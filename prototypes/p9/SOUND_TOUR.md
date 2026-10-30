@@ -24,17 +24,14 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 ## 4. cursor moves
 
 - **Music:** menu · Track 2 (summer nights)
-- **`sfx.ui-move`** · Cursor moves: `select_3.wav` · pool `select_3.wav` · alternates `select_1.wav`, `select_2.wav`
-- **`sfx.ui-move`** · Cursor moves: `select_3.wav` · pool `select_3.wav` · alternates `select_1.wav`, `select_2.wav`
+- **`sfx.ui-move`** · Cursor moves: `select_3.wav` ×2 · pool `select_3.wav` · alternates `select_1.wav`, `select_2.wav`
 
 ## 5. the Credits card
 
 ![the Credits card](shots/credits.jpg)
 
 - **Music:** credits · Track 2 (summer nights)
-- **`sfx.ui-move`** · Cursor moves: `select_3.wav` · pool `select_3.wav` · alternates `select_1.wav`, `select_2.wav`
-- **`sfx.ui-move`** · Cursor moves: `select_3.wav` · pool `select_3.wav` · alternates `select_1.wav`, `select_2.wav`
-- **`sfx.ui-move`** · Cursor moves: `select_3.wav` · pool `select_3.wav` · alternates `select_1.wav`, `select_2.wav`
+- **`sfx.ui-move`** · Cursor moves: `select_3.wav` ×3 · pool `select_3.wav` · alternates `select_1.wav`, `select_2.wav`
 - **`sfx.ui-ok`** · Confirm: `confirm_4.wav` · pool `confirm_4.wav` · alternates `confirm_1.wav`, `select_5.wav`
 
 ## 6. high scores
@@ -43,9 +40,7 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 
 - **Music:** menu · Track 2 (summer nights)
 - **`sfx.ui-back`** · Back: `cancel_3.wav` · pool `cancel_3.wav` · alternates `cancel_1.wav`, `cancel_2.wav`
-- **`sfx.ui-move`** · Cursor moves: `select_3.wav` · pool `select_3.wav` · alternates `select_1.wav`, `select_2.wav`
-- **`sfx.ui-move`** · Cursor moves: `select_3.wav` · pool `select_3.wav` · alternates `select_1.wav`, `select_2.wav`
-- **`sfx.ui-move`** · Cursor moves: `select_3.wav` · pool `select_3.wav` · alternates `select_1.wav`, `select_2.wav`
+- **`sfx.ui-move`** · Cursor moves: `select_3.wav` ×3 · pool `select_3.wav` · alternates `select_1.wav`, `select_2.wav`
 - **`sfx.ui-ok`** · Confirm: `confirm_4.wav` · pool `confirm_4.wav` · alternates `confirm_1.wav`, `select_5.wav`
 
 ## 7. Arcade: district select
@@ -54,9 +49,7 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 
 - **Music:** menu · Track 2 (summer nights)
 - **`sfx.ui-back`** · Back: `cancel_3.wav` · pool `cancel_3.wav` · alternates `cancel_1.wav`, `cancel_2.wav`
-- **`sfx.ui-move`** · Cursor moves: `select_3.wav` · pool `select_3.wav` · alternates `select_1.wav`, `select_2.wav`
-- **`sfx.ui-move`** · Cursor moves: `select_3.wav` · pool `select_3.wav` · alternates `select_1.wav`, `select_2.wav`
-- **`sfx.ui-move`** · Cursor moves: `select_3.wav` · pool `select_3.wav` · alternates `select_1.wav`, `select_2.wav`
+- **`sfx.ui-move`** · Cursor moves: `select_3.wav` ×3 · pool `select_3.wav` · alternates `select_1.wav`, `select_2.wav`
 - **`sfx.ui-ok`** · Confirm: `confirm_4.wav` · pool `confirm_4.wav` · alternates `confirm_1.wav`, `select_5.wav`
 
 ## 8. Arcade: the level card
@@ -158,25 +151,19 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 ![Options: MUSIC, SOUND, MUTE](shots/options.jpg)
 
 - **Music:** level · Track 3 (chibi robot b)
-- **`sfx.ui-move`** · Cursor moves: `select_3.wav` · pool `select_3.wav` · alternates `select_1.wav`, `select_2.wav`
-- **`sfx.ui-move`** · Cursor moves: `select_3.wav` · pool `select_3.wav` · alternates `select_1.wav`, `select_2.wav`
-- **`sfx.ui-move`** · Cursor moves: `select_3.wav` · pool `select_3.wav` · alternates `select_1.wav`, `select_2.wav`
+- **`sfx.ui-move`** · Cursor moves: `select_3.wav` ×3 · pool `select_3.wav` · alternates `select_1.wav`, `select_2.wav`
 - **`sfx.ui-ok`** · Confirm: `confirm_4.wav` · pool `confirm_4.wav` · alternates `confirm_1.wav`, `select_5.wav`
 
 ## 23. Options: SOUND adjusted
 
 - **Music:** level · Track 3 (chibi robot b)
-- **`sfx.ui-move`** · Cursor moves: `select_3.wav` · pool `select_3.wav` · alternates `select_1.wav`, `select_2.wav`
-- **`sfx.ui-move`** · Cursor moves: `select_3.wav` · pool `select_3.wav` · alternates `select_1.wav`, `select_2.wav`
+- **`sfx.ui-move`** · Cursor moves: `select_3.wav` ×2 · pool `select_3.wav` · alternates `select_1.wav`, `select_2.wav`
 
 ## 24. resume
 
 - **Music:** level · Track 3 (chibi robot b)
-- **`sfx.ui-back`** · Back: `cancel_3.wav` · pool `cancel_3.wav` · alternates `cancel_1.wav`, `cancel_2.wav`
-- **`sfx.ui-move`** · Cursor moves: `select_3.wav` · pool `select_3.wav` · alternates `select_1.wav`, `select_2.wav`
-- **`sfx.ui-move`** · Cursor moves: `select_3.wav` · pool `select_3.wav` · alternates `select_1.wav`, `select_2.wav`
-- **`sfx.ui-move`** · Cursor moves: `select_3.wav` · pool `select_3.wav` · alternates `select_1.wav`, `select_2.wav`
-- **`sfx.ui-back`** · Back: `cancel_3.wav` · pool `cancel_3.wav` · alternates `cancel_1.wav`, `cancel_2.wav`
+- **`sfx.ui-back`** · Back: `cancel_3.wav` ×2 · pool `cancel_3.wav` · alternates `cancel_1.wav`, `cancel_2.wav`
+- **`sfx.ui-move`** · Cursor moves: `select_3.wav` ×3 · pool `select_3.wav` · alternates `select_1.wav`, `select_2.wav`
 
 ## 25. Arcade ends: Licensed
 

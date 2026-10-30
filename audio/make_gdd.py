@@ -221,10 +221,14 @@ def tour():
         mus = s["music"]
         a(f"- **Music:** {mus['state'] or 'none yet'}{' · ' + tname(mus['track']) if mus.get('track') else ''}")
         cues = [c for c in s["cues"] if c["kind"] in ("sfx", "ui")]
+        seen = {}
         for c in cues:
-            d = C["sfx"].get(c["id"], {})
+            seen.setdefault(c["id"], []).append(c["file"])
+        for cid, fl in seen.items():
+            d = C["sfx"].get(cid, {})
             alts = ", ".join(f"`{f}`" for f in d.get("alternates", [])) or "—"
-            a(f"- **`sfx.{c['id']}`** · {d.get('label', '')}: `{c['file']}` · pool {files(d) or '—'} · alternates {alts}")
+            heard = ", ".join(f"`{f}`" for f in dict.fromkeys(fl)) + (f" ×{len(fl)}" if len(fl) > 1 else "")
+            a(f"- **`sfx.{cid}`** · {d.get('label', '')}: {heard} · pool {files(d) or '—'} · alternates {alts}")
         if not cues:
             a("- No effect on this step.")
         a("")
