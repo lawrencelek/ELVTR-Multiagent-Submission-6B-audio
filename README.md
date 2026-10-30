@@ -18,6 +18,7 @@
   - A sound control sits top right on the intro, the mode select and the pause pages: a mute button and a volume slider. M mutes; − and + step the volume.
   - Its caret (▾) opens a dropdown with separate MUSIC and SFX sliders.
   - Options has VOLUME, MUSIC, SFX and MUTE.
+- **[The Text Lab](prototypes/p9/text_lab.html)**, the text review: all 369 lines the player reads, 127 with a proposed change, each with an in-game preview and its limits. Approve, keep or edit; export the decisions (row 621).
 - **[The Sound Lab](prototypes/p9/sound_lab.html)**, an audition page:
   - every cue and music state, beside a screenshot of its moment;
   - swap files and tracks, change weights, play timed sequences;
@@ -26,6 +27,7 @@
   - Home: https://lawrencelek.github.io/ELVTR-Multiagent-Submission-6B-audio/
   - Prototype 9: https://lawrencelek.github.io/ELVTR-Multiagent-Submission-6B-audio/prototypes/p9/dummies_p9.html
   - Sound Lab: https://lawrencelek.github.io/ELVTR-Multiagent-Submission-6B-audio/prototypes/p9/sound_lab.html
+  - Text Lab: https://lawrencelek.github.io/ELVTR-Multiagent-Submission-6B-audio/prototypes/p9/text_lab.html
 - **Locally:** `python3 -m http.server` in this folder, then open `http://localhost:8000/`. Opened as a file, the pages still play sound through a slower fallback.
 
 ## At a glance
@@ -35,6 +37,7 @@
 | **Documentation:** which SFX (WAV) and MUSIC (OGG) cues play where | [GDD Edit 100](coder/gdd/DUMMIES_GDD_Edit100_Prototype_9_Sound.md): §2 MUSIC, §3 SFX (every cue, its trigger, files, bus, volume ID, cooldown ID) |
 | **Gameplay points with screenshots** | [`prototypes/p9/SOUND_TOUR.md`](prototypes/p9/SOUND_TOUR.md): 47 steps, 31 screenshots, each cue heard and its alternates |
 | **The audition page** | [`prototypes/p9/sound_lab.html`](prototypes/p9/sound_lab.html) (built by `make_lab.py`) |
+| **The text review** | [`prototypes/p9/text_lab.html`](prototypes/p9/text_lab.html) and [`content/text/REVIEW.md`](content/text/REVIEW.md): every line, before and after. Inventory `text/inventory.py`, brief `text/BRIEF.md`, lint `text/lint.py`, reviewer `text/REVIEWER.md` |
 | **The new build** | [`prototypes/p9/dummies_p9.html`](prototypes/p9/dummies_p9.html) with `prototypes/p9/audio/` (built by `build.py`) |
 | **The agent** | [`audio/`](audio/): `inventory.py`, `events.py`, `loop.py`, `lint.py`, `llm.py`, `integrate.py`, `agents/`, [`SOUND_GUIDE.md`](audio/SOUND_GUIDE.md) |
 | **Evidence** | [`audio/runs/`](audio/runs/): every agent input and output, every map version, lint, a `trace.md` per run |
@@ -165,6 +168,17 @@ Lawrence: "I died on a cone-baited car but my body did not die."
 - **Cause:** a car that swerved round a cone, then stopped for the dummy or returned to its lane, no longer counted as cone-baited. On Monument A2, 39 cars reacted to a cone; within 6 s they made 30 stops for the dummy and 9 returns to lane, each a moment a hit would not count. A tap under 1 health then left 0.4 alive, which read BODY 0.
 - **Fix:** a cone reaction counts for `story.coneBaitSeconds` (6 s). At 1 health a miss holds, small hits included; a hit to the brief writes off. A live chassis never reads BODY 0.
 - **Frozen builds keep the old rule:** the three IDs default to 0 in the registry.
+
+## 3.2 The text review (row 621, for Lawrence's approval)
+
+Lawrence: "messages such as 'HELD AT 1 · the brief wants cone-baited car' are not exactly in the correct tone and canon. Maybe it can be a tad snarkier."
+
+- **Inventory** (`text/inventory.py`, no model): 369 lines the player reads in Prototype 9. 147 car barks; 42 story texts; 27 notices; 21 labels; 56 feedback toasts; 9 strip lines; 29 screen lines; 38 interface lines.
+- **Drafts:** four writers in parallel, one batch each, on `text/BRIEF.md`. The brief proposes Style Guide V2.10: T1 gains a dry corporate snark; T15 gives feedback a put-down, then the fix; T16 keeps status lines crisp, praise withheld.
+- **Lint** (`text/lint.py`): placeholders, banned words, length, sentences, "!", caps, repeats.
+- **Review:** a fifth agent, which wrote none of the lines, flagged 16 (`text/REVIEWER.md`): held lines that missed their brief, repeated put-downs, two cone mechanics, the ending's "adequately". All 16 fixes are taken.
+- **Result:** 127 changes proposed, none over a limit. One held line per brief, from Lawrence's example: "Try harder. Bait a car with a cone, then get hit by it."
+- **Nothing is applied** until Lawrence decides in the Text Lab.
 
 ## 4 The engine
 

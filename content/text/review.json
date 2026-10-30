@@ -1,7 +1,7 @@
 {
  "generated_by": "text/make_text_lab.py",
  "count": 369,
- "changed": 125,
+ "changed": 127,
  "guide": {
   "title": "Proposed: Style Guide V2.10, a dry corporate snark",
   "rules": [
@@ -445,8 +445,8 @@
     "chars": 48,
     "sentences": 2
    },
-   "after": "I routed around it. It rerouted into me.",
-   "why": "R2: bait means a committed route; resentment sharpened.",
+   "after": "My route was set, and we met anyway. Rude.",
+   "why": "review: R2: bait is true for any locked, expiring or interrupted route (cone, return, yield), so 'I routed around it' and 'It rerouted into me' claim a dodge and a move the trigger does not log.",
    "findings": []
   },
   {
@@ -1620,8 +1620,8 @@
     "chars": 48,
     "sentences": 2
    },
-   "after": "Missed me. Please keep practising elsewhere.",
-   "why": "T8, T11: drops Corporate 'Noted'; smug relief instead.",
+   "after": "Not today. Please keep practising elsewhere.",
+   "why": "review: T11: the rewrite still opens on 'Missed me', as b051 and b060 do, so the stock opener the writer meant to cut remains in three miss lines.",
    "findings": []
   },
   {
@@ -3632,8 +3632,8 @@
    },
    "tile": "Monument B3",
    "task": "jump",
-   "after": "Two screens advertise to each other; neither advertises you yet. Legs 1 is fitted: jump into a passing car.",
-   "why": "T14: 'jump into a car' in four lines; dry put-down, place and Legs 1 kept",
+   "after": "Two screens advertise to each other, not to you. Legs 1 is fitted: jump into the traffic between them.",
+   "why": "review: V11: dropping 'between them' cuts the jump loose from the LED canyon, and 'neither advertises you yet' promises publicity the canon never gives the trainee.",
    "findings": []
   },
   {
@@ -4332,8 +4332,8 @@
     "words": 20,
     "sentences": 2
    },
-   "after": "Your model has passed, adequately, and will be manufactured for our clients. A Corporation drone carries you to the ship.",
-   "why": "T16: praise withheld; 'adequately' is the amendment's own register",
+   "after": "Your model has passed and will be manufactured for our clients. A Corporation drone carries you to the ship.",
+   "why": "kept (review): T1/T4/V6: 'adequately' turns the CERTIFIED payoff into a wink; T16 withholds praise on status lines, not on the ending that honours the sacrifice.",
    "findings": []
   },
   {
@@ -5218,8 +5218,8 @@
    "limit": {
     "chars": 60
    },
-   "after": "No legal room. Face open ground to set the cone down.",
-   "why": "T15: verdict, then the fix",
+   "after": "No legal room. Down on the street, face open ground.",
+   "why": "review: Mechanic: a cone goes down only at street height (onGround), so 'Face open ground' misleads a trainee on a highway or roof.",
    "findings": []
   },
   {
@@ -5236,8 +5236,8 @@
    "limit": {
     "chars": 60
    },
-   "after": "Cone retained. Face open road, then throw (Y).",
-   "why": "T15: verdict, then the fix; names throw (Y)",
+   "after": "No room. Down on the street, face open road; throw (Y).",
+   "why": "review: Mechanic: a throw is refused anywhere above the street (onGround), so 'Face open road' misleads a trainee standing on a raised road.",
    "findings": []
   },
   {
@@ -5355,8 +5355,8 @@
    "limit": {
     "chars": 60
    },
-   "after": "Low highway: own cars only. Broken parapets drop you down.",
-   "why": "fits 60 characters; same two facts",
+   "after": "Low highway: its own cars only. Broken parapets drop you.",
+   "why": "review: Sense: 'own cars only' reads as a parking sign with no owner; the fact is that the highway keeps its own traffic.",
    "findings": []
   },
   {
@@ -5430,8 +5430,8 @@
    "limit": {
     "chars": 60
    },
-   "after": "Try harder. Finish it with a dash into a car.",
-   "why": "T15: per brief; the fix names the move",
+   "after": "Unconvincing. Make your dash the last hit.",
+   "why": "review: T14/T15: 'Try harder.' now opens three lines (msg.held, held.dash, held.cone); keep it for Lawrence's cone line and the fallback.",
    "findings": []
   },
   {
@@ -5448,8 +5448,8 @@
    "limit": {
     "chars": 60
    },
-   "after": "Wrong angle. Drop onto a car from above.",
-   "why": "T15: per brief",
+   "after": "Gravity unused. Drop onto a car from above.",
+   "why": "review: Sense: 'Wrong angle' sends the trainee after an angle when the brief wants a drop from above, and 'Wrong' already opens three other put-downs.",
    "findings": []
   },
   {
@@ -5502,8 +5502,8 @@
    "limit": {
     "chars": 60
    },
-   "after": "Try harder. Bait a car to divert, then get hit.",
-   "why": "Lawrence's example, to the brief's limits",
+   "after": "Try harder. Bait a car with a cone, then get hit by it.",
+   "why": "review: Canon (row 620): without the cone the fix reads as body-baiting, which makes a car divert but does not count; the cone and the same car must both be named.",
    "findings": []
   },
   {
@@ -5556,8 +5556,8 @@
    "limit": {
     "chars": 60
    },
-   "after": "Too eager. Stand still and let a car strike.",
-   "why": "T15: per brief; not dashing",
+   "after": "Overeager. Do not dash; let a car come to you.",
+   "why": "review: Mechanic: the brief allows walking or standing and fails only a dash, so 'Stand still' misstates it; also the third 'Too ...' put-down beside held.level and held.bounce.",
    "findings": []
   },
   {
@@ -6428,8 +6428,8 @@
     "words": 20,
     "sentences": 2
    },
-   "after": "Wrong finish, {points} points, not counted. Next body's last hit: {brief}.",
-   "why": "T15: put-down, then the fix",
+   "after": "Off brief: not counted, but {points} points kept. Next body's last hit: {brief}.",
+   "why": "review: Sense: '{points} points, not counted' reads as if the points were voided, when only the tile count is lost; also a fourth 'Wrong ...' put-down.",
    "findings": []
   },
   {
@@ -6727,8 +6727,8 @@
     "words": 20,
     "sentences": 2
    },
-   "after": "The story map saves this tile's count. The chassis in service is lost.",
-   "why": "T3: training framing, not 'in play'",
+   "after": "The story map saves this tile's count. The current chassis is lost.",
+   "why": "review: Canon: 'in service' is the word for the Certified's sacrifice to clients, so here it says the wrong thing about a chassis abandoned mid-tile.",
    "findings": []
   },
   {
@@ -7089,11 +7089,9 @@
    "shot": null,
    "locked": false,
    "limit": {},
-   "after": "STORY · SAVE GAMES",
-   "why": "kept: interface chrome, out of the voice's scope (decision 540)",
-   "findings": [
-    "banned word 'games' (V1)"
-   ]
+   "after": "STORY · SAVE SLOTS",
+   "why": "review: V1: 'GAMES' is banned in in-game text.",
+   "findings": []
   },
   {
    "id": "ui.10",
@@ -7203,11 +7201,9 @@
    "shot": null,
    "locked": false,
    "limit": {},
-   "after": "Name this score",
-   "why": "kept: interface chrome, out of the voice's scope (decision 540)",
-   "findings": [
-    "banned word 'score' (V1)"
-   ]
+   "after": "Name this record",
+   "why": "review: V1: 'score' is banned in in-game text.",
+   "findings": []
   },
   {
    "id": "ui.17",
@@ -7237,11 +7233,9 @@
    "shot": null,
    "locked": false,
    "limit": {},
-   "after": "Restart level",
-   "why": "kept: interface chrome, out of the voice's scope (decision 540)",
-   "findings": [
-    "banned word 'level' (V1)"
-   ]
+   "after": "Restart district",
+   "why": "review: V1: 'level' is banned; this pause row appears only in Arcade, where it restarts the district.",
+   "findings": []
   },
   {
    "id": "ui.19",

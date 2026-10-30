@@ -1,6 +1,6 @@
 # DUMMIES — every line the player reads, before and after (Prototype 9)
 
-30 October 2026 · 369 lines · 125 with a proposed change · for Lawrence's approval in the Text Lab (`prototypes/p9/text_lab.html`). Nothing is applied to the game until approved. Brief: `text/BRIEF.md`. Inventory: `text/inventory.py`. Lint: `text/lint.py`.
+30 October 2026 · 369 lines · 127 with a proposed change · for Lawrence's approval in the Text Lab (`prototypes/p9/text_lab.html`). Nothing is applied to the game until approved. Brief: `text/BRIEF.md`. Inventory: `text/inventory.py`. Lint: `text/lint.py`.
 
 ## Proposed rule change: Style Guide V2.10
 
@@ -31,7 +31,7 @@ Your example set the direction: "Try harder - bait a car to divert and get hit."
 | `bark.b014` | the car hits the dummy (zone front/frontDiagonal) | You absolute bollard! Respectfully. | *unchanged* | kept: Budget insult plus bolted-on courtesy, the tier's signature. |
 | `bark.b015` | the car hits the dummy (zone side) | My side! Watch it, you plank! | **My side panel, you plank! Sincerely.** | T7: Budget rage now gets its bolted-on politeness. |
 | `bark.b016` | the car hits the dummy (zone rear/rearDiagonal) | My boot! Come back here! | **My boot! Come back here, if you please!** | T7: Budget rage now gets its bolted-on politeness. |
-| `bark.b017` | the car hits the dummy (bait True) | It left my path, then came back. Rude. | **I routed around it. It rerouted into me.** | R2: bait means a committed route; resentment sharpened. |
+| `bark.b017` | the car hits the dummy (bait True) | It left my path, then came back. Rude. | **My route was set, and we met anyway. Rude.** | review: R2: bait is true for any locked, expiring or interrupted route (cone, return, yield), so 'I routed around it' and 'It rerouted into me' claim a dodge and a move the trigger does not log. |
 | `bark.b018` | the car hits the dummy (bait True) | It waited for my route to lock. Clever. | **Hit after route lock. Flagging an exploit.** | R1: 'it waited' claimed a motive; T7: Corporate logs it. |
 | `bark.b019` | the car hits the dummy (stopped True) | I was stationary. Please note I was stationary. | *unchanged* | kept: defensive, true to a stopped hit. |
 | `bark.b020` | the car hits the dummy (stopped True) | I had stopped! I was being good! | **I had STOPPED! Cheers for that, pal!** | T7: whine became Budget rage with sarcastic courtesy. |
@@ -82,7 +82,7 @@ Your example set the direction: "Try harder - bait a car to divert and get hit."
 | `bark.b065` | the car fixes its route around the dummy (mood Rush) | Rushing. Do not make me late. | *unchanged* | kept: true to Rush mood. |
 | `bark.b066` | the car fixes its route around the dummy (mood Cautious) | Slowing. Everything is a hazard. | *unchanged* | kept: true to Cautious mood. |
 | `bark.b067` | the car passes close (mood Unreliable) | Was that a dummy? Or a bin? | *unchanged* | kept: true to Unreliable mood, dry. |
-| `bark.b068` | a dash misses the car | Missed. Noted for my record. | **Missed me. Please keep practising elsewhere.** | T8, T11: drops Corporate 'Noted'; smug relief instead. |
+| `bark.b068` | a dash misses the car | Missed. Noted for my record. | **Not today. Please keep practising elsewhere.** | review: T11: the rewrite still opens on 'Missed me', as b051 and b060 do, so the stock opener the writer meant to cut remains in three miss lines. |
 | `bark.b069` | the car fixes its route around the dummy (cause body, man brake) | Stopping for the dummy. Window closing. | *unchanged* | kept: true to a brake for the body. |
 | `bark.b070` | the car fixes its route around the dummy (cause body) | Route locked. Do not try anything. | **Route locked. Do try not to embarrass us both.** | T7: threat read as Budget; Luxury condescends instead. |
 | `bark.b071` | the car fixes its route around the dummy (cause body) | Route committed per policy 6.3. | *unchanged* | kept: Corporate policy number; commit event true. |
@@ -163,7 +163,7 @@ Your example set the direction: "Try harder - bait a car to divert and get hit."
 | `bark.c023` | the car hits the dummy (district cbd) | Business district. Of all places. | *unchanged* | kept: dry, true to the business district. |
 | `bark.c024` | the car hits the dummy (district campus) | Hit on campus. That goes on my record. | **Hit on campus. Now I am a case study.** | Campus joke; frees 'on my record' for c018. |
 
-## Story (42 lines, 12 changed)
+## Story (42 lines, 11 changed)
 
 | ID | Where | Before | After | Why |
 |---|---|---|---|---|
@@ -175,7 +175,7 @@ Your example set the direction: "Try harder - bait a car to divert and get hit."
 | `story.tale.monument.B2` | Monument B2 · The monument: the tile card's tale | The plaque reads ZERO ACCIDENTS: a target, not a record. Stand near it until a colleague finds you. | *unchanged* | kept: ZERO ACCIDENTS exact; duty matches struck |
 | `story.tale.monument.A2` | Monument A2 · The neon shops: the tile card's tale | The neon shops sell nothing, but the traffic reads them. Hands 1 is fitted: bait a colleague with a cone. | *unchanged* | kept: place, Hands 1, cone duty; deadpan |
 | `story.tale.monument.A3` | Monument A3 · The stacked cubes: the tile card's tale | The stacked cubes rose one budget at a time. Build the same way: one hit, then another, quickly. | *unchanged* | kept: place turned to the combo; deadpan |
-| `story.tale.monument.B3` | Monument B3 · The LED canyon: the tile card's tale | Two screens advertise to each other all night. Legs 1 is fitted: jump into a car between them. | **Two screens advertise to each other; neither advertises you yet. Legs 1 is fitted: jump into a passing car.** | T14: 'jump into a car' in four lines; dry put-down, place and Legs 1 kept |
+| `story.tale.monument.B3` | Monument B3 · The LED canyon: the tile card's tale | Two screens advertise to each other all night. Legs 1 is fitted: jump into a car between them. | **Two screens advertise to each other, not to you. Legs 1 is fitted: jump into the traffic between them.** | review: V11: dropping 'between them' cuts the jump loose from the LED canyon, and 'neither advertises you yet' promises publicity the canon never gives the trainee. |
 | `story.tale.monument.C3` | Monument C3 · The LED gateway: the tile card's tale | The gateway thanked the car that wrote you off for driving safely. Let one colleague throw you into the next. | *unchanged* | kept: gateway's thanks is the dry joke; bounce duty |
 | `story.act.parkland` | ACT II · OPENING DAY: the act line, on the district's first card and the map | The Expo opens to clients when this park passes. Your training keeps them safe. | *unchanged* | kept: states service to clients; motivates |
 | `story.tale.parkland.C1` | Parkland C1 · The lantern pavilion: the tile card's tale | The lantern, the Expo's first exhibit, is lit for clients. With Arms 1, push off one car into the next. | *unchanged* | kept: lantern, Arms 1, push duty |
@@ -208,7 +208,7 @@ Your example set the direction: "Try harder - bait a car to divert and get hit."
 | `story.brief.struck` | the brief 'struck': the level card, the map's tile panel | Walk or stand in the traffic. A car must deliver the final hit while you are not dashing. | *unchanged* | kept: imperative goal, then the final hit |
 | `story.brief.combo` | the brief 'combo': the level card, the map's tile panel | Chain your hits into a combo. The final hit must be link {n} or later. | *unchanged* | kept: goal and {n} intact; one of two 'final hit must' |
 | `story.brief.cls` | the brief 'cls': the level card, the map's tile panel | Step in front of the {clsLong}. The final hit must come from a {cls}. | *unchanged* | kept: 'a {cls}' feeds the article fix in taskText |
-| `story.ending` | CERTIFIED: the ending at the ship | Your model has passed and will be manufactured for our clients. A Corporation drone carries you to the ship. | **Your model has passed, adequately, and will be manufactured for our clients. A Corporation drone carries you to the ship.** | T16: praise withheld; 'adequately' is the amendment's own register |
+| `story.ending` | CERTIFIED: the ending at the ship | Your model has passed and will be manufactured for our clients. A Corporation drone carries you to the ship. | *unchanged* | kept (review): T1/T4/V6: 'adequately' turns the CERTIFIED payoff into a wink; T16 withholds praise on status lines, not on the ending that honours the sacrifice. |
 
 ## Notices (27 lines, 6 changed)
 
@@ -278,20 +278,20 @@ Your example set the direction: "Try harder - bait a car to divert and get hit."
 | `copy.toast.refusal-locked` | toast: Arcade, Refuse testing before one body | Refusal is unavailable until one body is completed. | **Premature. Complete one body before refusing.** | T15: put-down, then the fix |
 | `copy.denied.lunge` | toast: a dash refused (no charge, or recovering) | Lunge declined. Charge or recovery incomplete. | **Impatient. Wait for charge and recovery, then dash.** | T15: put-down, then the fix; the move is the dash (A) |
 | `copy.denied.pickup` | toast: nothing to grab | Nothing within reach to carry. | **Nothing in reach. Stand by a cone, then grab (X).** | T15: adds the fix; names grab (X) |
-| `copy.denied.drop` | toast: no room to put a cone down | No legal room ahead. Cone retained. | **No legal room. Face open ground to set the cone down.** | T15: verdict, then the fix |
-| `copy.denied.throw` | toast: no room to throw a cone | No legal room to throw. Cone retained. | **Cone retained. Face open road, then throw (Y).** | T15: verdict, then the fix; names throw (Y) |
-| `place.levels.z1` | toast: first time on the low highway | Low highway: only its own cars drive here. A broken parapet drops you to the street. | **Low highway: own cars only. Broken parapets drop you down.** | fits 60 characters; same two facts |
+| `copy.denied.drop` | toast: no room to put a cone down | No legal room ahead. Cone retained. | **No legal room. Down on the street, face open ground.** | review: Mechanic: a cone goes down only at street height (onGround), so 'Face open ground' misleads a trainee on a highway or roof. |
+| `copy.denied.throw` | toast: no room to throw a cone | No legal room to throw. Cone retained. | **No room. Down on the street, face open road; throw (Y).** | review: Mechanic: a throw is refused anywhere above the street (onGround), so 'Face open road' misleads a trainee standing on a raised road. |
+| `place.levels.z1` | toast: first time on the low highway | Low highway: only its own cars drive here. A broken parapet drops you to the street. | **Low highway: its own cars only. Broken parapets drop you.** | review: Sense: 'own cars only' reads as a parking sign with no owner; the fact is that the highway keeps its own traffic. |
 | `place.levels.z2Highway` | toast: first time on the high highway | High highway: fast traffic. A broken parapet drops you to the street, a long fall. | **High highway: fast cars. A broken parapet is a long fall.** | fits 60 characters; same two facts |
 | `place.levels.roof` | toast: first time on a roof | Roof: no traffic. Step off a ledge to drop to the street below. | **Roof: no traffic. Step off a ledge to reach the street.** | fits 60 characters; varies a repeated phrase (T14) |
 | `msg.held` | toast: a hit that would write off the chassis misses the brief; the chassis is held (row 620) | HELD AT {health} · the brief wants {brief} | **Try harder. Held at {health}; last hit: {brief}.** | T15: Lawrence's put-down, then the brief as the fix |
-| `msg.held.dash` | toast: held, on a dash brief | HELD AT 1 · the brief wants dash into a car | **Try harder. Finish it with a dash into a car.** | T15: per brief; the fix names the move |
-| `msg.held.drop` | toast: held, on a drop brief | HELD AT 1 · the brief wants drop onto a car | **Wrong angle. Drop onto a car from above.** | T15: per brief |
+| `msg.held.dash` | toast: held, on a dash brief | HELD AT 1 · the brief wants dash into a car | **Unconvincing. Make your dash the last hit.** | review: T14/T15: 'Try harder.' now opens three lines (msg.held, held.dash, held.cone); keep it for Lawrence's cone line and the fallback. |
+| `msg.held.drop` | toast: held, on a drop brief | HELD AT 1 · the brief wants drop onto a car | **Gravity unused. Drop onto a car from above.** | review: Sense: 'Wrong angle' sends the trainee after an angle when the brief wants a drop from above, and 'Wrong' already opens three other put-downs. |
 | `msg.held.jump` | toast: held, on a jump brief | HELD AT 1 · the brief wants jump into a car | **Grounded effort. Jump into a car to finish.** | T15: per brief |
 | `msg.held.level` | toast: held, on a raised-road brief | HELD AT 1 · the brief wants on a raised road | **Too low. Take the last hit on a raised road.** | T15: per brief |
-| `msg.held.cone` | toast: held, on a cone brief (the line Lawrence quoted) | HELD AT 1 · the brief wants cone-baited car | **Try harder. Bait a car to divert, then get hit.** | Lawrence's example, to the brief's limits |
+| `msg.held.cone` | toast: held, on a cone brief (the line Lawrence quoted) | HELD AT 1 · the brief wants cone-baited car | **Try harder. Bait a car with a cone, then get hit by it.** | review: Canon (row 620): without the cone the fix reads as body-baiting, which makes a car divert but does not count; the cone and the same car must both be named. |
 | `msg.held.push` | toast: held, on a push brief | HELD AT 1 · the brief wants push off a car | **Out of order. Push off a car; take the next one.** | T15: per brief; push, then the next car |
 | `msg.held.bounce` | toast: held, on a bounce brief | HELD AT 1 · the brief wants thrown into a car | **Too steady. Take the last hit while thrown.** | T15: per brief |
-| `msg.held.struck` | toast: held, on a struck brief | HELD AT 1 · the brief wants struck, not dashing | **Too eager. Stand still and let a car strike.** | T15: per brief; not dashing |
+| `msg.held.struck` | toast: held, on a struck brief | HELD AT 1 · the brief wants struck, not dashing | **Overeager. Do not dash; let a car come to you.** | review: Mechanic: the brief allows walking or standing and fails only a dash, so 'Stand still' misstates it; also the third 'Too ...' put-down beside held.level and held.bounce. |
 | `msg.held.combo` | toast: held, on a combo brief | HELD AT 1 · the brief wants combo ×{n} | **Short chain. Make the last hit link {n} or later.** | T15: per brief; keeps the link number |
 | `msg.held.cls` | toast: held, on a vehicle-class brief | HELD AT 1 · the brief wants a {cls} | **Wrong vehicle. Only a {cls} may finish you.** | T15: per brief; keeps the class |
 | `msg.story-count` | toast: a write-off counts for the tile | COUNTED · {tile} {n} / {need} | *unchanged* | kept: T16 caps tally, crisp |
@@ -339,7 +339,7 @@ Your example set the direction: "Try harder - bait a car to divert and get hit."
 | `copy.shop.deploy` | the workshop's last row | Deploy next chassis | *unchanged* | kept: workshop row, plain instruction |
 | `copy.shop.bank` | the workshop's last row, credits left | Keep {credits} in credit. Deploy next chassis | *unchanged* | kept: workshop row, plain instruction |
 | `rep.counted` | the report: the write-off counted | Counted for {tile}: {n} of {need} · points this body {points} | **Adequate. Counted for {tile}: {n} of {need}, {points} points.** | T16: praise withheld; varies a repeated phrase (T14) |
-| `rep.task` | the report: the write-off missed the brief | Not counted: the brief wants {brief} · points this body {points} | **Wrong finish, {points} points, not counted. Next body's last hit: {brief}.** | T15: put-down, then the fix |
+| `rep.task` | the report: the write-off missed the brief | Not counted: the brief wants {brief} · points this body {points} | **Off brief: not counted, but {points} points kept. Next body's last hit: {brief}.** | review: Sense: '{points} points, not counted' reads as if the points were voided, when only the tile count is lost; also a fourth 'Wrong ...' put-down. |
 | `rep.cleared` | the report: a cleared tile | Not counted: {tile} is already cleared · points this body {points} | **Surplus: {tile} was already cleared, so not counted ({points} points). Advance.** | T15: put-down, then the fix |
 | `rep.elsewhere` | the report: a tile not in test | Not counted: {tile} is not in test · points this body {points} | **Wrong tile: {tile} is not in test, so not counted ({points} points). Consult the map.** | T15: put-down, then the fix |
 | `rep.credit` | the report, Story: the credit and the next affordable part | +{n} credits for the body. Balance: {balance}. {part} is yours for {price}. | **+{n} credits for the body; balance {balance}. {part} is yours for {price}.** | F6: two sentences, was three |
@@ -353,7 +353,7 @@ Your example set the direction: "Try harder - bait a car to divert and get hit."
 | `map.need` | the map's tile panel, after the brief | One counted write-off clears the tile. | *unchanged* | kept: plain map note, accurate |
 | `map.needN` | the map's tile panel, after the brief | {n} counted write-offs clear the tile ({count} so far). | *unchanged* | kept: plain map note, accurate |
 | `card.sub` | the level card's subtitle | Tile {tile}. Level {n} of {total}. | **Tile {tile}. Test {n} of {total}.** | V1: 'level' is banned; tiles are in test |
-| `pause.story` | pause, Story: under Quit to title | The story map saves this tile's count. The body in play is lost. | **The story map saves this tile's count. The chassis in service is lost.** | T3: training framing, not 'in play' |
+| `pause.story` | pause, Story: under Quit to title | The story map saves this tile's count. The body in play is lost. | **The story map saves this tile's count. The current chassis is lost.** | review: Canon: 'in service' is the word for the Certified's sacrifice to clients, so here it says the wrong thing about a chassis abandoned mid-tile. |
 | `pause.refuse-locked` | pause, Arcade: before one body | Refusal opens after one completed body. | *unchanged* | kept: plain pause note |
 | `pause.refuse` | pause, Arcade: Refuse testing | Refusal is a deliberate ending. | *unchanged* | kept: dry, flat, in canon |
 | `end.certified.fallback` | the CERTIFIED ending, if the story has no ending line | All {total} tiles of the Test City are tested and certified complete. | **All {total} tiles of the Test City are tested. You are Certified.** | canon: the ending is CERTIFIED; capital C |
@@ -377,7 +377,7 @@ Your example set the direction: "Try harder - bait a car to divert and get hit."
 | `obj.arcade` | the strip, Arcade | Grade {g}: write off {n} bodies for grade {next} ({count} of {n}). | *unchanged* | kept: the strip's goal, clear |
 | `obj.arcade.top` | the strip, Arcade at the top grade | Grade {g}, the top grade: write off all you can. | *unchanged* | kept: the strip's goal, clear |
 
-## Interface chrome (38 lines, 0 changed)
+## Interface chrome (38 lines, 3 changed)
 
 | ID | Where | Before | After | Why |
 |---|---|---|---|---|
@@ -389,16 +389,16 @@ Your example set the direction: "Try harder - bait a car to divert and get hit."
 | `ui.06` | menus, legends and the cue key | ARROWS READ A TILE · SPACE DEPLOY · SHIFT BACK | *unchanged* | kept: interface chrome, out of the voice's scope (decision 540) |
 | `ui.07` | menus, legends and the cue key | TYPE THE NAME · ENTER OK · BACKSPACE DELETE · ESC CANCEL | *unchanged* | kept: interface chrome, out of the voice's scope (decision 540) |
 | `ui.08` | menus, legends and the cue key | SAVED IN THIS BROWSER | *unchanged* | kept: interface chrome, out of the voice's scope (decision 540) |
-| `ui.09` | menus, legends and the cue key | STORY · SAVE GAMES | *unchanged* | kept: interface chrome, out of the voice's scope (decision 540) |
+| `ui.09` | menus, legends and the cue key | STORY · SAVE GAMES | **STORY · SAVE SLOTS** | review: V1: 'GAMES' is banned in in-game text. |
 | `ui.10` | menus, legends and the cue key | STORY · THE TEST CITY | *unchanged* | kept: interface chrome, out of the voice's scope (decision 540) |
 | `ui.11` | menus, legends and the cue key | ARCADE · SELECT A DISTRICT | *unchanged* | kept: interface chrome, out of the voice's scope (decision 540) |
 | `ui.12` | menus, legends and the cue key | Quit to title | *unchanged* | kept: interface chrome, out of the voice's scope (decision 540) |
 | `ui.13` | menus, legends and the cue key | Retry this district | *unchanged* | kept: interface chrome, out of the voice's scope (decision 540) |
 | `ui.14` | menus, legends and the cue key | Choose a district | *unchanged* | kept: interface chrome, out of the voice's scope (decision 540) |
 | `ui.15` | menus, legends and the cue key | Play again from district 1 | *unchanged* | kept: interface chrome, out of the voice's scope (decision 540) |
-| `ui.16` | menus, legends and the cue key | Name this score | *unchanged* | kept: interface chrome, out of the voice's scope (decision 540) |
+| `ui.16` | menus, legends and the cue key | Name this score | **Name this record** | review: V1: 'score' is banned in in-game text. |
 | `ui.17` | menus, legends and the cue key | Resume | *unchanged* | kept: interface chrome, out of the voice's scope (decision 540) |
-| `ui.18` | menus, legends and the cue key | Restart level | *unchanged* | kept: interface chrome, out of the voice's scope (decision 540) |
+| `ui.18` | menus, legends and the cue key | Restart level | **Restart district** | review: V1: 'level' is banned; this pause row appears only in Arcade, where it restarts the district. |
 | `ui.19` | menus, legends and the cue key | Refuse testing | *unchanged* | kept: interface chrome, out of the voice's scope (decision 540) |
 | `ui.20` | menus, legends and the cue key | Options | *unchanged* | kept: interface chrome, out of the voice's scope (decision 540) |
 | `ui.21` | menus, legends and the cue key | Controls | *unchanged* | kept: interface chrome, out of the voice's scope (decision 540) |

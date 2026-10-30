@@ -1,0 +1,66 @@
+{
+ "bark.b017": {
+  "problem": "R2: bait is true for any locked, expiring or interrupted route (cone, return, yield), so 'I routed around it' and 'It rerouted into me' claim a dodge and a move the trigger does not log.",
+  "fix": "My route was set, and we met anyway. Rude."
+ },
+ "bark.b068": {
+  "problem": "T11: the rewrite still opens on 'Missed me', as b051 and b060 do, so the stock opener the writer meant to cut remains in three miss lines.",
+  "fix": "Not today. Please keep practising elsewhere."
+ },
+ "story.tale.monument.B3": {
+  "problem": "V11: dropping 'between them' cuts the jump loose from the LED canyon, and 'neither advertises you yet' promises publicity the canon never gives the trainee.",
+  "fix": "Two screens advertise to each other, not to you. Legs 1 is fitted: jump into the traffic between them."
+ },
+ "story.ending": {
+  "problem": "T1/T4/V6: 'adequately' turns the CERTIFIED payoff into a wink; T16 withholds praise on status lines, not on the ending that honours the sacrifice.",
+  "fix": "KEEP_ORIGINAL"
+ },
+ "msg.held.dash": {
+  "problem": "T14/T15: 'Try harder.' now opens three lines (msg.held, held.dash, held.cone); keep it for Lawrence's cone line and the fallback.",
+  "fix": "Unconvincing. Make your dash the last hit."
+ },
+ "msg.held.drop": {
+  "problem": "Sense: 'Wrong angle' sends the trainee after an angle when the brief wants a drop from above, and 'Wrong' already opens three other put-downs.",
+  "fix": "Gravity unused. Drop onto a car from above."
+ },
+ "msg.held.cone": {
+  "problem": "Canon (row 620): without the cone the fix reads as body-baiting, which makes a car divert but does not count; the cone and the same car must both be named.",
+  "fix": "Try harder. Bait a car with a cone, then get hit by it."
+ },
+ "msg.held.struck": {
+  "problem": "Mechanic: the brief allows walking or standing and fails only a dash, so 'Stand still' misstates it; also the third 'Too ...' put-down beside held.level and held.bounce.",
+  "fix": "Overeager. Do not dash; let a car come to you."
+ },
+ "rep.task": {
+  "problem": "Sense: '{points} points, not counted' reads as if the points were voided, when only the tile count is lost; also a fourth 'Wrong ...' put-down.",
+  "fix": "Off brief: not counted, but {points} points kept. Next body's last hit: {brief}."
+ },
+ "copy.denied.drop": {
+  "problem": "Mechanic: a cone goes down only at street height (onGround), so 'Face open ground' misleads a trainee on a highway or roof.",
+  "fix": "No legal room. Down on the street, face open ground."
+ },
+ "copy.denied.throw": {
+  "problem": "Mechanic: a throw is refused anywhere above the street (onGround), so 'Face open road' misleads a trainee standing on a raised road.",
+  "fix": "No room. Down on the street, face open road; throw (Y)."
+ },
+ "place.levels.z1": {
+  "problem": "Sense: 'own cars only' reads as a parking sign with no owner; the fact is that the highway keeps its own traffic.",
+  "fix": "Low highway: its own cars only. Broken parapets drop you."
+ },
+ "pause.story": {
+  "problem": "Canon: 'in service' is the word for the Certified's sacrifice to clients, so here it says the wrong thing about a chassis abandoned mid-tile.",
+  "fix": "The story map saves this tile's count. The current chassis is lost."
+ },
+ "ui.09": {
+  "problem": "V1: 'GAMES' is banned in in-game text.",
+  "fix": "STORY · SAVE SLOTS"
+ },
+ "ui.16": {
+  "problem": "V1: 'score' is banned in in-game text.",
+  "fix": "Name this record"
+ },
+ "ui.18": {
+  "problem": "V1: 'level' is banned; this pause row appears only in Arcade, where it restarts the district.",
+  "fix": "Restart district"
+ }
+}
