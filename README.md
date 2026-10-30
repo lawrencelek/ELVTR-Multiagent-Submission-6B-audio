@@ -21,7 +21,10 @@
   - every cue and music state, beside a screenshot of its moment;
   - swap files and tracks, change weights, play timed sequences;
   - the game picks up your choices in the same browser.
-- **On GitHub Pages:** `https://lawrencelek.github.io/ELVTR-Multiagent-Submission-6B-audio/`. Switch Pages on once: Settings › Pages › branch `gh-pages`, folder `/`.
+- **On GitHub Pages (live, branch `gh-pages`, folder `/`):**
+  - Home: https://lawrencelek.github.io/ELVTR-Multiagent-Submission-6B-audio/
+  - Prototype 9: https://lawrencelek.github.io/ELVTR-Multiagent-Submission-6B-audio/prototypes/p9/dummies_p9.html
+  - Sound Lab: https://lawrencelek.github.io/ELVTR-Multiagent-Submission-6B-audio/prototypes/p9/sound_lab.html
 - **Locally:** `python3 -m http.server` in this folder, then open `http://localhost:8000/`. Opened as a file, the pages still play sound through a slower fallback.
 
 ## At a glance
