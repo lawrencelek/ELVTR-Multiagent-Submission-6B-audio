@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="screen-orientation" content="landscape"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<title>DUMMIES P8.4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=B612:wght@400;700&family=B612+Mono:wght@400;700&family=Nunito:wght@700;800;900&display=swap">
+<style>
+/* One cabinet: a 640 × 360 screen scaled to fit the stage (Edit 76: any factor); developer controls below the fold. */
+:root {
+  --ground: #DCEEF5; --ink: #101417; --ink-2: #4A5A66; --line: #B8C4CB; --aqua: #4FC3E8; --aqua-deep: #1E8FB8; --panel: #F7FBFD;
+  --font-ui: "B612", "Segoe UI", system-ui, sans-serif; --font-mono: "B612 Mono", ui-monospace, Menlo, monospace; --font-brand: "Nunito", "Segoe UI", system-ui, sans-serif;
+  color-scheme: light;
+}
+html, body { margin: 0; min-height: 100%; }
+[hidden] { display: none !important; }
+body { background: linear-gradient(#EAF6FB, #C3E1EC) fixed; color: var(--ink); font-family: var(--font-ui); }
+.stage { height: 100vh; height: 100dvh; min-height: 360px; display: grid; place-items: center; overflow: hidden; } /* Edit 86 (P7.5): the screen alone; options in the pause menu */
+.stage:fullscreen { height: 100vh; background: #C3E1EC; }
+[data-palette="night"] body, [data-palette="cyber"] body { background: linear-gradient(#05070D, #121B33) fixed; color: #F4F8FA; }
+[data-palette="night"] .keys, [data-palette="night"] #status, [data-palette="cyber"] .keys, [data-palette="cyber"] #status { color: #9FB8C8; }
+[data-palette="night"] .stage:fullscreen, [data-palette="cyber"] .stage:fullscreen { background: #05070D; }
+#game { display: block; image-rendering: pixelated; image-rendering: crisp-edges; outline: none; box-shadow: 0 10px 30px rgba(16, 40, 56, 0.18); }
+#game:focus-visible { box-shadow: 0 0 0 3px var(--aqua), 0 10px 30px rgba(16, 40, 56, 0.18); }
+.wrap { max-width: 1280px; margin: 0 auto; padding-inline: 16px; padding-block: 0 16px; display: grid; gap: 12px; }
+.bar { min-height: 56px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
+.keys { margin: 0; flex: 1 1 320px; min-width: 0; font-size: 13px; color: var(--ink-2); }
+.keys kbd { font-family: var(--font-mono); font-size: 12px; padding: 1px 6px; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 5px; background: var(--panel); color: var(--ink); }
+#status { font: 700 12px var(--font-mono); color: var(--ink-2); }
+button { font: 700 13px var(--font-ui); color: var(--ink); background: linear-gradient(#FFFFFF, #E4F3F9); border: 1px solid var(--aqua); border-radius: 999px; padding: 7px 14px; cursor: pointer; }
+button:hover { background: linear-gradient(#FFFFFF, #D2ECF6); }
+button:focus-visible { outline: 3px solid var(--aqua-deep); outline-offset: 2px; }
+details#tune { background: var(--panel); border: 1px solid var(--aqua); border-radius: 14px; padding-inline: 16px; padding-block: 4px 14px; }
+details#tune summary { cursor: pointer; font: 800 15px var(--font-brand); padding-block: 10px; color: var(--ink); }
+details#tune summary small { font: 400 12px var(--font-ui); color: var(--ink-2); margin-left: 8px; }
+#tune-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 10px 20px; }
+.trow { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; align-items: center; min-width: 0; }
+.trow .pid, .tcheck code { font: 400 11px var(--font-mono); color: var(--ink-2); overflow-wrap: anywhere; }
+.trow output { font: 700 12px var(--font-mono); color: var(--ink); font-variant-numeric: tabular-nums; }
+.trow input { grid-column: 1 / -1; width: 100%; accent-color: var(--aqua-deep); }
+.tcheck { display: flex; gap: 8px; align-items: flex-start; font-size: 12px; min-width: 0; }
+.tcheck input { accent-color: var(--aqua-deep); margin-top: 2px; }
+.tune-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.note { margin: 10px 0 0; font-size: 11px; color: var(--ink-2); }
+.modal { position: fixed; inset: 0; background: rgba(16, 20, 23, 0.4); display: grid; place-items: center; padding: 16px; }
+.modal-card { width: min(760px, 100%); background: var(--panel); border: 1px solid var(--aqua); border-radius: 14px; padding: 16px; display: grid; gap: 10px; }
+.modal-card h2 { margin: 0; font: 800 18px var(--font-brand); }
+.modal-card p { margin: 0; font-size: 12px; color: var(--ink-2); }
+#trace-text { width: 100%; box-sizing: border-box; height: 46vh; font: 400 11px var(--font-mono); color: var(--ink); background: #FFFFFF; border: 1px solid var(--line); border-radius: 8px; padding: 8px; resize: vertical; }
+.modal-actions { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+#padmon { margin: 0; font: 400 11px var(--font-mono); color: var(--ink-2); overflow-wrap: anywhere; }
+[data-palette="night"] #padmon, [data-palette="cyber"] #padmon { color: #9FB8C8; }
+/* Edit 75: touch. The stage fills the screen (landscape only); the controls draw on an overlay. Upright phones see a prompt. */
+body.touch { overflow: hidden; overscroll-behavior: none; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+body.touch .wrap { display: none; }
+body.touch .stage { height: 100vh; height: 100dvh; min-height: 0; }
+body.touch #game { touch-action: none; }
+#rotate { position: fixed; inset: 0; z-index: 9; display: grid; place-items: center; background: linear-gradient(#05070D, #121B33); color: #3FD0FF; font: 700 18px var(--font-ui); text-align: center; line-height: 1.6; padding: 24px; }
+#rotate > div { border: 1.5px solid rgba(63,208,255,0.85); border-radius: 12px; padding: 20px 24px; background: linear-gradient(rgba(20,30,56,0.94), rgba(8,12,24,0.94)); box-shadow: 0 0 12px rgba(63,208,255,0.35); }
+#rotate small { font-weight: 400; font-size: 13px; color: #9FB8C8; }
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <canvas id="game" tabindex="0" aria-label="DUMMIES P8.3 game: Arcade and Story. Keyboard, gamepad or touch (landscape)."></canvas>
+</div>
+<div class="wrap">
+  <div class="bar" hidden> <!-- Edit 86: kept for its handlers and the build line; the pause menu carries options and controls -->
+    <p class="keys"><kbd>WASD</kbd> move · <kbd>Space</kbd>/<kbd>K</kbd> dash (A) · <kbd>L</kbd>/<kbd>Shift</kbd> jump (B) · <kbd>J</kbd>/<kbd>E</kbd> grab, hold to put down (X) · <kbd>I</kbd>/<kbd>Q</kbd> push off a car (Y) · <kbd>Esc</kbd> pause · <kbd>T</kbd> tuning · <kbd>G</kbd> pad setup · <span id="status"></span></p>
+    <button id="btn-pal" type="button">Night palette</button>
+    <button id="btn-full" type="button">Full screen</button>
+    <button id="btn-tune" type="button">Tuning</button>
+    <button id="btn-sound" type="button" aria-pressed="true">Sound on</button>
+  </div>
+  <p id="padmon" aria-live="off" hidden></p>
+  <details id="tune">
+    <summary>Tuning <small>Registry and prototype IDs. Changes apply live and mark the run as tuned. Open with T, or Pause › Options.</small></summary>
+    <div id="tune-grid"></div>
+    <div class="tune-actions">
+      <button id="t-credit" type="button">Grant 1 credit</button>
+      <button id="t-pad" type="button">Set up gamepad buttons</button>
+      <button id="t-reset" type="button">Reset to registry values</button>
+    </div>
+    <p class="note">Snapshot values (car sensor length, car speed) apply to the next car admitted. Body health applies to the next chassis.</p>
+  </details>
+</div>
+
+<div id="trace" class="modal" hidden>
+  <div class="modal-card" role="dialog" aria-labelledby="trace-h">
+    <h2 id="trace-h">Run trace</h2>
+    <p>Events, milestones and parameters for this run. Copy it into a file for playtest notes.</p>
+    <textarea id="trace-text" readonly spellcheck="false"></textarea>
+    <div class="modal-actions">
+      <button id="trace-copy" type="button">Copy trace</button>
+      <button id="trace-close" type="button">Close</button>
+    </div>
+  </div>
+</div>
+<script>
+// Palette: cyber (default: Chongqing city blocks), day (Edit 37 eco-city) or night (Chongqing parkland). Chosen at load: ?palette=
+window.PIX_PALETTE_NAME = { day: 'day', night: 'night', cyber: 'cyber' }[new URLSearchParams(location.search).get('palette') || (location.hash.match(/^#palette-(\w+)$/) || [])[1]] || 'cyber'; // cyber is the default scheme; ?palette= or #palette- (a hosted page keeps only the hash)
+document.documentElement.dataset.palette = window.PIX_PALETTE_NAME;
+const PAL_NEXT = { cyber: 'day', day: 'night', night: 'cyber' };
+document.getElementById('btn-pal').textContent = 'Palette: ' + window.PIX_PALETTE_NAME + ' → ' + PAL_NEXT[window.PIX_PALETTE_NAME];
+document.getElementById('btn-pal').addEventListener('click', () => {
+  if (location.search.includes('palette=')) { const u = new URL(location.href); u.searchParams.set('palette', PAL_NEXT[window.PIX_PALETTE_NAME]); location.href = u.toString(); return; }
+  location.hash = 'palette-' + PAL_NEXT[window.PIX_PALETTE_NAME]; location.reload();
+});
+document.getElementById('btn-full').addEventListener('click', () => {
+  const st = document.getElementById('stage');
+  try { (document.fullscreenElement ? document.exitFullscreen() : st.requestFullscreen()).catch(() => {}); } catch (e) { /* fullscreen blocked */ }
+  document.getElementById('game').focus();
+});
+</script>
+<!--SCRIPTS-->
+</body>
+</html>

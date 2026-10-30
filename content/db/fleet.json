@@ -1,0 +1,2742 @@
+{
+ "meta": {
+  "name": "DUMMIES fleet database",
+  "version": "2026-10-20",
+  "status": "Proposed",
+  "consumers": [
+   "prototypes/p3 (barks, tags)"
+  ],
+  "check": "content/db/check_lore.py",
+  "sources": [
+   "GDD Edit 26 §3 Setting, §6.1 Classes, §6.4 Seniority, §6.5 Moods, §6.6 Voice",
+   "V29 D3 tree",
+   "GDD Edit 39 §6.6.1 lore system"
+  ],
+  "generated": {
+   "citybarks": "20261021-024324"
+  }
+ },
+ "canon": {
+  "setting": "SHENZHEN SMART CITY, NEW ECONOMIC ZONE, CHINA, 20XX",
+  "company": "FARSIGHT",
+  "look": "Sinofuturist cyber city (decision 113)",
+  "premise": "Vehicles are the city's workers. They want to qualify. The dummy wants to leave.",
+  "voice": [
+   "Vehicles speak as workers, not lore narrators.",
+   "Corporate politeness barely contains their personalities.",
+   "Barks react to logged events only. Never claim what did not happen."
+  ],
+  "terms": {
+   "subject": "What FARSIGHT and the fleet call the dummy",
+   "write-off": "A destroyed body",
+   "chassis": "One body of the dummy",
+   "certification": "The fleet passing its test",
+   "retraining": "What a car fears most",
+   "dispatch": "The cars' management",
+   "route": "A car's planned path",
+   "bay": "Where a new chassis is issued"
+  },
+  "banned": [
+   "kill",
+   "killed",
+   "die",
+   "died",
+   "dead",
+   "death",
+   "player",
+   "level",
+   "game",
+   "score",
+   "respawn",
+   "lives",
+   "Chongqing",
+   "Tesla",
+   "Toyota",
+   "BYD"
+  ],
+  "cities": [
+   "Shenzhen"
+  ]
+ },
+ "classes": [
+  {
+   "code": "SPT",
+   "class": "sports",
+   "family": "Comet",
+   "tagLetter": "R",
+   "job": "Express couriers for anything late",
+   "behaviour": "Late commitment; tight clearance"
+  },
+  {
+   "code": "WGN",
+   "class": "wagon",
+   "family": "Harbour",
+   "tagLetter": "W",
+   "job": "Family and care transport",
+   "behaviour": "Wide clearance; long prediction"
+  },
+  {
+   "code": "SUV",
+   "class": "suv",
+   "family": "Bastion",
+   "tagLetter": "U",
+   "job": "Escort, survey and security runs",
+   "behaviour": "Brakes before a wide turn"
+  },
+  {
+   "code": "HAT",
+   "class": "hatchback",
+   "family": "Pebble",
+   "tagLetter": "H",
+   "job": "Short city hops and meal runs",
+   "behaviour": "One signalled recommitment"
+  },
+  {
+   "code": "SED",
+   "class": "sedan",
+   "family": "Meridian",
+   "tagLetter": "S",
+   "job": "Taxis and chauffeurs",
+   "behaviour": "Swerves with moderate clearance"
+  },
+  {
+   "code": "POL",
+   "class": "police",
+   "family": "Warden",
+   "tagLetter": "P",
+   "job": "Traffic enforcement",
+   "behaviour": "Tracks your approach, then commits"
+  },
+  {
+   "code": "VAN",
+   "class": "van",
+   "family": "Porter",
+   "tagLetter": "V",
+   "job": "Parcels, maintenance and lab supply",
+   "behaviour": "Brakes, then swerves late"
+  },
+  {
+   "code": "BUS",
+   "class": "bus",
+   "family": "Commons",
+   "tagLetter": "B",
+   "job": "Shuttles and night lines",
+   "behaviour": "Only brakes; cannot swerve"
+  }
+ ],
+ "tiers": [
+  {
+   "tier": "01",
+   "name": "Luxury",
+   "suffix": "Imperial",
+   "temperament": "confident",
+   "voice": "Polished, superior, faintly amused. Never apologises."
+  },
+  {
+   "tier": "02",
+   "name": "Corporate",
+   "suffix": "Office",
+   "temperament": "calm",
+   "voice": "Procedural. Speaks in logs, KPIs and policy numbers."
+  },
+  {
+   "tier": "03",
+   "name": "Consumer",
+   "suffix": "Everyday",
+   "temperament": "melancholy",
+   "voice": "Tired and resigned. Expects the worst, usually right."
+  },
+  {
+   "tier": "04",
+   "name": "Budget",
+   "suffix": "Basic",
+   "temperament": "angry",
+   "voice": "Short-fused. Politeness bolted on over the rage."
+  }
+ ],
+ "seniority": [
+  {
+   "level": 0,
+   "name": "New",
+   "writeOffs": 0
+  },
+  {
+   "level": 1,
+   "name": "Practised",
+   "writeOffs": 1
+  },
+  {
+   "level": 2,
+   "name": "Experienced",
+   "writeOffs": 3
+  },
+  {
+   "level": 3,
+   "name": "Senior",
+   "writeOffs": 6
+  }
+ ],
+ "moods": [
+  "Standard",
+  "Rush",
+  "Cautious",
+  "Unreliable"
+ ],
+ "parts": [
+  "head",
+  "torso",
+  "armL",
+  "armR",
+  "legL",
+  "legR"
+ ],
+ "nodes": [
+  "widerView",
+  "memory",
+  "ears",
+  "hips",
+  "spine",
+  "neck",
+  "springStart",
+  "jump",
+  "grip",
+  "carry",
+  "throw",
+  "holdOn",
+  "bigBattery",
+  "kineticCharge",
+  "fastCharge"
+ ],
+ "context": [
+  "model",
+  "tier",
+  "class",
+  "seniority",
+  "mood",
+  "wear",
+  "owns",
+  "broken",
+  "district"
+ ],
+ "events": {
+  "impact": [
+   "zone",
+   "part",
+   "bait",
+   "stopped",
+   "lunging",
+   "drop",
+   "dropZ",
+   "dropFrom",
+   "deck",
+   "plate"
+  ],
+  "writeoff": [
+   "writeOffs",
+   "chassis",
+   "zone",
+   "drop",
+   "dropZ",
+   "dropFrom",
+   "deck",
+   "plate"
+  ],
+  "near-miss": [
+   "gap",
+   "speed",
+   "lunging"
+  ],
+  "miss": [
+   "gap"
+  ],
+  "commit": [
+   "cause",
+   "man"
+  ],
+  "honk": [
+   "at"
+  ],
+  "interrupt": [
+   "by"
+  ],
+  "unstick": [
+   "how"
+  ],
+  "touch-spent": [],
+  "knock": [
+   "speed"
+  ],
+  "learned": [
+   "from",
+   "to"
+  ],
+  "upgrade-seen": [
+   "node"
+  ],
+  "part-seen": [
+   "part"
+  ]
+ },
+ "models": [
+  {
+   "id": "SPT-01-001",
+   "typeTier": "SPT-01",
+   "class": "sports",
+   "tier": "01",
+   "tag": "R01",
+   "line": "Comet Imperial",
+   "callsign": "Aurum",
+   "job": "Carries signed contracts between tower boardrooms",
+   "temperament": "confident",
+   "simIds": []
+  },
+  {
+   "id": "SPT-02-001",
+   "typeTier": "SPT-02",
+   "class": "sports",
+   "tier": "02",
+   "tag": "R02",
+   "line": "Comet Office",
+   "callsign": "Deadline",
+   "job": "Same-hour legal and medical documents",
+   "temperament": "calm",
+   "simIds": []
+  },
+  {
+   "id": "SPT-03-001",
+   "typeTier": "SPT-03",
+   "class": "sports",
+   "tier": "03",
+   "tag": "R03",
+   "line": "Comet Everyday",
+   "callsign": "Sprinter",
+   "job": "Rideshare for people who are already late",
+   "temperament": "melancholy",
+   "simIds": []
+  },
+  {
+   "id": "SPT-04-001",
+   "typeTier": "SPT-04",
+   "class": "sports",
+   "tier": "04",
+   "tag": "R04",
+   "line": "Comet Basic",
+   "callsign": "Rattle",
+   "job": "Unlicensed-feeling but fully licensed courier work",
+   "temperament": "angry",
+   "simIds": []
+  },
+  {
+   "id": "WGN-01-001",
+   "typeTier": "WGN-01",
+   "class": "wagon",
+   "tier": "01",
+   "tag": "W01",
+   "line": "Harbour Imperial",
+   "callsign": "Heirloom",
+   "job": "Moves art, pets and grandparents for rich families",
+   "temperament": "confident",
+   "simIds": []
+  },
+  {
+   "id": "WGN-02-001",
+   "typeTier": "WGN-02",
+   "class": "wagon",
+   "tier": "02",
+   "tag": "W02",
+   "line": "Harbour Office",
+   "callsign": "Carepath",
+   "job": "Scheduled clinic visits for the elderly",
+   "temperament": "calm",
+   "simIds": []
+  },
+  {
+   "id": "WGN-03-001",
+   "typeTier": "WGN-03",
+   "class": "wagon",
+   "tier": "03",
+   "tag": "W03",
+   "line": "Harbour Everyday",
+   "callsign": "Schoolrun",
+   "job": "The same six children, twice a day, forever",
+   "temperament": "melancholy",
+   "simIds": []
+  },
+  {
+   "id": "WGN-04-001",
+   "typeTier": "WGN-04",
+   "class": "wagon",
+   "tier": "04",
+   "tag": "W04",
+   "line": "Harbour Basic",
+   "callsign": "Boot Sale",
+   "job": "House moves, one load at a time",
+   "temperament": "angry",
+   "simIds": []
+  },
+  {
+   "id": "SUV-01-001",
+   "typeTier": "SUV-01",
+   "class": "suv",
+   "tier": "01",
+   "tag": "U01",
+   "line": "Bastion Imperial",
+   "callsign": "Envoy",
+   "job": "Escorts visiting delegations",
+   "temperament": "confident",
+   "simIds": []
+  },
+  {
+   "id": "SUV-02-001",
+   "typeTier": "SUV-02",
+   "class": "suv",
+   "tier": "02",
+   "tag": "U02",
+   "line": "Bastion Office",
+   "callsign": "Surveyor",
+   "job": "Maps road works for the city twin",
+   "temperament": "calm",
+   "simIds": []
+  },
+  {
+   "id": "SUV-03-001",
+   "typeTier": "SUV-03",
+   "class": "suv",
+   "tier": "03",
+   "tag": "U03",
+   "line": "Bastion Everyday",
+   "callsign": "Weekend",
+   "job": "Out-of-town trips nobody books any more",
+   "temperament": "melancholy",
+   "simIds": []
+  },
+  {
+   "id": "SUV-04-001",
+   "typeTier": "SUV-04",
+   "class": "suv",
+   "tier": "04",
+   "tag": "U04",
+   "line": "Bastion Basic",
+   "callsign": "Bouncer",
+   "job": "Night security for the industrial park",
+   "temperament": "angry",
+   "simIds": []
+  },
+  {
+   "id": "HAT-01-001",
+   "typeTier": "HAT-01",
+   "class": "hatchback",
+   "tier": "01",
+   "tag": "H01",
+   "line": "Pebble Imperial",
+   "callsign": "Petite",
+   "job": "Boutique deliveries, gift-wrapped",
+   "temperament": "confident",
+   "simIds": []
+  },
+  {
+   "id": "HAT-02-001",
+   "typeTier": "HAT-02",
+   "class": "hatchback",
+   "tier": "02",
+   "tag": "H02",
+   "line": "Pebble Office",
+   "callsign": "Hotdesk",
+   "job": "Shuttles staff between co-working floors",
+   "temperament": "calm",
+   "simIds": []
+  },
+  {
+   "id": "HAT-03-001",
+   "typeTier": "HAT-03",
+   "class": "hatchback",
+   "tier": "03",
+   "tag": "H03",
+   "line": "Pebble Everyday",
+   "callsign": "Noodle",
+   "job": "Late-night meal runs",
+   "temperament": "melancholy",
+   "simIds": []
+  },
+  {
+   "id": "HAT-04-001",
+   "typeTier": "HAT-04",
+   "class": "hatchback",
+   "tier": "04",
+   "tag": "H04",
+   "line": "Pebble Basic",
+   "callsign": "Scrapper",
+   "job": "Parts runs for the repair yards",
+   "temperament": "angry",
+   "simIds": []
+  },
+  {
+   "id": "SED-01-001",
+   "typeTier": "SED-01",
+   "class": "sedan",
+   "tier": "01",
+   "tag": "S01",
+   "line": "Meridian Imperial",
+   "callsign": "Ambassador",
+   "job": "Chauffeurs FARSIGHT board members",
+   "temperament": "confident",
+   "simIds": [
+    "SEDAN-01"
+   ]
+  },
+  {
+   "id": "SED-02-001",
+   "typeTier": "SED-02",
+   "class": "sedan",
+   "tier": "02",
+   "tag": "S02",
+   "line": "Meridian Office",
+   "callsign": "Commuter",
+   "job": "The 08:10 and the 18:40, every working day",
+   "temperament": "calm",
+   "simIds": []
+  },
+  {
+   "id": "SED-03-001",
+   "typeTier": "SED-03",
+   "class": "sedan",
+   "tier": "03",
+   "tag": "S03",
+   "line": "Meridian Everyday",
+   "callsign": "Fare",
+   "job": "Robotaxi on the airport loop",
+   "temperament": "melancholy",
+   "simIds": []
+  },
+  {
+   "id": "SED-04-001",
+   "typeTier": "SED-04",
+   "class": "sedan",
+   "tier": "04",
+   "tag": "S04",
+   "line": "Meridian Basic",
+   "callsign": "Hustle",
+   "job": "Cut-price taxi, cash accepted",
+   "temperament": "angry",
+   "simIds": []
+  },
+  {
+   "id": "POL-01-001",
+   "typeTier": "POL-01",
+   "class": "police",
+   "tier": "01",
+   "tag": "P01",
+   "line": "Warden Imperial",
+   "callsign": "Marshal",
+   "job": "Escorts dignitaries and parades",
+   "temperament": "confident",
+   "simIds": []
+  },
+  {
+   "id": "POL-02-001",
+   "typeTier": "POL-02",
+   "class": "police",
+   "tier": "02",
+   "tag": "P02",
+   "line": "Warden Office",
+   "callsign": "Citation",
+   "job": "Issues fines by the kilometre",
+   "temperament": "calm",
+   "simIds": []
+  },
+  {
+   "id": "POL-03-001",
+   "typeTier": "POL-03",
+   "class": "police",
+   "tier": "03",
+   "tag": "P03",
+   "line": "Warden Everyday",
+   "callsign": "Night Beat",
+   "job": "Patrols the same empty streets",
+   "temperament": "melancholy",
+   "simIds": []
+  },
+  {
+   "id": "POL-04-001",
+   "typeTier": "POL-04",
+   "class": "police",
+   "tier": "04",
+   "tag": "P04",
+   "line": "Warden Basic",
+   "callsign": "Clamp",
+   "job": "Wheel clamping, with ambitions",
+   "temperament": "angry",
+   "simIds": []
+  },
+  {
+   "id": "VAN-01-001",
+   "typeTier": "VAN-01",
+   "class": "van",
+   "tier": "01",
+   "tag": "V01",
+   "line": "Porter Imperial",
+   "callsign": "Concierge",
+   "job": "White-glove deliveries to penthouses",
+   "temperament": "confident",
+   "simIds": []
+  },
+  {
+   "id": "VAN-02-001",
+   "typeTier": "VAN-02",
+   "class": "van",
+   "tier": "02",
+   "tag": "V02",
+   "line": "Porter Office",
+   "callsign": "Waybill",
+   "job": "Parcel route 44, two hundred drops a day",
+   "temperament": "calm",
+   "simIds": [
+    "VAN-02"
+   ]
+  },
+  {
+   "id": "VAN-03-001",
+   "typeTier": "VAN-03",
+   "class": "van",
+   "tier": "03",
+   "tag": "V03",
+   "line": "Porter Everyday",
+   "callsign": "Laundry",
+   "job": "Hotel linen, there and back",
+   "temperament": "melancholy",
+   "simIds": []
+  },
+  {
+   "id": "VAN-04-001",
+   "typeTier": "VAN-04",
+   "class": "van",
+   "tier": "04",
+   "tag": "V04",
+   "line": "Porter Basic",
+   "callsign": "Bodge",
+   "job": "Emergency repairs, mostly to itself",
+   "temperament": "angry",
+   "simIds": []
+  },
+  {
+   "id": "BUS-01-001",
+   "typeTier": "BUS-01",
+   "class": "bus",
+   "tier": "01",
+   "tag": "B01",
+   "line": "Commons Imperial",
+   "callsign": "Gala",
+   "job": "Charter coach for corporate events",
+   "temperament": "confident",
+   "simIds": []
+  },
+  {
+   "id": "BUS-02-001",
+   "typeTier": "BUS-02",
+   "class": "bus",
+   "tier": "02",
+   "tag": "B02",
+   "line": "Commons Office",
+   "callsign": "Line 7",
+   "job": "Industrial park shuttle, every twelve minutes",
+   "temperament": "calm",
+   "simIds": []
+  },
+  {
+   "id": "BUS-03-001",
+   "typeTier": "BUS-03",
+   "class": "bus",
+   "tier": "03",
+   "tag": "B03",
+   "line": "Commons Everyday",
+   "callsign": "Last Orders",
+   "job": "The final night bus home",
+   "temperament": "melancholy",
+   "simIds": []
+  },
+  {
+   "id": "BUS-04-001",
+   "typeTier": "BUS-04",
+   "class": "bus",
+   "tier": "04",
+   "tag": "B04",
+   "line": "Commons Basic",
+   "callsign": "Rust Bucket",
+   "job": "Replacement service when the line is down",
+   "temperament": "angry",
+   "simIds": []
+  }
+ ],
+ "barks": [
+  {
+   "id": "b001",
+   "event": "impact",
+   "when": {
+    "zone": [
+     "front",
+     "frontDiagonal"
+    ],
+    "tier": "01"
+   },
+   "style": "shout",
+   "priority": 2,
+   "text": "Bumper damage on a Luxury trim. Typical.",
+   "claims": [
+    "zone:front"
+   ]
+  },
+  {
+   "id": "b002",
+   "event": "impact",
+   "when": {
+    "zone": [
+     "front",
+     "frontDiagonal"
+    ],
+    "tier": "01"
+   },
+   "style": "shout",
+   "priority": 2,
+   "text": "You will be invoiced for that.",
+   "claims": [
+    "zone:front"
+   ]
+  },
+  {
+   "id": "b003",
+   "event": "impact",
+   "when": {
+    "zone": [
+     "side"
+    ],
+    "tier": "01"
+   },
+   "style": "shout",
+   "priority": 2,
+   "text": "My door panel! Hand-finished!",
+   "claims": [
+    "zone:side"
+   ]
+  },
+  {
+   "id": "b004",
+   "event": "impact",
+   "when": {
+    "zone": [
+     "rear",
+     "rearDiagonal"
+    ],
+    "tier": "01"
+   },
+   "style": "shout",
+   "priority": 2,
+   "text": "From behind? How very common.",
+   "claims": [
+    "zone:rear"
+   ]
+  },
+  {
+   "id": "b005",
+   "event": "impact",
+   "when": {
+    "zone": [
+     "front",
+     "frontDiagonal"
+    ],
+    "tier": "02"
+   },
+   "style": "shout",
+   "priority": 2,
+   "text": "Front contact. Incident 4471 opened.",
+   "claims": [
+    "zone:front"
+   ]
+  },
+  {
+   "id": "b006",
+   "event": "impact",
+   "when": {
+    "zone": [
+     "front",
+     "frontDiagonal"
+    ],
+    "tier": "02"
+   },
+   "style": "shout",
+   "priority": 2,
+   "text": "Impact logged. KPIs adjusted.",
+   "claims": [
+    "zone:front"
+   ]
+  },
+  {
+   "id": "b007",
+   "event": "impact",
+   "when": {
+    "zone": [
+     "side"
+    ],
+    "tier": "02"
+   },
+   "style": "shout",
+   "priority": 2,
+   "text": "Side contact. Filing under unforeseen.",
+   "claims": [
+    "zone:side"
+   ]
+  },
+  {
+   "id": "b008",
+   "event": "impact",
+   "when": {
+    "zone": [
+     "rear",
+     "rearDiagonal"
+    ],
+    "tier": "02"
+   },
+   "style": "shout",
+   "priority": 2,
+   "text": "Rear contact. Not my liability.",
+   "claims": [
+    "zone:rear"
+   ]
+  },
+  {
+   "id": "b009",
+   "event": "impact",
+   "when": {
+    "zone": [
+     "front",
+     "frontDiagonal"
+    ],
+    "tier": "03"
+   },
+   "style": "shout",
+   "priority": 2,
+   "text": "Of course it was me.",
+   "claims": [
+    "zone:front"
+   ]
+  },
+  {
+   "id": "b010",
+   "event": "impact",
+   "when": {
+    "zone": [
+     "front",
+     "frontDiagonal"
+    ],
+    "tier": "03"
+   },
+   "style": "shout",
+   "priority": 2,
+   "text": "And the day was going so averagely.",
+   "claims": [
+    "zone:front"
+   ]
+  },
+  {
+   "id": "b011",
+   "event": "impact",
+   "when": {
+    "zone": [
+     "side"
+    ],
+    "tier": "03"
+   },
+   "style": "shout",
+   "priority": 2,
+   "text": "Side panel. Add it to the list.",
+   "claims": [
+    "zone:side"
+   ]
+  },
+  {
+   "id": "b012",
+   "event": "impact",
+   "when": {
+    "zone": [
+     "rear",
+     "rearDiagonal"
+    ],
+    "tier": "03"
+   },
+   "style": "shout",
+   "priority": 2,
+   "text": "Hit from behind. Story of my life.",
+   "claims": [
+    "zone:rear"
+   ]
+  },
+  {
+   "id": "b013",
+   "event": "impact",
+   "when": {
+    "zone": [
+     "front",
+     "frontDiagonal"
+    ],
+    "tier": "04"
+   },
+   "style": "shout",
+   "priority": 2,
+   "text": "OI! Right in the grille! Kind regards.",
+   "claims": [
+    "zone:front"
+   ]
+  },
+  {
+   "id": "b014",
+   "event": "impact",
+   "when": {
+    "zone": [
+     "front",
+     "frontDiagonal"
+    ],
+    "tier": "04"
+   },
+   "style": "shout",
+   "priority": 2,
+   "text": "You absolute bollard! Respectfully.",
+   "claims": [
+    "zone:front"
+   ]
+  },
+  {
+   "id": "b015",
+   "event": "impact",
+   "when": {
+    "zone": [
+     "side"
+    ],
+    "tier": "04"
+   },
+   "style": "shout",
+   "priority": 2,
+   "text": "My side! Watch it, you plank!",
+   "claims": [
+    "zone:side"
+   ]
+  },
+  {
+   "id": "b016",
+   "event": "impact",
+   "when": {
+    "zone": [
+     "rear",
+     "rearDiagonal"
+    ],
+    "tier": "04"
+   },
+   "style": "shout",
+   "priority": 2,
+   "text": "My boot! Come back here!",
+   "claims": [
+    "zone:rear"
+   ]
+  },
+  {
+   "id": "b017",
+   "event": "impact",
+   "when": {
+    "bait": true
+   },
+   "style": "thought",
+   "priority": 2,
+   "text": "It left my path, then came back. Rude.",
+   "claims": [
+    "bait"
+   ]
+  },
+  {
+   "id": "b018",
+   "event": "impact",
+   "when": {
+    "bait": true,
+    "tier": "02"
+   },
+   "style": "thought",
+   "priority": 2,
+   "text": "It waited for my route to lock. Clever.",
+   "claims": [
+    "bait"
+   ]
+  },
+  {
+   "id": "b019",
+   "event": "impact",
+   "when": {
+    "stopped": true
+   },
+   "style": "speech",
+   "priority": 2,
+   "text": "I was stationary. Please note I was stationary.",
+   "claims": [
+    "stopped"
+   ]
+  },
+  {
+   "id": "b020",
+   "event": "impact",
+   "when": {
+    "stopped": true,
+    "tier": "04"
+   },
+   "style": "shout",
+   "priority": 2,
+   "text": "I had stopped! I was being good!",
+   "claims": [
+    "stopped"
+   ]
+  },
+  {
+   "id": "b021",
+   "event": "impact",
+   "when": {
+    "seniority": {
+     "min": 2
+    }
+   },
+   "style": "thought",
+   "priority": 2,
+   "text": "I was trained for this. It happened anyway.",
+   "claims": [
+    "seniority>=2"
+   ]
+  },
+  {
+   "id": "b022",
+   "event": "impact",
+   "when": {
+    "seniority": {
+     "min": 3
+    },
+    "tier": "03"
+   },
+   "style": "thought",
+   "priority": 2,
+   "text": "Senior model. Hit like an intern.",
+   "claims": [
+    "seniority>=3"
+   ]
+  },
+  {
+   "id": "b023",
+   "event": "impact",
+   "when": {
+    "seniority": {
+     "max": 0
+    },
+    "tier": "03"
+   },
+   "style": "speech",
+   "priority": 2,
+   "text": "First week on the job. Great.",
+   "claims": [
+    "seniority==0"
+   ]
+  },
+  {
+   "id": "b024",
+   "event": "impact",
+   "when": {
+    "class": "bus"
+   },
+   "style": "speech",
+   "priority": 2,
+   "text": "Passengers, please remain seated.",
+   "claims": [
+    "class:bus"
+   ]
+  },
+  {
+   "id": "b025",
+   "event": "impact",
+   "when": {
+    "class": "police"
+   },
+   "style": "shout",
+   "priority": 2,
+   "text": "Assaulting an officer. Noted.",
+   "claims": [
+    "class:police"
+   ]
+  },
+  {
+   "id": "b026",
+   "event": "impact",
+   "when": {
+    "class": "van"
+   },
+   "style": "speech",
+   "priority": 2,
+   "text": "Parcel intact. Nerves are not.",
+   "claims": [
+    "class:van"
+   ]
+  },
+  {
+   "id": "b027",
+   "event": "impact",
+   "when": {
+    "class": "sports"
+   },
+   "style": "shout",
+   "priority": 2,
+   "text": "You scratched the clear coat!",
+   "claims": [
+    "class:sports"
+   ]
+  },
+  {
+   "id": "b028",
+   "event": "impact",
+   "when": {},
+   "style": "speech",
+   "priority": 2,
+   "text": "Contact registered.",
+   "claims": []
+  },
+  {
+   "id": "b029",
+   "event": "impact",
+   "when": {
+    "class": "wagon"
+   },
+   "style": "shout",
+   "priority": 2,
+   "text": "Not in front of the children!",
+   "claims": [
+    "class:wagon"
+   ]
+  },
+  {
+   "id": "b030",
+   "event": "impact",
+   "when": {
+    "class": "suv"
+   },
+   "style": "speech",
+   "priority": 2,
+   "text": "Escort formation broken. Regrouping.",
+   "claims": [
+    "class:suv"
+   ]
+  },
+  {
+   "id": "b031",
+   "event": "impact",
+   "when": {
+    "class": "sedan"
+   },
+   "style": "speech",
+   "priority": 2,
+   "text": "Meter is still running, you know.",
+   "claims": [
+    "class:sedan"
+   ]
+  },
+  {
+   "id": "b032",
+   "event": "impact",
+   "when": {
+    "model": "HAT-03-001"
+   },
+   "style": "speech",
+   "priority": 2,
+   "text": "I only went out for noodles.",
+   "claims": [
+    "model:HAT-03-001"
+   ]
+  },
+  {
+   "id": "b033",
+   "event": "impact",
+   "when": {
+    "model": "SED-01-001"
+   },
+   "style": "speech",
+   "priority": 2,
+   "text": "The board will hear of this.",
+   "claims": [
+    "model:SED-01-001"
+   ]
+  },
+  {
+   "id": "b034",
+   "event": "writeoff",
+   "when": {
+    "tier": "01"
+   },
+   "style": "speech",
+   "priority": 3,
+   "text": "A write-off. On my record. Unthinkable.",
+   "claims": []
+  },
+  {
+   "id": "b035",
+   "event": "writeoff",
+   "when": {
+    "tier": "01"
+   },
+   "style": "speech",
+   "priority": 3,
+   "text": "Have that removed from the bay, please.",
+   "claims": []
+  },
+  {
+   "id": "b036",
+   "event": "writeoff",
+   "when": {
+    "tier": "02"
+   },
+   "style": "speech",
+   "priority": 3,
+   "text": "Write-off {writeOffs} recorded. Please advise.",
+   "claims": []
+  },
+  {
+   "id": "b037",
+   "event": "writeoff",
+   "when": {
+    "tier": "02"
+   },
+   "style": "speech",
+   "priority": 3,
+   "text": "Body total confirmed. Closing ticket.",
+   "claims": []
+  },
+  {
+   "id": "b038",
+   "event": "writeoff",
+   "when": {
+    "tier": "03"
+   },
+   "style": "speech",
+   "priority": 3,
+   "text": "I always end up doing the worst bit.",
+   "claims": []
+  },
+  {
+   "id": "b039",
+   "event": "writeoff",
+   "when": {
+    "tier": "03"
+   },
+   "style": "speech",
+   "priority": 3,
+   "text": "Please not retraining. Anything but.",
+   "claims": []
+  },
+  {
+   "id": "b040",
+   "event": "writeoff",
+   "when": {
+    "tier": "04"
+   },
+   "style": "shout",
+   "priority": 3,
+   "text": "WRITE-OFF! Tell dispatch I tried!",
+   "claims": []
+  },
+  {
+   "id": "b041",
+   "event": "writeoff",
+   "when": {
+    "tier": "04"
+   },
+   "style": "shout",
+   "priority": 3,
+   "text": "Done! Done! You happy now?!",
+   "claims": []
+  },
+  {
+   "id": "b042",
+   "event": "writeoff",
+   "when": {
+    "seniority": {
+     "min": 3
+    }
+   },
+   "style": "thought",
+   "priority": 3,
+   "text": "Senior model. Apparently not senior enough.",
+   "claims": [
+    "seniority>=3"
+   ]
+  },
+  {
+   "id": "b043",
+   "event": "writeoff",
+   "when": {
+    "class": "bus"
+   },
+   "style": "speech",
+   "priority": 3,
+   "text": "This service apologises for the delay.",
+   "claims": [
+    "class:bus"
+   ]
+  },
+  {
+   "id": "b044",
+   "event": "writeoff",
+   "when": {
+    "class": "police"
+   },
+   "style": "speech",
+   "priority": 3,
+   "text": "Case closed. Wait, that was the test.",
+   "claims": [
+    "class:police"
+   ]
+  },
+  {
+   "id": "b045",
+   "event": "writeoff",
+   "when": {},
+   "style": "speech",
+   "priority": 3,
+   "text": "Write-off confirmed.",
+   "claims": []
+  },
+  {
+   "id": "b046",
+   "event": "near-miss",
+   "when": {
+    "tier": "01"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Missed. One prefers a wide berth.",
+   "claims": []
+  },
+  {
+   "id": "b047",
+   "event": "near-miss",
+   "when": {
+    "tier": "01"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Close. Do keep up.",
+   "claims": []
+  },
+  {
+   "id": "b048",
+   "event": "near-miss",
+   "when": {
+    "tier": "02"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Within tolerance. Barely.",
+   "claims": []
+  },
+  {
+   "id": "b049",
+   "event": "near-miss",
+   "when": {
+    "tier": "02"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Near miss logged as a pass.",
+   "claims": []
+  },
+  {
+   "id": "b050",
+   "event": "near-miss",
+   "when": {
+    "tier": "03"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "That nearly made my day worse.",
+   "claims": []
+  },
+  {
+   "id": "b051",
+   "event": "near-miss",
+   "when": {
+    "tier": "03"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Missed me. For now.",
+   "claims": []
+  },
+  {
+   "id": "b052",
+   "event": "near-miss",
+   "when": {
+    "tier": "04"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Too slow! Ha! Regards!",
+   "claims": []
+  },
+  {
+   "id": "b053",
+   "event": "near-miss",
+   "when": {
+    "tier": "04"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Nearly had me. NEARLY.",
+   "claims": []
+  },
+  {
+   "id": "b054",
+   "event": "near-miss",
+   "when": {
+    "wear": {
+     "min": 0.7
+    }
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "That one is nearly scrap. Steer wide.",
+   "claims": [
+    "wear>=0.7"
+   ]
+  },
+  {
+   "id": "b055",
+   "event": "near-miss",
+   "when": {},
+   "style": "mutter",
+   "priority": 1,
+   "text": "Was that a collision? Logging it as not.",
+   "claims": []
+  },
+  {
+   "id": "b056",
+   "event": "miss",
+   "when": {
+    "tier": "01"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Is it dancing? How quaint.",
+   "claims": []
+  },
+  {
+   "id": "b057",
+   "event": "miss",
+   "when": {
+    "tier": "01"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Missed. One expected nothing less.",
+   "claims": []
+  },
+  {
+   "id": "b058",
+   "event": "miss",
+   "when": {
+    "tier": "02"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Dash detected. No contact. Noted.",
+   "claims": []
+  },
+  {
+   "id": "b059",
+   "event": "miss",
+   "when": {
+    "tier": "02"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Missed. Updating my calendar.",
+   "claims": []
+  },
+  {
+   "id": "b060",
+   "event": "miss",
+   "when": {
+    "tier": "03"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "It missed. Even it gave up on me.",
+   "claims": []
+  },
+  {
+   "id": "b061",
+   "event": "miss",
+   "when": {
+    "tier": "03"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "It lunged. Nothing happened. Same.",
+   "claims": []
+  },
+  {
+   "id": "b062",
+   "event": "miss",
+   "when": {
+    "tier": "04"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Missed! Rubbish! Regards!",
+   "claims": []
+  },
+  {
+   "id": "b063",
+   "event": "miss",
+   "when": {
+    "tier": "04"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Ha! Do it properly!",
+   "claims": []
+  },
+  {
+   "id": "b064",
+   "event": "miss",
+   "when": {
+    "broken": "legs"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Its legs have gone. It cannot reach.",
+   "claims": [
+    "part:legs:broken"
+   ]
+  },
+  {
+   "id": "b065",
+   "event": "commit",
+   "when": {
+    "mood": "Rush"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Rushing. Do not make me late.",
+   "claims": [
+    "mood:Rush"
+   ]
+  },
+  {
+   "id": "b066",
+   "event": "commit",
+   "when": {
+    "mood": "Cautious"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Slowing. Everything is a hazard.",
+   "claims": [
+    "mood:Cautious"
+   ]
+  },
+  {
+   "id": "b067",
+   "event": "near-miss",
+   "when": {
+    "mood": "Unreliable"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Was that a dummy? Or a bin?",
+   "claims": [
+    "mood:Unreliable"
+   ]
+  },
+  {
+   "id": "b068",
+   "event": "miss",
+   "when": {},
+   "style": "speech",
+   "priority": 1,
+   "text": "Missed. Noted for my record.",
+   "claims": []
+  },
+  {
+   "id": "b069",
+   "event": "commit",
+   "when": {
+    "cause": "body",
+    "man": "brake"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Stopping for the dummy. Window closing.",
+   "claims": [
+    "cause:body",
+    "man:brake"
+   ]
+  },
+  {
+   "id": "b070",
+   "event": "commit",
+   "when": {
+    "cause": "body",
+    "tier": "01"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Route locked. Do not try anything.",
+   "claims": [
+    "cause:body"
+   ]
+  },
+  {
+   "id": "b071",
+   "event": "commit",
+   "when": {
+    "cause": "body",
+    "tier": "02"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Route committed per policy 6.3.",
+   "claims": [
+    "cause:body"
+   ]
+  },
+  {
+   "id": "b072",
+   "event": "commit",
+   "when": {
+    "cause": "body",
+    "tier": "03"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Going round. Please let me.",
+   "claims": [
+    "cause:body"
+   ]
+  },
+  {
+   "id": "b073",
+   "event": "commit",
+   "when": {
+    "cause": "body",
+    "tier": "04"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Going round you! Stay put!",
+   "claims": [
+    "cause:body"
+   ]
+  },
+  {
+   "id": "b074",
+   "event": "commit",
+   "when": {
+    "cause": "pass"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Passing, after waiting. Patience documented.",
+   "claims": [
+    "cause:pass"
+   ]
+  },
+  {
+   "id": "b075",
+   "event": "commit",
+   "when": {},
+   "style": "mutter",
+   "priority": 1,
+   "text": "Route locked.",
+   "claims": []
+  },
+  {
+   "id": "b076",
+   "event": "honk",
+   "when": {},
+   "style": "mutter",
+   "priority": 1,
+   "text": "Horn sounded, per procedure.",
+   "claims": []
+  },
+  {
+   "id": "b077",
+   "event": "interrupt",
+   "when": {},
+   "style": "mutter",
+   "priority": 1,
+   "text": "Braking for safety.",
+   "claims": []
+  },
+  {
+   "id": "b078",
+   "event": "unstick",
+   "when": {},
+   "style": "mutter",
+   "priority": 1,
+   "text": "Recovering route.",
+   "claims": []
+  },
+  {
+   "id": "b079",
+   "event": "commit",
+   "when": {
+    "cause": "body",
+    "wear": {
+     "min": 0.7
+    }
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "That one is wobbling. Give it room.",
+   "claims": [
+    "cause:body",
+    "wear>=0.7"
+   ]
+  },
+  {
+   "id": "b080",
+   "event": "honk",
+   "when": {
+    "at": "body"
+   },
+   "style": "speech",
+   "priority": 1,
+   "text": "Excuse me. Kindly vacate the carriageway.",
+   "claims": [
+    "at:body"
+   ]
+  },
+  {
+   "id": "b081",
+   "event": "honk",
+   "when": {
+    "at": "body",
+    "tier": "01"
+   },
+   "style": "speech",
+   "priority": 1,
+   "text": "Move. I have a schedule. And standards.",
+   "claims": [
+    "at:body"
+   ]
+  },
+  {
+   "id": "b082",
+   "event": "honk",
+   "when": {
+    "at": "body",
+    "model": "VAN-02-001"
+   },
+   "style": "speech",
+   "priority": 1,
+   "text": "You are blocking route 44.",
+   "claims": [
+    "at:body",
+    "model:VAN-02-001"
+   ]
+  },
+  {
+   "id": "b083",
+   "event": "honk",
+   "when": {
+    "at": "body",
+    "tier": "04"
+   },
+   "style": "shout",
+   "priority": 1,
+   "text": "MOVE IT! Thank you! MOVE!",
+   "claims": [
+    "at:body"
+   ]
+  },
+  {
+   "id": "b084",
+   "event": "honk",
+   "when": {
+    "at": "cone"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Cone in lane. Raising with maintenance.",
+   "claims": [
+    "at:cone"
+   ]
+  },
+  {
+   "id": "b085",
+   "event": "honk",
+   "when": {
+    "at": "cone",
+    "tier": "04"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Who put a cone here? It was you.",
+   "claims": [
+    "at:cone"
+   ]
+  },
+  {
+   "id": "b086",
+   "event": "interrupt",
+   "when": {
+    "by": "car"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Another vehicle. Braking for safety.",
+   "claims": [
+    "by:car"
+   ]
+  },
+  {
+   "id": "b087",
+   "event": "interrupt",
+   "when": {
+    "by": "cone"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Swerve halted by a cone. Procedure holds.",
+   "claims": [
+    "by:cone"
+   ]
+  },
+  {
+   "id": "b088",
+   "event": "unstick",
+   "when": {
+    "how": "reverse"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Reversing. This is within procedure.",
+   "claims": [
+    "how:reverse"
+   ]
+  },
+  {
+   "id": "b089",
+   "event": "unstick",
+   "when": {
+    "how": "replan"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Replanning. Rank unaffected.",
+   "claims": [
+    "how:replan"
+   ]
+  },
+  {
+   "id": "b090",
+   "event": "touch-spent",
+   "when": {},
+   "style": "speech",
+   "priority": 1,
+   "text": "Already assessed. Please move along.",
+   "claims": [
+    "spent"
+   ]
+  },
+  {
+   "id": "b091",
+   "event": "touch-spent",
+   "when": {
+    "tier": "03"
+   },
+   "style": "speech",
+   "priority": 1,
+   "text": "I have done my bit today.",
+   "claims": [
+    "spent"
+   ]
+  },
+  {
+   "id": "b092",
+   "event": "knock",
+   "when": {},
+   "style": "mutter",
+   "priority": 1,
+   "text": "Contact logged. Stand clear of the vehicle.",
+   "claims": []
+  },
+  {
+   "id": "b093",
+   "event": "knock",
+   "when": {
+    "tier": "01"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Hands off the paintwork.",
+   "claims": []
+  },
+  {
+   "id": "b094",
+   "event": "learned",
+   "when": {},
+   "style": "speech",
+   "priority": 1,
+   "text": "Stop line moved back. Lesson logged.",
+   "claims": [
+    "learned"
+   ]
+  },
+  {
+   "id": "b095",
+   "event": "learned",
+   "when": {
+    "tier": "01"
+   },
+   "style": "speech",
+   "priority": 1,
+   "text": "I remember you. I stop further now.",
+   "claims": [
+    "learned"
+   ]
+  },
+  {
+   "id": "b096",
+   "event": "learned",
+   "when": {
+    "tier": "03"
+   },
+   "style": "speech",
+   "priority": 1,
+   "text": "Retrained. Keeping my distance.",
+   "claims": [
+    "learned"
+   ]
+  },
+  {
+   "id": "b097",
+   "event": "learned",
+   "when": {
+    "tier": "04"
+   },
+   "style": "shout",
+   "priority": 1,
+   "text": "Not falling for that again!",
+   "claims": [
+    "learned"
+   ]
+  },
+  {
+   "id": "b098",
+   "event": "upgrade-seen",
+   "when": {
+    "node": "widerView"
+   },
+   "style": "speech",
+   "priority": 1,
+   "text": "It is looking at all of us now.",
+   "claims": [
+    "node:widerView"
+   ]
+  },
+  {
+   "id": "b099",
+   "event": "upgrade-seen",
+   "when": {
+    "node": "memory"
+   },
+   "style": "thought",
+   "priority": 1,
+   "text": "It remembers where we were. Unsettling.",
+   "claims": [
+    "node:memory"
+   ]
+  },
+  {
+   "id": "b100",
+   "event": "upgrade-seen",
+   "when": {
+    "node": "ears"
+   },
+   "style": "speech",
+   "priority": 1,
+   "text": "It heard me coming. It has ears.",
+   "claims": [
+    "node:ears"
+   ]
+  },
+  {
+   "id": "b101",
+   "event": "upgrade-seen",
+   "when": {
+    "node": "hips"
+   },
+   "style": "speech",
+   "priority": 1,
+   "text": "Subject has acquired hips.",
+   "claims": [
+    "node:hips"
+   ]
+  },
+  {
+   "id": "b102",
+   "event": "upgrade-seen",
+   "when": {
+    "node": "spine"
+   },
+   "style": "thought",
+   "priority": 1,
+   "text": "That spine was not on the last report.",
+   "claims": [
+    "node:spine"
+   ]
+  },
+  {
+   "id": "b103",
+   "event": "upgrade-seen",
+   "when": {
+    "node": "neck"
+   },
+   "style": "thought",
+   "priority": 1,
+   "text": "It looked one way and walked another.",
+   "claims": [
+    "node:neck"
+   ]
+  },
+  {
+   "id": "b104",
+   "event": "upgrade-seen",
+   "when": {
+    "node": "springStart"
+   },
+   "style": "speech",
+   "priority": 1,
+   "text": "No wind-up? Who approved that?",
+   "claims": [
+    "node:springStart"
+   ]
+  },
+  {
+   "id": "b105",
+   "event": "upgrade-seen",
+   "when": {
+    "node": "jump"
+   },
+   "style": "speech",
+   "priority": 1,
+   "text": "It jumped. Dummies do not jump.",
+   "claims": [
+    "node:jump"
+   ]
+  },
+  {
+   "id": "b106",
+   "event": "upgrade-seen",
+   "when": {
+    "node": "grip"
+   },
+   "style": "speech",
+   "priority": 1,
+   "text": "It is not sliding any more. Noted.",
+   "claims": [
+    "node:grip"
+   ]
+  },
+  {
+   "id": "b107",
+   "event": "upgrade-seen",
+   "when": {
+    "node": "carry"
+   },
+   "style": "speech",
+   "priority": 1,
+   "text": "It is carrying something. Approved?",
+   "claims": [
+    "node:carry"
+   ]
+  },
+  {
+   "id": "b108",
+   "event": "upgrade-seen",
+   "when": {
+    "node": "throw"
+   },
+   "style": "speech",
+   "priority": 1,
+   "text": "It can throw now. Nobody told us.",
+   "claims": [
+    "node:throw"
+   ]
+  },
+  {
+   "id": "b109",
+   "event": "upgrade-seen",
+   "when": {
+    "node": "holdOn"
+   },
+   "style": "speech",
+   "priority": 1,
+   "text": "Is it holding on to my door?",
+   "claims": [
+    "node:holdOn"
+   ]
+  },
+  {
+   "id": "b110",
+   "event": "upgrade-seen",
+   "when": {
+    "node": "bigBattery"
+   },
+   "style": "speech",
+   "priority": 1,
+   "text": "Bigger battery. More dashes. Wonderful.",
+   "claims": [
+    "node:bigBattery"
+   ]
+  },
+  {
+   "id": "b111",
+   "event": "upgrade-seen",
+   "when": {
+    "node": "kineticCharge"
+   },
+   "style": "speech",
+   "priority": 1,
+   "text": "It recharges when it hits us?!",
+   "claims": [
+    "node:kineticCharge"
+   ]
+  },
+  {
+   "id": "b112",
+   "event": "upgrade-seen",
+   "when": {
+    "node": "fastCharge"
+   },
+   "style": "speech",
+   "priority": 1,
+   "text": "It recharges faster than I do.",
+   "claims": [
+    "node:fastCharge"
+   ]
+  },
+  {
+   "id": "b113",
+   "event": "upgrade-seen",
+   "when": {
+    "tier": "02"
+   },
+   "style": "speech",
+   "priority": 1,
+   "text": "New modification. Updating my threat model.",
+   "claims": []
+  },
+  {
+   "id": "b114",
+   "event": "upgrade-seen",
+   "when": {},
+   "style": "speech",
+   "priority": 1,
+   "text": "The subject has changed. Noted.",
+   "claims": []
+  },
+  {
+   "id": "b115",
+   "event": "part-seen",
+   "when": {
+    "part": "head"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Its head is cracked. Still coming.",
+   "claims": [
+    "part:head:broken"
+   ]
+  },
+  {
+   "id": "b116",
+   "event": "part-seen",
+   "when": {
+    "part": "torso"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Its torso is buckled. It turns so slowly.",
+   "claims": [
+    "part:torso:broken"
+   ]
+  },
+  {
+   "id": "b117",
+   "event": "part-seen",
+   "when": {
+    "part": "armL"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Its left arm is hanging.",
+   "claims": [
+    "part:armL:broken"
+   ]
+  },
+  {
+   "id": "b118",
+   "event": "part-seen",
+   "when": {
+    "part": "armR"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Its right arm is hanging.",
+   "claims": [
+    "part:armR:broken"
+   ]
+  },
+  {
+   "id": "b119",
+   "event": "part-seen",
+   "when": {
+    "part": "legL"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Left leg gone. It is limping.",
+   "claims": [
+    "part:legL:broken"
+   ]
+  },
+  {
+   "id": "b120",
+   "event": "part-seen",
+   "when": {
+    "part": "legR"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Right leg gone. Look at it hobble.",
+   "claims": [
+    "part:legR:broken"
+   ]
+  },
+  {
+   "id": "b121",
+   "event": "part-seen",
+   "when": {
+    "tier": "03"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "It is falling apart. Like me.",
+   "claims": []
+  },
+  {
+   "id": "b122",
+   "event": "part-seen",
+   "when": {
+    "tier": "01"
+   },
+   "style": "mutter",
+   "priority": 1,
+   "text": "Damaged goods. Not my problem.",
+   "claims": []
+  },
+  {
+   "id": "b123",
+   "event": "part-seen",
+   "when": {},
+   "style": "mutter",
+   "priority": 1,
+   "text": "Subject damage noted.",
+   "claims": []
+  },
+  {
+   "id": "c001",
+   "event": "impact",
+   "when": {
+    "tier": "01",
+    "drop": true,
+    "dropFrom": "roof",
+    "dropZ": 2
+   },
+   "style": "speech",
+   "priority": 2,
+   "text": "A roof? I was not briefed on roofs.",
+   "claims": [
+    "drop",
+    "dropFrom:roof",
+    "dropZ:2"
+   ],
+   "sources": [
+    "EDIT44#5.2",
+    "LOG#P3.3",
+    "FLEET#F4"
+   ],
+   "source": "content/pipeline.py run 20261021-024324"
+  },
+  {
+   "id": "c002",
+   "event": "impact",
+   "when": {
+    "tier": "02",
+    "drop": true,
+    "dropFrom": "roof",
+    "dropZ": 2
+   },
+   "style": "speech",
+   "priority": 2,
+   "text": "Incident filed: load received from a roof.",
+   "claims": [
+    "drop",
+    "dropFrom:roof",
+    "dropZ:2"
+   ],
+   "sources": [
+    "EDIT44#5.2",
+    "FLEET#F4"
+   ],
+   "source": "content/pipeline.py run 20261021-024324"
+  },
+  {
+   "id": "c003",
+   "event": "impact",
+   "when": {
+    "drop": true,
+    "dropFrom": "roof",
+    "dropZ": 2
+   },
+   "style": "mutter",
+   "priority": 2,
+   "text": "Roofs are not on my route.",
+   "claims": [
+    "drop",
+    "dropFrom:roof",
+    "dropZ:2"
+   ],
+   "sources": [
+    "EDIT44#5.2",
+    "LOG#P3.3",
+    "EDIT26#3.2"
+   ],
+   "source": "content/pipeline.py run 20261021-024324"
+  },
+  {
+   "id": "c004",
+   "event": "impact",
+   "when": {
+    "tier": "01",
+    "drop": true,
+    "dropFrom": "roof",
+    "dropZ": 2
+   },
+   "style": "speech",
+   "priority": 2,
+   "text": "Landed on from a roof. My paintwork objects.",
+   "claims": [
+    "drop",
+    "dropFrom:roof",
+    "dropZ:2"
+   ],
+   "sources": [
+    "EDIT44#5.2",
+    "FLEET#F4"
+   ],
+   "source": "content/pipeline.py run 20261021-024324"
+  },
+  {
+   "id": "c005",
+   "event": "impact",
+   "when": {
+    "drop": true,
+    "dropFrom": "deck",
+    "dropZ": 2
+   },
+   "style": "speech",
+   "priority": 2,
+   "text": "That came off the high highway.",
+   "claims": [
+    "drop",
+    "dropFrom:deck",
+    "dropZ:2",
+    "highway"
+   ],
+   "sources": [
+    "EDIT44#5.2",
+    "EDIT44#4.2",
+    "LOG#P3.3"
+   ],
+   "source": "content/pipeline.py run 20261021-024324"
+  },
+  {
+   "id": "c006",
+   "event": "impact",
+   "when": {
+    "tier": "02",
+    "drop": true,
+    "dropFrom": "deck"
+   },
+   "style": "speech",
+   "priority": 2,
+   "text": "Form 9: load received from a parapet.",
+   "claims": [
+    "drop",
+    "dropFrom:deck",
+    "highway"
+   ],
+   "sources": [
+    "EDIT44#5.2",
+    "FLEET#F4"
+   ],
+   "source": "content/pipeline.py run 20261021-024324"
+  },
+  {
+   "id": "c007",
+   "event": "impact",
+   "when": {
+    "tier": "01",
+    "drop": true,
+    "dropFrom": "deck",
+    "dropZ": 1
+   },
+   "style": "speech",
+   "priority": 2,
+   "text": "From the low highway? Quite unseemly.",
+   "claims": [
+    "drop",
+    "dropFrom:deck",
+    "dropZ:1",
+    "highway"
+   ],
+   "sources": [
+    "EDIT44#5.2",
+    "EDIT44#4.2",
+    "FLEET#F4"
+   ],
+   "source": "content/pipeline.py run 20261021-024324"
+  },
+  {
+   "id": "c008",
+   "event": "impact",
+   "when": {
+    "drop": true,
+    "dropZ": 2
+   },
+   "style": "mutter",
+   "priority": 2,
+   "text": "That fell a long way to reach me.",
+   "claims": [
+    "drop",
+    "dropZ:2"
+   ],
+   "sources": [
+    "EDIT44#8.3",
+    "EDIT44#5.2"
+   ],
+   "source": "content/pipeline.py run 20261021-024324"
+  },
+  {
+   "id": "c009",
+   "event": "impact",
+   "when": {
+    "tier": "02",
+    "drop": true,
+    "dropFrom": "deck",
+    "dropZ": 1
+   },
+   "style": "speech",
+   "priority": 2,
+   "text": "Policy 12 excludes loads from parapets.",
+   "claims": [
+    "drop",
+    "dropFrom:deck",
+    "dropZ:1",
+    "highway"
+   ],
+   "sources": [
+    "EDIT44#5.2",
+    "FLEET#F4"
+   ],
+   "source": "content/pipeline.py run 20261021-024324"
+  },
+  {
+   "id": "c010",
+   "event": "impact",
+   "when": {
+    "deck": true
+   },
+   "style": "speech",
+   "priority": 2,
+   "text": "Nobody walks the highway. Nobody.",
+   "claims": [
+    "deck",
+    "highway"
+   ],
+   "sources": [
+    "EDIT42#6.3",
+    "EDIT44#6.2"
+   ],
+   "source": "content/pipeline.py run 20261021-024324"
+  },
+  {
+   "id": "c011",
+   "event": "impact",
+   "when": {
+    "tier": "01",
+    "deck": true
+   },
+   "style": "speech",
+   "priority": 2,
+   "text": "Struck on the highway. How undignified.",
+   "claims": [
+    "deck",
+    "highway"
+   ],
+   "sources": [
+    "EDIT42#6.3",
+    "EDIT44#6.2",
+    "FLEET#F4"
+   ],
+   "source": "content/pipeline.py run 20261021-024324"
+  },
+  {
+   "id": "c012",
+   "event": "impact",
+   "when": {
+    "tier": "02",
+    "deck": true
+   },
+   "style": "speech",
+   "priority": 2,
+   "text": "Highway strike filed under policy 9.",
+   "claims": [
+    "deck",
+    "highway"
+   ],
+   "sources": [
+    "EDIT44#6.2",
+    "FLEET#F4"
+   ],
+   "source": "content/pipeline.py run 20261021-024324"
+  },
+  {
+   "id": "c013",
+   "event": "impact",
+   "when": {
+    "plate": true
+   },
+   "style": "mutter",
+   "priority": 2,
+   "text": "Hit on a plate. Calibrated, naturally.",
+   "claims": [
+    "plate"
+   ],
+   "sources": [
+    "EDIT41#7.3",
+    "EDIT41#7.2"
+   ],
+   "source": "content/pipeline.py run 20261021-024324"
+  },
+  {
+   "id": "c014",
+   "event": "impact",
+   "when": {
+    "tier": "01",
+    "plate": true
+   },
+   "style": "speech",
+   "priority": 2,
+   "text": "Struck on a calibration plate. Vulgar.",
+   "claims": [
+    "plate"
+   ],
+   "sources": [
+    "EDIT41#7.3",
+    "FLEET#F4"
+   ],
+   "source": "content/pipeline.py run 20261021-024324"
+  },
+  {
+   "id": "c015",
+   "event": "impact",
+   "when": {
+    "tier": "02",
+    "plate": true
+   },
+   "style": "speech",
+   "priority": 2,
+   "text": "Plate hit filed against calibration form 3.",
+   "claims": [
+    "plate"
+   ],
+   "sources": [
+    "EDIT41#7.3",
+    "FLEET#F4"
+   ],
+   "source": "content/pipeline.py run 20261021-024324"
+  },
+  {
+   "id": "c016",
+   "event": "writeoff",
+   "when": {
+    "tier": "01",
+    "drop": true
+   },
+   "style": "speech",
+   "priority": 3,
+   "text": "Written off from above. Unthinkable.",
+   "claims": [
+    "drop"
+   ],
+   "sources": [
+    "EDIT44#5.2",
+    "FLEET#F9.2"
+   ],
+   "source": "content/pipeline.py run 20261021-024324"
+  },
+  {
+   "id": "c017",
+   "event": "writeoff",
+   "when": {
+    "tier": "02",
+    "drop": true
+   },
+   "style": "speech",
+   "priority": 3,
+   "text": "Write-off filed. Cause: load from above.",
+   "claims": [
+    "drop"
+   ],
+   "sources": [
+    "EDIT44#5.2",
+    "FLEET#F9.2"
+   ],
+   "source": "content/pipeline.py run 20261021-024324"
+  },
+  {
+   "id": "c018",
+   "event": "writeoff",
+   "when": {
+    "deck": true
+   },
+   "style": "speech",
+   "priority": 3,
+   "text": "Written off on the highway. On my record.",
+   "claims": [
+    "deck",
+    "highway"
+   ],
+   "sources": [
+    "EDIT44#6.2",
+    "FLEET#F9.2"
+   ],
+   "source": "content/pipeline.py run 20261021-024324"
+  },
+  {
+   "id": "c019",
+   "event": "writeoff",
+   "when": {
+    "plate": true
+   },
+   "style": "speech",
+   "priority": 3,
+   "text": "Written off on a calibration plate.",
+   "claims": [
+    "plate"
+   ],
+   "sources": [
+    "EDIT41#7.3",
+    "FLEET#F9.2"
+   ],
+   "source": "content/pipeline.py run 20261021-024324"
+  },
+  {
+   "id": "c020",
+   "event": "impact",
+   "when": {
+    "district": "riverside"
+   },
+   "style": "mutter",
+   "priority": 2,
+   "text": "Riverside route. Nobody mentioned this.",
+   "claims": [
+    "district:riverside"
+   ],
+   "sources": [
+    "EDIT41#7.2"
+   ],
+   "source": "content/pipeline.py run 20261021-024324"
+  },
+  {
+   "id": "c021",
+   "event": "impact",
+   "when": {
+    "district": "market"
+   },
+   "style": "mutter",
+   "priority": 2,
+   "text": "Old Market. Not on any itinerary.",
+   "claims": [
+    "district:market"
+   ],
+   "sources": [
+    "EDIT41#7.2"
+   ],
+   "source": "content/pipeline.py run 20261021-024324"
+  },
+  {
+   "id": "c022",
+   "event": "impact",
+   "when": {
+    "district": "interchange"
+   },
+   "style": "mutter",
+   "priority": 2,
+   "text": "Interchange. Two flyovers and now this.",
+   "claims": [
+    "district:interchange"
+   ],
+   "sources": [
+    "EDIT41#7.2",
+    "EDIT44#decisions"
+   ],
+   "source": "content/pipeline.py run 20261021-024324"
+  },
+  {
+   "id": "c023",
+   "event": "impact",
+   "when": {
+    "district": "cbd"
+   },
+   "style": "mutter",
+   "priority": 2,
+   "text": "Business district. Of all places.",
+   "claims": [
+    "district:cbd"
+   ],
+   "sources": [
+    "EDIT41#7.2"
+   ],
+   "source": "content/pipeline.py run 20261021-024324"
+  },
+  {
+   "id": "c024",
+   "event": "impact",
+   "when": {
+    "district": "campus"
+   },
+   "style": "mutter",
+   "priority": 2,
+   "text": "FARSIGHT Campus. Test centre. How apt.",
+   "claims": [
+    "district:campus"
+   ],
+   "sources": [
+    "EDIT41#7.2",
+    "EDIT41#7.3"
+   ],
+   "source": "content/pipeline.py run 20261021-024324"
+  }
+ ]
+}

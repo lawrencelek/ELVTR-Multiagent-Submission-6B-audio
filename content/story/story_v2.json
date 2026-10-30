@@ -1,0 +1,407 @@
+{
+ "meta": {
+  "name": "DUMMIES story: the Test City, tile by tile",
+  "version": "edit98-2026-10-29",
+  "status": "Narrative A, Certified, under the lore refinement of GDD Edit 95 (user-decided, 29 October): Dummy Corporation narrates; Farsight, the publisher, is named only in the Credits. Edit 98: tales 15 to 20 words; goals. Text from style run 20261029-205717-v83 on Style Guide V2; gameplay fields as story.json (edit93)",
+  "consumers": [
+   "prototypes/p8 (story.js, game.js): Prototype 8.3"
+  ],
+  "sources": [
+   "GDD Edit 26 §3 Setting",
+   "world6.js tile notes (Edits 62–68)",
+   "circus_valley.js PLAN.tiles",
+   "GDD Edits 81–85",
+   "GDD Edit 91",
+   "GDD Edit 92: Narrative A, Certified",
+   "GDD Edit 93: introduce, then test",
+   "GDD Edit 95: lore refinement, Dummy Corporation",
+   "style/STYLE_GUIDE_V2.md; style run 20261029-205717-v83"
+  ],
+  "rules": [
+   "Numbers live in the registry: tasks and gifts name parameter IDs, never values.",
+   "A task tests the hit that writes the chassis off (the fatal hit).",
+   "Tile names are column-row, as in the game: A1 is the top-left tile.",
+   "Each tile's write-offs are story.writeOffs.<district>.<tile> in the registry (Edit 82).",
+   "Edit 93: introduce, then test. A part arrives on the tile whose brief first needs it; no brief needs a part not yet issued. Monument: Battery 1 B1 (dash), Hands 1 A2 (cone), Legs 1 B3 (jump). Parkland: Arms 1 C1 (push), Legs 2 A3 (jump), Hands 2 A2 (cone), Arms 2 A1 (push), Battery 2 B2 (combo). Waterfront: Legs 3 B1 (jump), Arms 3 B3 (push), Battery 3 B2 (combo).",
+   "A gift rides in on the drone that carries the dummy into its tile (Edit 84). Arcade sells every part for credits; its chassis ships with Battery 1 (Edit 91).",
+   "Each tile's traffic is story.traffic.<district>.<tile> in the registry, on the tile and its neighbours (Edit 85).",
+   "Edit 92: Narrative A, Certified. Act I Monument (Induction), Act II Parkland (Opening Day), Act III Waterfront (Customs).",
+   "Edit 95: Dummy Corporation narrates: deadpan and inspirational, few adjectives, no exclamation marks. Every text at most two sentences and 20 words (style.v2.text.maxSentences, style.v2.text.maxWords). Farsight is named only in the Credits.",
+   "Edit 98: a tale runs 15 to 20 words; a brief is the level's goal, imperative; the user's own lines (A1's tale, the any goal) are canon."
+  ]
+ },
+ "ending": "Your model has passed and will be manufactured for our clients. A Corporation drone carries you to the ship.",
+ "tasks": {
+  "any": {
+   "label": "ANY WRITE-OFF",
+   "brief": "Walk into the path of the incoming vehicles. Time your approach, and choose your angle carefully. Bonus points for combinations and lethal hits."
+  },
+  "dash": {
+   "label": "DASH INTO A CAR",
+   "brief": "Dash into a car. The final hit must be the dash."
+  },
+  "drop": {
+   "label": "DROP ONTO A CAR",
+   "brief": "Drop onto a car from above. The final hit must be that drop."
+  },
+  "jump": {
+   "label": "JUMP INTO A CAR",
+   "brief": "Jump into a car. The jump must be the final hit."
+  },
+  "level": {
+   "label": "ON A RAISED ROAD",
+   "brief": "Climb to a raised road. The final hit must land up there, not on the street."
+  },
+  "cone": {
+   "label": "CONE-BAITED CAR",
+   "brief": "Place a cone. The final hit must come from a car reacting to it."
+  },
+  "push": {
+   "label": "PUSH OFF A CAR",
+   "brief": "Push off one car. The final hit must be the next car."
+  },
+  "bounce": {
+   "label": "THROWN INTO A CAR",
+   "brief": "Let one car throw you into another. Take the final hit while a hit is still throwing you."
+  },
+  "struck": {
+   "label": "STRUCK, NOT DASHING",
+   "brief": "Walk or stand in the traffic. A car must deliver the final hit while you are not dashing."
+  },
+  "combo": {
+   "label": "COMBO ×{n}",
+   "brief": "Chain your hits into a combo. The final hit must be link {n} or later."
+  },
+  "cls": {
+   "label": "A {cls}",
+   "brief": "Step in front of the {clsLong}. The final hit must come from a {cls}."
+  }
+ },
+ "classes": {
+  "van": [
+   "VAN",
+   "van fleet"
+  ],
+  "police": [
+   "POLICE CAR",
+   "police fleet"
+  ],
+  "bus": [
+   "BUS",
+   "bus fleet"
+  ],
+  "sedan": [
+   "SEDAN",
+   "sedan fleet"
+  ],
+  "hatchback": [
+   "HATCHBACK",
+   "hatchback fleet"
+  ]
+ },
+ "districts": [
+  {
+   "id": "monument",
+   "name": "Monument",
+   "act": "ACT I · INDUCTION",
+   "intro": "Dummy Corporation welcomes you off the factory floor. The cars are your colleagues; Certification is your goal.",
+   "order": [
+    "A1",
+    "B1",
+    "C1",
+    "C2",
+    "B2",
+    "A2",
+    "A3",
+    "B3",
+    "C3"
+   ],
+   "tiles": {
+    "A1": {
+     "title": "The welcome wall",
+     "task": {
+      "kind": "any"
+     },
+     "gift": null,
+     "tale": "Fresh off the factory floor, you're ready to do some damage to yourself. Make your engineers proud."
+    },
+    "B1": {
+     "title": "The podium bridge",
+     "task": {
+      "kind": "dash"
+     },
+     "gift": {
+      "node": "battery1"
+     },
+     "tale": "Battery 1 is fitted. The skybridge was built for shoppers who never came; staff watch you dash into a colleague."
+    },
+    "C1": {
+     "title": "The LED drum",
+     "task": {
+      "kind": "drop"
+     },
+     "gift": null,
+     "tale": "The LED drum lights each bend. Step off the high road onto a car: gravity is company policy."
+    },
+    "C2": {
+     "title": "The portal tower",
+     "task": {
+      "kind": "level"
+     },
+     "gift": null,
+     "tale": "The road runs through the portal tower at the sixth floor. Take your write-off up there; ignore the view."
+    },
+    "B2": {
+     "title": "The monument",
+     "task": {
+      "kind": "struck"
+     },
+     "gift": null,
+     "tale": "The plaque reads ZERO ACCIDENTS: a target, not a record. Stand near it until a colleague finds you."
+    },
+    "A2": {
+     "title": "The neon shops",
+     "task": {
+      "kind": "cone"
+     },
+     "gift": {
+      "node": "hands1"
+     },
+     "tale": "The neon shops sell nothing, but the traffic reads them. Hands 1 is fitted: bait a colleague with a cone."
+    },
+    "A3": {
+     "title": "The stacked cubes",
+     "task": {
+      "kind": "combo",
+      "param": "story.task.comboEasy"
+     },
+     "gift": null,
+     "tale": "The stacked cubes rose one budget at a time. Build the same way: one hit, then another, quickly."
+    },
+    "B3": {
+     "title": "The LED canyon",
+     "task": {
+      "kind": "jump"
+     },
+     "gift": {
+      "node": "legs1"
+     },
+     "tale": "Two screens advertise to each other all night. Legs 1 is fitted: jump into a car between them."
+    },
+    "C3": {
+     "title": "The LED gateway",
+     "task": {
+      "kind": "bounce"
+     },
+     "gift": null,
+     "tale": "The gateway thanked the car that wrote you off for driving safely. Let one colleague throw you into the next."
+    }
+   }
+  },
+  {
+   "id": "parkland",
+   "name": "Parkland",
+   "act": "ACT II · OPENING DAY",
+   "intro": "The Expo opens to clients when this park passes. Your training keeps them safe.",
+   "order": [
+    "C1",
+    "C2",
+    "C3",
+    "B3",
+    "A3",
+    "A2",
+    "A1",
+    "B1",
+    "B2"
+   ],
+   "tiles": {
+    "C1": {
+     "title": "The lantern pavilion",
+     "task": {
+      "kind": "push"
+     },
+     "gift": {
+      "node": "arms1"
+     },
+     "tale": "The lantern, the Expo's first exhibit, is lit for clients. With Arms 1, push off one car into the next."
+    },
+    "C2": {
+     "title": "The amphitheatre",
+     "task": {
+      "kind": "cls",
+      "cls": "van"
+     },
+     "gift": null,
+     "tale": "Our board watches opening day from these terraces. A van delivers the catering; arrange for it to deliver you."
+    },
+    "C3": {
+     "title": "The arch and the roundabout",
+     "task": {
+      "kind": "combo",
+      "param": "story.task.comboEasy"
+     },
+     "gift": null,
+     "tale": "The arch is the Expo's gate; visitors circle the roundabout once. You go faster: chain hits before each is forgotten."
+    },
+    "B3": {
+     "title": "The obelisk court",
+     "task": {
+      "kind": "cls",
+      "cls": "police"
+     },
+     "gift": null,
+     "tale": "The obelisk marks the surveyors' first stake. Police escort a school party here on opening day; test them first."
+    },
+    "A3": {
+     "title": "The belvedere",
+     "task": {
+      "kind": "jump"
+     },
+     "gift": {
+      "node": "legs2"
+     },
+     "tale": "A wedding faces the traffic from the belvedere. Legs 2 is fitted: jump into a car, so no guest does."
+    },
+    "A2": {
+     "title": "The dome by the canal",
+     "task": {
+      "kind": "cone"
+     },
+     "gift": {
+      "node": "hands2"
+     },
+     "tale": "The dome is the Expo's showroom; you are the exhibit. Hands 2 is fitted: bait a car with a cone."
+    },
+    "A1": {
+     "title": "The reservoir terraces",
+     "task": {
+      "kind": "push"
+     },
+     "gift": {
+      "node": "arms2"
+     },
+     "tale": "The gardener's pools need cars that stop. Teach them with Arms 2: push off one car into the next."
+    },
+    "B1": {
+     "title": "The cascade",
+     "task": {
+      "kind": "level"
+     },
+     "gift": null,
+     "tale": "The cascade was built to drown out the traffic. The traffic got louder; take your hit up on the highway."
+    },
+    "B2": {
+     "title": "The ring over the pools",
+     "task": {
+      "kind": "combo",
+      "param": "story.task.comboHard"
+     },
+     "gift": {
+      "node": "battery2"
+     },
+     "tale": "The board watches the ring over the pools. Battery 2 is fitted: chain your hits."
+    }
+   }
+  },
+  {
+   "id": "waterfront",
+   "name": "Waterfront",
+   "act": "ACT III · CUSTOMS",
+   "intro": "Certified dummies ship across the river, to be sacrificed in service to our clients. Your papers are being prepared.",
+   "order": [
+    "A1",
+    "B1",
+    "C1",
+    "C2",
+    "C3",
+    "B3",
+    "A3",
+    "A2",
+    "B2"
+   ],
+   "tiles": {
+    "A1": {
+     "title": "The west portal",
+     "task": {
+      "kind": "cls",
+      "cls": "bus"
+     },
+     "gift": null,
+     "tale": "The bus carries engineers through the west portal to the bridge. It never misses; take its hit."
+    },
+    "B1": {
+     "title": "The tunnel portal",
+     "task": {
+      "kind": "jump"
+     },
+     "gift": {
+      "node": "legs3"
+     },
+     "tale": "Cars go into the tunnel under the hill, and data comes back. Legs 3 is fitted: leap into one."
+    },
+    "C1": {
+     "title": "The east portal",
+     "task": {
+      "kind": "cls",
+      "cls": "police"
+     },
+     "gift": null,
+     "tale": "The east portal faces away from its twin. Police here check papers; your Certification needs their fleet on record."
+    },
+    "C2": {
+     "title": "The east beach terrace",
+     "task": {
+      "kind": "drop"
+     },
+     "gift": null,
+     "tale": "The east beach terrace served tourists, then sensors. Drop from its rail onto a car; ships wait for the Certified."
+    },
+    "C3": {
+     "title": "The east customs post",
+     "task": {
+      "kind": "bounce"
+     },
+     "gift": null,
+     "tale": "The pier tower logs all that floats: containers, ducks, one dummy. Be thrown into a car to earn your entry."
+    },
+    "B3": {
+     "title": "The stilt houses",
+     "task": {
+      "kind": "push"
+     },
+     "gift": {
+      "node": "arms3"
+     },
+     "tale": "The stilt houses keep Chassis 0 behind glass. Arms 3 is fitted; push off a car and show it progress."
+    },
+    "A3": {
+     "title": "The west customs post",
+     "task": {
+      "kind": "level"
+     },
+     "gift": null,
+     "tale": "The west tower keeps the customs log. Your entry reads PURPOSE DESTRUCTION: honour it on the raised road."
+    },
+    "A2": {
+     "title": "The west beach terrace",
+     "task": {
+      "kind": "cone"
+     },
+     "gift": null,
+     "tale": "Sand from three provinces lies under the west beach terrace. Place a cone; one more clean reading before the ceremony."
+    },
+    "B2": {
+     "title": "The circus",
+     "task": {
+      "kind": "combo",
+      "param": "story.task.comboHard"
+     },
+     "gift": {
+      "node": "battery3"
+     },
+     "tale": "The circus monument, cast from your written-off chassis, reads ZERO ACCIDENTS (EXCLUDING TESTS). Battery 3 is fitted; chain your hits."
+    }
+   }
+  }
+ ]
+}
