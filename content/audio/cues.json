@@ -17,7 +17,6 @@
   "audio.music.track.menu": 2,
   "audio.music.track.credits": 1,
   "audio.music.track.card": -1,
-  "audio.music.track.ending": 2,
   "audio.music.track.finale": 1,
   "audio.music.levelRotation": 3456,
   "audio.music.targetLufs": -16,
@@ -56,10 +55,22 @@
   "audio.music.fadeOutSeconds": 0.3,
   "audio.music.screenDuck": 0.7,
   "audio.music.writeoffDuck": 0.5,
-  "audio.music.duckSeconds": 0.25
+  "audio.music.duckSeconds": 0.25,
+  "audio.music.track.licensed": 8,
+  "audio.music.track.failed": 9,
+  "audio.music.track.noncompliant": 10,
+  "audio.music.track.certified": 7
  },
  "music": {
   "tracks": {
+   "10": {
+    "file": "music/track10_dummies-generated_non-compliant.ogg",
+    "mp3": "music/mp3/track10_dummies-generated_non-compliant.mp3",
+    "title": "non-compliant",
+    "seconds": 38.4,
+    "level": -11.0,
+    "trimDb": -5.0
+   },
    "1": {
     "file": "music/track1_ansimuz-itch-io_megabot.ogg",
     "mp3": "music/mp3/track1_ansimuz-itch-io_megabot.mp3",
@@ -107,6 +118,30 @@
     "seconds": 66.462,
     "level": -16.7,
     "trimDb": 0.7
+   },
+   "7": {
+    "file": "music/track7_dummies-generated_certified.ogg",
+    "mp3": "music/mp3/track7_dummies-generated_certified.mp3",
+    "title": "certified",
+    "seconds": 63.158,
+    "level": -11.6,
+    "trimDb": -4.4
+   },
+   "8": {
+    "file": "music/track8_dummies-generated_licensed.ogg",
+    "mp3": "music/mp3/track8_dummies-generated_licensed.mp3",
+    "title": "licensed",
+    "seconds": 30.968,
+    "level": -10.6,
+    "trimDb": -5.4
+   },
+   "9": {
+    "file": "music/track9_dummies-generated_failed-test.ogg",
+    "mp3": "music/mp3/track9_dummies-generated_failed-test.mp3",
+    "title": "failed test",
+    "seconds": 43.636,
+    "level": -10.4,
+    "trimDb": -5.6
    }
   },
   "states": {
@@ -116,8 +151,11 @@
    "card": "level",
    "level": "rotation",
    "pause": "duck",
-   "ending": 2,
    "finale": 1,
+   "licensed": 8,
+   "failed": 9,
+   "noncompliant": 10,
+   "certified": 7,
    "screens": "duck",
    "writeoff": "duck"
   },
@@ -137,16 +175,25 @@
    "level": "Lawrence (Q3): the track holds from its card to the next, so a cleared tile walked back to keeps it.",
    "pause": "Lawrence (Q4): pause drops the level track to 35%.",
    "ending": "Run ends lead back to menus, so Track 2 returns.",
-   "finale": "Lawrence (Q4): Track 1 bookends the story.",
+   "finale": "Lawrence (Q4): Track 1 bookends the story, through the unveiling and the voyage.",
    "screens": "Lawrence (Q4): the gift screen, report and workshop keep the level track at 70%.",
-   "writeoff": "Lawrence (Q5): a write-off drops the level track to 50%."
+   "writeoff": "Lawrence (Q5): a write-off drops the level track to 50%.",
+   "certified": "Lawrence: a track of its own for the end at the ship. Generated: horn, plucked strings, bells.",
+   "licensed": "Lawrence: a track of its own. Generated: a chip lead over four on the floor.",
+   "failed": "Lawrence: a track of its own. Generated: a slow minor line, a wobbling pad, a heartbeat.",
+   "noncompliant": "Lawrence: a track of its own. Generated: hold music, a cold chime."
   },
   "by": {
    "card": "Lawrence",
-   "credits": "Lawrence"
+   "credits": "Lawrence",
+   "certified": "Lawrence",
+   "licensed": "Lawrence",
+   "failed": "Lawrence",
+   "noncompliant": "Lawrence"
   },
   "retired": {
-   "audio.music.crossfadeSeconds": "superseded by audio.music.fadeInSeconds and fadeOutSeconds (row 609)"
+   "audio.music.crossfadeSeconds": "superseded by audio.music.fadeInSeconds and fadeOutSeconds (row 609)",
+   "audio.music.track.ending": "superseded by audio.music.track.licensed, failed and noncompliant (row 619)"
   }
  },
  "sfx": {
@@ -4252,7 +4299,8 @@
    "content/audio/picks_lawrence.json",
    "content/audio/picks_lawrence_2.json",
    "content/audio/picks_lawrence_2_tones.json",
-   "content/audio/picks_lawrence_3.json"
+   "content/audio/picks_lawrence_3.json",
+   "content/audio/picks_lawrence_4.json"
   ],
   "changed": {
    "ui-start": {

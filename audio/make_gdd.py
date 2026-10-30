@@ -51,8 +51,11 @@ MUSIC_ROWS = {
     "screens": ("The gift screen, the level report, the workshop (Q4)", "phases `gift`, `report`, `shop`", "`audio.music.screenDuck`"),
     "writeoff": ("The write-off hold (Q5)", "phase `writeoff`", "`audio.music.writeoffDuck`"),
     "pause": ("Pause, Options, Controls; window blur", "`app.paused`", "`audio.music.pauseDuck`"),
-    "ending": ("Licensed, Failed test, Non-compliant", "phase `ending`, not Certified", "`audio.music.track.ending`"),
-    "finale": ("The unveiling, the voyage, CERTIFIED", "phase `unveil`, `voyage`; ending Certified", "`audio.music.track.finale`"),
+    "licensed": ("A run ends Licensed", "phase `ending`, kind Licensed", "`audio.music.track.licensed`"),
+    "failed": ("A run ends Failed test", "phase `ending`, kind Failed test", "`audio.music.track.failed`"),
+    "noncompliant": ("A run ends Non-compliant (a refusal)", "phase `ending`, kind Non-compliant", "`audio.music.track.noncompliant`"),
+    "finale": ("The unveiling, the voyage", "phase `unveil`, `voyage`", "`audio.music.track.finale`"),
+    "certified": ("At the ship: the set-down, CERTIFIED", "phase `ending`, kind Certified", "`audio.music.track.certified`"),
 }
 
 
@@ -82,9 +85,10 @@ def gdd():
     a("| Q1 | \"Splash Screen\" is the intro screen. It shows PRESS ANY KEY; the first press only unlocks audio and starts Track 1. The next press is START | `audio.music.track.intro` (1) |")
     a("| Q2 | The level card starts the level's track | `audio.music.track.card` (−1: the level's track) |")
     a(f"| Q3 | The start tile sets the track. Story: the tile *n* a level card announces plays slot ((*n* − 1) mod {len(M['rotation'])}) + 1. The track holds until the next card: a walk back to a cleared tile, the ferry and a write-off never change it. Arcade: each level's card takes the next slot | `audio.music.levelRotation` ({REG['audio.music.levelRotation']['default']}) |")
-    a(f"| Q4 | Pause: the level track at {REG['audio.music.pauseDuck']['default']}. Gift screen, report, workshop: the level track at {REG['audio.music.screenDuck']['default']}. Finale and CERTIFIED: {tname(M['states']['finale'])}. Credits: {tname(M['states']['credits'])}. Endings (not ruled): {tname(M['states']['ending'])} | `audio.music.pauseDuck`, `audio.music.screenDuck`, `audio.music.track.*` |")
+    a(f"| Q4 | Pause: the level track at {REG['audio.music.pauseDuck']['default']}. Gift screen, report, workshop: the level track at {REG['audio.music.screenDuck']['default']}. Finale and CERTIFIED: {tname(M['states']['finale'])}. Credits: {tname(M['states']['credits'])} | `audio.music.pauseDuck`, `audio.music.screenDuck`, `audio.music.track.*` |")
     a(f"| Q5 | A write-off drops the level track to {REG['audio.music.writeoffDuck']['default']}; it keeps playing | `audio.music.writeoffDuck` |")
     a("| Q6 | Each new bark bubble keeps its soft blip; a shouted line a brighter one. The new chassis no longer shares `bubble.wav`: it plays a generated blip | `sfx.bark`, `sfx.bark.shout`, `sfx.chassis` |")
+    a(f"| Endings | Each has a track of its own, generated (row 619): at the ship {tname(M['states']['certified'])}; Licensed {tname(M['states']['licensed'])}; Failed test {tname(M['states']['failed'])}; Non-compliant {tname(M['states']['noncompliant'])} | `audio.music.track.certified`, `.licensed`, `.failed`, `.noncompliant` |")
     a(f"| Fades | Every track fades in over {REG['audio.music.fadeInSeconds']['default']} s from each start and out over {REG['audio.music.fadeOutSeconds']['default']} s at each end, the loop's seam included. A switch is the two, overlapped | `audio.music.fadeInSeconds`, `audio.music.fadeOutSeconds` |")
     a("")
     a("## 1 System")
@@ -93,6 +97,7 @@ def gdd():
     a("- **Buses:** music, SFX, UI under a master. Levels: `audio.music.volume`, `audio.sfx.volume`, `audio.ui.volume`.")
     a(f"- **Generated tones:** Prototype 8.4's procedural sounds, rendered to WAV by `audio/tones.py` ({INV.get('tones', 0)} files: 8.4's recipes, plus new tones for slip and for the eight events Lawrence asked for (row 606); a replaced 8.4 tone stays as `tone_<event>_p84.wav`). A `synth` entry plays its event's tone through the mix: gain class, cooldown, trim. An event with no entry or tone keeps the live synth, on the SFX bus at `audio.synth.gain`.")
     a("- **Lawrence's picks:** his Sound Lab exports over the agent's map, in order: `content/audio/picks_lawrence.json` (row 603), `picks_lawrence_2.json` and `picks_lawrence_2_tones.json` (row 607), `picks_lawrence_3.json` (his rulings: the chassis blip, the music states and values; rows 609–618). His fine gain becomes `audio.sfx.offset.<cue>`.")
+    a("- **Generated music** (row 619): Tracks 7–10, composed in code by `audio/music_gen.py` (`content/audio/music_gen.json`): 7 at the ship (CERTIFIED), 8 Licensed, 9 Failed test, 10 Non-compliant. Pulse, triangle, saw and FM voices, a plucked string, a pad, drums; a delay and a reverb. Whole bars, tails wrapped, so each loops on the bar.")
     a("- **Hush:** a cue or a stated silence hushes the synth for its event. Hit juice still draws.")
     a("- **Loudness:** each file is trimmed toward `audio.sfx.targetLufs` or `audio.music.targetLufs`. Trims cap at `audio.trim.maxBoostDb` and `audio.trim.peakCeilingDb`.")
     a("- **Weight:** gain classes set it. `audio.sfx.gain.<class>`, in dB after the trim.")
@@ -206,7 +211,7 @@ def gdd():
     a("")
     lv = [f["level"] for f in INV["files"] if f["folder"] == "sfx"]
     a(f"- **SFX:** {INV['sfx']} mono WAV, 44.1 kHz. {min(f['duration'] for f in INV['files'] if f['folder'] == 'sfx'):.2f}–{max(f['duration'] for f in INV['files'] if f['folder'] == 'sfx'):.2f} s. Level {min(lv)} to {max(lv)} dB (LUFS, or RMS under 0.4 s).")
-    a(f"- **Music:** six stereo OGG, 48 kHz, 66–123 s, {min(t['level'] for t in TR.values())} to {max(t['level'] for t in TR.values())} LUFS.")
+    a(f"- **Music:** {len(TR)} stereo OGG: six from the pack (48 kHz, 66–123 s) and four generated (44.1 kHz, 31–63 s). {min(t['level'] for t in TR.values())} to {max(t['level'] for t in TR.values())} LUFS.")
     a(f"- **Build:** `dummies_p9.html` {(ROOT / 'prototypes/p9/dummies_p9.html').stat().st_size:,} bytes. Audio beside it: {sum(p.stat().st_size for p in (ROOT / 'prototypes/p9/audio').rglob('*') if p.is_file()) / 1e6:.1f} MB.")
     a("")
     a("## 8 Registry (edit100)")
@@ -220,7 +225,7 @@ def gdd():
     n_sil = sum(c["decision"] == "silence" for c in C["sfx"].values())
     a("## 9 Open")
     a("")
-    a("- **Endings:** Licensed, Failed test and Non-compliant play Track 2. Not ruled; the Sound Lab changes it.")
+    a("- **Generated music:** four tracks composed in code (`audio/music_gen.py`) to fill the pack's gaps. Heard here only as numbers: loudness, spectrum, structure. Lawrence's ear decides; the Sound Lab swaps any of them.")
     a("- **Honk and cone hits:** the pack has no horn. Honks play Prototype 8.4's horn as generated tones; Lawrence set cone hits to their tone too (C2, user-decided).")
     a("- **Tone fidelity:** a generated tone is one rendering. Prototype 8.4 scaled some of its sounds with the hit's force; the tones take the middle of each range.")
     a(f"- **Silenced:** {n_sil} entries (§3). Switch any on in the Sound Lab.")

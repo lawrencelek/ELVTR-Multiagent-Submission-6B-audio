@@ -173,21 +173,48 @@
    "gdd": "Edit 86"
   },
   {
-   "id": "ending",
-   "cue": "music.ending",
-   "label": "Run ends",
-   "what": "Licensed, Failed test, Non-compliant.",
-   "detect": "phase 'ending' (not Certified)",
+   "id": "licensed",
+   "cue": "music.licensed",
+   "label": "Licensed",
+   "what": "A run ends licensed: the quota met (Lawrence: its own track).",
+   "detect": "phase 'ending', kind Licensed",
    "shot": "ending",
+   "gdd": "Edit 97"
+  },
+  {
+   "id": "failed",
+   "cue": "music.failed",
+   "label": "Failed test",
+   "what": "A run ends failed: the cars ran out first (Lawrence: its own track).",
+   "detect": "phase 'ending', kind Failed test",
+   "shot": "failed",
+   "gdd": "Edit 97"
+  },
+  {
+   "id": "noncompliant",
+   "cue": "music.noncompliant",
+   "label": "Non-compliant",
+   "what": "A run ends in refusal (Lawrence: its own track).",
+   "detect": "phase 'ending', kind Non-compliant",
+   "shot": "refused",
    "gdd": "Edit 97"
   },
   {
    "id": "finale",
    "cue": "music.finale",
    "label": "Finale",
-   "what": "The unveiling, the voyage, CERTIFIED.",
-   "detect": "phase unveil, voyage; ending Certified",
+   "what": "The unveiling and the voyage.",
+   "detect": "phase unveil, voyage",
    "shot": "plaque",
+   "gdd": "Edit 94"
+  },
+  {
+   "id": "certified",
+   "cue": "music.certified",
+   "label": "At the ship",
+   "what": "The dummy set down at the ship: CERTIFIED (Lawrence: its own track).",
+   "detect": "phase 'ending', kind Certified",
+   "shot": "certified",
    "gdd": "Edit 94"
   }
  ],

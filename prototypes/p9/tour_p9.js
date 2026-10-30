@@ -98,6 +98,8 @@ function serve() {
   if (oi >= 0) { await key('ArrowDown', oi); await key('Space', 1, 500); await mark('Options: VOLUME, MUSIC, SFX, MUTE', 'options'); await key('ArrowRight', 1, 250); await key('ArrowLeft', 1, 250); await mark('Options: VOLUME adjusted'); await key('Escape', 1, 300); await key('ArrowUp', oi); }
   await key('Escape', 1, 500); await mark('resume');
   await sim(() => { const s = window.__dummies.sim; s.phase = 'play'; s.end('Licensed'); }); await pg.waitForTimeout(900); await mark('Arcade ends: Licensed', 'ending');
+  await sim(() => { const s = window.__dummies.sim; s.phase = 'play'; s.end('Failed test'); }); await pg.waitForTimeout(900); await mark('Arcade ends: Failed test', 'failed');
+  await sim(() => { const s = window.__dummies.sim; s.phase = 'play'; s.end('Non-compliant'); }); await pg.waitForTimeout(900); await mark('Arcade ends: Non-compliant', 'refused');
   await pg.evaluate(() => { window.__dummies.screen = 'title'; window.__dummies.sim = null; window.__dummies.titleSel = 0; }); await pg.waitForTimeout(600); await mark('back to the title');
 
   // ---------- Story

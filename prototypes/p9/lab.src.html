@@ -11,7 +11,7 @@
 :root {
   --bg: #E6F1F6; --panel: #F7FBFD; --panel-2: #DCEBF2; --ink: #0F1518; --ink-2: #4A5A66; --line: #B9C7CF;
   --aqua: #1A7FA5; --aqua-soft: #CFE9F3; --dummy: #F5C542; --dummy-ink: #1A1D1F; --cone: #D9650B; --warn: #C8392B; --ok: #1F8A5B;
-  --t1: #C99A12; --t2: #1A7FA5; --t3: #B83C9C; --t4: #2E8F55; --t5: #C8601C; --t6: #6B54C9;
+  --t1: #C99A12; --t2: #1A7FA5; --t3: #B83C9C; --t4: #2E8F55; --t5: #C8601C; --t6: #6B54C9; --t7: #1E8C86; --t8: #B8403F; --t9: #5E6A78; --t10: #8A6A2E;
   --shadow: 0 1px 0 rgba(16, 40, 56, 0.06), 0 6px 18px rgba(16, 40, 56, 0.08);
   --f-ui: "B612", "Segoe UI", system-ui, sans-serif; --f-mono: "B612 Mono", ui-monospace, Menlo, Consolas, monospace; --f-brand: "Nunito", "Segoe UI", system-ui, sans-serif;
   --r: 10px;
@@ -19,12 +19,12 @@
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   --bg: #070A12; --panel: #0F1626; --panel-2: #152038; --ink: #E7F0F5; --ink-2: #93A9B9; --line: #24314C;
   --aqua: #4FC3E8; --aqua-soft: #12324A; --dummy: #F5C542; --dummy-ink: #15130B; --cone: #FF8A1F; --warn: #FF6A5A; --ok: #4FD39A;
-  --t1: #F5C542; --t2: #4FC3E8; --t3: #F06BD6; --t4: #5FD68F; --t5: #FF9A4A; --t6: #A493FF;
+  --t1: #F5C542; --t2: #4FC3E8; --t3: #F06BD6; --t4: #5FD68F; --t5: #FF9A4A; --t6: #A493FF; --t7: #4FD6CC; --t8: #FF7B7B; --t9: #A9B4C2; --t10: #D9B26A;
   --shadow: 0 1px 0 rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35); color-scheme: dark; } }
 :root[data-theme="dark"] {
   --bg: #070A12; --panel: #0F1626; --panel-2: #152038; --ink: #E7F0F5; --ink-2: #93A9B9; --line: #24314C;
   --aqua: #4FC3E8; --aqua-soft: #12324A; --dummy: #F5C542; --dummy-ink: #15130B; --cone: #FF8A1F; --warn: #FF6A5A; --ok: #4FD39A;
-  --t1: #F5C542; --t2: #4FC3E8; --t3: #F06BD6; --t4: #5FD68F; --t5: #FF9A4A; --t6: #A493FF;
+  --t1: #F5C542; --t2: #4FC3E8; --t3: #F06BD6; --t4: #5FD68F; --t5: #FF9A4A; --t6: #A493FF; --t7: #4FD6CC; --t8: #FF7B7B; --t9: #A9B4C2; --t10: #D9B26A;
   --shadow: 0 1px 0 rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35); color-scheme: dark; }
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
@@ -585,7 +585,7 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
 
   // ---------- Music
   function trackOptions(v, k) {
-    const opts = []; for (let n = 1; n <= 6; n++) opts.push(['' + n, 'Track ' + n + ' · ' + L.music.tracks[n].title]);
+    const opts = []; for (const n of Object.keys(L.music.tracks).map(Number)) opts.push(['' + n, 'Track ' + n + ' · ' + L.music.tracks[n].title]);
     if (k === 'card') opts.unshift(['level', 'The level\'s track (from the tile)']);
     if (k === 'card' || k === 'credits') opts.push(['continue', 'Keep the current track']);
     if (k !== 'level') opts.push(['none', 'Silence']);
@@ -606,7 +606,7 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
         + (why ? (/^Lawrence \(/.test(why) ? '<p class="why"><b>' + esc(why.slice(0, why.indexOf(':') + 1)) + '</b> ' + esc(why.slice(why.indexOf(':') + 2)) + '</p>' : '<p class="why"><b>Designer:</b> ' + esc(why) + '</p>') : '') + '</div></article>';
     }).join('');
     const R = rotation();
-    let tm = '<div class="rot-slots"><span class="note">Rotation:</span>' + R.map((t, i) => '<label for="rot-' + i + '">' + (i + 1) + ' <select id="rot-' + i + '" data-act="rot" data-i="' + i + '">' + [1, 2, 3, 4, 5, 6].map((n) => '<option value="' + n + '"' + (n === t ? ' selected' : '') + '>Track ' + n + '</option>').join('') + '</select></label>').join('')
+    let tm = '<div class="rot-slots"><span class="note">Rotation:</span>' + R.map((t, i) => '<label for="rot-' + i + '">' + (i + 1) + ' <select id="rot-' + i + '" data-act="rot" data-i="' + i + '">' + Object.keys(L.music.tracks).map(Number).map((n) => '<option value="' + n + '"' + (n === t ? ' selected' : '') + '>Track ' + n + '</option>').join('') + '</select></label>').join('')
       + (R.length < 6 ? '<button class="btn" type="button" data-act="rotAdd">+ Slot</button>' : '') + (R.length > 1 ? '<button class="btn quiet" type="button" data-act="rotDel">− Slot</button>' : '') + '</div>';
     let n = 0;
     tm += '<div class="tilemap" aria-label="Story tiles and their tracks">' + L.tiles.map((d) => '<div class="district"><div><b>' + esc(d.name) + '</b><small>' + esc(d.act || '') + '</small></div><div class="tiles">' + d.order.map((t) => { n++; const tr = R[(n - 1) % R.length]; return '<button class="tile" type="button" data-act="track" data-track="' + tr + '" style="background:' + TRACK_VAR(tr) + '" title="Tile ' + n + ' · ' + esc(d.name + ' ' + t + (d.titles[t] ? ' · ' + d.titles[t] : '')) + ': Track ' + tr + '">' + t + '<small>T' + tr + '</small></button>'; }).join('') + '</div></div>').join('') + '</div>';

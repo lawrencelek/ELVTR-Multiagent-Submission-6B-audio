@@ -11532,7 +11532,7 @@
    "default": 1,
    "validation": {
     "min": 0,
-    "max": 6
+    "max": 10
    },
    "description": "Track on the intro screen",
    "purpose": "Request: Track 1, the splash screen"
@@ -11554,7 +11554,7 @@
    "default": 2,
    "validation": {
     "min": 0,
-    "max": 6
+    "max": 10
    },
    "description": "Track on every menu until the level starts",
    "purpose": "Request: Track 2 from the menu until just before the level starts"
@@ -11576,7 +11576,7 @@
    "default": 1,
    "validation": {
     "min": 0,
-    "max": 6
+    "max": 10
    },
    "description": "Track on the Credits card (0: the current track continues)",
    "purpose": "Q4"
@@ -11598,32 +11598,10 @@
    "default": -1,
    "validation": {
     "min": -1,
-    "max": 6
+    "max": 10
    },
    "description": "Track on a level card. −1: the level's own track, from the tile the card announces; 0: the track playing continues; 1–6: that track",
    "purpose": "Lawrence, Q2 (row 610)"
-  },
-  {
-   "editable": true,
-   "protectedReason": null,
-   "integrationStatus": "prototype-p9",
-   "boundaryStatus": "proposed-adapter-contract-not-implemented",
-   "source": "Edit 100 (P9): sound design; values proposed by the sound designer agent and the integrator; Lawrence to confirm",
-   "status": "proposed",
-   "applyAt": "next-run",
-   "id": "audio.music.track.ending",
-   "group": "Audio",
-   "owner": "Audio",
-   "label": "Ending track",
-   "unit": "track",
-   "type": "number",
-   "default": 2,
-   "validation": {
-    "min": 0,
-    "max": 6
-   },
-   "description": "Track on Licensed, Failed test and Non-compliant",
-   "purpose": "Q4"
   },
   {
    "editable": true,
@@ -11642,9 +11620,9 @@
    "default": 1,
    "validation": {
     "min": 0,
-    "max": 6
+    "max": 10
    },
-   "description": "Track for the unveiling, the voyage and CERTIFIED",
+   "description": "Track for the unveiling and the voyage",
    "purpose": "Q4"
   },
   {
@@ -12482,6 +12460,94 @@
    },
    "description": "Seconds a duck takes to go fully down or back up",
    "purpose": "No jump in level between screens"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "source": "Edit 100 (P9): Lawrence's ruling, 30 October 11:30 (DECISIONS row 619)",
+   "status": "user-confirmed",
+   "applyAt": "next-run",
+   "id": "audio.music.track.licensed",
+   "group": "Audio",
+   "owner": "Audio",
+   "label": "Licensed track",
+   "unit": "track",
+   "type": "number",
+   "default": 8,
+   "validation": {
+    "min": 0,
+    "max": 10
+   },
+   "description": "Track when a run ends Licensed",
+   "purpose": "Lawrence: its own track (row 619)"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "source": "Edit 100 (P9): Lawrence's ruling, 30 October 11:30 (DECISIONS row 619)",
+   "status": "user-confirmed",
+   "applyAt": "next-run",
+   "id": "audio.music.track.failed",
+   "group": "Audio",
+   "owner": "Audio",
+   "label": "Failed test track",
+   "unit": "track",
+   "type": "number",
+   "default": 9,
+   "validation": {
+    "min": 0,
+    "max": 10
+   },
+   "description": "Track when a run ends Failed test",
+   "purpose": "Lawrence: its own track (row 619)"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "source": "Edit 100 (P9): Lawrence's ruling, 30 October 11:30 (DECISIONS row 619)",
+   "status": "user-confirmed",
+   "applyAt": "next-run",
+   "id": "audio.music.track.noncompliant",
+   "group": "Audio",
+   "owner": "Audio",
+   "label": "Non-compliant track",
+   "unit": "track",
+   "type": "number",
+   "default": 10,
+   "validation": {
+    "min": 0,
+    "max": 10
+   },
+   "description": "Track when a run ends Non-compliant (a refusal)",
+   "purpose": "Lawrence: its own track (row 619)"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "source": "Edit 100 (P9): Lawrence's ruling, 30 October 11:30 (DECISIONS row 619)",
+   "status": "user-confirmed",
+   "applyAt": "next-run",
+   "id": "audio.music.track.certified",
+   "group": "Audio",
+   "owner": "Audio",
+   "label": "At the ship track",
+   "unit": "track",
+   "type": "number",
+   "default": 7,
+   "validation": {
+    "min": 0,
+    "max": 10
+   },
+   "description": "Track from the set-down at the ship: CERTIFIED",
+   "purpose": "Lawrence: one for the end at the ship (row 619)"
   }
  ],
  "tables": {

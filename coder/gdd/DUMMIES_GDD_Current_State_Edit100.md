@@ -102,7 +102,7 @@
 ## 11 Builds and records
 
 - **Current build:** `prototypes/p9/dummies_p9.html` (Edit 100), in `lawrencelek/ELVTR-Multiagent-Submission-6B-audio`. Prototypes 8–8.4 and 1–7.13 frozen.
-- **Decisions:** `DECISIONS.md`, rows 1–618; open items in its D table (newest D77–D85; D86 closed).
+- **Decisions:** `DECISIONS.md`, rows 1–619; open items in its D table (newest D77–D85; D86 closed).
 - **Text sources:** `content/story/story_v2.json`, `prototypes/p8/lore.js`. Prototype 7.13 keeps `story.json` and Farsight.
 - **Style Guide Agent:** Assignment 6, `style/` (V1 for 7.13; V2 for 8).
 - **Sound Designer Agent:** `audio/` in the sound repo; GDD Edit 100; the Sound Lab `prototypes/p9/sound_lab.html`.
@@ -111,7 +111,9 @@
 
 - **Engine:** `prototypes/p9/audio.js`, on when `audio.enabled` is 1 (build value 1; registry default 0).
 - **Pack:** six OGG tracks (ansimuz), 100 WAV effects (Chequered Ink), beside the page; an MP3 copy of each track.
-- **Music:** Track 1 intro, finale and Credits; Track 2 menus and run ends; levels rotate Tracks 3–6 (`audio.music.levelRotation`) (rows 610–612, 617).
+- **Generated music** (row 619): Tracks 7–10 by `audio/music_gen.py`: 7 at the ship, 8 Licensed, 9 Failed test, 10 Non-compliant.
+- **Music:** Track 1 intro, finale (unveiling, voyage) and Credits; Track 2 menus; levels rotate Tracks 3–6 (`audio.music.levelRotation`) (rows 610–612, 617).
+  - Endings (row 619): at the ship `audio.music.track.certified` (7); Licensed `audio.music.track.licensed` (8); Failed test `audio.music.track.failed` (9); Non-compliant `audio.music.track.noncompliant` (10).
   - Each level card starts its level's track (`audio.music.track.card` −1). Story: the card's tile *n* plays slot ((*n* − 1) mod 4) + 1. Arcade: each level's card, the next slot.
   - The track holds until the next card: a cleared tile walked back to keeps it (row 611).
   - Ducks: pause `audio.music.pauseDuck`; gift screen, report, workshop `audio.music.screenDuck`; write-off `audio.music.writeoffDuck` (rows 612–613).

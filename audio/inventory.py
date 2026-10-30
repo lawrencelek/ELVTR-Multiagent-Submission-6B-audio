@@ -71,14 +71,17 @@ def main():
             # One level per file for the bus trims: integrated LUFS where gated loudness exists, else whole-file RMS.
             rec["level"] = rec["lufs"] if rec["lufs"] is not None else rec["rmsDb"]
             rec["levelSource"] = "lufs" if rec["lufs"] is not None else "rms"
-            rec.update({"credit": CREDITS[folder], "source": SOURCE[folder],
-                        "licence": "generated for this game" if folder == "tones" else "royalty-free pack; credit line supplied by the user; licence text not supplied"})
+            gen = folder == "tones" or "dummies-generated" in p.name  # audio/tones.py, audio/music_gen.py (row 619)
+            rec.update({"credit": "Generated for DUMMIES (audio/music_gen.py)" if folder == "music" and gen else CREDITS[folder],
+                        "source": "audio/music_gen.py" if folder == "music" and gen else SOURCE[folder],
+                        "licence": "generated for this game" if gen else "royalty-free pack; credit line supplied by the user; licence text not supplied"})
             if folder == "music":
                 if p.name in RENAMED:
                     rec["original"] = RENAMED[p.name]
-                m = re.match(r"track(\d)_(.+)$", p.stem)
+                m = re.match(r"track(\d+)_(.+)$", p.stem)
                 rec["track"] = int(m.group(1))
-                rec["title"] = m.group(2).split("_", 1)[1].replace("-", " ").replace("fantasy dragon", "fantasy Dragon")
+                slug = m.group(2).split("_", 1)[1]
+                rec["title"] = slug if slug == "non-compliant" else slug.replace("-", " ").replace("fantasy dragon", "fantasy Dragon")
             files.append(rec)
     OUT.parent.mkdir(parents=True, exist_ok=True)
     doc = {"generated_by": "audio/inventory.py", "pack": "prototypes/p9/audio/", "count": len(files),

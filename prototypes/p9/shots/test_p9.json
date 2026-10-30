@@ -1,9 +1,9 @@
 {
- "passed": 42,
- "total": 42,
+ "passed": 44,
+ "total": 44,
  "results": [
   {
-   "name": "every file in the cue map loads (147)",
+   "name": "every file in the cue map loads (155)",
    "pass": true,
    "detail": ""
   },
@@ -48,9 +48,19 @@
    "detail": "level, Track 3"
   },
   {
-   "name": "music on \"Arcade ends: Licensed\": ending, Track 2",
+   "name": "music on \"Arcade ends: Licensed\": licensed, Track 8",
    "pass": true,
-   "detail": "ending, Track 2"
+   "detail": "licensed, Track 8"
+  },
+  {
+   "name": "music on \"Arcade ends: Failed test\": failed, Track 9",
+   "pass": true,
+   "detail": "failed, Track 9"
+  },
+  {
+   "name": "music on \"Arcade ends: Non-compliant\": noncompliant, Track 10",
+   "pass": true,
+   "detail": "noncompliant, Track 10"
   },
   {
    "name": "music on \"Story: save slots\": menu, Track 2",
@@ -93,9 +103,9 @@
    "detail": "finale, Track 1"
   },
   {
-   "name": "music on \"CERTIFIED\": finale, Track 1",
+   "name": "music on \"CERTIFIED\": certified, Track 7",
    "pass": true,
-   "detail": "finale, Track 1"
+   "detail": "certified, Track 7"
   },
   {
    "name": "the music ducks: write-off 0.5, report, workshop and gift screen 0.7, play 1",
@@ -103,9 +113,9 @@
    "detail": "Arcade: play 1/1 · Arcade: a write-off 0.5/0.5 · Arcade: the report 0.7/0.7 · Arcade: the workshop 0.7/0.7 · Story: the gift screen (ferry) 0.7/0.7"
   },
   {
-   "name": "the tour heard 39 cues through the game's hooks",
+   "name": "the tour heard 40 cues through the game's hooks",
    "pass": true,
-   "detail": "ui-start ui-move ui-ok ui-back chassis.start drop-in near-miss bark dropped-in car-notice lunge screen denied impact combo pickup cone-hit drone-dispatch drone-dispatch.rescue writeoff credit shop-open chassis jump jump-land ui-pause ending.win story-enter knock impact.big story-deliver story-count story-clear gift story-ferry story-gift story-ferried unveil unveil-lift"
+   "detail": "ui-start ui-move ui-ok ui-back chassis.start drop-in near-miss bark dropped-in car-notice lunge screen denied impact combo pickup cone-hit drone-dispatch drone-dispatch.rescue writeoff credit shop-open chassis jump jump-land ui-pause ending.win ending.fail story-enter knock impact.big story-deliver story-count story-clear gift story-ferry story-gift story-ferried unveil unveil-lift"
   },
   {
    "name": "the intro waits behind the gate",

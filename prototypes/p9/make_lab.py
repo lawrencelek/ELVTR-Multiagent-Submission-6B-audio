@@ -34,9 +34,11 @@ SEQUENCES = [
     ("Traffic", "level", [[0, "car-notice"], [0.4, "bark"], [0.9, "honk.body"], [1.6, "near-miss"], [2.2, "skid"], [2.9, "car-brake"]], "play", "What the cars do around the dummy."),
     ("Gift delivery", "level", [[0, "story-deliver"], [2.0, "gift"], [4.6, "ui-ok"]], "gift", "The drone brings a part; the gift screen; continue."),
     ("River rescue", "level", [[0, "splash"], [0.3, "drone-dispatch.rescue"], [2.6, "rescued"]], "drone", "Into the river, the drone, the recovery."),
-    ("Arcade ends: Licensed", "ending", [[0, "ending.win"]], "ending", "The run ends well. Track 2 returns."),
-    ("Arcade ends: Failed test", "ending", [[0, "ending.fail"]], "ending", "The run ends badly."),
-    ("Finale", "finale", [[0, "unveil"], [0.6, "unveil-lift"], [4.0, "ui-ok"], [4.2, "voyage"], [7.0, "voyage-end"]], "plaque", "The cloth lifts, the plaque, the voyage."),
+    ("Arcade ends: Licensed", "licensed", [[0, "ending.win"]], "ending", "The run ends licensed, on its own track."),
+    ("Arcade ends: Failed test", "failed", [[0, "ending.fail"]], "failed", "The run ends failed, on its own track."),
+    ("Arcade ends: Non-compliant", "noncompliant", [[0, "ending.fail"]], "refused", "A refusal, on its own track."),
+    ("Finale", "finale", [[0, "unveil"], [0.6, "unveil-lift"], [4.0, "ui-ok"], [4.2, "voyage"]], "plaque", "The cloth lifts, the plaque, the voyage."),
+    ("At the ship", "certified", [[0, "voyage-end"], [0.3, "ending.win"]], "certified", "Set down at the ship: CERTIFIED, on its own track."),
 ]
 
 

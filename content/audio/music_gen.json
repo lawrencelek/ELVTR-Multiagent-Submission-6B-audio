@@ -1,0 +1,50 @@
+{
+ "generated_by": "audio/music_gen.py",
+ "folder": "prototypes/p9/audio/music/",
+ "tracks": [
+  {
+   "track": 7,
+   "file": "music/track7_dummies-generated_certified.ogg",
+   "mp3": "music/mp3/track7_dummies-generated_certified.mp3",
+   "title": "certified",
+   "bpm": 76,
+   "bars": 20,
+   "seconds": 63.158,
+   "events": 495,
+   "what": "The ship: the dummy set down, CERTIFIED. D major pentatonic, 76 BPM. A ship's horn, plucked strings, bells, a gong at the climax"
+  },
+  {
+   "track": 8,
+   "file": "music/track8_dummies-generated_licensed.ogg",
+   "mp3": "music/mp3/track8_dummies-generated_licensed.mp3",
+   "title": "licensed",
+   "bpm": 124,
+   "bars": 16,
+   "seconds": 30.968,
+   "events": 710,
+   "what": "A run licensed. C major, 124 BPM. A chip lead over an arpeggio, four on the floor"
+  },
+  {
+   "track": 9,
+   "file": "music/track9_dummies-generated_failed-test.ogg",
+   "mp3": "music/mp3/track9_dummies-generated_failed-test.mp3",
+   "title": "failed test",
+   "bpm": 66,
+   "bars": 12,
+   "seconds": 43.636,
+   "events": 155,
+   "what": "A run failed. A minor, 66 BPM. A wobbling pad, a slow triangle line, plucked chords, a heartbeat"
+  },
+  {
+   "track": 10,
+   "file": "music/track10_dummies-generated_non-compliant.ogg",
+   "mp3": "music/mp3/track10_dummies-generated_non-compliant.mp3",
+   "title": "non-compliant",
+   "bpm": 100,
+   "bars": 16,
+   "seconds": 38.4,
+   "events": 701,
+   "what": "A refusal. E minor with its flat second, 100 BPM. Hold music: off-beat electric piano, a cold chime, a pulsing bass"
+  }
+ ]
+}

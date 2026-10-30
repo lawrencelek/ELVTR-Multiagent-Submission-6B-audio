@@ -35,10 +35,10 @@ const get = (url) => new Promise((res) => http.get(url, (r) => { r.resume(); res
   ok('nothing plays before the first press', !S[0].cues.some((c) => c.kind === 'sfx' || c.kind === 'music' || c.kind === 'ui') && at('intro').music.state == null);
   const want = { 'the first press': ['intro', CUES.music.states.intro], 'START': ['menu', CUES.music.states.menu], 'the Credits card': ['credits', typeof CUES.music.states.credits === 'number' ? CUES.music.states.credits : CUES.music.states.menu],
     'Arcade: district select': ['menu', CUES.music.states.menu], 'Arcade: the level card': ['card', CUES.music.rotation[0]], 'Arcade: the drone drop': ['level', CUES.music.rotation[0]],
-    'Arcade ends: Licensed': ['ending', CUES.music.states.ending], 'Story: save slots': ['menu', CUES.music.states.menu], 'Story: the map': ['menu', CUES.music.states.menu],
+    'Arcade ends: Licensed': ['licensed', CUES.music.states.licensed], 'Arcade ends: Failed test': ['failed', CUES.music.states.failed], 'Arcade ends: Non-compliant': ['noncompliant', CUES.music.states.noncompliant], 'Story: save slots': ['menu', CUES.music.states.menu], 'Story: the map': ['menu', CUES.music.states.menu],
     'Story: the level card (A1)': ['card', CUES.music.rotation[0]], 'Story: the drone drop': ['level', CUES.music.rotation[0]], 'Story: the ferry to the next tile': ['level', CUES.music.rotation[0]],
     'Story: the next card': ['card', CUES.music.rotation[1 % CUES.music.rotation.length]], 'Story: play on tile 2': ['level', CUES.music.rotation[1 % CUES.music.rotation.length]],
-    'the finale': ['finale', CUES.music.states.finale], 'CERTIFIED': ['finale', CUES.music.states.finale] };
+    'the finale': ['finale', CUES.music.states.finale], 'CERTIFIED': ['certified', CUES.music.states.certified] };
   for (const [name, [st, tr]] of Object.entries(want)) { const s = at(name); ok('music on "' + name + '": ' + st + ', Track ' + tr, s.music && s.music.state === st && s.music.track === tr, s.music ? s.music.state + ', Track ' + s.music.track : 'step missing'); }
   // Lawrence's ducks (rows 612, 613): the write-off 50%, the report and the workshop 70%, play 100%
   const ducks = { 'Arcade: play': 1, 'Arcade: a write-off': CUES.params['audio.music.writeoffDuck'], 'Arcade: the report': CUES.params['audio.music.screenDuck'], 'Arcade: the workshop': CUES.params['audio.music.screenDuck'], 'Story: the gift screen (ferry)': CUES.params['audio.music.screenDuck'] };

@@ -12,6 +12,7 @@ The reviewer and the refiner read this whole guide. Every rule has an ID, a seve
   - **The Corporation's system:** menus, notices, drones, counts, gifts, grades, the plaque. Clean, synthetic, official.
 - **The pack:** 100 WAV effects (Chequered Ink) and six OGG tracks (ansimuz). Retro, synthetic. Names describe use: `hurt_*`, `select_*`, `confirm_*`, `collect_*`, `powerup_*`, `explosion_*`.
 - **Generated tones:** `tone_<event>.wav`, Prototype 8.4's procedural sounds rendered by `audio/tones.py` (from run 4 on). A `synth` entry plays its event's tone.
+- **Generated music:** Tracks 7–10 by `audio/music_gen.py`, for the ship and the three run ends (row 619).
 
 ## 1. The request (Lawrence, verbatim)
 
@@ -85,7 +86,7 @@ Severity: blocking −4, major −2, minor −1. Each broken rule deducts once p
 |---|---|---|---|
 | M1 | blocking | The request's three spans hold | Intro not Track 1; any menu state not Track 2; levels not Tracks 3–6. The level card may play the level's track (Lawrence, row 610) |
 | M2 | major | Levels alternate | Rotation not four distinct tracks from 3–6; neighbouring Story tiles on one track; Arcade not rotating per run |
-| M3 | minor | Open states are stated | Pause, credits, ending or finale with no state and reason |
+| M3 | minor | Open states are stated | Pause, credits, each run end (licensed, failed, noncompliant), the finale or the ship (certified) with no state and reason |
 
 ### Alternates (the Sound Lab)
 

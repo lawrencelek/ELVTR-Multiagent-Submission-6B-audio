@@ -685,8 +685,8 @@
    "screen": "game",
    "phase": "ending",
    "music": {
-    "state": "ending",
-    "track": 2,
+    "state": "licensed",
+    "track": 8,
     "duck": 1
    },
    "cues": [
@@ -697,18 +697,76 @@
     },
     {
      "kind": "state",
-     "id": "ending",
+     "id": "licensed",
      "file": null
     },
     {
      "kind": "music",
-     "id": "track2",
-     "file": "music/track2_ansimuz-itch-io_summer-nights.ogg"
+     "id": "track8",
+     "file": "music/track8_dummies-generated_licensed.ogg"
     }
    ]
   },
   {
    "step": 27,
+   "name": "Arcade ends: Failed test",
+   "shot": "failed",
+   "screen": "game",
+   "phase": "ending",
+   "music": {
+    "state": "failed",
+    "track": 9,
+    "duck": 1
+   },
+   "cues": [
+    {
+     "kind": "sfx",
+     "id": "ending.fail",
+     "file": "lose_1.wav"
+    },
+    {
+     "kind": "state",
+     "id": "failed",
+     "file": null
+    },
+    {
+     "kind": "music",
+     "id": "track9",
+     "file": "music/track9_dummies-generated_failed-test.ogg"
+    }
+   ]
+  },
+  {
+   "step": 28,
+   "name": "Arcade ends: Non-compliant",
+   "shot": "refused",
+   "screen": "game",
+   "phase": "ending",
+   "music": {
+    "state": "noncompliant",
+    "track": 10,
+    "duck": 1
+   },
+   "cues": [
+    {
+     "kind": "sfx",
+     "id": "ending.fail",
+     "file": "lose_1.wav"
+    },
+    {
+     "kind": "state",
+     "id": "noncompliant",
+     "file": null
+    },
+    {
+     "kind": "music",
+     "id": "track10",
+     "file": "music/track10_dummies-generated_non-compliant.ogg"
+    }
+   ]
+  },
+  {
+   "step": 29,
    "name": "back to the title",
    "shot": null,
    "screen": "title",
@@ -723,11 +781,16 @@
      "kind": "state",
      "id": "menu",
      "file": null
+    },
+    {
+     "kind": "music",
+     "id": "track2",
+     "file": "music/track2_ansimuz-itch-io_summer-nights.ogg"
     }
    ]
   },
   {
-   "step": 28,
+   "step": 30,
    "name": "Story: save slots",
    "shot": "saves",
    "screen": "saves",
@@ -746,7 +809,7 @@
    ]
   },
   {
-   "step": 29,
+   "step": 31,
    "name": "Story: the splash",
    "shot": "splash",
    "screen": "splash",
@@ -765,7 +828,7 @@
    ]
   },
   {
-   "step": 30,
+   "step": 32,
    "name": "Story: the map",
    "shot": "map",
    "screen": "storymap",
@@ -784,7 +847,7 @@
    ]
   },
   {
-   "step": 31,
+   "step": 33,
    "name": "Story: the level card (A1)",
    "shot": "card",
    "screen": "game",
@@ -823,7 +886,7 @@
    ]
   },
   {
-   "step": 32,
+   "step": 34,
    "name": "Story: the drone drop",
    "shot": "drop",
    "screen": "game",
@@ -852,7 +915,7 @@
    ]
   },
   {
-   "step": 33,
+   "step": 35,
    "name": "Story: play on tile 1",
    "shot": "play",
    "screen": "game",
@@ -876,7 +939,7 @@
    ]
   },
   {
-   "step": 34,
+   "step": 36,
    "name": "Story: a dash",
    "shot": "dash",
    "screen": "game",
@@ -910,7 +973,7 @@
    ]
   },
   {
-   "step": 35,
+   "step": 37,
    "name": "Story: a jump",
    "shot": "jump",
    "screen": "game",
@@ -934,7 +997,7 @@
    ]
   },
   {
-   "step": 36,
+   "step": 38,
    "name": "Story: a big hit",
    "shot": "impact",
    "screen": "game",
@@ -963,7 +1026,7 @@
    ]
   },
   {
-   "step": 37,
+   "step": 39,
    "name": "Story: counted, cleared",
    "shot": "story",
    "screen": "game",
@@ -997,7 +1060,7 @@
    ]
   },
   {
-   "step": 38,
+   "step": 40,
    "name": "Story: the gift screen",
    "shot": "gift",
    "screen": "game",
@@ -1026,7 +1089,7 @@
    ]
   },
   {
-   "step": 39,
+   "step": 41,
    "name": "Story: the report",
    "shot": null,
    "screen": "game",
@@ -1049,6 +1112,11 @@
     },
     {
      "kind": "sfx",
+     "id": "car-notice",
+     "file": "tone_car_notice.wav"
+    },
+    {
+     "kind": "sfx",
      "id": "writeoff",
      "file": "tone_writeoff.wav"
     },
@@ -1065,7 +1133,7 @@
    ]
   },
   {
-   "step": 40,
+   "step": 42,
    "name": "Story: the ferry to the next tile",
    "shot": "ferry",
    "screen": "game",
@@ -1094,7 +1162,7 @@
    ]
   },
   {
-   "step": 41,
+   "step": 43,
    "name": "Story: the gift screen (ferry)",
    "shot": null,
    "screen": "game",
@@ -1118,7 +1186,7 @@
    ]
   },
   {
-   "step": 42,
+   "step": 44,
    "name": "Story: the next card",
    "shot": null,
    "screen": "game",
@@ -1162,7 +1230,7 @@
    ]
   },
   {
-   "step": 43,
+   "step": 45,
    "name": "Story: play on tile 2: the next level track",
    "shot": null,
    "screen": "game",
@@ -1191,7 +1259,7 @@
    ]
   },
   {
-   "step": 44,
+   "step": 46,
    "name": "the finale: the plaque, Track 1",
    "shot": "plaque",
    "screen": "game",
@@ -1225,14 +1293,14 @@
    ]
   },
   {
-   "step": 45,
+   "step": 47,
    "name": "CERTIFIED",
    "shot": "certified",
    "screen": "game",
    "phase": "ending",
    "music": {
-    "state": "finale",
-    "track": 1,
+    "state": "certified",
+    "track": 7,
     "duck": 1
    },
    "cues": [
@@ -1240,6 +1308,16 @@
      "kind": "sfx",
      "id": "ending.win",
      "file": "powerup_5.wav"
+    },
+    {
+     "kind": "state",
+     "id": "certified",
+     "file": null
+    },
+    {
+     "kind": "music",
+     "id": "track7",
+     "file": "music/track7_dummies-generated_certified.ogg"
     }
    ]
   }
@@ -1260,24 +1338,26 @@
   "pause": 22,
   "options": 23,
   "ending": 26,
-  "saves": 28,
-  "splash": 29,
-  "map": 30,
-  "card": 31,
-  "drop": 32,
-  "play": 33,
-  "dash": 34,
-  "jump": 35,
-  "impact": 36,
-  "story": 37,
-  "gift": 38,
-  "ferry": 40,
-  "plaque": 44,
-  "certified": 45
+  "failed": 27,
+  "refused": 28,
+  "saves": 30,
+  "splash": 31,
+  "map": 32,
+  "card": 33,
+  "drop": 34,
+  "play": 35,
+  "dash": 36,
+  "jump": 37,
+  "impact": 38,
+  "story": 39,
+  "gift": 40,
+  "ferry": 42,
+  "plaque": 46,
+  "certified": 47
  },
  "errors": [],
  "audio": {
-  "log": 123,
+  "log": 133,
   "settings": {
    "master": 9,
    "music": 8,

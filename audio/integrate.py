@@ -25,6 +25,7 @@ PICKS = [ROOT / "content" / "audio" / f for f in (       # Lawrence's picks from
     "picks_lawrence_2.json",        # 30 October 10:39 (row 607)
     "picks_lawrence_2_tones.json",  # the three events he asked new tones for, set to play them (row 607)
     "picks_lawrence_3.json",        # 30 October 11:30: the chassis blip; the music rulings and fades (rows 609–618)
+    "picks_lawrence_4.json",        # 30 October 12:06: the generated tracks on the ship and the three run ends (row 619)
 )]
 TONES = ROOT / "content" / "audio" / "tones.json"            # generated tones (audio/tones.py)
 OUT = ROOT / "content" / "audio" / "cues.json"
@@ -54,12 +55,15 @@ PARAMS = [  # id, label, unit, default, min, max, description, purpose
     ("audio.music.screenDuck", "Screen duck", "ratio", 0.7, 0, 1, "The level track's level on the gift screen, the level report and the workshop, as a share of its level in play", "Lawrence, Q4 (row 612)"),
     ("audio.music.writeoffDuck", "Write-off duck", "ratio", 0.5, 0, 1, "The level track's level through the write-off hold, as a share of its level in play", "Lawrence, Q5 (row 613)"),
     ("audio.music.duckSeconds", "Duck time", "s", 0.25, 0.01, 4, "Seconds a duck takes to go fully down or back up", "No jump in level between screens"),
-    ("audio.music.track.intro", "Intro track", "track", 1, 0, 6, "Track on the intro screen", "Request: Track 1, the splash screen"),
-    ("audio.music.track.menu", "Menu track", "track", 2, 0, 6, "Track on every menu until the level starts", "Request: Track 2 from the menu until just before the level starts"),
-    ("audio.music.track.credits", "Credits track", "track", 2, 0, 6, "Track on the Credits card (0: the current track continues)", "Q4"),
-    ("audio.music.track.card", "Level card track", "track", -1, -1, 6, "Track on a level card. −1: the level's own track, from the tile the card announces; 0: the track playing continues; 1–6: that track", "Lawrence, Q2 (row 610)"),
-    ("audio.music.track.ending", "Ending track", "track", 2, 0, 6, "Track on Licensed, Failed test and Non-compliant", "Q4"),
-    ("audio.music.track.finale", "Finale track", "track", 1, 0, 6, "Track for the unveiling, the voyage and CERTIFIED", "Q4"),
+    ("audio.music.track.intro", "Intro track", "track", 1, 0, 10, "Track on the intro screen", "Request: Track 1, the splash screen"),
+    ("audio.music.track.menu", "Menu track", "track", 2, 0, 10, "Track on every menu until the level starts", "Request: Track 2 from the menu until just before the level starts"),
+    ("audio.music.track.credits", "Credits track", "track", 2, 0, 10, "Track on the Credits card (0: the current track continues)", "Q4"),
+    ("audio.music.track.card", "Level card track", "track", -1, -1, 10, "Track on a level card. −1: the level's own track, from the tile the card announces; 0: the track playing continues; 1–6: that track", "Lawrence, Q2 (row 610)"),
+    ("audio.music.track.licensed", "Licensed track", "track", 2, 0, 10, "Track when a run ends Licensed", "Lawrence: its own track (row 619)"),
+    ("audio.music.track.failed", "Failed test track", "track", 2, 0, 10, "Track when a run ends Failed test", "Lawrence: its own track (row 619)"),
+    ("audio.music.track.noncompliant", "Non-compliant track", "track", 2, 0, 10, "Track when a run ends Non-compliant (a refusal)", "Lawrence: its own track (row 619)"),
+    ("audio.music.track.finale", "Finale track", "track", 1, 0, 10, "Track for the unveiling and the voyage", "Q4"),
+    ("audio.music.track.certified", "At the ship track", "track", 1, 0, 10, "Track from the set-down at the ship: CERTIFIED", "Lawrence: one for the end at the ship (row 619)"),
     ("audio.music.levelRotation", "Level rotation", "digits", 3456, 0, 66666666, "Level tracks in order, one digit each. Story: the tile n a level card announces plays digit ((n − 1) mod count) + 1, until the next card. Arcade: the session's level n does", "Request: Tracks 3–6 alternate between levels and maps; Lawrence, Q3 (row 611)"),
     ("audio.music.targetLufs", "Music target", "LUFS", -16, -40, 0, "Integrated loudness each track is trimmed toward", "One level for every track"),
     ("audio.sfx.targetLufs", "SFX target", "LUFS", -18, -40, 0, "Loudness each effect is trimmed toward (integrated LUFS, or RMS under 0.4 s)", "One level for every effect"),
@@ -72,11 +76,13 @@ PARAMS = [  # id, label, unit, default, min, max, description, purpose
 ]
 
 
-RETIRED = {"audio.music.crossfadeSeconds": "superseded by audio.music.fadeInSeconds and fadeOutSeconds (row 609)"}
+RETIRED = {"audio.music.crossfadeSeconds": "superseded by audio.music.fadeInSeconds and fadeOutSeconds (row 609)",
+           "audio.music.track.ending": "superseded by audio.music.track.licensed, failed and noncompliant (row 619)"}
 RULED = {  # Lawrence's rulings, 30 October 11:30: the IDs they fix (status user-confirmed)
     "audio.music.track.intro": 617, "audio.music.fadeInSeconds": 609, "audio.music.fadeOutSeconds": 609, "audio.music.track.card": 610,
     "audio.music.levelRotation": 611, "audio.music.pauseDuck": 612, "audio.music.screenDuck": 612, "audio.music.track.credits": 612,
     "audio.music.track.finale": 612, "audio.music.writeoffDuck": 613, "audio.sfx.cooldown.bark": 614,
+    "audio.music.track.licensed": 619, "audio.music.track.failed": 619, "audio.music.track.noncompliant": 619, "audio.music.track.certified": 619,
 }
 
 
@@ -197,6 +203,12 @@ def main():
         if "tones" not in pf.name:  # what his browser may still hold: the latest export per entry
             raw.update(picks.get("sfx") or {})
     music_by, prm_user = {}, {}
+    st0 = m["music"]["states"]  # the agent's one "ending" state becomes the three run ends; the ship starts on the finale's track (row 619)
+    if "ending" in st0:
+        for k in ("licensed", "failed", "noncompliant"):
+            st0.setdefault(k, st0["ending"])
+        del st0["ending"]
+    st0.setdefault("certified", st0.get("finale"))
     for pf in PICKS:  # Lawrence's music rulings and the values he set (row 609 on)
         if not pf.exists():
             continue
@@ -218,7 +230,11 @@ def main():
         "writeoff": "Lawrence (Q5): a write-off drops the level track to 50%.",
         "pause": "Lawrence (Q4): pause drops the level track to 35%.",
         "credits": "Lawrence (Q4): Credits play Track 1, as the finale does.",
-        "finale": "Lawrence (Q4): Track 1 bookends the story.",
+        "finale": "Lawrence (Q4): Track 1 bookends the story, through the unveiling and the voyage.",
+        "certified": "Lawrence: a track of its own for the end at the ship. Generated: horn, plucked strings, bells.",
+        "licensed": "Lawrence: a track of its own. Generated: a chip lead over four on the floor.",
+        "failed": "Lawrence: a track of its own. Generated: a slow minor line, a wobbling pad, a heartbeat.",
+        "noncompliant": "Lawrence: a track of its own. Generated: hold music, a cold chime.",
     })
     tones = json.loads(TONES.read_text(encoding="utf-8"))["tones"] if TONES.exists() else {}
     F = L.lint(m, EV, INV)
@@ -230,7 +246,7 @@ def main():
     st, rot = m["music"]["states"], m["music"]["rotation"]
     vals = {p[0]: p[3] for p in PARAMS}
     vals.update({k: v for k, v in prm_user.items() if k in vals})
-    for k in ("intro", "menu", "credits", "card", "ending", "finale"):
+    for k in ("intro", "menu", "credits", "card", "licensed", "failed", "noncompliant", "finale", "certified"):
         v = st.get(k)
         vals["audio.music.track." + k] = v if isinstance(v, int) else -1 if v == "level" else 0
     vals["audio.music.levelRotation"] = int("".join(str(n) for n in rot))
@@ -295,7 +311,7 @@ def main():
                   "arcadeRule": m["music"].get("arcadeRule", "run"), "why": m["music"].get("why", {}), "by": music_by,
                   "retired": RETIRED},
         "sfx": sfx, "files": files, "picks": {"by": "Lawrence", "files": [str(p.relative_to(ROOT)) for p in PICKS if p.exists()], "changed": changed, "raw": {"sfx": raw}},
-        "credits": {"music": INV["files"][0]["credit"], "sfx": next(f["credit"] for f in INV["files"] if f["folder"] == "sfx")},
+        "credits": {"music": next(f["credit"] for f in INV["files"] if f["folder"] == "music" and "ansimuz" in f["credit"]), "sfx": next(f["credit"] for f in INV["files"] if f["folder"] == "sfx")},
     }
     OUT.write_text(json.dumps(out, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     used = sorted({f for c in sfx.values() if c["decision"] == "cue" for f in c.get("files", [])})

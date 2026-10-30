@@ -2,7 +2,7 @@
 
 **ELVTR Multi-Agent Systems · Sound (Assignment 6B) · Lawrence Lek · 30 October 2026 · Prototype 9 · GDD Edit 100**
 
-**DUMMIES** is a top-down game. You are a crash-test dummy in training in SHENZHEN SMART CITY. Dummy Corporation narrates, deadpan and inspirational. Prototype 9 adds sound: six OGG tracks (ansimuz) and 100 WAV effects (Chequered Ink).
+**DUMMIES** is a top-down game. You are a crash-test dummy in training in SHENZHEN SMART CITY. Dummy Corporation narrates, deadpan and inspirational. Prototype 9 adds sound: six OGG tracks (ansimuz), four more composed in code for the endings, and 100 WAV effects (Chequered Ink).
 
 **The agent:** a sound designer that reads the pack's file names and the game's code, and writes the cue map.
 
@@ -33,15 +33,16 @@
 | Deliverable | Where |
 |---|---|
 | **Documentation:** which SFX (WAV) and MUSIC (OGG) cues play where | [GDD Edit 100](coder/gdd/DUMMIES_GDD_Edit100_Prototype_9_Sound.md): §2 MUSIC, §3 SFX (every cue, its trigger, files, bus, volume ID, cooldown ID) |
-| **Gameplay points with screenshots** | [`prototypes/p9/SOUND_TOUR.md`](prototypes/p9/SOUND_TOUR.md): 45 steps, 29 screenshots, each cue heard and its alternates |
+| **Gameplay points with screenshots** | [`prototypes/p9/SOUND_TOUR.md`](prototypes/p9/SOUND_TOUR.md): 47 steps, 31 screenshots, each cue heard and its alternates |
 | **The audition page** | [`prototypes/p9/sound_lab.html`](prototypes/p9/sound_lab.html) (built by `make_lab.py`) |
 | **The new build** | [`prototypes/p9/dummies_p9.html`](prototypes/p9/dummies_p9.html) with `prototypes/p9/audio/` (built by `build.py`) |
 | **The agent** | [`audio/`](audio/): `inventory.py`, `events.py`, `loop.py`, `lint.py`, `llm.py`, `integrate.py`, `agents/`, [`SOUND_GUIDE.md`](audio/SOUND_GUIDE.md) |
 | **Evidence** | [`audio/runs/`](audio/runs/): every agent input and output, every map version, lint, a `trace.md` per run |
-| **The cue map** | [`content/audio/cues.json`](content/audio/cues.json): the agent's accepted map ([`design.json`](content/audio/design.json)) with Lawrence's picks over it ([`picks_lawrence.json`](content/audio/picks_lawrence.json), [`picks_lawrence_2.json`](content/audio/picks_lawrence_2.json), [`picks_lawrence_2_tones.json`](content/audio/picks_lawrence_2_tones.json), [`picks_lawrence_3.json`](content/audio/picks_lawrence_3.json)) |
+| **The cue map** | [`content/audio/cues.json`](content/audio/cues.json): the agent's accepted map ([`design.json`](content/audio/design.json)) with Lawrence's picks over it ([`picks_lawrence.json`](content/audio/picks_lawrence.json), [`picks_lawrence_2.json`](content/audio/picks_lawrence_2.json), [`picks_lawrence_2_tones.json`](content/audio/picks_lawrence_2_tones.json), [`picks_lawrence_3.json`](content/audio/picks_lawrence_3.json), [`picks_lawrence_4.json`](content/audio/picks_lawrence_4.json)) |
 | **Generated tones** | [`audio/tones.py`](audio/tones.py) → `prototypes/p9/audio/tones/` (66 WAV) and [`content/audio/tones.json`](content/audio/tones.json) |
-| **Tests** | `prototypes/p9/test_p9.js`: 42/42 ([`shots/test_p9.json`](prototypes/p9/shots/test_p9.json)) |
-| **Decisions** | [`DECISIONS.md`](DECISIONS.md) rows 591–618; D86 closed |
+| **Generated music** | [`audio/music_gen.py`](audio/music_gen.py) → Tracks 7–10 in `prototypes/p9/audio/music/` (OGG and MP3) and [`content/audio/music_gen.json`](content/audio/music_gen.json) |
+| **Tests** | `prototypes/p9/test_p9.js`: 44/44 ([`shots/test_p9.json`](prototypes/p9/shots/test_p9.json)) |
+| **Decisions** | [`DECISIONS.md`](DECISIONS.md) rows 591–619; D86 closed |
 
 ## 1 The agent
 
@@ -140,14 +141,22 @@ flowchart TD
 | Gift screen, report, workshop | The level track at 70% |
 | Write-off | The level track at 50% |
 | Pause | The level track at 35% |
-| Run ends (Licensed, Failed test, Non-compliant) | Track 2 |
-| Finale (unveiling, voyage, CERTIFIED) | Track 1 |
+| Licensed | Track 8 · licensed (generated) |
+| Failed test | Track 9 · failed test (generated) |
+| Non-compliant | Track 10 · non-compliant (generated) |
+| Finale (unveiling, voyage) | Track 1 |
+| At the ship: CERTIFIED | Track 7 · certified (generated) |
 | Credits | Track 1 |
 
 - **Story:** the tile *n* a level card announces plays slot ((*n* − 1) mod 4) + 1, so neighbouring tiles always differ. The track holds until the next card: walking back to a cleared tile never changes it.
 - **Arcade:** each level's card takes the next slot.
 - **Fades:** every track fades in over 0.3 s from each start and out over 0.3 s at each end, the loop's seam included.
-- **Lawrence ruled on all six readings** (rows 609–617). Endings on Track 2 were not ruled on.
+- **Lawrence ruled on all six readings** (rows 609–617).
+- **Generated music** (row 619): the pack has six tracks, so `audio/music_gen.py` composes four more in code: pulse, triangle, saw and FM voices, a plucked string, a pad, drums, a delay and a reverb. Each is a whole number of bars and loops on the bar.
+  - **7 · certified:** the ship. 76 BPM, D major pentatonic: a ship's horn, plucked strings, bells, a gong at the climax.
+  - **8 · licensed:** 124 BPM, C major: a chip lead over an arpeggio, four on the floor.
+  - **9 · failed test:** 66 BPM, A minor: a slow line, a wobbling pad, a heartbeat.
+  - **10 · non-compliant:** 100 BPM: hold music, off-beat electric piano, a cold chime.
 
 ## 4 The engine
 
@@ -190,7 +199,7 @@ flowchart TD
   - the VOLUME, MUSIC and SFX faders, shared with the game.
 - **Sequences:** twelve timed moments over their music, among them a combo to the cap, a write-off, the drone drop, the river rescue and the finale.
 - **Tour:** the 45 steps of `tour_p9.js`, with the cues each fired.
-- **Library:** the pack and the 66 generated tones by family, with each file's length, level and users.
+- **Library:** the pack, the four generated tracks and the 66 generated tones by family, with each file's length, level and users.
 - **Picks:**
   - **Play the game with these picks** opens Prototype 9 with them.
   - **Export** gives JSON and a plain summary to send back.
@@ -198,11 +207,11 @@ flowchart TD
 
 ## 6 Tests
 
-`cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84` → 42/42:
+`cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84` → 44/44:
 
 - every file in the cue map loads, tones included;
 - nothing plays before the first press;
-- each screen of the tour plays its state's track: 16 checks, the cards, the ferry and Story tiles 1 and 2 included;
+- each screen of the tour plays its state's track: 18 checks, the cards, the ferry, Story tiles 1 and 2, each run end and CERTIFIED included;
 - the ducks: write-off 0.5; report, workshop and gift screen 0.7;
 - the fades: the music dips to silence at the loop's seam and comes back;
 - every catalogued event and variant does what the map says (107: cue, tone, silence or base);
@@ -219,7 +228,7 @@ flowchart TD
 - **Licence:** only the pack's credit lines were supplied, not its licence texts.
 - **Devices:** the MP3 fallback for Safari and iOS is untested on a device.
 - **Silenced:** 23 entries, among them brake lights coming on. The Lab switches any on.
-- **Endings:** Licensed, Failed test and Non-compliant play Track 2. Not ruled on.
+- **Generated music:** checked by numbers (loudness, spectrum, structure), not by ear. Swap any of the four in the Lab.
 - **Tone fidelity:** each tone is one rendering. Prototype 8.4 scaled some sounds with the hit's force; the tones take the middle of each range.
 
 ## 8 Run it
@@ -228,6 +237,7 @@ Needs Python 3.9+, Node 18+, Playwright with Chromium, `ffmpeg`, and [Claude Cod
 
 ```
 python3 audio/tones.py                         # Prototype 8.4's synth → prototypes/p9/audio/tones/
+python3 audio/music_gen.py                     # Tracks 7–10 → prototypes/p9/audio/music/
 python3 audio/inventory.py                     # the pack and the tones → content/audio/inventory.json
 python3 audio/events.py                        # the code → content/audio/events.json
 python3 audio/loop.py                          # the agent → audio/runs/<id>/, content/audio/design.json

@@ -173,8 +173,11 @@ MUSIC = [
     ("screens", "Gift, report, workshop", "The gift screen, the level report and the workshop: the level track at 70% (Lawrence, Q4).", "phases gift, report, shop", "report", "Edit 82, 84"),
     ("writeoff", "Write-off", "The write-off hold: the level track at 50% (Lawrence, Q5).", "phase 'writeoff'", "writeoff", "Edit 26"),
     ("pause", "Pause", "Pause, options, controls: the level track at 35%.", "app.paused", "pause", "Edit 86"),
-    ("ending", "Run ends", "Licensed, Failed test, Non-compliant.", "phase 'ending' (not Certified)", "ending", "Edit 97"),
-    ("finale", "Finale", "The unveiling, the voyage, CERTIFIED.", "phase unveil, voyage; ending Certified", "plaque", "Edit 94"),
+    ("licensed", "Licensed", "A run ends licensed: the quota met (Lawrence: its own track).", "phase 'ending', kind Licensed", "ending", "Edit 97"),
+    ("failed", "Failed test", "A run ends failed: the cars ran out first (Lawrence: its own track).", "phase 'ending', kind Failed test", "failed", "Edit 97"),
+    ("noncompliant", "Non-compliant", "A run ends in refusal (Lawrence: its own track).", "phase 'ending', kind Non-compliant", "refused", "Edit 97"),
+    ("finale", "Finale", "The unveiling and the voyage.", "phase unveil, voyage", "plaque", "Edit 94"),
+    ("certified", "At the ship", "The dummy set down at the ship: CERTIFIED (Lawrence: its own track).", "phase 'ending', kind Certified", "certified", "Edit 94"),
 ]
 
 

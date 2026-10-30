@@ -275,6 +275,7 @@
       const n = v.mode === 'story' && v.tileN ? v.tileN : Math.max(1, v.runN || 1);
       return R[(n - 1) % R.length];
     }
+    const ENDS = { Licensed: 'licensed', 'Failed test': 'failed', 'Non-compliant': 'noncompliant' };
     // What the screen shows → the music state (GDD Edit 100 §2)
     function musicState(v) {
       if (!A.unlocked || v.gate) return null;
@@ -282,8 +283,9 @@
       if (v.screen === 'intro') return 'intro';
       if (v.screen === 'loading') return null; // a district building: the music holds until its card
       if (v.screen !== 'game') return 'menu';
-      if (v.phase === 'unveil' || v.phase === 'voyage' || v.voyage || (v.phase === 'ending' && v.ending === 'Certified')) return 'finale';
-      if (v.phase === 'ending') return 'ending';
+      if (v.phase === 'ending' && v.ending === 'Certified') return 'certified'; // the ship (Lawrence, row 619)
+      if (v.phase === 'unveil' || v.phase === 'voyage' || v.voyage) return 'finale';
+      if (v.phase === 'ending') return ENDS[v.ending] || 'licensed'; // each run end its own track (row 619)
       if (v.phase === 'brief') return 'card'; // Q2 (Lawrence): the level card starts the level's track
       return 'level';
     }
