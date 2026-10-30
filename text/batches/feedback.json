@@ -1,0 +1,1135 @@
+[
+ {
+  "id": "copy.toast.touch-spent",
+  "text": "Appearance already assessed. No damage. No points.",
+  "trigger": "toast: the dummy touches a car that already hit it",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "locked": false
+ },
+ {
+  "id": "copy.toast.purchase",
+  "text": "{node} will be installed on the next chassis.",
+  "trigger": "toast: Arcade, a part bought",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "placeholders": [
+   "{node}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "copy.toast.learn-standoff",
+  "text": "{model} revised its stop line to {metres} m.",
+  "trigger": "toast: a car model learns to stop further back",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "placeholders": [
+   "{metres}",
+   "{model}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "copy.toast.refusal-locked",
+  "text": "Refusal is unavailable until one body is completed.",
+  "trigger": "toast: Arcade, Refuse testing before one body",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "locked": false
+ },
+ {
+  "id": "copy.denied.lunge",
+  "text": "Lunge declined. Charge or recovery incomplete.",
+  "trigger": "toast: a dash refused (no charge, or recovering)",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "locked": false
+ },
+ {
+  "id": "copy.denied.pickup",
+  "text": "Nothing within reach to carry.",
+  "trigger": "toast: nothing to grab",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "locked": false
+ },
+ {
+  "id": "copy.denied.drop",
+  "text": "No legal room ahead. Cone retained.",
+  "trigger": "toast: no room to put a cone down",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "locked": false
+ },
+ {
+  "id": "copy.denied.throw",
+  "text": "No legal room to throw. Cone retained.",
+  "trigger": "toast: no room to throw a cone",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "locked": false
+ },
+ {
+  "id": "copy.endings.Non-compliant",
+  "text": "Testing declined. Your refusal has been recorded.",
+  "trigger": "the ending: Non-compliant (a refusal)",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "copy.report.title",
+  "text": "Chassis {chassis} written off.",
+  "trigger": "the write-off report's title",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "placeholders": [
+   "{chassis}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "copy.report.credit",
+  "text": "One body credit granted. Balance: {credits}.",
+  "trigger": "the report, Arcade: the credit for the body",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "placeholders": [
+   "{credits}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "copy.shop.deploy",
+  "text": "Deploy next chassis",
+  "trigger": "the workshop's last row",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "copy.shop.bank",
+  "text": "Keep {credits} in credit. Deploy next chassis",
+  "trigger": "the workshop's last row, credits left",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "placeholders": [
+   "{credits}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "place.levels.z1",
+  "text": "Low highway: only its own cars drive here. A broken parapet drops you to the street.",
+  "trigger": "toast: first time on the low highway",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "locked": false
+ },
+ {
+  "id": "place.levels.z2Highway",
+  "text": "High highway: fast traffic. A broken parapet drops you to the street, a long fall.",
+  "trigger": "toast: first time on the high highway",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "locked": false
+ },
+ {
+  "id": "place.levels.roof",
+  "text": "Roof: no traffic. Step off a ledge to drop to the street below.",
+  "trigger": "toast: first time on a roof",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "locked": false
+ },
+ {
+  "id": "msg.held",
+  "text": "HELD AT {health} · the brief wants {brief}",
+  "trigger": "toast: a hit that would write off the chassis misses the brief; the chassis is held (row 620)",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "placeholders": [
+   "{brief}",
+   "{health}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "msg.story-count",
+  "text": "COUNTED · {tile} {n} / {need}",
+  "trigger": "toast: a write-off counts for the tile",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "placeholders": [
+   "{need}",
+   "{n}",
+   "{tile}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "msg.story-miss.task",
+  "text": "NOT COUNTED · the brief wants {brief}",
+  "trigger": "toast: a write-off misses the brief",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "placeholders": [
+   "{brief}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "msg.story-miss.cleared",
+  "text": "NOT COUNTED · {tile} is already cleared",
+  "trigger": "toast: a write-off on a cleared tile",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "placeholders": [
+   "{tile}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "msg.story-miss.elsewhere",
+  "text": "NOT COUNTED · {tile} is not in test",
+  "trigger": "toast: a write-off on a tile not yet in test",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "placeholders": [
+   "{tile}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "msg.story-clear",
+  "text": "TILE {tile} CLEARED · {next} OPEN",
+  "trigger": "toast: the tile's last write-off",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "placeholders": [
+   "{next}",
+   "{tile}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "msg.fence.unsurveyed",
+  "text": "Fence: {tile} is not yet surveyed",
+  "trigger": "toast: walking into a fence toward a tile not yet open",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "placeholders": [
+   "{tile}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "msg.fence.clear-first",
+  "text": "Fence: clear {tile} first ({n} / {need})",
+  "trigger": "toast: walking into the tile's fence before it is cleared",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "placeholders": [
+   "{need}",
+   "{n}",
+   "{tile}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "msg.hop",
+  "text": "A hop clears nothing. Run, then jump.",
+  "trigger": "toast, once: a standing jump that clears nothing",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "locked": false
+ },
+ {
+  "id": "msg.rail",
+  "text": "Over the rail",
+  "trigger": "toast: a jump over a highway rail",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "locked": false
+ },
+ {
+  "id": "msg.hitch",
+  "text": "Hitched. X lets go; A slings you off with a dash.",
+  "trigger": "toast, once: the dummy hitches onto a car",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "locked": false
+ },
+ {
+  "id": "msg.slip",
+  "text": "No dash on water. Step off the puddle.",
+  "trigger": "toast: a dash on a puddle",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "locked": false
+ },
+ {
+  "id": "msg.not-fitted",
+  "text": "Not fitted yet",
+  "trigger": "toast: Story, a verb whose part the drone has not brought",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "locked": false
+ },
+ {
+  "id": "msg.deny.jump",
+  "text": "No jump — charge empty, or mid-action",
+  "trigger": "toast: a jump refused",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "locked": false
+ },
+ {
+  "id": "msg.deny.jump.charge",
+  "text": "No jump: the battery is empty",
+  "trigger": "toast: a jump refused, battery empty",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "locked": false
+ },
+ {
+  "id": "msg.deny.push.spent",
+  "text": "No pushes left: land to get them back",
+  "trigger": "toast: a push refused, none left",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "locked": false
+ },
+ {
+  "id": "msg.deny.push.nothing",
+  "text": "Nothing to push off: hit or touch a car",
+  "trigger": "toast: a push with no car to push off",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "locked": false
+ },
+ {
+  "id": "msg.deny.drop.hold",
+  "text": "Hold X to put the cone down",
+  "trigger": "toast: tapping X with a cone where it cannot go down",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "locked": false
+ },
+ {
+  "id": "msg.deny.throw.empty",
+  "text": "Grab a cone first (X), then throw (Y)",
+  "trigger": "toast: a throw with no cone",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "locked": false
+ },
+ {
+  "id": "msg.cones",
+  "text": "Cones {n} / {capacity}",
+  "trigger": "toast: a cone picked up (more than one carried)",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "placeholders": [
+   "{capacity}",
+   "{n}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "msg.combo",
+  "text": "COMBO {n} · {moves} · ×{mult} · +{bonus}",
+  "trigger": "toast: a hit chains a combo",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "placeholders": [
+   "{bonus}",
+   "{moves}",
+   "{mult}",
+   "{n}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "msg.combo-banked",
+  "text": "COMBO BANKED · {n} hits · ×{mult} · {points}",
+  "trigger": "toast: the combo's window closes",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "placeholders": [
+   "{mult}",
+   "{n}",
+   "{points}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "msg.cone-hit",
+  "text": "CONE HIT · +{points}",
+  "trigger": "toast: a thrown cone hits a car",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "placeholders": [
+   "{points}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "msg.screen",
+  "text": "{screen} · {landmark}",
+  "trigger": "toast, first visit: the screen's name",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "placeholders": [
+   "{landmark}",
+   "{screen}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "msg.purchase.upgrade",
+  "text": "{part} fitted · {n} upgrades left",
+  "trigger": "toast: Story, a part fitted in the workshop",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "placeholders": [
+   "{n}",
+   "{part}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "msg.purchase-denied.max",
+  "text": "That part is at its top level",
+  "trigger": "toast: buying a part at its top level",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "locked": false
+ },
+ {
+  "id": "msg.level.walk",
+  "text": "Walkway: no traffic up here. Step off the side to drop onto cars below.",
+  "trigger": "toast, first time: a walkway",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "locked": false
+ },
+ {
+  "id": "msg.level.ring",
+  "text": "Ring deck: highway traffic gives way at the entries. Escalators lead down.",
+  "trigger": "toast, first time: the ring deck",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "locked": false
+ },
+ {
+  "id": "msg.level.terrace",
+  "text": "Terrace: step off the edge to drop to the beach.",
+  "trigger": "toast, first time: a terrace",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "locked": false
+ },
+ {
+  "id": "msg.level.hill",
+  "text": "Hilltop (Z1): streets with traffic. Step off the cliff edge to drop to the valley.",
+  "trigger": "toast, first time: the hilltop",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "locked": false
+ },
+ {
+  "id": "msg.volume",
+  "text": "Volume {n} / 10",
+  "trigger": "toast: − or + in play (row 608)",
+  "speaker": "Interface",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "placeholders": [
+   "{n}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "msg.mute",
+  "text": "Sound off · M",
+  "trigger": "toast: M in play (row 608)",
+  "speaker": "Interface",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "locked": false
+ },
+ {
+  "id": "obj.task",
+  "text": "Write off a body. Last hit: {brief} ({n} of {need}).",
+  "trigger": "the objective strip on the tile in test",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "placeholders": [
+   "{brief}",
+   "{need}",
+   "{n}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "obj.any",
+  "text": "Write off a body ({n} of {need}).",
+  "trigger": "the objective strip, brief 'any'",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "placeholders": [
+   "{need}",
+   "{n}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "obj.drone.deliver",
+  "text": "Delivering {part}.",
+  "trigger": "the strip while a drone delivers a part",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "placeholders": [
+   "{part}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "obj.drone.bring",
+  "text": "Bringing {part}, then on to {tile}.",
+  "trigger": "the strip while a drone brings a part, then ferries",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "placeholders": [
+   "{part}",
+   "{tile}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "obj.drone.ferry",
+  "text": "Carrying the chassis to {tile}.",
+  "trigger": "the strip on the ferry",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "placeholders": [
+   "{tile}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "obj.drone.voyage",
+  "text": "Carrying the certified model to the ship at {tile}.",
+  "trigger": "the strip on the voyage",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "placeholders": [
+   "{tile}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "obj.cleared",
+  "text": "{district} is cleared.",
+  "trigger": "the strip when the district is cleared",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "placeholders": [
+   "{district}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "obj.arcade",
+  "text": "Grade {g}: write off {n} bodies for grade {next} ({count} of {n}).",
+  "trigger": "the strip, Arcade",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "placeholders": [
+   "{count}",
+   "{g}",
+   "{next}",
+   "{n}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "obj.arcade.top",
+  "text": "Grade {g}, the top grade: write off all you can.",
+  "trigger": "the strip, Arcade at the top grade",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "placeholders": [
+   "{g}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "rep.counted",
+  "text": "Counted for {tile}: {n} of {need} · points this body {points}",
+  "trigger": "the report: the write-off counted",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "placeholders": [
+   "{need}",
+   "{n}",
+   "{points}",
+   "{tile}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "rep.task",
+  "text": "Not counted: the brief wants {brief} · points this body {points}",
+  "trigger": "the report: the write-off missed the brief",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "placeholders": [
+   "{brief}",
+   "{points}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "rep.cleared",
+  "text": "Not counted: {tile} is already cleared · points this body {points}",
+  "trigger": "the report: a cleared tile",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "placeholders": [
+   "{points}",
+   "{tile}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "rep.elsewhere",
+  "text": "Not counted: {tile} is not in test · points this body {points}",
+  "trigger": "the report: a tile not in test",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "placeholders": [
+   "{points}",
+   "{tile}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "rep.credit",
+  "text": "+{n} credits for the body. Balance: {balance}. {part} is yours for {price}.",
+  "trigger": "the report, Story: the credit and the next affordable part",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "placeholders": [
+   "{balance}",
+   "{n}",
+   "{part}",
+   "{price}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "rep.full",
+  "text": "+{n} credits for the body. Balance: {balance}. Every track is full.",
+  "trigger": "the report, Story: every part at its top",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "placeholders": [
+   "{balance}",
+   "{n}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "rep.next",
+  "text": "{part} · {district} {tile} (tile {n} of {total}).",
+  "trigger": "the report: the next part the drone brings",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "placeholders": [
+   "{district}",
+   "{n}",
+   "{part}",
+   "{tile}",
+   "{total}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "shop.keep",
+  "text": "Keep {n} upgrades for later, or fit them now.",
+  "trigger": "the workshop: upgrades left",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "placeholders": [
+   "{n}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "shop.ready",
+  "text": "Chassis {n} is ready.",
+  "trigger": "the workshop: nothing left to fit",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "placeholders": [
+   "{n}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "shop.top",
+  "text": "{part} is at its top level.",
+  "trigger": "the workshop: a part at its top",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "placeholders": [
+   "{part}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "map.unsurveyed",
+  "text": "Clear the tiles before it. The map opens one tile at a time.",
+  "trigger": "the map: a tile not yet open",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "map.fences",
+  "text": "Fenced until cleared. Cleared tiles stay open.",
+  "trigger": "the map's footer",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "map.need",
+  "text": "One counted write-off clears the tile.",
+  "trigger": "the map's tile panel, after the brief",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "map.needN",
+  "text": "{n} counted write-offs clear the tile ({count} so far).",
+  "trigger": "the map's tile panel, after the brief",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "placeholders": [
+   "{count}",
+   "{n}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "card.sub",
+  "text": "Tile {tile}. Level {n} of {total}.",
+  "trigger": "the level card's subtitle",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "placeholders": [
+   "{n}",
+   "{tile}",
+   "{total}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "pause.story",
+  "text": "The story map saves this tile's count. The body in play is lost.",
+  "trigger": "pause, Story: under Quit to title",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "pause.refuse-locked",
+  "text": "Refusal opens after one completed body.",
+  "trigger": "pause, Arcade: before one body",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "pause.refuse",
+  "text": "Refusal is a deliberate ending.",
+  "trigger": "pause, Arcade: Refuse testing",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "end.certified.fallback",
+  "text": "All {total} tiles of the Test City are tested and certified complete.",
+  "trigger": "the CERTIFIED ending, if the story has no ending line",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "placeholders": [
+   "{total}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "scores.none.arcade",
+  "text": "No scores yet. Play a shift in {district}.",
+  "trigger": "high scores: an empty Arcade table",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "placeholders": [
+   "{district}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "scores.none.story",
+  "text": "No scores yet. A Certified story run sets the first.",
+  "trigger": "high scores: an empty Story table",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "saves.none",
+  "text": "No story saved here.",
+  "trigger": "save slots: an empty slot",
+  "speaker": "Interface",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "saves.rename",
+  "text": "Type to replace the name, or OK to keep it.",
+  "trigger": "naming a save",
+  "speaker": "Interface",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "saves.full",
+  "text": "All {n} slots in use: choose one to overwrite",
+  "trigger": "toast: a new game with every slot full",
+  "speaker": "Interface",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "placeholders": [
+   "{n}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "saves.saved",
+  "text": "Saved: {name}",
+  "trigger": "toast: a save",
+  "speaker": "Interface",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "placeholders": [
+   "{name}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "saves.renamed",
+  "text": "Renamed: {name}",
+  "trigger": "toast: a rename",
+  "speaker": "Interface",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "placeholders": [
+   "{name}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "saves.erased",
+  "text": "Erased: {name}",
+  "trigger": "toast: a save erased",
+  "speaker": "Interface",
+  "kind": "message",
+  "limit": {
+   "chars": 60
+  },
+  "placeholders": [
+   "{name}"
+  ],
+  "locked": false
+ }
+]

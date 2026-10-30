@@ -1,0 +1,1141 @@
+[
+ {
+  "id": "bark.b001",
+  "text": "Bumper damage on a Luxury trim. Typical.",
+  "trigger": "the car hits the dummy (zone front/frontDiagonal)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "tier": "01",
+  "style": "shout",
+  "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b002",
+  "text": "You will be invoiced for that.",
+  "trigger": "the car hits the dummy (zone front/frontDiagonal)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "tier": "01",
+  "style": "shout",
+  "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b003",
+  "text": "My door panel! Hand-finished!",
+  "trigger": "the car hits the dummy (zone side)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "tier": "01",
+  "style": "shout",
+  "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b004",
+  "text": "From behind? How very common.",
+  "trigger": "the car hits the dummy (zone rear/rearDiagonal)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "tier": "01",
+  "style": "shout",
+  "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b005",
+  "text": "Front contact. Incident 4471 opened.",
+  "trigger": "the car hits the dummy (zone front/frontDiagonal)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "tier": "02",
+  "style": "shout",
+  "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b006",
+  "text": "Impact logged. KPIs adjusted.",
+  "trigger": "the car hits the dummy (zone front/frontDiagonal)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "tier": "02",
+  "style": "shout",
+  "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b007",
+  "text": "Side contact. Filing under unforeseen.",
+  "trigger": "the car hits the dummy (zone side)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "tier": "02",
+  "style": "shout",
+  "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b008",
+  "text": "Rear contact. Not my liability.",
+  "trigger": "the car hits the dummy (zone rear/rearDiagonal)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "tier": "02",
+  "style": "shout",
+  "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b009",
+  "text": "Of course it was me.",
+  "trigger": "the car hits the dummy (zone front/frontDiagonal)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "tier": "03",
+  "style": "shout",
+  "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b010",
+  "text": "And the day was going so averagely.",
+  "trigger": "the car hits the dummy (zone front/frontDiagonal)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "tier": "03",
+  "style": "shout",
+  "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b011",
+  "text": "Side panel. Add it to the list.",
+  "trigger": "the car hits the dummy (zone side)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "tier": "03",
+  "style": "shout",
+  "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b012",
+  "text": "Hit from behind. Story of my life.",
+  "trigger": "the car hits the dummy (zone rear/rearDiagonal)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "tier": "03",
+  "style": "shout",
+  "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b013",
+  "text": "OI! Right in the grille, kind regards.",
+  "trigger": "the car hits the dummy (zone front/frontDiagonal)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "tier": "04",
+  "style": "shout",
+  "voice": "Budget · Short-fused. Politeness bolted on over the rage.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b014",
+  "text": "You absolute bollard! Respectfully.",
+  "trigger": "the car hits the dummy (zone front/frontDiagonal)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "tier": "04",
+  "style": "shout",
+  "voice": "Budget · Short-fused. Politeness bolted on over the rage.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b015",
+  "text": "My side! Watch it, you plank!",
+  "trigger": "the car hits the dummy (zone side)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "tier": "04",
+  "style": "shout",
+  "voice": "Budget · Short-fused. Politeness bolted on over the rage.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b016",
+  "text": "My boot! Come back here!",
+  "trigger": "the car hits the dummy (zone rear/rearDiagonal)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "tier": "04",
+  "style": "shout",
+  "voice": "Budget · Short-fused. Politeness bolted on over the rage.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b018",
+  "text": "It waited for my route to lock. Clever.",
+  "trigger": "the car hits the dummy (bait True)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "tier": "02",
+  "style": "thought",
+  "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b020",
+  "text": "I had stopped! I was being good!",
+  "trigger": "the car hits the dummy (stopped True)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "tier": "04",
+  "style": "shout",
+  "voice": "Budget · Short-fused. Politeness bolted on over the rage.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b022",
+  "text": "Senior model. Hit like an intern.",
+  "trigger": "the car hits the dummy (seniority {'min': 3})",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "tier": "03",
+  "style": "thought",
+  "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b023",
+  "text": "First week on the job. Great.",
+  "trigger": "the car hits the dummy (seniority {'max': 0})",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "tier": "03",
+  "style": "speech",
+  "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b034",
+  "text": "A write-off on my record. Unthinkable.",
+  "trigger": "the car writes the chassis off",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "writeoff",
+  "tier": "01",
+  "style": "speech",
+  "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b035",
+  "text": "Have that removed from the bay, please.",
+  "trigger": "the car writes the chassis off",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "writeoff",
+  "tier": "01",
+  "style": "speech",
+  "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b036",
+  "text": "Write-off {writeOffs} recorded. Please advise.",
+  "trigger": "the car writes the chassis off",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "writeoff",
+  "tier": "02",
+  "style": "speech",
+  "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "placeholders": [
+   "{writeOffs}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "bark.b037",
+  "text": "Body total confirmed. Closing ticket.",
+  "trigger": "the car writes the chassis off",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "writeoff",
+  "tier": "02",
+  "style": "speech",
+  "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b038",
+  "text": "I always end up doing the worst bit.",
+  "trigger": "the car writes the chassis off",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "writeoff",
+  "tier": "03",
+  "style": "speech",
+  "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b039",
+  "text": "Please not retraining. Anything but.",
+  "trigger": "the car writes the chassis off",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "writeoff",
+  "tier": "03",
+  "style": "speech",
+  "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b040",
+  "text": "WRITE-OFF! Tell dispatch I tried!",
+  "trigger": "the car writes the chassis off",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "writeoff",
+  "tier": "04",
+  "style": "shout",
+  "voice": "Budget · Short-fused. Politeness bolted on over the rage.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b041",
+  "text": "Done, done! You happy now?!",
+  "trigger": "the car writes the chassis off",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "writeoff",
+  "tier": "04",
+  "style": "shout",
+  "voice": "Budget · Short-fused. Politeness bolted on over the rage.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b046",
+  "text": "Missed. One prefers a wide berth.",
+  "trigger": "the car passes close",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "near-miss",
+  "tier": "01",
+  "style": "mutter",
+  "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b047",
+  "text": "Close. Do keep up.",
+  "trigger": "the car passes close",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "near-miss",
+  "tier": "01",
+  "style": "mutter",
+  "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b048",
+  "text": "Within tolerance. Barely.",
+  "trigger": "the car passes close",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "near-miss",
+  "tier": "02",
+  "style": "mutter",
+  "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b049",
+  "text": "Near miss logged as a pass.",
+  "trigger": "the car passes close",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "near-miss",
+  "tier": "02",
+  "style": "mutter",
+  "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b050",
+  "text": "That nearly made my day worse.",
+  "trigger": "the car passes close",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "near-miss",
+  "tier": "03",
+  "style": "mutter",
+  "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b051",
+  "text": "Missed me. For now.",
+  "trigger": "the car passes close",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "near-miss",
+  "tier": "03",
+  "style": "mutter",
+  "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b052",
+  "text": "Too slow, ha! Have a nice day!",
+  "trigger": "the car passes close",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "near-miss",
+  "tier": "04",
+  "style": "mutter",
+  "voice": "Budget · Short-fused. Politeness bolted on over the rage.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b053",
+  "text": "Nearly had me. NEARLY.",
+  "trigger": "the car passes close",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "near-miss",
+  "tier": "04",
+  "style": "mutter",
+  "voice": "Budget · Short-fused. Politeness bolted on over the rage.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b056",
+  "text": "Is it dancing? How quaint.",
+  "trigger": "a dash misses the car",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "miss",
+  "tier": "01",
+  "style": "mutter",
+  "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b057",
+  "text": "Missed. One expected nothing less.",
+  "trigger": "a dash misses the car",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "miss",
+  "tier": "01",
+  "style": "mutter",
+  "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b058",
+  "text": "Dash detected, no contact. Noted.",
+  "trigger": "a dash misses the car",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "miss",
+  "tier": "02",
+  "style": "mutter",
+  "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b059",
+  "text": "Missed. Updating my calendar.",
+  "trigger": "a dash misses the car",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "miss",
+  "tier": "02",
+  "style": "mutter",
+  "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b060",
+  "text": "It missed. Even it gave up on me.",
+  "trigger": "a dash misses the car",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "miss",
+  "tier": "03",
+  "style": "mutter",
+  "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b061",
+  "text": "It lunged and nothing happened. Same.",
+  "trigger": "a dash misses the car",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "miss",
+  "tier": "03",
+  "style": "mutter",
+  "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b062",
+  "text": "Missed, rubbish! Regards!",
+  "trigger": "a dash misses the car",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "miss",
+  "tier": "04",
+  "style": "mutter",
+  "voice": "Budget · Short-fused. Politeness bolted on over the rage.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b063",
+  "text": "Ha! Do it properly!",
+  "trigger": "a dash misses the car",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "miss",
+  "tier": "04",
+  "style": "mutter",
+  "voice": "Budget · Short-fused. Politeness bolted on over the rage.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b070",
+  "text": "Route locked. Do not try anything.",
+  "trigger": "the car fixes its route around the dummy (cause body)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "commit",
+  "tier": "01",
+  "style": "mutter",
+  "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b071",
+  "text": "Route committed per policy 6.3.",
+  "trigger": "the car fixes its route around the dummy (cause body)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "commit",
+  "tier": "02",
+  "style": "mutter",
+  "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b072",
+  "text": "Going round. Please let me.",
+  "trigger": "the car fixes its route around the dummy (cause body)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "commit",
+  "tier": "03",
+  "style": "mutter",
+  "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b073",
+  "text": "Going round you! Stay put!",
+  "trigger": "the car fixes its route around the dummy (cause body)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "commit",
+  "tier": "04",
+  "style": "mutter",
+  "voice": "Budget · Short-fused. Politeness bolted on over the rage.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b081",
+  "text": "Move. I have a schedule, and standards.",
+  "trigger": "the car honks at the dummy (at body)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "honk",
+  "tier": "01",
+  "style": "speech",
+  "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b083",
+  "text": "MOVE IT, thank you! MOVE!",
+  "trigger": "the car honks at the dummy (at body)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "honk",
+  "tier": "04",
+  "style": "shout",
+  "voice": "Budget · Short-fused. Politeness bolted on over the rage.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b085",
+  "text": "Who put a cone here? It was you.",
+  "trigger": "the car honks at the dummy (at cone)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "honk",
+  "tier": "04",
+  "style": "mutter",
+  "voice": "Budget · Short-fused. Politeness bolted on over the rage.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b091",
+  "text": "I have done my bit today.",
+  "trigger": "the dummy touches a car that already hit it",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "touch-spent",
+  "tier": "03",
+  "style": "speech",
+  "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b093",
+  "text": "Hands off the paintwork.",
+  "trigger": "the car knocks the dummy aside",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "knock",
+  "tier": "01",
+  "style": "mutter",
+  "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b095",
+  "text": "I remember you. I stop further now.",
+  "trigger": "the car's model learns a stop line",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "learned",
+  "tier": "01",
+  "style": "speech",
+  "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b096",
+  "text": "Retrained. Keeping my distance.",
+  "trigger": "the car's model learns a stop line",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "learned",
+  "tier": "03",
+  "style": "speech",
+  "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b097",
+  "text": "Not falling for that again!",
+  "trigger": "the car's model learns a stop line",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "learned",
+  "tier": "04",
+  "style": "shout",
+  "voice": "Budget · Short-fused. Politeness bolted on over the rage.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b113",
+  "text": "New modification. Updating my threat model.",
+  "trigger": "the car sees a new part on the chassis",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "upgrade-seen",
+  "tier": "02",
+  "style": "speech",
+  "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b121",
+  "text": "It is falling apart. Like me.",
+  "trigger": "the car sees a damaged part",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "part-seen",
+  "tier": "03",
+  "style": "mutter",
+  "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b122",
+  "text": "Damaged goods. Not my problem.",
+  "trigger": "the car sees a damaged part",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "part-seen",
+  "tier": "01",
+  "style": "mutter",
+  "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.c001",
+  "text": "A roof? I was not briefed on roofs.",
+  "trigger": "the car hits the dummy (drop True, dropFrom roof, dropZ 2)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "tier": "01",
+  "style": "speech",
+  "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.c002",
+  "text": "Incident filed: load received from a roof.",
+  "trigger": "the car hits the dummy (drop True, dropFrom roof, dropZ 2)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "tier": "02",
+  "style": "speech",
+  "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.c004",
+  "text": "Landed on from a roof. My paintwork objects.",
+  "trigger": "the car hits the dummy (drop True, dropFrom roof, dropZ 2)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "tier": "01",
+  "style": "speech",
+  "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.c006",
+  "text": "Form 9: load received from a parapet.",
+  "trigger": "the car hits the dummy (drop True, dropFrom deck)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "tier": "02",
+  "style": "speech",
+  "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.c007",
+  "text": "From the low highway? Quite unseemly.",
+  "trigger": "the car hits the dummy (drop True, dropFrom deck, dropZ 1)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "tier": "01",
+  "style": "speech",
+  "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.c009",
+  "text": "Policy 12 excludes loads from parapets.",
+  "trigger": "the car hits the dummy (drop True, dropFrom deck, dropZ 1)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "tier": "02",
+  "style": "speech",
+  "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.c011",
+  "text": "Struck on the highway. How undignified.",
+  "trigger": "the car hits the dummy (deck True)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "tier": "01",
+  "style": "speech",
+  "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.c012",
+  "text": "Highway strike filed under policy 9.",
+  "trigger": "the car hits the dummy (deck True)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "tier": "02",
+  "style": "speech",
+  "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.c014",
+  "text": "Struck on a calibration plate. Vulgar.",
+  "trigger": "the car hits the dummy (plate True)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "tier": "01",
+  "style": "speech",
+  "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.c015",
+  "text": "Plate hit filed against calibration form 3.",
+  "trigger": "the car hits the dummy (plate True)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "tier": "02",
+  "style": "speech",
+  "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.c016",
+  "text": "Written off from above. Unthinkable.",
+  "trigger": "the car writes the chassis off (drop True)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "writeoff",
+  "tier": "01",
+  "style": "speech",
+  "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.c017",
+  "text": "Write-off filed. Cause: load from above.",
+  "trigger": "the car writes the chassis off (drop True)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "writeoff",
+  "tier": "02",
+  "style": "speech",
+  "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ }
+]

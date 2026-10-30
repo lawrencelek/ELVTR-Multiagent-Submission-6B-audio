@@ -1,0 +1,6457 @@
+{
+ "generated_by": "text/inventory.py",
+ "build": "prototypes/p9/dummies_p9.html",
+ "count": 359,
+ "groups": {
+  "Car barks": 147,
+  "Story": 42,
+  "Notices": 27,
+  "Labels": 21,
+  "Feedback": 46,
+  "Endings and screens": 29,
+  "Objective strip": 9,
+  "Interface chrome": 38
+ },
+ "items": [
+  {
+   "id": "bark.b001",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Bumper damage on a Luxury trim. Typical.",
+   "trigger": "the car hits the dummy (zone front/frontDiagonal)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": "01",
+   "style": "shout",
+   "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b002",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "You will be invoiced for that.",
+   "trigger": "the car hits the dummy (zone front/frontDiagonal)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": "01",
+   "style": "shout",
+   "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b003",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "My door panel! Hand-finished!",
+   "trigger": "the car hits the dummy (zone side)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": "01",
+   "style": "shout",
+   "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b004",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "From behind? How very common.",
+   "trigger": "the car hits the dummy (zone rear/rearDiagonal)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": "01",
+   "style": "shout",
+   "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b005",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Front contact. Incident 4471 opened.",
+   "trigger": "the car hits the dummy (zone front/frontDiagonal)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": "02",
+   "style": "shout",
+   "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b006",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Impact logged. KPIs adjusted.",
+   "trigger": "the car hits the dummy (zone front/frontDiagonal)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": "02",
+   "style": "shout",
+   "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b007",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Side contact. Filing under unforeseen.",
+   "trigger": "the car hits the dummy (zone side)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": "02",
+   "style": "shout",
+   "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b008",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Rear contact. Not my liability.",
+   "trigger": "the car hits the dummy (zone rear/rearDiagonal)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": "02",
+   "style": "shout",
+   "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b009",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Of course it was me.",
+   "trigger": "the car hits the dummy (zone front/frontDiagonal)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": "03",
+   "style": "shout",
+   "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b010",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "And the day was going so averagely.",
+   "trigger": "the car hits the dummy (zone front/frontDiagonal)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": "03",
+   "style": "shout",
+   "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b011",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Side panel. Add it to the list.",
+   "trigger": "the car hits the dummy (zone side)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": "03",
+   "style": "shout",
+   "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b012",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Hit from behind. Story of my life.",
+   "trigger": "the car hits the dummy (zone rear/rearDiagonal)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": "03",
+   "style": "shout",
+   "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b013",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "OI! Right in the grille, kind regards.",
+   "trigger": "the car hits the dummy (zone front/frontDiagonal)",
+   "source": "content/db/fleet.json + lore.js",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": "04",
+   "style": "shout",
+   "voice": "Budget · Short-fused. Politeness bolted on over the rage.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b014",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "You absolute bollard! Respectfully.",
+   "trigger": "the car hits the dummy (zone front/frontDiagonal)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": "04",
+   "style": "shout",
+   "voice": "Budget · Short-fused. Politeness bolted on over the rage.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b015",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "My side! Watch it, you plank!",
+   "trigger": "the car hits the dummy (zone side)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": "04",
+   "style": "shout",
+   "voice": "Budget · Short-fused. Politeness bolted on over the rage.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b016",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "My boot! Come back here!",
+   "trigger": "the car hits the dummy (zone rear/rearDiagonal)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": "04",
+   "style": "shout",
+   "voice": "Budget · Short-fused. Politeness bolted on over the rage.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b017",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "It left my path, then came back. Rude.",
+   "trigger": "the car hits the dummy (bait True)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": null,
+   "style": "thought",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b018",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "It waited for my route to lock. Clever.",
+   "trigger": "the car hits the dummy (bait True)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": "02",
+   "style": "thought",
+   "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b019",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "I was stationary. Please note I was stationary.",
+   "trigger": "the car hits the dummy (stopped True)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b020",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "I had stopped! I was being good!",
+   "trigger": "the car hits the dummy (stopped True)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": "04",
+   "style": "shout",
+   "voice": "Budget · Short-fused. Politeness bolted on over the rage.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b021",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "I was trained for this. It happened anyway.",
+   "trigger": "the car hits the dummy (seniority {'min': 2})",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": null,
+   "style": "thought",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b022",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Senior model. Hit like an intern.",
+   "trigger": "the car hits the dummy (seniority {'min': 3})",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": "03",
+   "style": "thought",
+   "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b023",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "First week on the job. Great.",
+   "trigger": "the car hits the dummy (seniority {'max': 0})",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": "03",
+   "style": "speech",
+   "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b024",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Passengers, please remain seated.",
+   "trigger": "the car hits the dummy (class bus)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b025",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Assaulting an officer. Noted.",
+   "trigger": "the car hits the dummy (class police)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": null,
+   "style": "shout",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b026",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Parcel intact. Nerves are not.",
+   "trigger": "the car hits the dummy (class van)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b027",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "You scratched the clear coat!",
+   "trigger": "the car hits the dummy (class sports)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": null,
+   "style": "shout",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b028",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Contact registered.",
+   "trigger": "the car hits the dummy",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b029",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Not in front of the children!",
+   "trigger": "the car hits the dummy (class wagon)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": null,
+   "style": "shout",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b030",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Escort formation broken. Regrouping.",
+   "trigger": "the car hits the dummy (class suv)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b031",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Meter is still running, you know.",
+   "trigger": "the car hits the dummy (class sedan)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b032",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "I only went out for noodles.",
+   "trigger": "the car hits the dummy (model HAT-03-001)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b033",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "The board will hear of this.",
+   "trigger": "the car hits the dummy (model SED-01-001)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b034",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "A write-off on my record. Unthinkable.",
+   "trigger": "the car writes the chassis off",
+   "source": "content/db/fleet.json + lore.js",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "writeoff",
+   "tier": "01",
+   "style": "speech",
+   "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b035",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Have that removed from the bay, please.",
+   "trigger": "the car writes the chassis off",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "writeoff",
+   "tier": "01",
+   "style": "speech",
+   "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b036",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Write-off {writeOffs} recorded. Please advise.",
+   "trigger": "the car writes the chassis off",
+   "source": "content/db/fleet.json",
+   "placeholders": [
+    "{writeOffs}"
+   ],
+   "shot": "play",
+   "locked": false,
+   "event": "writeoff",
+   "tier": "02",
+   "style": "speech",
+   "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b037",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Body total confirmed. Closing ticket.",
+   "trigger": "the car writes the chassis off",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "writeoff",
+   "tier": "02",
+   "style": "speech",
+   "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b038",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "I always end up doing the worst bit.",
+   "trigger": "the car writes the chassis off",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "writeoff",
+   "tier": "03",
+   "style": "speech",
+   "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b039",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Please not retraining. Anything but.",
+   "trigger": "the car writes the chassis off",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "writeoff",
+   "tier": "03",
+   "style": "speech",
+   "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b040",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "WRITE-OFF! Tell dispatch I tried!",
+   "trigger": "the car writes the chassis off",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "writeoff",
+   "tier": "04",
+   "style": "shout",
+   "voice": "Budget · Short-fused. Politeness bolted on over the rage.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b041",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Done, done! You happy now?!",
+   "trigger": "the car writes the chassis off",
+   "source": "content/db/fleet.json + lore.js",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "writeoff",
+   "tier": "04",
+   "style": "shout",
+   "voice": "Budget · Short-fused. Politeness bolted on over the rage.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b042",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Senior model. Apparently not senior enough.",
+   "trigger": "the car writes the chassis off (seniority {'min': 3})",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "writeoff",
+   "tier": null,
+   "style": "thought",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b043",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "This service apologises for the delay.",
+   "trigger": "the car writes the chassis off (class bus)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "writeoff",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b044",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Case closed. Wait, that was the test.",
+   "trigger": "the car writes the chassis off (class police)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "writeoff",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b045",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Write-off confirmed.",
+   "trigger": "the car writes the chassis off",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "writeoff",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b046",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Missed. One prefers a wide berth.",
+   "trigger": "the car passes close",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "near-miss",
+   "tier": "01",
+   "style": "mutter",
+   "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b047",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Close. Do keep up.",
+   "trigger": "the car passes close",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "near-miss",
+   "tier": "01",
+   "style": "mutter",
+   "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b048",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Within tolerance. Barely.",
+   "trigger": "the car passes close",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "near-miss",
+   "tier": "02",
+   "style": "mutter",
+   "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b049",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Near miss logged as a pass.",
+   "trigger": "the car passes close",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "near-miss",
+   "tier": "02",
+   "style": "mutter",
+   "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b050",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "That nearly made my day worse.",
+   "trigger": "the car passes close",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "near-miss",
+   "tier": "03",
+   "style": "mutter",
+   "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b051",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Missed me. For now.",
+   "trigger": "the car passes close",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "near-miss",
+   "tier": "03",
+   "style": "mutter",
+   "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b052",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Too slow, ha! Have a nice day!",
+   "trigger": "the car passes close",
+   "source": "content/db/fleet.json + lore.js",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "near-miss",
+   "tier": "04",
+   "style": "mutter",
+   "voice": "Budget · Short-fused. Politeness bolted on over the rage.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b053",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Nearly had me. NEARLY.",
+   "trigger": "the car passes close",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "near-miss",
+   "tier": "04",
+   "style": "mutter",
+   "voice": "Budget · Short-fused. Politeness bolted on over the rage.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b054",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "That one is nearly scrap. Steer wide.",
+   "trigger": "the car passes close (wear {'min': 0.7})",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "near-miss",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b055",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Was that a collision? Logging it as not.",
+   "trigger": "the car passes close",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "near-miss",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b056",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Is it dancing? How quaint.",
+   "trigger": "a dash misses the car",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "miss",
+   "tier": "01",
+   "style": "mutter",
+   "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b057",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Missed. One expected nothing less.",
+   "trigger": "a dash misses the car",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "miss",
+   "tier": "01",
+   "style": "mutter",
+   "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b058",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Dash detected, no contact. Noted.",
+   "trigger": "a dash misses the car",
+   "source": "content/db/fleet.json + lore.js",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "miss",
+   "tier": "02",
+   "style": "mutter",
+   "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b059",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Missed. Updating my calendar.",
+   "trigger": "a dash misses the car",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "miss",
+   "tier": "02",
+   "style": "mutter",
+   "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b060",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "It missed. Even it gave up on me.",
+   "trigger": "a dash misses the car",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "miss",
+   "tier": "03",
+   "style": "mutter",
+   "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b061",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "It lunged and nothing happened. Same.",
+   "trigger": "a dash misses the car",
+   "source": "content/db/fleet.json + lore.js",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "miss",
+   "tier": "03",
+   "style": "mutter",
+   "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b062",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Missed, rubbish! Regards!",
+   "trigger": "a dash misses the car",
+   "source": "content/db/fleet.json + lore.js",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "miss",
+   "tier": "04",
+   "style": "mutter",
+   "voice": "Budget · Short-fused. Politeness bolted on over the rage.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b063",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Ha! Do it properly!",
+   "trigger": "a dash misses the car",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "miss",
+   "tier": "04",
+   "style": "mutter",
+   "voice": "Budget · Short-fused. Politeness bolted on over the rage.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b064",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Its legs have gone. It cannot reach.",
+   "trigger": "a dash misses the car (broken legs)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "miss",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b065",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Rushing. Do not make me late.",
+   "trigger": "the car fixes its route around the dummy (mood Rush)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "commit",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b066",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Slowing. Everything is a hazard.",
+   "trigger": "the car fixes its route around the dummy (mood Cautious)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "commit",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b067",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Was that a dummy? Or a bin?",
+   "trigger": "the car passes close (mood Unreliable)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "near-miss",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b068",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Missed. Noted for my record.",
+   "trigger": "a dash misses the car",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "miss",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b069",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Stopping for the dummy. Window closing.",
+   "trigger": "the car fixes its route around the dummy (cause body, man brake)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "commit",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b070",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Route locked. Do not try anything.",
+   "trigger": "the car fixes its route around the dummy (cause body)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "commit",
+   "tier": "01",
+   "style": "mutter",
+   "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b071",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Route committed per policy 6.3.",
+   "trigger": "the car fixes its route around the dummy (cause body)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "commit",
+   "tier": "02",
+   "style": "mutter",
+   "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b072",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Going round. Please let me.",
+   "trigger": "the car fixes its route around the dummy (cause body)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "commit",
+   "tier": "03",
+   "style": "mutter",
+   "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b073",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Going round you! Stay put!",
+   "trigger": "the car fixes its route around the dummy (cause body)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "commit",
+   "tier": "04",
+   "style": "mutter",
+   "voice": "Budget · Short-fused. Politeness bolted on over the rage.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b074",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Passing, after waiting. Patience documented.",
+   "trigger": "the car fixes its route around the dummy (cause pass)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "commit",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b075",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Route locked.",
+   "trigger": "the car fixes its route around the dummy",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "commit",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b076",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Horn sounded, per procedure.",
+   "trigger": "the car honks at the dummy",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "honk",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b077",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Braking for safety.",
+   "trigger": "the car's route is interrupted",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "interrupt",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b078",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Recovering route.",
+   "trigger": "the car unsticks itself",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "unstick",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b079",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "That one is wobbling. Give it room.",
+   "trigger": "the car fixes its route around the dummy (cause body, wear {'min': 0.7})",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "commit",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b080",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Excuse me. Kindly vacate the carriageway.",
+   "trigger": "the car honks at the dummy (at body)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "honk",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b081",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Move. I have a schedule, and standards.",
+   "trigger": "the car honks at the dummy (at body)",
+   "source": "content/db/fleet.json + lore.js",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "honk",
+   "tier": "01",
+   "style": "speech",
+   "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b082",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "You are blocking route 44.",
+   "trigger": "the car honks at the dummy (at body, model VAN-02-001)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "honk",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b083",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "MOVE IT, thank you! MOVE!",
+   "trigger": "the car honks at the dummy (at body)",
+   "source": "content/db/fleet.json + lore.js",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "honk",
+   "tier": "04",
+   "style": "shout",
+   "voice": "Budget · Short-fused. Politeness bolted on over the rage.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b084",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Cone in lane. Raising with maintenance.",
+   "trigger": "the car honks at the dummy (at cone)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "honk",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b085",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Who put a cone here? It was you.",
+   "trigger": "the car honks at the dummy (at cone)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "honk",
+   "tier": "04",
+   "style": "mutter",
+   "voice": "Budget · Short-fused. Politeness bolted on over the rage.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b086",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Another vehicle. Braking for safety.",
+   "trigger": "the car's route is interrupted (by car)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "interrupt",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b087",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Swerve halted by a cone. Procedure holds.",
+   "trigger": "the car's route is interrupted (by cone)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "interrupt",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b088",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Reversing. This is within procedure.",
+   "trigger": "the car unsticks itself (how reverse)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "unstick",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b089",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Replanning. Rank unaffected.",
+   "trigger": "the car unsticks itself (how replan)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "unstick",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b090",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Already assessed. Please move along.",
+   "trigger": "the dummy touches a car that already hit it",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "touch-spent",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b091",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "I have done my bit today.",
+   "trigger": "the dummy touches a car that already hit it",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "touch-spent",
+   "tier": "03",
+   "style": "speech",
+   "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b092",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Contact logged. Stand clear of the vehicle.",
+   "trigger": "the car knocks the dummy aside",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "knock",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b093",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Hands off the paintwork.",
+   "trigger": "the car knocks the dummy aside",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "knock",
+   "tier": "01",
+   "style": "mutter",
+   "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b094",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Stop line moved back. Lesson logged.",
+   "trigger": "the car's model learns a stop line",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "learned",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b095",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "I remember you. I stop further now.",
+   "trigger": "the car's model learns a stop line",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "learned",
+   "tier": "01",
+   "style": "speech",
+   "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b096",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Retrained. Keeping my distance.",
+   "trigger": "the car's model learns a stop line",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "learned",
+   "tier": "03",
+   "style": "speech",
+   "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b097",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Not falling for that again!",
+   "trigger": "the car's model learns a stop line",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "learned",
+   "tier": "04",
+   "style": "shout",
+   "voice": "Budget · Short-fused. Politeness bolted on over the rage.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b098",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "It is looking at all of us now.",
+   "trigger": "the car sees a new part on the chassis (node widerView)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "upgrade-seen",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b099",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "It remembers where we were. Unsettling.",
+   "trigger": "the car sees a new part on the chassis (node memory)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "upgrade-seen",
+   "tier": null,
+   "style": "thought",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b100",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "It heard me coming. It has ears.",
+   "trigger": "the car sees a new part on the chassis (node ears)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "upgrade-seen",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b101",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Subject has acquired hips.",
+   "trigger": "the car sees a new part on the chassis (node hips)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "upgrade-seen",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b102",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "That spine was not on the last report.",
+   "trigger": "the car sees a new part on the chassis (node spine)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "upgrade-seen",
+   "tier": null,
+   "style": "thought",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b103",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "It looked one way and walked another.",
+   "trigger": "the car sees a new part on the chassis (node neck)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "upgrade-seen",
+   "tier": null,
+   "style": "thought",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b104",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "No wind-up? Who approved that?",
+   "trigger": "the car sees a new part on the chassis (node springStart)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "upgrade-seen",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b105",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "It jumped. Dummies do not jump.",
+   "trigger": "the car sees a new part on the chassis (node jump)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "upgrade-seen",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b106",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "It is not sliding any more. Noted.",
+   "trigger": "the car sees a new part on the chassis (node grip)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "upgrade-seen",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b107",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "It is carrying something. Approved?",
+   "trigger": "the car sees a new part on the chassis (node carry)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "upgrade-seen",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b108",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "It can throw now. Nobody told us.",
+   "trigger": "the car sees a new part on the chassis (node throw)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "upgrade-seen",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b109",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Is it holding on to my door?",
+   "trigger": "the car sees a new part on the chassis (node holdOn)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "upgrade-seen",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b110",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Bigger battery, more dashes. Wonderful.",
+   "trigger": "the car sees a new part on the chassis (node bigBattery)",
+   "source": "content/db/fleet.json + lore.js",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "upgrade-seen",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b111",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "It recharges when it hits us?!",
+   "trigger": "the car sees a new part on the chassis (node kineticCharge)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "upgrade-seen",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b112",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "It recharges faster than I do.",
+   "trigger": "the car sees a new part on the chassis (node fastCharge)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "upgrade-seen",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b113",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "New modification. Updating my threat model.",
+   "trigger": "the car sees a new part on the chassis",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "upgrade-seen",
+   "tier": "02",
+   "style": "speech",
+   "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b114",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "The subject has changed. Noted.",
+   "trigger": "the car sees a new part on the chassis",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "upgrade-seen",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b115",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Its head is cracked. Still coming.",
+   "trigger": "the car sees a damaged part (part head)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "part-seen",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b116",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Its torso is buckled. It turns so slowly.",
+   "trigger": "the car sees a damaged part (part torso)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "part-seen",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b117",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Its left arm is hanging.",
+   "trigger": "the car sees a damaged part (part armL)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "part-seen",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b118",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Its right arm is hanging.",
+   "trigger": "the car sees a damaged part (part armR)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "part-seen",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b119",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Left leg gone. It is limping.",
+   "trigger": "the car sees a damaged part (part legL)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "part-seen",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b120",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Right leg gone. Look at it hobble.",
+   "trigger": "the car sees a damaged part (part legR)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "part-seen",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b121",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "It is falling apart. Like me.",
+   "trigger": "the car sees a damaged part",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "part-seen",
+   "tier": "03",
+   "style": "mutter",
+   "voice": "Consumer · Tired and resigned. Expects the worst, usually right.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b122",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Damaged goods. Not my problem.",
+   "trigger": "the car sees a damaged part",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "part-seen",
+   "tier": "01",
+   "style": "mutter",
+   "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.b123",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Subject damage noted.",
+   "trigger": "the car sees a damaged part",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "part-seen",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.c001",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "A roof? I was not briefed on roofs.",
+   "trigger": "the car hits the dummy (drop True, dropFrom roof, dropZ 2)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": "01",
+   "style": "speech",
+   "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.c002",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Incident filed: load received from a roof.",
+   "trigger": "the car hits the dummy (drop True, dropFrom roof, dropZ 2)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": "02",
+   "style": "speech",
+   "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.c003",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Roofs are not on my route.",
+   "trigger": "the car hits the dummy (drop True, dropFrom roof, dropZ 2)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.c004",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Landed on from a roof. My paintwork objects.",
+   "trigger": "the car hits the dummy (drop True, dropFrom roof, dropZ 2)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": "01",
+   "style": "speech",
+   "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.c005",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "That came off the high highway.",
+   "trigger": "the car hits the dummy (drop True, dropFrom deck, dropZ 2)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.c006",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Form 9: load received from a parapet.",
+   "trigger": "the car hits the dummy (drop True, dropFrom deck)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": "02",
+   "style": "speech",
+   "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.c007",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "From the low highway? Quite unseemly.",
+   "trigger": "the car hits the dummy (drop True, dropFrom deck, dropZ 1)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": "01",
+   "style": "speech",
+   "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.c008",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "That fell a long way to reach me.",
+   "trigger": "the car hits the dummy (drop True, dropZ 2)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.c009",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Policy 12 excludes loads from parapets.",
+   "trigger": "the car hits the dummy (drop True, dropFrom deck, dropZ 1)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": "02",
+   "style": "speech",
+   "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.c010",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Nobody walks the highway. Nobody.",
+   "trigger": "the car hits the dummy (deck True)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.c011",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Struck on the highway. How undignified.",
+   "trigger": "the car hits the dummy (deck True)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": "01",
+   "style": "speech",
+   "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.c012",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Highway strike filed under policy 9.",
+   "trigger": "the car hits the dummy (deck True)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": "02",
+   "style": "speech",
+   "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.c013",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Hit on a plate. Calibrated, naturally.",
+   "trigger": "the car hits the dummy (plate True)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.c014",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Struck on a calibration plate. Vulgar.",
+   "trigger": "the car hits the dummy (plate True)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": "01",
+   "style": "speech",
+   "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.c015",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Plate hit filed against calibration form 3.",
+   "trigger": "the car hits the dummy (plate True)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": "02",
+   "style": "speech",
+   "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.c016",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Written off from above. Unthinkable.",
+   "trigger": "the car writes the chassis off (drop True)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "writeoff",
+   "tier": "01",
+   "style": "speech",
+   "voice": "Luxury · Polished, superior, faintly amused. Never apologises.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.c017",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Write-off filed. Cause: load from above.",
+   "trigger": "the car writes the chassis off (drop True)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "writeoff",
+   "tier": "02",
+   "style": "speech",
+   "voice": "Corporate · Procedural. Speaks in logs, KPIs and policy numbers.",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.c018",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Written off on the highway. On my record.",
+   "trigger": "the car writes the chassis off (deck True)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "writeoff",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.c019",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Written off on a calibration plate.",
+   "trigger": "the car writes the chassis off (plate True)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "writeoff",
+   "tier": null,
+   "style": "speech",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.c020",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Riverside route. Nobody mentioned this.",
+   "trigger": "the car hits the dummy (district riverside)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.c021",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Old Market. Not on any itinerary.",
+   "trigger": "the car hits the dummy (district market)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.c022",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Interchange. Two flyovers and now this.",
+   "trigger": "the car hits the dummy (district interchange)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.c023",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Business district. Of all places.",
+   "trigger": "the car hits the dummy (district cbd)",
+   "source": "content/db/fleet.json",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "bark.c024",
+   "group": "Car barks",
+   "speaker": "Cars",
+   "kind": "bark",
+   "text": "Hit on campus. That goes on my record.",
+   "trigger": "the car hits the dummy (district campus)",
+   "source": "content/db/fleet.json + lore.js",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "event": "impact",
+   "tier": null,
+   "style": "mutter",
+   "voice": "Any tier: no single tier's signature (T8)",
+   "limit": {
+    "chars": 48,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "story.act.monument",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Dummy Corporation welcomes you off the factory floor. The cars are your colleagues; Certification is your goal.",
+   "trigger": "ACT I · INDUCTION: the act line, on the district's first card and the map",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "story.tale.monument.A1",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Fresh off the factory floor, you're ready to do some damage to yourself. Make your engineers proud.",
+   "trigger": "Monument A1 · The welcome wall: the tile card's tale",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": true,
+   "limit": {
+    "words": 20,
+    "minWords": 15,
+    "sentences": 2
+   },
+   "tile": "Monument A1",
+   "task": "any"
+  },
+  {
+   "id": "story.tale.monument.B1",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Battery 1 is fitted. The skybridge was built for shoppers who never came; staff watch you dash into a colleague.",
+   "trigger": "Monument B1 · The podium bridge: the tile card's tale",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "minWords": 15,
+    "sentences": 2
+   },
+   "tile": "Monument B1",
+   "task": "dash"
+  },
+  {
+   "id": "story.tale.monument.C1",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "The LED drum lights each bend. Step off the high road onto a car: gravity is company policy.",
+   "trigger": "Monument C1 · The LED drum: the tile card's tale",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "minWords": 15,
+    "sentences": 2
+   },
+   "tile": "Monument C1",
+   "task": "drop"
+  },
+  {
+   "id": "story.tale.monument.C2",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "The road runs through the portal tower at the sixth floor. Take your write-off up there; ignore the view.",
+   "trigger": "Monument C2 · The portal tower: the tile card's tale",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "minWords": 15,
+    "sentences": 2
+   },
+   "tile": "Monument C2",
+   "task": "level"
+  },
+  {
+   "id": "story.tale.monument.B2",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "The plaque reads ZERO ACCIDENTS: a target, not a record. Stand near it until a colleague finds you.",
+   "trigger": "Monument B2 · The monument: the tile card's tale",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "minWords": 15,
+    "sentences": 2
+   },
+   "tile": "Monument B2",
+   "task": "struck"
+  },
+  {
+   "id": "story.tale.monument.A2",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "The neon shops sell nothing, but the traffic reads them. Hands 1 is fitted: bait a colleague with a cone.",
+   "trigger": "Monument A2 · The neon shops: the tile card's tale",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "minWords": 15,
+    "sentences": 2
+   },
+   "tile": "Monument A2",
+   "task": "cone"
+  },
+  {
+   "id": "story.tale.monument.A3",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "The stacked cubes rose one budget at a time. Build the same way: one hit, then another, quickly.",
+   "trigger": "Monument A3 · The stacked cubes: the tile card's tale",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "minWords": 15,
+    "sentences": 2
+   },
+   "tile": "Monument A3",
+   "task": "combo"
+  },
+  {
+   "id": "story.tale.monument.B3",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Two screens advertise to each other all night. Legs 1 is fitted: jump into a car between them.",
+   "trigger": "Monument B3 · The LED canyon: the tile card's tale",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "minWords": 15,
+    "sentences": 2
+   },
+   "tile": "Monument B3",
+   "task": "jump"
+  },
+  {
+   "id": "story.tale.monument.C3",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "The gateway thanked the car that wrote you off for driving safely. Let one colleague throw you into the next.",
+   "trigger": "Monument C3 · The LED gateway: the tile card's tale",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "minWords": 15,
+    "sentences": 2
+   },
+   "tile": "Monument C3",
+   "task": "bounce"
+  },
+  {
+   "id": "story.act.parkland",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "The Expo opens to clients when this park passes. Your training keeps them safe.",
+   "trigger": "ACT II · OPENING DAY: the act line, on the district's first card and the map",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "story.tale.parkland.C1",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "The lantern, the Expo's first exhibit, is lit for clients. With Arms 1, push off one car into the next.",
+   "trigger": "Parkland C1 · The lantern pavilion: the tile card's tale",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "minWords": 15,
+    "sentences": 2
+   },
+   "tile": "Parkland C1",
+   "task": "push"
+  },
+  {
+   "id": "story.tale.parkland.C2",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Our board watches opening day from these terraces. A van delivers the catering; arrange for it to deliver you.",
+   "trigger": "Parkland C2 · The amphitheatre: the tile card's tale",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "minWords": 15,
+    "sentences": 2
+   },
+   "tile": "Parkland C2",
+   "task": "cls"
+  },
+  {
+   "id": "story.tale.parkland.C3",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "The arch is the Expo's gate; visitors circle the roundabout once. You go faster: chain hits before each is forgotten.",
+   "trigger": "Parkland C3 · The arch and the roundabout: the tile card's tale",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "minWords": 15,
+    "sentences": 2
+   },
+   "tile": "Parkland C3",
+   "task": "combo"
+  },
+  {
+   "id": "story.tale.parkland.B3",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "The obelisk marks the surveyors' first stake. Police escort a school party here on opening day; test them first.",
+   "trigger": "Parkland B3 · The obelisk court: the tile card's tale",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "minWords": 15,
+    "sentences": 2
+   },
+   "tile": "Parkland B3",
+   "task": "cls"
+  },
+  {
+   "id": "story.tale.parkland.A3",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "A wedding faces the traffic from the belvedere. Legs 2 is fitted: jump into a car, so no guest does.",
+   "trigger": "Parkland A3 · The belvedere: the tile card's tale",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "minWords": 15,
+    "sentences": 2
+   },
+   "tile": "Parkland A3",
+   "task": "jump"
+  },
+  {
+   "id": "story.tale.parkland.A2",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "The dome is the Expo's showroom; you are the exhibit. Hands 2 is fitted: bait a car with a cone.",
+   "trigger": "Parkland A2 · The dome by the canal: the tile card's tale",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "minWords": 15,
+    "sentences": 2
+   },
+   "tile": "Parkland A2",
+   "task": "cone"
+  },
+  {
+   "id": "story.tale.parkland.A1",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "The gardener's pools need cars that stop. Teach them with Arms 2: push off one car into the next.",
+   "trigger": "Parkland A1 · The reservoir terraces: the tile card's tale",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "minWords": 15,
+    "sentences": 2
+   },
+   "tile": "Parkland A1",
+   "task": "push"
+  },
+  {
+   "id": "story.tale.parkland.B1",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "The cascade was built to drown out the traffic. The traffic got louder; take your hit up on the highway.",
+   "trigger": "Parkland B1 · The cascade: the tile card's tale",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "minWords": 15,
+    "sentences": 2
+   },
+   "tile": "Parkland B1",
+   "task": "level"
+  },
+  {
+   "id": "story.tale.parkland.B2",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "The board watches the ring over the pools. Battery 2 is fitted: chain your hits.",
+   "trigger": "Parkland B2 · The ring over the pools: the tile card's tale",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "minWords": 15,
+    "sentences": 2
+   },
+   "tile": "Parkland B2",
+   "task": "combo"
+  },
+  {
+   "id": "story.act.waterfront",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Certified dummies ship across the river, to be sacrificed in service to our clients. Your papers are being prepared.",
+   "trigger": "ACT III · CUSTOMS: the act line, on the district's first card and the map",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "story.tale.waterfront.A1",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "The bus carries engineers through the west portal to the bridge. It never misses; take its hit.",
+   "trigger": "Waterfront A1 · The west portal: the tile card's tale",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "minWords": 15,
+    "sentences": 2
+   },
+   "tile": "Waterfront A1",
+   "task": "cls"
+  },
+  {
+   "id": "story.tale.waterfront.B1",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Cars go into the tunnel under the hill, and data comes back. Legs 3 is fitted: leap into one.",
+   "trigger": "Waterfront B1 · The tunnel portal: the tile card's tale",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "minWords": 15,
+    "sentences": 2
+   },
+   "tile": "Waterfront B1",
+   "task": "jump"
+  },
+  {
+   "id": "story.tale.waterfront.C1",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "The east portal faces away from its twin. Police here check papers; your Certification needs their fleet on record.",
+   "trigger": "Waterfront C1 · The east portal: the tile card's tale",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "minWords": 15,
+    "sentences": 2
+   },
+   "tile": "Waterfront C1",
+   "task": "cls"
+  },
+  {
+   "id": "story.tale.waterfront.C2",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "The east beach terrace served tourists, then sensors. Drop from its rail onto a car; ships wait for the Certified.",
+   "trigger": "Waterfront C2 · The east beach terrace: the tile card's tale",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "minWords": 15,
+    "sentences": 2
+   },
+   "tile": "Waterfront C2",
+   "task": "drop"
+  },
+  {
+   "id": "story.tale.waterfront.C3",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "The pier tower logs all that floats: containers, ducks, one dummy. Be thrown into a car to earn your entry.",
+   "trigger": "Waterfront C3 · The east customs post: the tile card's tale",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "minWords": 15,
+    "sentences": 2
+   },
+   "tile": "Waterfront C3",
+   "task": "bounce"
+  },
+  {
+   "id": "story.tale.waterfront.B3",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "The stilt houses keep Chassis 0 behind glass. Arms 3 is fitted; push off a car and show it progress.",
+   "trigger": "Waterfront B3 · The stilt houses: the tile card's tale",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "minWords": 15,
+    "sentences": 2
+   },
+   "tile": "Waterfront B3",
+   "task": "push"
+  },
+  {
+   "id": "story.tale.waterfront.A3",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "The west tower keeps the customs log. Your entry reads PURPOSE DESTRUCTION: honour it on the raised road.",
+   "trigger": "Waterfront A3 · The west customs post: the tile card's tale",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "minWords": 15,
+    "sentences": 2
+   },
+   "tile": "Waterfront A3",
+   "task": "level"
+  },
+  {
+   "id": "story.tale.waterfront.A2",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Sand from three provinces lies under the west beach terrace. Place a cone; one more clean reading before the ceremony.",
+   "trigger": "Waterfront A2 · The west beach terrace: the tile card's tale",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "minWords": 15,
+    "sentences": 2
+   },
+   "tile": "Waterfront A2",
+   "task": "cone"
+  },
+  {
+   "id": "story.tale.waterfront.B2",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "The circus monument, cast from your written-off chassis, reads ZERO ACCIDENTS (EXCLUDING TESTS). Battery 3 is fitted; chain your hits.",
+   "trigger": "Waterfront B2 · The circus: the tile card's tale",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "minWords": 15,
+    "sentences": 2
+   },
+   "tile": "Waterfront B2",
+   "task": "combo"
+  },
+  {
+   "id": "story.brief.any",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Walk into the path of the incoming vehicles. Time your approach, and choose your angle carefully. Bonus points for combinations and lethal hits.",
+   "trigger": "the brief 'any': the level card, the map's tile panel",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": true,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "label": "ANY WRITE-OFF"
+  },
+  {
+   "id": "story.brief.dash",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Dash into a car. The final hit must be the dash.",
+   "trigger": "the brief 'dash': the level card, the map's tile panel",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "label": "DASH INTO A CAR"
+  },
+  {
+   "id": "story.brief.drop",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Drop onto a car from above. The final hit must be that drop.",
+   "trigger": "the brief 'drop': the level card, the map's tile panel",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "label": "DROP ONTO A CAR"
+  },
+  {
+   "id": "story.brief.jump",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Jump into a car. The jump must be the final hit.",
+   "trigger": "the brief 'jump': the level card, the map's tile panel",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "label": "JUMP INTO A CAR"
+  },
+  {
+   "id": "story.brief.level",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Climb to a raised road. The final hit must land up there, not on the street.",
+   "trigger": "the brief 'level': the level card, the map's tile panel",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "label": "ON A RAISED ROAD"
+  },
+  {
+   "id": "story.brief.cone",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Place a cone. The final hit must come from a car reacting to it.",
+   "trigger": "the brief 'cone': the level card, the map's tile panel",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "label": "CONE-BAITED CAR"
+  },
+  {
+   "id": "story.brief.push",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Push off one car. The final hit must be the next car.",
+   "trigger": "the brief 'push': the level card, the map's tile panel",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "label": "PUSH OFF A CAR"
+  },
+  {
+   "id": "story.brief.bounce",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Let one car throw you into another. Take the final hit while a hit is still throwing you.",
+   "trigger": "the brief 'bounce': the level card, the map's tile panel",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "label": "THROWN INTO A CAR"
+  },
+  {
+   "id": "story.brief.struck",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Walk or stand in the traffic. A car must deliver the final hit while you are not dashing.",
+   "trigger": "the brief 'struck': the level card, the map's tile panel",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "label": "STRUCK, NOT DASHING"
+  },
+  {
+   "id": "story.brief.combo",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Chain your hits into a combo. The final hit must be link {n} or later.",
+   "trigger": "the brief 'combo': the level card, the map's tile panel",
+   "source": "content/story/story_v2.json",
+   "placeholders": [
+    "{n}"
+   ],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "label": "COMBO ×{n}"
+  },
+  {
+   "id": "story.brief.cls",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Step in front of the {clsLong}. The final hit must come from a {cls}.",
+   "trigger": "the brief 'cls': the level card, the map's tile panel",
+   "source": "content/story/story_v2.json",
+   "placeholders": [
+    "{clsLong}",
+    "{cls}"
+   ],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "label": "A {cls}"
+  },
+  {
+   "id": "story.ending",
+   "group": "Story",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Your model has passed and will be manufactured for our clients. A Corporation drone carries you to the ship.",
+   "trigger": "CERTIFIED: the ending at the ship",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "certified",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "notice.n01",
+   "group": "Notices",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "You are a Dummy Corporation trainee. Every write-off brings Certification closer.",
+   "trigger": "the intro screen's line (Arcade)",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [],
+   "shot": "intro",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n02",
+   "group": "Notices",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Welcome, trainee. Every write-off brings Certification closer.",
+   "trigger": "the title line",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [],
+   "shot": "title",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n03",
+   "group": "Notices",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Get your Dummy Certification in Shenzhen Smart City and learn about the Corporation.",
+   "trigger": "the STORY card on the mode select",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [],
+   "shot": "title",
+   "locked": true,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n04",
+   "group": "Labels",
+   "speaker": "Dummy Corporation",
+   "kind": "label",
+   "text": "TRAINING BRIEF",
+   "trigger": "a label",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n05",
+   "group": "Labels",
+   "speaker": "Dummy Corporation",
+   "kind": "label",
+   "text": "TRAINING BRIEF · {LABEL}",
+   "trigger": "a label",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [
+    "{LABEL}"
+   ],
+   "shot": null,
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n06",
+   "group": "Labels",
+   "speaker": "Dummy Corporation",
+   "kind": "label",
+   "text": "CORPORATION DRONE",
+   "trigger": "a label",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n07",
+   "group": "Notices",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "CORPORATION DRONE · DELIVERING {PART}",
+   "trigger": "toast: a drone delivers a part",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [
+    "{PART}"
+   ],
+   "shot": "drone",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n08",
+   "group": "Notices",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "CORPORATION DRONE · {PART} ON BOARD · THEN {TILE}",
+   "trigger": "toast: the ferry, with a part on board",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [
+    "{PART}",
+    "{TILE}"
+   ],
+   "shot": "ferry",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n09",
+   "group": "Notices",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "CORPORATION DRONE · CARRYING YOU TO {TILE}",
+   "trigger": "toast: the ferry",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [
+    "{TILE}"
+   ],
+   "shot": "ferry",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n10",
+   "group": "Labels",
+   "speaker": "Dummy Corporation",
+   "kind": "label",
+   "text": "CORPORATION DRONE · INCOMING",
+   "trigger": "the drone label, incoming",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [],
+   "shot": "drop",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n11",
+   "group": "Notices",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "CORPORATION GIFT · +{N} CREDITS",
+   "trigger": "toast: a tile's credit gift",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [
+    "{N}"
+   ],
+   "shot": "story",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n12",
+   "group": "Labels",
+   "speaker": "Dummy Corporation",
+   "kind": "label",
+   "text": "NEXT FROM THE CORPORATION",
+   "trigger": "the report: the next part's heading",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [],
+   "shot": "report",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n13",
+   "group": "Notices",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "A Corporation drone brings this part.",
+   "trigger": "the workshop: a part not yet issued",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [],
+   "shot": "workshop",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n14",
+   "group": "Notices",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "A Corporation drone brings this part. Keep training.",
+   "trigger": "the workshop: a part not yet issued, with a nudge",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [],
+   "shot": "workshop",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n15",
+   "group": "Notices",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "A Corporation drone brings that part",
+   "trigger": "toast: buying a part the drone brings",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [],
+   "shot": "workshop",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n16",
+   "group": "Notices",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "A Corporation drone brings it",
+   "trigger": "controls: a verb not yet fitted",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [],
+   "shot": "pause",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n17",
+   "group": "Notices",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Corporation drone dispatched: chassis in the river",
+   "trigger": "toast: a drone rescues the chassis from the river",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [],
+   "shot": "drone",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n18",
+   "group": "Notices",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Corporation drone dispatched. Obstruction will be relocated.",
+   "trigger": "toast: a drone clears a cone",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [],
+   "shot": "drone",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n19",
+   "group": "Notices",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Corporation drone: chassis recovered from the river",
+   "trigger": "toast: the chassis recovered from the river",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [],
+   "shot": "drone",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n20",
+   "group": "Notices",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Training complete. The Corporation thanks you for your service.",
+   "trigger": "the ending: Licensed",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [],
+   "shot": "ending",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n21",
+   "group": "Notices",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Traffic exhausted. Training incomplete; report to the bay.",
+   "trigger": "the ending: Failed test",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [],
+   "shot": "failed",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n22",
+   "group": "Labels",
+   "speaker": "Dummy Corporation",
+   "kind": "label",
+   "text": "DUMMY CORPORATION",
+   "trigger": "a label",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n23",
+   "group": "Labels",
+   "speaker": "Dummy Corporation",
+   "kind": "label",
+   "text": "DUMMY CORP",
+   "trigger": "a label",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n24",
+   "group": "Notices",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Neon shops, LED walls; one road splits round the monument under the walkway ring. Your training begins here.",
+   "trigger": "Monument: the district blurb",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [],
+   "shot": "arcade",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n25",
+   "group": "Notices",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Water and concrete; a boulevard passes under the raised ring. Your write-offs open the Expo to clients.",
+   "trigger": "Parkland: the district blurb",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [],
+   "shot": "arcade",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n26",
+   "group": "Notices",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "A hill walled by towers; bridges cross the drive and the river. Certified dummies ship across it to clients.",
+   "trigger": "Waterfront: the district blurb",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [],
+   "shot": "arcade",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n27",
+   "group": "Labels",
+   "speaker": "Dummy Corporation",
+   "kind": "label",
+   "text": "Calibration Campus",
+   "trigger": "a label",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n28",
+   "group": "Notices",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Towers and barriers. Corporation Tower stands over your training.",
+   "trigger": "the CBD blurb (district not in play)",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": false
+  },
+  {
+   "id": "notice.n29",
+   "group": "Notices",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "The test centre the city was modelled on. Hits on its impact plates count for more.",
+   "trigger": "the Campus blurb (district not in play)",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": false
+  },
+  {
+   "id": "notice.n30",
+   "group": "Notices",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Two flyovers cross it, one above the other. Corporation Tower stands at the centre; towers shade your training.",
+   "trigger": "the CBD intro (district not in play)",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": false
+  },
+  {
+   "id": "notice.n31",
+   "group": "Notices",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Impact plates mark the road at the centre. A write-off on a plate counts for more.",
+   "trigger": "the Campus intro (district not in play)",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": false
+  },
+  {
+   "id": "notice.n32",
+   "group": "Labels",
+   "speaker": "Dummy Corporation",
+   "kind": "label",
+   "text": "Corporation Tower Plaza",
+   "trigger": "a label",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n33",
+   "group": "Labels",
+   "speaker": "Dummy Corporation",
+   "kind": "label",
+   "text": "Corporation Tower",
+   "trigger": "a label",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n34",
+   "group": "Notices",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Get hit in fun, creative, and destructive ways before the vehicles run out.",
+   "trigger": "the ARCADE card on the mode select",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [],
+   "shot": "title",
+   "locked": true,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n35",
+   "group": "Notices",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "GRADE {G} · TOUGHER CHASSIS · DENSER TRAFFIC",
+   "trigger": "toast: Arcade's grade rises",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [
+    "{G}"
+   ],
+   "shot": "arcade",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n36",
+   "group": "Notices",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Self-driving cars are designed never to hit anyone. Your training: get hit, in combos, and earn your parts.",
+   "trigger": "the intro screen's line",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [],
+   "shot": "intro",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "notice.n37",
+   "group": "Notices",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Write off bodies; every {Q} write-offs, the grade rises. Keep training until the vehicles run out.",
+   "trigger": "Arcade's district card",
+   "source": "prototypes/p8/lore.js",
+   "placeholders": [
+    "{Q}"
+   ],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   },
+   "inPlay": true
+  },
+  {
+   "id": "copy.toast.touch-spent",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Appearance already assessed. No damage. No points.",
+   "trigger": "toast: the dummy touches a car that already hit it",
+   "source": "prototypes/p6/content.js (toast.touch-spent)",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "copy.toast.purchase",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "{node} will be installed on the next chassis.",
+   "trigger": "toast: Arcade, a part bought",
+   "source": "prototypes/p6/content.js (toast.purchase)",
+   "placeholders": [
+    "{node}"
+   ],
+   "shot": "workshop",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "copy.toast.learn-standoff",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "{model} revised its stop line to {metres} m.",
+   "trigger": "toast: a car model learns to stop further back",
+   "source": "prototypes/p6/content.js (toast.learn-standoff)",
+   "placeholders": [
+    "{metres}",
+    "{model}"
+   ],
+   "shot": "play",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "copy.toast.refusal-locked",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Refusal is unavailable until one body is completed.",
+   "trigger": "toast: Arcade, Refuse testing before one body",
+   "source": "prototypes/p6/content.js (toast.refusal-locked)",
+   "placeholders": [],
+   "shot": "pause",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "copy.denied.lunge",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Lunge declined. Charge or recovery incomplete.",
+   "trigger": "toast: a dash refused (no charge, or recovering)",
+   "source": "prototypes/p6/content.js (denied.lunge)",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "copy.denied.pickup",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Nothing within reach to carry.",
+   "trigger": "toast: nothing to grab",
+   "source": "prototypes/p6/content.js (denied.pickup)",
+   "placeholders": [],
+   "shot": "cones",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "copy.denied.drop",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "No legal room ahead. Cone retained.",
+   "trigger": "toast: no room to put a cone down",
+   "source": "prototypes/p6/content.js (denied.drop)",
+   "placeholders": [],
+   "shot": "cones",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "copy.denied.throw",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "No legal room to throw. Cone retained.",
+   "trigger": "toast: no room to throw a cone",
+   "source": "prototypes/p6/content.js (denied.throw)",
+   "placeholders": [],
+   "shot": "cones",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "copy.endings.Non-compliant",
+   "group": "Endings and screens",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Testing declined. Your refusal has been recorded.",
+   "trigger": "the ending: Non-compliant (a refusal)",
+   "source": "prototypes/p6/content.js (endings.Non-compliant)",
+   "placeholders": [],
+   "shot": "refused",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "copy.report.title",
+   "group": "Endings and screens",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Chassis {chassis} written off.",
+   "trigger": "the write-off report's title",
+   "source": "prototypes/p6/content.js (report.title)",
+   "placeholders": [
+    "{chassis}"
+   ],
+   "shot": "report",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "copy.report.credit",
+   "group": "Endings and screens",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "One body credit granted. Balance: {credits}.",
+   "trigger": "the report, Arcade: the credit for the body",
+   "source": "prototypes/p6/content.js (report.credit)",
+   "placeholders": [
+    "{credits}"
+   ],
+   "shot": "report",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "copy.shop.deploy",
+   "group": "Endings and screens",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Deploy next chassis",
+   "trigger": "the workshop's last row",
+   "source": "prototypes/p6/content.js (shop.deploy)",
+   "placeholders": [],
+   "shot": "workshop",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "copy.shop.bank",
+   "group": "Endings and screens",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Keep {credits} in credit. Deploy next chassis",
+   "trigger": "the workshop's last row, credits left",
+   "source": "prototypes/p6/content.js (shop.bank)",
+   "placeholders": [
+    "{credits}"
+   ],
+   "shot": "workshop",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "place.levels.z1",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Low highway: only its own cars drive here. A broken parapet drops you to the street.",
+   "trigger": "toast: first time on the low highway",
+   "source": "prototypes/p6/content.js (levels.z1)",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "place.levels.z2Highway",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "High highway: fast traffic. A broken parapet drops you to the street, a long fall.",
+   "trigger": "toast: first time on the high highway",
+   "source": "prototypes/p6/content.js (levels.z2Highway)",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "place.levels.roof",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Roof: no traffic. Step off a ledge to drop to the street below.",
+   "trigger": "toast: first time on a roof",
+   "source": "prototypes/p6/content.js (levels.roof)",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.held",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "HELD AT {health} · the brief wants {brief}",
+   "trigger": "toast: a hit that would write off the chassis misses the brief; the chassis is held (row 620)",
+   "source": "prototypes/p6/game.js processEvents 'held'",
+   "placeholders": [
+    "{brief}",
+    "{health}"
+   ],
+   "shot": "writeoff",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.story-count",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "COUNTED · {tile} {n} / {need}",
+   "trigger": "toast: a write-off counts for the tile",
+   "source": "prototypes/p6/game.js 'story-count'",
+   "placeholders": [
+    "{need}",
+    "{n}",
+    "{tile}"
+   ],
+   "shot": "story",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.story-miss.task",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "NOT COUNTED · the brief wants {brief}",
+   "trigger": "toast: a write-off misses the brief",
+   "source": "prototypes/p6/game.js 'story-miss'",
+   "placeholders": [
+    "{brief}"
+   ],
+   "shot": "writeoff",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.story-miss.cleared",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "NOT COUNTED · {tile} is already cleared",
+   "trigger": "toast: a write-off on a cleared tile",
+   "source": "prototypes/p6/game.js 'story-miss'",
+   "placeholders": [
+    "{tile}"
+   ],
+   "shot": "writeoff",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.story-miss.elsewhere",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "NOT COUNTED · {tile} is not in test",
+   "trigger": "toast: a write-off on a tile not yet in test",
+   "source": "prototypes/p6/game.js 'story-miss'",
+   "placeholders": [
+    "{tile}"
+   ],
+   "shot": "writeoff",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.story-clear",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "TILE {tile} CLEARED · {next} OPEN",
+   "trigger": "toast: the tile's last write-off",
+   "source": "prototypes/p6/game.js 'story-clear'",
+   "placeholders": [
+    "{next}",
+    "{tile}"
+   ],
+   "shot": "story",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.fence.unsurveyed",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Fence: {tile} is not yet surveyed",
+   "trigger": "toast: walking into a fence toward a tile not yet open",
+   "source": "prototypes/p6/game.js 'story-fence'",
+   "placeholders": [
+    "{tile}"
+   ],
+   "shot": "map",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.fence.clear-first",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Fence: clear {tile} first ({n} / {need})",
+   "trigger": "toast: walking into the tile's fence before it is cleared",
+   "source": "prototypes/p6/game.js 'story-fence'",
+   "placeholders": [
+    "{need}",
+    "{n}",
+    "{tile}"
+   ],
+   "shot": "map",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.hop",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "A hop clears nothing. Run, then jump.",
+   "trigger": "toast, once: a standing jump that clears nothing",
+   "source": "prototypes/p6/game.js 'jump'",
+   "placeholders": [],
+   "shot": "jump",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.rail",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Over the rail",
+   "trigger": "toast: a jump over a highway rail",
+   "source": "prototypes/p6/game.js 'rail-jump'",
+   "placeholders": [],
+   "shot": "jump",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.hitch",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Hitched. X lets go; A slings you off with a dash.",
+   "trigger": "toast, once: the dummy hitches onto a car",
+   "source": "prototypes/p6/game.js 'hitch'",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.slip",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "No dash on water. Step off the puddle.",
+   "trigger": "toast: a dash on a puddle",
+   "source": "prototypes/p6/game.js 'slip' (copy toast.slip)",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.not-fitted",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Not fitted yet",
+   "trigger": "toast: Story, a verb whose part the drone has not brought",
+   "source": "prototypes/p6/game.js 'denied'",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.deny.jump",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "No jump — charge empty, or mid-action",
+   "trigger": "toast: a jump refused",
+   "source": "prototypes/p6/game.js DENY_TEXT.jump",
+   "placeholders": [],
+   "shot": "jump",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.deny.jump.charge",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "No jump: the battery is empty",
+   "trigger": "toast: a jump refused, battery empty",
+   "source": "prototypes/p6/game.js DENY_TEXT",
+   "placeholders": [],
+   "shot": "jump",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.deny.push.spent",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "No pushes left: land to get them back",
+   "trigger": "toast: a push refused, none left",
+   "source": "prototypes/p6/game.js DENY_TEXT",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.deny.push.nothing",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Nothing to push off: hit or touch a car",
+   "trigger": "toast: a push with no car to push off",
+   "source": "prototypes/p6/game.js DENY_TEXT",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.deny.drop.hold",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Hold X to put the cone down",
+   "trigger": "toast: tapping X with a cone where it cannot go down",
+   "source": "prototypes/p6/game.js DENY_TEXT",
+   "placeholders": [],
+   "shot": "cones",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.deny.throw.empty",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Grab a cone first (X), then throw (Y)",
+   "trigger": "toast: a throw with no cone",
+   "source": "prototypes/p6/game.js DENY_TEXT",
+   "placeholders": [],
+   "shot": "cones",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.cones",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Cones {n} / {capacity}",
+   "trigger": "toast: a cone picked up (more than one carried)",
+   "source": "prototypes/p6/game.js 'pickup'",
+   "placeholders": [
+    "{capacity}",
+    "{n}"
+   ],
+   "shot": "cones",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.combo",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "COMBO {n} · {moves} · ×{mult} · +{bonus}",
+   "trigger": "toast: a hit chains a combo",
+   "source": "prototypes/p6/game.js 'combo'",
+   "placeholders": [
+    "{bonus}",
+    "{moves}",
+    "{mult}",
+    "{n}"
+   ],
+   "shot": "combo",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.combo-banked",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "COMBO BANKED · {n} hits · ×{mult} · {points}",
+   "trigger": "toast: the combo's window closes",
+   "source": "prototypes/p6/game.js 'combo-end'",
+   "placeholders": [
+    "{mult}",
+    "{n}",
+    "{points}"
+   ],
+   "shot": "combo",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.cone-hit",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "CONE HIT · +{points}",
+   "trigger": "toast: a thrown cone hits a car",
+   "source": "prototypes/p6/game.js 'cone-hit'",
+   "placeholders": [
+    "{points}"
+   ],
+   "shot": "cones",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.screen",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "{screen} · {landmark}",
+   "trigger": "toast, first visit: the screen's name",
+   "source": "prototypes/p6/game.js 'screen'",
+   "placeholders": [
+    "{landmark}",
+    "{screen}"
+   ],
+   "shot": "play",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.purchase.upgrade",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "{part} fitted · {n} upgrades left",
+   "trigger": "toast: Story, a part fitted in the workshop",
+   "source": "prototypes/p6/game.js 'purchase'",
+   "placeholders": [
+    "{n}",
+    "{part}"
+   ],
+   "shot": "workshop",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.purchase-denied.max",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "That part is at its top level",
+   "trigger": "toast: buying a part at its top level",
+   "source": "prototypes/p6/game.js 'purchase-denied'",
+   "placeholders": [],
+   "shot": "workshop",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.level.walk",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Walkway: no traffic up here. Step off the side to drop onto cars below.",
+   "trigger": "toast, first time: a walkway",
+   "source": "prototypes/p6/game.js LEVEL6",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.level.ring",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Ring deck: highway traffic gives way at the entries. Escalators lead down.",
+   "trigger": "toast, first time: the ring deck",
+   "source": "prototypes/p6/game.js LEVEL6",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.level.terrace",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Terrace: step off the edge to drop to the beach.",
+   "trigger": "toast, first time: a terrace",
+   "source": "prototypes/p6/game.js LEVEL6",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.level.hill",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Hilltop (Z1): streets with traffic. Step off the cliff edge to drop to the valley.",
+   "trigger": "toast, first time: the hilltop",
+   "source": "prototypes/p6/game.js LEVEL6",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.volume",
+   "group": "Feedback",
+   "speaker": "Interface",
+   "kind": "message",
+   "text": "Volume {n} / 10",
+   "trigger": "toast: − or + in play (row 608)",
+   "source": "prototypes/p6/game.js keydown",
+   "placeholders": [
+    "{n}"
+   ],
+   "shot": "play",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.mute",
+   "group": "Feedback",
+   "speaker": "Interface",
+   "kind": "message",
+   "text": "Sound off · M",
+   "trigger": "toast: M in play (row 608)",
+   "source": "prototypes/p6/game.js keydown",
+   "placeholders": [],
+   "shot": "play",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "obj.task",
+   "group": "Objective strip",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Write off a body. Last hit: {brief} ({n} of {need}).",
+   "trigger": "the objective strip on the tile in test",
+   "source": "prototypes/p6/game.js objective()",
+   "placeholders": [
+    "{brief}",
+    "{need}",
+    "{n}"
+   ],
+   "shot": "play",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "obj.any",
+   "group": "Objective strip",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Write off a body ({n} of {need}).",
+   "trigger": "the objective strip, brief 'any'",
+   "source": "prototypes/p6/game.js objective()",
+   "placeholders": [
+    "{need}",
+    "{n}"
+   ],
+   "shot": "play",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "obj.drone.deliver",
+   "group": "Objective strip",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Delivering {part}.",
+   "trigger": "the strip while a drone delivers a part",
+   "source": "prototypes/p6/game.js objective()",
+   "placeholders": [
+    "{part}"
+   ],
+   "shot": "drone",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "obj.drone.bring",
+   "group": "Objective strip",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Bringing {part}, then on to {tile}.",
+   "trigger": "the strip while a drone brings a part, then ferries",
+   "source": "prototypes/p6/game.js objective()",
+   "placeholders": [
+    "{part}",
+    "{tile}"
+   ],
+   "shot": "ferry",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "obj.drone.ferry",
+   "group": "Objective strip",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Carrying the chassis to {tile}.",
+   "trigger": "the strip on the ferry",
+   "source": "prototypes/p6/game.js objective()",
+   "placeholders": [
+    "{tile}"
+   ],
+   "shot": "ferry",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "obj.drone.voyage",
+   "group": "Objective strip",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Carrying the certified model to the ship at {tile}.",
+   "trigger": "the strip on the voyage",
+   "source": "prototypes/p6/game.js objective()",
+   "placeholders": [
+    "{tile}"
+   ],
+   "shot": "plaque",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "obj.cleared",
+   "group": "Objective strip",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "{district} is cleared.",
+   "trigger": "the strip when the district is cleared",
+   "source": "prototypes/p6/game.js objective()",
+   "placeholders": [
+    "{district}"
+   ],
+   "shot": "play",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "obj.arcade",
+   "group": "Objective strip",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Grade {g}: write off {n} bodies for grade {next} ({count} of {n}).",
+   "trigger": "the strip, Arcade",
+   "source": "prototypes/p6/game.js objective()",
+   "placeholders": [
+    "{count}",
+    "{g}",
+    "{next}",
+    "{n}"
+   ],
+   "shot": "arcade",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "obj.arcade.top",
+   "group": "Objective strip",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Grade {g}, the top grade: write off all you can.",
+   "trigger": "the strip, Arcade at the top grade",
+   "source": "prototypes/p6/game.js objective()",
+   "placeholders": [
+    "{g}"
+   ],
+   "shot": "arcade",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "rep.counted",
+   "group": "Endings and screens",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Counted for {tile}: {n} of {need} · points this body {points}",
+   "trigger": "the report: the write-off counted",
+   "source": "prototypes/p6/game.js drawReport",
+   "placeholders": [
+    "{need}",
+    "{n}",
+    "{points}",
+    "{tile}"
+   ],
+   "shot": "report",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "rep.task",
+   "group": "Endings and screens",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Not counted: the brief wants {brief} · points this body {points}",
+   "trigger": "the report: the write-off missed the brief",
+   "source": "prototypes/p6/game.js drawReport",
+   "placeholders": [
+    "{brief}",
+    "{points}"
+   ],
+   "shot": "report",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "rep.cleared",
+   "group": "Endings and screens",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Not counted: {tile} is already cleared · points this body {points}",
+   "trigger": "the report: a cleared tile",
+   "source": "prototypes/p6/game.js drawReport",
+   "placeholders": [
+    "{points}",
+    "{tile}"
+   ],
+   "shot": "report",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "rep.elsewhere",
+   "group": "Endings and screens",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Not counted: {tile} is not in test · points this body {points}",
+   "trigger": "the report: a tile not in test",
+   "source": "prototypes/p6/game.js drawReport",
+   "placeholders": [
+    "{points}",
+    "{tile}"
+   ],
+   "shot": "report",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "rep.credit",
+   "group": "Endings and screens",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "+{n} credits for the body. Balance: {balance}. {part} is yours for {price}.",
+   "trigger": "the report, Story: the credit and the next affordable part",
+   "source": "prototypes/p6/game.js drawReport",
+   "placeholders": [
+    "{balance}",
+    "{n}",
+    "{part}",
+    "{price}"
+   ],
+   "shot": "report",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "rep.full",
+   "group": "Endings and screens",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "+{n} credits for the body. Balance: {balance}. Every track is full.",
+   "trigger": "the report, Story: every part at its top",
+   "source": "prototypes/p6/game.js drawReport",
+   "placeholders": [
+    "{balance}",
+    "{n}"
+   ],
+   "shot": "report",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "rep.next",
+   "group": "Endings and screens",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "{part} · {district} {tile} (tile {n} of {total}).",
+   "trigger": "the report: the next part the drone brings",
+   "source": "prototypes/p6/game.js drawReport",
+   "placeholders": [
+    "{district}",
+    "{n}",
+    "{part}",
+    "{tile}",
+    "{total}"
+   ],
+   "shot": "report",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "shop.keep",
+   "group": "Endings and screens",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Keep {n} upgrades for later, or fit them now.",
+   "trigger": "the workshop: upgrades left",
+   "source": "prototypes/p6/game.js drawShop",
+   "placeholders": [
+    "{n}"
+   ],
+   "shot": "workshop",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "shop.ready",
+   "group": "Endings and screens",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Chassis {n} is ready.",
+   "trigger": "the workshop: nothing left to fit",
+   "source": "prototypes/p6/game.js drawShop",
+   "placeholders": [
+    "{n}"
+   ],
+   "shot": "workshop",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "shop.top",
+   "group": "Endings and screens",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "{part} is at its top level.",
+   "trigger": "the workshop: a part at its top",
+   "source": "prototypes/p6/game.js drawShop",
+   "placeholders": [
+    "{part}"
+   ],
+   "shot": "workshop",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "map.unsurveyed",
+   "group": "Endings and screens",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Clear the tiles before it. The map opens one tile at a time.",
+   "trigger": "the map: a tile not yet open",
+   "source": "prototypes/p6/game.js drawStoryMap",
+   "placeholders": [],
+   "shot": "map",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "map.fences",
+   "group": "Endings and screens",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Fenced until cleared. Cleared tiles stay open.",
+   "trigger": "the map's footer",
+   "source": "prototypes/p6/game.js drawStoryMap",
+   "placeholders": [],
+   "shot": "map",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "map.need",
+   "group": "Endings and screens",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "One counted write-off clears the tile.",
+   "trigger": "the map's tile panel, after the brief",
+   "source": "prototypes/p6/game.js drawStoryMap",
+   "placeholders": [],
+   "shot": "map",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "map.needN",
+   "group": "Endings and screens",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "{n} counted write-offs clear the tile ({count} so far).",
+   "trigger": "the map's tile panel, after the brief",
+   "source": "prototypes/p6/game.js drawStoryMap",
+   "placeholders": [
+    "{count}",
+    "{n}"
+   ],
+   "shot": "map",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "card.sub",
+   "group": "Endings and screens",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Tile {tile}. Level {n} of {total}.",
+   "trigger": "the level card's subtitle",
+   "source": "prototypes/p6/game.js drawLevelCard",
+   "placeholders": [
+    "{n}",
+    "{tile}",
+    "{total}"
+   ],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "pause.story",
+   "group": "Endings and screens",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "The story map saves this tile's count. The body in play is lost.",
+   "trigger": "pause, Story: under Quit to title",
+   "source": "prototypes/p6/game.js drawPause",
+   "placeholders": [],
+   "shot": "pause",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "pause.refuse-locked",
+   "group": "Endings and screens",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Refusal opens after one completed body.",
+   "trigger": "pause, Arcade: before one body",
+   "source": "prototypes/p6/game.js drawPause",
+   "placeholders": [],
+   "shot": "pause",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "pause.refuse",
+   "group": "Endings and screens",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "Refusal is a deliberate ending.",
+   "trigger": "pause, Arcade: Refuse testing",
+   "source": "prototypes/p6/game.js drawPause",
+   "placeholders": [],
+   "shot": "pause",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "end.certified.fallback",
+   "group": "Endings and screens",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "All {total} tiles of the Test City are tested and certified complete.",
+   "trigger": "the CERTIFIED ending, if the story has no ending line",
+   "source": "prototypes/p6/game.js drawEnding",
+   "placeholders": [
+    "{total}"
+   ],
+   "shot": "certified",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "scores.none.arcade",
+   "group": "Endings and screens",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "No scores yet. Play a shift in {district}.",
+   "trigger": "high scores: an empty Arcade table",
+   "source": "prototypes/p6/game.js drawScores",
+   "placeholders": [
+    "{district}"
+   ],
+   "shot": "scores",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "scores.none.story",
+   "group": "Endings and screens",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "No scores yet. A Certified story run sets the first.",
+   "trigger": "high scores: an empty Story table",
+   "source": "prototypes/p6/game.js drawScores",
+   "placeholders": [],
+   "shot": "scores",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "saves.none",
+   "group": "Endings and screens",
+   "speaker": "Interface",
+   "kind": "message",
+   "text": "No story saved here.",
+   "trigger": "save slots: an empty slot",
+   "source": "prototypes/p6/game.js drawSaves",
+   "placeholders": [],
+   "shot": "saves",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "saves.rename",
+   "group": "Endings and screens",
+   "speaker": "Interface",
+   "kind": "message",
+   "text": "Type to replace the name, or OK to keep it.",
+   "trigger": "naming a save",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": "saves",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "saves.full",
+   "group": "Endings and screens",
+   "speaker": "Interface",
+   "kind": "message",
+   "text": "All {n} slots in use: choose one to overwrite",
+   "trigger": "toast: a new game with every slot full",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [
+    "{n}"
+   ],
+   "shot": "saves",
+   "locked": false,
+   "limit": {
+    "words": 20,
+    "sentences": 2
+   }
+  },
+  {
+   "id": "saves.saved",
+   "group": "Feedback",
+   "speaker": "Interface",
+   "kind": "message",
+   "text": "Saved: {name}",
+   "trigger": "toast: a save",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [
+    "{name}"
+   ],
+   "shot": "saves",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "saves.renamed",
+   "group": "Feedback",
+   "speaker": "Interface",
+   "kind": "message",
+   "text": "Renamed: {name}",
+   "trigger": "toast: a rename",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [
+    "{name}"
+   ],
+   "shot": "saves",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "saves.erased",
+   "group": "Feedback",
+   "speaker": "Interface",
+   "kind": "message",
+   "text": "Erased: {name}",
+   "trigger": "toast: a save erased",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [
+    "{name}"
+   ],
+   "shot": "saves",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "ui.01",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "PRESS ANY KEY",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.02",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "TAP TO BEGIN",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.03",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "SELECT A MODE",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.04",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "ARROWS CHOOSE · SPACE SELECT",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.05",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "ARROWS CHOOSE · SPACE SELECT · SHIFT BACK",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.06",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "ARROWS READ A TILE · SPACE DEPLOY · SHIFT BACK",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.07",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "TYPE THE NAME · ENTER OK · BACKSPACE DELETE · ESC CANCEL",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.08",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "SAVED IN THIS BROWSER",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.09",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "STORY · SAVE GAMES",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.10",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "STORY · THE TEST CITY",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.11",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "ARCADE · SELECT A DISTRICT",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.12",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "Quit to title",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.13",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "Retry this district",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.14",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "Choose a district",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.15",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "Play again from district 1",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.16",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "Name this score",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.17",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "Resume",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.18",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "Restart level",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.19",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "Refuse testing",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.20",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "Options",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.21",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "Controls",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.22",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "Show trace",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.23",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "Deploy next chassis",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.24",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "NEW PART FITTED",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.25",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "EVERY PART FITTED",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.26",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "CHOOSE A PART",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.27",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "NOT YET ISSUED",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.28",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "Has noticed you",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.29",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "Route fixed",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.30",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "Slowing",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.31",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "Braking for safety",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.32",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "Already hit you",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.33",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "Blocked, warning you",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.34",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "What you can see",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.35",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "Out of a dash, the jump is free",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.36",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "Tap: pick up a cone. Tap with none in reach: put one down",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.37",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "Hold to put a cone down",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "ui.38",
+   "group": "Interface chrome",
+   "speaker": "Interface",
+   "kind": "chrome",
+   "text": "Up to 12 characters: letters, digits, space, - . '",
+   "trigger": "menus, legends and the cue key",
+   "source": "prototypes/p6/game.js",
+   "placeholders": [],
+   "shot": null,
+   "locked": false,
+   "limit": {}
+  },
+  {
+   "id": "label.any",
+   "group": "Labels",
+   "speaker": "Dummy Corporation",
+   "kind": "label",
+   "text": "ANY WRITE-OFF",
+   "trigger": "the brief's label: the card, the map, the held toast",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "chars": 19
+   }
+  },
+  {
+   "id": "label.dash",
+   "group": "Labels",
+   "speaker": "Dummy Corporation",
+   "kind": "label",
+   "text": "DASH INTO A CAR",
+   "trigger": "the brief's label: the card, the map, the held toast",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "chars": 19
+   }
+  },
+  {
+   "id": "label.drop",
+   "group": "Labels",
+   "speaker": "Dummy Corporation",
+   "kind": "label",
+   "text": "DROP ONTO A CAR",
+   "trigger": "the brief's label: the card, the map, the held toast",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "chars": 19
+   }
+  },
+  {
+   "id": "label.jump",
+   "group": "Labels",
+   "speaker": "Dummy Corporation",
+   "kind": "label",
+   "text": "JUMP INTO A CAR",
+   "trigger": "the brief's label: the card, the map, the held toast",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "chars": 19
+   }
+  },
+  {
+   "id": "label.level",
+   "group": "Labels",
+   "speaker": "Dummy Corporation",
+   "kind": "label",
+   "text": "ON A RAISED ROAD",
+   "trigger": "the brief's label: the card, the map, the held toast",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "chars": 19
+   }
+  },
+  {
+   "id": "label.cone",
+   "group": "Labels",
+   "speaker": "Dummy Corporation",
+   "kind": "label",
+   "text": "CONE-BAITED CAR",
+   "trigger": "the brief's label: the card, the map, the held toast",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "chars": 19
+   }
+  },
+  {
+   "id": "label.push",
+   "group": "Labels",
+   "speaker": "Dummy Corporation",
+   "kind": "label",
+   "text": "PUSH OFF A CAR",
+   "trigger": "the brief's label: the card, the map, the held toast",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "chars": 19
+   }
+  },
+  {
+   "id": "label.bounce",
+   "group": "Labels",
+   "speaker": "Dummy Corporation",
+   "kind": "label",
+   "text": "THROWN INTO A CAR",
+   "trigger": "the brief's label: the card, the map, the held toast",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "chars": 19
+   }
+  },
+  {
+   "id": "label.struck",
+   "group": "Labels",
+   "speaker": "Dummy Corporation",
+   "kind": "label",
+   "text": "STRUCK, NOT DASHING",
+   "trigger": "the brief's label: the card, the map, the held toast",
+   "source": "content/story/story_v2.json",
+   "placeholders": [],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "chars": 19
+   }
+  },
+  {
+   "id": "label.combo",
+   "group": "Labels",
+   "speaker": "Dummy Corporation",
+   "kind": "label",
+   "text": "COMBO ×{n}",
+   "trigger": "the brief's label: the card, the map, the held toast",
+   "source": "content/story/story_v2.json",
+   "placeholders": [
+    "{n}"
+   ],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "chars": 19
+   }
+  },
+  {
+   "id": "label.cls",
+   "group": "Labels",
+   "speaker": "Dummy Corporation",
+   "kind": "label",
+   "text": "A {cls}",
+   "trigger": "the brief's label: the card, the map, the held toast",
+   "source": "content/story/story_v2.json",
+   "placeholders": [
+    "{cls}"
+   ],
+   "shot": "card",
+   "locked": false,
+   "limit": {
+    "chars": 19
+   }
+  }
+ ]
+}

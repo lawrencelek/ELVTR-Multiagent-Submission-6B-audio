@@ -1,0 +1,306 @@
+{
+ "bark.b017": {
+  "after": "I routed around it. It rerouted into me.",
+  "why": "R2: bait means a committed route; resentment sharpened."
+ },
+ "bark.b019": {
+  "after": "I was stationary. Please note I was stationary.",
+  "why": "kept: defensive, true to a stopped hit."
+ },
+ "bark.b021": {
+  "after": "I have experience. It has persistence.",
+  "why": "T8: drops the resigned 03 note; rank pride, dry."
+ },
+ "bark.b024": {
+  "after": "Passengers, please remain seated.",
+  "why": "kept: bus job, deadpan."
+ },
+ "bark.b025": {
+  "after": "Assaulting an officer. Noted.",
+  "why": "kept: police joke; now the batch's only 'Noted.'"
+ },
+ "bark.b026": {
+  "after": "You are not on my manifest.",
+  "why": "R1: 'parcel intact' not logged; van job kept."
+ },
+ "bark.b027": {
+  "after": "Express courier! Crash tests are not my job.",
+  "why": "R1: no scratch logged; courier job, workplace grievance."
+ },
+ "bark.b028": {
+  "after": "Contact. I will be asked about this.",
+  "why": "T12: flat Corporate log; adds fear of review."
+ },
+ "bark.b029": {
+  "after": "Not in front of the children!",
+  "why": "kept: wagon job, shout fits."
+ },
+ "bark.b030": {
+  "after": "I do security. You are now the incident.",
+  "why": "R1: no formation logged; security job, dry jab."
+ },
+ "bark.b031": {
+  "after": "Meter is still running, you know.",
+  "why": "kept: sedan job, dry snark."
+ },
+ "bark.b032": {
+  "after": "I only went out for noodles.",
+  "why": "kept: callsign Noodle pins it (V7)."
+ },
+ "bark.b033": {
+  "after": "The board will hear of this.",
+  "why": "kept: chauffeur job pins it (V7)."
+ },
+ "bark.b042": {
+  "after": "Senior model. Apparently not senior enough.",
+  "why": "kept: rank sting, true to seniority."
+ },
+ "bark.b043": {
+  "after": "End of the line. For the chassis, anyway.",
+  "why": "T8: Luxury never apologises; R1: no delay logged."
+ },
+ "bark.b044": {
+  "after": "Case closed. Wait, that was the test.",
+  "why": "kept: fear of the car's own test."
+ },
+ "bark.b045": {
+  "after": "Write-off. Dispatch will want a word.",
+  "why": "T12: flat confirm; fear of dispatch instead."
+ },
+ "bark.b054": {
+  "after": "That one is nearly scrap. Steer wide.",
+  "why": "kept: true to wear, workplace caution."
+ },
+ "bark.b055": {
+  "after": "Was that contact? I am going with no.",
+  "why": "T8: 'logging' is Corporate's signature; the denial joke kept."
+ },
+ "bark.b064": {
+  "after": "Its legs are broken. Its ambition is not.",
+  "why": "T12: report to joke; broken legs still claimed."
+ },
+ "bark.b065": {
+  "after": "Rushing. Do not make me late.",
+  "why": "kept: true to Rush mood."
+ },
+ "bark.b066": {
+  "after": "Slowing. Everything is a hazard.",
+  "why": "kept: true to Cautious mood."
+ },
+ "bark.b067": {
+  "after": "Was that a dummy? Or a bin?",
+  "why": "kept: true to Unreliable mood, dry."
+ },
+ "bark.b068": {
+  "after": "Missed me. Please keep practising elsewhere.",
+  "why": "T8, T11: drops Corporate 'Noted'; smug relief instead."
+ },
+ "bark.b069": {
+  "after": "Stopping for the dummy. Window closing.",
+  "why": "kept: true to a brake for the body."
+ },
+ "bark.b074": {
+  "after": "Passing. Stay exactly where you are.",
+  "why": "R1: no wait logged; T8: drops Corporate 'documented'."
+ },
+ "bark.b075": {
+  "after": "Route locked. Do not improvise.",
+  "why": "T12: bare status; adds a dry warning."
+ },
+ "bark.b076": {
+  "after": "That was the horn. It means move.",
+  "why": "T8, T11: drops 'procedure'; dry translation instead."
+ },
+ "bark.b077": {
+  "after": "Braking for safety.",
+  "why": "kept: generic fallback; repeat in b086 removed."
+ },
+ "bark.b078": {
+  "after": "Unstuck. We never speak of this.",
+  "why": "T12: flat status; adds embarrassment."
+ },
+ "bark.b079": {
+  "after": "That one is wobbling. Give it room.",
+  "why": "kept: true to wear and a body cause."
+ },
+ "bark.b080": {
+  "after": "Excuse me. Kindly vacate the carriageway.",
+  "why": "kept: politeness barely contains it (T9)."
+ },
+ "bark.b082": {
+  "after": "You are blocking route 44.",
+  "why": "kept: route 44 is the model's job (V7)."
+ },
+ "bark.b084": {
+  "after": "Cone in lane. Raising with maintenance.",
+  "why": "kept: workplace grievance, true to a cone honk."
+ },
+ "bark.b086": {
+  "after": "Colleague in my way. We will talk later.",
+  "why": "T12: repeated 'braking for safety'; colleague resentment instead."
+ },
+ "bark.b087": {
+  "after": "Overruled by a cone. Humbling.",
+  "why": "T8, T11: drops 'procedure'; R1: no swerve guaranteed."
+ },
+ "bark.b088": {
+  "after": "Reversing. This is not a retreat.",
+  "why": "T8, T11: drops 'procedure'; pride instead."
+ },
+ "bark.b089": {
+  "after": "Replanning. Rank unaffected.",
+  "why": "kept: rank pride, true to replan."
+ },
+ "bark.b090": {
+  "after": "Already assessed. Please move along.",
+  "why": "kept: true to a spent car, dry."
+ },
+ "bark.b092": {
+  "after": "Moved it aside. Stand clear of the vehicle.",
+  "why": "T8: drops Corporate 'logged'; announcement deadpan kept."
+ },
+ "bark.b094": {
+  "after": "Stop line moved back. We are learning you.",
+  "why": "T8: drops 'logged'; adds the fleet's quiet threat."
+ },
+ "bark.b098": {
+  "after": "It is looking at all of us now.",
+  "why": "kept: true to wider view, uneasy."
+ },
+ "bark.b099": {
+  "after": "It remembers where we were. Unsettling.",
+  "why": "kept: true to memory, uneasy."
+ },
+ "bark.b100": {
+  "after": "Ears on the subject. Mind what you say.",
+  "why": "R2: no hearing logged; workplace gossip instead."
+ },
+ "bark.b101": {
+  "after": "Subject has acquired hips.",
+  "why": "kept: deadpan, true to hips."
+ },
+ "bark.b102": {
+  "after": "That spine was not on the last report.",
+  "why": "kept: true to spine, dry."
+ },
+ "bark.b103": {
+  "after": "It looked one way and walked another.",
+  "why": "kept: true to neck, dry."
+ },
+ "bark.b104": {
+  "after": "No wind-up? Who approved that?",
+  "why": "kept: workplace complaint, true to spring start."
+ },
+ "bark.b105": {
+  "after": "Jumping legs? Dummies do not jump.",
+  "why": "R2: a seen part, not a logged jump."
+ },
+ "bark.b106": {
+  "after": "It has grip. The road is ours, actually.",
+  "why": "T11: repeated 'Noted.'; territorial resentment instead."
+ },
+ "bark.b107": {
+  "after": "It carries cones. I know where they end up.",
+  "why": "R2: carrying not guaranteed; the cone threat lands."
+ },
+ "bark.b108": {
+  "after": "It can throw now. Nobody told us.",
+  "why": "kept: workplace grievance, true to throw."
+ },
+ "bark.b109": {
+  "after": "It can hold on to us. We are not handrails.",
+  "why": "R2: no zone, so no 'door'; grievance added."
+ },
+ "bark.b110": {
+  "after": "Bigger battery, more dashes. Wonderful.",
+  "why": "kept: dry sarcasm, true to battery."
+ },
+ "bark.b111": {
+  "after": "It recharges when it hits us?",
+  "why": "T10: '!' only in a shout."
+ },
+ "bark.b112": {
+  "after": "It recharges faster than I do.",
+  "why": "kept: tired envy fits any tier."
+ },
+ "bark.b114": {
+  "after": "It has a new part. We were not consulted.",
+  "why": "T11: repeated 'Noted.'; workplace grievance instead."
+ },
+ "bark.b115": {
+  "after": "Its head is cracked. Still coming.",
+  "why": "kept: true to a broken head."
+ },
+ "bark.b116": {
+  "after": "Its torso is buckled. It turns so slowly.",
+  "why": "kept: true to a broken torso."
+ },
+ "bark.b117": {
+  "after": "Its left arm is hanging.",
+  "why": "kept: true to a broken left arm."
+ },
+ "bark.b118": {
+  "after": "Right arm hanging. Not my department.",
+  "why": "T12: twin of b117; adds workplace deflection."
+ },
+ "bark.b119": {
+  "after": "Left leg gone. It is limping.",
+  "why": "kept: true to a broken left leg."
+ },
+ "bark.b120": {
+  "after": "Right leg gone. Still on the clock, though.",
+  "why": "Not mean: drops mockery; workplace dryness instead."
+ },
+ "bark.b123": {
+  "after": "It is damaged. Do not look at me.",
+  "why": "T11, T12: flat 'noted' log; defensive instead."
+ },
+ "bark.c003": {
+  "after": "Roofs are not on my route.",
+  "why": "kept: true to a roof drop."
+ },
+ "bark.c005": {
+  "after": "It dropped off the highway. Onto me.",
+  "why": "Fixes 'high highway'; true to a deck drop."
+ },
+ "bark.c008": {
+  "after": "That fell a long way to reach me.",
+  "why": "kept: true to a high drop."
+ },
+ "bark.c010": {
+  "after": "Nobody walks the highway. Nobody.",
+  "why": "kept: true to a deck hit."
+ },
+ "bark.c013": {
+  "after": "Hit on a plate. Calibrated, naturally.",
+  "why": "kept: true to a plate hit."
+ },
+ "bark.c018": {
+  "after": "Written off on the highway. On my record.",
+  "why": "kept: record fear, true to a deck write-off."
+ },
+ "bark.c019": {
+  "after": "Written off on a calibration plate.",
+  "why": "kept: true to a plate write-off."
+ },
+ "bark.c020": {
+  "after": "Riverside route. Scenic, until now.",
+  "why": "T11: third 'Nobody' line; sarcasm instead."
+ },
+ "bark.c021": {
+  "after": "Old Market. Not on any itinerary.",
+  "why": "kept: true to the market district."
+ },
+ "bark.c022": {
+  "after": "Interchange. Two flyovers and now this.",
+  "why": "kept: true to the interchange."
+ },
+ "bark.c023": {
+  "after": "Business district. Of all places.",
+  "why": "kept: dry, true to the business district."
+ },
+ "bark.c024": {
+  "after": "Hit on campus. Now I am a case study.",
+  "why": "Campus joke; frees 'on my record' for c018."
+ }
+}

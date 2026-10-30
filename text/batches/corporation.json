@@ -1,0 +1,1198 @@
+[
+ {
+  "id": "story.act.monument",
+  "text": "Dummy Corporation welcomes you off the factory floor. The cars are your colleagues; Certification is your goal.",
+  "trigger": "ACT I · INDUCTION: the act line, on the district's first card and the map",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "story.tale.monument.A1",
+  "text": "Fresh off the factory floor, you're ready to do some damage to yourself. Make your engineers proud.",
+  "trigger": "Monument A1 · The welcome wall: the tile card's tale",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "minWords": 15,
+   "sentences": 2
+  },
+  "locked": true,
+  "tile": "Monument A1",
+  "task": "any"
+ },
+ {
+  "id": "story.tale.monument.B1",
+  "text": "Battery 1 is fitted. The skybridge was built for shoppers who never came; staff watch you dash into a colleague.",
+  "trigger": "Monument B1 · The podium bridge: the tile card's tale",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "minWords": 15,
+   "sentences": 2
+  },
+  "locked": false,
+  "tile": "Monument B1",
+  "task": "dash"
+ },
+ {
+  "id": "story.tale.monument.C1",
+  "text": "The LED drum lights each bend. Step off the high road onto a car: gravity is company policy.",
+  "trigger": "Monument C1 · The LED drum: the tile card's tale",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "minWords": 15,
+   "sentences": 2
+  },
+  "locked": false,
+  "tile": "Monument C1",
+  "task": "drop"
+ },
+ {
+  "id": "story.tale.monument.C2",
+  "text": "The road runs through the portal tower at the sixth floor. Take your write-off up there; ignore the view.",
+  "trigger": "Monument C2 · The portal tower: the tile card's tale",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "minWords": 15,
+   "sentences": 2
+  },
+  "locked": false,
+  "tile": "Monument C2",
+  "task": "level"
+ },
+ {
+  "id": "story.tale.monument.B2",
+  "text": "The plaque reads ZERO ACCIDENTS: a target, not a record. Stand near it until a colleague finds you.",
+  "trigger": "Monument B2 · The monument: the tile card's tale",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "minWords": 15,
+   "sentences": 2
+  },
+  "locked": false,
+  "tile": "Monument B2",
+  "task": "struck"
+ },
+ {
+  "id": "story.tale.monument.A2",
+  "text": "The neon shops sell nothing, but the traffic reads them. Hands 1 is fitted: bait a colleague with a cone.",
+  "trigger": "Monument A2 · The neon shops: the tile card's tale",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "minWords": 15,
+   "sentences": 2
+  },
+  "locked": false,
+  "tile": "Monument A2",
+  "task": "cone"
+ },
+ {
+  "id": "story.tale.monument.A3",
+  "text": "The stacked cubes rose one budget at a time. Build the same way: one hit, then another, quickly.",
+  "trigger": "Monument A3 · The stacked cubes: the tile card's tale",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "minWords": 15,
+   "sentences": 2
+  },
+  "locked": false,
+  "tile": "Monument A3",
+  "task": "combo"
+ },
+ {
+  "id": "story.tale.monument.B3",
+  "text": "Two screens advertise to each other all night. Legs 1 is fitted: jump into a car between them.",
+  "trigger": "Monument B3 · The LED canyon: the tile card's tale",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "minWords": 15,
+   "sentences": 2
+  },
+  "locked": false,
+  "tile": "Monument B3",
+  "task": "jump"
+ },
+ {
+  "id": "story.tale.monument.C3",
+  "text": "The gateway thanked the car that wrote you off for driving safely. Let one colleague throw you into the next.",
+  "trigger": "Monument C3 · The LED gateway: the tile card's tale",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "minWords": 15,
+   "sentences": 2
+  },
+  "locked": false,
+  "tile": "Monument C3",
+  "task": "bounce"
+ },
+ {
+  "id": "story.act.parkland",
+  "text": "The Expo opens to clients when this park passes. Your training keeps them safe.",
+  "trigger": "ACT II · OPENING DAY: the act line, on the district's first card and the map",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "story.tale.parkland.C1",
+  "text": "The lantern, the Expo's first exhibit, is lit for clients. With Arms 1, push off one car into the next.",
+  "trigger": "Parkland C1 · The lantern pavilion: the tile card's tale",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "minWords": 15,
+   "sentences": 2
+  },
+  "locked": false,
+  "tile": "Parkland C1",
+  "task": "push"
+ },
+ {
+  "id": "story.tale.parkland.C2",
+  "text": "Our board watches opening day from these terraces. A van delivers the catering; arrange for it to deliver you.",
+  "trigger": "Parkland C2 · The amphitheatre: the tile card's tale",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "minWords": 15,
+   "sentences": 2
+  },
+  "locked": false,
+  "tile": "Parkland C2",
+  "task": "cls"
+ },
+ {
+  "id": "story.tale.parkland.C3",
+  "text": "The arch is the Expo's gate; visitors circle the roundabout once. You go faster: chain hits before each is forgotten.",
+  "trigger": "Parkland C3 · The arch and the roundabout: the tile card's tale",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "minWords": 15,
+   "sentences": 2
+  },
+  "locked": false,
+  "tile": "Parkland C3",
+  "task": "combo"
+ },
+ {
+  "id": "story.tale.parkland.B3",
+  "text": "The obelisk marks the surveyors' first stake. Police escort a school party here on opening day; test them first.",
+  "trigger": "Parkland B3 · The obelisk court: the tile card's tale",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "minWords": 15,
+   "sentences": 2
+  },
+  "locked": false,
+  "tile": "Parkland B3",
+  "task": "cls"
+ },
+ {
+  "id": "story.tale.parkland.A3",
+  "text": "A wedding faces the traffic from the belvedere. Legs 2 is fitted: jump into a car, so no guest does.",
+  "trigger": "Parkland A3 · The belvedere: the tile card's tale",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "minWords": 15,
+   "sentences": 2
+  },
+  "locked": false,
+  "tile": "Parkland A3",
+  "task": "jump"
+ },
+ {
+  "id": "story.tale.parkland.A2",
+  "text": "The dome is the Expo's showroom; you are the exhibit. Hands 2 is fitted: bait a car with a cone.",
+  "trigger": "Parkland A2 · The dome by the canal: the tile card's tale",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "minWords": 15,
+   "sentences": 2
+  },
+  "locked": false,
+  "tile": "Parkland A2",
+  "task": "cone"
+ },
+ {
+  "id": "story.tale.parkland.A1",
+  "text": "The gardener's pools need cars that stop. Teach them with Arms 2: push off one car into the next.",
+  "trigger": "Parkland A1 · The reservoir terraces: the tile card's tale",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "minWords": 15,
+   "sentences": 2
+  },
+  "locked": false,
+  "tile": "Parkland A1",
+  "task": "push"
+ },
+ {
+  "id": "story.tale.parkland.B1",
+  "text": "The cascade was built to drown out the traffic. The traffic got louder; take your hit up on the highway.",
+  "trigger": "Parkland B1 · The cascade: the tile card's tale",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "minWords": 15,
+   "sentences": 2
+  },
+  "locked": false,
+  "tile": "Parkland B1",
+  "task": "level"
+ },
+ {
+  "id": "story.tale.parkland.B2",
+  "text": "The board watches the ring over the pools. Battery 2 is fitted: chain your hits.",
+  "trigger": "Parkland B2 · The ring over the pools: the tile card's tale",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "minWords": 15,
+   "sentences": 2
+  },
+  "locked": false,
+  "tile": "Parkland B2",
+  "task": "combo"
+ },
+ {
+  "id": "story.act.waterfront",
+  "text": "Certified dummies ship across the river, to be sacrificed in service to our clients. Your papers are being prepared.",
+  "trigger": "ACT III · CUSTOMS: the act line, on the district's first card and the map",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "story.tale.waterfront.A1",
+  "text": "The bus carries engineers through the west portal to the bridge. It never misses; take its hit.",
+  "trigger": "Waterfront A1 · The west portal: the tile card's tale",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "minWords": 15,
+   "sentences": 2
+  },
+  "locked": false,
+  "tile": "Waterfront A1",
+  "task": "cls"
+ },
+ {
+  "id": "story.tale.waterfront.B1",
+  "text": "Cars go into the tunnel under the hill, and data comes back. Legs 3 is fitted: leap into one.",
+  "trigger": "Waterfront B1 · The tunnel portal: the tile card's tale",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "minWords": 15,
+   "sentences": 2
+  },
+  "locked": false,
+  "tile": "Waterfront B1",
+  "task": "jump"
+ },
+ {
+  "id": "story.tale.waterfront.C1",
+  "text": "The east portal faces away from its twin. Police here check papers; your Certification needs their fleet on record.",
+  "trigger": "Waterfront C1 · The east portal: the tile card's tale",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "minWords": 15,
+   "sentences": 2
+  },
+  "locked": false,
+  "tile": "Waterfront C1",
+  "task": "cls"
+ },
+ {
+  "id": "story.tale.waterfront.C2",
+  "text": "The east beach terrace served tourists, then sensors. Drop from its rail onto a car; ships wait for the Certified.",
+  "trigger": "Waterfront C2 · The east beach terrace: the tile card's tale",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "minWords": 15,
+   "sentences": 2
+  },
+  "locked": false,
+  "tile": "Waterfront C2",
+  "task": "drop"
+ },
+ {
+  "id": "story.tale.waterfront.C3",
+  "text": "The pier tower logs all that floats: containers, ducks, one dummy. Be thrown into a car to earn your entry.",
+  "trigger": "Waterfront C3 · The east customs post: the tile card's tale",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "minWords": 15,
+   "sentences": 2
+  },
+  "locked": false,
+  "tile": "Waterfront C3",
+  "task": "bounce"
+ },
+ {
+  "id": "story.tale.waterfront.B3",
+  "text": "The stilt houses keep Chassis 0 behind glass. Arms 3 is fitted; push off a car and show it progress.",
+  "trigger": "Waterfront B3 · The stilt houses: the tile card's tale",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "minWords": 15,
+   "sentences": 2
+  },
+  "locked": false,
+  "tile": "Waterfront B3",
+  "task": "push"
+ },
+ {
+  "id": "story.tale.waterfront.A3",
+  "text": "The west tower keeps the customs log. Your entry reads PURPOSE DESTRUCTION: honour it on the raised road.",
+  "trigger": "Waterfront A3 · The west customs post: the tile card's tale",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "minWords": 15,
+   "sentences": 2
+  },
+  "locked": false,
+  "tile": "Waterfront A3",
+  "task": "level"
+ },
+ {
+  "id": "story.tale.waterfront.A2",
+  "text": "Sand from three provinces lies under the west beach terrace. Place a cone; one more clean reading before the ceremony.",
+  "trigger": "Waterfront A2 · The west beach terrace: the tile card's tale",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "minWords": 15,
+   "sentences": 2
+  },
+  "locked": false,
+  "tile": "Waterfront A2",
+  "task": "cone"
+ },
+ {
+  "id": "story.tale.waterfront.B2",
+  "text": "The circus monument, cast from your written-off chassis, reads ZERO ACCIDENTS (EXCLUDING TESTS). Battery 3 is fitted; chain your hits.",
+  "trigger": "Waterfront B2 · The circus: the tile card's tale",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "minWords": 15,
+   "sentences": 2
+  },
+  "locked": false,
+  "tile": "Waterfront B2",
+  "task": "combo"
+ },
+ {
+  "id": "story.brief.any",
+  "text": "Walk into the path of the incoming vehicles. Time your approach, and choose your angle carefully. Bonus points for combinations and lethal hits.",
+  "trigger": "the brief 'any': the level card, the map's tile panel",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": true,
+  "label": "ANY WRITE-OFF"
+ },
+ {
+  "id": "story.brief.dash",
+  "text": "Dash into a car. The final hit must be the dash.",
+  "trigger": "the brief 'dash': the level card, the map's tile panel",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false,
+  "label": "DASH INTO A CAR"
+ },
+ {
+  "id": "story.brief.drop",
+  "text": "Drop onto a car from above. The final hit must be that drop.",
+  "trigger": "the brief 'drop': the level card, the map's tile panel",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false,
+  "label": "DROP ONTO A CAR"
+ },
+ {
+  "id": "story.brief.jump",
+  "text": "Jump into a car. The jump must be the final hit.",
+  "trigger": "the brief 'jump': the level card, the map's tile panel",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false,
+  "label": "JUMP INTO A CAR"
+ },
+ {
+  "id": "story.brief.level",
+  "text": "Climb to a raised road. The final hit must land up there, not on the street.",
+  "trigger": "the brief 'level': the level card, the map's tile panel",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false,
+  "label": "ON A RAISED ROAD"
+ },
+ {
+  "id": "story.brief.cone",
+  "text": "Place a cone. The final hit must come from a car reacting to it.",
+  "trigger": "the brief 'cone': the level card, the map's tile panel",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false,
+  "label": "CONE-BAITED CAR"
+ },
+ {
+  "id": "story.brief.push",
+  "text": "Push off one car. The final hit must be the next car.",
+  "trigger": "the brief 'push': the level card, the map's tile panel",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false,
+  "label": "PUSH OFF A CAR"
+ },
+ {
+  "id": "story.brief.bounce",
+  "text": "Let one car throw you into another. Take the final hit while a hit is still throwing you.",
+  "trigger": "the brief 'bounce': the level card, the map's tile panel",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false,
+  "label": "THROWN INTO A CAR"
+ },
+ {
+  "id": "story.brief.struck",
+  "text": "Walk or stand in the traffic. A car must deliver the final hit while you are not dashing.",
+  "trigger": "the brief 'struck': the level card, the map's tile panel",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false,
+  "label": "STRUCK, NOT DASHING"
+ },
+ {
+  "id": "story.brief.combo",
+  "text": "Chain your hits into a combo. The final hit must be link {n} or later.",
+  "trigger": "the brief 'combo': the level card, the map's tile panel",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "placeholders": [
+   "{n}"
+  ],
+  "locked": false,
+  "label": "COMBO ×{n}"
+ },
+ {
+  "id": "story.brief.cls",
+  "text": "Step in front of the {clsLong}. The final hit must come from a {cls}.",
+  "trigger": "the brief 'cls': the level card, the map's tile panel",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "placeholders": [
+   "{clsLong}",
+   "{cls}"
+  ],
+  "locked": false,
+  "label": "A {cls}"
+ },
+ {
+  "id": "story.ending",
+  "text": "Your model has passed and will be manufactured for our clients. A Corporation drone carries you to the ship.",
+  "trigger": "CERTIFIED: the ending at the ship",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "notice.n01",
+  "text": "You are a Dummy Corporation trainee. Every write-off brings Certification closer.",
+  "trigger": "the intro screen's line (Arcade)",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "notice.n02",
+  "text": "Welcome, trainee. Every write-off brings Certification closer.",
+  "trigger": "the title line",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "notice.n03",
+  "text": "Get your Dummy Certification in Shenzhen Smart City and learn about the Corporation.",
+  "trigger": "the STORY card on the mode select",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": true
+ },
+ {
+  "id": "notice.n04",
+  "text": "TRAINING BRIEF",
+  "trigger": "a label",
+  "speaker": "Dummy Corporation",
+  "kind": "label",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "notice.n05",
+  "text": "TRAINING BRIEF · {LABEL}",
+  "trigger": "a label",
+  "speaker": "Dummy Corporation",
+  "kind": "label",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "placeholders": [
+   "{LABEL}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "notice.n06",
+  "text": "CORPORATION DRONE",
+  "trigger": "a label",
+  "speaker": "Dummy Corporation",
+  "kind": "label",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "notice.n07",
+  "text": "CORPORATION DRONE · DELIVERING {PART}",
+  "trigger": "toast: a drone delivers a part",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "placeholders": [
+   "{PART}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "notice.n08",
+  "text": "CORPORATION DRONE · {PART} ON BOARD · THEN {TILE}",
+  "trigger": "toast: the ferry, with a part on board",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "placeholders": [
+   "{PART}",
+   "{TILE}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "notice.n09",
+  "text": "CORPORATION DRONE · CARRYING YOU TO {TILE}",
+  "trigger": "toast: the ferry",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "placeholders": [
+   "{TILE}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "notice.n10",
+  "text": "CORPORATION DRONE · INCOMING",
+  "trigger": "the drone label, incoming",
+  "speaker": "Dummy Corporation",
+  "kind": "label",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "notice.n11",
+  "text": "CORPORATION GIFT · +{N} CREDITS",
+  "trigger": "toast: a tile's credit gift",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "placeholders": [
+   "{N}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "notice.n12",
+  "text": "NEXT FROM THE CORPORATION",
+  "trigger": "the report: the next part's heading",
+  "speaker": "Dummy Corporation",
+  "kind": "label",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "notice.n13",
+  "text": "A Corporation drone brings this part.",
+  "trigger": "the workshop: a part not yet issued",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "notice.n14",
+  "text": "A Corporation drone brings this part. Keep training.",
+  "trigger": "the workshop: a part not yet issued, with a nudge",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "notice.n15",
+  "text": "A Corporation drone brings that part",
+  "trigger": "toast: buying a part the drone brings",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "notice.n16",
+  "text": "A Corporation drone brings it",
+  "trigger": "controls: a verb not yet fitted",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "notice.n17",
+  "text": "Corporation drone dispatched: chassis in the river",
+  "trigger": "toast: a drone rescues the chassis from the river",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "notice.n18",
+  "text": "Corporation drone dispatched. Obstruction will be relocated.",
+  "trigger": "toast: a drone clears a cone",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "notice.n19",
+  "text": "Corporation drone: chassis recovered from the river",
+  "trigger": "toast: the chassis recovered from the river",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "notice.n20",
+  "text": "Training complete. The Corporation thanks you for your service.",
+  "trigger": "the ending: Licensed",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "notice.n21",
+  "text": "Traffic exhausted. Training incomplete; report to the bay.",
+  "trigger": "the ending: Failed test",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "notice.n22",
+  "text": "DUMMY CORPORATION",
+  "trigger": "a label",
+  "speaker": "Dummy Corporation",
+  "kind": "label",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "notice.n23",
+  "text": "DUMMY CORP",
+  "trigger": "a label",
+  "speaker": "Dummy Corporation",
+  "kind": "label",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "notice.n24",
+  "text": "Neon shops, LED walls; one road splits round the monument under the walkway ring. Your training begins here.",
+  "trigger": "Monument: the district blurb",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "notice.n25",
+  "text": "Water and concrete; a boulevard passes under the raised ring. Your write-offs open the Expo to clients.",
+  "trigger": "Parkland: the district blurb",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "notice.n26",
+  "text": "A hill walled by towers; bridges cross the drive and the river. Certified dummies ship across it to clients.",
+  "trigger": "Waterfront: the district blurb",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "notice.n27",
+  "text": "Calibration Campus",
+  "trigger": "a label",
+  "speaker": "Dummy Corporation",
+  "kind": "label",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "notice.n28",
+  "text": "Towers and barriers. Corporation Tower stands over your training.",
+  "trigger": "the CBD blurb (district not in play)",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "notice.n29",
+  "text": "The test centre the city was modelled on. Hits on its impact plates count for more.",
+  "trigger": "the Campus blurb (district not in play)",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "notice.n30",
+  "text": "Two flyovers cross it, one above the other. Corporation Tower stands at the centre; towers shade your training.",
+  "trigger": "the CBD intro (district not in play)",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "notice.n31",
+  "text": "Impact plates mark the road at the centre. A write-off on a plate counts for more.",
+  "trigger": "the Campus intro (district not in play)",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "notice.n32",
+  "text": "Corporation Tower Plaza",
+  "trigger": "a label",
+  "speaker": "Dummy Corporation",
+  "kind": "label",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "notice.n33",
+  "text": "Corporation Tower",
+  "trigger": "a label",
+  "speaker": "Dummy Corporation",
+  "kind": "label",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "notice.n34",
+  "text": "Get hit in fun, creative, and destructive ways before the vehicles run out.",
+  "trigger": "the ARCADE card on the mode select",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": true
+ },
+ {
+  "id": "notice.n35",
+  "text": "GRADE {G} · TOUGHER CHASSIS · DENSER TRAFFIC",
+  "trigger": "toast: Arcade's grade rises",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "placeholders": [
+   "{G}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "notice.n36",
+  "text": "Self-driving cars are designed never to hit anyone. Your training: get hit, in combos, and earn your parts.",
+  "trigger": "the intro screen's line",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "notice.n37",
+  "text": "Write off bodies; every {Q} write-offs, the grade rises. Keep training until the vehicles run out.",
+  "trigger": "Arcade's district card",
+  "speaker": "Dummy Corporation",
+  "kind": "message",
+  "limit": {
+   "words": 20,
+   "sentences": 2
+  },
+  "placeholders": [
+   "{Q}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "label.any",
+  "text": "ANY WRITE-OFF",
+  "trigger": "the brief's label: the card, the map, the held toast",
+  "speaker": "Dummy Corporation",
+  "kind": "label",
+  "limit": {
+   "chars": 19
+  },
+  "locked": false
+ },
+ {
+  "id": "label.dash",
+  "text": "DASH INTO A CAR",
+  "trigger": "the brief's label: the card, the map, the held toast",
+  "speaker": "Dummy Corporation",
+  "kind": "label",
+  "limit": {
+   "chars": 19
+  },
+  "locked": false
+ },
+ {
+  "id": "label.drop",
+  "text": "DROP ONTO A CAR",
+  "trigger": "the brief's label: the card, the map, the held toast",
+  "speaker": "Dummy Corporation",
+  "kind": "label",
+  "limit": {
+   "chars": 19
+  },
+  "locked": false
+ },
+ {
+  "id": "label.jump",
+  "text": "JUMP INTO A CAR",
+  "trigger": "the brief's label: the card, the map, the held toast",
+  "speaker": "Dummy Corporation",
+  "kind": "label",
+  "limit": {
+   "chars": 19
+  },
+  "locked": false
+ },
+ {
+  "id": "label.level",
+  "text": "ON A RAISED ROAD",
+  "trigger": "the brief's label: the card, the map, the held toast",
+  "speaker": "Dummy Corporation",
+  "kind": "label",
+  "limit": {
+   "chars": 19
+  },
+  "locked": false
+ },
+ {
+  "id": "label.cone",
+  "text": "CONE-BAITED CAR",
+  "trigger": "the brief's label: the card, the map, the held toast",
+  "speaker": "Dummy Corporation",
+  "kind": "label",
+  "limit": {
+   "chars": 19
+  },
+  "locked": false
+ },
+ {
+  "id": "label.push",
+  "text": "PUSH OFF A CAR",
+  "trigger": "the brief's label: the card, the map, the held toast",
+  "speaker": "Dummy Corporation",
+  "kind": "label",
+  "limit": {
+   "chars": 19
+  },
+  "locked": false
+ },
+ {
+  "id": "label.bounce",
+  "text": "THROWN INTO A CAR",
+  "trigger": "the brief's label: the card, the map, the held toast",
+  "speaker": "Dummy Corporation",
+  "kind": "label",
+  "limit": {
+   "chars": 19
+  },
+  "locked": false
+ },
+ {
+  "id": "label.struck",
+  "text": "STRUCK, NOT DASHING",
+  "trigger": "the brief's label: the card, the map, the held toast",
+  "speaker": "Dummy Corporation",
+  "kind": "label",
+  "limit": {
+   "chars": 19
+  },
+  "locked": false
+ },
+ {
+  "id": "label.combo",
+  "text": "COMBO ×{n}",
+  "trigger": "the brief's label: the card, the map, the held toast",
+  "speaker": "Dummy Corporation",
+  "kind": "label",
+  "limit": {
+   "chars": 19
+  },
+  "placeholders": [
+   "{n}"
+  ],
+  "locked": false
+ },
+ {
+  "id": "label.cls",
+  "text": "A {cls}",
+  "trigger": "the brief's label: the card, the map, the held toast",
+  "speaker": "Dummy Corporation",
+  "kind": "label",
+  "limit": {
+   "chars": 19
+  },
+  "placeholders": [
+   "{cls}"
+  ],
+  "locked": false
+ }
+]

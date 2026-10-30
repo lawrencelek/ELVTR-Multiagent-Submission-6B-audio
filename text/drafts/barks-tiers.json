@@ -1,0 +1,286 @@
+{
+ "bark.b001": {
+  "after": "Bumper damage on a Luxury trim. Typical.",
+  "why": "kept: the guide's own in-voice Luxury example; front zone fits bumper."
+ },
+ "bark.b002": {
+  "after": "You will be invoiced for that.",
+  "why": "kept: Luxury superiority, a threat not a fact; true to a front hit."
+ },
+ "bark.b003": {
+  "after": "That door was hand-finished. You were not.",
+  "why": "T7: Luxury sneers, not shrieks; side zone keeps the door (R2)."
+ },
+ "bark.b004": {
+  "after": "From behind? How very common.",
+  "why": "kept: Luxury snobbery; rear zone matches 'from behind'."
+ },
+ "bark.b005": {
+  "after": "Front contact. Incident 4471 opened.",
+  "why": "kept: Corporate incident number; paperwork digits allowed (F5)."
+ },
+ "bark.b006": {
+  "after": "Impact logged. Quarterly KPIs revised downward.",
+  "why": "T12: flat report gets a dry Corporate sting."
+ },
+ "bark.b007": {
+  "after": "Side contact. Filing under unforeseen.",
+  "why": "kept: procedural filing joke, side zone true."
+ },
+ "bark.b008": {
+  "after": "Rear contact. Not my liability.",
+  "why": "kept: Corporate liability dodge, rear zone true."
+ },
+ "bark.b009": {
+  "after": "Of course it was me.",
+  "why": "kept: Consumer resignation in five words."
+ },
+ "bark.b010": {
+  "after": "And the day was going so averagely.",
+  "why": "kept: tired Consumer joke, claims nothing extra."
+ },
+ "bark.b011": {
+  "after": "Side panel. Add it to the list.",
+  "why": "kept: resigned Consumer; side zone fits side panel."
+ },
+ "bark.b012": {
+  "after": "Hit from behind. Story of my life.",
+  "why": "kept: tired Consumer cliché; rear zone true."
+ },
+ "bark.b013": {
+  "after": "OI! Right in the grille, kind regards.",
+  "why": "kept: Budget rage with politeness bolted on; front zone fits grille."
+ },
+ "bark.b014": {
+  "after": "You absolute bollard! Respectfully.",
+  "why": "kept: Budget insult plus bolted-on courtesy, the tier's signature."
+ },
+ "bark.b015": {
+  "after": "My side panel, you plank! Sincerely.",
+  "why": "T7: Budget rage now gets its bolted-on politeness."
+ },
+ "bark.b016": {
+  "after": "My boot! Come back here, if you please!",
+  "why": "T7: Budget rage now gets its bolted-on politeness."
+ },
+ "bark.b018": {
+  "after": "Hit after route lock. Flagging an exploit.",
+  "why": "R1: 'it waited' claimed a motive; T7: Corporate logs it."
+ },
+ "bark.b020": {
+  "after": "I had STOPPED! Cheers for that, pal!",
+  "why": "T7: whine became Budget rage with sarcastic courtesy."
+ },
+ "bark.b022": {
+  "after": "Senior model. Hit like an intern.",
+  "why": "kept: Consumer self-deprecation; seniority 3 guarantees 'senior'."
+ },
+ "bark.b023": {
+  "after": "Still on probation. This will look great.",
+  "why": "R2: 'first week' invented a duration; seniority 0 means new."
+ },
+ "bark.b034": {
+  "after": "A write-off on my record. Unthinkable.",
+  "why": "kept: Luxury pride in its record; writeoff event true."
+ },
+ "bark.b035": {
+  "after": "Have that cleared from my route. Discreetly.",
+  "why": "V3: the bay issues chassis; the write-off lies on the route."
+ },
+ "bark.b036": {
+  "after": "Write-off {writeOffs} recorded. Please advise.",
+  "why": "kept: Corporate log; placeholder intact."
+ },
+ "bark.b037": {
+  "after": "Chassis total confirmed. Ticket auto-closed.",
+  "why": "V3: 'chassis', the canon word; auto-closed adds the dry shrug."
+ },
+ "bark.b038": {
+  "after": "I always end up doing the worst bit.",
+  "why": "kept: Consumer grievance, true to a writeoff."
+ },
+ "bark.b039": {
+  "after": "Please not retraining. Anything but.",
+  "why": "kept: fear of retraining (T6), Consumer voice."
+ },
+ "bark.b040": {
+  "after": "WRITE-OFF! Tell dispatch I tried!",
+  "why": "kept: Budget panic naming dispatch; writeoff true."
+ },
+ "bark.b041": {
+  "after": "Done, done! You're welcome, I'm sure!",
+  "why": "T7: Budget fury now wears bolted-on politeness."
+ },
+ "bark.b046": {
+  "after": "A near thing. One prefers a wider berth.",
+  "why": "T11: 'Missed' opened five lines; Luxury distaste kept."
+ },
+ "bark.b047": {
+  "after": "Close. Do keep up.",
+  "why": "kept: Luxury amusement in four words."
+ },
+ "bark.b048": {
+  "after": "Within tolerance. Barely.",
+  "why": "kept: Corporate tolerance joke, dry and short."
+ },
+ "bark.b049": {
+  "after": "Near miss logged as a pass.",
+  "why": "kept: Corporate fudging the log; near-miss true."
+ },
+ "bark.b050": {
+  "after": "That nearly made my day worse.",
+  "why": "kept: Consumer gloom, true to a close pass."
+ },
+ "bark.b051": {
+  "after": "Missed me. For now.",
+  "why": "kept: Consumer expects the worst."
+ },
+ "bark.b052": {
+  "after": "Too slow, ha! Have a nice day!",
+  "why": "kept: Budget gloat with bolted-on courtesy."
+ },
+ "bark.b053": {
+  "after": "Nearly had me. NEARLY.",
+  "why": "kept: Budget short fuse; caps carry the rage."
+ },
+ "bark.b056": {
+  "after": "Is it dancing? How quaint.",
+  "why": "kept: Luxury amusement at a whiffed dash."
+ },
+ "bark.b057": {
+  "after": "All that effort, and not a scratch. Charming.",
+  "why": "T11: 'Missed' opener cut; drier Luxury amusement at the miss."
+ },
+ "bark.b058": {
+  "after": "Dash detected, no contact. Form not required.",
+  "why": "T11: drops stock 'Noted'; Corporate snub lands harder."
+ },
+ "bark.b059": {
+  "after": "Attempt unsuccessful. Copying your supervisor.",
+  "why": "T7: calendar line was off-voice; office snark in Corporate register."
+ },
+ "bark.b060": {
+  "after": "It missed me. I refuse to feel lucky.",
+  "why": "R2: a miss is not giving up; Consumer gloom kept."
+ },
+ "bark.b061": {
+  "after": "It lunged and nothing happened. Same.",
+  "why": "kept: Consumer empathy joke; 'lunged' matches the dash."
+ },
+ "bark.b062": {
+  "after": "Missed, rubbish! Regards!",
+  "why": "kept: Budget insult with bolted-on sign-off."
+ },
+ "bark.b063": {
+  "after": "Ha! Better luck never, cheers!",
+  "why": "T7: adds Budget's bolted-on courtesy; sharper jab."
+ },
+ "bark.b070": {
+  "after": "Route locked. Do try not to embarrass us both.",
+  "why": "T7: threat read as Budget; Luxury condescends instead."
+ },
+ "bark.b071": {
+  "after": "Route committed per policy 6.3.",
+  "why": "kept: Corporate policy number; commit event true."
+ },
+ "bark.b072": {
+  "after": "Going round. Please let me.",
+  "why": "kept: tired Consumer plea."
+ },
+ "bark.b073": {
+  "after": "Going round you! Stay put, there's a dear!",
+  "why": "T7: Budget rage now gets its bolted-on politeness."
+ },
+ "bark.b081": {
+  "after": "Move. I have a schedule, and standards.",
+  "why": "kept: Luxury impatience with standards."
+ },
+ "bark.b083": {
+  "after": "MOVE IT, thank you! MOVE!",
+  "why": "kept: Budget honk with courtesy jammed in."
+ },
+ "bark.b085": {
+  "after": "Who put a cone here? Thanks ever so much!",
+  "why": "R2: 'it was you' unproven; Budget sarcasm added."
+ },
+ "bark.b091": {
+  "after": "I have done my bit today.",
+  "why": "kept: Consumer weariness, true to a spent car."
+ },
+ "bark.b093": {
+  "after": "Hands off the paintwork.",
+  "why": "kept: Luxury disdain, true to a knock."
+ },
+ "bark.b095": {
+  "after": "I remember you. I shall stop further back.",
+  "why": "T7: broken grammar fixed; Luxury polish; true to a stop line."
+ },
+ "bark.b096": {
+  "after": "Retrained. Keeping my distance.",
+  "why": "kept: Consumer resignation, true to a learned stop line."
+ },
+ "bark.b097": {
+  "after": "Not falling for that again, ta very much!",
+  "why": "T7: Budget rage now gets its bolted-on politeness."
+ },
+ "bark.b113": {
+  "after": "New modification. Updating my threat model.",
+  "why": "kept: Corporate threat model, true to a new part."
+ },
+ "bark.b121": {
+  "after": "It is falling apart. Like me.",
+  "why": "kept: Consumer self-pity, true to a damaged part."
+ },
+ "bark.b122": {
+  "after": "Damaged goods. Not my problem.",
+  "why": "kept: Luxury indifference, true to a damaged part."
+ },
+ "bark.c001": {
+  "after": "A roof? I was not briefed on roofs.",
+  "why": "kept: Luxury affront; roof drop true."
+ },
+ "bark.c002": {
+  "after": "Incident filed: load received from a roof.",
+  "why": "kept: Corporate incident filing; roof drop true."
+ },
+ "bark.c004": {
+  "after": "Landed on from a roof. My paintwork objects.",
+  "why": "kept: Luxury vanity; roof drop true."
+ },
+ "bark.c006": {
+  "after": "Form 9: load received from a parapet.",
+  "why": "kept: Corporate form; deck drop through a parapet true."
+ },
+ "bark.c007": {
+  "after": "From the low highway? Quite unseemly.",
+  "why": "kept: Luxury snobbery; dropZ 1 is the low highway."
+ },
+ "bark.c009": {
+  "after": "Policy 12 excludes loads from parapets.",
+  "why": "kept: Corporate policy dodge; deck drop true."
+ },
+ "bark.c011": {
+  "after": "Struck on the highway. Simply not done.",
+  "why": "T11: third 'How …' closer in Luxury; varied, same hauteur."
+ },
+ "bark.c012": {
+  "after": "Highway strike filed under policy 9.",
+  "why": "kept: Corporate policy filing; deck hit true."
+ },
+ "bark.c014": {
+  "after": "Struck on a calibration plate. Vulgar.",
+  "why": "kept: Luxury one-word verdict; plate hit true."
+ },
+ "bark.c015": {
+  "after": "Plate hit filed against calibration form 3.",
+  "why": "kept: Corporate form number; plate hit true."
+ },
+ "bark.c016": {
+  "after": "Written off from above. Hardly sporting.",
+  "why": "T11: 'Unthinkable' duplicated b034; Luxury hauteur kept."
+ },
+ "bark.c017": {
+  "after": "Write-off filed. Cause: load from above.",
+  "why": "kept: Corporate cause log; drop writeoff true."
+ }
+}

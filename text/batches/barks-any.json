@@ -1,0 +1,1142 @@
+[
+ {
+  "id": "bark.b017",
+  "text": "It left my path, then came back. Rude.",
+  "trigger": "the car hits the dummy (bait True)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "style": "thought",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b019",
+  "text": "I was stationary. Please note I was stationary.",
+  "trigger": "the car hits the dummy (stopped True)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b021",
+  "text": "I was trained for this. It happened anyway.",
+  "trigger": "the car hits the dummy (seniority {'min': 2})",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "style": "thought",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b024",
+  "text": "Passengers, please remain seated.",
+  "trigger": "the car hits the dummy (class bus)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b025",
+  "text": "Assaulting an officer. Noted.",
+  "trigger": "the car hits the dummy (class police)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "style": "shout",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b026",
+  "text": "Parcel intact. Nerves are not.",
+  "trigger": "the car hits the dummy (class van)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b027",
+  "text": "You scratched the clear coat!",
+  "trigger": "the car hits the dummy (class sports)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "style": "shout",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b028",
+  "text": "Contact registered.",
+  "trigger": "the car hits the dummy",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b029",
+  "text": "Not in front of the children!",
+  "trigger": "the car hits the dummy (class wagon)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "style": "shout",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b030",
+  "text": "Escort formation broken. Regrouping.",
+  "trigger": "the car hits the dummy (class suv)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b031",
+  "text": "Meter is still running, you know.",
+  "trigger": "the car hits the dummy (class sedan)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b032",
+  "text": "I only went out for noodles.",
+  "trigger": "the car hits the dummy (model HAT-03-001)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b033",
+  "text": "The board will hear of this.",
+  "trigger": "the car hits the dummy (model SED-01-001)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b042",
+  "text": "Senior model. Apparently not senior enough.",
+  "trigger": "the car writes the chassis off (seniority {'min': 3})",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "writeoff",
+  "style": "thought",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b043",
+  "text": "This service apologises for the delay.",
+  "trigger": "the car writes the chassis off (class bus)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "writeoff",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b044",
+  "text": "Case closed. Wait, that was the test.",
+  "trigger": "the car writes the chassis off (class police)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "writeoff",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b045",
+  "text": "Write-off confirmed.",
+  "trigger": "the car writes the chassis off",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "writeoff",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b054",
+  "text": "That one is nearly scrap. Steer wide.",
+  "trigger": "the car passes close (wear {'min': 0.7})",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "near-miss",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b055",
+  "text": "Was that a collision? Logging it as not.",
+  "trigger": "the car passes close",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "near-miss",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b064",
+  "text": "Its legs have gone. It cannot reach.",
+  "trigger": "a dash misses the car (broken legs)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "miss",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b065",
+  "text": "Rushing. Do not make me late.",
+  "trigger": "the car fixes its route around the dummy (mood Rush)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "commit",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b066",
+  "text": "Slowing. Everything is a hazard.",
+  "trigger": "the car fixes its route around the dummy (mood Cautious)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "commit",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b067",
+  "text": "Was that a dummy? Or a bin?",
+  "trigger": "the car passes close (mood Unreliable)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "near-miss",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b068",
+  "text": "Missed. Noted for my record.",
+  "trigger": "a dash misses the car",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "miss",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b069",
+  "text": "Stopping for the dummy. Window closing.",
+  "trigger": "the car fixes its route around the dummy (cause body, man brake)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "commit",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b074",
+  "text": "Passing, after waiting. Patience documented.",
+  "trigger": "the car fixes its route around the dummy (cause pass)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "commit",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b075",
+  "text": "Route locked.",
+  "trigger": "the car fixes its route around the dummy",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "commit",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b076",
+  "text": "Horn sounded, per procedure.",
+  "trigger": "the car honks at the dummy",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "honk",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b077",
+  "text": "Braking for safety.",
+  "trigger": "the car's route is interrupted",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "interrupt",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b078",
+  "text": "Recovering route.",
+  "trigger": "the car unsticks itself",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "unstick",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b079",
+  "text": "That one is wobbling. Give it room.",
+  "trigger": "the car fixes its route around the dummy (cause body, wear {'min': 0.7})",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "commit",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b080",
+  "text": "Excuse me. Kindly vacate the carriageway.",
+  "trigger": "the car honks at the dummy (at body)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "honk",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b082",
+  "text": "You are blocking route 44.",
+  "trigger": "the car honks at the dummy (at body, model VAN-02-001)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "honk",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b084",
+  "text": "Cone in lane. Raising with maintenance.",
+  "trigger": "the car honks at the dummy (at cone)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "honk",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b086",
+  "text": "Another vehicle. Braking for safety.",
+  "trigger": "the car's route is interrupted (by car)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "interrupt",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b087",
+  "text": "Swerve halted by a cone. Procedure holds.",
+  "trigger": "the car's route is interrupted (by cone)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "interrupt",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b088",
+  "text": "Reversing. This is within procedure.",
+  "trigger": "the car unsticks itself (how reverse)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "unstick",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b089",
+  "text": "Replanning. Rank unaffected.",
+  "trigger": "the car unsticks itself (how replan)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "unstick",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b090",
+  "text": "Already assessed. Please move along.",
+  "trigger": "the dummy touches a car that already hit it",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "touch-spent",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b092",
+  "text": "Contact logged. Stand clear of the vehicle.",
+  "trigger": "the car knocks the dummy aside",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "knock",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b094",
+  "text": "Stop line moved back. Lesson logged.",
+  "trigger": "the car's model learns a stop line",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "learned",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b098",
+  "text": "It is looking at all of us now.",
+  "trigger": "the car sees a new part on the chassis (node widerView)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "upgrade-seen",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b099",
+  "text": "It remembers where we were. Unsettling.",
+  "trigger": "the car sees a new part on the chassis (node memory)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "upgrade-seen",
+  "style": "thought",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b100",
+  "text": "It heard me coming. It has ears.",
+  "trigger": "the car sees a new part on the chassis (node ears)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "upgrade-seen",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b101",
+  "text": "Subject has acquired hips.",
+  "trigger": "the car sees a new part on the chassis (node hips)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "upgrade-seen",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b102",
+  "text": "That spine was not on the last report.",
+  "trigger": "the car sees a new part on the chassis (node spine)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "upgrade-seen",
+  "style": "thought",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b103",
+  "text": "It looked one way and walked another.",
+  "trigger": "the car sees a new part on the chassis (node neck)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "upgrade-seen",
+  "style": "thought",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b104",
+  "text": "No wind-up? Who approved that?",
+  "trigger": "the car sees a new part on the chassis (node springStart)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "upgrade-seen",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b105",
+  "text": "It jumped. Dummies do not jump.",
+  "trigger": "the car sees a new part on the chassis (node jump)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "upgrade-seen",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b106",
+  "text": "It is not sliding any more. Noted.",
+  "trigger": "the car sees a new part on the chassis (node grip)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "upgrade-seen",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b107",
+  "text": "It is carrying something. Approved?",
+  "trigger": "the car sees a new part on the chassis (node carry)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "upgrade-seen",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b108",
+  "text": "It can throw now. Nobody told us.",
+  "trigger": "the car sees a new part on the chassis (node throw)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "upgrade-seen",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b109",
+  "text": "Is it holding on to my door?",
+  "trigger": "the car sees a new part on the chassis (node holdOn)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "upgrade-seen",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b110",
+  "text": "Bigger battery, more dashes. Wonderful.",
+  "trigger": "the car sees a new part on the chassis (node bigBattery)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "upgrade-seen",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b111",
+  "text": "It recharges when it hits us?!",
+  "trigger": "the car sees a new part on the chassis (node kineticCharge)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "upgrade-seen",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b112",
+  "text": "It recharges faster than I do.",
+  "trigger": "the car sees a new part on the chassis (node fastCharge)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "upgrade-seen",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b114",
+  "text": "The subject has changed. Noted.",
+  "trigger": "the car sees a new part on the chassis",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "upgrade-seen",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b115",
+  "text": "Its head is cracked. Still coming.",
+  "trigger": "the car sees a damaged part (part head)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "part-seen",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b116",
+  "text": "Its torso is buckled. It turns so slowly.",
+  "trigger": "the car sees a damaged part (part torso)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "part-seen",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b117",
+  "text": "Its left arm is hanging.",
+  "trigger": "the car sees a damaged part (part armL)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "part-seen",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b118",
+  "text": "Its right arm is hanging.",
+  "trigger": "the car sees a damaged part (part armR)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "part-seen",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b119",
+  "text": "Left leg gone. It is limping.",
+  "trigger": "the car sees a damaged part (part legL)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "part-seen",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b120",
+  "text": "Right leg gone. Look at it hobble.",
+  "trigger": "the car sees a damaged part (part legR)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "part-seen",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.b123",
+  "text": "Subject damage noted.",
+  "trigger": "the car sees a damaged part",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "part-seen",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.c003",
+  "text": "Roofs are not on my route.",
+  "trigger": "the car hits the dummy (drop True, dropFrom roof, dropZ 2)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.c005",
+  "text": "That came off the high highway.",
+  "trigger": "the car hits the dummy (drop True, dropFrom deck, dropZ 2)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.c008",
+  "text": "That fell a long way to reach me.",
+  "trigger": "the car hits the dummy (drop True, dropZ 2)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.c010",
+  "text": "Nobody walks the highway. Nobody.",
+  "trigger": "the car hits the dummy (deck True)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.c013",
+  "text": "Hit on a plate. Calibrated, naturally.",
+  "trigger": "the car hits the dummy (plate True)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.c018",
+  "text": "Written off on the highway. On my record.",
+  "trigger": "the car writes the chassis off (deck True)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "writeoff",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.c019",
+  "text": "Written off on a calibration plate.",
+  "trigger": "the car writes the chassis off (plate True)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "writeoff",
+  "style": "speech",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.c020",
+  "text": "Riverside route. Nobody mentioned this.",
+  "trigger": "the car hits the dummy (district riverside)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.c021",
+  "text": "Old Market. Not on any itinerary.",
+  "trigger": "the car hits the dummy (district market)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.c022",
+  "text": "Interchange. Two flyovers and now this.",
+  "trigger": "the car hits the dummy (district interchange)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.c023",
+  "text": "Business district. Of all places.",
+  "trigger": "the car hits the dummy (district cbd)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ },
+ {
+  "id": "bark.c024",
+  "text": "Hit on campus. That goes on my record.",
+  "trigger": "the car hits the dummy (district campus)",
+  "speaker": "Cars",
+  "kind": "bark",
+  "event": "impact",
+  "style": "mutter",
+  "voice": "Any tier: no single tier's signature (T8)",
+  "limit": {
+   "chars": 48,
+   "sentences": 2
+  },
+  "locked": false
+ }
+]
