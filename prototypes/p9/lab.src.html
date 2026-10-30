@@ -1,0 +1,740 @@
+<title>DUMMIES Sound Lab</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=B612:wght@400;700&family=B612+Mono:wght@400;700&family=Nunito:wght@800;900&display=swap">
+<style>
+/* Layout: a sound-test cabinet. One sticky console bar (mix, picks, play the game); below it, four rooms: Music, Effects,
+   Sequences, Library, and the Tour (every step of the scripted walk, its screenshot and the cues it fired). The game's own
+   faces: B612 for the interface, B612 Mono for IDs and figures, Nunito Black for the wordmark. Safety yellow is the dummy's
+   colour and the one call to action; aqua is the Corporation's interface. */
+:root {
+  --bg: #E6F1F6; --panel: #F7FBFD; --panel-2: #DCEBF2; --ink: #0F1518; --ink-2: #4A5A66; --line: #B9C7CF;
+  --aqua: #1A7FA5; --aqua-soft: #CFE9F3; --dummy: #F5C542; --dummy-ink: #1A1D1F; --cone: #D9650B; --warn: #C8392B; --ok: #1F8A5B;
+  --t1: #C99A12; --t2: #1A7FA5; --t3: #B83C9C; --t4: #2E8F55; --t5: #C8601C; --t6: #6B54C9;
+  --shadow: 0 1px 0 rgba(16, 40, 56, 0.06), 0 6px 18px rgba(16, 40, 56, 0.08);
+  --f-ui: "B612", "Segoe UI", system-ui, sans-serif; --f-mono: "B612 Mono", ui-monospace, Menlo, Consolas, monospace; --f-brand: "Nunito", "Segoe UI", system-ui, sans-serif;
+  --r: 10px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #070A12; --panel: #0F1626; --panel-2: #152038; --ink: #E7F0F5; --ink-2: #93A9B9; --line: #24314C;
+  --aqua: #4FC3E8; --aqua-soft: #12324A; --dummy: #F5C542; --dummy-ink: #15130B; --cone: #FF8A1F; --warn: #FF6A5A; --ok: #4FD39A;
+  --t1: #F5C542; --t2: #4FC3E8; --t3: #F06BD6; --t4: #5FD68F; --t5: #FF9A4A; --t6: #A493FF;
+  --shadow: 0 1px 0 rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35); color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #070A12; --panel: #0F1626; --panel-2: #152038; --ink: #E7F0F5; --ink-2: #93A9B9; --line: #24314C;
+  --aqua: #4FC3E8; --aqua-soft: #12324A; --dummy: #F5C542; --dummy-ink: #15130B; --cone: #FF8A1F; --warn: #FF6A5A; --ok: #4FD39A;
+  --t1: #F5C542; --t2: #4FC3E8; --t3: #F06BD6; --t4: #5FD68F; --t5: #FF9A4A; --t6: #A493FF;
+  --shadow: 0 1px 0 rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35); color-scheme: dark; }
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.5 var(--f-ui); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--panel); }
+button, select, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--aqua); outline-offset: 2px; }
+code, .mono { font-family: var(--f-mono); font-size: 12px; }
+h1, h2, h3, h4 { margin: 0; text-wrap: balance; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* the console bar */
+.console { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--panel); border-bottom: 1px solid var(--line); box-shadow: var(--shadow); }
+.console .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; padding-block: 10px; }
+.brand { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
+.brand b { font: 900 26px/1 var(--f-brand); color: var(--dummy); -webkit-text-stroke: 1px var(--dummy-ink); paint-order: stroke fill; letter-spacing: 0.01em; }
+.brand span { font: 700 12px/1 var(--f-mono); letter-spacing: 0.18em; color: var(--ink-2); text-transform: uppercase; }
+.mix { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-left: auto; }
+.fader { display: flex; align-items: center; gap: 6px; font: 700 11px/1 var(--f-mono); letter-spacing: 0.12em; color: var(--ink-2); }
+.fader input { width: 96px; accent-color: var(--aqua); }
+.fader output { width: 2ch; text-align: right; color: var(--ink); font-variant-numeric: tabular-nums; }
+.btn { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 6px 12px; font-size: 13px; line-height: 1.2; text-decoration: none; color: var(--ink); white-space: nowrap; }
+.btn:hover { border-color: var(--aqua); }
+.btn.primary { background: var(--dummy); color: var(--dummy-ink); border-color: var(--dummy-ink); font-weight: 700; }
+.btn.quiet { background: transparent; }
+.btn.on { background: var(--aqua-soft); border-color: var(--aqua); }
+.btn.danger { color: var(--warn); }
+.btn small { font-family: var(--f-mono); font-size: 11px; opacity: 0.75; }
+.play { width: 28px; height: 28px; padding: 0; justify-content: center; border-radius: 50%; flex: none; }
+.play svg { width: 11px; height: 11px; fill: currentColor; }
+.now { display: flex; align-items: center; gap: 8px; font: 12px var(--f-mono); color: var(--ink-2); min-width: 0; }
+.now i { width: 9px; height: 9px; border-radius: 50%; background: var(--line); flex: none; }
+.now.live i { background: var(--ok); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 25%, transparent); }
+.badge { font: 700 11px/1 var(--f-mono); padding: 4px 8px; border-radius: 999px; background: var(--cone); color: #fff; }
+.badge[hidden] { display: none; }
+.tabs { display: flex; gap: 4px; overflow-x: auto; padding-block: 0 8px; scrollbar-width: thin; }
+.tabs a { font: 700 12px/1 var(--f-mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-2); text-decoration: none; padding: 9px 12px; border-radius: 8px; white-space: nowrap; }
+.tabs a[aria-current="page"] { background: var(--aqua-soft); color: var(--ink); }
+
+main { padding-block: 22px 60px; }
+.room { display: grid; gap: 22px; }
+.room[hidden] { display: none; }
+.lede { display: grid; gap: 6px; max-width: 72ch; }
+.lede h2 { font: 900 28px/1.1 var(--f-brand); letter-spacing: 0.01em; }
+.lede p { margin: 0; color: var(--ink-2); }
+h3 { font: 700 12px/1 var(--f-mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-2); }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); }
+.pill { display: inline-flex; align-items: center; font: 700 10.5px/1 var(--f-mono); letter-spacing: 0.06em; padding: 4px 7px; border-radius: 999px; border: 1px solid var(--line); color: var(--ink-2); white-space: nowrap; }
+.pill.high { border-color: var(--warn); color: var(--warn); }
+.pill.medium { border-color: var(--aqua); color: var(--aqua); }
+.pill.changed { background: var(--cone); border-color: var(--cone); color: #fff; }
+.pill.dec-silence { background: var(--panel-2); }
+.pill.dec-synth { border-style: dashed; }
+.track-dot { display: inline-block; width: 10px; height: 10px; border-radius: 3px; vertical-align: -1px; }
+
+/* music */
+.tracks { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+.track { display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; align-items: center; padding: 10px 12px; }
+.track h4 { font-size: 14px; display: flex; gap: 8px; align-items: center; min-width: 0; }
+.track h4 span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.track p { grid-column: 2; margin: 0; font: 11.5px/1.4 var(--f-mono); color: var(--ink-2); }
+.states { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+.state { display: grid; grid-template-rows: auto 1fr; overflow: hidden; }
+.state .shot { aspect-ratio: 1280 / 760; }
+.state .in { display: grid; gap: 8px; padding: 10px 12px 12px; align-content: start; }
+.state h4 { font-size: 15px; }
+.state p { margin: 0; font-size: 12.5px; color: var(--ink-2); }
+.state .why { font-size: 12px; font-style: italic; }
+.state .ctl { display: flex; gap: 8px; align-items: center; }
+.state select, .knob select, .tool select, .tool input[type="search"] { min-width: 0; border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 5px 8px; }
+.state select { flex: 1; }
+.shot { display: block; width: 100%; padding: 0; border: 0; background: var(--panel-2); cursor: zoom-in; position: relative; overflow: hidden; }
+.shot img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.shot .none { display: grid; place-items: center; height: 100%; font: 11px var(--f-mono); color: var(--ink-2); }
+.rot { display: grid; gap: 14px; padding: 14px; }
+.rot-slots { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.rot-slots label { display: flex; align-items: center; gap: 6px; font: 11px var(--f-mono); color: var(--ink-2); }
+.rot-slots select { border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 5px 8px; }
+.tilemap { display: grid; gap: 10px; }
+.district { display: grid; grid-template-columns: 150px 1fr; gap: 10px; align-items: center; }
+.district b { font-size: 13px; }
+.district small { display: block; font: 10.5px var(--f-mono); color: var(--ink-2); letter-spacing: 0.06em; }
+.tiles { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 4px; }
+.tile { border-radius: 6px; padding: 5px 4px; font: 700 11px/1.15 var(--f-mono); color: #fff; text-align: center; min-width: 0; border: 0; }
+.tile small { display: block; font-weight: 400; opacity: 0.9; }
+.runs { display: flex; flex-wrap: wrap; gap: 6px; font: 11px var(--f-mono); color: var(--ink-2); align-items: center; }
+.runs span { padding: 4px 7px; border-radius: 6px; color: #fff; }
+.mixer { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px 18px; padding: 14px; }
+.param { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; align-items: center; }
+.param label { font-size: 12.5px; }
+.param output { font: 12px var(--f-mono); font-variant-numeric: tabular-nums; }
+.param input { grid-column: 1 / -1; width: 100%; accent-color: var(--aqua); }
+.param code { grid-column: 1 / -1; color: var(--ink-2); font-size: 10.5px; }
+
+/* effects */
+.tool { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.tool input[type="search"] { flex: 1 1 220px; padding: 7px 10px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 4px 10px; font-size: 12px; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--panel); border-color: var(--ink); }
+.group { display: grid; gap: 10px; }
+.group > header { display: flex; align-items: baseline; gap: 10px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+.group > header h3 { color: var(--ink); }
+.group > header span { font: 11px var(--f-mono); color: var(--ink-2); }
+.cue { display: grid; grid-template-columns: 220px minmax(0, 1fr); overflow: hidden; }
+.cue.variant { margin-left: 28px; grid-template-columns: 170px minmax(0, 1fr); background: color-mix(in srgb, var(--panel) 70%, var(--panel-2)); }
+.cue .shot { aspect-ratio: 1280 / 760; align-self: start; margin: 10px 0 10px 10px; border-radius: 6px; width: calc(100% - 10px); }
+.cue .body { display: grid; gap: 8px; padding: 10px 14px 12px; min-width: 0; }
+.cue header { display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; }
+.cue h4 { font-size: 15px; margin-right: 2px; }
+.cue code { color: var(--ink-2); }
+.cue .what { margin: 0; color: var(--ink-2); font-size: 13px; }
+.cue .when { font: 11px var(--f-mono); color: var(--aqua); }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; flex-wrap: wrap; }
+.seg button { border: 0; background: transparent; padding: 5px 10px; font-size: 12.5px; border-right: 1px solid var(--line); }
+.seg button:last-child { border-right: 0; }
+.seg button[aria-pressed="true"] { background: var(--aqua); color: var(--panel); }
+.files { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.file { display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--line); border-radius: 999px; padding: 2px 4px 2px 2px; background: var(--panel-2); font: 12px var(--f-mono); max-width: 100%; }
+.file .play { width: 24px; height: 24px; border: 0; background: var(--panel); }
+.file span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.file .x { border: 0; background: transparent; width: 22px; height: 22px; border-radius: 50%; color: var(--ink-2); padding: 0; }
+.file .x:hover { color: var(--warn); }
+.file.hot { border-color: var(--ok); box-shadow: 0 0 0 2px color-mix(in srgb, var(--ok) 30%, transparent); }
+.knobs { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; font-size: 12.5px; color: var(--ink-2); }
+.knob { display: flex; align-items: center; gap: 6px; }
+.knob input[type="range"] { width: 120px; accent-color: var(--aqua); }
+.knob output { font: 12px var(--f-mono); color: var(--ink); width: 6ch; font-variant-numeric: tabular-nums; }
+.why { margin: 0; font-size: 12.5px; color: var(--ink-2); }
+.why b { font-weight: 700; color: var(--ink); font-style: normal; }
+.cue footer { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.note { font-size: 12px; color: var(--ink-2); }
+.empty { padding: 24px; text-align: center; color: var(--ink-2); }
+
+/* sequences, library, tour */
+.seqs { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+.seq { display: grid; grid-template-rows: auto 1fr; overflow: hidden; }
+.seq .shot { aspect-ratio: 1280 / 760; }
+.seq .in { display: grid; gap: 8px; padding: 10px 12px 12px; align-content: start; }
+.seq ol { margin: 0; padding: 0; list-style: none; display: grid; gap: 3px; font: 12px var(--f-mono); }
+.seq li { display: grid; grid-template-columns: 4.2ch 1fr; gap: 8px; color: var(--ink-2); border-radius: 4px; padding: 1px 4px; }
+.seq li.lit { background: var(--aqua-soft); color: var(--ink); }
+.seq li b { font-weight: 400; color: var(--ink); }
+.fam { display: grid; gap: 6px; }
+.lib { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 6px 14px; }
+.lrow { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 8px; align-items: center; padding: 5px 8px; border-radius: 8px; }
+.lrow:hover { background: var(--panel); }
+.lrow .n { font: 12.5px var(--f-mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lrow .bar { height: 4px; border-radius: 2px; background: var(--aqua); opacity: 0.6; margin-top: 3px; }
+.lrow .meta { font: 11px var(--f-mono); color: var(--ink-2); text-align: right; white-space: nowrap; }
+.lrow .used { grid-column: 2 / -1; display: flex; flex-wrap: wrap; gap: 4px; }
+.lrow .used a { font: 10.5px var(--f-mono); color: var(--aqua); text-decoration: none; }
+.tour { display: grid; gap: 10px; }
+.step { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 0; overflow: hidden; }
+.step.noshot { grid-template-columns: 1fr; }
+.step .shot { aspect-ratio: 1280 / 760; }
+.step .in { display: grid; gap: 6px; padding: 10px 14px; align-content: start; }
+.step h4 { font-size: 14px; display: flex; gap: 8px; align-items: baseline; }
+.step h4 span { font: 11px var(--f-mono); color: var(--ink-2); }
+.step .heard { display: flex; flex-wrap: wrap; gap: 6px; }
+.hear { display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--line); border-radius: 999px; padding: 2px 9px 2px 3px; background: var(--panel-2); font: 11.5px var(--f-mono); }
+.hear .play { width: 22px; height: 22px; border: 0; background: var(--panel); }
+.hear.music { border-color: var(--aqua); }
+
+dialog { border: 1px solid var(--line); border-radius: 14px; background: var(--panel); color: var(--ink); padding: 0; width: min(760px, calc(100vw - 32px)); max-height: min(86vh, 900px); box-shadow: var(--shadow); }
+dialog::backdrop { background: rgba(5, 8, 15, 0.55); }
+dialog .dh { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: var(--panel); z-index: 1; }
+dialog .dh h3 { color: var(--ink); flex: 1; }
+dialog .db { padding: 12px 16px 16px; display: grid; gap: 12px; }
+dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); font: 12px/1.45 var(--f-mono); padding: 10px; resize: vertical; }
+#shotdlg { width: min(1100px, calc(100vw - 32px)); }
+#shotdlg img { display: block; width: 100%; height: auto; }
+.pick-list { display: grid; gap: 2px; }
+.pick-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; gap: 8px; align-items: center; padding: 4px 6px; border-radius: 8px; }
+.pick-row:hover { background: var(--panel-2); }
+.pick-row .n { font: 12.5px var(--f-mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pick-row .n small { color: var(--ink-2); margin-left: 6px; }
+.pick-row .star { color: var(--t1); }
+.toast { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--panel); padding: 8px 14px; border-radius: 999px; font-size: 13px; z-index: 40; max-width: calc(100vw - 32px); box-shadow: var(--shadow); }
+.toast[hidden] { display: none; }
+
+@media (max-width: 760px) {
+  .cue, .cue.variant { grid-template-columns: 1fr; margin-left: 0; }
+  .cue .shot { margin: 0; width: 100%; border-radius: 0; }
+  .console { position: static; }
+  .cue.variant { border-left: 4px solid var(--aqua); }
+  .step { grid-template-columns: 1fr; }
+  .district { grid-template-columns: 1fr; }
+  .tiles { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .mix { margin-left: 0; }
+  .fader input { width: 80px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="console">
+  <div class="wrap">
+    <div class="brand"><b>DUMMIES</b><span>Sound Lab · P9</span></div>
+    <div class="now" id="now" aria-live="polite"><i></i><span>Press any play button. Audio starts on your first click.</span></div>
+    <div class="mix">
+      <label class="fader" for="vol-music">MUSIC <input id="vol-music" type="range" min="0" max="10" step="1"><output id="vol-music-o"></output></label>
+      <label class="fader" for="vol-sound">SOUND <input id="vol-sound" type="range" min="0" max="10" step="1"><output id="vol-sound-o"></output></label>
+      <button class="btn quiet" id="btn-mute" type="button" aria-pressed="false">Mute</button>
+      <button class="btn quiet" id="btn-bed" type="button" aria-pressed="false" title="Play the level track under the effects you audition">Music bed</button>
+      <button class="btn quiet" id="btn-stop" type="button">Stop all</button>
+    </div>
+  </div>
+  <div class="wrap" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-block:0 8px">
+    <nav class="tabs" aria-label="Rooms" id="tabs">
+      <a href="#effects">Effects</a><a href="#music">Music</a><a href="#sequences">Sequences</a><a href="#tour">Tour</a><a href="#library">Library</a>
+    </nav>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-left:auto;align-items:center">
+      <span class="badge" id="changes" hidden></span>
+      <a class="btn primary" id="btn-game" href="dummies_p9.html" target="_blank" rel="noopener">▶ Play the game with these picks</a>
+      <button class="btn" id="btn-export" type="button">Export picks</button>
+      <button class="btn" id="btn-import" type="button">Import</button>
+      <button class="btn danger" id="btn-reset" type="button">Reset to the designed map</button>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+  <section class="room" id="room-effects" data-room="effects">
+    <div class="lede">
+      <h2>Effects</h2>
+      <p id="fx-lede">Every point in the game where a sound can play, with a screenshot of the moment. Swap files, change the weight, or set a cue to silence. Picks save in this browser, and the game reads them when you open it from the button above.</p>
+    </div>
+    <div class="tool">
+      <input type="search" id="fx-search" placeholder="Search events or files: impact, hurt, drone…" aria-label="Search events or files">
+      <select id="fx-prio" aria-label="Priority"><option value="">Every priority</option><option value="high">High only</option><option value="medium">Medium and high</option></select>
+      <select id="fx-dec" aria-label="Decision"><option value="">Every decision</option><option value="cue">Cues</option><option value="silence">Silences</option><option value="synth">8.4 synth</option><option value="base">Variants on their base</option></select>
+      <button class="chip" id="fx-changed" type="button" aria-pressed="false">Changed only</button>
+    </div>
+    <div class="chips" id="fx-groups" aria-label="Groups"></div>
+    <div id="fx-list" class="room"></div>
+  </section>
+
+  <section class="room" id="room-music" data-room="music" hidden>
+    <div class="lede">
+      <h2>Music</h2>
+      <p>Track 1 on the intro, Track 2 from the menus until a level starts, Tracks 3 to 6 alternating between levels and maps. Change any screen's track, reorder the rotation, and hear it with the crossfade the game uses.</p>
+    </div>
+    <h3>The six tracks</h3>
+    <div class="tracks" id="mu-tracks"></div>
+    <h3>By screen</h3>
+    <div class="states" id="mu-states"></div>
+    <h3>Levels and maps</h3>
+    <div class="panel rot" id="mu-rot"></div>
+    <h3>Mix</h3>
+    <div class="panel mixer" id="mu-mix"></div>
+  </section>
+
+  <section class="room" id="room-sequences" data-room="sequences" hidden>
+    <div class="lede">
+      <h2>Sequences</h2>
+      <p>Moments from play, timed as the game fires them, over the music that plays there. Each uses your current picks, so a swap on the Effects page is heard here at once.</p>
+    </div>
+    <div class="seqs" id="seq-list"></div>
+  </section>
+
+  <section class="room" id="room-tour" data-room="tour" hidden>
+    <div class="lede">
+      <h2>Tour</h2>
+      <p id="tour-lede">A scripted walk through Prototype 9, step by step: the screen, the music state, and every cue the audio engine logged on the way. The ▶ beside a cue plays your current pick for it.</p>
+    </div>
+    <div class="tour" id="tour-list"></div>
+  </section>
+
+  <section class="room" id="room-library" data-room="library" hidden>
+    <div class="lede">
+      <h2>Library</h2>
+      <p>All 100 effects in the pack, by family. The bar is the length; the level is what the game plays after its loudness trim. Links jump to the cues that use a file.</p>
+    </div>
+    <div id="lib-list" class="room"></div>
+  </section>
+</main>
+
+<dialog id="pickdlg" aria-labelledby="pick-h">
+  <div class="dh"><h3 id="pick-h">Choose a file</h3><button class="btn quiet" type="button" data-close>Close</button></div>
+  <div class="db">
+    <input type="search" id="pick-search" placeholder="Filter files" aria-label="Filter files" style="border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:7px 10px">
+    <div id="pick-body"></div>
+  </div>
+</dialog>
+<dialog id="iodlg" aria-labelledby="io-h">
+  <div class="dh"><h3 id="io-h">Picks</h3><button class="btn quiet" type="button" data-close>Close</button></div>
+  <div class="db" id="io-body"></div>
+</dialog>
+<dialog id="shotdlg" aria-label="Screenshot">
+  <div class="dh"><h3 id="shot-h">Screenshot</h3><button class="btn quiet" type="button" data-close>Close</button></div>
+  <img id="shot-img" alt="">
+</dialog>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>/*LAB_DATA*/</script>
+<script>
+(() => {
+  'use strict';
+  const L = window.LAB, KEY = 'dummies.p9.audio.lab', VKEY = 'dummies.p9.audio';
+  const $ = (s, r) => (r || document).querySelector(s), $$ = (s, r) => [...(r || document).querySelectorAll(s)];
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const store = {
+    get(k) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch (e) { return null; } },
+    set(k, v) { try { if (v == null) localStorage.removeItem(k); else localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* storage off: picks last this visit */ } },
+  };
+  const PLAY = '<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2 1 L9 5 L2 9 Z"/></svg>';
+  const GAINS = ['ui', 'move', 'hit', 'big', 'reward', 'story', 'alert', 'ambient'];
+  const COOLS = ['ui', 'action', 'burst', 'frame', 'ambient', 'once', 'honk', 'bark'];
+  const DEC_LABEL = { cue: 'Cue', silence: 'Silence', synth: '8.4 synth', base: 'As base' };
+  const TRACK_VAR = (n) => 'var(--t' + n + ')';
+  const fmtS = (s) => { s = Math.round(s); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+  const sign = (x) => (x > 0 ? '+' : x < 0 ? '−' : '±') + Math.abs(Math.round(x * 10) / 10);
+
+  // ---------- picks (the key the game reads) and the shared MUSIC / SOUND settings
+  function norm(p) { p = p && typeof p === 'object' ? p : {}; return { sfx: p.sfx && typeof p.sfx === 'object' ? p.sfx : {}, music: { states: (p.music && p.music.states) || {}, rotation: (p.music && Array.isArray(p.music.rotation)) ? p.music.rotation : null }, params: p.params && typeof p.params === 'object' ? p.params : {} }; }
+  let picks = norm(store.get(KEY));
+  const vs = Object.assign({ music: L.params['audio.settings.music'] ? L.params['audio.settings.music'].value : 8, sound: L.params['audio.settings.sound'] ? L.params['audio.settings.sound'].value : 8, mute: false }, store.get(VKEY) || {});
+  function clean() {
+    for (const [id, p] of Object.entries(picks.sfx)) { if (!p || !Object.keys(p).length) delete picks.sfx[id]; }
+    for (const [k, v] of Object.entries(picks.music.states)) if (v === L.music.states[k]) delete picks.music.states[k];
+    if (picks.music.rotation && picks.music.rotation.join() === L.music.rotation.join()) picks.music.rotation = null;
+    for (const [k, v] of Object.entries(picks.params)) if (L.params[k] && v === L.params[k].value) delete picks.params[k];
+  }
+  function empty() { return !Object.keys(picks.sfx).length && !Object.keys(picks.music.states).length && !picks.music.rotation && !Object.keys(picks.params).length; }
+  function exportable() { clean(); const o = {}; if (Object.keys(picks.sfx).length) o.sfx = picks.sfx; const m = {}; if (Object.keys(picks.music.states).length) m.states = picks.music.states; if (picks.music.rotation) m.rotation = picks.music.rotation; if (Object.keys(m).length) o.music = m; if (Object.keys(picks.params).length) o.params = picks.params; return o; }
+  function save() { clean(); store.set(KEY, empty() ? null : exportable()); badge(); gameLink(); }
+  function saveVs() { store.set(VKEY, { music: vs.music, sound: vs.sound, mute: vs.mute }); applyVols(); }
+  function b64(o) { const s = JSON.stringify(o); return btoa(unescape(encodeURIComponent(s))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+  function gameLink() { const a = $('#btn-game'); a.href = 'dummies_p9.html' + (empty() ? '' : '#audio=' + b64(exportable())); }
+  function changedCount() { clean(); return Object.keys(picks.sfx).length + Object.keys(picks.music.states).length + (picks.music.rotation ? 1 : 0) + Object.keys(picks.params).length; }
+  function badge() { const n = changedCount(), b = $('#changes'); b.hidden = !n; b.textContent = n + (n === 1 ? ' change' : ' changes'); }
+
+  // ---------- the effective map: the designed cue, with the picks on top
+  const D = L.cues;
+  function base(id) { return D[id] && D[id].variantOf ? D[id].variantOf : null; }
+  function cue(id) {
+    const d = D[id] || {}, p = picks.sfx[id] || {}, c = Object.assign({ id }, d);
+    if (p.decision) c.decision = p.decision;
+    if (Array.isArray(p.files)) c.files = p.files.slice();
+    if (p.gain) c.gain = p.gain;
+    if (p.cooldown) c.cooldown = p.cooldown;
+    c.userDb = typeof p.gainDb === 'number' ? p.gainDb : 0;
+    if (c.decision === 'cue') { c.bus = p.bus || c.bus || (d.group === 'ui' ? 'ui' : 'sfx'); c.gain = c.gain || (d.group === 'ui' ? 'ui' : 'hit'); c.cooldown = c.cooldown || freqCool(d.freq); c.files = c.files || []; }
+    return c;
+  }
+  function freqCool(f) { return { once: 'once', action: 'action', burst: 'burst', frame: 'frame', ambient: 'ambient' }[f] || 'action'; }
+  function param(id) { return picks.params[id] != null ? picks.params[id] : L.params[id] ? L.params[id].value : 0; }
+  function stateOf(k) { return picks.music.states[k] != null ? picks.music.states[k] : L.music.states[k]; }
+  function rotation() { return picks.music.rotation || L.music.rotation; }
+  function changed(id) { return !!picks.sfx[id]; }
+  function setPick(id, patch) {
+    const p = Object.assign({}, picks.sfx[id] || {}, patch), d = D[id] || {};
+    if (p.decision === d.decision) delete p.decision;
+    if (p.files && d.files && p.files.join() === d.files.join()) delete p.files;
+    if (p.files && !d.files && !p.files.length) delete p.files;
+    if (p.gain === d.gain) delete p.gain;
+    if (p.cooldown === d.cooldown) delete p.cooldown;
+    if (p.gainDb === 0) delete p.gainDb;
+    const eff = Object.assign({}, d, p);
+    if (eff.decision === 'cue' && d.decision !== 'cue') { p.bus = p.bus || (d.group === 'ui' ? 'ui' : 'sfx'); p.gain = p.gain || (d.group === 'ui' ? 'ui' : 'hit'); p.cooldown = p.cooldown || freqCool(d.freq); }
+    if (Object.keys(p).length) picks.sfx[id] = p; else delete picks.sfx[id];
+    save(); redrawCue(id);
+  }
+
+  // ---------- audio: three buses under a master, as the game has them
+  let AC = null, BUS = null, useEl = location.protocol === 'file:';
+  const BUF = new Map(), LAST = new Map(), local = location.protocol === 'file:';
+  function ac() {
+    if (!AC) {
+      try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { AC = null; }
+      if (AC) { const g = (to) => { const n = AC.createGain(); n.connect(to); return n; }; const m = g(AC.destination); BUS = { master: m, music: g(m), sfx: g(m), ui: g(m) }; BUS.synth = g(BUS.sfx); applyVols(); }
+    }
+    if (AC && AC.state === 'suspended') AC.resume();
+    return AC;
+  }
+  function busLevel(b) { if (vs.mute) return 0; if (b === 'music') return param('audio.music.volume') * vs.music / 10; if (b === 'ui') return param('audio.ui.volume') * vs.sound / 10; return param('audio.sfx.volume') * vs.sound / 10; }
+  function applyVols() { if (BUS) { BUS.sfx.gain.value = busLevel('sfx'); BUS.ui.gain.value = busLevel('ui'); BUS.synth.gain.value = param('audio.synth.gain'); } for (const p of MP) if (p) out(p); }
+  const sfxUrl = (f) => 'audio/sfx/' + encodeURIComponent(f);
+  function buf(f) {
+    if (BUF.has(f)) return BUF.get(f);
+    const pr = fetch(sfxUrl(f)).then((r) => { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); })
+      .then((ab) => new Promise((ok, no) => ac().decodeAudioData(ab, ok, no))).catch(() => { useEl = true; return null; });
+    BUF.set(f, pr); return pr;
+  }
+  async function playFile(f, o) {
+    o = o || {}; const a = ac(); if (!a) return;
+    const info = L.files[f] || {}, db = (o.raw ? 0 : (info.trimDb || 0)) + (o.db || 0), g = Math.pow(10, db / 20), bus = o.bus || 'sfx', rate = o.rate || 1;
+    hot(f, (info.seconds || 0.4) / rate);
+    const b = useEl ? null : await buf(f);
+    if (b) { const s = a.createBufferSource(), n = a.createGain(); s.buffer = b; s.playbackRate.value = rate; n.gain.value = g; s.connect(n); n.connect(BUS[bus]); s.start(); return; }
+    try { const el = new Audio(sfxUrl(f)); el.volume = Math.max(0, Math.min(1, g * busLevel(bus))); el.playbackRate = rate; el.play().catch(() => {}); } catch (e) { /* no audio */ }
+  }
+  function hot(f, secs) { for (const el of $$('[data-file="' + CSS.escape(f) + '"]')) { el.classList.add('hot'); setTimeout(() => el.classList.remove('hot'), Math.max(200, secs * 1000)); } }
+  function synthPlay(id) {
+    const v = L.synth[id] || L.synth[base(id)];
+    if (!v) { toast('Prototype 8.4 has no sound here'); return false; }
+    const a = ac(); if (!a) return false;
+    for (const [kind, f0, f1, dur, gain, wave, delay] of v) {
+      const t = a.currentTime + (delay || 0), g = a.createGain();
+      g.gain.setValueAtTime(gain || 0.06, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur); g.connect(BUS.synth);
+      if (kind === 'tone') { const o = a.createOscillator(); o.type = wave || 'square'; o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(Math.max(20, f1), t + dur); o.connect(g); o.start(t); o.stop(t + dur + 0.03); }
+      else { const n = Math.max(1, Math.floor(a.sampleRate * Math.max(dur, 1))), nb = a.createBuffer(1, n, a.sampleRate), d = nb.getChannelData(0); for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+        const src = a.createBufferSource(), bp = a.createBiquadFilter(); src.buffer = nb; bp.type = 'bandpass'; bp.Q.value = 1.2; bp.frequency.setValueAtTime(Math.max(20, f0), t); bp.frequency.exponentialRampToValueAtTime(Math.max(20, f1), t + dur); src.connect(bp); bp.connect(g); src.start(t); src.stop(t + dur + 0.03); }
+    }
+    return true;
+  }
+  // A cue as the game plays it: its pool (random, never the same file twice running, or in turn), the file's trim, the
+  // gain class, your fine gain, and the pitch jitter
+  function playCue(id, quiet) {
+    let c = cue(id);
+    if (c.decision === 'base' && base(id)) c = Object.assign(cue(base(id)), { id });
+    if (c.decision === 'synth') { synthPlay(id); if (!quiet) say('8.4 synth', id); return; }
+    if (c.decision !== 'cue') { if (!quiet) toast((D[id] ? D[id].label : id) + ': silence in the game'); return; }
+    const fl = c.files || [];
+    if (!fl.length) { if (!quiet) toast('No file yet: add one'); return; }
+    let f;
+    if (c.pick === 'cycle') { const n = (LAST.get(id + '#n') || 0) % fl.length; LAST.set(id + '#n', n + 1); f = fl[n]; }
+    else { f = fl[Math.floor(Math.random() * fl.length)]; if (fl.length > 1 && f === LAST.get(id)) f = fl[(fl.indexOf(f) + 1) % fl.length]; }
+    LAST.set(id, f);
+    const ui = c.bus === 'ui', jit = ui ? 0 : param('audio.sfx.pitchJitter');
+    playFile(f, { bus: ui ? 'ui' : 'sfx', db: param('audio.sfx.gain.' + c.gain) + (c.userDb || 0), rate: 1 + jit * (Math.random() * 2 - 1) });
+    if (!quiet) say(f, id);
+  }
+
+  // ---------- music: two players and the game's crossfade
+  const MP = [null, null]; let cur = -1, curTrack = null, duck = 1, raf = 0;
+  const oggOk = (() => { try { return !!document.createElement('audio').canPlayType('audio/ogg; codecs="vorbis"'); } catch (e) { return true; } })();
+  function trackUrl(n) { const t = L.music.tracks[n]; return 'audio/' + (oggOk || !t.m4a ? t.file : t.m4a).split('/').map(encodeURIComponent).join('/'); }
+  function player(i) {
+    if (MP[i]) return MP[i];
+    const el = new Audio(); el.loop = true; el.preload = 'auto'; const p = { el, node: null, gain: null, vol: 0, want: 0, trim: 0 };
+    if (!local && ac()) { try { el.crossOrigin = 'anonymous'; p.node = AC.createMediaElementSource(el); p.gain = AC.createGain(); p.gain.gain.value = 0; p.node.connect(p.gain); p.gain.connect(BUS.music); } catch (e) { p.node = null; p.gain = null; } }
+    return (MP[i] = p);
+  }
+  function out(p) { const lvl = Math.max(0, Math.min(1, p.vol * duck * busLevel('music') * Math.pow(10, (p.trim || 0) / 20))); if (p.gain) p.gain.gain.value = lvl; else p.el.volume = lvl; }
+  function tick(t0) {
+    let last = performance.now();
+    const step = (now) => {
+      const dt = Math.min(0.1, (now - last) / 1000); last = now; const xf = Math.max(0.05, param('audio.music.crossfadeSeconds'));
+      let moving = false;
+      for (const p of MP) { if (!p) continue; const d = p.want - p.vol; if (Math.abs(d) > 1e-3) { p.vol += Math.sign(d) * Math.min(Math.abs(d), dt / xf); moving = true; } else p.vol = p.want; out(p); if (p.want === 0 && p.vol <= 0 && !p.el.paused) p.el.pause(); }
+      raf = moving ? requestAnimationFrame(step) : 0;
+    };
+    if (!raf) raf = requestAnimationFrame(step);
+  }
+  function playTrack(n, o) {
+    o = o || {}; ac();
+    duck = o.duck != null ? o.duck : 1;
+    if (n == null) { stopMusic(); return; }
+    if (curTrack === n && cur >= 0 && !MP[cur].el.paused) { for (const p of MP) if (p) out(p); nowPlaying(); return; }
+    const prev = cur >= 0 ? MP[cur] : null, i = cur === 0 ? 1 : 0, p = player(i);
+    if (prev) prev.want = 0;
+    cur = i; curTrack = n; p.trim = (L.music.tracks[n] || {}).trimDb || 0; p.want = 1; p.vol = prev ? 0 : 0.0001;
+    const src = trackUrl(n); if (p.el.dataset.src !== src) { p.el.src = src; p.el.dataset.src = src; }
+    try { p.el.currentTime = o.at || 0; } catch (e) { /* not loaded */ }
+    const pr = p.el.play(); if (pr && pr.catch) pr.catch(() => {});
+    tick(); nowPlaying();
+  }
+  function stopMusic() { for (const p of MP) if (p) p.want = 0; curTrack = null; tick(); nowPlaying(); }
+  function nowPlaying() {
+    const n = $('#now'), t = curTrack && L.music.tracks[curTrack];
+    n.classList.toggle('live', !!t);
+    $('span', n).innerHTML = t ? '<span class="track-dot" style="background:' + TRACK_VAR(curTrack) + '"></span> Track ' + curTrack + ' · ' + esc(t.title) + (duck < 1 ? ' · ducked' : '') : 'Music stopped';
+    for (const b of $$('[data-act="track"]')) b.classList.toggle('on', +b.dataset.track === curTrack);
+  }
+  function stateTrack(k) { // the track a music state plays now (levels: the first slot of the rotation)
+    let v = stateOf(k);
+    if (k === 'level' || v === 'rotation') return rotation()[0];
+    if (k === 'pause') return rotation()[0];
+    if (v === 'continue') return stateOf('menu');
+    return typeof v === 'number' && v > 0 ? v : null;
+  }
+  let bed = false;
+  function say(what, id) { const n = $('#now'); if (!curTrack) { n.classList.remove('live'); $('span', n).textContent = '▶ ' + (D[id] ? D[id].label + ' · ' : '') + what; } }
+
+  // ---------- small UI helpers
+  let toastT = 0;
+  function toast(m) { const t = $('#toast'); t.textContent = m; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { t.hidden = true; }, 2200); }
+  function shotHtml(id, label) { const src = L.shots[id]; return '<button class="shot" type="button" data-act="shot" data-shot="' + esc(id) + '" aria-label="Screenshot: ' + esc(label || id) + '">' + (src ? '<img loading="lazy" src="' + esc(src) + '" alt="">' : '<span class="none">no screenshot</span>') + '</button>'; }
+  function fileChip(f, id, removable) { const info = L.files[f] || {}; return '<span class="file" data-file="' + esc(f) + '"><button class="play btn" type="button" data-act="file" data-f="' + esc(f) + '" data-id="' + esc(id || '') + '" aria-label="Play ' + esc(f) + '">' + PLAY + '</button><span title="' + esc(f) + ' · ' + (info.seconds || 0).toFixed(2) + ' s">' + esc(f.replace(/\.wav$/, '')) + '</span>' + (removable ? '<button class="x" type="button" data-act="rm" data-id="' + esc(id) + '" data-f="' + esc(f) + '" aria-label="Remove ' + esc(f) + '">✕</button>' : '') + '</span>'; }
+
+  // ---------- Effects
+  const ORDER = []; for (const e of L.events) { ORDER.push(e.id); for (const v of Object.keys(D).filter((k) => D[k].variantOf === e.id)) ORDER.push(v); }
+  const EV = Object.fromEntries(L.events.map((e) => [e.id, e]));
+  const fx = { q: '', prio: '', dec: '', changed: false, group: '' };
+  function cueCard(id) {
+    const d = D[id], c = cue(id), vb = base(id), e = EV[vb || id] || {};
+    const decs = vb ? ['base', 'cue', 'silence', 'synth'] : ['cue', 'silence', 'synth'];
+    const seg = '<div class="seg" role="group" aria-label="Decision">' + decs.map((k) => '<button type="button" data-act="dec" data-id="' + id + '" data-v="' + k + '" aria-pressed="' + (c.decision === k) + '">' + DEC_LABEL[k] + '</button>').join('') + '</div>';
+    let body = '';
+    if (c.decision === 'cue') {
+      body += '<div class="files">' + (c.files || []).map((f) => fileChip(f, id, true)).join('') + '<button class="btn" type="button" data-act="add" data-id="' + id + '">+ Add file</button></div>';
+      body += '<div class="knobs"><label class="knob">Weight <select data-act="gain" data-id="' + id + '" aria-label="Gain class">' + GAINS.map((g) => '<option value="' + g + '"' + (g === c.gain ? ' selected' : '') + '>' + g + ' (' + sign(param('audio.sfx.gain.' + g)) + ' dB)</option>').join('') + '</select></label>'
+        + '<label class="knob">Fine <input type="range" min="-12" max="12" step="0.5" value="' + (c.userDb || 0) + '" data-act="db" data-id="' + id + '" aria-label="Fine gain in dB"><output>' + sign(c.userDb || 0) + ' dB</output></label>'
+        + '<label class="knob">Cooldown <select data-act="cool" data-id="' + id + '" aria-label="Cooldown">' + COOLS.map((k) => '<option value="' + k + '"' + (k === c.cooldown ? ' selected' : '') + '>' + k + ' (' + param('audio.sfx.cooldown.' + k) + ' s)</option>').join('') + '</select></label>'
+        + (c.files && c.files.length > 1 ? '<span class="note">' + c.files.length + ' files, ' + (c.pick === 'cycle' ? 'in turn' : 'at random') + '</span>' : '') + '</div>';
+    } else if (c.decision === 'synth') body += '<p class="note">The game plays Prototype 8.4\'s procedural sound here.' + (L.synth[id] || L.synth[vb] ? '' : ' (It has none for this event: silent.)') + '</p>';
+    else if (c.decision === 'silence') body += '<p class="note">Silent in the game.</p>';
+    else if (c.decision === 'base') { const bc = cue(vb); body += '<p class="note">Plays its base cue, ' + esc(D[vb].label) + (bc.decision === 'cue' ? ': ' + esc((bc.files || []).join(', ')) : ' (' + DEC_LABEL[bc.decision] + ')') + '.</p>'; }
+    const alts = (d.alternates || []).filter((f) => !(c.files || []).includes(f));
+    if (c.decision === 'cue' && alts.length) body += '<div class="files"><span class="note">Designer\'s alternates:</span>' + alts.map((f) => fileChip(f, id, false) + '<button class="btn quiet" type="button" data-act="use" data-id="' + id + '" data-f="' + esc(f) + '">Use</button>').join('') + '</div>';
+    const synthBtn = (L.synth[id] || L.synth[vb]) && c.decision !== 'synth' ? '<button class="btn quiet" type="button" data-act="synth" data-id="' + id + '">▶ Prototype 8.4\'s sound</button>' : '';
+    const heard = L.heard[id] ? '<span class="note">Heard on the tour: ' + esc(L.heard[id]) + '</span>' : '';
+    return '<article class="cue panel' + (vb ? ' variant' : '') + '" id="cue-' + id + '" data-id="' + id + '">' + shotHtml(d.shot, d.label)
+      + '<div class="body"><header><h4>' + esc(d.label) + '</h4><code>' + esc(id) + '</code><span class="pill">' + esc(d.freq) + '</span><span class="pill ' + esc(d.priority) + '">' + esc(d.priority) + '</span>' + (changed(id) ? '<span class="pill changed">changed</span>' : '') + '</header>'
+      + (vb ? '<div class="when">↳ variant of ' + esc(D[vb].label) + ' · when ' + esc(Object.entries(d.when || {}).map(([k, v]) => k + ' = ' + (Array.isArray(v) ? v.join(' or ') : v === '*' ? 'any car' : v)).join(', ')) + '</div>' : '')
+      + '<p class="what">' + esc(d.what) + (e.firesWith && e.firesWith.length && !vb ? ' <span class="note">Fires with: ' + esc(e.firesWith.join(', ')) + '.</span>' : '') + '</p>'
+      + seg + body
+      + (d.why ? '<p class="why"><b>Designer:</b> ' + esc(d.why) + '</p>' : '')
+      + '<footer><button class="btn primary" type="button" data-act="cue" data-id="' + id + '">▶ Play as in the game</button>' + synthBtn + (changed(id) ? '<button class="btn quiet" type="button" data-act="revert" data-id="' + id + '">Revert</button>' : '') + heard + '</footer></div></article>';
+  }
+  function visible(id) {
+    const d = D[id], c = cue(id), q = fx.q.trim().toLowerCase();
+    if (fx.group && d.group !== fx.group) return false;
+    if (fx.prio === 'high' && d.priority !== 'high') return false;
+    if (fx.prio === 'medium' && d.priority === 'low') return false;
+    if (fx.dec && c.decision !== fx.dec) return false;
+    if (fx.changed && !changed(id)) return false;
+    if (q && ![id, d.label, d.what, ...(c.files || []), ...(d.alternates || [])].join(' ').toLowerCase().includes(q)) return false;
+    return true;
+  }
+  function drawEffects() {
+    const groups = L.groups.map((g) => ({ g, ids: ORDER.filter((id) => D[id] && D[id].group === g.id && visible(id)) })).filter((x) => x.ids.length);
+    $('#fx-list').innerHTML = groups.length ? groups.map(({ g, ids }) => '<section class="group"><header><h3>' + esc(g.label) + '</h3><span>' + ids.length + (ids.length === 1 ? ' cue' : ' cues') + '</span></header>' + ids.map(cueCard).join('') + '</section>').join('') : '<p class="empty panel">Nothing matches. Clear the search or the filters.</p>';
+  }
+  function drawGroups() {
+    const counts = {}; for (const id of ORDER) if (D[id]) counts[D[id].group] = (counts[D[id].group] || 0) + 1;
+    $('#fx-groups').innerHTML = '<button class="chip" type="button" data-act="grp" data-g="" aria-pressed="' + (!fx.group) + '">All ' + ORDER.length + '</button>' + L.groups.map((g) => '<button class="chip" type="button" data-act="grp" data-g="' + g.id + '" aria-pressed="' + (fx.group === g.id) + '">' + esc(g.label) + ' ' + (counts[g.id] || 0) + '</button>').join('');
+  }
+  function redrawCue(id) { const el = document.getElementById('cue-' + id); if (el) el.outerHTML = cueCard(id); const vb = base(id); for (const v of ORDER.filter((k) => D[k] && D[k].variantOf === id)) { const ve = document.getElementById('cue-' + v); if (ve) ve.outerHTML = cueCard(v); } if (vb) { /* a variant on its base shows the base's files */ } drawLibrary(); }
+
+  // ---------- Music
+  function trackOptions(v, k) {
+    const opts = []; for (let n = 1; n <= 6; n++) opts.push(['' + n, 'Track ' + n + ' · ' + L.music.tracks[n].title]);
+    if (k === 'card' || k === 'credits') opts.push(['continue', 'Keep the current track']);
+    if (k !== 'level' && k !== 'pause') opts.push(['none', 'Silence']);
+    if (k === 'level') return '<option>Rotation (below)</option>';
+    if (k === 'pause') return '<option>The level track, ducked</option>';
+    return opts.map(([val, lab]) => '<option value="' + val + '"' + (String(v) === val ? ' selected' : '') + '>' + esc(lab) + '</option>').join('');
+  }
+  function drawMusic() {
+    const used = {}; for (const m of L.musicStates) { const t = stateTrack(m.id); if (t && m.id !== 'level' && m.id !== 'pause') (used[t] = used[t] || []).push(m.label); }
+    rotation().forEach((t, i) => (used[t] = used[t] || []).push('Levels slot ' + (i + 1)));
+    $('#mu-tracks').innerHTML = Object.entries(L.music.tracks).map(([n, t]) => '<div class="track panel"><button class="btn play" type="button" data-act="track" data-track="' + n + '" aria-label="Play Track ' + n + '">' + PLAY + '</button><h4><span class="track-dot" style="background:' + TRACK_VAR(n) + '"></span><span>Track ' + n + ' · ' + esc(t.title) + '</span></h4><p>' + fmtS(t.seconds) + ' · ' + t.level + ' LUFS → trim ' + sign(t.trimDb) + ' dB</p><p>' + esc((used[n] || ['unused']).join(', ')) + '</p></div>').join('');
+    $('#mu-states').innerHTML = L.musicStates.map((m) => {
+      const v = stateOf(m.id), ch = picks.music.states[m.id] != null || (m.id === 'level' && picks.music.rotation);
+      const why = (L.music.why || {})[m.id];
+      return '<article class="state panel">' + shotHtml(m.shot, m.label) + '<div class="in"><h4>' + esc(m.label) + (ch ? ' <span class="pill changed">changed</span>' : '') + '</h4><p>' + esc(m.what) + '</p>'
+        + '<div class="ctl"><select data-act="state" data-k="' + m.id + '" aria-label="Track for ' + esc(m.label) + '"' + (m.id === 'level' || m.id === 'pause' ? ' disabled' : '') + '>' + trackOptions(v, m.id) + '</select><button class="btn play" type="button" data-act="statePlay" data-k="' + m.id + '" aria-label="Play ' + esc(m.label) + '">' + PLAY + '</button></div>'
+        + (why ? '<p class="why"><b>Designer:</b> ' + esc(why) + '</p>' : '') + '</div></article>';
+    }).join('');
+    const R = rotation();
+    let tm = '<div class="rot-slots"><span class="note">Rotation:</span>' + R.map((t, i) => '<label for="rot-' + i + '">' + (i + 1) + ' <select id="rot-' + i + '" data-act="rot" data-i="' + i + '">' + [1, 2, 3, 4, 5, 6].map((n) => '<option value="' + n + '"' + (n === t ? ' selected' : '') + '>Track ' + n + '</option>').join('') + '</select></label>').join('')
+      + (R.length < 6 ? '<button class="btn" type="button" data-act="rotAdd">+ Slot</button>' : '') + (R.length > 1 ? '<button class="btn quiet" type="button" data-act="rotDel">− Slot</button>' : '') + '</div>';
+    let n = 0;
+    tm += '<div class="tilemap" aria-label="Story tiles and their tracks">' + L.tiles.map((d) => '<div class="district"><div><b>' + esc(d.name) + '</b><small>' + esc(d.act || '') + '</small></div><div class="tiles">' + d.order.map((t) => { n++; const tr = R[(n - 1) % R.length]; return '<button class="tile" type="button" data-act="track" data-track="' + tr + '" style="background:' + TRACK_VAR(tr) + '" title="Tile ' + n + ' · ' + esc(d.name + ' ' + t + (d.titles[t] ? ' · ' + d.titles[t] : '')) + ': Track ' + tr + '">' + t + '<small>T' + tr + '</small></button>'; }).join('') + '</div></div>').join('') + '</div>';
+    tm += '<div class="runs"><span class="note" style="padding:0;color:var(--ink-2)">Arcade, run by run:</span>' + [1, 2, 3, 4, 5, 6].map((r) => { const tr = R[(r - 1) % R.length]; return '<span style="background:' + TRACK_VAR(tr) + '">Run ' + r + ' · T' + tr + '</span>'; }).join('') + '</div>';
+    tm += '<p class="note">Story: tile <i>n</i> in story order plays slot ((<i>n</i> − 1) mod ' + R.length + ') + 1, so neighbouring tiles differ. A tile\'s track starts with its drone drop, or as the ferry carries you in. A write-off keeps the track playing.</p>';
+    $('#mu-rot').innerHTML = tm;
+    const P = ['audio.music.volume', 'audio.sfx.volume', 'audio.ui.volume', 'audio.music.crossfadeSeconds', 'audio.music.pauseDuck', 'audio.sfx.pitchJitter', 'audio.synth.gain', 'audio.sfx.maxVoices'].concat(GAINS.map((g) => 'audio.sfx.gain.' + g));
+    $('#mu-mix').innerHTML = P.filter((id) => L.params[id]).map((id) => { const p = L.params[id], v = param(id), st = p.unit === 'dB' ? 0.5 : p.unit === 'count' ? 1 : p.unit === 's' ? 0.05 : 0.01; const lo = p.unit === 'dB' ? -24 : p.min, hi = p.unit === 'dB' ? 6 : p.unit === 'count' ? 32 : p.unit === 's' ? 4 : p.max;
+      return '<div class="param"><label for="p-' + id + '">' + esc(p.label) + (picks.params[id] != null ? ' <span class="pill changed">changed</span>' : '') + '</label><output id="o-' + id + '">' + v + ' ' + esc(p.unit === 'ratio' ? '' : p.unit) + '</output><input id="p-' + id + '" type="range" min="' + lo + '" max="' + hi + '" step="' + st + '" value="' + v + '" data-act="param" data-pid="' + id + '"><code>' + esc(id) + '</code></div>'; }).join('');
+  }
+
+  // ---------- Sequences
+  function drawSequences() {
+    $('#seq-list').innerHTML = L.sequences.map((s, i) => '<article class="seq panel" id="seq-' + i + '">' + shotHtml(s.shot, s.label) + '<div class="in"><h4 style="font-size:15px">' + esc(s.label) + '</h4><p class="note" style="margin:0">' + esc(s.what) + ' Music: ' + esc((L.musicStates.find((m) => m.id === s.state) || {}).label || s.state) + '.</p>'
+      + '<ol>' + s.steps.map(([t, id]) => { const c = cue(id); return '<li data-t="' + t + '"><span>' + t.toFixed(2) + '</span><b>' + esc(D[id] ? D[id].label : id) + ' <span class="note">' + esc(c.decision === 'cue' ? (c.files || []).join(' / ') : c.decision === 'base' ? 'as ' + (D[base(id)] || {}).label : DEC_LABEL[c.decision]) + '</span></b></li>'; }).join('') + '</ol>'
+      + '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" type="button" data-act="seq" data-i="' + i + '">▶ Play the moment</button><button class="btn quiet" type="button" data-act="seqDry" data-i="' + i + '">Without music</button></div></div></article>').join('');
+  }
+  let seqTimers = [];
+  function playSeq(i, withMusic) {
+    for (const t of seqTimers) clearTimeout(t); seqTimers = [];
+    const s = L.sequences[i]; ac();
+    if (withMusic) { const tr = stateTrack(s.state); if (tr) playTrack(tr); }
+    const card = document.getElementById('seq-' + i), lis = $$('li', card);
+    s.steps.forEach(([t, id], k) => seqTimers.push(setTimeout(() => { playCue(id, true); for (const li of lis) li.classList.remove('lit'); if (lis[k]) lis[k].classList.add('lit'); }, (withMusic ? 400 : 0) + t * 1000)));
+    seqTimers.push(setTimeout(() => { for (const li of lis) li.classList.remove('lit'); }, (withMusic ? 400 : 0) + (s.steps[s.steps.length - 1][0] + 1.6) * 1000));
+  }
+
+  // ---------- Tour
+  function drawTour() {
+    $('#tour-list').innerHTML = L.steps.map((s) => {
+      const chips = s.cues.map((c) => c.kind === 'music' ? (/^track/.test(c.id) ? '<span class="hear music"><button class="btn play" type="button" data-act="track" data-track="' + c.id.slice(5) + '" aria-label="Play ' + esc(c.id) + '">' + PLAY + '</button>' + esc(c.id.replace('track', 'Track ')) + '</span>' : '') : '<span class="hear"><button class="btn play" type="button" data-act="cue" data-id="' + esc(c.id) + '" aria-label="Play ' + esc(c.id) + '">' + PLAY + '</button>' + esc(c.id) + ' <span class="note">' + esc(c.file || '') + '</span></span>').join('');
+      return '<article class="step panel' + (s.shot ? '' : ' noshot') + '">' + (s.shot ? shotHtml(s.shot, s.name) : '') + '<div class="in"><h4><span>' + s.step + '</span>' + esc(s.name) + '</h4><p class="note" style="margin:0">Music: ' + esc(s.music.state || 'none yet') + (s.music.track ? ' · Track ' + s.music.track : '') + '</p><div class="heard">' + (chips || '<span class="note">No cue on this step.</span>') + '</div></div></article>';
+    }).join('');
+  }
+
+  // ---------- Library
+  function drawLibrary() {
+    const byFile = {}; for (const id of ORDER) { const c = cue(id); if (c.decision === 'cue') for (const f of c.files || []) (byFile[f] = byFile[f] || []).push(id); }
+    const fams = {}; for (const [f, info] of Object.entries(L.files)) (fams[info.family] = fams[info.family] || []).push(f);
+    const maxS = Math.max(...Object.values(L.files).map((i) => i.seconds));
+    $('#lib-list').innerHTML = Object.keys(fams).sort().map((fam) => '<section class="fam"><h3>' + esc(fam) + ' · ' + fams[fam].length + '</h3><div class="lib">' + fams[fam].sort().map((f) => { const i = L.files[f], u = byFile[f] || [];
+      return '<div class="lrow" data-file="' + esc(f) + '"><button class="btn play" type="button" data-act="file" data-f="' + esc(f) + '" aria-label="Play ' + esc(f) + '">' + PLAY + '</button><div style="min-width:0"><div class="n">' + esc(f) + '</div><div class="bar" style="width:' + Math.max(3, i.seconds / maxS * 100) + '%"></div></div><div class="meta">' + i.seconds.toFixed(2) + ' s · ' + i.level + ' → ' + (i.level + i.trimDb).toFixed(1) + ' dB</div>'
+        + (u.length ? '<div class="used">' + u.map((id) => '<a href="#effects" data-act="goto" data-id="' + esc(id) + '">' + esc(id) + '</a>').join(' · ') + '</div>' : '') + '</div>'; }).join('') + '</div></section>').join('');
+  }
+
+  // ---------- the file picker
+  let pickFor = null;
+  function openPicker(id) {
+    pickFor = id; const d = D[id], c = cue(id);
+    $('#pick-h').textContent = 'A file for ' + d.label;
+    $('#pick-search').value = '';
+    drawPicker();
+    $('#pickdlg').showModal();
+  }
+  function drawPicker() {
+    const id = pickFor, d = D[id], c = cue(id), q = $('#pick-search').value.trim().toLowerCase(), have = new Set(c.files || []);
+    const row = (f, star) => { const i = L.files[f]; return '<div class="pick-row" data-file="' + esc(f) + '"><button class="btn play" type="button" data-act="file" data-f="' + esc(f) + '" aria-label="Play ' + esc(f) + '">' + PLAY + '</button><div class="n">' + (star ? '<span class="star">★ </span>' : '') + esc(f) + '<small>' + i.seconds.toFixed(2) + ' s</small></div>'
+      + (have.has(f) ? '<span class="note">in the pool</span><span></span>' : '<button class="btn" type="button" data-act="padd" data-f="' + esc(f) + '">Add</button><button class="btn quiet" type="button" data-act="ponly" data-f="' + esc(f) + '">Use only this</button>') + '</div>'; };
+    const alts = (d.alternates || []).filter((f) => !q || f.toLowerCase().includes(q));
+    const fams = {}; for (const [f, i] of Object.entries(L.files)) if (!q || f.toLowerCase().includes(q) || i.family.includes(q)) (fams[i.family] = fams[i.family] || []).push(f);
+    $('#pick-body').innerHTML = (alts.length ? '<h3>The designer\'s alternates</h3><div class="pick-list">' + alts.map((f) => row(f, true)).join('') + '</div>' : '')
+      + Object.keys(fams).sort().map((fam) => '<h3 style="margin-top:12px">' + esc(fam) + '</h3><div class="pick-list">' + fams[fam].sort().map((f) => row(f)).join('') + '</div>').join('');
+  }
+
+  // ---------- export, import, reset
+  function openExport() {
+    const o = exportable(), json = JSON.stringify(o, null, 1), lines = [];
+    for (const [id, p] of Object.entries(o.sfx || {})) { const c = cue(id); lines.push(id + ': ' + (c.decision === 'cue' ? (c.files || []).join(', ') + ' · ' + c.gain + (c.userDb ? ' ' + sign(c.userDb) + ' dB' : '') : DEC_LABEL[c.decision])); }
+    for (const [k, v] of Object.entries((o.music || {}).states || {})) lines.push('music.' + k + ': ' + v);
+    if (o.music && o.music.rotation) lines.push('music.rotation: ' + o.music.rotation.join(', '));
+    for (const [k, v] of Object.entries(o.params || {})) lines.push(k + ': ' + v);
+    $('#io-h').textContent = 'Export picks';
+    $('#io-body').innerHTML = (empty() ? '<p class="note">No changes yet: the designed map plays as it is.</p>' : '<p class="note">' + changedCount() + ' changes. Copy the JSON to keep it, or the summary to send in a message. The game in this browser already uses them.</p>')
+      + '<h3>Summary</h3><textarea id="io-sum" readonly spellcheck="false" style="min-height:120px">' + esc(lines.join('\n') || 'No changes.') + '</textarea>'
+      + '<h3>JSON</h3><textarea id="io-json" readonly spellcheck="false">' + esc(json) + '</textarea>'
+      + '<div style="display:flex;flex-wrap:wrap;gap:8px"><button class="btn primary" type="button" data-act="copy" data-t="io-json">Copy JSON</button><button class="btn" type="button" data-act="copy" data-t="io-sum">Copy summary</button><a class="btn quiet" download="dummies_sound_picks.json" href="data:application/json;charset=utf-8,' + encodeURIComponent(json) + '">Download .json</a></div>';
+    $('#iodlg').showModal();
+  }
+  function openImport() {
+    $('#io-h').textContent = 'Import picks';
+    $('#io-body').innerHTML = '<p class="note">Paste picks exported from this page, or choose a .json file. They replace the picks in this browser.</p><textarea id="io-in" spellcheck="false" placeholder="{ &quot;sfx&quot;: { … } }"></textarea><input type="file" id="io-file" accept="application/json,.json" aria-label="Choose a picks file"><div style="display:flex;gap:8px"><button class="btn primary" type="button" data-act="doImport">Import</button></div>';
+    $('#io-file').addEventListener('change', (e) => { const f = e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => { $('#io-in').value = r.result; }; r.readAsText(f); });
+    $('#iodlg').showModal();
+  }
+  function doImport() {
+    try { const o = JSON.parse($('#io-in').value); if (!o || typeof o !== 'object') throw new Error('not an object'); picks = norm(o); for (const id of Object.keys(picks.sfx)) if (!D[id]) delete picks.sfx[id]; save(); drawAll(); $('#iodlg').close(); toast('Imported ' + changedCount() + ' changes'); }
+    catch (e) { toast('That is not picks JSON: ' + e.message); }
+  }
+  let resetArm = 0;
+  function reset() {
+    const b = $('#btn-reset');
+    if (!resetArm) { resetArm = setTimeout(() => { resetArm = 0; b.textContent = 'Reset to the designed map'; }, 3000); b.textContent = 'Press again to reset'; return; }
+    clearTimeout(resetArm); resetArm = 0; b.textContent = 'Reset to the designed map';
+    picks = norm(null); save(); drawAll(); toast('Back to the designed map');
+  }
+
+  // ---------- rooms (hash), events
+  const ROOMS = ['effects', 'music', 'sequences', 'tour', 'library'];
+  function route() { const r = ROOMS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'effects'; for (const s of $$('.room[data-room]')) s.hidden = s.dataset.room !== r; for (const a of $$('#tabs a')) a.setAttribute('aria-current', a.getAttribute('href') === '#' + r ? 'page' : 'false'); }
+  window.addEventListener('hashchange', route);
+  function drawAll() { drawGroups(); drawEffects(); drawMusic(); drawSequences(); drawTour(); drawLibrary(); badge(); gameLink(); }
+
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-act]'); if (!b) { if (e.target.matches('[data-close]')) e.target.closest('dialog').close(); return; }
+    const act = b.dataset.act, id = b.dataset.id;
+    if (act === 'cue') playCue(id);
+    else if (act === 'file') { playFile(b.dataset.f, { bus: id && D[id] && cue(id).bus === 'ui' ? 'ui' : 'sfx', db: id && D[id] && cue(id).gain ? param('audio.sfx.gain.' + cue(id).gain) + (cue(id).userDb || 0) : 0 }); say(b.dataset.f, id); if (bed && !curTrack) playTrack(rotation()[0]); }
+    else if (act === 'synth') { synthPlay(id); say('8.4 synth', id); }
+    else if (act === 'dec') setPick(id, { decision: b.dataset.v });
+    else if (act === 'rm') { const c = cue(id); setPick(id, { files: (c.files || []).filter((f) => f !== b.dataset.f) }); }
+    else if (act === 'use') { const c = cue(id); setPick(id, { files: [b.dataset.f], decision: 'cue' }); }
+    else if (act === 'add') openPicker(id);
+    else if (act === 'padd') { const c = cue(pickFor); setPick(pickFor, { files: (c.files || []).concat([b.dataset.f]), decision: 'cue' }); drawPicker(); toast('Added ' + b.dataset.f); }
+    else if (act === 'ponly') { setPick(pickFor, { files: [b.dataset.f], decision: 'cue' }); $('#pickdlg').close(); }
+    else if (act === 'revert') { delete picks.sfx[id]; save(); redrawCue(id); }
+    else if (act === 'grp') { fx.group = b.dataset.g; drawGroups(); drawEffects(); }
+    else if (act === 'shot') { const s = b.dataset.shot; if (!L.shots[s]) return; $('#shot-img').src = L.shots[s]; $('#shot-h').textContent = b.getAttribute('aria-label').replace('Screenshot: ', ''); $('#shotdlg').showModal(); }
+    else if (act === 'track') { const n = +b.dataset.track; if (curTrack === n) stopMusic(); else playTrack(n); }
+    else if (act === 'statePlay') { const k = b.dataset.k, t = stateTrack(k); if (!t) { stopMusic(); toast('Silence on this screen'); } else playTrack(t, { duck: k === 'pause' ? param('audio.music.pauseDuck') : 1 }); }
+    else if (act === 'rotAdd') { const R = rotation().slice(); R.push(3 + (R.length % 4)); picks.music.rotation = R; save(); drawMusic(); }
+    else if (act === 'rotDel') { const R = rotation().slice(0, -1); picks.music.rotation = R; save(); drawMusic(); }
+    else if (act === 'seq') playSeq(+b.dataset.i, true);
+    else if (act === 'seqDry') playSeq(+b.dataset.i, false);
+    else if (act === 'goto') { location.hash = 'effects'; fx.group = ''; fx.q = ''; $('#fx-search').value = ''; fx.changed = false; fx.dec = ''; fx.prio = ''; drawGroups(); drawEffects(); setTimeout(() => { const el = document.getElementById('cue-' + id); if (el) el.scrollIntoView({ block: 'center' }); }, 30); }
+    else if (act === 'copy') { const ta = document.getElementById(b.dataset.t); const ok = () => toast('Copied'); try { navigator.clipboard.writeText(ta.value).then(ok, () => { ta.select(); toast('Selected: press Ctrl+C'); }); } catch (err) { ta.select(); toast('Selected: press Ctrl+C'); } }
+    else if (act === 'doImport') doImport();
+  });
+  document.addEventListener('input', (e) => {
+    const t = e.target, act = t.dataset && t.dataset.act;
+    if (act === 'db') { t.nextElementSibling.textContent = sign(+t.value) + ' dB'; }
+    else if (act === 'param') { const id = t.dataset.pid; picks.params[id] = +t.value; $('#o-' + CSS.escape(id)).textContent = t.value + ' ' + (L.params[id].unit === 'ratio' ? '' : L.params[id].unit); applyVols(); save(); }
+  });
+  document.addEventListener('change', (e) => {
+    const t = e.target, act = t.dataset && t.dataset.act, id = t.dataset && t.dataset.id;
+    if (act === 'db') { setPick(id, { gainDb: +t.value }); playCue(id, true); }
+    else if (act === 'gain') { setPick(id, { gain: t.value }); playCue(id, true); }
+    else if (act === 'cool') setPick(id, { cooldown: t.value });
+    else if (act === 'state') { const k = t.dataset.k, v = t.value === 'continue' || t.value === 'none' ? t.value : +t.value; picks.music.states[k] = v; save(); drawMusic(); const tr = stateTrack(k); if (tr) playTrack(tr); else stopMusic(); }
+    else if (act === 'rot') { const R = rotation().slice(); R[+t.dataset.i] = +t.value; picks.music.rotation = R; save(); drawMusic(); }
+    else if (act === 'param') drawMusic();
+  });
+  $('#fx-search').addEventListener('input', (e) => { fx.q = e.target.value; drawEffects(); });
+  $('#fx-prio').addEventListener('change', (e) => { fx.prio = e.target.value; drawEffects(); });
+  $('#fx-dec').addEventListener('change', (e) => { fx.dec = e.target.value; drawEffects(); });
+  $('#fx-changed').addEventListener('click', (e) => { fx.changed = !fx.changed; e.currentTarget.setAttribute('aria-pressed', fx.changed); drawEffects(); });
+  $('#pick-search').addEventListener('input', drawPicker);
+  for (const d of $$('dialog')) d.addEventListener('click', (e) => { if (e.target === d) d.close(); });
+  for (const [k, el] of [['music', $('#vol-music')], ['sound', $('#vol-sound')]]) { el.value = vs[k]; $('#vol-' + k + '-o').textContent = vs[k]; el.addEventListener('input', () => { vs[k] = +el.value; $('#vol-' + k + '-o').textContent = el.value; saveVs(); }); }
+  const mb = $('#btn-mute'); const muteUi = () => { mb.setAttribute('aria-pressed', vs.mute); mb.classList.toggle('on', vs.mute); mb.textContent = vs.mute ? 'Muted' : 'Mute'; }; muteUi();
+  mb.addEventListener('click', () => { vs.mute = !vs.mute; saveVs(); muteUi(); });
+  const bb = $('#btn-bed'); bb.addEventListener('click', () => { bed = !bed; bb.setAttribute('aria-pressed', bed); bb.classList.toggle('on', bed); if (bed) playTrack(rotation()[0]); else stopMusic(); });
+  $('#btn-stop').addEventListener('click', () => { for (const t of seqTimers) clearTimeout(t); stopMusic(); if (AC) { AC.suspend().then(() => AC.resume()); } });
+  $('#btn-export').addEventListener('click', openExport);
+  $('#btn-import').addEventListener('click', openImport);
+  $('#btn-reset').addEventListener('click', reset);
+  $('#fx-lede').textContent += ' The map: ' + Object.keys(D).length + ' entries from the sound designer agent' + (L.run ? ' (run ' + L.run + (L.accepted ? ', 10/10, confirmed' : '') + ')' : '') + '.';
+  drawAll(); route();
+})();
+</script>

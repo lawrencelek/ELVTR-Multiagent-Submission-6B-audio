@@ -1,0 +1,4 @@
+SCORE: 10/10
+REASON:
+- None. I checked every §3 rule (C1–C3, F1–F4, X1–X2, S1–S2, L1–L2, M1–M3, A1) against all 106 ids and the music states, and every lint finding is wrong: combo.max states a reason ("it fires once per cap"), honk's synth reason is tied to the game (the pack has no horn, and horns keep each tier's voice), "audio.sfx.cooldown.bark" is a specific ID that §2 names and bark is a burst event, not frame or ambient, intro and menu play the Track 1 and Track 2 files exactly, and the rotation holds Tracks 3, 4, 5 and 6 once each.
+Total: 10 − 0 = 10.

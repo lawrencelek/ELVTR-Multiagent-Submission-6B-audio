@@ -1,0 +1,5 @@
+SCORE: 9/10
+REASON:
+- honk · C2 (major, −0) "decision": "synth". I am not deducting this lint finding: the event is high priority and set to synth, but the rule only breaks when there is no game reason, and the entry gives one: the inventory has no horn file, and the 8.4 horns keep each car tier's voice (Style Guide V2 T3, T7). Fix: none needed.
+- road-cleared · F3 (minor, −1) "powerup_1.wav" Its why says the met quota outranks a capped combo hit, but at −28.1 dB in the same `reward` class it is quieter than combo.max's "powerup_2.wav" (−27.3) and "powerup_4.wav" (−26.8). Fix: make "chime.wav" (−20.3 dB, 0.77 s) the primary for road-cleared and keep "powerup_1.wav" and "level_up.wav" as alternates.
+Total: 10 − 0 − 1 = 9.

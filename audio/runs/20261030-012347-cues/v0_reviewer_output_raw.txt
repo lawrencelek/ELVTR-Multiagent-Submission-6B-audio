@@ -1,0 +1,13 @@
+SCORE: 7/10
+REASON:
+- combo.max · S2 (major, −0) "A powerup crowns the cap; it fires once per cap." The lint finding is wrong because the why gives a reason: the cap fires once per combo, so one file cannot repeat back to back. Fix: none.
+- honk · C2 (major, −0) "The pack has no horn; 8.4 honks keep each tier's voice." The lint finding is wrong because C2 accepts a reason tied to the game: the inventory has no horn file, and tier voices come from Style Guide T3/T7. Fix: none.
+- bark · S1 (blocking, −0) "audio.sfx.cooldown.bark" The lint finding is wrong because §2 names this as a valid specific ID, and S1 only tests frame and ambient events, while `bark` is burst. Fix: none.
+- bark.shout · S1 (blocking, −0) "audio.sfx.cooldown.bark" The lint finding is wrong for the same reasons: the cooldown ID is named in §2, and the event is burst. Fix: none.
+- music.intro · M1 (blocking, −0) "track1_ansimuz-itch-io_megabot.ogg" The lint finding is wrong because this file is Track 1 in the pack's music inventory. Fix: none.
+- music.menu · M1 (blocking, −0) "track2_ansimuz-itch-io_summer-nights.ogg" The lint finding is wrong because this file is Track 2 in the pack's music inventory. Fix: none.
+- music.level · M2 (major, −0) "rotation" The lint finding is wrong because the rotation holds Tracks 3, 4, 5 and 6 once each, with storyRule "tile" and arcadeRule "run". Fix: none.
+- story-clear · F3 (minor, −1) "level_up.wav" At −28.2 dB this is the quietest reward cue, 5.3 dB under the combo tick `collect_7.wav` (−22.9), so clearing a tile sounds smaller than a routine combo hit. Fix: make `powerup_5.wav` (−19.5 dB) primary and keep `level_up.wav` as an alternate.
+- bark.shout · L2 (minor, −1) "gain": "alert" A shout is still a car bark, which is ambient chatter, but it is on `alert` while the base `bark` is on `ambient`. Fix: set gain to `ambient` and keep `select_5.wav` and `select_4.wav`.
+- unveil-lift · A1 (minor, −1) "tidal_wave.wav" A tidal wave comes from another domain (water disaster) than a cloth lifting off a monument. Fix: replace it with `teleport.wav`, next to `shrink.wav`.
+Total: 10 − 1 − 1 − 1 = 7.

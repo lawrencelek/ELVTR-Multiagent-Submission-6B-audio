@@ -1,0 +1,2157 @@
+{
+ "generated_by": "audio/events.py",
+ "build": "Prototype 9 (shared code of Prototype 8.4)",
+ "groups": [
+  {
+   "id": "ui",
+   "label": "Menus and interface"
+  },
+  {
+   "id": "moves",
+   "label": "Dummy moves"
+  },
+  {
+   "id": "abilities",
+   "label": "Abilities"
+  },
+  {
+   "id": "hits",
+   "label": "Hits and damage"
+  },
+  {
+   "id": "near",
+   "label": "Near-misses"
+  },
+  {
+   "id": "cones",
+   "label": "Cones"
+  },
+  {
+   "id": "combos",
+   "label": "Combos"
+  },
+  {
+   "id": "world",
+   "label": "World"
+  },
+  {
+   "id": "cars",
+   "label": "Cars"
+  },
+  {
+   "id": "drones",
+   "label": "Drones"
+  },
+  {
+   "id": "story",
+   "label": "Story beats"
+  },
+  {
+   "id": "arcade",
+   "label": "Arcade"
+  },
+  {
+   "id": "barks",
+   "label": "Barks"
+  },
+  {
+   "id": "intro",
+   "label": "Intro screen"
+  }
+ ],
+ "freqClasses": {
+  "once": "once per occurrence: a beat in the run",
+  "action": "once per player action",
+  "burst": "a few per second at most",
+  "frame": "logged on every contact frame: needs a cooldown",
+  "ambient": "traffic chatter: many per minute, from any car"
+ },
+ "count": 94,
+ "counts": {
+  "sim": 76,
+  "derived": 5,
+  "new": 7,
+  "ui": 6
+ },
+ "high": 26,
+ "screens": [
+  "arcade",
+  "game",
+  "intro",
+  "loading",
+  "saves",
+  "scores",
+  "splash",
+  "storymap",
+  "title"
+ ],
+ "phases": [
+  "brief",
+  "drop",
+  "ending",
+  "gift",
+  "hitstop",
+  "in",
+  "next",
+  "play",
+  "scroll",
+  "shop",
+  "voyage",
+  "writeoff"
+ ],
+ "music": [
+  {
+   "id": "intro",
+   "cue": "music.intro",
+   "label": "Intro screen",
+   "what": "DUMMIES, the front-on animation, START (after the first press).",
+   "detect": "app.screen 'intro'",
+   "shot": "intro",
+   "gdd": "Edit 98"
+  },
+  {
+   "id": "menu",
+   "cue": "music.menu",
+   "label": "Menus",
+   "what": "Mode select, save slots, name entry, Story splash, map, district select, high scores, loading.",
+   "detect": "app.screen title, saves, splash, storymap, arcade, scores, loading",
+   "shot": "title",
+   "gdd": "Edit 81, 88, 97, 98"
+  },
+  {
+   "id": "credits",
+   "cue": "music.credits",
+   "label": "Credits card",
+   "what": "The Credits card, from the title or the ending.",
+   "detect": "app.credits",
+   "shot": "credits",
+   "gdd": "Edit 95"
+  },
+  {
+   "id": "card",
+   "cue": "music.card",
+   "label": "Level card",
+   "what": "The level card before the drone drop, at a district's start.",
+   "detect": "phase 'brief', no level track yet",
+   "shot": "card",
+   "gdd": "Edit 98"
+  },
+  {
+   "id": "level",
+   "cue": "music.level",
+   "label": "Levels",
+   "what": "Play, the drone drop, write-off holds, flips, ferries, the gift screen, reports, the workshop.",
+   "detect": "app.screen 'game', phases play … shop",
+   "shot": "play",
+   "gdd": "Edit 81, 98"
+  },
+  {
+   "id": "pause",
+   "cue": "music.pause",
+   "label": "Pause",
+   "what": "Pause, options, controls: the level track, ducked.",
+   "detect": "app.paused",
+   "shot": "pause",
+   "gdd": "Edit 86"
+  },
+  {
+   "id": "ending",
+   "cue": "music.ending",
+   "label": "Run ends",
+   "what": "Licensed, Failed test, Non-compliant.",
+   "detect": "phase 'ending' (not Certified)",
+   "shot": "ending",
+   "gdd": "Edit 97"
+  },
+  {
+   "id": "finale",
+   "cue": "music.finale",
+   "label": "Finale",
+   "what": "The unveiling, the voyage, CERTIFIED.",
+   "detect": "phase unveil, voyage; ending Certified",
+   "shot": "plaque",
+   "gdd": "Edit 94"
+  }
+ ],
+ "events": [
+  {
+   "id": "ui-move",
+   "cue": "sfx.ui-move",
+   "group": "ui",
+   "label": "Cursor moves",
+   "what": "A menu cursor moves: arrows, stick, d-pad, WASD.",
+   "freq": "action",
+   "priority": "high",
+   "firesWith": [],
+   "gdd": "Edit 81, 86",
+   "shot": "title",
+   "kind": "ui",
+   "where": [],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "ui-ok",
+   "cue": "sfx.ui-ok",
+   "group": "ui",
+   "label": "Confirm",
+   "what": "A menu choice is confirmed: A, Space, Enter, a tap or a click.",
+   "freq": "action",
+   "priority": "high",
+   "firesWith": [],
+   "gdd": "Edit 81, 89",
+   "shot": "title",
+   "kind": "ui",
+   "where": [],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "ui-back",
+   "cue": "sfx.ui-back",
+   "group": "ui",
+   "label": "Back",
+   "what": "A menu goes back or closes: B, Shift, Esc on a page.",
+   "freq": "action",
+   "priority": "high",
+   "firesWith": [],
+   "gdd": "Edit 86, 88",
+   "shot": "saves",
+   "kind": "ui",
+   "where": [],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "ui-pause",
+   "cue": "sfx.ui-pause",
+   "group": "ui",
+   "label": "Pause opens",
+   "what": "Play pauses: Esc, P, START or the pause chip.",
+   "freq": "action",
+   "priority": "medium",
+   "firesWith": [],
+   "gdd": "Edit 86",
+   "shot": "pause",
+   "kind": "ui",
+   "where": [],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "ui-start",
+   "cue": "sfx.ui-start",
+   "group": "ui",
+   "label": "START",
+   "what": "START on the intro screen opens the mode select.",
+   "freq": "once",
+   "priority": "high",
+   "firesWith": [],
+   "gdd": "Edit 98",
+   "shot": "intro",
+   "kind": "ui",
+   "where": [],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "ui-gate",
+   "cue": "sfx.ui-gate",
+   "group": "ui",
+   "label": "Press any key",
+   "what": "The first press on the intro screen unlocks audio; Track 1 starts.",
+   "freq": "once",
+   "priority": "low",
+   "firesWith": [],
+   "gdd": "Edit 100",
+   "shot": "intro",
+   "kind": "ui",
+   "where": [],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "lunge",
+   "cue": "sfx.lunge",
+   "group": "moves",
+   "label": "Dash",
+   "what": "The dummy dashes (A). Spends a battery charge.",
+   "freq": "action",
+   "priority": "high",
+   "firesWith": [
+    "impact",
+    "combo",
+    "jump"
+   ],
+   "gdd": "Edit 75, 90",
+   "shot": "dash",
+   "kind": "sim",
+   "where": [
+    "S:1684"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 1,
+   "variants": []
+  },
+  {
+   "id": "jump",
+   "cue": "sfx.jump",
+   "group": "moves",
+   "label": "Jump",
+   "what": "The dummy jumps (B). A jump out of a dash is a long jump.",
+   "freq": "action",
+   "priority": "high",
+   "firesWith": [
+    "lunge"
+   ],
+   "gdd": "Edit 75, 76, 90",
+   "shot": "jump",
+   "kind": "sim",
+   "where": [
+    "S:1960"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": [
+    {
+     "id": "jump.dash",
+     "cue": "sfx.jump.dash",
+     "when": {
+      "kind": "dash"
+     },
+     "label": "Long jump, out of a dash"
+    }
+   ]
+  },
+  {
+   "id": "jump-land",
+   "cue": "sfx.jump-land",
+   "group": "moves",
+   "label": "Jump lands",
+   "what": "A jump lands on the ground.",
+   "freq": "action",
+   "priority": "medium",
+   "firesWith": [
+    "impact"
+   ],
+   "gdd": "Edit 76",
+   "shot": "jump",
+   "kind": "sim",
+   "where": [
+    "S:1969"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "land",
+   "cue": "sfx.land",
+   "group": "moves",
+   "label": "Drop lands",
+   "what": "A drop from a walkway or deck lands, on a car or on the ground.",
+   "freq": "action",
+   "priority": "medium",
+   "firesWith": [
+    "impact",
+    "deck-drop"
+   ],
+   "gdd": "Edit 42",
+   "shot": "jump",
+   "kind": "sim",
+   "where": [
+    "S:2243",
+    "S:2247"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 1,
+   "variants": [
+    {
+     "id": "land.car",
+     "cue": "sfx.land.car",
+     "when": {
+      "car": "*"
+     },
+     "label": "Onto a car roof"
+    }
+   ]
+  },
+  {
+   "id": "deck-drop",
+   "cue": "sfx.deck-drop",
+   "group": "moves",
+   "label": "Drop off a deck",
+   "what": "The dummy steps off a highway parapet or ledge.",
+   "freq": "action",
+   "priority": "medium",
+   "firesWith": [
+    "land"
+   ],
+   "gdd": "Edit 42",
+   "shot": "play",
+   "kind": "sim",
+   "where": [
+    "S:2227",
+    "W:2247"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 1,
+   "variants": []
+  },
+  {
+   "id": "rail-jump",
+   "cue": "sfx.rail-jump",
+   "group": "moves",
+   "label": "Over the rail",
+   "what": "The dummy jumps a walkway rail.",
+   "freq": "action",
+   "priority": "low",
+   "firesWith": [],
+   "gdd": "Edit 69",
+   "shot": "play",
+   "kind": "sim",
+   "where": [
+    "W:2217"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "stair",
+   "cue": "sfx.stair",
+   "group": "moves",
+   "label": "Stairs",
+   "what": "The dummy starts up or down a stair.",
+   "freq": "action",
+   "priority": "low",
+   "firesWith": [],
+   "gdd": "Edit 63",
+   "shot": "play",
+   "kind": "sim",
+   "where": [
+    "S:2150"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "level",
+   "cue": "sfx.level",
+   "group": "moves",
+   "label": "New level",
+   "what": "The dummy reaches a new level: walkway, deck, roof.",
+   "freq": "action",
+   "priority": "low",
+   "firesWith": [
+    "stair"
+   ],
+   "gdd": "Edit 42, 44",
+   "shot": "play",
+   "kind": "sim",
+   "where": [
+    "S:2169",
+    "S:2173",
+    "W:2191",
+    "W:2196"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "slip",
+   "cue": "sfx.slip",
+   "group": "moves",
+   "label": "Slip on water",
+   "what": "A dash is refused on a puddle.",
+   "freq": "action",
+   "priority": "medium",
+   "firesWith": [
+    "denied"
+   ],
+   "gdd": "D18",
+   "shot": "play",
+   "kind": "sim",
+   "where": [
+    "S:1715"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "push",
+   "cue": "sfx.push",
+   "group": "abilities",
+   "label": "Push off a car",
+   "what": "Arms: the dummy pushes off a car (Y).",
+   "freq": "action",
+   "priority": "high",
+   "firesWith": [],
+   "gdd": "Edit 80",
+   "shot": "play",
+   "kind": "sim",
+   "where": [
+    "S:1879"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "hitch",
+   "cue": "sfx.hitch",
+   "group": "abilities",
+   "label": "Hitch a car",
+   "what": "The dummy grabs a passing car (X).",
+   "freq": "action",
+   "priority": "high",
+   "firesWith": [],
+   "gdd": "Edit 79",
+   "shot": "play",
+   "kind": "sim",
+   "where": [
+    "S:1904"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "sling",
+   "cue": "sfx.sling",
+   "group": "abilities",
+   "label": "Sling off",
+   "what": "The dummy lets go of a hitched car with speed.",
+   "freq": "action",
+   "priority": "high",
+   "firesWith": [],
+   "gdd": "Edit 79",
+   "shot": "play",
+   "kind": "sim",
+   "where": [
+    "S:1925"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "denied",
+   "cue": "sfx.denied",
+   "group": "abilities",
+   "label": "Denied",
+   "what": "A move is refused: no charge, or not fitted yet.",
+   "freq": "action",
+   "priority": "medium",
+   "firesWith": [
+    "slip"
+   ],
+   "gdd": "Edit 90",
+   "shot": "play",
+   "kind": "sim",
+   "where": [
+    "S:1675"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": [
+    {
+     "id": "denied.locked",
+     "cue": "sfx.denied.locked",
+     "when": {
+      "why": "locked"
+     },
+     "label": "Not fitted yet"
+    }
+   ]
+  },
+  {
+   "id": "impact",
+   "cue": "sfx.impact",
+   "group": "hits",
+   "label": "Hit",
+   "what": "A car hits the dummy. Damage, points, the burst.",
+   "freq": "burst",
+   "priority": "high",
+   "firesWith": [
+    "combo",
+    "writeoff",
+    "held",
+    "learn-standoff",
+    "part-break",
+    "low-health",
+    "land"
+   ],
+   "gdd": "Edit 26, 75",
+   "shot": "impact",
+   "kind": "sim",
+   "where": [
+    "S:3268"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 7,
+   "variants": [
+    {
+     "id": "impact.big",
+     "cue": "sfx.impact.big",
+     "when": {
+      "big": true
+     },
+     "label": "A big hit"
+    },
+    {
+     "id": "impact.drop",
+     "cue": "sfx.impact.drop",
+     "when": {
+      "drop": true
+     },
+     "label": "A drop onto a car"
+    }
+   ]
+  },
+  {
+   "id": "held",
+   "cue": "sfx.held",
+   "group": "hits",
+   "label": "Chassis held",
+   "what": "Story: a hit that misses the brief; the chassis holds at the floor.",
+   "freq": "once",
+   "priority": "medium",
+   "firesWith": [
+    "impact"
+   ],
+   "gdd": "Edit 91",
+   "shot": "impact",
+   "kind": "sim",
+   "where": [
+    "S:3269"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "knock",
+   "cue": "sfx.knock",
+   "group": "hits",
+   "label": "Knock",
+   "what": "A car shoves the dummy without damage.",
+   "freq": "frame",
+   "priority": "medium",
+   "firesWith": [],
+   "gdd": "Edit 70",
+   "shot": "play",
+   "kind": "sim",
+   "where": [
+    "S:2106",
+    "W:2346"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 1,
+   "variants": []
+  },
+  {
+   "id": "touch-spent",
+   "cue": "sfx.touch-spent",
+   "group": "hits",
+   "label": "Spent car",
+   "what": "The dummy touches a spent car: no reward.",
+   "freq": "frame",
+   "priority": "low",
+   "firesWith": [],
+   "gdd": "Edit 70, 99",
+   "shot": "play",
+   "kind": "sim",
+   "where": [
+    "S:3233"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 1,
+   "variants": []
+  },
+  {
+   "id": "writeoff",
+   "cue": "sfx.writeoff",
+   "group": "hits",
+   "label": "Write-off",
+   "what": "The chassis is written off: health reaches zero.",
+   "freq": "once",
+   "priority": "high",
+   "firesWith": [
+    "impact",
+    "combo",
+    "ending",
+    "credit"
+   ],
+   "gdd": "Edit 26",
+   "shot": "writeoff",
+   "kind": "sim",
+   "where": [
+    "S:3284"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 2,
+   "variants": []
+  },
+  {
+   "id": "chassis",
+   "cue": "sfx.chassis",
+   "group": "hits",
+   "label": "New chassis",
+   "what": "A chassis is issued: at a level's start, under the card, and after each write-off.",
+   "freq": "once",
+   "priority": "medium",
+   "firesWith": [],
+   "gdd": "Edit 26",
+   "shot": "play",
+   "kind": "sim",
+   "where": [
+    "S:1666"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": [
+    {
+     "id": "chassis.start",
+     "cue": "sfx.chassis.start",
+     "when": {
+      "start": true
+     },
+     "label": "At a level's start, under the level card"
+    }
+   ]
+  },
+  {
+   "id": "part-break",
+   "cue": "sfx.part-break",
+   "group": "hits",
+   "label": "Part breaks",
+   "what": "A body part reaches broken (level 3).",
+   "freq": "once",
+   "priority": "medium",
+   "firesWith": [
+    "impact"
+   ],
+   "gdd": "Edit 91",
+   "shot": "impact",
+   "kind": "new",
+   "where": [],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "low-health",
+   "cue": "sfx.low-health",
+   "group": "hits",
+   "label": "Low health",
+   "what": "The chassis falls below audio.sfx.lowHealthAt of its maximum.",
+   "freq": "once",
+   "priority": "medium",
+   "firesWith": [
+    "impact"
+   ],
+   "gdd": "Edit 100",
+   "shot": "impact",
+   "kind": "new",
+   "where": [],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "near-miss",
+   "cue": "sfx.near-miss",
+   "group": "near",
+   "label": "Near-miss",
+   "what": "A fast car passes close without touching.",
+   "freq": "burst",
+   "priority": "medium",
+   "firesWith": [],
+   "gdd": "Edit 37",
+   "shot": "play",
+   "kind": "derived",
+   "where": [
+    "G:688"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 1,
+   "variants": []
+  },
+  {
+   "id": "miss",
+   "cue": "sfx.miss",
+   "group": "near",
+   "label": "Dash misses",
+   "what": "A dash ends with no contact.",
+   "freq": "action",
+   "priority": "low",
+   "firesWith": [
+    "lunge"
+   ],
+   "gdd": "Edit 37",
+   "shot": "dash",
+   "kind": "derived",
+   "where": [
+    "G:698"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 1,
+   "variants": []
+  },
+  {
+   "id": "pickup",
+   "cue": "sfx.pickup",
+   "group": "cones",
+   "label": "Cone picked up",
+   "what": "The dummy picks up a cone (X).",
+   "freq": "action",
+   "priority": "high",
+   "firesWith": [],
+   "gdd": "Edit 78, 80",
+   "shot": "cones",
+   "kind": "sim",
+   "where": [
+    "S:1611"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "drop",
+   "cue": "sfx.drop",
+   "group": "cones",
+   "label": "Cone set down",
+   "what": "The dummy sets a cone down.",
+   "freq": "action",
+   "priority": "medium",
+   "firesWith": [],
+   "gdd": "Edit 78",
+   "shot": "cones",
+   "kind": "sim",
+   "where": [
+    "S:2004"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "throw",
+   "cue": "sfx.throw",
+   "group": "cones",
+   "label": "Cone thrown",
+   "what": "The dummy throws a cone.",
+   "freq": "action",
+   "priority": "high",
+   "firesWith": [],
+   "gdd": "Edit 79",
+   "shot": "cones",
+   "kind": "sim",
+   "where": [
+    "S:2013"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "punt",
+   "cue": "sfx.punt",
+   "group": "cones",
+   "label": "Cone kicked",
+   "what": "The dummy walks into a cone and kicks it.",
+   "freq": "action",
+   "priority": "low",
+   "firesWith": [],
+   "gdd": "Edit 90",
+   "shot": "cones",
+   "kind": "sim",
+   "where": [
+    "S:2119",
+    "W:2359"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "cone-hit",
+   "cue": "sfx.cone-hit",
+   "group": "cones",
+   "label": "Cone hit",
+   "what": "A cone makes a car stop or crash: points.",
+   "freq": "once",
+   "priority": "high",
+   "firesWith": [
+    "combo"
+   ],
+   "gdd": "Edit 78",
+   "shot": "cones",
+   "kind": "sim",
+   "where": [
+    "S:2264"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "cone-struck",
+   "cue": "sfx.cone-struck",
+   "group": "cones",
+   "label": "Car strikes a cone",
+   "what": "A car runs into a cone.",
+   "freq": "ambient",
+   "priority": "low",
+   "firesWith": [
+    "cone-hit"
+   ],
+   "gdd": "Edit 99",
+   "shot": "cones",
+   "kind": "sim",
+   "where": [
+    "S:2278"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "cone-stop",
+   "cue": "sfx.cone-stop",
+   "group": "cones",
+   "label": "Cone stops",
+   "what": "A thrown cone stops sliding.",
+   "freq": "ambient",
+   "priority": "low",
+   "firesWith": [],
+   "gdd": "Edit 78",
+   "shot": "cones",
+   "kind": "sim",
+   "where": [
+    "S:2261"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "cone-rest",
+   "cue": "sfx.cone-rest",
+   "group": "cones",
+   "label": "Cone at rest",
+   "what": "A cone settles.",
+   "freq": "ambient",
+   "priority": "low",
+   "firesWith": [],
+   "gdd": "Edit 78",
+   "shot": "cones",
+   "kind": "sim",
+   "where": [
+    "S:2267"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "cone-release",
+   "cue": "sfx.cone-release",
+   "group": "cones",
+   "label": "Cone released",
+   "what": "Carried cones fall when the dummy is written off.",
+   "freq": "once",
+   "priority": "low",
+   "firesWith": [
+    "writeoff"
+   ],
+   "gdd": "Edit 80",
+   "shot": "cones",
+   "kind": "sim",
+   "where": [
+    "S:2023"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "combo",
+   "cue": "sfx.combo",
+   "group": "combos",
+   "label": "Combo",
+   "what": "A hit extends a combo (two or more).",
+   "freq": "burst",
+   "priority": "high",
+   "firesWith": [
+    "impact"
+   ],
+   "gdd": "Edit 79",
+   "shot": "combo",
+   "kind": "sim",
+   "where": [
+    "S:3249"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": [
+    {
+     "id": "combo.max",
+     "cue": "sfx.combo.max",
+     "when": {
+      "max": true
+     },
+     "label": "At the combo cap (scoring.comboMax)"
+    }
+   ]
+  },
+  {
+   "id": "combo-end",
+   "cue": "sfx.combo-end",
+   "group": "combos",
+   "label": "Combo banked",
+   "what": "The combo clock runs out; the combo is banked.",
+   "freq": "once",
+   "priority": "medium",
+   "firesWith": [],
+   "gdd": "Edit 79",
+   "shot": "combo",
+   "kind": "sim",
+   "where": [
+    "S:1934"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "splash",
+   "cue": "sfx.splash",
+   "group": "world",
+   "label": "Into the river",
+   "what": "The dummy falls into the river.",
+   "freq": "once",
+   "priority": "high",
+   "firesWith": [
+    "drone-dispatch"
+   ],
+   "gdd": "D37",
+   "shot": "river",
+   "kind": "sim",
+   "where": [
+    "W:2267"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "rescued",
+   "cue": "sfx.rescued",
+   "group": "world",
+   "label": "River rescue",
+   "what": "A drone recovers the chassis from the river.",
+   "freq": "once",
+   "priority": "medium",
+   "firesWith": [],
+   "gdd": "D37",
+   "shot": "river",
+   "kind": "sim",
+   "where": [
+    "W:2299"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "screen",
+   "cue": "sfx.screen",
+   "group": "world",
+   "label": "Screen flip",
+   "what": "The view moves to a neighbouring tile.",
+   "freq": "action",
+   "priority": "medium",
+   "firesWith": [],
+   "gdd": "D24",
+   "shot": "play",
+   "kind": "sim",
+   "where": [
+    "S:3397",
+    "W:2407"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "honk",
+   "cue": "sfx.honk",
+   "group": "cars",
+   "label": "Honk",
+   "what": "A blocked car honks, at the dummy or at a cone.",
+   "freq": "burst",
+   "priority": "high",
+   "firesWith": [],
+   "gdd": "Edit 70, 99",
+   "shot": "play",
+   "kind": "sim",
+   "where": [
+    "S:2971"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": [
+    {
+     "id": "honk.body",
+     "cue": "sfx.honk.body",
+     "when": {
+      "at": "body"
+     },
+     "label": "At the dummy; repeats while it blocks"
+    }
+   ]
+  },
+  {
+   "id": "skid",
+   "cue": "sfx.skid",
+   "group": "cars",
+   "label": "Skid",
+   "what": "A car skids on a puddle.",
+   "freq": "ambient",
+   "priority": "medium",
+   "firesWith": [],
+   "gdd": "D18",
+   "shot": "play",
+   "kind": "sim",
+   "where": [
+    "S:3141"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "unstick",
+   "cue": "sfx.unstick",
+   "group": "cars",
+   "label": "Car reverses",
+   "what": "A stuck car reverses or replans.",
+   "freq": "ambient",
+   "priority": "low",
+   "firesWith": [],
+   "gdd": "Edit 72",
+   "shot": "play",
+   "kind": "sim",
+   "where": [
+    "S:2989",
+    "S:3026",
+    "S:3034"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": [
+    {
+     "id": "unstick.reverse",
+     "cue": "sfx.unstick.reverse",
+     "when": {
+      "how": "reverse"
+     },
+     "label": "Reversing beeps"
+    }
+   ]
+  },
+  {
+   "id": "learn-standoff",
+   "cue": "sfx.learn-standoff",
+   "group": "cars",
+   "label": "Model learns",
+   "what": "A car model learns to stop further back.",
+   "freq": "once",
+   "priority": "medium",
+   "firesWith": [
+    "impact"
+   ],
+   "gdd": "Edit 39",
+   "shot": "play",
+   "kind": "sim",
+   "where": [
+    "S:3259"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "car-notice",
+   "cue": "sfx.car-notice",
+   "group": "cars",
+   "label": "Car notices you",
+   "what": "A car's headlights start to flash: it has noticed the dummy.",
+   "freq": "burst",
+   "priority": "medium",
+   "firesWith": [],
+   "gdd": "Edit 99",
+   "shot": "play",
+   "kind": "new",
+   "where": [],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "car-brake",
+   "cue": "sfx.car-brake",
+   "group": "cars",
+   "label": "Car brakes",
+   "what": "A car's brake lights come on as it brakes for safety.",
+   "freq": "ambient",
+   "priority": "low",
+   "firesWith": [],
+   "gdd": "Edit 99",
+   "shot": "play",
+   "kind": "new",
+   "where": [],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "commit",
+   "cue": "sfx.commit",
+   "group": "cars",
+   "label": "Car commits",
+   "what": "A car commits to a manoeuvre.",
+   "freq": "ambient",
+   "priority": "low",
+   "firesWith": [],
+   "gdd": "Edit 70",
+   "shot": "play",
+   "kind": "sim",
+   "where": [
+    "S:2854"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "interrupt",
+   "cue": "sfx.interrupt",
+   "group": "cars",
+   "label": "Car interrupted",
+   "what": "A car's manoeuvre is interrupted.",
+   "freq": "ambient",
+   "priority": "low",
+   "firesWith": [],
+   "gdd": "Edit 70",
+   "shot": "play",
+   "kind": "sim",
+   "where": [
+    "S:3007"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "resume",
+   "cue": "sfx.resume",
+   "group": "cars",
+   "label": "Car resumes",
+   "what": "A car resumes after an interruption.",
+   "freq": "ambient",
+   "priority": "low",
+   "firesWith": [],
+   "gdd": "Edit 70",
+   "shot": "play",
+   "kind": "sim",
+   "where": [
+    "S:3017"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "release",
+   "cue": "sfx.release",
+   "group": "cars",
+   "label": "Car released",
+   "what": "A car is released from a hold.",
+   "freq": "ambient",
+   "priority": "low",
+   "firesWith": [],
+   "gdd": "Edit 72",
+   "shot": "play",
+   "kind": "sim",
+   "where": [
+    "S:2979",
+    "S:2998"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "ring",
+   "cue": "sfx.ring",
+   "group": "cars",
+   "label": "Roundabout lane",
+   "what": "A car changes ring on a roundabout.",
+   "freq": "ambient",
+   "priority": "low",
+   "firesWith": [],
+   "gdd": "Edit 72",
+   "shot": "play",
+   "kind": "sim",
+   "where": [
+    "S:2613",
+    "S:2622"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "gridlock",
+   "cue": "sfx.gridlock",
+   "group": "cars",
+   "label": "Gridlock",
+   "what": "Traffic locks on a layer.",
+   "freq": "once",
+   "priority": "low",
+   "firesWith": [],
+   "gdd": "Edit 72",
+   "shot": "play",
+   "kind": "sim",
+   "where": [
+    "S:2442"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "gridlock-clear",
+   "cue": "sfx.gridlock-clear",
+   "group": "cars",
+   "label": "Gridlock clears",
+   "what": "Locked traffic clears.",
+   "freq": "once",
+   "priority": "low",
+   "firesWith": [],
+   "gdd": "Edit 72",
+   "shot": "play",
+   "kind": "sim",
+   "where": [
+    "S:2443"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "admit",
+   "cue": "sfx.admit",
+   "group": "cars",
+   "label": "Car enters",
+   "what": "A car enters the screen.",
+   "freq": "ambient",
+   "priority": "low",
+   "firesWith": [],
+   "gdd": "Edit 70",
+   "shot": "play",
+   "kind": "sim",
+   "where": [
+    "S:2301",
+    "S:3600"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "exit",
+   "cue": "sfx.exit",
+   "group": "cars",
+   "label": "Car leaves",
+   "what": "A car leaves the screen.",
+   "freq": "ambient",
+   "priority": "low",
+   "firesWith": [],
+   "gdd": "Edit 70",
+   "shot": "play",
+   "kind": "sim",
+   "where": [
+    "S:3220"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "contact-ignored",
+   "cue": "sfx.contact-ignored",
+   "group": "cars",
+   "label": "Contact ignored",
+   "what": "A contact that scores nothing.",
+   "freq": "frame",
+   "priority": "low",
+   "firesWith": [],
+   "gdd": "Edit 70",
+   "shot": "play",
+   "kind": "sim",
+   "where": [
+    "S:3232"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "touch",
+   "cue": "sfx.touch",
+   "group": "cars",
+   "label": "Touch",
+   "what": "A zero-speed touch.",
+   "freq": "frame",
+   "priority": "low",
+   "firesWith": [],
+   "gdd": "Edit 70",
+   "shot": "play",
+   "kind": "sim",
+   "where": [
+    "S:3235"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "drone-dispatch",
+   "cue": "sfx.drone-dispatch",
+   "group": "drones",
+   "label": "Drone dispatched",
+   "what": "A Corporation drone sets off: to clear a cone, or to the river.",
+   "freq": "once",
+   "priority": "medium",
+   "firesWith": [
+    "splash"
+   ],
+   "gdd": "Edit 70",
+   "shot": "drone",
+   "kind": "sim",
+   "where": [
+    "S:2896",
+    "W:2289"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": [
+    {
+     "id": "drone-dispatch.rescue",
+     "cue": "sfx.drone-dispatch.rescue",
+     "when": {
+      "rescue": true
+     },
+     "label": "To the river"
+    }
+   ]
+  },
+  {
+   "id": "drone-pickup",
+   "cue": "sfx.drone-pickup",
+   "group": "drones",
+   "label": "Drone lifts a cone",
+   "what": "The drone lifts a cone.",
+   "freq": "once",
+   "priority": "low",
+   "firesWith": [],
+   "gdd": "Edit 70",
+   "shot": "drone",
+   "kind": "sim",
+   "where": [
+    "S:2927"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "drone-drop",
+   "cue": "sfx.drone-drop",
+   "group": "drones",
+   "label": "Drone sets a cone down",
+   "what": "The drone sets the cone down.",
+   "freq": "once",
+   "priority": "low",
+   "firesWith": [],
+   "gdd": "Edit 70",
+   "shot": "drone",
+   "kind": "sim",
+   "where": [
+    "S:2938"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "drop-in",
+   "cue": "sfx.drop-in",
+   "group": "drones",
+   "label": "Drone drop begins",
+   "what": "A level starts: a drone carries the dummy in.",
+   "freq": "once",
+   "priority": "high",
+   "firesWith": [],
+   "gdd": "Edit 98",
+   "shot": "drop",
+   "kind": "sim",
+   "where": [
+    "T:139"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "dropped-in",
+   "cue": "sfx.dropped-in",
+   "group": "drones",
+   "label": "Dummy set down",
+   "what": "The drone sets the dummy down; play starts.",
+   "freq": "once",
+   "priority": "medium",
+   "firesWith": [],
+   "gdd": "Edit 98",
+   "shot": "drop",
+   "kind": "sim",
+   "where": [
+    "T:152"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "story-enter",
+   "cue": "sfx.story-enter",
+   "group": "story",
+   "label": "Tile in test",
+   "what": "The dummy is in the tile in test.",
+   "freq": "once",
+   "priority": "medium",
+   "firesWith": [],
+   "gdd": "Edit 81",
+   "shot": "card",
+   "kind": "sim",
+   "where": [
+    "T:187"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "story-count",
+   "cue": "sfx.story-count",
+   "group": "story",
+   "label": "Counted",
+   "what": "A write-off counts toward the brief.",
+   "freq": "once",
+   "priority": "high",
+   "firesWith": [
+    "writeoff"
+   ],
+   "gdd": "Edit 81",
+   "shot": "story",
+   "kind": "sim",
+   "where": [
+    "T:362"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "story-miss",
+   "cue": "sfx.story-miss",
+   "group": "story",
+   "label": "Not counted",
+   "what": "A write-off does not count.",
+   "freq": "once",
+   "priority": "medium",
+   "firesWith": [
+    "writeoff"
+   ],
+   "gdd": "Edit 81",
+   "shot": "story",
+   "kind": "sim",
+   "where": [
+    "T:362"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "story-clear",
+   "cue": "sfx.story-clear",
+   "group": "story",
+   "label": "Tile cleared",
+   "what": "The tile's brief is met.",
+   "freq": "once",
+   "priority": "high",
+   "firesWith": [
+    "story-count",
+    "writeoff"
+   ],
+   "gdd": "Edit 81",
+   "shot": "story",
+   "kind": "sim",
+   "where": [
+    "T:380"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "story-gift",
+   "cue": "sfx.story-gift",
+   "group": "story",
+   "label": "Credit gift",
+   "what": "Dummy Corporation gifts credits on arrival.",
+   "freq": "once",
+   "priority": "medium",
+   "firesWith": [],
+   "gdd": "Edit 84",
+   "shot": "story",
+   "kind": "sim",
+   "where": [
+    "T:183",
+    "T:192"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "story-deliver",
+   "cue": "sfx.story-deliver",
+   "group": "story",
+   "label": "Delivery drone",
+   "what": "A drone brings this tile's part.",
+   "freq": "once",
+   "priority": "medium",
+   "firesWith": [
+    "story-enter"
+   ],
+   "gdd": "Edit 84",
+   "shot": "story",
+   "kind": "sim",
+   "where": [
+    "T:185"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "story-ferry",
+   "cue": "sfx.story-ferry",
+   "group": "story",
+   "label": "Ferry",
+   "what": "A drone carries the dummy to the next tile.",
+   "freq": "once",
+   "priority": "medium",
+   "firesWith": [],
+   "gdd": "Edit 83",
+   "shot": "ferry",
+   "kind": "sim",
+   "where": [
+    "T:260"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "story-ferried",
+   "cue": "sfx.story-ferried",
+   "group": "story",
+   "label": "Ferried",
+   "what": "The ferry sets the dummy down on the next tile.",
+   "freq": "once",
+   "priority": "low",
+   "firesWith": [],
+   "gdd": "Edit 83",
+   "shot": "ferry",
+   "kind": "sim",
+   "where": [
+    "T:296"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "story-fence",
+   "cue": "sfx.story-fence",
+   "group": "story",
+   "label": "Fence",
+   "what": "The dummy meets a tile's fence.",
+   "freq": "action",
+   "priority": "medium",
+   "firesWith": [],
+   "gdd": "Edit 81",
+   "shot": "story",
+   "kind": "sim",
+   "where": [
+    "T:339"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "gift",
+   "cue": "sfx.gift",
+   "group": "story",
+   "label": "Gift screen",
+   "what": "A part falls, lands and is fitted: the gift screen.",
+   "freq": "once",
+   "priority": "high",
+   "firesWith": [
+    "story-gift"
+   ],
+   "gdd": "Edit 84",
+   "shot": "gift",
+   "kind": "sim",
+   "where": [
+    "T:192"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "delivered",
+   "cue": "sfx.delivered",
+   "group": "story",
+   "label": "Delivery done",
+   "what": "The delivery drone leaves.",
+   "freq": "once",
+   "priority": "low",
+   "firesWith": [],
+   "gdd": "Edit 84",
+   "shot": "story",
+   "kind": "sim",
+   "where": [
+    "T:126"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "unveil",
+   "cue": "sfx.unveil",
+   "group": "story",
+   "label": "Unveiling",
+   "what": "The finale: the monument and its plaque.",
+   "freq": "once",
+   "priority": "high",
+   "firesWith": [],
+   "gdd": "Edit 94",
+   "shot": "plaque",
+   "kind": "sim",
+   "where": [
+    "T:390"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "unveil-lift",
+   "cue": "sfx.unveil-lift",
+   "group": "story",
+   "label": "Cloth lifts",
+   "what": "The cloth comes off the monument.",
+   "freq": "once",
+   "priority": "high",
+   "firesWith": [
+    "unveil"
+   ],
+   "gdd": "Edit 94",
+   "shot": "plaque",
+   "kind": "new",
+   "where": [],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "voyage",
+   "cue": "sfx.voyage",
+   "group": "story",
+   "label": "Voyage",
+   "what": "A drone lifts the dummy toward the ship.",
+   "freq": "once",
+   "priority": "medium",
+   "firesWith": [],
+   "gdd": "Edit 94",
+   "shot": "certified",
+   "kind": "sim",
+   "where": [
+    "T:204"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "voyage-end",
+   "cue": "sfx.voyage-end",
+   "group": "story",
+   "label": "At the ship",
+   "what": "The dummy is set down at the ship: CERTIFIED.",
+   "freq": "once",
+   "priority": "medium",
+   "firesWith": [
+    "ending"
+   ],
+   "gdd": "Edit 94",
+   "shot": "certified",
+   "kind": "sim",
+   "where": [
+    "T:231"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "shop-open",
+   "cue": "sfx.shop-open",
+   "group": "arcade",
+   "label": "Workshop opens",
+   "what": "The workshop opens after a report.",
+   "freq": "once",
+   "priority": "low",
+   "firesWith": [],
+   "gdd": "Edit 89",
+   "shot": "workshop",
+   "kind": "sim",
+   "where": [
+    "S:3621"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "purchase",
+   "cue": "sfx.purchase",
+   "group": "arcade",
+   "label": "Part fitted",
+   "what": "A part is bought and fitted.",
+   "freq": "action",
+   "priority": "high",
+   "firesWith": [],
+   "gdd": "Edit 89",
+   "shot": "workshop",
+   "kind": "sim",
+   "where": [
+    "S:3643"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "purchase-denied",
+   "cue": "sfx.purchase-denied",
+   "group": "arcade",
+   "label": "Cannot buy",
+   "what": "A purchase is refused.",
+   "freq": "action",
+   "priority": "medium",
+   "firesWith": [],
+   "gdd": "Edit 89",
+   "shot": "workshop",
+   "kind": "sim",
+   "where": [
+    "S:3641",
+    "T:397"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "shop-skip",
+   "cue": "sfx.shop-skip",
+   "group": "arcade",
+   "label": "Workshop skipped",
+   "what": "Story: nothing to buy; the workshop is skipped.",
+   "freq": "once",
+   "priority": "low",
+   "firesWith": [],
+   "gdd": "Edit 89",
+   "shot": "workshop",
+   "kind": "sim",
+   "where": [
+    "T:399"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "credit",
+   "cue": "sfx.credit",
+   "group": "arcade",
+   "label": "Credits paid",
+   "what": "Credits are paid for a write-off.",
+   "freq": "once",
+   "priority": "low",
+   "firesWith": [
+    "writeoff"
+   ],
+   "gdd": "Edit 82",
+   "shot": "report",
+   "kind": "sim",
+   "where": [
+    "S:3309",
+    "T:448"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "road-cleared",
+   "cue": "sfx.road-cleared",
+   "group": "arcade",
+   "label": "Road cleared",
+   "what": "Arcade: the road's quota is met.",
+   "freq": "once",
+   "priority": "medium",
+   "firesWith": [],
+   "gdd": "Edit 81",
+   "shot": "report",
+   "kind": "sim",
+   "where": [
+    "S:3308"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "grade",
+   "cue": "sfx.grade",
+   "group": "arcade",
+   "label": "Grade up",
+   "what": "Arcade: the grade rises; tougher chassis, denser traffic.",
+   "freq": "once",
+   "priority": "high",
+   "firesWith": [
+    "writeoff"
+   ],
+   "gdd": "Edit 97",
+   "shot": "report",
+   "kind": "sim",
+   "where": [
+    "T:446"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "ending",
+   "cue": "sfx.ending",
+   "group": "arcade",
+   "label": "Ending",
+   "what": "A run ends: Licensed, Certified, Failed test or Non-compliant.",
+   "freq": "once",
+   "priority": "high",
+   "firesWith": [
+    "writeoff"
+   ],
+   "gdd": "Edit 97, 94",
+   "shot": "ending",
+   "kind": "sim",
+   "where": [
+    "S:3291"
+   ],
+   "synthNow": true,
+   "juiceLayersWithSound": 0,
+   "variants": [
+    {
+     "id": "ending.win",
+     "cue": "sfx.ending.win",
+     "when": {
+      "kind": [
+       "Licensed",
+       "Certified"
+      ]
+     },
+     "label": "Licensed or Certified"
+    },
+    {
+     "id": "ending.fail",
+     "cue": "sfx.ending.fail",
+     "when": {
+      "kind": [
+       "Failed test",
+       "Non-compliant"
+      ]
+     },
+     "label": "Failed test or Non-compliant"
+    }
+   ]
+  },
+  {
+   "id": "milestone",
+   "cue": "sfx.milestone",
+   "group": "arcade",
+   "label": "Milestone",
+   "what": "An internal first (first hit, first combo).",
+   "freq": "once",
+   "priority": "low",
+   "firesWith": [],
+   "gdd": "Edit 70",
+   "shot": "play",
+   "kind": "sim",
+   "where": [
+    "S:1641"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "bark",
+   "cue": "sfx.bark",
+   "group": "barks",
+   "label": "Bark bubble",
+   "what": "A car's line appears in the message strip.",
+   "freq": "burst",
+   "priority": "medium",
+   "firesWith": [],
+   "gdd": "Edit 26, 70",
+   "shot": "play",
+   "kind": "new",
+   "where": [],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": [
+    {
+     "id": "bark.shout",
+     "cue": "sfx.bark.shout",
+     "when": {
+      "style": "shout"
+     },
+     "label": "A shouted line"
+    }
+   ]
+  },
+  {
+   "id": "intro-hit",
+   "cue": "sfx.intro-hit",
+   "group": "intro",
+   "label": "Intro hit",
+   "what": "The intro loop: the car meets the dummy.",
+   "freq": "once",
+   "priority": "low",
+   "firesWith": [],
+   "gdd": "Edit 98",
+   "shot": "intro",
+   "kind": "new",
+   "where": [],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "learned",
+   "cue": "sfx.learned",
+   "group": "barks",
+   "label": "Model returns",
+   "what": "A model that learned returns and says so (a bark).",
+   "freq": "once",
+   "priority": "low",
+   "firesWith": [
+    "bark"
+   ],
+   "gdd": "D23",
+   "shot": "play",
+   "kind": "derived",
+   "where": [
+    "G:857"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "upgrade-seen",
+   "cue": "sfx.upgrade-seen",
+   "group": "barks",
+   "label": "Upgrade seen",
+   "what": "A car remarks on a new module (a bark).",
+   "freq": "once",
+   "priority": "low",
+   "firesWith": [
+    "bark"
+   ],
+   "gdd": "D23",
+   "shot": "play",
+   "kind": "derived",
+   "where": [
+    "G:879"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  },
+  {
+   "id": "part-seen",
+   "cue": "sfx.part-seen",
+   "group": "barks",
+   "label": "Broken part seen",
+   "what": "A car remarks on a broken part (a bark).",
+   "freq": "once",
+   "priority": "low",
+   "firesWith": [
+    "bark"
+   ],
+   "gdd": "D23",
+   "shot": "play",
+   "kind": "derived",
+   "where": [
+    "G:883"
+   ],
+   "synthNow": false,
+   "juiceLayersWithSound": 0,
+   "variants": []
+  }
+ ]
+}

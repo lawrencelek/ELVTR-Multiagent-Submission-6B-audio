@@ -15,6 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PACK = ROOT / "prototypes" / "p9" / "audio"
 OUT = ROOT / "content" / "audio" / "inventory.json"
 CREDITS = {"music": "ansimuz on itch.io", "sfx": "Chequered Ink on itch.io"}
+RENAMED = {"track6_ansimuz-itch-io_fantasy-dragon.ogg": "track6_ansimuz-itch-io_fantasy Dragon.ogg"}  # no spaces in URLs
 SOURCE = {"music": "itch.io (assets/audio/licence/music-credit.txt)", "sfx": "itch.io (assets/audio/licence/sfx-credit.txt)"}
 
 
@@ -70,9 +71,11 @@ def main():
             rec["levelSource"] = "lufs" if rec["lufs"] is not None else "rms"
             rec.update({"credit": CREDITS[folder], "source": SOURCE[folder], "licence": "royalty-free pack; credit line supplied by the user; licence text not supplied"})
             if folder == "music":
+                if p.name in RENAMED:
+                    rec["original"] = RENAMED[p.name]
                 m = re.match(r"track(\d)_(.+)$", p.stem)
                 rec["track"] = int(m.group(1))
-                rec["title"] = m.group(2).split("_", 1)[1].replace("-", " ")
+                rec["title"] = m.group(2).split("_", 1)[1].replace("-", " ").replace("fantasy dragon", "fantasy Dragon")
             files.append(rec)
     OUT.parent.mkdir(parents=True, exist_ok=True)
     doc = {"generated_by": "audio/inventory.py", "pack": "prototypes/p9/audio/", "count": len(files),

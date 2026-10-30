@@ -1,0 +1,5 @@
+SCORE: 10/10
+REASON:
+- None.
+I checked every §3 rule (C1–C3, F1–F4, X1–X2, S1–S2, L1–L2, M1–M3, A1) against all 108 entries, the inventory and the music states; I rejected the lint finding "honk · C2" because its `why`, "The pack has no horn; 8.4 honks keep each tier's voice.", is a reason tied to the game (the inventory has no horn file, and cars speak in their tier's voice per Style Guide V2 T3/T7), which C2 explicitly allows.
+Total: 10 − 0 = 10.

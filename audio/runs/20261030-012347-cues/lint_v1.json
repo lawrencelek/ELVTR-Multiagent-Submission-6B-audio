@@ -1,0 +1,44 @@
+[
+ {
+  "event": "combo.max",
+  "rule": "S2",
+  "severity": "major",
+  "text": "a repeating event with one file and no stated variation"
+ },
+ {
+  "event": "honk",
+  "rule": "C2",
+  "severity": "major",
+  "text": "high-priority event set to synth"
+ },
+ {
+  "event": "bark",
+  "rule": "S1",
+  "severity": "blocking",
+  "text": "cooldown 'audio.sfx.cooldown.bark' is not a class or a specific ID"
+ },
+ {
+  "event": "bark.shout",
+  "rule": "S1",
+  "severity": "blocking",
+  "text": "cooldown 'audio.sfx.cooldown.bark' is not a class or a specific ID"
+ },
+ {
+  "event": "music.intro",
+  "rule": "M1",
+  "severity": "blocking",
+  "text": "intro plays track1_ansimuz-itch-io_megabot.ogg, not Track 1"
+ },
+ {
+  "event": "music.menu",
+  "rule": "M1",
+  "severity": "blocking",
+  "text": "menus play track2_ansimuz-itch-io_summer-nights.ogg, not Track 2"
+ },
+ {
+  "event": "music.level",
+  "rule": "M2",
+  "severity": "major",
+  "text": "rotation ['track3_ansimuz-itch-io_chibi-robot-b.ogg', 'track4_ansimuz-itch-io_happywalking.ogg', 'track5_ansimuz-itch-io_dark-happy-world.ogg', 'track6_ansimuz-itch-io_fantasy Dragon.ogg'] is not Tracks 3–6, each once"
+ }
+]

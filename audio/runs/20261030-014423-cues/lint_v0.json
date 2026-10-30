@@ -1,0 +1,8 @@
+[
+ {
+  "event": "honk",
+  "rule": "C2",
+  "severity": "major",
+  "text": "high-priority event set to synth"
+ }
+]

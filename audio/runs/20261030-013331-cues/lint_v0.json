@@ -1,0 +1,20 @@
+[
+ {
+  "event": "chassis.start",
+  "rule": "C1",
+  "severity": "blocking",
+  "text": "no entry"
+ },
+ {
+  "event": "combo.max",
+  "rule": "S2",
+  "severity": "major",
+  "text": "a repeating event with one file and no stated variation"
+ },
+ {
+  "event": "honk",
+  "rule": "C2",
+  "severity": "major",
+  "text": "high-priority event set to synth"
+ }
+]

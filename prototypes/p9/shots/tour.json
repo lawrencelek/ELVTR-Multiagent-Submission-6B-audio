@@ -1,0 +1,1130 @@
+{
+ "html": "dummies_p9.html",
+ "steps": [
+  {
+   "step": 1,
+   "name": "intro, before the first press (PRESS ANY KEY)",
+   "shot": "intro",
+   "screen": "intro",
+   "phase": null,
+   "music": {
+    "state": null,
+    "track": null
+   },
+   "cues": []
+  },
+  {
+   "step": 2,
+   "name": "the first press: audio unlocks, Track 1",
+   "shot": null,
+   "screen": "intro",
+   "phase": null,
+   "music": {
+    "state": "intro",
+    "track": 1
+   },
+   "cues": [
+    {
+     "kind": "unlock",
+     "id": "audio",
+     "file": null
+    },
+    {
+     "kind": "state",
+     "id": "intro",
+     "file": null
+    },
+    {
+     "kind": "music",
+     "id": "track1",
+     "file": "music/track1_ansimuz-itch-io_megabot.ogg"
+    }
+   ]
+  },
+  {
+   "step": 3,
+   "name": "START: the mode select, Track 2",
+   "shot": "title",
+   "screen": "title",
+   "phase": null,
+   "music": {
+    "state": "menu",
+    "track": 2
+   },
+   "cues": [
+    {
+     "kind": "ui",
+     "id": "ui-start",
+     "file": "confirm_1.wav"
+    },
+    {
+     "kind": "state",
+     "id": "menu",
+     "file": null
+    },
+    {
+     "kind": "music",
+     "id": "track2",
+     "file": "music/track2_ansimuz-itch-io_summer-nights.ogg"
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "name": "cursor moves",
+   "shot": null,
+   "screen": "title",
+   "phase": null,
+   "music": {
+    "state": "menu",
+    "track": 2
+   },
+   "cues": [
+    {
+     "kind": "ui",
+     "id": "ui-move",
+     "file": "select_3.wav"
+    },
+    {
+     "kind": "ui",
+     "id": "ui-move",
+     "file": "select_3.wav"
+    }
+   ]
+  },
+  {
+   "step": 5,
+   "name": "the Credits card",
+   "shot": "credits",
+   "screen": "title",
+   "phase": null,
+   "music": {
+    "state": "credits",
+    "track": 2
+   },
+   "cues": [
+    {
+     "kind": "ui",
+     "id": "ui-move",
+     "file": "select_3.wav"
+    },
+    {
+     "kind": "ui",
+     "id": "ui-move",
+     "file": "select_3.wav"
+    },
+    {
+     "kind": "ui",
+     "id": "ui-move",
+     "file": "select_3.wav"
+    },
+    {
+     "kind": "ui",
+     "id": "ui-ok",
+     "file": "confirm_4.wav"
+    },
+    {
+     "kind": "state",
+     "id": "credits",
+     "file": null
+    }
+   ]
+  },
+  {
+   "step": 6,
+   "name": "high scores",
+   "shot": "scores",
+   "screen": "scores",
+   "phase": null,
+   "music": {
+    "state": "menu",
+    "track": 2
+   },
+   "cues": [
+    {
+     "kind": "ui",
+     "id": "ui-back",
+     "file": "cancel_3.wav"
+    },
+    {
+     "kind": "state",
+     "id": "menu",
+     "file": null
+    },
+    {
+     "kind": "ui",
+     "id": "ui-move",
+     "file": "select_3.wav"
+    },
+    {
+     "kind": "ui",
+     "id": "ui-move",
+     "file": "select_3.wav"
+    },
+    {
+     "kind": "ui",
+     "id": "ui-move",
+     "file": "select_3.wav"
+    },
+    {
+     "kind": "ui",
+     "id": "ui-ok",
+     "file": "confirm_4.wav"
+    }
+   ]
+  },
+  {
+   "step": 7,
+   "name": "Arcade: district select",
+   "shot": "arcade",
+   "screen": "arcade",
+   "phase": null,
+   "music": {
+    "state": "menu",
+    "track": 2
+   },
+   "cues": [
+    {
+     "kind": "ui",
+     "id": "ui-back",
+     "file": "cancel_3.wav"
+    },
+    {
+     "kind": "ui",
+     "id": "ui-move",
+     "file": "select_3.wav"
+    },
+    {
+     "kind": "ui",
+     "id": "ui-move",
+     "file": "select_3.wav"
+    },
+    {
+     "kind": "ui",
+     "id": "ui-move",
+     "file": "select_3.wav"
+    },
+    {
+     "kind": "ui",
+     "id": "ui-ok",
+     "file": "confirm_4.wav"
+    }
+   ]
+  },
+  {
+   "step": 8,
+   "name": "Arcade: the level card",
+   "shot": null,
+   "screen": "game",
+   "phase": "brief",
+   "music": {
+    "state": "menu",
+    "track": 2
+   },
+   "cues": [
+    {
+     "kind": "ui",
+     "id": "ui-ok",
+     "file": "confirm_4.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "chassis",
+     "file": "teleport.wav"
+    }
+   ]
+  },
+  {
+   "step": 9,
+   "name": "Arcade: the drone drop, the level track",
+   "shot": null,
+   "screen": "game",
+   "phase": "play",
+   "music": {
+    "state": "level",
+    "track": 3
+   },
+   "cues": [
+    {
+     "kind": "ui",
+     "id": "ui-ok",
+     "file": "confirm_4.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "drop-in",
+     "file": "engine.wav"
+    },
+    {
+     "kind": "state",
+     "id": "level",
+     "file": null
+    },
+    {
+     "kind": "music",
+     "id": "track3",
+     "file": "music/track3_ansimuz-itch-io_chibi-robot-b.ogg"
+    }
+   ]
+  },
+  {
+   "step": 10,
+   "name": "Arcade: play",
+   "shot": null,
+   "screen": "game",
+   "phase": "play",
+   "music": {
+    "state": "level",
+    "track": 3
+   },
+   "cues": [
+    {
+     "kind": "sfx",
+     "id": "bark",
+     "file": "bubble.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "dropped-in",
+     "file": "land.wav"
+    }
+   ]
+  },
+  {
+   "step": 11,
+   "name": "Arcade: a dash",
+   "shot": null,
+   "screen": "game",
+   "phase": "scroll",
+   "music": {
+    "state": "level",
+    "track": 3
+   },
+   "cues": [
+    {
+     "kind": "sfx",
+     "id": "lunge",
+     "file": "jump_4.wav"
+    }
+   ]
+  },
+  {
+   "step": 12,
+   "name": "Arcade: a jump",
+   "shot": null,
+   "screen": "game",
+   "phase": "play",
+   "music": {
+    "state": "level",
+    "track": 3
+   },
+   "cues": [
+    {
+     "kind": "sfx",
+     "id": "denied",
+     "file": "blocked.wav"
+    }
+   ]
+  },
+  {
+   "step": 13,
+   "name": "Arcade: a hit",
+   "shot": null,
+   "screen": "game",
+   "phase": "play",
+   "music": {
+    "state": "level",
+    "track": 3
+   },
+   "cues": [
+    {
+     "kind": "sfx",
+     "id": "impact",
+     "file": "hurt_3.wav"
+    }
+   ]
+  },
+  {
+   "step": 14,
+   "name": "Arcade: a combo",
+   "shot": "combo",
+   "screen": "game",
+   "phase": "play",
+   "music": {
+    "state": "level",
+    "track": 3
+   },
+   "cues": [
+    {
+     "kind": "sfx",
+     "id": "combo",
+     "file": "collect_7.wav"
+    }
+   ]
+  },
+  {
+   "step": 15,
+   "name": "Arcade: cones",
+   "shot": "cones",
+   "screen": "game",
+   "phase": "play",
+   "music": {
+    "state": "level",
+    "track": 3
+   },
+   "cues": [
+    {
+     "kind": "sfx",
+     "id": "pickup",
+     "file": "collect_3.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "cone-hit",
+     "file": "explosion_2.wav"
+    }
+   ]
+  },
+  {
+   "step": 16,
+   "name": "drones",
+   "shot": "drone",
+   "screen": "game",
+   "phase": "play",
+   "music": {
+    "state": "level",
+    "track": 3
+   },
+   "cues": [
+    {
+     "kind": "sfx",
+     "id": "drone-dispatch",
+     "file": "ufo.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "drone-dispatch.rescue",
+     "file": "siren.wav"
+    }
+   ]
+  },
+  {
+   "step": 17,
+   "name": "Arcade: a write-off",
+   "shot": "writeoff",
+   "screen": "game",
+   "phase": "writeoff",
+   "music": {
+    "state": "level",
+    "track": 3
+   },
+   "cues": [
+    {
+     "kind": "sfx",
+     "id": "writeoff",
+     "file": "explosion_4.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "credit",
+     "file": "collect_5.wav"
+    }
+   ]
+  },
+  {
+   "step": 18,
+   "name": "Arcade: the report",
+   "shot": "report",
+   "screen": "game",
+   "phase": "report",
+   "music": {
+    "state": "level",
+    "track": 3
+   },
+   "cues": []
+  },
+  {
+   "step": 19,
+   "name": "Arcade: the workshop",
+   "shot": "workshop",
+   "screen": "game",
+   "phase": "shop",
+   "music": {
+    "state": "level",
+    "track": 3
+   },
+   "cues": [
+    {
+     "kind": "ui",
+     "id": "ui-ok",
+     "file": "confirm_4.wav"
+    },
+    {
+     "kind": "ui",
+     "id": "shop-open",
+     "file": "select_5.wav"
+    }
+   ]
+  },
+  {
+   "step": 20,
+   "name": "Arcade: a purchase",
+   "shot": null,
+   "screen": "game",
+   "phase": "play",
+   "music": {
+    "state": "level",
+    "track": 3
+   },
+   "cues": [
+    {
+     "kind": "ui",
+     "id": "ui-ok",
+     "file": "confirm_4.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "chassis",
+     "file": "teleport.wav"
+    }
+   ]
+  },
+  {
+   "step": 21,
+   "name": "pause: the music ducks",
+   "shot": "pause",
+   "screen": "game",
+   "phase": "play",
+   "music": {
+    "state": "level",
+    "track": 3
+   },
+   "cues": [
+    {
+     "kind": "sfx",
+     "id": "jump",
+     "file": "jump_1.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "jump-land",
+     "file": "land.wav"
+    },
+    {
+     "kind": "ui",
+     "id": "ui-pause",
+     "file": "select_4.wav"
+    }
+   ]
+  },
+  {
+   "step": 22,
+   "name": "Options: MUSIC, SOUND, MUTE",
+   "shot": "options",
+   "screen": "game",
+   "phase": "play",
+   "music": {
+    "state": "level",
+    "track": 3
+   },
+   "cues": [
+    {
+     "kind": "ui",
+     "id": "ui-move",
+     "file": "select_3.wav"
+    },
+    {
+     "kind": "ui",
+     "id": "ui-move",
+     "file": "select_3.wav"
+    },
+    {
+     "kind": "ui",
+     "id": "ui-move",
+     "file": "select_3.wav"
+    },
+    {
+     "kind": "ui",
+     "id": "ui-ok",
+     "file": "confirm_4.wav"
+    }
+   ]
+  },
+  {
+   "step": 23,
+   "name": "Options: SOUND adjusted",
+   "shot": null,
+   "screen": "game",
+   "phase": "play",
+   "music": {
+    "state": "level",
+    "track": 3
+   },
+   "cues": [
+    {
+     "kind": "ui",
+     "id": "ui-move",
+     "file": "select_3.wav"
+    },
+    {
+     "kind": "ui",
+     "id": "ui-move",
+     "file": "select_3.wav"
+    }
+   ]
+  },
+  {
+   "step": 24,
+   "name": "resume",
+   "shot": null,
+   "screen": "game",
+   "phase": "play",
+   "music": {
+    "state": "level",
+    "track": 3
+   },
+   "cues": [
+    {
+     "kind": "ui",
+     "id": "ui-back",
+     "file": "cancel_3.wav"
+    },
+    {
+     "kind": "ui",
+     "id": "ui-move",
+     "file": "select_3.wav"
+    },
+    {
+     "kind": "ui",
+     "id": "ui-move",
+     "file": "select_3.wav"
+    },
+    {
+     "kind": "ui",
+     "id": "ui-move",
+     "file": "select_3.wav"
+    },
+    {
+     "kind": "ui",
+     "id": "ui-back",
+     "file": "cancel_3.wav"
+    }
+   ]
+  },
+  {
+   "step": 25,
+   "name": "Arcade ends: Licensed",
+   "shot": "ending",
+   "screen": "game",
+   "phase": "ending",
+   "music": {
+    "state": "ending",
+    "track": 2
+   },
+   "cues": [
+    {
+     "kind": "sfx",
+     "id": "ending.win",
+     "file": "powerup_5.wav"
+    },
+    {
+     "kind": "state",
+     "id": "ending",
+     "file": null
+    },
+    {
+     "kind": "music",
+     "id": "track2",
+     "file": "music/track2_ansimuz-itch-io_summer-nights.ogg"
+    }
+   ]
+  },
+  {
+   "step": 26,
+   "name": "back to the title",
+   "shot": null,
+   "screen": "title",
+   "phase": null,
+   "music": {
+    "state": "menu",
+    "track": 2
+   },
+   "cues": [
+    {
+     "kind": "state",
+     "id": "menu",
+     "file": null
+    }
+   ]
+  },
+  {
+   "step": 27,
+   "name": "Story: save slots",
+   "shot": "saves",
+   "screen": "saves",
+   "phase": null,
+   "music": {
+    "state": "menu",
+    "track": 2
+   },
+   "cues": [
+    {
+     "kind": "ui",
+     "id": "ui-ok",
+     "file": "confirm_4.wav"
+    }
+   ]
+  },
+  {
+   "step": 28,
+   "name": "Story: the splash",
+   "shot": "splash",
+   "screen": "splash",
+   "phase": null,
+   "music": {
+    "state": "menu",
+    "track": 2
+   },
+   "cues": [
+    {
+     "kind": "ui",
+     "id": "ui-ok",
+     "file": "confirm_4.wav"
+    }
+   ]
+  },
+  {
+   "step": 29,
+   "name": "Story: the map",
+   "shot": "map",
+   "screen": "storymap",
+   "phase": null,
+   "music": {
+    "state": "menu",
+    "track": 2
+   },
+   "cues": [
+    {
+     "kind": "ui",
+     "id": "ui-ok",
+     "file": "confirm_4.wav"
+    }
+   ]
+  },
+  {
+   "step": 30,
+   "name": "Story: the level card (A1)",
+   "shot": "card",
+   "screen": "game",
+   "phase": "brief",
+   "music": {
+    "state": "menu",
+    "track": 2
+   },
+   "cues": [
+    {
+     "kind": "ui",
+     "id": "ui-ok",
+     "file": "confirm_4.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "chassis",
+     "file": "teleport.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "story-enter",
+     "file": "computer_1.wav"
+    }
+   ]
+  },
+  {
+   "step": 31,
+   "name": "Story: the drone drop",
+   "shot": "drop",
+   "screen": "game",
+   "phase": "play",
+   "music": {
+    "state": "level",
+    "track": 3
+   },
+   "cues": [
+    {
+     "kind": "ui",
+     "id": "ui-ok",
+     "file": "confirm_4.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "drop-in",
+     "file": "engine.wav"
+    },
+    {
+     "kind": "state",
+     "id": "level",
+     "file": null
+    },
+    {
+     "kind": "music",
+     "id": "track3",
+     "file": "music/track3_ansimuz-itch-io_chibi-robot-b.ogg"
+    }
+   ]
+  },
+  {
+   "step": 32,
+   "name": "Story: play on tile 1",
+   "shot": "play",
+   "screen": "game",
+   "phase": "play",
+   "music": {
+    "state": "level",
+    "track": 3
+   },
+   "cues": [
+    {
+     "kind": "sfx",
+     "id": "dropped-in",
+     "file": "land.wav"
+    }
+   ]
+  },
+  {
+   "step": 33,
+   "name": "Story: a dash",
+   "shot": "dash",
+   "screen": "game",
+   "phase": "play",
+   "music": {
+    "state": "level",
+    "track": 3
+   },
+   "cues": [
+    {
+     "kind": "sfx",
+     "id": "lunge",
+     "file": "jump_4.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "bark",
+     "file": "select_1.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "impact",
+     "file": "hurt_4.wav"
+    }
+   ]
+  },
+  {
+   "step": 34,
+   "name": "Story: a jump",
+   "shot": "jump",
+   "screen": "game",
+   "phase": "play",
+   "music": {
+    "state": "level",
+    "track": 3
+   },
+   "cues": [
+    {
+     "kind": "sfx",
+     "id": "jump",
+     "file": "jump_1.wav"
+    }
+   ]
+  },
+  {
+   "step": 35,
+   "name": "Story: a big hit",
+   "shot": "impact",
+   "screen": "game",
+   "phase": "play",
+   "music": {
+    "state": "level",
+    "track": 3
+   },
+   "cues": [
+    {
+     "kind": "sfx",
+     "id": "jump-land",
+     "file": "land.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "impact.big",
+     "file": "explosion_1.wav"
+    }
+   ]
+  },
+  {
+   "step": 36,
+   "name": "Story: counted, cleared",
+   "shot": "story",
+   "screen": "game",
+   "phase": "play",
+   "music": {
+    "state": "level",
+    "track": 3
+   },
+   "cues": [
+    {
+     "kind": "sfx",
+     "id": "story-deliver",
+     "file": "engine.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "story-count",
+     "file": "stat_increase.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "story-clear",
+     "file": "powerup_5.wav"
+    }
+   ]
+  },
+  {
+   "step": 37,
+   "name": "Story: the gift screen",
+   "shot": "gift",
+   "screen": "game",
+   "phase": "play",
+   "music": {
+    "state": "level",
+    "track": 3
+   },
+   "cues": [
+    {
+     "kind": "sfx",
+     "id": "gift",
+     "file": "powerup_5.wav"
+    }
+   ]
+  },
+  {
+   "step": 38,
+   "name": "Story: the report",
+   "shot": null,
+   "screen": "game",
+   "phase": "report",
+   "music": {
+    "state": "level",
+    "track": 3
+   },
+   "cues": [
+    {
+     "kind": "sfx",
+     "id": "bark",
+     "file": "bubble.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "writeoff",
+     "file": "explosion_4.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "story-count",
+     "file": "stat_increase.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "story-clear",
+     "file": "powerup_5.wav"
+    }
+   ]
+  },
+  {
+   "step": 39,
+   "name": "Story: the ferry to the next tile",
+   "shot": "ferry",
+   "screen": "game",
+   "phase": "play",
+   "music": {
+    "state": "level",
+    "track": 3
+   },
+   "cues": [
+    {
+     "kind": "ui",
+     "id": "ui-ok",
+     "file": "confirm_4.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "chassis",
+     "file": "teleport.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "story-ferry",
+     "file": "ufo.wav"
+    }
+   ]
+  },
+  {
+   "step": 40,
+   "name": "Story: the gift screen (ferry)",
+   "shot": null,
+   "screen": "game",
+   "phase": "gift",
+   "music": {
+    "state": "level",
+    "track": 3
+   },
+   "cues": [
+    {
+     "kind": "sfx",
+     "id": "gift",
+     "file": "powerup_5.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "story-gift",
+     "file": "collect_6.wav"
+    }
+   ]
+  },
+  {
+   "step": 41,
+   "name": "Story: the next card",
+   "shot": null,
+   "screen": "game",
+   "phase": "brief",
+   "music": {
+    "state": "level",
+    "track": 4
+   },
+   "cues": [
+    {
+     "kind": "ui",
+     "id": "ui-ok",
+     "file": "confirm_4.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "story-enter",
+     "file": "computer_1.wav"
+    },
+    {
+     "kind": "music",
+     "id": "track4",
+     "file": "music/track4_ansimuz-itch-io_happywalking.ogg"
+    }
+   ]
+  },
+  {
+   "step": 42,
+   "name": "Story: play on tile 2: the next level track",
+   "shot": null,
+   "screen": "game",
+   "phase": "play",
+   "music": {
+    "state": "level",
+    "track": 4
+   },
+   "cues": [
+    {
+     "kind": "ui",
+     "id": "ui-ok",
+     "file": "confirm_4.wav"
+    }
+   ]
+  },
+  {
+   "step": 43,
+   "name": "the finale: the plaque, Track 1",
+   "shot": "plaque",
+   "screen": "game",
+   "phase": "unveil",
+   "music": {
+    "state": "finale",
+    "track": 1
+   },
+   "cues": [
+    {
+     "kind": "sfx",
+     "id": "unveil",
+     "file": "powerup_1.wav"
+    },
+    {
+     "kind": "state",
+     "id": "finale",
+     "file": null
+    },
+    {
+     "kind": "music",
+     "id": "track1",
+     "file": "music/track1_ansimuz-itch-io_megabot.ogg"
+    },
+    {
+     "kind": "sfx",
+     "id": "unveil-lift",
+     "file": "disappear.wav"
+    }
+   ]
+  },
+  {
+   "step": 44,
+   "name": "CERTIFIED",
+   "shot": "certified",
+   "screen": "game",
+   "phase": "ending",
+   "music": {
+    "state": "finale",
+    "track": 1
+   },
+   "cues": [
+    {
+     "kind": "sfx",
+     "id": "ending.win",
+     "file": "powerup_5.wav"
+    }
+   ]
+  }
+ ],
+ "shots": {
+  "intro": 1,
+  "title": 3,
+  "credits": 5,
+  "scores": 6,
+  "arcade": 7,
+  "combo": 14,
+  "cones": 15,
+  "drone": 16,
+  "writeoff": 17,
+  "report": 18,
+  "workshop": 19,
+  "pause": 21,
+  "options": 22,
+  "ending": 25,
+  "saves": 27,
+  "splash": 28,
+  "map": 29,
+  "card": 30,
+  "drop": 31,
+  "play": 32,
+  "dash": 33,
+  "jump": 34,
+  "impact": 35,
+  "story": 36,
+  "gift": 37,
+  "ferry": 39,
+  "plaque": 43,
+  "certified": 44
+ },
+ "errors": [],
+ "audio": {
+  "log": 103,
+  "settings": {
+   "music": 8,
+   "sound": 8,
+   "mute": false
+  },
+  "errors": []
+ }
+}

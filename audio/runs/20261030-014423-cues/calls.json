@@ -1,0 +1,46 @@
+[
+ {
+  "label": "v0_reviewer",
+  "role": "reviewer",
+  "seconds": 90.6,
+  "output_tokens": 10133,
+  "models": [
+   "claude-haiku-5-5",
+   "claude-opus-5-5"
+  ],
+  "cost_usd": 0.4412315
+ },
+ {
+  "label": "v1_refiner",
+  "role": "refiner",
+  "seconds": 80.3,
+  "output_tokens": 12532,
+  "models": [
+   "claude-haiku-5-5",
+   "claude-opus-5-5"
+  ],
+  "cost_usd": 0.49059389999999997
+ },
+ {
+  "label": "v1_reviewer",
+  "role": "reviewer",
+  "seconds": 92.6,
+  "output_tokens": 10446,
+  "models": [
+   "claude-haiku-5-5",
+   "claude-opus-5-5"
+  ],
+  "cost_usd": 0.41293110000000005
+ },
+ {
+  "label": "v1_confirm1",
+  "role": "reviewer",
+  "seconds": 87.5,
+  "output_tokens": 9394,
+  "models": [
+   "claude-haiku-5-5",
+   "claude-opus-5-5"
+  ],
+  "cost_usd": 0.1981371
+ }
+]

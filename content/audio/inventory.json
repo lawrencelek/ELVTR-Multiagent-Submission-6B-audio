@@ -121,8 +121,8 @@
    "title": "dark happy world"
   },
   {
-   "file": "music/track6_ansimuz-itch-io_fantasy Dragon.ogg",
-   "name": "track6_ansimuz-itch-io_fantasy Dragon",
+   "file": "music/track6_ansimuz-itch-io_fantasy-dragon.ogg",
+   "name": "track6_ansimuz-itch-io_fantasy-dragon",
    "folder": "music",
    "bytes": 1593242,
    "family": null,
@@ -140,6 +140,7 @@
    "credit": "ansimuz on itch.io",
    "source": "itch.io (assets/audio/licence/music-credit.txt)",
    "licence": "royalty-free pack; credit line supplied by the user; licence text not supplied",
+   "original": "track6_ansimuz-itch-io_fantasy Dragon.ogg",
    "track": 6,
    "title": "fantasy Dragon"
   },

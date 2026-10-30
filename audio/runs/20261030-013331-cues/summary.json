@@ -1,0 +1,31 @@
+{
+ "run": "20261030-013331-cues",
+ "accepted": false,
+ "versions": [
+  {
+   "version": 0,
+   "score": 4,
+   "lint": "1 blocking, 2 major"
+  },
+  {
+   "version": 1,
+   "score": 9,
+   "lint": "1 major"
+  },
+  {
+   "version": 2,
+   "score": 9,
+   "lint": "1 major"
+  },
+  {
+   "version": 3,
+   "score": 9,
+   "lint": "1 major"
+  }
+ ],
+ "calls": 7,
+ "cost_usd": 2.92,
+ "seconds": 597.6,
+ "finalLint": "1 major",
+ "blocking": 0
+}

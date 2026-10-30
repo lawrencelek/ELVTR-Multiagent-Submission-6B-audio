@@ -1,0 +1,6 @@
+SCORE: 5/10
+REASON:
+- music.rotation · L1 (blocking, −4) "track6_ansimuz-itch-io_fantasy Dragon.ogg" The pack's inventory has no file by this name (it lists "track6_ansimuz-itch-io_fantasy-dragon.ogg"), so the fourth level track will not load. Fix: change the fourth rotation entry to track6_ansimuz-itch-io_fantasy-dragon.ogg.
+- dropped-in · A1 (minor, −1) "confirm_2.wav" This alternate is a menu confirm from the system world, but the event is a body landing thud. Fix: replace it with blocked.wav and keep door_close.wav as the other alternate, so both fit the landing.
+- honk · C2 (major, −0) "synth" I overrule the lint finding because the reason is tied to the game: the pack has no horn, and Style Guide V2 T3/T7 have each car tier honk in its own voice, which the Prototype 8.4 synth already does. Fix: none.
+Total: 10 − 4 − 1 = 5.

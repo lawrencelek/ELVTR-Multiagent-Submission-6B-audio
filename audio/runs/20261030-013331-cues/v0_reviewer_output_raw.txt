@@ -1,0 +1,6 @@
+SCORE: 4/10
+REASON:
+- chassis.start · C1 (blocking, −4) "chassis.start" has no entry in the map, but the catalogue lists it as a variant of `chassis` and it fires when a level starts. Fix: add a `chassis.start` entry, either `base` so it plays `teleport.wav` or `silence` with the reason that the level card covers the issue.
+- combo.max · S2 (major, −2) "powerup_2.wav" is the only file, and the stated reason "it fires once per cap" contradicts the entry's own `burst` cooldown and the catalogue's burst frequency. Fix: set files to `powerup_2.wav` and `powerup_4.wav`, and change the alternates to `collect_5.wav` and `powerup_3.wav`.
+- honk · C2 (major, −0) "The pack has no horn; 8.4 honks keep each tier's voice." I reject this lint finding: the inventory has no horn file, and §0 (Style Guide V2 T3, T7) has cars bark in their tier's voice, so the reason is tied to the game. Fix: none.
+Total: 10 − 4 − 2 = 4.

@@ -1,0 +1,11 @@
+SCORE: 10/10
+REASON:
+- combo.max · S2 (major, −0) "powerup_2.wav": I rejected this lint finding. S2 fails an entry only when it gives no reason, and this entry's `why` gives one ("it fires once per cap"). Fix: None to the map. Lint should check for a stated reason, not for stated variation.
+- honk · C2 (major, −0) "decision": "synth": I rejected this lint finding. C2 accepts a reason tied to the game, and this entry gives one: the pack has no horn, and the 8.4 synth keeps each tier's voice (Style Guide V2 T3, T7). Fix: None to the map. Lint should read the `why` before it flags.
+- bark · S1 (blocking, −0) "audio.sfx.cooldown.bark": I rejected this lint finding. §2 names `audio.sfx.cooldown.bark` as an allowed cooldown ID, and S1 only covers `frame` and `ambient` events, while `bark` is `burst`. Fix: None to the map. Lint should accept the specific cooldown IDs listed in §2.
+- bark.shout · S1 (blocking, −0) "audio.sfx.cooldown.bark": I rejected this lint finding for the same reason: the cooldown ID is listed in §2, and the variant is `burst`, which S1 does not cover. Fix: None to the map.
+- music.intro · M1 (blocking, −0) "track1_ansimuz-itch-io_megabot.ogg": I rejected this lint finding. The music inventory lists this file as Track 1. Fix: None to the map. Lint should match tracks by the inventory's track number.
+- music.menu · M1 (blocking, −0) "track2_ansimuz-itch-io_summer-nights.ogg": I rejected this lint finding. The music inventory lists this file as Track 2, and `card` continues it until the level starts, as the request asks. Fix: None to the map.
+- music.level · M2 (major, −0) "rotation": I rejected this lint finding. The rotation plays the inventory's Tracks 3, 4, 5 and 6, each once, and it rotates per tile in Story and per run in Arcade. Fix: None to the map.
+- No other rule is broken. I checked C1–C3, F1–F4, X1–X2, S1–S2, L1–L2, M1–M3 and A1 against all 106 entries (94 events and 12 variants) and all 8 music states.
+Total: 10 − 0 = 10.

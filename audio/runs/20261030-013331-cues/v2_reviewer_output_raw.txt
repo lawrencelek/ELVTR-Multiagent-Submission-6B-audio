@@ -1,0 +1,5 @@
+SCORE: 9/10
+REASON:
+- honk · C2 (major, −0) "decision": "synth". I am rejecting this lint finding. C2 deducts only when the reason is not tied to the game. This reason is: the inventory has no horn file, and Prototype 8.4's honks give each car tier its own voice, which the Style Guide V2 requires (T3, T7). Fix: none needed.
+- ending.win · F3 (minor, −1) "level_up.wav" The win ending is in the `big` class, but at −28.2 dB it is the quietest file in that class. It sits 8.7 dB below the gift's powerup_5.wav (−19.5) and is even quieter than ending.fail's lose_1.wav (−24.3), so a Licensed or Certified run ends smaller than a failed one. Fix: make powerup_5.wav the primary for ending.win and keep level_up.wav as an alternate. To keep X2 at three uses of powerup_5.wav, move road-cleared to powerup_1.wav.
+Total: 10 − 0 − 1 = 9.

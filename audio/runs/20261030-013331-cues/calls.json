@@ -1,0 +1,79 @@
+[
+ {
+  "label": "v0_reviewer",
+  "role": "reviewer",
+  "seconds": 102.6,
+  "output_tokens": 11531,
+  "models": [
+   "claude-haiku-5-5",
+   "claude-opus-5-5"
+  ],
+  "cost_usd": 0.4291317
+ },
+ {
+  "label": "v1_refiner",
+  "role": "refiner",
+  "seconds": 62.9,
+  "output_tokens": 9526,
+  "models": [
+   "claude-haiku-5-5",
+   "claude-opus-5-5"
+  ],
+  "cost_usd": 0.3922783
+ },
+ {
+  "label": "v1_reviewer",
+  "role": "reviewer",
+  "seconds": 80.1,
+  "output_tokens": 8769,
+  "models": [
+   "claude-haiku-5-5",
+   "claude-opus-5-5"
+  ],
+  "cost_usd": 0.37408610000000003
+ },
+ {
+  "label": "v2_refiner",
+  "role": "refiner",
+  "seconds": 77.9,
+  "output_tokens": 11959,
+  "models": [
+   "claude-haiku-5-5",
+   "claude-opus-5-5"
+  ],
+  "cost_usd": 0.4401564
+ },
+ {
+  "label": "v2_reviewer",
+  "role": "reviewer",
+  "seconds": 96.8,
+  "output_tokens": 10953,
+  "models": [
+   "claude-haiku-5-5",
+   "claude-opus-5-5"
+  ],
+  "cost_usd": 0.41793009999999997
+ },
+ {
+  "label": "v3_refiner",
+  "role": "refiner",
+  "seconds": 84.5,
+  "output_tokens": 12987,
+  "models": [
+   "claude-haiku-5-5",
+   "claude-opus-5-5"
+  ],
+  "cost_usd": 0.4614616
+ },
+ {
+  "label": "v3_reviewer",
+  "role": "reviewer",
+  "seconds": 92.8,
+  "output_tokens": 10057,
+  "models": [
+   "claude-haiku-5-5",
+   "claude-opus-5-5"
+  ],
+  "cost_usd": 0.4000243
+ }
+]

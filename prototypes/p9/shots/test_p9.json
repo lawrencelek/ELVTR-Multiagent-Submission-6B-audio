@@ -1,0 +1,171 @@
+{
+ "passed": 33,
+ "total": 33,
+ "results": [
+  {
+   "name": "every file in the cue map loads (83)",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "the tour ran without page errors",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "nothing plays before the first press",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "music on \"the first press\": intro, Track 1",
+   "pass": true,
+   "detail": "intro, Track 1"
+  },
+  {
+   "name": "music on \"START\": menu, Track 2",
+   "pass": true,
+   "detail": "menu, Track 2"
+  },
+  {
+   "name": "music on \"the Credits card\": credits, Track 2",
+   "pass": true,
+   "detail": "credits, Track 2"
+  },
+  {
+   "name": "music on \"Arcade: district select\": menu, Track 2",
+   "pass": true,
+   "detail": "menu, Track 2"
+  },
+  {
+   "name": "music on \"Arcade: the level card\": menu, Track 2",
+   "pass": true,
+   "detail": "menu, Track 2"
+  },
+  {
+   "name": "music on \"Arcade: the drone drop\": level, Track 3",
+   "pass": true,
+   "detail": "level, Track 3"
+  },
+  {
+   "name": "music on \"Arcade ends: Licensed\": ending, Track 2",
+   "pass": true,
+   "detail": "ending, Track 2"
+  },
+  {
+   "name": "music on \"Story: save slots\": menu, Track 2",
+   "pass": true,
+   "detail": "menu, Track 2"
+  },
+  {
+   "name": "music on \"Story: the map\": menu, Track 2",
+   "pass": true,
+   "detail": "menu, Track 2"
+  },
+  {
+   "name": "music on \"Story: the level card (A1)\": menu, Track 2",
+   "pass": true,
+   "detail": "menu, Track 2"
+  },
+  {
+   "name": "music on \"Story: the drone drop\": level, Track 3",
+   "pass": true,
+   "detail": "level, Track 3"
+  },
+  {
+   "name": "music on \"Story: play on tile 2\": level, Track 4",
+   "pass": true,
+   "detail": "level, Track 4"
+  },
+  {
+   "name": "music on \"the finale\": finale, Track 1",
+   "pass": true,
+   "detail": "finale, Track 1"
+  },
+  {
+   "name": "music on \"CERTIFIED\": finale, Track 1",
+   "pass": true,
+   "detail": "finale, Track 1"
+  },
+  {
+   "name": "the tour heard 33 cues through the game's hooks",
+   "pass": true,
+   "detail": "ui-start ui-move ui-ok ui-back chassis drop-in bark dropped-in lunge denied impact combo pickup cone-hit drone-dispatch drone-dispatch.rescue writeoff credit shop-open jump jump-land ui-pause ending.win story-enter impact.big story-deliver story-count story-clear gift story-ferry story-gift unveil unveil-lift"
+  },
+  {
+   "name": "the intro waits behind the gate",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "an unmapped key unlocks audio and starts Track 1",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "every catalogued event and variant does what the map says (107: 66 cue, 28 silence, 12 synth, 1 base)",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "the catalogue and the cue map hold the same 107 entries",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "START plays ui-start and crossfades to Track 2",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "a cursor move plays ui-move",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "Arcade run 1 plays the rotation's first track",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "pause ducks the music to audio.music.pauseDuck (0.35)",
+   "pass": true,
+   "detail": "duck 0.35"
+  },
+  {
+   "name": "Options shows MUSIC, SOUND and MUTE",
+   "pass": true,
+   "detail": "Music: 8 / 10 · Sound: 8 / 10 · Mute: off"
+  },
+  {
+   "name": "MUSIC − twice is saved (dummies.p9.audio)",
+   "pass": true,
+   "detail": "{\"music\":6,\"sound\":8,\"mute\":false}"
+  },
+  {
+   "name": "the game takes the Sound Lab's picks from #audio= and keeps them",
+   "pass": true,
+   "detail": "{\"lunge\":[\"boost.wav\"],\"impact\":\"silence\",\"menu\":5,\"rot\":[6,5],\"hash\":\"\",\"stored\":true}"
+  },
+  {
+   "name": "no page errors in the hook tests",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "no audio engine errors",
+   "pass": true,
+   "detail": "[]"
+  },
+  {
+   "name": "Prototype 8.4 rebuilt from the shared code draws what the frozen build draws (315 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 315 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "name": "the frozen dummies_p8_4.html is unchanged (md5 9f5549201d88891f9f0b22c461602909)",
+   "pass": true,
+   "detail": ""
+  }
+ ]
+}

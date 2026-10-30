@@ -56,7 +56,7 @@
   // in reference units; a tap runs the topmost one under the finger. In play the list is empty: the field takes no taps
   const HITS = [];
   function hitbox(x, y, w, h, tag, fn) { HITS.push({ x, y, w, h, tag, fn }); }
-  function uiTap(rx, ry) { for (let i = HITS.length - 1; i >= 0; i--) { const q2 = HITS[i]; if (rx >= q2.x && rx <= q2.x + q2.w && ry >= q2.y && ry <= q2.y + q2.h) { q2.fn(); return true; } } return false; }
+  function uiTap(rx, ry) { for (let i = HITS.length - 1; i >= 0; i--) { const q2 = HITS[i]; if (rx >= q2.x && rx <= q2.x + q2.w && ry >= q2.y && ry <= q2.y + q2.h) { const n0 = AUD ? menuQ.length : 0; q2.fn(); if (AUD && menuQ.length === n0) AUD.ui('ok'); return true; } } return false; } // Edit 100: a tap that queues nothing still clicks
   // Edit 88 (P7.7): three save slots (story.saveSlots), each a name (story.saveNameMax characters), a time stamp and the story's
   // progress (district, tile in test, cleared tiles, credits, points, levels, chassis). Saved in this browser after every count,
   // clear, gift and purchase, as before (Edit 81), into the slot in play. 7.1–7.6 kept one story under SAVE_KEY: it moves into
@@ -101,6 +101,10 @@
   const SIM8 = window.DUMMIES_SIM || null, HS = SIM8 && SIM8['highscore.tableSize'] ? SIM8['highscore.tableSize'] : 0; // Edit 97 (P8.2): Prototype 8.2's values; the high scores
   const INTRO = !!(SIM8 && SIM8['ui.introScreen']), CARD = !!(SIM8 && SIM8['ui.levelCard']), SPLASH = !!(SIM8 && SIM8['ui.storySplash']); // Edit 98 (P8.3)
   if (INTRO) { app.screen = 'intro'; app.introT0 = 0; }
+  // Edit 100 (P9): the audio engine (prototypes/p9/audio.js), only when window.DUMMIES_SIM['audio.enabled'] is 1: cues for sim
+  // events, derived cases, menus and new hooks; the music by screen; MUSIC, SOUND and MUTE in Options. Without it, as before
+  const AUD = SIM8 && SIM8['audio.enabled'] && window.DUMMIES_AUDIO ? window.DUMMIES_AUDIO.create({ app, pv: (id) => pv(id) }) : null;
+  if (AUD && INTRO) app.audioGate = true; // the first press on the intro screen only unlocks audio; Track 1 starts (Edit 100 §3)
   // Fleet database (content/db/fleet.json, decision 117): model names, tags and the bark bank, separate from other text.
   const FLEET = window.FLEET_DB || null;
   const FMODEL = new Map(); // sim model id → database model
@@ -161,6 +165,7 @@
   }
   function startLevelNow(i, carry) {
     if (!carry) app.roads = [];
+    if (AUD && app.mode !== 'story') app.audioRun = (app.audioRun || 0) + 1; // Edit 100: Arcade's music rotates per run
     app.level = i; app.roadCarry = carry || null;
     // Edit 41: each run plays one of the three baked layouts per district, at random (tuning: proto.layout fixes one)
     const nL = ((window.DISTRICT_DB || {}).districts || {})[LEVEL_LIST[i]], nLay = nL && nL.length ? nL.length : 1;
@@ -259,7 +264,7 @@
     else if (e.key === 'Enter') nameDone();
     else if (e.key === 'Escape') nameCancel();
     else used = false;
-    if (used) { e.preventDefault(); e.stopImmediatePropagation(); app.device = 'keys'; }
+    if (used) { e.preventDefault(); e.stopImmediatePropagation(); app.device = 'keys'; if (AUD) Snd.init(); } // Edit 100: typing a name unlocks audio
   }, true);
 
   // ---------- input. Edit 75 (P6.5): four buttons, as on a gamepad: A dash, B jump, X grab, Y throw.
@@ -552,30 +557,42 @@
     if (app.touchEdit) drawTouchEdit(L);
   }
   if (touchDevice()) touchOn();
-  for (const t of ['pointerdown', 'touchstart']) window.addEventListener(t, (e) => { if (!TOUCH.on && (t === 'touchstart' || e.pointerType === 'touch')) touchOn(); }, { capture: true, passive: true }); // Edit 89: a finger on any screen turns touch on
+  for (const t of ['pointerdown', 'touchstart']) window.addEventListener(t, (e) => { if (AUD) Snd.init(); if (!TOUCH.on && (t === 'touchstart' || e.pointerType === 'touch')) touchOn(); }, { capture: true, passive: true }); // Edit 100: and unlocks audio // Edit 89: a finger on any screen turns touch on
 
   // ---------- audio
   const Snd = {
     ctx: null,
-    init() { if (!this.ctx) { try { this.ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { this.ctx = null; } } if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume(); },
+    init() { if (!this.ctx) { try { this.ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { this.ctx = null; } } if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume(); if (AUD && this.ctx) AUD.unlock(this.ctx); }, // Edit 100: the first gesture unlocks the engine
     tone(f0, f1, dur, type, gain, delay) {
-      if (!this.ctx || !app.sound) return;
+      if (!this.ctx || !app.sound || this.hush) return; // Edit 100: hushed while the cue map handles the event
       const c = this.ctx, t = c.currentTime + (delay || 0), o = c.createOscillator(), g = c.createGain();
       o.type = type || 'square'; o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(Math.max(20, f1), t + dur);
       g.gain.setValueAtTime(gain || 0.06, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-      o.connect(g); g.connect(c.destination); o.start(t); o.stop(t + dur + 0.03);
+      o.connect(g); g.connect((AUD && AUD.synthOut()) || c.destination); o.start(t); o.stop(t + dur + 0.03); // Edit 100: through the SOUND volume
     },
     noise(f0, f1, dur, gain, delay) { // band-passed noise sweep: crunch, whoosh, clatter
-      if (!this.ctx || !app.sound) return;
+      if (!this.ctx || !app.sound || this.hush) return;
       const c = this.ctx, t = c.currentTime + (delay || 0), n = Math.max(1, Math.floor(c.sampleRate * dur));
       if (!this.buf || this.buf.length < n) { this.buf = c.createBuffer(1, Math.max(n, c.sampleRate), c.sampleRate); const d = this.buf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; }
       const src = c.createBufferSource(), bp = c.createBiquadFilter(), g = c.createGain();
       src.buffer = this.buf; bp.type = 'bandpass'; bp.Q.value = 1.2;
       bp.frequency.setValueAtTime(Math.max(20, f0), t); bp.frequency.exponentialRampToValueAtTime(Math.max(20, f1), t + dur);
       g.gain.setValueAtTime(gain || 0.08, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-      src.connect(bp); bp.connect(g); g.connect(c.destination); src.start(t); src.stop(t + dur + 0.03);
+      src.connect(bp); bp.connect(g); g.connect((AUD && AUD.synthOut()) || c.destination); src.start(t); src.stop(t + dur + 0.03);
     },
   };
+  if (AUD) { // Edit 100 (P9): any key or click unlocks audio. On the intro screen a key or click that is not START lifts the gate
+    window.addEventListener('keydown', (e) => { Snd.init(); if (app.audioGate && app.screen === 'intro' && !MAP[e.code]) { app.audioGate = false; AUD.ui('gate'); } }, true);
+    window.addEventListener('pointerdown', (e) => { Snd.init(); if (app.audioGate && app.screen === 'intro' && e.target !== cv) { app.audioGate = false; AUD.ui('gate'); } }, true);
+  }
+  // Edit 100: the fields a cue's variants test (content/audio/cues.json): a big hit, the combo cap
+  function audEv(e0) {
+    const x = Object.assign({}, e0);
+    if (e0.type === 'impact') x.big = (e0.assessed || 0) >= (pv('proto.hits.big.assessedMin') || 200);
+    if (e0.type === 'combo') x.max = (e0.mult || 0) >= (pv('scoring.comboMax') || 5) - 1e-9;
+    if (e0.type === 'chassis') x.start = !!(app.sim && (app.sim.t || 0) < 0.5); // the first chassis, under the level card
+    return x;
+  }
   const THEME_NAME = { start: 'Start screen', flyover: 'Pillars', barrier: 'Barrier run', plain: 'Open street',
     monument: 'Lantern monument', fountain: 'Fountain square', roundabout: 'Roundabout', tower: LT('n33', 'FARSIGHT Tower'), plate: 'Test plates' }; // Edit 96 (P8.1): n33
   const LEVEL6 = { walk: 'Walkway: no traffic up here. Step off the side to drop onto cars below.', hill: 'Hilltop (Z1): streets with traffic. Step off the cliff edge to drop to the valley.',
@@ -645,8 +662,10 @@
     const e = Object.assign({ t: +s.t.toFixed(4), type }, data);
     app.present.push(e);
     const x = enrich(e);
+    const h0 = Snd.hush; if (AUD) Snd.hush = AUD.event(audEv(e)); // Edit 100
     hitJuice(x, s);
     barkLine(x, s);
+    Snd.hush = h0;
   }
   function carGap(b, c, R) { // body edge to car edge, world units
     const ca = Math.cos(c.h), sa = Math.sin(c.h), dx = b.x - c.x, dy = b.y - c.y;
@@ -779,6 +798,7 @@
     const pick = use[(Math.round(e.t * 60) + info.slot * 7 + fx.barkN++) % use.length];
     const text = fillIn(pick.text, e); fx.lastLine = pick.id;
     fx.bubbles.set(e.car, { text, style: pick.style || 'speech', priority: pr, t0: now, car: e.car, id: pick.id });
+    if (AUD) AUD.event({ type: 'bark', style: pick.style || 'speech', priority: pr, car: e.car }); // Edit 100: a blip per new bubble
     fx.barkT = now; fx.carBarkT.set(e.car, { t: now, pr });
     app.present.push({ t: +s.t.toFixed(4), type: 'bark', car: e.car, event: e.type, line: pick.id, text });
   }
@@ -846,6 +866,7 @@
       if (e0.type === 'purchase') fx.pendingNodes.push(e0.node); // node id, as the fleet database keys it
       if (e0.type === 'chassis' && fx.pendingNodes.length) { fx.upgradeWatch = fx.pendingNodes[fx.pendingNodes.length - 1]; fx.pendingNodes = []; }
       const e = enrich(e0);
+      Snd.hush = AUD ? AUD.event(audEv(e0)) : false; // Edit 100 (P9): a cue or a stated silence hushes the synth for this event
       const hj = hitJuice(e, s);
       const juiced = hj.done || juice(e0, s);
       // P3: barks are not drawn. A legible bubble at ui.typeSecondary would cover the 400 × 300 field.
@@ -863,7 +884,7 @@
       }
       if (e0.type === 'learn-standoff') fx.learnWatch.set(e0.model, { from: e0.from, to: e0.to });
       if (e0.type === 'admit' && fx.learnWatch.has(e0.model)) { const lw = fx.learnWatch.get(e0.model); fx.learnWatch.delete(e0.model); fx.pendingLearned = { car: e0.car, from: lw.from, to: lw.to }; }
-      if (e0.type === 'impact' && e0.part && s.body.alive) { const lv = partLevels(s)[e0.part]; if (lv >= 3 && !fx.partsSeen.has(e0.part)) { fx.partsSeen.add(e0.part); fx.partWatch = e0.part; } }
+      if (e0.type === 'impact' && e0.part && s.body.alive) { const lv = partLevels(s)[e0.part]; if (lv >= 3 && !fx.partsSeen.has(e0.part)) { fx.partsSeen.add(e0.part); fx.partWatch = e0.part; if (AUD) AUD.event({ type: 'part-break', part: e0.part }); } } // Edit 100: part-break
       if (e0.type === 'chassis') { fx.partsSeen.clear(); fx.partWatch = null; }
       if (FLEET && e.car) barkLine(e, s);
       switch (e0.type) {
@@ -955,6 +976,7 @@
         case 'grade': toast(LT('n35', 'GRADE {G} · TOUGHER CHASSIS · DENSER TRAFFIC', { G: e.grade })); [440, 660, 880].forEach((f, j) => Snd.tone(f, f, 0.1, 'square', 0.05, j * 0.08)); break; // Edit 97 (P8.2)
         default: break;
       }
+      Snd.hush = false;
     }
     if (s.storyMode) for (let i = app.lastEv; i < ev.length; i++) if (/^story-|^purchase$/.test(ev[i].type)) { saveStory(); break; } // Edit 81
     app.lastEv = ev.length;
@@ -988,17 +1010,25 @@
   const nextLevel = (s, t) => { const L = s.tier(t) + 1; return L <= (ABIL4 ? s.trackMax(t) : s.P['abilities.maxLevel']) ? t + L : null; }; // Edit 78: the node a track's card sells
   const NODE = (n) => (ABIL && NODES7[n]) || NODES[n];
   const nodeDesc = (n) => (ABIL && NODES7[n] && NODES7[n].desc) || (FOUR && NODES4 && NODES4[n] && NODES4[n].desc) || NODES[n].desc;
+  function uiKind(m) { // Edit 100 (P9): the menu sound for a press, by what it does here
+    if (app.screen === 'intro') return m === 'ok' || m === 'pause' ? 'start' : null;
+    if (app.credits) return m === 'ok' || m === 'back' || m === 'pause' ? 'back' : null;
+    if (m === 'pause') return app.paused || app.screen === 'splash' ? 'back' : null;
+    return m;
+  }
   function handleMenus() {
     const s = app.sim;
     const live = app.screen === 'game' && !app.paused && s && (s.phase === 'play' || s.phase === 'hitstop' || s.phase === 'writeoff' || s.phase === 'scroll');
     if (live) {
-      for (const m of menuQ) if (m === 'pause' && s.phase === 'play') { app.paused = true; app.pauseSel = 0; app.confirmRefuse = false; app.pausePage = null; }
+      for (const m of menuQ) if (m === 'pause' && s.phase === 'play') { app.paused = true; app.pauseSel = 0; app.confirmRefuse = false; app.pausePage = null; if (AUD) AUD.ui('pause'); }
       menuQ.length = 0;
       return;
     }
     if (app.screen === 'loading') { menuQ.length = 0; return; }
     while (menuQ.length) {
       const m = menuQ.shift();
+      if (app.audioGate && app.screen === 'intro') { app.audioGate = false; if (AUD) AUD.ui('gate'); continue; } // Edit 100: the first press only unlocks audio
+      if (AUD) { const k = uiKind(m); if (k) AUD.ui(k); }
       if (app.credits) { if (m === 'ok' || m === 'back' || m === 'pause') app.credits = false; continue; } // Edit 95 (P8): the Credits card closes on A, B or Start
       if (app.screen === 'intro') { if (m === 'ok' || m === 'pause') { app.screen = 'title'; app.titleSel = 0; } continue; } // Edit 98 (P8.3): START
       if (app.screen === 'splash') { if ((m === 'ok' || m === 'pause' || m === 'back') && app.realT - app.splashT0 > 0.4) { toStoryMap(); return; } continue; } // Edit 98 (P8.3)
@@ -1043,6 +1073,7 @@
         if (m === 'up') app.optSel = (app.optSel + OI.length - 1) % OI.length;
         else if (m === 'down') app.optSel = (app.optSel + 1) % OI.length;
         else if (m === 'ok') optionDo(OI[app.optSel]);
+        else if (AUD && (m === 'left' || m === 'right') && /^(Music|Sound)/.test(OI[app.optSel])) AUD.nudge(OI[app.optSel].startsWith('Music') ? 'music' : 'sound', m === 'right' ? 1 : -1); // Edit 100
         continue;
       }
       if (app.paused) {
@@ -1068,8 +1099,8 @@
       }
       if (!s) continue;
       if (s.phase === 'brief' && m === 'ok') { s.continueBrief(); clearEdges(); return; } // Edit 81: the tile card
-      if (s.phase === 'unveil') { if (m === 'ok' && unveilReady()) { s.continueUnveil(); fx.unveil = null; app.endSel = 0; clearEdges(); Snd.tone(660, 990, 0.1, 'triangle', 0.05); return; } continue; } // Edit 94 (P7.13): A goes on to the ship; manual review: once the cloth is off
-      if (s.phase === 'gift') { if (m === 'ok' && giftReady()) { s.continueGift(); fx.gift = null; clearEdges(); Snd.tone(660, 990, 0.1, 'triangle', 0.05); return; } continue; } // Edit 84: the gift screen
+      if (s.phase === 'unveil') { if (m === 'ok' && unveilReady()) { s.continueUnveil(); fx.unveil = null; app.endSel = 0; clearEdges(); if (!AUD) Snd.tone(660, 990, 0.1, 'triangle', 0.05); return; } continue; } // Edit 94 (P7.13): A goes on to the ship; manual review: once the cloth is off
+      if (s.phase === 'gift') { if (m === 'ok' && giftReady()) { s.continueGift(); fx.gift = null; clearEdges(); if (!AUD) Snd.tone(660, 990, 0.1, 'triangle', 0.05); return; } continue; } // Edit 84: the gift screen
       if (s.phase === 'report' && m === 'ok') s.continueReport();
       else if (s.phase === 'shop') {
         const nc = SHOP_GRID.length, colLen = () => SHOP_GRID[app.shopCol].length;
@@ -1564,7 +1595,7 @@
         FB.rect(rx, y0, rx + 4, y0 + h - 1, K.tagBorder); FB.rect(rx + 1, y0 + 1, rx + 3, y0 + h - 2, K.tagFill);
         PIX.smallText(FB, '!', rx + 2, y0 + 2, K.tagInk);
       }
-      const last = fx.horn.get(c.id) || 0; if (c.honkAt === 'body' && app.realT - last > 1.4) { horn(); fx.horn.set(c.id, app.realT); }
+      const last = fx.horn.get(c.id) || 0; if (c.honkAt === 'body' && app.realT - last > 1.4) { if (!(AUD && AUD.event({ type: 'honk', at: 'body', repeat: true, car: c.id }))) horn(); fx.horn.set(c.id, app.realT); } // Edit 100: the repeat is the honk cue
     }
   }
   function drawDrone(s, d) {
@@ -3054,13 +3085,17 @@
   const PAL_NAME = window.PIX_PALETTE_NAME || 'cyber', PAL_NEXT = { cyber: 'day', day: 'night', night: 'cyber' };
   const deviceOf = () => (TOUCH.on ? 'touch' : app.device === 'pad' ? 'pad' : 'keys');
   function optionItems() {
-    const out = ['Sound: ' + (app.sound ? 'on' : 'off'), 'Palette: ' + PAL_NAME + ' → ' + PAL_NEXT[PAL_NAME], 'Full screen: ' + (document.fullscreenElement ? 'on' : 'off')];
+    const out = AUD ? ['Music: ' + AUD.settings.music + ' / 10', 'Sound: ' + AUD.settings.sound + ' / 10', 'Mute: ' + (AUD.settings.mute ? 'on' : 'off')] : ['Sound: ' + (app.sound ? 'on' : 'off')]; // Edit 100 (P9): volumes, saved
+    out.push('Palette: ' + PAL_NAME + ' → ' + PAL_NEXT[PAL_NAME], 'Full screen: ' + (document.fullscreenElement ? 'on' : 'off'));
     if (!TOUCH.on) out.push('Tuning panel', 'Gamepad setup');
     out.push('Back');
     return out;
   }
   function optionDo(it) {
-    if (it.startsWith('Sound')) { app.sound = !app.sound; Snd.init(); const b = document.getElementById('btn-sound'); if (b) { b.textContent = app.sound ? 'Sound on' : 'Sound off'; b.setAttribute('aria-pressed', String(app.sound)); } }
+    if (AUD && it.startsWith('Music')) { Snd.init(); AUD.cycle('music'); }
+    else if (AUD && it.startsWith('Sound')) { Snd.init(); AUD.cycle('sound'); }
+    else if (AUD && it.startsWith('Mute')) { Snd.init(); AUD.toggleMute(); }
+    else if (it.startsWith('Sound')) { app.sound = !app.sound; Snd.init(); const b = document.getElementById('btn-sound'); if (b) { b.textContent = app.sound ? 'Sound on' : 'Sound off'; b.setAttribute('aria-pressed', String(app.sound)); } }
     else if (it.startsWith('Palette')) { if (app.mode === 'story') saveStory(); const b = document.getElementById('btn-pal'); if (b) b.click(); }
     else if (it.startsWith('Full screen')) { if (TOUCH.on) fullscreen(); else { const b = document.getElementById('btn-full'); if (b) b.click(); } }
     else if (it === 'Tuning panel') toggleTune();
@@ -3163,7 +3198,7 @@
   }
   function drawUnveil(s) {
     const p = s.unveil && s.unveil.plaque; if (!p) return;
-    if (!fx.unveil) { fx.unveil = { t0: app.realT }; [392, 523, 659, 784].forEach((f, j) => Snd.tone(f, f, 0.2, 'triangle', 0.06, 0.3 + j * 0.14)); } // the chime as the cloth lifts
+    if (!fx.unveil) { fx.unveil = { t0: app.realT }; if (!(AUD && AUD.event({ type: 'unveil-lift' }))) [392, 523, 659, 784].forEach((f, j) => Snd.tone(f, f, 0.2, 'triangle', 0.06, 0.3 + j * 0.14)); } // Edit 100: unveil-lift // the chime as the cloth lifts
     const a = RM ? 1 : Math.max(0, Math.min(1, (unveilK() - 0.55) / 0.45)); if (a <= 0) return;
     const w = FW - 72, h = 214, x = FX + 36, y = FY + FH - h - 16, pd = TOUCH.on || app.device === 'pad';
     ctx.save(); ctx.globalAlpha = a;
@@ -3261,7 +3296,7 @@
     const g2 = ctx.createLinearGradient(0, 0, 0, 220); g2.addColorStop(0, 'rgba(5,7,15,0.85)'); g2.addColorStop(1, 'rgba(5,7,15,0)'); ctx.fillStyle = g2; ctx.fillRect(0, 0, VW, 220);
     ctx.save(); ctx.shadowColor = C.dummy; ctx.shadowBlur = 24; txt('DUMMIES', VW / 2, 128, '900 112px ' + F_BRAND, C.dummy, 'center'); ctx.restore();
     wrapText(LT('n36', 'Find new ways to make the cars hit you. Combo bonuses and upgrades await. Make Dummy Corporation proud.'), VW / 2, VH - 94, 900, 34, '700 26px ' + F_UI, '#FFFFFF', 2, 'center');
-    if (RM || Math.floor(app.realT * 2) % 2 === 0) txt(startPrompt('START'), VW / 2, VH - 24, '900 26px ' + F_BRAND, C.dummy, 'center');
+    if (RM || Math.floor(app.realT * 2) % 2 === 0) txt(app.audioGate ? (TOUCH.on ? 'TAP TO BEGIN' : 'PRESS ANY KEY') : startPrompt('START'), VW / 2, VH - 24, '900 26px ' + F_BRAND, C.dummy, 'center'); // Edit 100: the audio gate
     hitbox(0, 0, VW, VH, 'intro:start', () => menuQ.push('ok'));
   }
   let partArt = null;
@@ -3569,7 +3604,7 @@
   document.getElementById('t-reset').addEventListener('click', () => { app.tune = {}; if (app.sim) { for (const k of Object.keys(REG)) app.sim.P[k] = REG[k]; for (const k of Object.keys(PROTO)) app.sim.P[k] = PROTO[k]; Object.assign(app.sim.P, OVERRIDES, W6 && W6.P6SIM ? W6.P6SIM : {}); } syncTune(); }); // Edit 75: P6's own values too
   { const bp = document.getElementById('t-pad'); if (bp) bp.addEventListener('click', () => { app.padCmd = 'setup'; cv.focus(); }); }
   const sndBtn = document.getElementById('btn-sound');
-  sndBtn.addEventListener('click', () => { app.sound = !app.sound; sndBtn.textContent = app.sound ? 'Sound on' : 'Sound off'; sndBtn.setAttribute('aria-pressed', String(app.sound)); Snd.init(); });
+  sndBtn.addEventListener('click', () => { app.sound = !app.sound; if (AUD && AUD.settings.mute === app.sound) AUD.toggleMute(); sndBtn.textContent = app.sound ? 'Sound on' : 'Sound off'; sndBtn.setAttribute('aria-pressed', String(app.sound)); Snd.init(); });
   buildTune();
 
   // ---------- trace modal
@@ -3589,6 +3624,34 @@
 
   const statusEl = document.getElementById('status');
   function appStatus() { return BUILD + ' · ' + (app.tuned ? 'TUNED RUN' : 'registry values'); } // Edit 86: the build line in the pause menu
+  // Edit 100 (P9): each frame, what the screen shows for the music, and the edge cues no sim event carries:
+  // the intro loop's hit, low health (a threshold crossing), a car that notices the dummy, brake lights coming on
+  function audioFrame(dt) {
+    const s = app.sim, ph = app.screen === 'game' && s ? s.phase : null;
+    if (app.screen === 'intro' && !app.audioGate && app.introT0 && !RM) {
+      const L = Math.max(2, (SIM8 && SIM8['ui.intro.loopSeconds']) || 6.5), u = ((app.realT - app.introT0) % L) / L;
+      if (fx.audIntroU != null && fx.audIntroU < 0.66 && u >= 0.66) AUD.event({ type: 'intro-hit' });
+      fx.audIntroU = u;
+    } else fx.audIntroU = null;
+    if (s && app.screen === 'game' && !app.paused && ph === 'play') {
+      const ae = fx.aud && fx.aud.sim === s ? fx.aud : (fx.aud = { sim: s, low: false, notice: new Map(), brk: new Map() }), b = s.body;
+      if (b && b.alive && s.maxHealth) {
+        const k = b.health / Math.max(1e-6, s.maxHealth()), lowAt = AUD.param('audio.sfx.lowHealthAt', 0.3);
+        if (k < lowAt && !ae.low) { ae.low = true; AUD.event({ type: 'low-health', health: +k.toFixed(3) }); } else if (k >= lowAt) ae.low = false;
+      }
+      if (ae.notice.size > 300) { ae.notice.clear(); ae.brk.clear(); }
+      for (const c of carsOf(s)) {
+        if (c.ghost) continue;
+        const n = noticed(s, c), br = !!c._brk;
+        if (n && !ae.notice.get(c.id)) AUD.event({ type: 'car-notice', car: c.id });
+        if (br && !ae.brk.get(c.id) && !c.spent) AUD.event({ type: 'car-brake', car: c.id });
+        ae.notice.set(c.id, n); ae.brk.set(c.id, br);
+      }
+    }
+    AUD.frame({ screen: app.screen, credits: !!app.credits, paused: !!app.paused, gate: !!app.audioGate, mode: app.mode, phase: ph, dt,
+      voyage: !!(s && s.rescue && s.rescue.voyage), ending: s && s.run && s.run.ending ? s.run.ending.kind : null,
+      tileN: s && s.storyMode && STORY && s.screenName ? STORY.tileNumber(s.levelId, s.screenName()) : 0, runN: app.audioRun || 1 });
+  }
   // ---------- loop
   let last = performance.now(), acc = 0;
   function frame(now) {
@@ -3605,6 +3668,7 @@
       if (app.screen === 'loading') { acc = 0; }
     } else acc = 0;
     processEvents();
+    if (AUD) audioFrame(dt); // Edit 100 (P9)
     render();
     const pi = pad.info, padTxt = pad.blocked ? 'gamepads blocked on this page: open the downloaded file' : pi && pi.id ? 'pad: ' + pi.id.slice(0, 40) + (pi.mapping === 'standard' ? '' : ' (no standard mapping: hold START or G to set up)') : 'pad: none seen — press any button on it';
     const st = BUILD + ' · ' + SW + ' × ' + SH + ' ×' + kpx.toFixed(2) + ' · ' + (app.tuned ? 'TUNED RUN · UNRANKED' : 'registry values') + ' · ' + padTxt; app.statusLine = st;

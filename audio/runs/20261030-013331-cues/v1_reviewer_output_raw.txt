@@ -1,0 +1,5 @@
+SCORE: 9/10
+REASON:
+- honk · C2 (major, −0) "decision": "synth" Not deducted because the lint finding is wrong: the entry gives a reason tied to the game. The pack has no horn, so any cue would break F1, and the 8.4 synth keeps each tier's own honk (§0, Style Guide V2 T3/T7). Fix: none.
+- road-cleared · F3 (minor, −1) "powerup_4.wav" The Arcade clear plays the same file at the same `reward` gain as `combo.max`, which fires several times a second, so meeting the quota sounds no bigger than one capped combo hit. Fix: make `powerup_5.wav` the primary, matching `story-clear`, and keep `powerup_1.wav` and `level_up.wav` as alternates.
+Total: 10 − 1 = 9.

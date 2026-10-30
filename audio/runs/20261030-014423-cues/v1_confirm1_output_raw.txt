@@ -1,0 +1,5 @@
+SCORE: 10/10
+REASON:
+- honk · C2 (major, −0) "decision": "synth" The lint finding is wrong: the test allows `synth` when the reason is tied to the game, and this one is. The inventory has no horn file. Prototype 8.4's honks keep each tier's own voice, which the guide's §0 calls for (cars "bark in their tier's voice"). Fix: none needed.
+- None. I checked the rest against every rule in §3: one entry for each of the 94 events and 13 variants (C1–C3); file fit, length, weight and tone (F1–F4); clashes between events that fire together, and that no file is primary in more than three events (X1–X2); cooldowns and variety (S1–S2); files in the inventory and gain classes (L1–L2); the music spans, rotation and open states (M1–M3); and 2–3 alternates per cue (A1).
+Total: 10 − 0 = 10.
