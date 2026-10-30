@@ -55,7 +55,7 @@
     {
      "kind": "ui",
      "id": "ui-start",
-     "file": "confirm_1.wav"
+     "file": "equip_2.wav"
     },
     {
      "kind": "state",
@@ -280,6 +280,11 @@
    "cues": [
     {
      "kind": "sfx",
+     "id": "near-miss",
+     "file": "tone_near_miss.wav"
+    },
+    {
+     "kind": "sfx",
      "id": "bark",
      "file": "bubble.wav"
     },
@@ -304,7 +309,12 @@
     {
      "kind": "sfx",
      "id": "lunge",
-     "file": "jump_4.wav"
+     "file": "wobble.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "screen",
+     "file": "tone_screen.wav"
     }
    ]
   },
@@ -340,7 +350,7 @@
     {
      "kind": "sfx",
      "id": "impact",
-     "file": "hurt_3.wav"
+     "file": "hurt_4.wav"
     }
    ]
   },
@@ -376,12 +386,12 @@
     {
      "kind": "sfx",
      "id": "pickup",
-     "file": "collect_3.wav"
+     "file": "collect_7.wav"
     },
     {
      "kind": "sfx",
      "id": "cone-hit",
-     "file": "explosion_2.wav"
+     "file": "tone_cone_hit.wav"
     }
    ]
   },
@@ -422,7 +432,7 @@
     {
      "kind": "sfx",
      "id": "writeoff",
-     "file": "explosion_4.wav"
+     "file": "explosion_3.wav"
     },
     {
      "kind": "sfx",
@@ -804,7 +814,12 @@
     {
      "kind": "sfx",
      "id": "lunge",
-     "file": "jump_4.wav"
+     "file": "wobble.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "knock",
+     "file": "tone_knock.wav"
     },
     {
      "kind": "sfx",
@@ -814,7 +829,7 @@
     {
      "kind": "sfx",
      "id": "impact",
-     "file": "hurt_4.wav"
+     "file": "hurt_2.wav"
     }
    ]
   },
@@ -918,13 +933,18 @@
    "cues": [
     {
      "kind": "sfx",
+     "id": "near-miss",
+     "file": "tone_near_miss.wav"
+    },
+    {
+     "kind": "sfx",
      "id": "bark",
      "file": "bubble.wav"
     },
     {
      "kind": "sfx",
      "id": "writeoff",
-     "file": "explosion_4.wav"
+     "file": "explosion_3.wav"
     },
     {
      "kind": "sfx",
@@ -1004,6 +1024,11 @@
      "kind": "ui",
      "id": "ui-ok",
      "file": "confirm_4.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "screen",
+     "file": "tone_screen.wav"
     },
     {
      "kind": "sfx",
@@ -1119,7 +1144,7 @@
  },
  "errors": [],
  "audio": {
-  "log": 103,
+  "log": 108,
   "settings": {
    "music": 8,
    "sound": 8,

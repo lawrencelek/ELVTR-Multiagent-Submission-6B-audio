@@ -1,0 +1,26 @@
+{
+ "sfx": {
+  "ui-start": {"files": ["equip_2.wav"]},
+  "lunge": {"files": ["wobble.wav"]},
+  "rail-jump": {"decision": "synth"},
+  "level": {"decision": "cue", "bus": "sfx", "gain": "hit", "cooldown": "action", "files": ["bubble.wav"]},
+  "push": {"files": ["hurt_3.wav"]},
+  "slip": {"decision": "synth"},
+  "sling": {"files": ["equip_2.wav"]},
+  "denied": {"gainDb": 3.5},
+  "impact.big": {"files": ["explosion_1.wav"]},
+  "held": {"files": ["cancel_1.wav"]},
+  "touch-spent": {"decision": "synth"},
+  "writeoff": {"files": ["explosion_3.wav"]},
+  "part-break": {"files": ["explosion_2.wav"]},
+  "low-health": {"files": ["wobble.wav"]},
+  "near-miss": {"bus": "sfx", "gain": "hit", "cooldown": "burst"},
+  "miss": {"decision": "synth"},
+  "drop": {"decision": "cue", "bus": "sfx", "gain": "hit", "cooldown": "action", "files": ["collect_4.wav"]},
+  "pickup": {"files": ["collect_7.wav"]},
+  "punt": {"bus": "sfx", "gain": "hit", "cooldown": "action"},
+  "cone-hit": {"decision": "synth"},
+  "cone-struck": {"decision": "cue", "bus": "sfx", "gain": "hit", "cooldown": "ambient", "files": ["select_1.wav"]},
+  "cone-rest": {"bus": "sfx", "gain": "hit", "cooldown": "ambient"}
+ }
+}

@@ -582,7 +582,7 @@
     },
   };
   if (AUD) { // Edit 100 (P9): any key or click unlocks audio. On the intro screen a key or click that is not START lifts the gate
-    window.addEventListener('keydown', (e) => { Snd.init(); if (app.audioGate && app.screen === 'intro' && !MAP[e.code]) { app.audioGate = false; AUD.ui('gate'); } }, true);
+    window.addEventListener('keydown', (e) => { Snd.init(); if (app.audioGate && app.screen === 'intro' && !['a', 'b', 'ok', 'pause', 'up', 'down', 'left', 'right'].includes(MAP[e.code])) { app.audioGate = false; AUD.ui('gate'); } }, true); // a key that queues no menu press lifts the gate here
     window.addEventListener('pointerdown', (e) => { Snd.init(); if (app.audioGate && app.screen === 'intro' && e.target !== cv) { app.audioGate = false; AUD.ui('gate'); } }, true);
   }
   // Edit 100: the fields a cue's variants test (content/audio/cues.json): a big hit, the combo cap

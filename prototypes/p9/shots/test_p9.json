@@ -1,9 +1,9 @@
 {
- "passed": 33,
- "total": 33,
+ "passed": 34,
+ "total": 34,
  "results": [
   {
-   "name": "every file in the cue map loads (83)",
+   "name": "every file in the cue map loads (140)",
    "pass": true,
    "detail": ""
   },
@@ -88,9 +88,9 @@
    "detail": "finale, Track 1"
   },
   {
-   "name": "the tour heard 33 cues through the game's hooks",
+   "name": "the tour heard 36 cues through the game's hooks",
    "pass": true,
-   "detail": "ui-start ui-move ui-ok ui-back chassis drop-in bark dropped-in lunge denied impact combo pickup cone-hit drone-dispatch drone-dispatch.rescue writeoff credit shop-open jump jump-land ui-pause ending.win story-enter impact.big story-deliver story-count story-clear gift story-ferry story-gift unveil unveil-lift"
+   "detail": "ui-start ui-move ui-ok ui-back chassis drop-in near-miss bark dropped-in lunge screen denied impact combo pickup cone-hit drone-dispatch drone-dispatch.rescue writeoff credit shop-open jump jump-land ui-pause ending.win story-enter knock impact.big story-deliver story-count story-clear gift story-ferry story-gift unveil unveil-lift"
   },
   {
    "name": "the intro waits behind the gate",
@@ -103,7 +103,7 @@
    "detail": ""
   },
   {
-   "name": "every catalogued event and variant does what the map says (107: 66 cue, 28 silence, 12 synth, 1 base)",
+   "name": "every catalogued event and variant does what the map says (107: 66 cue, 24 silence, 16 synth, 1 base)",
    "pass": true,
    "detail": ""
   },
@@ -148,6 +148,11 @@
    "detail": "{\"lunge\":[\"boost.wav\"],\"impact\":\"silence\",\"menu\":5,\"rot\":[6,5],\"hash\":\"\",\"stored\":true}"
   },
   {
+   "name": "malformed picks are dropped and the game starts; an emptied pool is silent",
+   "pass": true,
+   "detail": "{\"up\":true,\"lunge\":[],\"pickup\":true,\"rot\":4} "
+  },
+  {
    "name": "no page errors in the hook tests",
    "pass": true,
    "detail": ""
@@ -158,7 +163,7 @@
    "detail": "[]"
   },
   {
-   "name": "Prototype 8.4 rebuilt from the shared code draws what the frozen build draws (316 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 316 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)",
+   "name": "Prototype 8.4 rebuilt from the shared code draws what the frozen build draws (315 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 315 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)",
    "pass": true,
    "detail": ""
   },

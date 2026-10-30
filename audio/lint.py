@@ -41,7 +41,7 @@ def lint(m, events, inv):
     m = spelled(m, inv)
     F = []
     add = lambda ev, rule, sev, text: F.append({"event": ev, "rule": rule, "severity": sev, "text": text})
-    cat, files = ids(events), {f["file"].split("/", 1)[1]: f for f in inv["files"] if f["folder"] == "sfx"}
+    cat, files = ids(events), {f["file"].split("/", 1)[1]: f for f in inv["files"] if f["folder"] in ("sfx", "tones")}
     seen = {}
     for x in m.get("sfx", []):
         seen.setdefault(x.get("event"), []).append(x)

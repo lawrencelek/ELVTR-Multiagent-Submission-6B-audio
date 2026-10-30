@@ -9,6 +9,8 @@
 - **Evidence first, no model:** an inventory of the pack (length, loudness, peak) and a catalogue of the 94 places the code can make a sound.
 - **The loop:** a **designer** proposes the cue map. **Lint** measures what a script can. A **reviewer** scores the map out of 10 against a sound guide. A **refiner** fixes what the REASON names. A fresh reviewer must confirm 10/10.
 - **After the loop:** an **integrator** writes the cue map the build plays, and its registry IDs.
+- **Then Lawrence chose:** his picks from the Sound Lab sit over the agent's map, as his decision (row 603).
+- **Generated tones:** every sound Prototype 8.4 synthesised is rendered to a WAV file, so a `synth` cue plays in the same mix as the pack (row 604).
 
 **Try it:**
 
@@ -30,9 +32,10 @@
 | **The new build** | [`prototypes/p9/dummies_p9.html`](prototypes/p9/dummies_p9.html) with `prototypes/p9/audio/` (built by `build.py`) |
 | **The agent** | [`audio/`](audio/): `inventory.py`, `events.py`, `loop.py`, `lint.py`, `llm.py`, `integrate.py`, `agents/`, [`SOUND_GUIDE.md`](audio/SOUND_GUIDE.md) |
 | **Evidence** | [`audio/runs/`](audio/runs/): every agent input and output, every map version, lint, a `trace.md` per run |
-| **The cue map** | [`content/audio/cues.json`](content/audio/cues.json) (from [`design.json`](content/audio/design.json), the accepted map) |
-| **Tests** | `prototypes/p9/test_p9.js`: 33/33 ([`shots/test_p9.json`](prototypes/p9/shots/test_p9.json)) |
-| **Decisions** | [`DECISIONS.md`](DECISIONS.md) rows 591–602; open D86 |
+| **The cue map** | [`content/audio/cues.json`](content/audio/cues.json): the agent's accepted map ([`design.json`](content/audio/design.json)) with Lawrence's picks over it ([`picks_lawrence.json`](content/audio/picks_lawrence.json)) |
+| **Generated tones** | [`audio/tones.py`](audio/tones.py) → `prototypes/p9/audio/tones/` (57 WAV) and [`content/audio/tones.json`](content/audio/tones.json) |
+| **Tests** | `prototypes/p9/test_p9.js`: 34/34 ([`shots/test_p9.json`](prototypes/p9/shots/test_p9.json)) |
+| **Decisions** | [`DECISIONS.md`](DECISIONS.md) rows 591–605; open D86 |
 
 ## 1 The agent
 
@@ -96,12 +99,18 @@ flowchart TD
   - The guide now states the trims and judges weight by gain class (row 599).
 - **Run 3:** the reviewer caught a renamed music file (L1, blocking) and a menu confirm offered as a landing alternate. One refinement reached 10/10, and a fresh reviewer confirmed it.
 
-**The accepted map** (107 entries):
+**The agent's accepted map:** 107 entries. 66 cues from 58 of the 100 files; 28 stated silences; 12 left to Prototype 8.4's synth; 1 variant on its base.
 
-- **66 cues** from 58 of the 100 files.
-- **28 stated silences:** traffic chatter, internal states, beats another cue already covers.
-- **12 left to Prototype 8.4's synth.** The honk is one: the pack has no horn, and the synth keeps each tier's voice. The reviewers accepted that reason under C2.
-- **1 variant on its base.**
+- **The honk stays synthetic.** The pack has no horn, and the synth keeps each tier's voice. The reviewers accepted that reason under C2.
+
+**Lawrence's picks** (row 603) then changed 21 entries in the Sound Lab:
+
+- **New files:** the dash, START, the push, the sling, big hits, the write-off, broken parts, low health, a held chassis, cone pickups.
+- **Silences that now sound:** levels, cone drops, cars striking cones.
+- **Set to their generated tones:** rail jumps, slips, spent cars, empty dashes, cone hits.
+- **Denied** is 3.5 dB louder.
+
+**The map the game ships:** 66 cues from 53 files, 24 silences, 16 generated tones, 1 on its base.
 
 ## 3 Music
 
@@ -128,23 +137,31 @@ flowchart TD
 - **Loudness:** each file is trimmed to a target per bus.
 - **Weight and spam:** gain classes, cooldown classes, a voice cap, pitch jitter.
 - **Music:** two players crossfade.
+- **Generated tones:** a `synth` entry plays its event's tone, rendered from Prototype 8.4's recipe, with the same gain class, cooldown and trim as a pack file. An event with no tone keeps the live synth.
 - **Hooks in `game.js`:** about 30 small, gated hooks.
   - Every sim event and derived case asks the cue map first. A cue or a stated silence hushes the synth for that event.
   - Menus click, move and go back.
   - **Edge cues:** low health (a threshold), a car that notices the dummy, brake lights coming on, a part breaking, the intro loop's hit.
   - The intro waits for a first press before it plays anything.
   - Options: MUSIC, SOUND, MUTE, saved in the browser.
-- **Safety:** a failure inside the engine never stops the game. Its entry points are guarded.
-- **Frozen builds:** Prototype 8.4 rebuilt from the changed shared code draws the same 315 strings as the frozen build. `dummies_p8_4.html` is unchanged (md5 `9f5549201d88891f9f0b22c461602909`).
+- **Safety:** a failure inside the engine never stops the game.
+  - `create()` falls back to the shipped map, and every entry point is guarded.
+  - Picks from the Lab or a link are cleaned before use: malformed ones are dropped.
+- **An independent review** found three bugs, now fixed (row 605):
+  - one malformed pick stopped the game from starting;
+  - the Lab and the game could disagree about a pick;
+  - an emptied pool still played in the game.
+  - It also flagged fades cut short and audio that unlocked before the browser allowed it. Both are fixed.
+- **Frozen builds:** Prototype 8.4 rebuilt from the changed shared code draws the same strings as the frozen build, on the same 32-step tour. `dummies_p8_4.html` is unchanged (md5 `9f5549201d88891f9f0b22c461602909`).
 
 ## 5 The Sound Lab
 
-- **Effects:** all 107 entries, grouped, filtered and searchable.
+- **Effects:** all 107 entries, grouped, filtered and searchable. A filter shows Lawrence's picks; each names the agent's original.
   - Each has the screenshot of its moment.
-  - Choose Cue, Silence, Prototype 8.4's synth, or the base cue.
+  - Choose Cue, Silence, Generated tone, or the base cue.
   - Edit the pool: add, remove, or "use only this", from the designer's alternates or all 100 files.
   - Set the gain class, a fine dB offset and the cooldown.
-  - **▶ Play as in the game** applies the trim, the class, the pool and the jitter. **▶ Prototype 8.4's sound** plays the old synth for comparison.
+  - **▶ Play as in the game** applies the trim, the class, the pool and the jitter. **▶ Its generated tone** plays Prototype 8.4's sound for comparison.
 - **Music:**
   - the six tracks;
   - each screen's track;
@@ -152,7 +169,7 @@ flowchart TD
   - the mix: bus levels, crossfade, duck, gain classes.
 - **Sequences:** twelve timed moments over their music, among them a combo to the cap, a write-off, the drone drop, the river rescue and the finale.
 - **Tour:** the 44 steps of `tour_p9.js`, with the cues each fired.
-- **Library:** the pack by family, with each file's length, level and users.
+- **Library:** the pack and the 57 generated tones by family, with each file's length, level and users.
 - **Picks:**
   - **Play the game with these picks** opens Prototype 9 with them.
   - **Export** gives JSON and a plain summary to send back.
@@ -160,17 +177,17 @@ flowchart TD
 
 ## 6 Tests
 
-`cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84` → 33/33:
+`cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84` → 34/34:
 
-- every file in the cue map loads (83);
+- every file in the cue map loads, tones included;
 - nothing plays before the first press;
 - each screen of the tour plays its state's track: 14 checks, Story tiles 1 and 2 included;
-- every catalogued event and variant does what the map says (107);
+- every catalogued event and variant does what the map says (107: cue, tone, silence or base);
 - START, cursor moves, the Arcade run's track, the pause duck;
 - Options shows MUSIC, SOUND and MUTE, and saves them;
-- the game takes the Lab's picks from `#audio=`;
+- the game takes the Lab's picks from `#audio=`; malformed picks are dropped and the game still starts;
 - no page or engine errors;
-- Prototype 8.4 is unchanged.
+- Prototype 8.4 draws the same strings, and its frozen file is unchanged.
 
 ## 7 Open
 
@@ -178,21 +195,24 @@ flowchart TD
 - **Licence:** only the pack's credit lines were supplied, not its licence texts.
 - **Devices:** the MP3 fallback for Safari and iOS is untested on a device.
 - **Silenced by the agent:** the car edge cues (car-notice, car-brake). The Lab switches them on.
+- **Tone fidelity:** each tone is one rendering. Prototype 8.4 scaled some sounds with the hit's force; the tones take the middle of each range.
 
 ## 8 Run it
 
 Needs Python 3.9+, Node 18+, Playwright with Chromium, `ffmpeg`, and [Claude Code](https://claude.com/claude-code) signed in, for the agent only.
 
 ```
-python3 prototypes/p8/build.py                 # reproduces dummies_p8_4.html; do not commit a changed 8.4
-python3 audio/inventory.py                     # the pack → content/audio/inventory.json
+python3 audio/tones.py                         # Prototype 8.4's synth → prototypes/p9/audio/tones/
+python3 audio/inventory.py                     # the pack and the tones → content/audio/inventory.json
 python3 audio/events.py                        # the code → content/audio/events.json
 python3 audio/loop.py                          # the agent → audio/runs/<id>/, content/audio/design.json
 python3 audio/loop.py --from content/audio/design.json   # incremental, after the catalogue changes
-python3 audio/integrate.py                     # → content/audio/cues.json, registry edit100
+python3 audio/integrate.py                     # + picks_lawrence.json → content/audio/cues.json, registry edit100
 python3 prototypes/p9/build.py                 # → prototypes/p9/dummies_p9.html
 cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../..
 python3 prototypes/p9/make_lab.py && python3 audio/make_gdd.py
 ```
+
+`prototypes/p8/build.py` reproduced `dummies_p8_4.html` byte for byte at the seed. It no longer does: it stamps the registry version (now edit100) and reads the shared `game.js`. Never commit a rebuilt 8.4.
 
 Seeded from `lawrencelek/ELVTR-dummies-agent-crew@49f17d4` ([`SOURCE.md`](SOURCE.md)).

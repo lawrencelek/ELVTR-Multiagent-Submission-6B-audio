@@ -139,7 +139,7 @@ h3 { font: 700 12px/1 var(--f-mono); letter-spacing: 0.16em; text-transform: upp
 .cue code { color: var(--ink-2); }
 .cue .what { margin: 0; color: var(--ink-2); font-size: 13px; }
 .cue .when { font: 11px var(--f-mono); color: var(--aqua); }
-.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; flex-wrap: wrap; }
+.seg { display: inline-flex; justify-self: start; max-width: 100%; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; flex-wrap: wrap; }
 .seg button { border: 0; background: transparent; padding: 5px 10px; font-size: 12.5px; border-right: 1px solid var(--line); }
 .seg button:last-child { border-right: 0; }
 .seg button[aria-pressed="true"] { background: var(--aqua); color: var(--panel); }
@@ -242,7 +242,7 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
       <a class="btn primary" id="btn-game" href="dummies_p9.html" target="_blank" rel="noopener">▶ Play the game with these picks</a>
       <button class="btn" id="btn-export" type="button">Export picks</button>
       <button class="btn" id="btn-import" type="button">Import</button>
-      <button class="btn danger" id="btn-reset" type="button">Reset to the designed map</button>
+      <button class="btn danger" id="btn-reset" type="button">Reset to the game's map</button>
     </div>
   </div>
 </div>
@@ -256,7 +256,7 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
     <div class="tool">
       <input type="search" id="fx-search" placeholder="Search events or files: impact, hurt, drone…" aria-label="Search events or files">
       <select id="fx-prio" aria-label="Priority"><option value="">Every priority</option><option value="high">High only</option><option value="medium">Medium and high</option></select>
-      <select id="fx-dec" aria-label="Decision"><option value="">Every decision</option><option value="cue">Cues</option><option value="silence">Silences</option><option value="synth">8.4 synth</option><option value="base">Variants on their base</option></select>
+      <select id="fx-dec" aria-label="Decision"><option value="">Every decision</option><option value="cue">Cues</option><option value="silence">Silences</option><option value="synth">Generated tones</option><option value="base">Variants on their base</option><option value="lawrence">Lawrence's picks</option></select>
       <button class="chip" id="fx-changed" type="button" aria-pressed="false">Changed only</button>
     </div>
     <div class="chips" id="fx-groups" aria-label="Groups"></div>
@@ -334,14 +334,47 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
   const PLAY = '<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2 1 L9 5 L2 9 Z"/></svg>';
   const GAINS = ['ui', 'move', 'hit', 'big', 'reward', 'story', 'alert', 'ambient'];
   const COOLS = ['ui', 'action', 'burst', 'frame', 'ambient', 'once', 'honk', 'bark'];
-  const DEC_LABEL = { cue: 'Cue', silence: 'Silence', synth: '8.4 synth', base: 'As base' };
+  const DEC_LABEL = { cue: 'Cue', silence: 'Silence', synth: 'Generated tone', base: 'As base' };
   const TRACK_VAR = (n) => 'var(--t' + n + ')';
   const fmtS = (s) => { s = Math.round(s); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
   const sign = (x) => (x > 0 ? '+' : x < 0 ? '−' : '±') + Math.abs(Math.round(x * 10) / 10);
 
   // ---------- picks (the key the game reads) and the shared MUSIC / SOUND settings
-  function norm(p) { p = p && typeof p === 'object' ? p : {}; return { sfx: p.sfx && typeof p.sfx === 'object' ? p.sfx : {}, music: { states: (p.music && p.music.states) || {}, rotation: (p.music && Array.isArray(p.music.rotation)) ? p.music.rotation : null }, params: p.params && typeof p.params === 'object' ? p.params : {} }; }
-  let picks = norm(store.get(KEY));
+  const isObj = (o) => !!o && typeof o === 'object' && !Array.isArray(o);
+  function norm(p) { // the game's own cleaning (audio.js sanitize): unknown ids, bad files and odd values are dropped
+    p = isObj(p) ? p : {}; const out = { sfx: {}, music: { states: {}, rotation: null }, params: {} }, T = L.music.tracks, okT = (v) => Number.isInteger(v) && T[v];
+    const baked = (L.picks && L.picks.raw && L.picks.raw.sfx) || {}; // Lawrence's picks, already in the build: not twice
+    for (const [id, e] of Object.entries(isObj(p.sfx) ? p.sfx : {})) {
+      const d = L.cues[id]; if (!d || !isObj(e)) continue; const c = {};
+      if (baked[id] && JSON.stringify(baked[id]) === JSON.stringify(e)) continue;
+      if (['cue', 'silence', 'synth', 'base'].includes(e.decision) && (e.decision !== 'base' || d.variantOf)) c.decision = e.decision;
+      if (Array.isArray(e.files)) c.files = e.files.filter((f) => typeof f === 'string' && L.files[f]).slice(0, 12);
+      if (typeof e.gainDb === 'number' && isFinite(e.gainDb)) c.gainDb = Math.max(-24, Math.min(24, e.gainDb));
+      if (e.bus === 'sfx' || e.bus === 'ui') c.bus = e.bus;
+      if (GAINS.includes(e.gain)) c.gain = e.gain;
+      if (COOLS.includes(e.cooldown)) c.cooldown = e.cooldown;
+      if (Object.keys(c).length) out.sfx[id] = c;
+    }
+    const m = isObj(p.music) ? p.music : {};
+    if (isObj(m.states)) for (const [k, v] of Object.entries(m.states)) if (L.music.states[k] !== undefined && (okT(v) || v === 'continue' || v === 'none')) out.music.states[k] = v;
+    if (Array.isArray(m.rotation)) { const r = m.rotation.filter(okT).slice(0, 8); if (r.length) out.music.rotation = r; }
+    for (const [k, v] of Object.entries(isObj(p.params) ? p.params : {})) if (L.params[k] && typeof v === 'number' && isFinite(v)) out.params[k] = v;
+    for (const id of Object.keys(out.sfx)) tidy(id, out.sfx);
+    return out;
+  }
+  function tidy(id, into) { // drop what equals the map, and what the decision makes moot, so the Lab and the game agree
+    const p = into[id], d = L.cues[id] || {}; if (!p) return;
+    if (p.decision === d.decision) delete p.decision;
+    const dec = p.decision || d.decision;
+    if (p.files && d.files && p.files.join() === d.files.join()) delete p.files;
+    for (const k of ['gain', 'cooldown', 'bus']) if (p[k] === d[k]) delete p[k];
+    if (p.gainDb === 0) delete p.gainDb;
+    if (dec !== 'cue') delete p.files;
+    if (dec !== 'cue' && dec !== 'synth') { delete p.gain; delete p.cooldown; delete p.bus; delete p.gainDb; }
+    if (!Object.keys(p).length) delete into[id];
+  }
+  const stored = store.get(KEY);
+  let picks = norm(stored);
   const vs = Object.assign({ music: L.params['audio.settings.music'] ? L.params['audio.settings.music'].value : 8, sound: L.params['audio.settings.sound'] ? L.params['audio.settings.sound'].value : 8, mute: false }, store.get(VKEY) || {});
   function clean() {
     for (const [id, p] of Object.entries(picks.sfx)) { if (!p || !Object.keys(p).length) delete picks.sfx[id]; }
@@ -368,7 +401,8 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
     if (p.gain) c.gain = p.gain;
     if (p.cooldown) c.cooldown = p.cooldown;
     c.userDb = typeof p.gainDb === 'number' ? p.gainDb : 0;
-    if (c.decision === 'cue') { c.bus = p.bus || c.bus || (d.group === 'ui' ? 'ui' : 'sfx'); c.gain = c.gain || (d.group === 'ui' ? 'ui' : 'hit'); c.cooldown = c.cooldown || freqCool(d.freq); c.files = c.files || []; }
+    if (p.bus) c.bus = p.bus;
+    c.files = c.files || []; c.gain = c.gain || 'hit'; c.cooldown = c.cooldown || freqCool(d.freq); c.bus = c.bus || 'sfx';
     return c;
   }
   function freqCool(f) { return { once: 'once', action: 'action', burst: 'burst', frame: 'frame', ambient: 'ambient' }[f] || 'action'; }
@@ -377,16 +411,9 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
   function rotation() { return picks.music.rotation || L.music.rotation; }
   function changed(id) { return !!picks.sfx[id]; }
   function setPick(id, patch) {
-    const p = Object.assign({}, picks.sfx[id] || {}, patch), d = D[id] || {};
-    if (p.decision === d.decision) delete p.decision;
-    if (p.files && d.files && p.files.join() === d.files.join()) delete p.files;
-    if (p.files && !d.files && !p.files.length) delete p.files;
-    if (p.gain === d.gain) delete p.gain;
-    if (p.cooldown === d.cooldown) delete p.cooldown;
-    if (p.gainDb === 0) delete p.gainDb;
-    const eff = Object.assign({}, d, p);
-    if (eff.decision === 'cue' && d.decision !== 'cue') { p.bus = p.bus || (d.group === 'ui' ? 'ui' : 'sfx'); p.gain = p.gain || (d.group === 'ui' ? 'ui' : 'hit'); p.cooldown = p.cooldown || freqCool(d.freq); }
-    if (Object.keys(p).length) picks.sfx[id] = p; else delete picks.sfx[id];
+    const cur = cue(id), p = Object.assign({}, picks.sfx[id] || {}, patch);
+    if (patch.decision === 'cue' && !p.files) p.files = cur.files.slice(); // keep the pool in view while it is a cue
+    picks.sfx[id] = p; tidy(id, picks.sfx);
     save(); redrawCue(id);
   }
 
@@ -403,7 +430,7 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
   }
   function busLevel(b) { if (vs.mute) return 0; if (b === 'music') return param('audio.music.volume') * vs.music / 10; if (b === 'ui') return param('audio.ui.volume') * vs.sound / 10; return param('audio.sfx.volume') * vs.sound / 10; }
   function applyVols() { if (BUS) { BUS.sfx.gain.value = busLevel('sfx'); BUS.ui.gain.value = busLevel('ui'); BUS.synth.gain.value = param('audio.synth.gain'); } for (const p of MP) if (p) out(p); }
-  const sfxUrl = (f) => 'audio/sfx/' + encodeURIComponent(f);
+  const sfxUrl = (f) => 'audio/' + ((L.files[f] && L.files[f].dir) || 'sfx') + '/' + encodeURIComponent(f);
   function buf(f) {
     if (BUF.has(f)) return BUF.get(f);
     const pr = fetch(sfxUrl(f)).then((r) => { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); })
@@ -419,25 +446,12 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
     try { const el = new Audio(sfxUrl(f)); el.volume = Math.max(0, Math.min(1, g * busLevel(bus))); el.playbackRate = rate; el.play().catch(() => {}); } catch (e) { /* no audio */ }
   }
   function hot(f, secs) { for (const el of $$('[data-file="' + CSS.escape(f) + '"]')) { el.classList.add('hot'); setTimeout(() => el.classList.remove('hot'), Math.max(200, secs * 1000)); } }
-  function synthPlay(id) {
-    const v = L.synth[id] || L.synth[base(id)];
-    if (!v) { toast('Prototype 8.4 has no sound here'); return false; }
-    const a = ac(); if (!a) return false;
-    for (const [kind, f0, f1, dur, gain, wave, delay] of v) {
-      const t = a.currentTime + (delay || 0), g = a.createGain();
-      g.gain.setValueAtTime(gain || 0.06, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur); g.connect(BUS.synth);
-      if (kind === 'tone') { const o = a.createOscillator(); o.type = wave || 'square'; o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(Math.max(20, f1), t + dur); o.connect(g); o.start(t); o.stop(t + dur + 0.03); }
-      else { const n = Math.max(1, Math.floor(a.sampleRate * Math.max(dur, 1))), nb = a.createBuffer(1, n, a.sampleRate), d = nb.getChannelData(0); for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
-        const src = a.createBufferSource(), bp = a.createBiquadFilter(); src.buffer = nb; bp.type = 'bandpass'; bp.Q.value = 1.2; bp.frequency.setValueAtTime(Math.max(20, f0), t); bp.frequency.exponentialRampToValueAtTime(Math.max(20, f1), t + dur); src.connect(bp); bp.connect(g); src.start(t); src.stop(t + dur + 0.03); }
-    }
-    return true;
-  }
   // A cue as the game plays it: its pool (random, never the same file twice running, or in turn), the file's trim, the
   // gain class, your fine gain, and the pitch jitter
   function playCue(id, quiet) {
     let c = cue(id);
     if (c.decision === 'base' && base(id)) c = Object.assign(cue(base(id)), { id });
-    if (c.decision === 'synth') { synthPlay(id); if (!quiet) say('8.4 synth', id); return; }
+    if (c.decision === 'synth') { if (!c.tone) { if (!quiet) toast('No generated tone for this event: silent in the game'); return; } c = Object.assign({}, c, { decision: 'cue', files: [c.tone], pick: 'cycle' }); }
     if (c.decision !== 'cue') { if (!quiet) toast((D[id] ? D[id].label : id) + ': silence in the game'); return; }
     const fl = c.files || [];
     if (!fl.length) { if (!quiet) toast('No file yet: add one'); return; }
@@ -446,7 +460,7 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
     else { f = fl[Math.floor(Math.random() * fl.length)]; if (fl.length > 1 && f === LAST.get(id)) f = fl[(fl.indexOf(f) + 1) % fl.length]; }
     LAST.set(id, f);
     const ui = c.bus === 'ui', jit = ui ? 0 : param('audio.sfx.pitchJitter');
-    playFile(f, { bus: ui ? 'ui' : 'sfx', db: param('audio.sfx.gain.' + c.gain) + (c.userDb || 0), rate: 1 + jit * (Math.random() * 2 - 1) });
+    playFile(f, { bus: ui ? 'ui' : 'sfx', db: param('audio.sfx.gain.' + c.gain) + (c.offsetId ? param(c.offsetId) : 0) + (c.userDb || 0), rate: 1 + jit * (Math.random() * 2 - 1) });
     if (!quiet) say(f, id);
   }
 
@@ -518,31 +532,36 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
     let body = '';
     if (c.decision === 'cue') {
       body += '<div class="files">' + (c.files || []).map((f) => fileChip(f, id, true)).join('') + '<button class="btn" type="button" data-act="add" data-id="' + id + '">+ Add file</button></div>';
-      body += '<div class="knobs"><label class="knob">Weight <select data-act="gain" data-id="' + id + '" aria-label="Gain class">' + GAINS.map((g) => '<option value="' + g + '"' + (g === c.gain ? ' selected' : '') + '>' + g + ' (' + sign(param('audio.sfx.gain.' + g)) + ' dB)</option>').join('') + '</select></label>'
-        + '<label class="knob">Fine <input type="range" min="-12" max="12" step="0.5" value="' + (c.userDb || 0) + '" data-act="db" data-id="' + id + '" aria-label="Fine gain in dB"><output>' + sign(c.userDb || 0) + ' dB</output></label>'
-        + '<label class="knob">Cooldown <select data-act="cool" data-id="' + id + '" aria-label="Cooldown">' + COOLS.map((k) => '<option value="' + k + '"' + (k === c.cooldown ? ' selected' : '') + '>' + k + ' (' + param('audio.sfx.cooldown.' + k) + ' s)</option>').join('') + '</select></label>'
-        + (c.files && c.files.length > 1 ? '<span class="note">' + c.files.length + ' files, ' + (c.pick === 'cycle' ? 'in turn' : 'at random') + '</span>' : '') + '</div>';
-    } else if (c.decision === 'synth') body += '<p class="note">The game plays Prototype 8.4\'s procedural sound here.' + (L.synth[id] || L.synth[vb] ? '' : ' (It has none for this event: silent.)') + '</p>';
+      body += knobs(id, c);
+    } else if (c.decision === 'synth') body += c.tone ? '<div class="files"><span class="note">Its generated tone (Prototype 8.4\'s synth, rendered):</span>' + fileChip(c.tone, id, false) + '</div>' + knobs(id, c) : '<p class="note">No generated tone for this event: silent in the game.</p>';
     else if (c.decision === 'silence') body += '<p class="note">Silent in the game.</p>';
     else if (c.decision === 'base') { const bc = cue(vb); body += '<p class="note">Plays its base cue, ' + esc(D[vb].label) + (bc.decision === 'cue' ? ': ' + esc((bc.files || []).join(', ')) : ' (' + DEC_LABEL[bc.decision] + ')') + '.</p>'; }
     const alts = (d.alternates || []).filter((f) => !(c.files || []).includes(f));
-    if (c.decision === 'cue' && alts.length) body += '<div class="files"><span class="note">Designer\'s alternates:</span>' + alts.map((f) => fileChip(f, id, false) + '<button class="btn quiet" type="button" data-act="use" data-id="' + id + '" data-f="' + esc(f) + '">Use</button>').join('') + '</div>';
-    const synthBtn = (L.synth[id] || L.synth[vb]) && c.decision !== 'synth' ? '<button class="btn quiet" type="button" data-act="synth" data-id="' + id + '">▶ Prototype 8.4\'s sound</button>' : '';
+    if (c.decision === 'cue' && alts.length) body += '<div class="files"><span class="note">Alternates:</span>' + alts.map((f) => fileChip(f, id, false) + '<button class="btn quiet" type="button" data-act="use" data-id="' + id + '" data-f="' + esc(f) + '">Use</button>').join('') + '</div>';
+    const synthBtn = d.tone && c.decision !== 'synth' ? '<button class="btn quiet" type="button" data-act="file" data-f="' + esc(d.tone) + '" data-id="' + id + '">▶ Its generated tone</button>' : '';
+    const ag = d.agent ? (d.agent.decision === 'cue' ? (d.agent.files || []).join(', ') : DEC_LABEL[d.agent.decision] || d.agent.decision) : '';
     const heard = L.heard[id] ? '<span class="note">Heard on the tour: ' + esc(L.heard[id]) + '</span>' : '';
     return '<article class="cue panel' + (vb ? ' variant' : '') + '" id="cue-' + id + '" data-id="' + id + '">' + shotHtml(d.shot, d.label)
-      + '<div class="body"><header><h4>' + esc(d.label) + '</h4><code>' + esc(id) + '</code><span class="pill">' + esc(d.freq) + '</span><span class="pill ' + esc(d.priority) + '">' + esc(d.priority) + '</span>' + (changed(id) ? '<span class="pill changed">changed</span>' : '') + '</header>'
+      + '<div class="body"><header><h4>' + esc(d.label) + '</h4><code>' + esc(id) + '</code><span class="pill">' + esc(d.freq) + '</span><span class="pill ' + esc(d.priority) + '">' + esc(d.priority) + '</span>' + (d.by ? '<span class="pill medium" title="Built into the game from Lawrence\'s picks">' + esc(d.by) + '\'s pick</span>' : '') + (changed(id) ? '<span class="pill changed">changed</span>' : '') + '</header>'
       + (vb ? '<div class="when">↳ variant of ' + esc(D[vb].label) + ' · when ' + esc(Object.entries(d.when || {}).map(([k, v]) => k + ' = ' + (Array.isArray(v) ? v.join(' or ') : v === '*' ? 'any car' : v)).join(', ')) + '</div>' : '')
       + '<p class="what">' + esc(d.what) + (e.firesWith && e.firesWith.length && !vb ? ' <span class="note">Fires with: ' + esc(e.firesWith.join(', ')) + '.</span>' : '') + '</p>'
       + seg + body
-      + (d.why ? '<p class="why"><b>Designer:</b> ' + esc(d.why) + '</p>' : '')
+      + (d.by ? '<p class="why"><b>The agent\'s pick:</b> ' + esc(ag) + '. ' + esc((d.agent && d.agent.why) || '') + '</p>' : d.why ? '<p class="why"><b>Designer:</b> ' + esc(d.why) + '</p>' : '')
       + '<footer><button class="btn primary" type="button" data-act="cue" data-id="' + id + '">▶ Play as in the game</button>' + synthBtn + (changed(id) ? '<button class="btn quiet" type="button" data-act="revert" data-id="' + id + '">Revert</button>' : '') + heard + '</footer></div></article>';
+  }
+  function knobs(id, c) {
+    return '<div class="knobs"><label class="knob">Weight <select data-act="gain" data-id="' + id + '" aria-label="Gain class">' + GAINS.map((g) => '<option value="' + g + '"' + (g === c.gain ? ' selected' : '') + '>' + g + ' (' + sign(param('audio.sfx.gain.' + g)) + ' dB)</option>').join('') + '</select></label>'
+      + '<label class="knob">Fine <input type="range" min="-12" max="12" step="0.5" value="' + (c.userDb || 0) + '" data-act="db" data-id="' + id + '" aria-label="Fine gain in dB"><output>' + sign(c.userDb || 0) + ' dB</output></label>'
+      + (c.offsetId ? '<span class="note">+ ' + esc(c.offsetId) + ' ' + sign(param(c.offsetId)) + ' dB</span>' : '')
+      + '<label class="knob">Cooldown <select data-act="cool" data-id="' + id + '" aria-label="Cooldown">' + COOLS.map((k) => '<option value="' + k + '"' + (k === c.cooldown ? ' selected' : '') + '>' + k + ' (' + param('audio.sfx.cooldown.' + k) + ' s)</option>').join('') + '</select></label>'
+      + (c.decision === 'cue' && c.files && c.files.length > 1 ? '<span class="note">' + c.files.length + ' files, ' + (c.pick === 'cycle' ? 'in turn' : 'at random') + '</span>' : '') + '</div>';
   }
   function visible(id) {
     const d = D[id], c = cue(id), q = fx.q.trim().toLowerCase();
     if (fx.group && d.group !== fx.group) return false;
     if (fx.prio === 'high' && d.priority !== 'high') return false;
     if (fx.prio === 'medium' && d.priority === 'low') return false;
-    if (fx.dec && c.decision !== fx.dec) return false;
+    if (fx.dec === 'lawrence' ? !d.by : fx.dec && c.decision !== fx.dec) return false;
     if (fx.changed && !changed(id)) return false;
     if (q && ![id, d.label, d.what, ...(c.files || []), ...(d.alternates || [])].join(' ').toLowerCase().includes(q)) return false;
     return true;
@@ -665,15 +684,15 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
     $('#iodlg').showModal();
   }
   function doImport() {
-    try { const o = JSON.parse($('#io-in').value); if (!o || typeof o !== 'object') throw new Error('not an object'); picks = norm(o); for (const id of Object.keys(picks.sfx)) if (!D[id]) delete picks.sfx[id]; save(); drawAll(); $('#iodlg').close(); toast('Imported ' + changedCount() + ' changes'); }
+    try { const o = JSON.parse($('#io-in').value); if (!isObj(o)) throw new Error('not an object'); picks = norm(o); save(); drawAll(); $('#iodlg').close(); toast('Imported ' + changedCount() + ' changes'); }
     catch (e) { toast('That is not picks JSON: ' + e.message); }
   }
   let resetArm = 0;
   function reset() {
     const b = $('#btn-reset');
-    if (!resetArm) { resetArm = setTimeout(() => { resetArm = 0; b.textContent = 'Reset to the designed map'; }, 3000); b.textContent = 'Press again to reset'; return; }
-    clearTimeout(resetArm); resetArm = 0; b.textContent = 'Reset to the designed map';
-    picks = norm(null); save(); drawAll(); toast('Back to the designed map');
+    if (!resetArm) { resetArm = setTimeout(() => { resetArm = 0; b.textContent = 'Reset to the game\'s map'; }, 3000); b.textContent = 'Press again to reset'; return; }
+    clearTimeout(resetArm); resetArm = 0; b.textContent = 'Reset to the game\'s map';
+    picks = norm(null); save(); drawAll(); toast('Back to the map the game ships');
   }
 
   // ---------- rooms (hash), events
@@ -687,10 +706,9 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
     const act = b.dataset.act, id = b.dataset.id;
     if (act === 'cue') playCue(id);
     else if (act === 'file') { playFile(b.dataset.f, { bus: id && D[id] && cue(id).bus === 'ui' ? 'ui' : 'sfx', db: id && D[id] && cue(id).gain ? param('audio.sfx.gain.' + cue(id).gain) + (cue(id).userDb || 0) : 0 }); say(b.dataset.f, id); if (bed && !curTrack) playTrack(rotation()[0]); }
-    else if (act === 'synth') { synthPlay(id); say('8.4 synth', id); }
     else if (act === 'dec') setPick(id, { decision: b.dataset.v });
     else if (act === 'rm') { const c = cue(id); setPick(id, { files: (c.files || []).filter((f) => f !== b.dataset.f) }); }
-    else if (act === 'use') { const c = cue(id); setPick(id, { files: [b.dataset.f], decision: 'cue' }); }
+    else if (act === 'use') setPick(id, { files: [b.dataset.f], decision: 'cue' });
     else if (act === 'add') openPicker(id);
     else if (act === 'padd') { const c = cue(pickFor); setPick(pickFor, { files: (c.files || []).concat([b.dataset.f]), decision: 'cue' }); drawPicker(); toast('Added ' + b.dataset.f); }
     else if (act === 'ponly') { setPick(pickFor, { files: [b.dataset.f], decision: 'cue' }); $('#pickdlg').close(); }
@@ -735,7 +753,8 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
   $('#btn-export').addEventListener('click', openExport);
   $('#btn-import').addEventListener('click', openImport);
   $('#btn-reset').addEventListener('click', reset);
-  $('#fx-lede').textContent += ' The map: ' + Object.keys(D).length + ' entries from the sound designer agent' + (L.run ? ' (run ' + L.run + (L.accepted ? ', 10/10, confirmed' : '') + ')' : '') + '.';
+  $('#fx-lede').textContent += ' The map: ' + Object.keys(D).length + ' entries from the sound designer agent' + (L.run ? ' (run ' + L.run + (L.accepted ? ', 10/10, confirmed' : '') + ')' : '') + (L.picks && L.picks.changed ? ', with ' + Object.keys(L.picks.changed).length + ' of Lawrence\'s picks built in' : '') + '. A generated tone is Prototype 8.4\'s synth sound, rendered to a file.';
+  if (stored && JSON.stringify(stored) !== JSON.stringify(empty() ? null : exportable())) save(); // keep only what still differs
   drawAll(); route();
 })();
 </script>

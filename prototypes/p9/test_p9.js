@@ -3,7 +3,7 @@
 // 1. Files: every file in content/audio/cues.json loads over http (status 200), the music in OGG and MP3.
 // 2. The tour (shots/tour.json): no page errors; each screen plays its state's track; nothing plays before the first press.
 // 3. Coverage: every catalogued event and variant, sent to the engine with the fields its `when` needs, plays a file from its
-//    own pool (a cue), plays its base's pool (base), or is handled silently (silence); synth leaves it to Prototype 8.4.
+//    own pool (a cue), its generated tone (synth), its base's (base), or is handled silently (silence).
 // 4. The game's hooks: menus, the pause duck, Options (MUSIC, SOUND, MUTE, saved), the Sound Lab's picks (#audio=).
 // 5. --p84: the shared code with audio.enabled off. Prototype 8.4 rebuilt from it draws the same strings as the frozen build.
 'use strict';
@@ -22,7 +22,8 @@ const get = (url) => new Promise((res) => http.get(url, (r) => { r.resume(); res
   const srv = await serve(), base = `http://127.0.0.1:${srv.address().port}/prototypes/p9/`;
   // ---- 1. files
   const files = new Set();
-  for (const c of Object.values(CUES.sfx)) for (const f of (c.files || []).concat(c.alternates || [])) files.add('audio/sfx/' + f);
+  const dir = (f) => (CUES.files[f] && CUES.files[f].dir) || 'sfx';
+  for (const c of Object.values(CUES.sfx)) for (const f of (c.files || []).concat(c.alternates || [], c.tone ? [c.tone] : [])) files.add('audio/' + dir(f) + '/' + f);
   for (const t of Object.values(CUES.music.tracks)) { files.add('audio/' + t.file); files.add('audio/' + t.mp3); }
   const bad = []; for (const f of files) { const st = await get(base + f.split('/').map(encodeURIComponent).join('/')); if (st !== 200) bad.push(f + ' ' + st); }
   ok('every file in the cue map loads (' + files.size + ')', !bad.length, bad.join(', '));
@@ -57,18 +58,18 @@ const get = (url) => new Promise((res) => http.get(url, (r) => { r.resume(); res
     const sample = (w) => { const x = {}; for (const [k, v] of Object.entries(w || {})) x[k] = v === '*' ? 'car1' : Array.isArray(v) ? v[0] : v && typeof v === 'object' ? 1e9 : v; return x; };
     for (const it of cat) {
       const type = it.base || it.id, e = Object.assign({ type }, sample(it.when));
-      A.last.clear(); A.voices = []; const n0 = A.log.length, handled = A.event(e), got = A.log.slice(n0).filter((l) => l.kind === 'sfx' || l.kind === 'ui');
+      A.last.clear(); A.voices = []; const n0 = A.log.length, handled = A.event(e), got = A.log.slice(n0).filter((l) => l.kind === 'sfx' || l.kind === 'ui' || l.kind === 'loading');
       out.push({ id: it.id, handled, got: got.map((l) => [l.id, l.file]) });
     }
     return out;
   }, cat);
   const fails = [];
   for (const r of cov) {
-    const c = CUES.sfx[r.id], b = c.variantOf ? CUES.sfx[c.variantOf] : null;
-    const pool = c.decision === 'base' ? (b.files || []) : (c.files || []);
-    if (c.decision === 'cue' || (c.decision === 'base' && b.decision === 'cue')) { if (!r.handled || !r.got.length || !pool.includes(r.got[0][1])) fails.push(r.id + ' (want a file from ' + pool.join('/') + ', got ' + JSON.stringify(r.got) + ')'); }
-    else if (c.decision === 'silence' || (c.decision === 'base' && b.decision === 'silence')) { if (!r.handled || r.got.length) fails.push(r.id + ' (want silence)'); }
-    else if (c.decision === 'synth' || (c.decision === 'base' && b.decision === 'synth')) { if (r.handled) fails.push(r.id + ' (want the synth)'); }
+    const c0 = CUES.sfx[r.id], b = c0.variantOf ? CUES.sfx[c0.variantOf] : null, c = c0.decision === 'base' ? b : c0;
+    const pool = c.decision === 'synth' ? (c.tone ? [c.tone] : []) : (c.files || []);
+    if (c.decision === 'cue' || (c.decision === 'synth' && c.tone)) { if (!r.handled || !r.got.length || !pool.includes(r.got[0][1])) fails.push(r.id + ' (want ' + pool.join('/') + ', got ' + JSON.stringify(r.got) + ')'); }
+    else if (c.decision === 'silence') { if (!r.handled || r.got.length) fails.push(r.id + ' (want silence)'); }
+    else if (c.decision === 'synth') { if (r.handled) fails.push(r.id + ' (no tone: want the live synth)'); }
   }
   const counts = {}; for (const c of Object.values(CUES.sfx)) counts[c.decision] = (counts[c.decision] || 0) + 1;
   ok('every catalogued event and variant does what the map says (' + cov.length + ': ' + Object.entries(counts).map(([k, v]) => v + ' ' + k).join(', ') + ')', !fails.length, fails.join('; '));
@@ -105,6 +106,13 @@ const get = (url) => new Promise((res) => http.get(url, (r) => { r.resume(); res
   const m = await pg2.evaluate(() => { const A = window.__dummiesAudio; return { lunge: A.cues.sfx.lunge.files, impact: A.cues.sfx.impact.decision, menu: A.cues.music.states.menu, rot: A.cues.music.rotation, hash: location.hash, stored: !!localStorage.getItem('dummies.p9.audio.lab') }; });
   ok('the game takes the Sound Lab\'s picks from #audio= and keeps them', m.lunge.join() === 'boost.wav' && m.impact === 'silence' && m.menu === 5 && m.rot.join() === '6,5' && !m.hash && m.stored, JSON.stringify(m));
   await pg2.evaluate(() => localStorage.removeItem('dummies.p9.audio.lab'));
+  // malformed picks never stop the game (the review's repro: {"sfx":{"impact":null}}), and an emptied pool is silent, as the Lab shows it
+  const badPicks = Buffer.from(JSON.stringify({ sfx: { impact: null, lunge: { files: [1, 'nope.wav'] }, pickup: { files: [] } }, music: { rotation: [] } })).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  const pg3 = await ctx.newPage(); const e3 = []; pg3.on('pageerror', (e) => e3.push(e.message));
+  await pg3.goto(base + 'dummies_p9.html#audio=' + badPicks); await pg3.waitForTimeout(1000);
+  const r3 = await pg3.evaluate(() => { const A = window.__dummiesAudio; A.last.clear(); const n0 = A.log.length, h = A.event({ type: 'pickup' }); return { up: !!window.__dummies && !!A, lunge: A.cues.sfx.lunge.files, pickup: h && A.log.length === n0, rot: A.cues.music.rotation.length }; });
+  ok('malformed picks are dropped and the game starts; an emptied pool is silent', !e3.length && r3.up && r3.lunge.length === 0 && r3.pickup && r3.rot === CUES.music.rotation.length, JSON.stringify(r3) + ' ' + e3.join(' | '));
+  await pg3.evaluate(() => localStorage.removeItem('dummies.p9.audio.lab'));
   ok('no page errors in the hook tests', !errors.length, errors.join(' | '));
   ok('no audio engine errors', !(await pg.evaluate(() => window.__dummiesAudio.errors.length)), JSON.stringify(await pg.evaluate(() => window.__dummiesAudio.errors)));
   await br.close();

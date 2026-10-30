@@ -1,0 +1,1279 @@
+{
+ "generated_by": "audio/tones.py",
+ "folder": "prototypes/p9/audio/tones/",
+ "count": 57,
+ "tones": {
+  "lunge": {
+   "file": "tone_lunge.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "noise",
+     300,
+     1800,
+     0.18,
+     0.12,
+     null,
+     0
+    ]
+   ],
+   "seconds": 0.26
+  },
+  "jump": {
+   "file": "tone_jump.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     330,
+     660,
+     0.12,
+     0.08,
+     "triangle",
+     0
+    ]
+   ],
+   "seconds": 0.2
+  },
+  "jump.dash": {
+   "file": "tone_jump_dash.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     330,
+     880,
+     0.18,
+     0.08,
+     "triangle",
+     0
+    ]
+   ],
+   "seconds": 0.26
+  },
+  "jump-land": {
+   "file": "tone_jump_land.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     160,
+     90,
+     0.08,
+     0.05,
+     "square",
+     0
+    ]
+   ],
+   "seconds": 0.16
+  },
+  "land": {
+   "file": "tone_land.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     210,
+     62,
+     0.24,
+     0.15,
+     "sine",
+     0
+    ]
+   ],
+   "seconds": 0.32
+  },
+  "deck-drop": {
+   "file": "tone_deck_drop.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     700,
+     210,
+     0.42,
+     0.08,
+     "sine",
+     0
+    ]
+   ],
+   "seconds": 0.5
+  },
+  "rail-jump": {
+   "file": "tone_rail_jump.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     520,
+     880,
+     0.1,
+     0.06,
+     "triangle",
+     0
+    ]
+   ],
+   "seconds": 0.18
+  },
+  "stair": {
+   "file": "tone_stair.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     260,
+     300,
+     0.05,
+     0.03,
+     "triangle",
+     0
+    ]
+   ],
+   "seconds": 0.13
+  },
+  "push": {
+   "file": "tone_push.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     360,
+     820,
+     0.12,
+     0.08,
+     "triangle",
+     0
+    ]
+   ],
+   "seconds": 0.2
+  },
+  "hitch": {
+   "file": "tone_hitch.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     300,
+     420,
+     0.08,
+     0.05,
+     "square",
+     0
+    ]
+   ],
+   "seconds": 0.16
+  },
+  "sling": {
+   "file": "tone_sling.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     420,
+     900,
+     0.14,
+     0.08,
+     "triangle",
+     0
+    ]
+   ],
+   "seconds": 0.22
+  },
+  "denied": {
+   "file": "tone_denied.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     120,
+     110,
+     0.05,
+     0.05,
+     "square",
+     0
+    ],
+    [
+     "tone",
+     120,
+     110,
+     0.05,
+     0.05,
+     "square",
+     0.08
+    ]
+   ],
+   "seconds": 0.21
+  },
+  "impact": {
+   "file": "tone_impact.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "noise",
+     2400,
+     300,
+     0.18,
+     0.18,
+     null,
+     0
+    ],
+    [
+     "noise",
+     900,
+     120,
+     0.22,
+     0.2,
+     null,
+     0
+    ]
+   ],
+   "seconds": 0.3
+  },
+  "impact.big": {
+   "file": "tone_impact_big.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "noise",
+     2400,
+     300,
+     0.18,
+     0.18,
+     null,
+     0
+    ],
+    [
+     "noise",
+     600,
+     60,
+     0.3,
+     0.22,
+     null,
+     0
+    ]
+   ],
+   "seconds": 0.38
+  },
+  "impact.drop": {
+   "file": "tone_impact_drop.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     320,
+     50,
+     0.25,
+     0.2,
+     "sine",
+     0
+    ],
+    [
+     "noise",
+     2400,
+     300,
+     0.18,
+     0.18,
+     null,
+     0
+    ]
+   ],
+   "seconds": 0.33
+  },
+  "held": {
+   "file": "tone_held.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     240,
+     200,
+     0.16,
+     0.05,
+     "square",
+     0
+    ]
+   ],
+   "seconds": 0.24
+  },
+  "knock": {
+   "file": "tone_knock.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "noise",
+     700,
+     250,
+     0.1,
+     0.08,
+     null,
+     0
+    ]
+   ],
+   "seconds": 0.18
+  },
+  "touch-spent": {
+   "file": "tone_touch_spent.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "noise",
+     500,
+     140,
+     0.12,
+     0.12,
+     null,
+     0
+    ]
+   ],
+   "seconds": 0.2
+  },
+  "writeoff": {
+   "file": "tone_writeoff.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "noise",
+     2000,
+     70,
+     0.6,
+     0.24,
+     null,
+     0
+    ]
+   ],
+   "seconds": 0.68
+  },
+  "near-miss": {
+   "file": "tone_near_miss.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "noise",
+     500,
+     2200,
+     0.25,
+     0.1,
+     null,
+     0
+    ]
+   ],
+   "seconds": 0.33
+  },
+  "miss": {
+   "file": "tone_miss.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "noise",
+     3200,
+     700,
+     0.3,
+     0.14,
+     null,
+     0
+    ]
+   ],
+   "seconds": 0.38
+  },
+  "pickup": {
+   "file": "tone_pickup.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     700,
+     950,
+     0.05,
+     0.06,
+     "triangle",
+     0
+    ]
+   ],
+   "seconds": 0.13
+  },
+  "drop": {
+   "file": "tone_drop.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     500,
+     380,
+     0.06,
+     0.05,
+     "triangle",
+     0
+    ]
+   ],
+   "seconds": 0.14
+  },
+  "throw": {
+   "file": "tone_throw.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     620,
+     180,
+     0.16,
+     0.07,
+     "triangle",
+     0
+    ]
+   ],
+   "seconds": 0.24
+  },
+  "punt": {
+   "file": "tone_punt.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     420,
+     300,
+     0.05,
+     0.04,
+     "triangle",
+     0
+    ]
+   ],
+   "seconds": 0.13
+  },
+  "cone-hit": {
+   "file": "tone_cone_hit.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     900,
+     600,
+     0.08,
+     0.06,
+     "square",
+     0
+    ]
+   ],
+   "seconds": 0.16
+  },
+  "combo": {
+   "file": "tone_combo.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     660,
+     792.0,
+     0.08,
+     0.08,
+     "triangle",
+     0.0
+    ],
+    [
+     "tone",
+     880,
+     1056.0,
+     0.08,
+     0.08,
+     "triangle",
+     0.06
+    ],
+    [
+     "tone",
+     1100,
+     1320.0,
+     0.08,
+     0.08,
+     "triangle",
+     0.12
+    ]
+   ],
+   "seconds": 0.28
+  },
+  "combo.max": {
+   "file": "tone_combo_max.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     660,
+     792.0,
+     0.08,
+     0.08,
+     "triangle",
+     0.0
+    ],
+    [
+     "tone",
+     880,
+     1056.0,
+     0.08,
+     0.08,
+     "triangle",
+     0.06
+    ],
+    [
+     "tone",
+     1100,
+     1320.0,
+     0.08,
+     0.08,
+     "triangle",
+     0.12
+    ]
+   ],
+   "seconds": 0.28
+  },
+  "combo-end": {
+   "file": "tone_combo_end.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     523,
+     784,
+     0.12,
+     0.06,
+     "triangle",
+     0
+    ]
+   ],
+   "seconds": 0.2
+  },
+  "splash": {
+   "file": "tone_splash.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "noise",
+     900,
+     200,
+     0.4,
+     0.08,
+     null,
+     0
+    ]
+   ],
+   "seconds": 0.48
+  },
+  "rescued": {
+   "file": "tone_rescued.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     320,
+     480,
+     0.12,
+     0.05,
+     "triangle",
+     0
+    ]
+   ],
+   "seconds": 0.2
+  },
+  "screen": {
+   "file": "tone_screen.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     300,
+     520,
+     0.12,
+     0.04,
+     "triangle",
+     0
+    ]
+   ],
+   "seconds": 0.2
+  },
+  "honk": {
+   "file": "tone_honk.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     880,
+     880,
+     0.05,
+     0.03,
+     "sine",
+     0
+    ]
+   ],
+   "seconds": 0.13
+  },
+  "honk.body": {
+   "file": "tone_honk_body.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     440,
+     430,
+     0.16,
+     0.05,
+     "square",
+     0
+    ],
+    [
+     "tone",
+     349,
+     340,
+     0.22,
+     0.05,
+     "square",
+     0.18
+    ]
+   ],
+   "seconds": 0.48
+  },
+  "skid": {
+   "file": "tone_skid.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     1800,
+     900,
+     0.18,
+     0.02,
+     "sawtooth",
+     0
+    ]
+   ],
+   "seconds": 0.26
+  },
+  "unstick.reverse": {
+   "file": "tone_unstick_reverse.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     1000,
+     1000,
+     0.06,
+     0.03,
+     "square",
+     0
+    ],
+    [
+     "tone",
+     1000,
+     1000,
+     0.06,
+     0.03,
+     "square",
+     0.25
+    ]
+   ],
+   "seconds": 0.39
+  },
+  "learn-standoff": {
+   "file": "tone_learn_standoff.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     330,
+     260,
+     0.12,
+     0.05,
+     "triangle",
+     0
+    ]
+   ],
+   "seconds": 0.2
+  },
+  "drone-dispatch": {
+   "file": "tone_drone_dispatch.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     150,
+     210,
+     0.6,
+     0.025,
+     "sawtooth",
+     0
+    ]
+   ],
+   "seconds": 0.68
+  },
+  "drone-dispatch.rescue": {
+   "file": "tone_drone_dispatch_rescue.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     150,
+     210,
+     0.6,
+     0.025,
+     "sawtooth",
+     0
+    ]
+   ],
+   "seconds": 0.68
+  },
+  "drone-pickup": {
+   "file": "tone_drone_pickup.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     320,
+     200,
+     0.08,
+     0.05,
+     "square",
+     0
+    ]
+   ],
+   "seconds": 0.16
+  },
+  "drone-drop": {
+   "file": "tone_drone_drop.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     240,
+     150,
+     0.1,
+     0.05,
+     "square",
+     0
+    ]
+   ],
+   "seconds": 0.18
+  },
+  "story-enter": {
+   "file": "tone_story_enter.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     392,
+     392.0,
+     0.1,
+     0.05,
+     "triangle",
+     0.0
+    ],
+    [
+     "tone",
+     523,
+     523.0,
+     0.1,
+     0.05,
+     "triangle",
+     0.08
+    ],
+    [
+     "tone",
+     659,
+     659.0,
+     0.1,
+     0.05,
+     "triangle",
+     0.16
+    ]
+   ],
+   "seconds": 0.34
+  },
+  "story-count": {
+   "file": "tone_story_count.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     660,
+     990,
+     0.12,
+     0.07,
+     "triangle",
+     0
+    ]
+   ],
+   "seconds": 0.2
+  },
+  "story-miss": {
+   "file": "tone_story_miss.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     200,
+     150,
+     0.12,
+     0.05,
+     "square",
+     0
+    ]
+   ],
+   "seconds": 0.2
+  },
+  "story-clear": {
+   "file": "tone_story_clear.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     523,
+     523.0,
+     0.14,
+     0.07,
+     "triangle",
+     0.0
+    ],
+    [
+     "tone",
+     659,
+     659.0,
+     0.14,
+     0.07,
+     "triangle",
+     0.09
+    ],
+    [
+     "tone",
+     784,
+     784.0,
+     0.14,
+     0.07,
+     "triangle",
+     0.18
+    ],
+    [
+     "tone",
+     1046,
+     1046.0,
+     0.14,
+     0.07,
+     "triangle",
+     0.27
+    ]
+   ],
+   "seconds": 0.49
+  },
+  "story-deliver": {
+   "file": "tone_story_deliver.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     150,
+     210,
+     0.6,
+     0.025,
+     "sawtooth",
+     0
+    ],
+    [
+     "tone",
+     1318.5,
+     1318.5,
+     0.14,
+     0.05,
+     "sine",
+     0
+    ],
+    [
+     "tone",
+     1760,
+     1760,
+     0.3,
+     0.05,
+     "sine",
+     0.12
+    ]
+   ],
+   "seconds": 0.68
+  },
+  "story-ferry": {
+   "file": "tone_story_ferry.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     150,
+     210,
+     0.6,
+     0.025,
+     "sawtooth",
+     0
+    ]
+   ],
+   "seconds": 0.68
+  },
+  "story-ferried": {
+   "file": "tone_story_ferried.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     240,
+     150,
+     0.1,
+     0.05,
+     "square",
+     0
+    ]
+   ],
+   "seconds": 0.18
+  },
+  "story-fence": {
+   "file": "tone_story_fence.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     140,
+     120,
+     0.08,
+     0.05,
+     "square",
+     0
+    ]
+   ],
+   "seconds": 0.16
+  },
+  "delivered": {
+   "file": "tone_delivered.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     320,
+     480,
+     0.12,
+     0.05,
+     "triangle",
+     0
+    ]
+   ],
+   "seconds": 0.2
+  },
+  "gift": {
+   "file": "tone_gift.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     280,
+     1300,
+     0.9,
+     0.035,
+     "sine",
+     0
+    ],
+    [
+     "noise",
+     500,
+     4200,
+     0.9,
+     0.03,
+     null,
+     0
+    ],
+    [
+     "tone",
+     150,
+     45,
+     0.32,
+     0.09,
+     "square",
+     0.9
+    ],
+    [
+     "noise",
+     4200,
+     900,
+     0.3,
+     0.06,
+     null,
+     0.9
+    ],
+    [
+     "tone",
+     587.33,
+     587.33,
+     0.18,
+     0.08,
+     "triangle",
+     0.96
+    ],
+    [
+     "tone",
+     739.99,
+     739.99,
+     0.18,
+     0.08,
+     "triangle",
+     1.05
+    ],
+    [
+     "tone",
+     880,
+     880.0,
+     0.18,
+     0.08,
+     "triangle",
+     1.14
+    ],
+    [
+     "tone",
+     1174.66,
+     1174.66,
+     0.18,
+     0.08,
+     "triangle",
+     1.23
+    ],
+    [
+     "tone",
+     880,
+     883.52,
+     1.4,
+     0.045,
+     "triangle",
+     1.32
+    ],
+    [
+     "tone",
+     1174.66,
+     1179.3586400000002,
+     1.4,
+     0.045,
+     "triangle",
+     1.32
+    ],
+    [
+     "tone",
+     1479.98,
+     1485.89992,
+     1.4,
+     0.045,
+     "triangle",
+     1.32
+    ],
+    [
+     "tone",
+     293.66,
+     293.66,
+     1.4,
+     0.06,
+     "sine",
+     1.32
+    ]
+   ],
+   "seconds": 2.8
+  },
+  "unveil-lift": {
+   "file": "tone_unveil_lift.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     392,
+     392.0,
+     0.2,
+     0.06,
+     "triangle",
+     0.3
+    ],
+    [
+     "tone",
+     523,
+     523.0,
+     0.2,
+     0.06,
+     "triangle",
+     0.44
+    ],
+    [
+     "tone",
+     659,
+     659.0,
+     0.2,
+     0.06,
+     "triangle",
+     0.5800000000000001
+    ],
+    [
+     "tone",
+     784,
+     784.0,
+     0.2,
+     0.06,
+     "triangle",
+     0.72
+    ]
+   ],
+   "seconds": 1.0
+  },
+  "purchase": {
+   "file": "tone_purchase.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     523,
+     523.0,
+     0.1,
+     0.07,
+     "triangle",
+     0.0
+    ],
+    [
+     "tone",
+     659,
+     659.0,
+     0.1,
+     0.07,
+     "triangle",
+     0.07
+    ],
+    [
+     "tone",
+     784,
+     784.0,
+     0.1,
+     0.07,
+     "triangle",
+     0.14
+    ],
+    [
+     "tone",
+     150,
+     60,
+     0.18,
+     0.06,
+     "square",
+     0.02
+    ]
+   ],
+   "seconds": 0.32
+  },
+  "purchase-denied": {
+   "file": "tone_purchase_denied.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     180,
+     140,
+     0.12,
+     0.04,
+     "square",
+     0
+    ]
+   ],
+   "seconds": 0.2
+  },
+  "grade": {
+   "file": "tone_grade.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     440,
+     440.0,
+     0.1,
+     0.05,
+     "square",
+     0.0
+    ],
+    [
+     "tone",
+     660,
+     660.0,
+     0.1,
+     0.05,
+     "square",
+     0.08
+    ],
+    [
+     "tone",
+     880,
+     880.0,
+     0.1,
+     0.05,
+     "square",
+     0.16
+    ]
+   ],
+   "seconds": 0.34
+  },
+  "ending.win": {
+   "file": "tone_ending_win.wav",
+   "source": "Prototype 8.4",
+   "voices": [
+    [
+     "tone",
+     523,
+     523.0,
+     0.16,
+     0.07,
+     "triangle",
+     0.0
+    ],
+    [
+     "tone",
+     659,
+     659.0,
+     0.16,
+     0.07,
+     "triangle",
+     0.09
+    ],
+    [
+     "tone",
+     784,
+     784.0,
+     0.16,
+     0.07,
+     "triangle",
+     0.18
+    ],
+    [
+     "tone",
+     1046,
+     1046.0,
+     0.16,
+     0.07,
+     "triangle",
+     0.27
+    ]
+   ],
+   "seconds": 0.51
+  },
+  "slip": {
+   "file": "tone_slip.wav",
+   "source": "Edit 100",
+   "voices": [
+    [
+     "tone",
+     1200,
+     520,
+     0.14,
+     0.06,
+     "sine",
+     0
+    ],
+    [
+     "noise",
+     4200,
+     1600,
+     0.12,
+     0.05,
+     null,
+     0.02
+    ]
+   ],
+   "seconds": 0.22
+  }
+ }
+}

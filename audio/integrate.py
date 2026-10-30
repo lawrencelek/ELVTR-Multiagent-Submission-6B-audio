@@ -20,6 +20,8 @@ ROOT = Path(__file__).resolve().parents[1]
 INV = json.loads((ROOT / "content" / "audio" / "inventory.json").read_text(encoding="utf-8"))
 EV = json.loads((ROOT / "content" / "audio" / "events.json").read_text(encoding="utf-8"))
 DESIGN = ROOT / "content" / "audio" / "design.json"
+PICKS = ROOT / "content" / "audio" / "picks_lawrence.json"   # Lawrence's picks from the Sound Lab: user-decided, over the agent's map
+TONES = ROOT / "content" / "audio" / "tones.json"            # generated tones (audio/tones.py)
 OUT = ROOT / "content" / "audio" / "cues.json"
 REGF = ROOT / "content" / "params" / "tuning.parameters.json"
 REG_VERSION = "edit100-2026-10-30"
@@ -56,7 +58,7 @@ PARAMS = [  # id, label, unit, default, min, max, description, purpose
     ("audio.sfx.maxVoices", "Voices", "count", 16, 1, 64, "Effects playing at once; a new one past the cap is dropped", "Combos and traffic never pile up"),
     ("audio.sfx.pitchJitter", "Pitch jitter", "ratio", 0.04, 0, 0.2, "Each effect plays at a rate up to this far from 1 (not menus)", "Repeated hits vary"),
     ("audio.sfx.lowHealthAt", "Low health", "ratio", 0.3, 0, 1, "The low-health cue sounds when the chassis falls below this share of its maximum, once until it recovers", "§6.6: a threshold crossing, not the frame"),
-    ("audio.synth.gain", "Synth level", "ratio", 1, 0, 2, "Prototype 8.4's procedural sounds, through the SFX bus, for events the map leaves to the synth", "§6.1: the synth stays as a fallback"),
+    ("audio.synth.gain", "Synth level", "ratio", 1, 0, 2, "Prototype 8.4's live synth, through the SFX bus, for an event with no entry and no generated tone", "§6.1: the synth stays as a fallback"),
 ]
 
 
@@ -92,15 +94,53 @@ def normalise(m):
     return m
 
 
+GROUP_GAIN = {"ui": "ui", "moves": "move", "abilities": "move", "hits": "hit", "near": "hit", "cones": "hit", "combos": "reward", "world": "story",
+              "cars": "alert", "drones": "story", "story": "story", "arcade": "reward", "barks": "ambient", "intro": "story"}
+
+
+def apply_picks(m, picks, cat):
+    """Lawrence's picks (Sound Lab JSON) over the agent's map, as prototypes/p9/audio.js merges them: a pick's decision wins,
+    else the map's; files replace the pool; bus, gain and cooldown replace the map's; gainDb becomes audio.sfx.offset.<id>.
+    Returns {id: what he changed}."""
+    by = {x["event"]: x for x in m["sfx"]}
+    changed = {}
+    for eid, p in (picks.get("sfx") or {}).items():
+        x = by.get(eid)
+        if not x or not isinstance(p, dict):
+            continue
+        before = {k: x.get(k) for k in ("decision", "files", "gain", "cooldown")}
+        if p.get("decision") in ("cue", "silence", "synth", "base"):
+            x["decision"] = p["decision"]
+        if isinstance(p.get("files"), list):
+            new = [f for f in p["files"] if isinstance(f, str)]
+            if new != (x.get("files") or []):  # the agent's own pick becomes an alternate
+                x["alternates"] = list(dict.fromkeys(f for f in (x.get("files") or []) + (x.get("alternates") or []) if f not in new))[:3]
+            x["files"] = new
+        for k in ("bus", "gain", "cooldown"):
+            if isinstance(p.get(k), str):
+                x[k] = p[k]
+        if isinstance(p.get("gainDb"), (int, float)) and p["gainDb"]:
+            x["offsetDb"] = float(p["gainDb"])
+        after = {k: x.get(k) for k in ("decision", "files", "gain", "cooldown")}
+        diff = {k: after[k] for k in after if after[k] != before[k] and (x["decision"] in ("cue", "synth") or k == "decision")}
+        if x.get("offsetDb"):
+            diff["gainDb"] = x["offsetDb"]
+        if diff:
+            changed[eid] = {"was": {k: before[k] for k in diff if k in before}, "now": diff}
+            x["by"] = "Lawrence"
+            x["why"] = "Lawrence's pick in the Sound Lab (DECISIONS row 603)." + (" Agent: " + x.get("why", "") if x.get("why") else "")
+    return changed
+
+
 def trims(prm):
     out, tracks = {}, {}
     for f in INV["files"]:
-        if f["folder"] == "sfx":
+        if f["folder"] in ("sfx", "tones"):
             t = prm["audio.sfx.targetLufs"] - (f["level"] if f["level"] is not None else prm["audio.sfx.targetLufs"])
             t = max(-prm["audio.trim.maxBoostDb"], min(prm["audio.trim.maxBoostDb"], t))
             if f.get("truePeak") is not None:
                 t = min(t, prm["audio.trim.peakCeilingDb"] - f["truePeak"])
-            out[f["file"].split("/", 1)[1]] = {"trimDb": round(t, 1), "seconds": f["duration"], "level": f["level"], "family": f["family"], "peak": f.get("truePeak")}
+            out[f["file"].split("/", 1)[1]] = {"trimDb": round(t, 1), "seconds": f["duration"], "level": f["level"], "family": f["family"], "peak": f.get("truePeak"), "dir": f["folder"]}
         else:
             t = prm["audio.music.targetLufs"] - f["level"]
             t = max(-prm["audio.trim.maxBoostDb"], min(prm["audio.trim.maxBoostDb"], t))
@@ -114,6 +154,10 @@ def main():
     if not DESIGN.exists():
         sys.exit("content/audio/design.json is missing: run audio/loop.py first")
     m = normalise(json.loads(DESIGN.read_text(encoding="utf-8")))
+    agent = {x["event"]: {k: x.get(k) for k in ("decision", "files", "gain", "cooldown", "why")} for x in m["sfx"]}
+    picks = json.loads(PICKS.read_text(encoding="utf-8")) if PICKS.exists() else {}
+    changed = apply_picks(m, picks, L.ids(EV))
+    tones = json.loads(TONES.read_text(encoding="utf-8"))["tones"] if TONES.exists() else {}
     F = L.lint(m, EV, INV)
     blocking = [f for f in F if f["severity"] == "blocking"]
     if blocking:
@@ -129,6 +173,9 @@ def main():
     new = [reg_entry(*p[:3], vals[p[0]], *p[4:]) for p in PARAMS]
     new += [reg_entry(f"audio.sfx.gain.{k}", f"Gain: {k}", "dB", v, -40, 12, f"Gain class '{k}' on its bus: {GAIN_USE[k]}", "Sound Guide §2") for k, v in GAIN_DB.items()]
     new += [reg_entry(f"audio.sfx.cooldown.{k}", f"Cooldown: {k}", "s", v, 0, 10, f"Seconds between two plays of one cue in class '{k}': {COOL_USE[k]}", "Sound Guide §2; S1") for k, v in COOL_S.items()]
+    new += [dict(reg_entry(f"audio.sfx.offset.{x['event']}", f"Offset: {x['event']}", "dB", x["offsetDb"], -24, 24, f"Fine gain on sfx.{x['event']}, after its gain class",
+                           "Lawrence's pick in the Sound Lab"), status="user-confirmed", source="Edit 100 (P9): Lawrence's Sound Lab picks, 30 October (row 603)")
+            for x in m["sfx"] if x.get("offsetDb")]
     added = 0
     for e in new:
         if e["id"] in have:
@@ -148,13 +195,23 @@ def main():
         e = cat[x["event"]]
         c = {"decision": x["decision"], "label": e["label"], "what": e["what"], "group": e["group"], "freq": e["freq"], "priority": e["priority"],
              "shot": e["shot"], "why": x.get("why", "")}
+        if x.get("by"):
+            c["by"] = x["by"]
+            c["agent"] = {k: v for k, v in agent[x["event"]].items() if v is not None}
+        base_id = e.get("variantOf")
+        tone = tones.get(x["event"]) or (tones.get(base_id) if base_id else None)
+        if tone:
+            c["tone"] = tone["file"]
         if e.get("variantOf"):
             c["variantOf"] = e["variantOf"]
             c["when"] = next(v["when"] for v in next(b for b in EV["events"] if b["id"] == e["variantOf"])["variants"] if v["id"] == x["event"])
-        if x["decision"] == "cue":
-            gain, cd = x["gain"], x["cooldown"]
-            c.update({"files": x["files"], "pick": x.get("pick", "random"), "bus": x["bus"], "gain": gain, "gainId": f"audio.sfx.gain.{gain}",
-                      "cooldown": cd, "cooldownId": f"audio.sfx.cooldown.{cd}", "alternates": x.get("alternates", [])})
+        # every entry carries a bus, a gain class and a cooldown, so a tone or a cue picked later in the Lab plays in the mix
+        gain = x.get("gain") or ("ambient" if e["freq"] == "ambient" else GROUP_GAIN[e["group"]])
+        cd = x.get("cooldown") or ("honk" if x["event"].startswith("honk") else {"once": "once", "action": "action", "burst": "burst", "frame": "frame", "ambient": "ambient"}[e["freq"]])
+        c.update({"bus": x.get("bus") or ("ui" if e["group"] == "ui" else "sfx"), "gain": gain, "gainId": f"audio.sfx.gain.{gain}", "cooldown": cd,
+                  "cooldownId": f"audio.sfx.cooldown.{cd}", "alternates": x.get("alternates", []), "files": x.get("files") or [], "pick": x.get("pick", "random")})
+        if x.get("offsetDb"):
+            c["offsetId"] = f"audio.sfx.offset.{x['event']}"
         sfx[x["event"]] = c
     for b in EV["events"]:
         if b["variants"]:
@@ -164,14 +221,15 @@ def main():
         "base": "audio/", "params": prm,
         "music": {"tracks": tracks, "states": st, "rotation": rot, "storyRule": m["music"].get("storyRule", "tile"),
                   "arcadeRule": m["music"].get("arcadeRule", "run"), "why": m["music"].get("why", {})},
-        "sfx": sfx, "files": files,
+        "sfx": sfx, "files": files, "picks": {"by": "Lawrence", "file": "content/audio/picks_lawrence.json", "changed": changed, "raw": picks},
         "credits": {"music": INV["files"][0]["credit"], "sfx": next(f["credit"] for f in INV["files"] if f["folder"] == "sfx")},
     }
     OUT.write_text(json.dumps(out, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
-    used = sorted({f for c in sfx.values() for f in c.get("files", [])})
+    used = sorted({f for c in sfx.values() if c["decision"] == "cue" for f in c.get("files", [])})
     print(f"{OUT.relative_to(ROOT)}: {sum(c['decision'] == 'cue' for c in sfx.values())} cues, {sum(c['decision'] == 'silence' for c in sfx.values())} silences, "
           f"{sum(c['decision'] == 'synth' for c in sfx.values())} synth, {sum(c['decision'] == 'base' for c in sfx.values())} base; {len(used)} files used. "
-          f"Registry {REG_VERSION}: {len(reg['entries'])} entries ({added} added). Lint: {L.summary(F)}")
+          f"{sum(1 for c in sfx.values() if c['decision'] == 'synth' and c.get('tone'))} synth entries play a generated tone. "
+          f"Lawrence changed {len(changed)}. Registry {REG_VERSION}: {len(reg['entries'])} entries ({added} added). Lint: {L.summary(F)}")
 
 
 if __name__ == "__main__":

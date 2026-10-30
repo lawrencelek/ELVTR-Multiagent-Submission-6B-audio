@@ -1,6 +1,6 @@
 # DUMMIES GDD — Edit 100 · Prototype 9 · Sound
 
-**30 October 2026 · Lawrence Lek** · Build `prototypes/p9/dummies_p9.html` · Registry `edit100-2026-10-30` · Cue map `content/audio/cues.json`, run `20261030-014423-cues` (10/10, confirmed) · Tests 33/33
+**30 October 2026 · Lawrence Lek** · Build `prototypes/p9/dummies_p9.html` · Registry `edit100-2026-10-30` · Cue map `content/audio/cues.json`, run `20261030-014423-cues` (10/10, confirmed) · Tests 34/34
 
 ## 0 Request
 
@@ -12,9 +12,9 @@
 
 ### 0.1 Readings (proposed; taken without a ruling)
 
-| # | Reading | Registry / where to change |
+| # | Reading | Recorded as (registry) · changed in |
 |---|---|---|
-| Q1 | "Splash Screen" is the intro screen. It shows PRESS ANY KEY; the first press only unlocks audio and starts Track 1. The next press is START | `audio.music.track.intro`; Sound Lab › Music |
+| Q1 | "Splash Screen" is the intro screen. It shows PRESS ANY KEY; the first press only unlocks audio and starts Track 1. The next press is START | `audio.music.track.intro` · Sound Lab › Music |
 | Q2 | Track 2 plays through a district's first level card. The level track starts with the drone drop | `audio.music.track.card` (0: continue) |
 | Q3 | Story: tile *n* in story order plays slot ((*n* − 1) mod 4) + 1 of the rotation. Arcade: one track per run, the next slot each run | `audio.music.levelRotation` (3456) |
 | Q4 | Pause ducks the music to 0.35. Gift screen, report and workshop keep the level track. Endings: Track 2 (summer nights). Finale and CERTIFIED: Track 1 (megabot). Credits: Track 2 (summer nights) (the agent's choice; the handover proposed Track 1) | `audio.music.track.*` |
@@ -25,7 +25,8 @@
 
 - **Engine:** `prototypes/p9/audio.js`. `game.js` creates it only when `audio.enabled` is 1. Prototype 9 sets 1; the registry default is 0.
 - **Buses:** music, SFX, UI under a master. Levels: `audio.music.volume`, `audio.sfx.volume`, `audio.ui.volume`.
-- **Synth fallback:** Prototype 8.4's procedural sounds route through the SFX bus at `audio.synth.gain`. A `synth` entry keeps them.
+- **Generated tones:** Prototype 8.4's procedural sounds, rendered to WAV by `audio/tones.py` (57 tones; one new, for slip). A `synth` entry plays its event's tone through the mix: gain class, cooldown, trim. An event with no entry or tone keeps the live synth, on the SFX bus at `audio.synth.gain`.
+- **Lawrence's picks:** `content/audio/picks_lawrence.json`, his Sound Lab export, over the agent's map (row 603). His fine gain becomes `audio.sfx.offset.<cue>`.
 - **Hush:** a cue or a stated silence hushes the synth for its event. Hit juice still draws.
 - **Loudness:** each file is trimmed toward `audio.sfx.targetLufs` or `audio.music.targetLufs`. Trims cap at `audio.trim.maxBoostDb` and `audio.trim.peakCeilingDb`.
 - **Weight:** gain classes set it. `audio.sfx.gain.<class>`, in dB after the trim.
@@ -53,6 +54,8 @@
 | `music.ending` | Licensed, Failed test, Non-compliant | phase `ending`, not Certified | Track 2 (summer nights) | yes | crossfade `audio.music.crossfadeSeconds` | `audio.music.track.ending` |
 | `music.finale` | The unveiling, the voyage, CERTIFIED | phase `unveil`, `voyage`; ending Certified | Track 1 (megabot) | yes | crossfade `audio.music.crossfadeSeconds` | `audio.music.track.finale` |
 
+- **Registry column:** the integrator records each state's track there from the map. The build reads `cues.json`; the Sound Lab and the map change it.
+
 | Track | File | Length | Measured | Trim | Plays in |
 |---|---|---:|---:|---:|---|
 | 1 · megabot | `music/track1_ansimuz-itch-io_megabot.ogg` | 1:12 | -10.4 LUFS | -5.6 dB | intro, finale |
@@ -67,7 +70,7 @@
 
 ## 3 SFX (WAV)
 
-Columns: the cue; what triggers it, with its code site; the files (a pool); bus; volume ID; cooldown ID. Variants are indented under their event.
+Columns: the cue; what triggers it, with its code site; the files (a pool), or the generated tone; bus; volume ID; cooldown ID. Variants are indented under their event. **L** marks Lawrence's pick (row 603); the agent's pick follows it.
 
 ### 3.1 Menus and interface
 
@@ -77,33 +80,33 @@ Columns: the cue; what triggers it, with its code site; the files (a pool); bus;
 | `sfx.ui-ok` | A menu choice is confirmed: A, Space, Enter, a tap or a click. | `confirm_4.wav` | ui | `audio.sfx.gain.ui` | `audio.sfx.cooldown.ui` |
 | `sfx.ui-back` | A menu goes back or closes: B, Shift, Esc on a page. | `cancel_3.wav` | ui | `audio.sfx.gain.ui` | `audio.sfx.cooldown.ui` |
 | `sfx.ui-pause` | Play pauses: Esc, P, START or the pause chip. | `select_4.wav` | ui | `audio.sfx.gain.ui` | `audio.sfx.cooldown.ui` |
-| `sfx.ui-start` | START on the intro screen opens the mode select. | `confirm_1.wav` | ui | `audio.sfx.gain.ui` | `audio.sfx.cooldown.once` |
+| `sfx.ui-start` | START on the intro screen opens the mode select. | `equip_2.wav` **L** (agent: `confirm_1.wav`) | ui | `audio.sfx.gain.ui` | `audio.sfx.cooldown.once` |
 | `sfx.ui-gate` | The first press on the intro screen unlocks audio; Track 1 starts. | *silence*: Track 1 starting is the response to the press. | — | — | — |
 
 ### 3.2 Dummy moves
 
 | Cue | Trigger | Files | Bus | Volume ID | Cooldown ID |
 |---|---|---|---|---|---|
-| `sfx.lunge` | The dummy dashes (A). Spends a battery charge. `S:1684` | `jump_4.wav` | sfx | `audio.sfx.gain.move` | `audio.sfx.cooldown.action` |
+| `sfx.lunge` | The dummy dashes (A). Spends a battery charge. `S:1684` | `wobble.wav` **L** (agent: `jump_4.wav`) | sfx | `audio.sfx.gain.move` | `audio.sfx.cooldown.action` |
 | `sfx.jump` | The dummy jumps (B). A jump out of a dash is a long jump. `S:1960` | `jump_1.wav` | sfx | `audio.sfx.gain.move` | `audio.sfx.cooldown.action` |
 | ↳ `sfx.jump.dash` | Long jump, out of a dash | `jump_3.wav` | sfx | `audio.sfx.gain.move` | `audio.sfx.cooldown.action` |
 | `sfx.jump-land` | A jump lands on the ground. `S:1969` | `land.wav` | sfx | `audio.sfx.gain.move` | `audio.sfx.cooldown.action` |
 | `sfx.land` | A drop from a walkway or deck lands, on a car or on the ground. `S:2243, S:2247` | `land.wav` | sfx | `audio.sfx.gain.move` | `audio.sfx.cooldown.action` |
 | ↳ `sfx.land.car` | Onto a car roof | `door_close.wav` | sfx | `audio.sfx.gain.move` | `audio.sfx.cooldown.action` |
-| `sfx.deck-drop` | The dummy steps off a highway parapet or ledge. `S:2227, W:2247` | *Prototype 8.4 synth*: The landing cue carries the drop; the 8.4 step-off stays light. | — | — | — |
-| `sfx.rail-jump` | The dummy jumps a walkway rail. `W:2217` | `jump_3.wav` | sfx | `audio.sfx.gain.move` | `audio.sfx.cooldown.action` |
-| `sfx.stair` | The dummy starts up or down a stair. `S:2150` | *Prototype 8.4 synth*: The pack has no footsteps; the procedural step suits stairs. | — | — | — |
-| `sfx.level` | The dummy reaches a new level: walkway, deck, roof. `S:2169, S:2173` | *silence*: The stair sound already marks the climb. | — | — | — |
-| `sfx.slip` | A dash is refused on a puddle. `S:1715` | `wobble.wav` | sfx | `audio.sfx.gain.move` | `audio.sfx.cooldown.action` |
+| `sfx.deck-drop` | The dummy steps off a highway parapet or ledge. `S:2227, W:2247` | tone `tone_deck_drop.wav` | sfx | `audio.sfx.gain.move` | `audio.sfx.cooldown.action` |
+| `sfx.rail-jump` | The dummy jumps a walkway rail. `W:2217` | tone `tone_rail_jump.wav` **L** (agent: `jump_3.wav`) | sfx | `audio.sfx.gain.move` | `audio.sfx.cooldown.action` |
+| `sfx.stair` | The dummy starts up or down a stair. `S:2150` | tone `tone_stair.wav` | sfx | `audio.sfx.gain.move` | `audio.sfx.cooldown.action` |
+| `sfx.level` | The dummy reaches a new level: walkway, deck, roof. `S:2169, S:2173` | `bubble.wav` **L** (agent: silence) | sfx | `audio.sfx.gain.hit` | `audio.sfx.cooldown.action` |
+| `sfx.slip` | A dash is refused on a puddle. `S:1715` | tone `tone_slip.wav` **L** (agent: `wobble.wav`) | sfx | `audio.sfx.gain.move` | `audio.sfx.cooldown.action` |
 
 ### 3.3 Abilities
 
 | Cue | Trigger | Files | Bus | Volume ID | Cooldown ID |
 |---|---|---|---|---|---|
-| `sfx.push` | Arms: the dummy pushes off a car (Y). `S:1879` | `door_close.wav` | sfx | `audio.sfx.gain.hit` | `audio.sfx.cooldown.action` |
+| `sfx.push` | Arms: the dummy pushes off a car (Y). `S:1879` | `hurt_3.wav` **L** (agent: `door_close.wav`) | sfx | `audio.sfx.gain.hit` | `audio.sfx.cooldown.action` |
 | `sfx.hitch` | The dummy grabs a passing car (X). `S:1904` | `equip_1.wav` | sfx | `audio.sfx.gain.move` | `audio.sfx.cooldown.action` |
-| `sfx.sling` | The dummy lets go of a hitched car with speed. `S:1925` | `shrink.wav` | sfx | `audio.sfx.gain.move` | `audio.sfx.cooldown.action` |
-| `sfx.denied` | A move is refused: no charge, or not fitted yet. `S:1675` | `blocked.wav` | sfx | `audio.sfx.gain.alert` | `audio.sfx.cooldown.action` |
+| `sfx.sling` | The dummy lets go of a hitched car with speed. `S:1925` | `equip_2.wav` **L** (agent: `shrink.wav`) | sfx | `audio.sfx.gain.move` | `audio.sfx.cooldown.action` |
+| `sfx.denied` | A move is refused: no charge, or not fitted yet. `S:1675` | `blocked.wav` **L** (agent: `blocked.wav`) | sfx | `audio.sfx.gain.alert` + `audio.sfx.offset.denied` | `audio.sfx.cooldown.action` |
 | ↳ `sfx.denied.locked` | Not fitted yet | `cancel_1.wav` | sfx | `audio.sfx.gain.alert` | `audio.sfx.cooldown.action` |
 
 ### 3.4 Hits and damage
@@ -111,34 +114,34 @@ Columns: the cue; what triggers it, with its code site; the files (a pool); bus;
 | Cue | Trigger | Files | Bus | Volume ID | Cooldown ID |
 |---|---|---|---|---|---|
 | `sfx.impact` | A car hits the dummy. Damage, points, the burst. `S:3268` | `hurt_1.wav`, `hurt_2.wav`, `hurt_3.wav`, `hurt_4.wav` | sfx | `audio.sfx.gain.hit` | `audio.sfx.cooldown.burst` |
-| ↳ `sfx.impact.big` | A big hit | `harsh_destruction.wav`, `explosion_1.wav` | sfx | `audio.sfx.gain.big` | `audio.sfx.cooldown.burst` |
+| ↳ `sfx.impact.big` | A big hit | `explosion_1.wav` **L** (agent: `harsh_destruction.wav`, `explosion_1.wav`) | sfx | `audio.sfx.gain.big` | `audio.sfx.cooldown.burst` |
 | ↳ `sfx.impact.drop` | A drop onto a car | `soft_destruction.wav`, `hurt_3.wav` | sfx | `audio.sfx.gain.hit` | `audio.sfx.cooldown.burst` |
-| `sfx.held` | Story: a hit that misses the brief; the chassis holds at the floor. `S:3269` | `equip_2.wav` | sfx | `audio.sfx.gain.story` | `audio.sfx.cooldown.once` |
-| `sfx.knock` | A car shoves the dummy without damage. `S:2106, W:2346` | *Prototype 8.4 synth*: The procedural shove scales with speed; hurt sounds mean damage. | — | — | — |
-| `sfx.touch-spent` | The dummy touches a spent car: no reward. `S:3233` | *silence*: Spent cars pay nothing; silence teaches that. | — | — | — |
-| `sfx.writeoff` | The chassis is written off: health reaches zero. `S:3284` | `explosion_4.wav` | sfx | `audio.sfx.gain.big` | `audio.sfx.cooldown.once` |
+| `sfx.held` | Story: a hit that misses the brief; the chassis holds at the floor. `S:3269` | `cancel_1.wav` **L** (agent: `equip_2.wav`) | sfx | `audio.sfx.gain.story` | `audio.sfx.cooldown.once` |
+| `sfx.knock` | A car shoves the dummy without damage. `S:2106, W:2346` | tone `tone_knock.wav` | sfx | `audio.sfx.gain.hit` | `audio.sfx.cooldown.frame` |
+| `sfx.touch-spent` | The dummy touches a spent car: no reward. `S:3233` | tone `tone_touch_spent.wav` **L** (agent: silence) | sfx | `audio.sfx.gain.hit` | `audio.sfx.cooldown.frame` |
+| `sfx.writeoff` | The chassis is written off: health reaches zero. `S:3284` | `explosion_3.wav` **L** (agent: `explosion_4.wav`) | sfx | `audio.sfx.gain.big` | `audio.sfx.cooldown.once` |
 | `sfx.chassis` | A chassis is issued: at a level's start, under the card, and after each write-off. `S:1666` | `teleport.wav` | sfx | `audio.sfx.gain.story` | `audio.sfx.cooldown.once` |
 | ↳ `sfx.chassis.start` | At a level's start, under the level card | *as `sfx.chassis`*: A level's first chassis beams in like every other; it plays the chassis cue. | — | — | — |
-| `sfx.part-break` | A body part reaches broken (level 3). | `fire_1.wav` | sfx | `audio.sfx.gain.alert` | `audio.sfx.cooldown.once` |
-| `sfx.low-health` | The chassis falls below audio.sfx.lowHealthAt of its maximum. | `siren.wav` | sfx | `audio.sfx.gain.alert` | `audio.sfx.cooldown.once` |
+| `sfx.part-break` | A body part reaches broken (level 3). | `explosion_2.wav` **L** (agent: `fire_1.wav`) | sfx | `audio.sfx.gain.alert` | `audio.sfx.cooldown.once` |
+| `sfx.low-health` | The chassis falls below audio.sfx.lowHealthAt of its maximum. | `wobble.wav` **L** (agent: `siren.wav`) | sfx | `audio.sfx.gain.alert` | `audio.sfx.cooldown.once` |
 
 ### 3.5 Near-misses
 
 | Cue | Trigger | Files | Bus | Volume ID | Cooldown ID |
 |---|---|---|---|---|---|
-| `sfx.near-miss` | A fast car passes close without touching. `G:688` | *Prototype 8.4 synth*: The procedural whoosh tracks car speed; the pack has no pass-by. | — | — | — |
-| `sfx.miss` | A dash ends with no contact. `G:698` | *silence*: The lunge already sounds; an empty dash earns nothing. | — | — | — |
+| `sfx.near-miss` | A fast car passes close without touching. `G:688` | tone `tone_near_miss.wav` **L** (agent: synth) | sfx | `audio.sfx.gain.hit` | `audio.sfx.cooldown.burst` |
+| `sfx.miss` | A dash ends with no contact. `G:698` | tone `tone_miss.wav` **L** (agent: silence) | sfx | `audio.sfx.gain.hit` | `audio.sfx.cooldown.action` |
 
 ### 3.6 Cones
 
 | Cue | Trigger | Files | Bus | Volume ID | Cooldown ID |
 |---|---|---|---|---|---|
-| `sfx.pickup` | The dummy picks up a cone (X). `S:1611` | `collect_3.wav` | sfx | `audio.sfx.gain.move` | `audio.sfx.cooldown.action` |
-| `sfx.drop` | The dummy sets a cone down. `S:2004` | *Prototype 8.4 synth*: The pack has no plastic tap; the 8.4 tap suits a cone. | — | — | — |
+| `sfx.pickup` | The dummy picks up a cone (X). `S:1611` | `collect_7.wav` **L** (agent: `collect_3.wav`) | sfx | `audio.sfx.gain.move` | `audio.sfx.cooldown.action` |
+| `sfx.drop` | The dummy sets a cone down. `S:2004` | `collect_4.wav` **L** (agent: synth) | sfx | `audio.sfx.gain.hit` | `audio.sfx.cooldown.action` |
 | `sfx.throw` | The dummy throws a cone. `S:2013` | `jump_2.wav` | sfx | `audio.sfx.gain.move` | `audio.sfx.cooldown.action` |
-| `sfx.punt` | The dummy walks into a cone and kicks it. `S:2119, W:2359` | *Prototype 8.4 synth*: The light procedural kick keeps a low-stakes action quiet. | — | — | — |
-| `sfx.cone-hit` | A cone makes a car stop or crash: points. `S:2264` | `explosion_2.wav` | sfx | `audio.sfx.gain.hit` | `audio.sfx.cooldown.once` |
-| `sfx.cone-struck` | A car runs into a cone. `S:2278` | *silence*: The cone-hit sound carries the payoff; strikes would chatter. | — | — | — |
+| `sfx.punt` | The dummy walks into a cone and kicks it. `S:2119, W:2359` | tone `tone_punt.wav` **L** (agent: synth) | sfx | `audio.sfx.gain.hit` | `audio.sfx.cooldown.action` |
+| `sfx.cone-hit` | A cone makes a car stop or crash: points. `S:2264` | tone `tone_cone_hit.wav` **L** (agent: `explosion_2.wav`) | sfx | `audio.sfx.gain.hit` | `audio.sfx.cooldown.once` |
+| `sfx.cone-struck` | A car runs into a cone. `S:2278` | `select_1.wav` **L** (agent: silence) | sfx | `audio.sfx.gain.hit` | `audio.sfx.cooldown.ambient` |
 | `sfx.cone-stop` | A thrown cone stops sliding. `S:2261` | *silence*: Background cone settling would clutter traffic. | — | — | — |
 | `sfx.cone-rest` | A cone settles. `S:2267` | *silence*: Background cone settling would clutter traffic. | — | — | — |
 | `sfx.cone-release` | Carried cones fall when the dummy is written off. `S:2023` | *silence*: The write-off owns this moment. | — | — | — |
@@ -157,17 +160,17 @@ Columns: the cue; what triggers it, with its code site; the files (a pool); bus;
 |---|---|---|---|---|---|
 | `sfx.splash` | The dummy falls into the river. `W:2267` | `water_1.wav` | sfx | `audio.sfx.gain.big` | `audio.sfx.cooldown.once` |
 | `sfx.rescued` | A drone recovers the chassis from the river. `W:2299` | `water_2.wav` | sfx | `audio.sfx.gain.story` | `audio.sfx.cooldown.once` |
-| `sfx.screen` | The view moves to a neighbouring tile. `S:3397, W:2407` | *Prototype 8.4 synth*: Flips are frequent; the 8.4 flip sits under the music. | — | — | — |
+| `sfx.screen` | The view moves to a neighbouring tile. `S:3397, W:2407` | tone `tone_screen.wav` | sfx | `audio.sfx.gain.story` | `audio.sfx.cooldown.action` |
 
 ### 3.9 Cars
 
 | Cue | Trigger | Files | Bus | Volume ID | Cooldown ID |
 |---|---|---|---|---|---|
-| `sfx.honk` | A blocked car honks, at the dummy or at a cone. `S:2971` | *Prototype 8.4 synth*: The pack has no horn; 8.4 honks keep each tier's voice. | — | — | — |
-| ↳ `sfx.honk.body` | At the dummy; repeats while it blocks | *Prototype 8.4 synth*: The tier horn holds; the bark names the target. | — | — | — |
-| `sfx.skid` | A car skids on a puddle. `S:3141` | *Prototype 8.4 synth*: slippery.wav runs 0.82 s; the procedural skid stays short. | — | — | — |
+| `sfx.honk` | A blocked car honks, at the dummy or at a cone. `S:2971` | tone `tone_honk.wav` | sfx | `audio.sfx.gain.alert` | `audio.sfx.cooldown.honk` |
+| ↳ `sfx.honk.body` | At the dummy; repeats while it blocks | tone `tone_honk_body.wav` | sfx | `audio.sfx.gain.alert` | `audio.sfx.cooldown.honk` |
+| `sfx.skid` | A car skids on a puddle. `S:3141` | tone `tone_skid.wav` | sfx | `audio.sfx.gain.ambient` | `audio.sfx.cooldown.ambient` |
 | `sfx.unstick` | A stuck car reverses or replans. `S:2989, S:3026` | *silence*: Replans are invisible; only reversing earns a sound. | — | — | — |
-| ↳ `sfx.unstick.reverse` | Reversing beeps | *Prototype 8.4 synth*: The 8.4 reversing beep is a real street cue. | — | — | — |
+| ↳ `sfx.unstick.reverse` | Reversing beeps | tone `tone_unstick_reverse.wav` | sfx | `audio.sfx.gain.ambient` | `audio.sfx.cooldown.ambient` |
 | `sfx.learn-standoff` | A car model learns to stop further back. `S:3259` | `computer_2.wav` | sfx | `audio.sfx.gain.story` | `audio.sfx.cooldown.once` |
 | `sfx.car-notice` | A car's headlights start to flash: it has noticed the dummy. | *silence*: Headlight flashes are the language; a sound would duplicate them. | — | — | — |
 | `sfx.car-brake` | A car's brake lights come on as it brakes for safety. | *silence*: Constant traffic chatter; brake lights carry it. | — | — | — |
@@ -190,7 +193,7 @@ Columns: the cue; what triggers it, with its code site; the files (a pool); bus;
 | `sfx.drone-dispatch` | A Corporation drone sets off: to clear a cone, or to the river. `S:2896, W:2289` | `ufo.wav` | sfx | `audio.sfx.gain.story` | `audio.sfx.cooldown.once` |
 | ↳ `sfx.drone-dispatch.rescue` | To the river | `siren.wav` | sfx | `audio.sfx.gain.story` | `audio.sfx.cooldown.once` |
 | `sfx.drone-pickup` | The drone lifts a cone. `S:2927` | `equip_1.wav` | sfx | `audio.sfx.gain.story` | `audio.sfx.cooldown.once` |
-| `sfx.drone-drop` | The drone sets the cone down. `S:2938` | *Prototype 8.4 synth*: The pickup frames the trip; the 8.4 tap closes it. | — | — | — |
+| `sfx.drone-drop` | The drone sets the cone down. `S:2938` | tone `tone_drone_drop.wav` | sfx | `audio.sfx.gain.story` | `audio.sfx.cooldown.once` |
 | `sfx.drop-in` | A level starts: a drone carries the dummy in. `T:139` | `engine.wav` | sfx | `audio.sfx.gain.story` | `audio.sfx.cooldown.once` |
 | `sfx.dropped-in` | The drone sets the dummy down; play starts. `T:152` | `land.wav` | sfx | `audio.sfx.gain.move` | `audio.sfx.cooldown.once` |
 
@@ -246,7 +249,7 @@ Columns: the cue; what triggers it, with its code site; the files (a pool); bus;
 |---|---|---|---|---|---|
 | `sfx.intro-hit` | The intro loop: the car meets the dummy. | *silence*: Track 1 owns the intro; a looping hit would grate. | — | — | — |
 
-**Totals:** 107 entries: 66 cues, 28 silences, 12 synth, 1 on its base. 58 of 100 files used.
+**Totals:** 107 entries: 66 cues, 24 silences, 16 generated tones, 1 on its base. 53 of 100 pack files used; 57 generated tones in `prototypes/p9/audio/tones/`. Lawrence's picks: 21 entries.
 
 ## 4 Gameplay points
 
@@ -274,7 +277,7 @@ python3 audio/integrate.py && python3 prototypes/p9/build.py
 cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && python3 prototypes/p9/make_lab.py && python3 audio/make_gdd.py
 ```
 
-- PASS · every file in the cue map loads (83)
+- PASS · every file in the cue map loads (140)
 - PASS · the tour ran without page errors
 - PASS · nothing plays before the first press
 - PASS · music on "the first press": intro, Track 1
@@ -291,10 +294,10 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 - PASS · music on "Story: play on tile 2": level, Track 4
 - PASS · music on "the finale": finale, Track 1
 - PASS · music on "CERTIFIED": finale, Track 1
-- PASS · the tour heard 33 cues through the game's hooks
+- PASS · the tour heard 36 cues through the game's hooks
 - PASS · the intro waits behind the gate
 - PASS · an unmapped key unlocks audio and starts Track 1
-- PASS · every catalogued event and variant does what the map says (107: 66 cue, 28 silence, 12 synth, 1 base)
+- PASS · every catalogued event and variant does what the map says (107: 66 cue, 24 silence, 16 synth, 1 base)
 - PASS · the catalogue and the cue map hold the same 107 entries
 - PASS · START plays ui-start and crossfades to Track 2
 - PASS · a cursor move plays ui-move
@@ -303,16 +306,17 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 - PASS · Options shows MUSIC, SOUND and MUTE
 - PASS · MUSIC − twice is saved (dummies.p9.audio)
 - PASS · the game takes the Sound Lab's picks from #audio= and keeps them
+- PASS · malformed picks are dropped and the game starts; an emptied pool is silent
 - PASS · no page errors in the hook tests
 - PASS · no audio engine errors
-- PASS · Prototype 8.4 rebuilt from the shared code draws what the frozen build draws (316 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 316 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)
+- PASS · Prototype 8.4 rebuilt from the shared code draws what the frozen build draws (315 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 315 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)
 - PASS · the frozen dummies_p8_4.html is unchanged (md5 9f5549201d88891f9f0b22c461602909)
 
 ## 7 Measured
 
 - **SFX:** 100 mono WAV, 44.1 kHz. 0.10–3.29 s. Level -29.0 to -17.6 dB (LUFS, or RMS under 0.4 s).
 - **Music:** six stereo OGG, 48 kHz, 66–123 s, -16.7 to -9.1 LUFS.
-- **Build:** `dummies_p9.html` 1,357,200 bytes. Audio beside it: 29.4 MB.
+- **Build:** `dummies_p9.html` 1,386,537 bytes. Audio beside it: 31.1 MB.
 
 ## 8 Registry (edit100)
 
@@ -350,10 +354,11 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 | `audio.sfx.gain.ui` | -6 | dB | Gain class 'ui' on its bus: menu moves and confirms |
 | `audio.sfx.lowHealthAt` | 0.3 | ratio | The low-health cue sounds when the chassis falls below this share of its maximum, once until it recovers |
 | `audio.sfx.maxVoices` | 16 | count | Effects playing at once; a new one past the cap is dropped |
+| `audio.sfx.offset.denied` | 3.5 | dB | Fine gain on sfx.denied, after its gain class |
 | `audio.sfx.pitchJitter` | 0.04 | ratio | Each effect plays at a rate up to this far from 1 (not menus) |
 | `audio.sfx.targetLufs` | -18 | LUFS | Loudness each effect is trimmed toward (integrated LUFS, or RMS under 0.4 s) |
 | `audio.sfx.volume` | 0.85 | ratio | The effects bus at SOUND 10 |
-| `audio.synth.gain` | 1 | ratio | Prototype 8.4's procedural sounds, through the SFX bus, for events the map leaves to the synth |
+| `audio.synth.gain` | 1 | ratio | Prototype 8.4's live synth, through the SFX bus, for an event with no entry and no generated tone |
 | `audio.trim.maxBoostDb` | 12 | dB | The largest boost or cut a trim applies |
 | `audio.trim.peakCeilingDb` | -1 | dBFS | An effect's boost stops where its peak would pass this |
 | `audio.ui.volume` | 0.7 | ratio | The menu bus at SOUND 10 |
@@ -362,8 +367,9 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 
 - **D86:** the Credits card's audio lines widen Style Guide C1. Needs Lawrence's ruling.
 - **Q1–Q6:** readings taken, not ruled (DECISIONS 591–596).
-- **Honk:** the pack has no horn. The agent kept Prototype 8.4's synth horn (C2 overruled by the reviewer).
-- **Silenced by the agent:** car-notice and car-brake. Switch them on in the Sound Lab to hear the edge cues.
+- **Honk and cone hits:** the pack has no horn. Honks play Prototype 8.4's horn as generated tones; Lawrence set cone hits to their tone too (C2, user-decided).
+- **Tone fidelity:** a generated tone is one rendering. Prototype 8.4 scaled some of its sounds with the hit's force; the tones take the middle of each range.
+- **Silenced:** car-notice and car-brake (the agent), cone-rest (Lawrence's pick left it so). Switch them on in the Sound Lab.
 - **Licence:** the pack's credit lines only. The licence texts were not supplied.
 - **Devices:** the MP3 fallback for Safari and iOS is untested on a device.
 - **Pages:** `gh-pages` is pushed. GitHub Pages needs switching on in the repo's settings once.

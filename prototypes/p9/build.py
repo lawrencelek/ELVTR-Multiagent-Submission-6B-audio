@@ -42,7 +42,8 @@ scripts += f'<script>\n{(p6 / "game.js").read_text(encoding="utf-8")}\n</script>
 out = here / 'dummies_p9.html'
 full = shell.replace('<!--SCRIPTS-->', scripts)
 out.write_text(full, encoding='utf-8')
-missing = [f for c in cues['sfx'].values() for f in c.get('files', []) + c.get('alternates', []) if not (here / 'audio' / 'sfx' / f).exists()]
+dir_ = lambda f: cues['files'].get(f, {}).get('dir', 'sfx')
+missing = [f for c in cues['sfx'].values() for f in c.get('files', []) + c.get('alternates', []) + ([c['tone']] if c.get('tone') else []) if not (here / 'audio' / dir_(f) / f).exists()]
 missing += [t['file'] for t in cues['music']['tracks'].values() if not (here / 'audio' / t['file']).exists()]
 missing += [t['mp3'] for t in cues['music']['tracks'].values() if not (here / 'audio' / t['mp3']).exists()]
 assert not missing, missing

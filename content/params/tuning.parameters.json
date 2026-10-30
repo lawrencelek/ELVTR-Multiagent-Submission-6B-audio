@@ -11864,7 +11864,7 @@
     "min": 0,
     "max": 2
    },
-   "description": "Prototype 8.4's procedural sounds, through the SFX bus, for events the map leaves to the synth",
+   "description": "Prototype 8.4's live synth, through the SFX bus, for an event with no entry and no generated tone",
    "purpose": "§6.1: the synth stays as a fallback"
   },
   {
@@ -12218,6 +12218,28 @@
    },
    "description": "Seconds between two plays of one cue in class 'bark': bark bubbles (proto.barks.cooldown)",
    "purpose": "Sound Guide §2; S1"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "source": "Edit 100 (P9): Lawrence's Sound Lab picks, 30 October (row 603)",
+   "status": "user-confirmed",
+   "applyAt": "next-run",
+   "id": "audio.sfx.offset.denied",
+   "group": "Audio",
+   "owner": "Audio",
+   "label": "Offset: denied",
+   "unit": "dB",
+   "type": "number",
+   "default": 3.5,
+   "validation": {
+    "min": -24,
+    "max": 24
+   },
+   "description": "Fine gain on sfx.denied, after its gain class",
+   "purpose": "Lawrence's pick in the Sound Lab"
   }
  ],
  "tables": {

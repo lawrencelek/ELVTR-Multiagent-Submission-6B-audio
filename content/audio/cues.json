@@ -44,7 +44,8 @@
   "audio.sfx.cooldown.ambient": 0.6,
   "audio.sfx.cooldown.once": 0,
   "audio.sfx.cooldown.honk": 1.4,
-  "audio.sfx.cooldown.bark": 0.8
+  "audio.sfx.cooldown.bark": 0.8,
+  "audio.sfx.offset.denied": 3.5
  },
  "music": {
   "tracks": {
@@ -136,10 +137,6 @@
    "priority": "high",
    "shot": "title",
    "why": "Shortest select tick suits rapid cursor moves.",
-   "files": [
-    "select_3.wav"
-   ],
-   "pick": "cycle",
    "bus": "ui",
    "gain": "ui",
    "gainId": "audio.sfx.gain.ui",
@@ -148,7 +145,11 @@
    "alternates": [
     "select_1.wav",
     "select_2.wav"
-   ]
+   ],
+   "files": [
+    "select_3.wav"
+   ],
+   "pick": "cycle"
   },
   "ui-ok": {
    "decision": "cue",
@@ -159,10 +160,6 @@
    "priority": "high",
    "shot": "title",
    "why": "Crisp short confirm keeps menus snappy.",
-   "files": [
-    "confirm_4.wav"
-   ],
-   "pick": "cycle",
    "bus": "ui",
    "gain": "ui",
    "gainId": "audio.sfx.gain.ui",
@@ -171,7 +168,11 @@
    "alternates": [
     "confirm_1.wav",
     "select_5.wav"
-   ]
+   ],
+   "files": [
+    "confirm_4.wav"
+   ],
+   "pick": "cycle"
   },
   "ui-back": {
    "decision": "cue",
@@ -182,10 +183,6 @@
    "priority": "high",
    "shot": "saves",
    "why": "Cancel family reads as back.",
-   "files": [
-    "cancel_3.wav"
-   ],
-   "pick": "cycle",
    "bus": "ui",
    "gain": "ui",
    "gainId": "audio.sfx.gain.ui",
@@ -194,7 +191,11 @@
    "alternates": [
     "cancel_1.wav",
     "cancel_2.wav"
-   ]
+   ],
+   "files": [
+    "cancel_3.wav"
+   ],
+   "pick": "cycle"
   },
   "ui-pause": {
    "decision": "cue",
@@ -205,10 +206,6 @@
    "priority": "medium",
    "shot": "pause",
    "why": "Soft select marks the pause while the music ducks.",
-   "files": [
-    "select_4.wav"
-   ],
-   "pick": "cycle",
    "bus": "ui",
    "gain": "ui",
    "gainId": "audio.sfx.gain.ui",
@@ -217,7 +214,11 @@
    "alternates": [
     "cancel_4.wav",
     "equip_1.wav"
-   ]
+   ],
+   "files": [
+    "select_4.wav"
+   ],
+   "pick": "cycle"
   },
   "ui-start": {
    "decision": "cue",
@@ -227,20 +228,30 @@
    "freq": "once",
    "priority": "high",
    "shot": "intro",
-   "why": "A distinct confirm opens the game.",
-   "files": [
-    "confirm_1.wav"
-   ],
-   "pick": "cycle",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: A distinct confirm opens the game.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "cue",
+    "files": [
+     "confirm_1.wav"
+    ],
+    "gain": "ui",
+    "cooldown": "once",
+    "why": "A distinct confirm opens the game."
+   },
    "bus": "ui",
    "gain": "ui",
    "gainId": "audio.sfx.gain.ui",
    "cooldown": "once",
    "cooldownId": "audio.sfx.cooldown.once",
    "alternates": [
-    "select_5.wav",
+    "confirm_1.wav",
+    "select_5.wav"
+   ],
+   "files": [
     "equip_2.wav"
-   ]
+   ],
+   "pick": "cycle"
   },
   "ui-gate": {
    "decision": "silence",
@@ -250,7 +261,15 @@
    "freq": "once",
    "priority": "low",
    "shot": "intro",
-   "why": "Track 1 starting is the response to the press."
+   "why": "Track 1 starting is the response to the press.",
+   "bus": "ui",
+   "gain": "ui",
+   "gainId": "audio.sfx.gain.ui",
+   "cooldown": "once",
+   "cooldownId": "audio.sfx.cooldown.once",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "lunge": {
    "decision": "cue",
@@ -260,20 +279,31 @@
    "freq": "action",
    "priority": "high",
    "shot": "dash",
-   "why": "A short spring launch reads as a lunge.",
-   "files": [
-    "jump_4.wav"
-   ],
-   "pick": "cycle",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: A short spring launch reads as a lunge.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "cue",
+    "files": [
+     "jump_4.wav"
+    ],
+    "gain": "move",
+    "cooldown": "action",
+    "why": "A short spring launch reads as a lunge."
+   },
+   "tone": "tone_lunge.wav",
    "bus": "sfx",
    "gain": "move",
    "gainId": "audio.sfx.gain.move",
    "cooldown": "action",
    "cooldownId": "audio.sfx.cooldown.action",
    "alternates": [
-    "shrink.wav",
+    "jump_4.wav",
+    "shrink.wav"
+   ],
+   "files": [
     "wobble.wav"
-   ]
+   ],
+   "pick": "cycle"
   },
   "jump": {
    "decision": "cue",
@@ -284,10 +314,7 @@
    "priority": "high",
    "shot": "jump",
    "why": "The pack's jump sound matches the event directly.",
-   "files": [
-    "jump_1.wav"
-   ],
-   "pick": "cycle",
+   "tone": "tone_jump.wav",
    "bus": "sfx",
    "gain": "move",
    "gainId": "audio.sfx.gain.move",
@@ -297,6 +324,10 @@
     "jump_3.wav",
     "jump_2.wav"
    ],
+   "files": [
+    "jump_1.wav"
+   ],
+   "pick": "cycle",
    "variants": [
     "jump.dash"
    ]
@@ -310,14 +341,11 @@
    "priority": "high",
    "shot": "jump",
    "why": "A longer rise marks the long jump.",
+   "tone": "tone_jump_dash.wav",
    "variantOf": "jump",
    "when": {
     "kind": "dash"
    },
-   "files": [
-    "jump_3.wav"
-   ],
-   "pick": "cycle",
    "bus": "sfx",
    "gain": "move",
    "gainId": "audio.sfx.gain.move",
@@ -326,7 +354,11 @@
    "alternates": [
     "jump_2.wav",
     "jump_1.wav"
-   ]
+   ],
+   "files": [
+    "jump_3.wav"
+   ],
+   "pick": "cycle"
   },
   "jump-land": {
    "decision": "cue",
@@ -337,10 +369,7 @@
    "priority": "medium",
    "shot": "jump",
    "why": "The pack's landing thud matches by name.",
-   "files": [
-    "land.wav"
-   ],
-   "pick": "cycle",
+   "tone": "tone_jump_land.wav",
    "bus": "sfx",
    "gain": "move",
    "gainId": "audio.sfx.gain.move",
@@ -349,7 +378,11 @@
    "alternates": [
     "blocked.wav",
     "door_close.wav"
-   ]
+   ],
+   "files": [
+    "land.wav"
+   ],
+   "pick": "cycle"
   },
   "land": {
    "decision": "cue",
@@ -360,10 +393,7 @@
    "priority": "medium",
    "shot": "jump",
    "why": "The same body thud covers every ground landing.",
-   "files": [
-    "land.wav"
-   ],
-   "pick": "cycle",
+   "tone": "tone_land.wav",
    "bus": "sfx",
    "gain": "move",
    "gainId": "audio.sfx.gain.move",
@@ -373,6 +403,10 @@
     "door_close.wav",
     "blocked.wav"
    ],
+   "files": [
+    "land.wav"
+   ],
+   "pick": "cycle",
    "variants": [
     "land.car"
    ]
@@ -386,14 +420,11 @@
    "priority": "medium",
    "shot": "jump",
    "why": "A metallic panel thunk sells a landing on a roof.",
+   "tone": "tone_land.wav",
    "variantOf": "land",
    "when": {
     "car": "*"
    },
-   "files": [
-    "door_close.wav"
-   ],
-   "pick": "cycle",
    "bus": "sfx",
    "gain": "move",
    "gainId": "audio.sfx.gain.move",
@@ -402,7 +433,11 @@
    "alternates": [
     "land.wav",
     "blocked.wav"
-   ]
+   ],
+   "files": [
+    "door_close.wav"
+   ],
+   "pick": "cycle"
   },
   "deck-drop": {
    "decision": "synth",
@@ -412,21 +447,37 @@
    "freq": "action",
    "priority": "medium",
    "shot": "play",
-   "why": "The landing cue carries the drop; the 8.4 step-off stays light."
+   "why": "The landing cue carries the drop; the 8.4 step-off stays light.",
+   "tone": "tone_deck_drop.wav",
+   "bus": "sfx",
+   "gain": "move",
+   "gainId": "audio.sfx.gain.move",
+   "cooldown": "action",
+   "cooldownId": "audio.sfx.cooldown.action",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "rail-jump": {
-   "decision": "cue",
+   "decision": "synth",
    "label": "Over the rail",
    "what": "The dummy jumps a walkway rail.",
    "group": "moves",
    "freq": "action",
    "priority": "low",
    "shot": "play",
-   "why": "A vault is a jump; it reuses the long-jump rise.",
-   "files": [
-    "jump_3.wav"
-   ],
-   "pick": "cycle",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: A vault is a jump; it reuses the long-jump rise.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "cue",
+    "files": [
+     "jump_3.wav"
+    ],
+    "gain": "move",
+    "cooldown": "action",
+    "why": "A vault is a jump; it reuses the long-jump rise."
+   },
+   "tone": "tone_rail_jump.wav",
    "bus": "sfx",
    "gain": "move",
    "gainId": "audio.sfx.gain.move",
@@ -435,7 +486,11 @@
    "alternates": [
     "jump_1.wav",
     "jump_4.wav"
-   ]
+   ],
+   "files": [
+    "jump_3.wav"
+   ],
+   "pick": "cycle"
   },
   "stair": {
    "decision": "synth",
@@ -445,31 +500,62 @@
    "freq": "action",
    "priority": "low",
    "shot": "play",
-   "why": "The pack has no footsteps; the procedural step suits stairs."
+   "why": "The pack has no footsteps; the procedural step suits stairs.",
+   "tone": "tone_stair.wav",
+   "bus": "sfx",
+   "gain": "move",
+   "gainId": "audio.sfx.gain.move",
+   "cooldown": "action",
+   "cooldownId": "audio.sfx.cooldown.action",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "level": {
-   "decision": "silence",
+   "decision": "cue",
    "label": "New level",
    "what": "The dummy reaches a new level: walkway, deck, roof.",
    "group": "moves",
    "freq": "action",
    "priority": "low",
    "shot": "play",
-   "why": "The stair sound already marks the climb."
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: The stair sound already marks the climb.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "silence",
+    "why": "The stair sound already marks the climb."
+   },
+   "bus": "sfx",
+   "gain": "hit",
+   "gainId": "audio.sfx.gain.hit",
+   "cooldown": "action",
+   "cooldownId": "audio.sfx.cooldown.action",
+   "alternates": [],
+   "files": [
+    "bubble.wav"
+   ],
+   "pick": "random"
   },
   "slip": {
-   "decision": "cue",
+   "decision": "synth",
    "label": "Slip on water",
    "what": "A dash is refused on a puddle.",
    "group": "moves",
    "freq": "action",
    "priority": "medium",
    "shot": "play",
-   "why": "A wobble sells feet losing grip on water.",
-   "files": [
-    "wobble.wav"
-   ],
-   "pick": "cycle",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: A wobble sells feet losing grip on water.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "cue",
+    "files": [
+     "wobble.wav"
+    ],
+    "gain": "move",
+    "cooldown": "action",
+    "why": "A wobble sells feet losing grip on water."
+   },
+   "tone": "tone_slip.wav",
    "bus": "sfx",
    "gain": "move",
    "gainId": "audio.sfx.gain.move",
@@ -478,7 +564,11 @@
    "alternates": [
     "swim_1.wav",
     "bubble.wav"
-   ]
+   ],
+   "files": [
+    "wobble.wav"
+   ],
+   "pick": "cycle"
   },
   "push": {
    "decision": "cue",
@@ -488,20 +578,32 @@
    "freq": "action",
    "priority": "high",
    "shot": "play",
-   "why": "Palms on a car panel make a flat metal thunk.",
-   "files": [
-    "door_close.wav"
-   ],
-   "pick": "cycle",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: Palms on a car panel make a flat metal thunk.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "cue",
+    "files": [
+     "door_close.wav"
+    ],
+    "gain": "hit",
+    "cooldown": "action",
+    "why": "Palms on a car panel make a flat metal thunk."
+   },
+   "tone": "tone_push.wav",
    "bus": "sfx",
    "gain": "hit",
    "gainId": "audio.sfx.gain.hit",
    "cooldown": "action",
    "cooldownId": "audio.sfx.cooldown.action",
    "alternates": [
+    "door_close.wav",
     "blocked.wav",
     "soft_destruction.wav"
-   ]
+   ],
+   "files": [
+    "hurt_3.wav"
+   ],
+   "pick": "cycle"
   },
   "hitch": {
    "decision": "cue",
@@ -512,10 +614,7 @@
    "priority": "high",
    "shot": "play",
    "why": "A clamp click reads as a grip that locks on.",
-   "files": [
-    "equip_1.wav"
-   ],
-   "pick": "cycle",
+   "tone": "tone_hitch.wav",
    "bus": "sfx",
    "gain": "move",
    "gainId": "audio.sfx.gain.move",
@@ -524,7 +623,11 @@
    "alternates": [
     "equip_2.wav",
     "door_close.wav"
-   ]
+   ],
+   "files": [
+    "equip_1.wav"
+   ],
+   "pick": "cycle"
   },
   "sling": {
    "decision": "cue",
@@ -534,20 +637,32 @@
    "freq": "action",
    "priority": "high",
    "shot": "play",
-   "why": "A falling sweep sells the release at speed.",
-   "files": [
-    "shrink.wav"
-   ],
-   "pick": "cycle",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: A falling sweep sells the release at speed.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "cue",
+    "files": [
+     "shrink.wav"
+    ],
+    "gain": "move",
+    "cooldown": "action",
+    "why": "A falling sweep sells the release at speed."
+   },
+   "tone": "tone_sling.wav",
    "bus": "sfx",
    "gain": "move",
    "gainId": "audio.sfx.gain.move",
    "cooldown": "action",
    "cooldownId": "audio.sfx.cooldown.action",
    "alternates": [
+    "shrink.wav",
     "jump_4.wav",
     "jump_2.wav"
-   ]
+   ],
+   "files": [
+    "equip_2.wav"
+   ],
+   "pick": "cycle"
   },
   "denied": {
    "decision": "cue",
@@ -557,11 +672,18 @@
    "freq": "action",
    "priority": "medium",
    "shot": "play",
-   "why": "The name matches: a refused move.",
-   "files": [
-    "blocked.wav"
-   ],
-   "pick": "cycle",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: The name matches: a refused move.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "cue",
+    "files": [
+     "blocked.wav"
+    ],
+    "gain": "alert",
+    "cooldown": "action",
+    "why": "The name matches: a refused move."
+   },
+   "tone": "tone_denied.wav",
    "bus": "sfx",
    "gain": "alert",
    "gainId": "audio.sfx.gain.alert",
@@ -571,6 +693,11 @@
     "cancel_2.wav",
     "cancel_4.wav"
    ],
+   "files": [
+    "blocked.wav"
+   ],
+   "pick": "cycle",
+   "offsetId": "audio.sfx.offset.denied",
    "variants": [
     "denied.locked"
    ]
@@ -584,14 +711,11 @@
    "priority": "medium",
    "shot": "play",
    "why": "A system cancel says the part isn't fitted yet.",
+   "tone": "tone_denied.wav",
    "variantOf": "denied",
    "when": {
     "why": "locked"
    },
-   "files": [
-    "cancel_1.wav"
-   ],
-   "pick": "cycle",
    "bus": "sfx",
    "gain": "alert",
    "gainId": "audio.sfx.gain.alert",
@@ -600,7 +724,11 @@
    "alternates": [
     "cancel_4.wav",
     "blocked.wav"
-   ]
+   ],
+   "files": [
+    "cancel_1.wav"
+   ],
+   "pick": "cycle"
   },
   "impact": {
    "decision": "cue",
@@ -611,13 +739,7 @@
    "priority": "high",
    "shot": "impact",
    "why": "Four hurt variants keep repeated combo hits fresh.",
-   "files": [
-    "hurt_1.wav",
-    "hurt_2.wav",
-    "hurt_3.wav",
-    "hurt_4.wav"
-   ],
-   "pick": "random",
+   "tone": "tone_impact.wav",
    "bus": "sfx",
    "gain": "hit",
    "gainId": "audio.sfx.gain.hit",
@@ -627,6 +749,13 @@
     "soft_destruction.wav",
     "explosion_1.wav"
    ],
+   "files": [
+    "hurt_1.wav",
+    "hurt_2.wav",
+    "hurt_3.wav",
+    "hurt_4.wav"
+   ],
+   "pick": "random",
    "variants": [
     "impact.big",
     "impact.drop"
@@ -640,25 +769,37 @@
    "freq": "burst",
    "priority": "high",
    "shot": "impact",
-   "why": "Crunch and blast give big hits weight.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: Crunch and blast give big hits weight.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "cue",
+    "files": [
+     "harsh_destruction.wav",
+     "explosion_1.wav"
+    ],
+    "gain": "big",
+    "cooldown": "burst",
+    "why": "Crunch and blast give big hits weight."
+   },
+   "tone": "tone_impact_big.wav",
    "variantOf": "impact",
    "when": {
     "big": true
    },
-   "files": [
-    "harsh_destruction.wav",
-    "explosion_1.wav"
-   ],
-   "pick": "random",
    "bus": "sfx",
    "gain": "big",
    "gainId": "audio.sfx.gain.big",
    "cooldown": "burst",
    "cooldownId": "audio.sfx.cooldown.burst",
    "alternates": [
+    "harsh_destruction.wav",
     "explosion_2.wav",
     "soft_destruction.wav"
-   ]
+   ],
+   "files": [
+    "explosion_1.wav"
+   ],
+   "pick": "random"
   },
   "impact.drop": {
    "decision": "cue",
@@ -669,15 +810,11 @@
    "priority": "high",
    "shot": "impact",
    "why": "A soft crumple suits a drop onto a car.",
+   "tone": "tone_impact_drop.wav",
    "variantOf": "impact",
    "when": {
     "drop": true
    },
-   "files": [
-    "soft_destruction.wav",
-    "hurt_3.wav"
-   ],
-   "pick": "random",
    "bus": "sfx",
    "gain": "hit",
    "gainId": "audio.sfx.gain.hit",
@@ -686,7 +823,12 @@
    "alternates": [
     "land.wav",
     "hurt_1.wav"
-   ]
+   ],
+   "files": [
+    "soft_destruction.wav",
+    "hurt_3.wav"
+   ],
+   "pick": "random"
   },
   "held": {
    "decision": "cue",
@@ -696,20 +838,32 @@
    "freq": "once",
    "priority": "medium",
    "shot": "impact",
-   "why": "A clamp click: the Corporation holds the chassis floor.",
-   "files": [
-    "equip_2.wav"
-   ],
-   "pick": "cycle",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: A clamp click: the Corporation holds the chassis floor.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "cue",
+    "files": [
+     "equip_2.wav"
+    ],
+    "gain": "story",
+    "cooldown": "once",
+    "why": "A clamp click: the Corporation holds the chassis floor."
+   },
+   "tone": "tone_held.wav",
    "bus": "sfx",
    "gain": "story",
    "gainId": "audio.sfx.gain.story",
    "cooldown": "once",
    "cooldownId": "audio.sfx.cooldown.once",
    "alternates": [
+    "equip_2.wav",
     "equip_1.wav",
     "blocked.wav"
-   ]
+   ],
+   "files": [
+    "cancel_1.wav"
+   ],
+   "pick": "cycle"
   },
   "knock": {
    "decision": "synth",
@@ -719,17 +873,40 @@
    "freq": "frame",
    "priority": "medium",
    "shot": "play",
-   "why": "The procedural shove scales with speed; hurt sounds mean damage."
+   "why": "The procedural shove scales with speed; hurt sounds mean damage.",
+   "tone": "tone_knock.wav",
+   "bus": "sfx",
+   "gain": "hit",
+   "gainId": "audio.sfx.gain.hit",
+   "cooldown": "frame",
+   "cooldownId": "audio.sfx.cooldown.frame",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "touch-spent": {
-   "decision": "silence",
+   "decision": "synth",
    "label": "Spent car",
    "what": "The dummy touches a spent car: no reward.",
    "group": "hits",
    "freq": "frame",
    "priority": "low",
    "shot": "play",
-   "why": "Spent cars pay nothing; silence teaches that."
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: Spent cars pay nothing; silence teaches that.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "silence",
+    "why": "Spent cars pay nothing; silence teaches that."
+   },
+   "tone": "tone_touch_spent.wav",
+   "bus": "sfx",
+   "gain": "hit",
+   "gainId": "audio.sfx.gain.hit",
+   "cooldown": "frame",
+   "cooldownId": "audio.sfx.cooldown.frame",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "writeoff": {
    "decision": "cue",
@@ -739,20 +916,31 @@
    "freq": "once",
    "priority": "high",
    "shot": "writeoff",
-   "why": "The loudest explosion marks the biggest body beat.",
-   "files": [
-    "explosion_4.wav"
-   ],
-   "pick": "cycle",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: The loudest explosion marks the biggest body beat.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "cue",
+    "files": [
+     "explosion_4.wav"
+    ],
+    "gain": "big",
+    "cooldown": "once",
+    "why": "The loudest explosion marks the biggest body beat."
+   },
+   "tone": "tone_writeoff.wav",
    "bus": "sfx",
    "gain": "big",
    "gainId": "audio.sfx.gain.big",
    "cooldown": "once",
    "cooldownId": "audio.sfx.cooldown.once",
    "alternates": [
-    "explosion_3.wav",
+    "explosion_4.wav",
     "harsh_destruction.wav"
-   ]
+   ],
+   "files": [
+    "explosion_3.wav"
+   ],
+   "pick": "cycle"
   },
   "chassis": {
    "decision": "cue",
@@ -763,10 +951,6 @@
    "priority": "medium",
    "shot": "play",
    "why": "A clean beam-in suits Sinofuturist replacement stock.",
-   "files": [
-    "teleport.wav"
-   ],
-   "pick": "cycle",
    "bus": "sfx",
    "gain": "story",
    "gainId": "audio.sfx.gain.story",
@@ -776,6 +960,10 @@
     "powerup_3.wav",
     "equip_2.wav"
    ],
+   "files": [
+    "teleport.wav"
+   ],
+   "pick": "cycle",
    "variants": [
     "chassis.start"
    ]
@@ -792,7 +980,15 @@
    "variantOf": "chassis",
    "when": {
     "start": true
-   }
+   },
+   "bus": "sfx",
+   "gain": "hit",
+   "gainId": "audio.sfx.gain.hit",
+   "cooldown": "once",
+   "cooldownId": "audio.sfx.cooldown.once",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "part-break": {
    "decision": "cue",
@@ -802,20 +998,31 @@
    "freq": "once",
    "priority": "medium",
    "shot": "impact",
-   "why": "A spark crackle: a part shorts out.",
-   "files": [
-    "fire_1.wav"
-   ],
-   "pick": "cycle",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: A spark crackle: a part shorts out.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "cue",
+    "files": [
+     "fire_1.wav"
+    ],
+    "gain": "alert",
+    "cooldown": "once",
+    "why": "A spark crackle: a part shorts out."
+   },
    "bus": "sfx",
    "gain": "alert",
    "gainId": "audio.sfx.gain.alert",
    "cooldown": "once",
    "cooldownId": "audio.sfx.cooldown.once",
    "alternates": [
+    "fire_1.wav",
     "fire_2.wav",
     "lose_4.wav"
-   ]
+   ],
+   "files": [
+    "explosion_2.wav"
+   ],
+   "pick": "cycle"
   },
   "low-health": {
    "decision": "cue",
@@ -825,20 +1032,31 @@
    "freq": "once",
    "priority": "medium",
    "shot": "impact",
-   "why": "A city siren warns calmly without horror.",
-   "files": [
-    "siren.wav"
-   ],
-   "pick": "cycle",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: A city siren warns calmly without horror.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "cue",
+    "files": [
+     "siren.wav"
+    ],
+    "gain": "alert",
+    "cooldown": "once",
+    "why": "A city siren warns calmly without horror."
+   },
    "bus": "sfx",
    "gain": "alert",
    "gainId": "audio.sfx.gain.alert",
    "cooldown": "once",
    "cooldownId": "audio.sfx.cooldown.once",
    "alternates": [
+    "siren.wav",
     "uh-oh.wav",
     "computer_2.wav"
-   ]
+   ],
+   "files": [
+    "wobble.wav"
+   ],
+   "pick": "cycle"
   },
   "near-miss": {
    "decision": "synth",
@@ -848,17 +1066,45 @@
    "freq": "burst",
    "priority": "medium",
    "shot": "play",
-   "why": "The procedural whoosh tracks car speed; the pack has no pass-by."
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: The procedural whoosh tracks car speed; the pack has no pass-by.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "synth",
+    "why": "The procedural whoosh tracks car speed; the pack has no pass-by."
+   },
+   "tone": "tone_near_miss.wav",
+   "bus": "sfx",
+   "gain": "hit",
+   "gainId": "audio.sfx.gain.hit",
+   "cooldown": "burst",
+   "cooldownId": "audio.sfx.cooldown.burst",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "miss": {
-   "decision": "silence",
+   "decision": "synth",
    "label": "Dash misses",
    "what": "A dash ends with no contact.",
    "group": "near",
    "freq": "action",
    "priority": "low",
    "shot": "dash",
-   "why": "The lunge already sounds; an empty dash earns nothing."
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: The lunge already sounds; an empty dash earns nothing.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "silence",
+    "why": "The lunge already sounds; an empty dash earns nothing."
+   },
+   "tone": "tone_miss.wav",
+   "bus": "sfx",
+   "gain": "hit",
+   "gainId": "audio.sfx.gain.hit",
+   "cooldown": "action",
+   "cooldownId": "audio.sfx.cooldown.action",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "pickup": {
    "decision": "cue",
@@ -868,30 +1114,58 @@
    "freq": "action",
    "priority": "high",
    "shot": "cones",
-   "why": "A collect blip suits taking a cone.",
-   "files": [
-    "collect_3.wav"
-   ],
-   "pick": "cycle",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: A collect blip suits taking a cone.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "cue",
+    "files": [
+     "collect_3.wav"
+    ],
+    "gain": "move",
+    "cooldown": "action",
+    "why": "A collect blip suits taking a cone."
+   },
+   "tone": "tone_pickup.wav",
    "bus": "sfx",
    "gain": "move",
    "gainId": "audio.sfx.gain.move",
    "cooldown": "action",
    "cooldownId": "audio.sfx.cooldown.action",
    "alternates": [
+    "collect_3.wav",
     "collect_4.wav",
     "equip_1.wav"
-   ]
+   ],
+   "files": [
+    "collect_7.wav"
+   ],
+   "pick": "cycle"
   },
   "drop": {
-   "decision": "synth",
+   "decision": "cue",
    "label": "Cone set down",
    "what": "The dummy sets a cone down.",
    "group": "cones",
    "freq": "action",
    "priority": "medium",
    "shot": "cones",
-   "why": "The pack has no plastic tap; the 8.4 tap suits a cone."
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: The pack has no plastic tap; the 8.4 tap suits a cone.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "synth",
+    "why": "The pack has no plastic tap; the 8.4 tap suits a cone."
+   },
+   "tone": "tone_drop.wav",
+   "bus": "sfx",
+   "gain": "hit",
+   "gainId": "audio.sfx.gain.hit",
+   "cooldown": "action",
+   "cooldownId": "audio.sfx.cooldown.action",
+   "alternates": [],
+   "files": [
+    "collect_4.wav"
+   ],
+   "pick": "random"
   },
   "throw": {
    "decision": "cue",
@@ -902,10 +1176,7 @@
    "priority": "high",
    "shot": "cones",
    "why": "A rising swoosh carries the cone's arc.",
-   "files": [
-    "jump_2.wav"
-   ],
-   "pick": "cycle",
+   "tone": "tone_throw.wav",
    "bus": "sfx",
    "gain": "move",
    "gainId": "audio.sfx.gain.move",
@@ -914,7 +1185,11 @@
    "alternates": [
     "jump_4.wav",
     "shrink.wav"
-   ]
+   ],
+   "files": [
+    "jump_2.wav"
+   ],
+   "pick": "cycle"
   },
   "punt": {
    "decision": "synth",
@@ -924,21 +1199,42 @@
    "freq": "action",
    "priority": "low",
    "shot": "cones",
-   "why": "The light procedural kick keeps a low-stakes action quiet."
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: The light procedural kick keeps a low-stakes action quiet.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "synth",
+    "why": "The light procedural kick keeps a low-stakes action quiet."
+   },
+   "tone": "tone_punt.wav",
+   "bus": "sfx",
+   "gain": "hit",
+   "gainId": "audio.sfx.gain.hit",
+   "cooldown": "action",
+   "cooldownId": "audio.sfx.cooldown.action",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "cone-hit": {
-   "decision": "cue",
+   "decision": "synth",
    "label": "Cone hit",
    "what": "A cone makes a car stop or crash: points.",
    "group": "cones",
    "freq": "once",
    "priority": "high",
    "shot": "cones",
-   "why": "A mid-size blast pays off the cone trap.",
-   "files": [
-    "explosion_2.wav"
-   ],
-   "pick": "cycle",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: A mid-size blast pays off the cone trap.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "cue",
+    "files": [
+     "explosion_2.wav"
+    ],
+    "gain": "hit",
+    "cooldown": "once",
+    "why": "A mid-size blast pays off the cone trap."
+   },
+   "tone": "tone_cone_hit.wav",
    "bus": "sfx",
    "gain": "hit",
    "gainId": "audio.sfx.gain.hit",
@@ -947,17 +1243,36 @@
    "alternates": [
     "explosion_1.wav",
     "harsh_destruction.wav"
-   ]
+   ],
+   "files": [
+    "explosion_2.wav"
+   ],
+   "pick": "cycle"
   },
   "cone-struck": {
-   "decision": "silence",
+   "decision": "cue",
    "label": "Car strikes a cone",
    "what": "A car runs into a cone.",
    "group": "cones",
    "freq": "ambient",
    "priority": "low",
    "shot": "cones",
-   "why": "The cone-hit sound carries the payoff; strikes would chatter."
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: The cone-hit sound carries the payoff; strikes would chatter.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "silence",
+    "why": "The cone-hit sound carries the payoff; strikes would chatter."
+   },
+   "bus": "sfx",
+   "gain": "hit",
+   "gainId": "audio.sfx.gain.hit",
+   "cooldown": "ambient",
+   "cooldownId": "audio.sfx.cooldown.ambient",
+   "alternates": [],
+   "files": [
+    "select_1.wav"
+   ],
+   "pick": "random"
   },
   "cone-stop": {
    "decision": "silence",
@@ -967,7 +1282,15 @@
    "freq": "ambient",
    "priority": "low",
    "shot": "cones",
-   "why": "Background cone settling would clutter traffic."
+   "why": "Background cone settling would clutter traffic.",
+   "bus": "sfx",
+   "gain": "ambient",
+   "gainId": "audio.sfx.gain.ambient",
+   "cooldown": "ambient",
+   "cooldownId": "audio.sfx.cooldown.ambient",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "cone-rest": {
    "decision": "silence",
@@ -977,7 +1300,15 @@
    "freq": "ambient",
    "priority": "low",
    "shot": "cones",
-   "why": "Background cone settling would clutter traffic."
+   "why": "Background cone settling would clutter traffic.",
+   "bus": "sfx",
+   "gain": "hit",
+   "gainId": "audio.sfx.gain.hit",
+   "cooldown": "ambient",
+   "cooldownId": "audio.sfx.cooldown.ambient",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "cone-release": {
    "decision": "silence",
@@ -987,7 +1318,15 @@
    "freq": "once",
    "priority": "low",
    "shot": "cones",
-   "why": "The write-off owns this moment."
+   "why": "The write-off owns this moment.",
+   "bus": "sfx",
+   "gain": "hit",
+   "gainId": "audio.sfx.gain.hit",
+   "cooldown": "once",
+   "cooldownId": "audio.sfx.cooldown.once",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "combo": {
    "decision": "cue",
@@ -998,12 +1337,7 @@
    "priority": "high",
    "shot": "combo",
    "why": "Cycling collects build the combo count.",
-   "files": [
-    "collect_7.wav",
-    "collect_1.wav",
-    "collect_2.wav"
-   ],
-   "pick": "cycle",
+   "tone": "tone_combo.wav",
    "bus": "sfx",
    "gain": "reward",
    "gainId": "audio.sfx.gain.reward",
@@ -1013,6 +1347,12 @@
     "collect_5.wav",
     "collect_6.wav"
    ],
+   "files": [
+    "collect_7.wav",
+    "collect_1.wav",
+    "collect_2.wav"
+   ],
+   "pick": "cycle",
    "variants": [
     "combo.max"
    ]
@@ -1026,15 +1366,11 @@
    "priority": "high",
    "shot": "combo",
    "why": "Two cycling powerups crown each capped hit without repeating.",
+   "tone": "tone_combo_max.wav",
    "variantOf": "combo",
    "when": {
     "max": true
    },
-   "files": [
-    "powerup_2.wav",
-    "powerup_4.wav"
-   ],
-   "pick": "cycle",
    "bus": "sfx",
    "gain": "reward",
    "gainId": "audio.sfx.gain.reward",
@@ -1043,7 +1379,12 @@
    "alternates": [
     "collect_5.wav",
     "powerup_3.wav"
-   ]
+   ],
+   "files": [
+    "powerup_2.wav",
+    "powerup_4.wav"
+   ],
+   "pick": "cycle"
   },
   "combo-end": {
    "decision": "cue",
@@ -1054,10 +1395,7 @@
    "priority": "medium",
    "shot": "combo",
    "why": "A ledger chime: the combo is banked.",
-   "files": [
-    "chime.wav"
-   ],
-   "pick": "cycle",
+   "tone": "tone_combo_end.wav",
    "bus": "sfx",
    "gain": "reward",
    "gainId": "audio.sfx.gain.reward",
@@ -1066,7 +1404,11 @@
    "alternates": [
     "confirm_2.wav",
     "collect_6.wav"
-   ]
+   ],
+   "files": [
+    "chime.wav"
+   ],
+   "pick": "cycle"
   },
   "splash": {
    "decision": "cue",
@@ -1077,10 +1419,7 @@
    "priority": "high",
    "shot": "river",
    "why": "A real splash matches a fall into the river.",
-   "files": [
-    "water_1.wav"
-   ],
-   "pick": "cycle",
+   "tone": "tone_splash.wav",
    "bus": "sfx",
    "gain": "big",
    "gainId": "audio.sfx.gain.big",
@@ -1089,7 +1428,11 @@
    "alternates": [
     "water_2.wav",
     "swim_1.wav"
-   ]
+   ],
+   "files": [
+    "water_1.wav"
+   ],
+   "pick": "cycle"
   },
   "rescued": {
    "decision": "cue",
@@ -1100,10 +1443,7 @@
    "priority": "medium",
    "shot": "river",
    "why": "Draining water as the drone lifts the chassis.",
-   "files": [
-    "water_2.wav"
-   ],
-   "pick": "cycle",
+   "tone": "tone_rescued.wav",
    "bus": "sfx",
    "gain": "story",
    "gainId": "audio.sfx.gain.story",
@@ -1112,7 +1452,11 @@
    "alternates": [
     "swim_2.wav",
     "teleport.wav"
-   ]
+   ],
+   "files": [
+    "water_2.wav"
+   ],
+   "pick": "cycle"
   },
   "screen": {
    "decision": "synth",
@@ -1122,7 +1466,16 @@
    "freq": "action",
    "priority": "medium",
    "shot": "play",
-   "why": "Flips are frequent; the 8.4 flip sits under the music."
+   "why": "Flips are frequent; the 8.4 flip sits under the music.",
+   "tone": "tone_screen.wav",
+   "bus": "sfx",
+   "gain": "story",
+   "gainId": "audio.sfx.gain.story",
+   "cooldown": "action",
+   "cooldownId": "audio.sfx.cooldown.action",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "honk": {
    "decision": "synth",
@@ -1133,6 +1486,15 @@
    "priority": "high",
    "shot": "play",
    "why": "The pack has no horn; 8.4 honks keep each tier's voice.",
+   "tone": "tone_honk.wav",
+   "bus": "sfx",
+   "gain": "alert",
+   "gainId": "audio.sfx.gain.alert",
+   "cooldown": "honk",
+   "cooldownId": "audio.sfx.cooldown.honk",
+   "alternates": [],
+   "files": [],
+   "pick": "random",
    "variants": [
     "honk.body"
    ]
@@ -1146,10 +1508,19 @@
    "priority": "high",
    "shot": "play",
    "why": "The tier horn holds; the bark names the target.",
+   "tone": "tone_honk_body.wav",
    "variantOf": "honk",
    "when": {
     "at": "body"
-   }
+   },
+   "bus": "sfx",
+   "gain": "alert",
+   "gainId": "audio.sfx.gain.alert",
+   "cooldown": "honk",
+   "cooldownId": "audio.sfx.cooldown.honk",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "skid": {
    "decision": "synth",
@@ -1159,7 +1530,16 @@
    "freq": "ambient",
    "priority": "medium",
    "shot": "play",
-   "why": "slippery.wav runs 0.82 s; the procedural skid stays short."
+   "why": "slippery.wav runs 0.82 s; the procedural skid stays short.",
+   "tone": "tone_skid.wav",
+   "bus": "sfx",
+   "gain": "ambient",
+   "gainId": "audio.sfx.gain.ambient",
+   "cooldown": "ambient",
+   "cooldownId": "audio.sfx.cooldown.ambient",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "unstick": {
    "decision": "silence",
@@ -1170,6 +1550,14 @@
    "priority": "low",
    "shot": "play",
    "why": "Replans are invisible; only reversing earns a sound.",
+   "bus": "sfx",
+   "gain": "ambient",
+   "gainId": "audio.sfx.gain.ambient",
+   "cooldown": "ambient",
+   "cooldownId": "audio.sfx.cooldown.ambient",
+   "alternates": [],
+   "files": [],
+   "pick": "random",
    "variants": [
     "unstick.reverse"
    ]
@@ -1183,10 +1571,19 @@
    "priority": "low",
    "shot": "play",
    "why": "The 8.4 reversing beep is a real street cue.",
+   "tone": "tone_unstick_reverse.wav",
    "variantOf": "unstick",
    "when": {
     "how": "reverse"
-   }
+   },
+   "bus": "sfx",
+   "gain": "ambient",
+   "gainId": "audio.sfx.gain.ambient",
+   "cooldown": "ambient",
+   "cooldownId": "audio.sfx.cooldown.ambient",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "learn-standoff": {
    "decision": "cue",
@@ -1197,10 +1594,7 @@
    "priority": "medium",
    "shot": "play",
    "why": "A computer chirp: the model updates its data.",
-   "files": [
-    "computer_2.wav"
-   ],
-   "pick": "cycle",
+   "tone": "tone_learn_standoff.wav",
    "bus": "sfx",
    "gain": "story",
    "gainId": "audio.sfx.gain.story",
@@ -1209,7 +1603,11 @@
    "alternates": [
     "computer_1.wav",
     "stat_increase.wav"
-   ]
+   ],
+   "files": [
+    "computer_2.wav"
+   ],
+   "pick": "cycle"
   },
   "car-notice": {
    "decision": "silence",
@@ -1219,7 +1617,15 @@
    "freq": "burst",
    "priority": "medium",
    "shot": "play",
-   "why": "Headlight flashes are the language; a sound would duplicate them."
+   "why": "Headlight flashes are the language; a sound would duplicate them.",
+   "bus": "sfx",
+   "gain": "alert",
+   "gainId": "audio.sfx.gain.alert",
+   "cooldown": "burst",
+   "cooldownId": "audio.sfx.cooldown.burst",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "car-brake": {
    "decision": "silence",
@@ -1229,7 +1635,15 @@
    "freq": "ambient",
    "priority": "low",
    "shot": "play",
-   "why": "Constant traffic chatter; brake lights carry it."
+   "why": "Constant traffic chatter; brake lights carry it.",
+   "bus": "sfx",
+   "gain": "ambient",
+   "gainId": "audio.sfx.gain.ambient",
+   "cooldown": "ambient",
+   "cooldownId": "audio.sfx.cooldown.ambient",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "commit": {
    "decision": "silence",
@@ -1239,7 +1653,15 @@
    "freq": "ambient",
    "priority": "low",
    "shot": "play",
-   "why": "Internal traffic state; the player sees the move."
+   "why": "Internal traffic state; the player sees the move.",
+   "bus": "sfx",
+   "gain": "ambient",
+   "gainId": "audio.sfx.gain.ambient",
+   "cooldown": "ambient",
+   "cooldownId": "audio.sfx.cooldown.ambient",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "interrupt": {
    "decision": "silence",
@@ -1249,7 +1671,15 @@
    "freq": "ambient",
    "priority": "low",
    "shot": "play",
-   "why": "Internal traffic state; constant chatter would mask the hits."
+   "why": "Internal traffic state; constant chatter would mask the hits.",
+   "bus": "sfx",
+   "gain": "ambient",
+   "gainId": "audio.sfx.gain.ambient",
+   "cooldown": "ambient",
+   "cooldownId": "audio.sfx.cooldown.ambient",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "resume": {
    "decision": "silence",
@@ -1259,7 +1689,15 @@
    "freq": "ambient",
    "priority": "low",
    "shot": "play",
-   "why": "Internal traffic state; constant chatter would mask the hits."
+   "why": "Internal traffic state; constant chatter would mask the hits.",
+   "bus": "sfx",
+   "gain": "ambient",
+   "gainId": "audio.sfx.gain.ambient",
+   "cooldown": "ambient",
+   "cooldownId": "audio.sfx.cooldown.ambient",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "release": {
    "decision": "silence",
@@ -1269,7 +1707,15 @@
    "freq": "ambient",
    "priority": "low",
    "shot": "play",
-   "why": "Internal traffic state; constant chatter would mask the hits."
+   "why": "Internal traffic state; constant chatter would mask the hits.",
+   "bus": "sfx",
+   "gain": "ambient",
+   "gainId": "audio.sfx.gain.ambient",
+   "cooldown": "ambient",
+   "cooldownId": "audio.sfx.cooldown.ambient",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "ring": {
    "decision": "silence",
@@ -1279,7 +1725,15 @@
    "freq": "ambient",
    "priority": "low",
    "shot": "play",
-   "why": "Lane changes are visual; sound would clutter the roundabout."
+   "why": "Lane changes are visual; sound would clutter the roundabout.",
+   "bus": "sfx",
+   "gain": "ambient",
+   "gainId": "audio.sfx.gain.ambient",
+   "cooldown": "ambient",
+   "cooldownId": "audio.sfx.cooldown.ambient",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "gridlock": {
    "decision": "cue",
@@ -1290,10 +1744,6 @@
    "priority": "low",
    "shot": "play",
    "why": "A deadpan uh-oh: the smart city stalls.",
-   "files": [
-    "uh-oh.wav"
-   ],
-   "pick": "cycle",
    "bus": "sfx",
    "gain": "alert",
    "gainId": "audio.sfx.gain.alert",
@@ -1302,7 +1752,11 @@
    "alternates": [
     "lose_2.wav",
     "computer_2.wav"
-   ]
+   ],
+   "files": [
+    "uh-oh.wav"
+   ],
+   "pick": "cycle"
   },
   "gridlock-clear": {
    "decision": "cue",
@@ -1313,10 +1767,6 @@
    "priority": "low",
    "shot": "play",
    "why": "A quiet system confirm: traffic is restored.",
-   "files": [
-    "confirm_2.wav"
-   ],
-   "pick": "cycle",
    "bus": "sfx",
    "gain": "ambient",
    "gainId": "audio.sfx.gain.ambient",
@@ -1325,7 +1775,11 @@
    "alternates": [
     "confirm_3.wav",
     "chime.wav"
-   ]
+   ],
+   "files": [
+    "confirm_2.wav"
+   ],
+   "pick": "cycle"
   },
   "admit": {
    "decision": "silence",
@@ -1335,7 +1789,15 @@
    "freq": "ambient",
    "priority": "low",
    "shot": "play",
-   "why": "Cars enter constantly; the music carries the city."
+   "why": "Cars enter constantly; the music carries the city.",
+   "bus": "sfx",
+   "gain": "ambient",
+   "gainId": "audio.sfx.gain.ambient",
+   "cooldown": "ambient",
+   "cooldownId": "audio.sfx.cooldown.ambient",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "exit": {
    "decision": "silence",
@@ -1345,7 +1807,15 @@
    "freq": "ambient",
    "priority": "low",
    "shot": "play",
-   "why": "Cars leave constantly; the music carries the city."
+   "why": "Cars leave constantly; the music carries the city.",
+   "bus": "sfx",
+   "gain": "ambient",
+   "gainId": "audio.sfx.gain.ambient",
+   "cooldown": "ambient",
+   "cooldownId": "audio.sfx.cooldown.ambient",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "contact-ignored": {
    "decision": "silence",
@@ -1355,7 +1825,15 @@
    "freq": "frame",
    "priority": "low",
    "shot": "play",
-   "why": "It scores nothing, so silence keeps the feedback honest."
+   "why": "It scores nothing, so silence keeps the feedback honest.",
+   "bus": "sfx",
+   "gain": "alert",
+   "gainId": "audio.sfx.gain.alert",
+   "cooldown": "frame",
+   "cooldownId": "audio.sfx.cooldown.frame",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "touch": {
    "decision": "silence",
@@ -1365,7 +1843,15 @@
    "freq": "frame",
    "priority": "low",
    "shot": "play",
-   "why": "Zero-speed touches don't count; silence keeps the feedback honest."
+   "why": "Zero-speed touches don't count; silence keeps the feedback honest.",
+   "bus": "sfx",
+   "gain": "alert",
+   "gainId": "audio.sfx.gain.alert",
+   "cooldown": "frame",
+   "cooldownId": "audio.sfx.cooldown.frame",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "drone-dispatch": {
    "decision": "cue",
@@ -1376,10 +1862,7 @@
    "priority": "medium",
    "shot": "drone",
    "why": "A hovering whir: a Corporation drone, not an alien.",
-   "files": [
-    "ufo.wav"
-   ],
-   "pick": "cycle",
+   "tone": "tone_drone_dispatch.wav",
    "bus": "sfx",
    "gain": "story",
    "gainId": "audio.sfx.gain.story",
@@ -1389,6 +1872,10 @@
     "engine.wav",
     "computer_1.wav"
    ],
+   "files": [
+    "ufo.wav"
+   ],
+   "pick": "cycle",
    "variants": [
     "drone-dispatch.rescue"
    ]
@@ -1402,14 +1889,11 @@
    "priority": "medium",
    "shot": "drone",
    "why": "An official siren marks the rescue run.",
+   "tone": "tone_drone_dispatch_rescue.wav",
    "variantOf": "drone-dispatch",
    "when": {
     "rescue": true
    },
-   "files": [
-    "siren.wav"
-   ],
-   "pick": "cycle",
    "bus": "sfx",
    "gain": "story",
    "gainId": "audio.sfx.gain.story",
@@ -1418,7 +1902,11 @@
    "alternates": [
     "ufo.wav",
     "engine.wav"
-   ]
+   ],
+   "files": [
+    "siren.wav"
+   ],
+   "pick": "cycle"
   },
   "drone-pickup": {
    "decision": "cue",
@@ -1429,10 +1917,7 @@
    "priority": "low",
    "shot": "drone",
    "why": "A clamp click: the drone lifts the cone.",
-   "files": [
-    "equip_1.wav"
-   ],
-   "pick": "cycle",
+   "tone": "tone_drone_pickup.wav",
    "bus": "sfx",
    "gain": "story",
    "gainId": "audio.sfx.gain.story",
@@ -1441,7 +1926,11 @@
    "alternates": [
     "equip_2.wav",
     "collect_4.wav"
-   ]
+   ],
+   "files": [
+    "equip_1.wav"
+   ],
+   "pick": "cycle"
   },
   "drone-drop": {
    "decision": "synth",
@@ -1451,7 +1940,16 @@
    "freq": "once",
    "priority": "low",
    "shot": "drone",
-   "why": "The pickup frames the trip; the 8.4 tap closes it."
+   "why": "The pickup frames the trip; the 8.4 tap closes it.",
+   "tone": "tone_drone_drop.wav",
+   "bus": "sfx",
+   "gain": "story",
+   "gainId": "audio.sfx.gain.story",
+   "cooldown": "once",
+   "cooldownId": "audio.sfx.cooldown.once",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "drop-in": {
    "decision": "cue",
@@ -1462,10 +1960,6 @@
    "priority": "high",
    "shot": "drop",
    "why": "A motor hum carries the dummy into the level.",
-   "files": [
-    "engine.wav"
-   ],
-   "pick": "cycle",
    "bus": "sfx",
    "gain": "story",
    "gainId": "audio.sfx.gain.story",
@@ -1474,7 +1968,11 @@
    "alternates": [
     "ufo.wav",
     "boost.wav"
-   ]
+   ],
+   "files": [
+    "engine.wav"
+   ],
+   "pick": "cycle"
   },
   "dropped-in": {
    "decision": "cue",
@@ -1485,10 +1983,6 @@
    "priority": "medium",
    "shot": "drop",
    "why": "A landing thud starts play.",
-   "files": [
-    "land.wav"
-   ],
-   "pick": "cycle",
    "bus": "sfx",
    "gain": "move",
    "gainId": "audio.sfx.gain.move",
@@ -1497,7 +1991,11 @@
    "alternates": [
     "door_close.wav",
     "blocked.wav"
-   ]
+   ],
+   "files": [
+    "land.wav"
+   ],
+   "pick": "cycle"
   },
   "story-enter": {
    "decision": "cue",
@@ -1508,10 +2006,7 @@
    "priority": "medium",
    "shot": "card",
    "why": "The Corporation logs the tile in test.",
-   "files": [
-    "computer_1.wav"
-   ],
-   "pick": "cycle",
+   "tone": "tone_story_enter.wav",
    "bus": "sfx",
    "gain": "story",
    "gainId": "audio.sfx.gain.story",
@@ -1520,7 +2015,11 @@
    "alternates": [
     "computer_2.wav",
     "chime.wav"
-   ]
+   ],
+   "files": [
+    "computer_1.wav"
+   ],
+   "pick": "cycle"
   },
   "story-count": {
    "decision": "cue",
@@ -1531,10 +2030,7 @@
    "priority": "high",
    "shot": "story",
    "why": "The brief's tally goes up.",
-   "files": [
-    "stat_increase.wav"
-   ],
-   "pick": "cycle",
+   "tone": "tone_story_count.wav",
    "bus": "sfx",
    "gain": "reward",
    "gainId": "audio.sfx.gain.reward",
@@ -1543,7 +2039,11 @@
    "alternates": [
     "collect_5.wav",
     "confirm_2.wav"
-   ]
+   ],
+   "files": [
+    "stat_increase.wav"
+   ],
+   "pick": "cycle"
   },
   "story-miss": {
    "decision": "cue",
@@ -1554,10 +2054,7 @@
    "priority": "medium",
    "shot": "story",
    "why": "A falling tone: the write-off doesn't count.",
-   "files": [
-    "stat_decrease.wav"
-   ],
-   "pick": "cycle",
+   "tone": "tone_story_miss.wav",
    "bus": "sfx",
    "gain": "alert",
    "gainId": "audio.sfx.gain.alert",
@@ -1566,7 +2063,11 @@
    "alternates": [
     "lose_4.wav",
     "cancel_2.wav"
-   ]
+   ],
+   "files": [
+    "stat_decrease.wav"
+   ],
+   "pick": "cycle"
   },
   "story-clear": {
    "decision": "cue",
@@ -1577,10 +2078,7 @@
    "priority": "high",
    "shot": "story",
    "why": "The loudest powerup: the tile is cleared, louder than any combo tick.",
-   "files": [
-    "powerup_5.wav"
-   ],
-   "pick": "cycle",
+   "tone": "tone_story_clear.wav",
    "bus": "sfx",
    "gain": "reward",
    "gainId": "audio.sfx.gain.reward",
@@ -1589,7 +2087,11 @@
    "alternates": [
     "level_up.wav",
     "powerup_1.wav"
-   ]
+   ],
+   "files": [
+    "powerup_5.wav"
+   ],
+   "pick": "cycle"
   },
   "story-gift": {
    "decision": "cue",
@@ -1600,10 +2102,6 @@
    "priority": "medium",
    "shot": "story",
    "why": "A coin collect: credits arrive.",
-   "files": [
-    "collect_6.wav"
-   ],
-   "pick": "cycle",
    "bus": "sfx",
    "gain": "reward",
    "gainId": "audio.sfx.gain.reward",
@@ -1612,7 +2110,11 @@
    "alternates": [
     "collect_5.wav",
     "chime.wav"
-   ]
+   ],
+   "files": [
+    "collect_6.wav"
+   ],
+   "pick": "cycle"
   },
   "story-deliver": {
    "decision": "cue",
@@ -1623,10 +2125,7 @@
    "priority": "medium",
    "shot": "story",
    "why": "A drone motor hum brings the part.",
-   "files": [
-    "engine.wav"
-   ],
-   "pick": "cycle",
+   "tone": "tone_story_deliver.wav",
    "bus": "sfx",
    "gain": "story",
    "gainId": "audio.sfx.gain.story",
@@ -1635,7 +2134,11 @@
    "alternates": [
     "ufo.wav",
     "boost.wav"
-   ]
+   ],
+   "files": [
+    "engine.wav"
+   ],
+   "pick": "cycle"
   },
   "story-ferry": {
    "decision": "cue",
@@ -1646,10 +2149,7 @@
    "priority": "medium",
    "shot": "ferry",
    "why": "The drone's hover carries the dummy onward.",
-   "files": [
-    "ufo.wav"
-   ],
-   "pick": "cycle",
+   "tone": "tone_story_ferry.wav",
    "bus": "sfx",
    "gain": "story",
    "gainId": "audio.sfx.gain.story",
@@ -1658,7 +2158,11 @@
    "alternates": [
     "engine.wav",
     "teleport.wav"
-   ]
+   ],
+   "files": [
+    "ufo.wav"
+   ],
+   "pick": "cycle"
   },
   "story-ferried": {
    "decision": "silence",
@@ -1668,7 +2172,16 @@
    "freq": "once",
    "priority": "low",
    "shot": "ferry",
-   "why": "The next tile's entry sound marks the arrival."
+   "why": "The next tile's entry sound marks the arrival.",
+   "tone": "tone_story_ferried.wav",
+   "bus": "sfx",
+   "gain": "story",
+   "gainId": "audio.sfx.gain.story",
+   "cooldown": "once",
+   "cooldownId": "audio.sfx.cooldown.once",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "story-fence": {
    "decision": "cue",
@@ -1679,10 +2192,7 @@
    "priority": "medium",
    "shot": "story",
    "why": "Blocked by name: the fence refuses entry.",
-   "files": [
-    "blocked.wav"
-   ],
-   "pick": "cycle",
+   "tone": "tone_story_fence.wav",
    "bus": "sfx",
    "gain": "alert",
    "gainId": "audio.sfx.gain.alert",
@@ -1691,7 +2201,11 @@
    "alternates": [
     "cancel_4.wav",
     "door_close.wav"
-   ]
+   ],
+   "files": [
+    "blocked.wav"
+   ],
+   "pick": "cycle"
   },
   "gift": {
    "decision": "cue",
@@ -1702,10 +2216,7 @@
    "priority": "high",
    "shot": "gift",
    "why": "The loudest powerup: a part is fitted.",
-   "files": [
-    "powerup_5.wav"
-   ],
-   "pick": "cycle",
+   "tone": "tone_gift.wav",
    "bus": "sfx",
    "gain": "big",
    "gainId": "audio.sfx.gain.big",
@@ -1714,7 +2225,11 @@
    "alternates": [
     "powerup_3.wav",
     "level_up.wav"
-   ]
+   ],
+   "files": [
+    "powerup_5.wav"
+   ],
+   "pick": "cycle"
   },
   "delivered": {
    "decision": "silence",
@@ -1724,7 +2239,16 @@
    "freq": "once",
    "priority": "low",
    "shot": "story",
-   "why": "Fitting the part already closed the delivery."
+   "why": "Fitting the part already closed the delivery.",
+   "tone": "tone_delivered.wav",
+   "bus": "sfx",
+   "gain": "story",
+   "gainId": "audio.sfx.gain.story",
+   "cooldown": "once",
+   "cooldownId": "audio.sfx.cooldown.once",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "unveil": {
    "decision": "cue",
@@ -1735,10 +2259,6 @@
    "priority": "high",
    "shot": "plaque",
    "why": "A long ceremonial rise presents the monument.",
-   "files": [
-    "powerup_1.wav"
-   ],
-   "pick": "cycle",
    "bus": "sfx",
    "gain": "big",
    "gainId": "audio.sfx.gain.big",
@@ -1747,7 +2267,11 @@
    "alternates": [
     "powerup_3.wav",
     "level_up.wav"
-   ]
+   ],
+   "files": [
+    "powerup_1.wav"
+   ],
+   "pick": "cycle"
   },
   "unveil-lift": {
    "decision": "cue",
@@ -1758,10 +2282,7 @@
    "priority": "high",
    "shot": "plaque",
    "why": "A sweeping vanish: the cloth comes off.",
-   "files": [
-    "disappear.wav"
-   ],
-   "pick": "cycle",
+   "tone": "tone_unveil_lift.wav",
    "bus": "sfx",
    "gain": "big",
    "gainId": "audio.sfx.gain.big",
@@ -1770,7 +2291,11 @@
    "alternates": [
     "teleport.wav",
     "shrink.wav"
-   ]
+   ],
+   "files": [
+    "disappear.wav"
+   ],
+   "pick": "cycle"
   },
   "voyage": {
    "decision": "cue",
@@ -1781,10 +2306,6 @@
    "priority": "medium",
    "shot": "certified",
    "why": "The drone's hover lifts the dummy to the ship.",
-   "files": [
-    "ufo.wav"
-   ],
-   "pick": "cycle",
    "bus": "sfx",
    "gain": "story",
    "gainId": "audio.sfx.gain.story",
@@ -1793,7 +2314,11 @@
    "alternates": [
     "engine.wav",
     "teleport.wav"
-   ]
+   ],
+   "files": [
+    "ufo.wav"
+   ],
+   "pick": "cycle"
   },
   "voyage-end": {
    "decision": "cue",
@@ -1804,10 +2329,6 @@
    "priority": "medium",
    "shot": "certified",
    "why": "One clean high note: CERTIFIED.",
-   "files": [
-    "note_high_C.wav"
-   ],
-   "pick": "cycle",
    "bus": "sfx",
    "gain": "reward",
    "gainId": "audio.sfx.gain.reward",
@@ -1816,7 +2337,11 @@
    "alternates": [
     "chime.wav",
     "confirm_2.wav"
-   ]
+   ],
+   "files": [
+    "note_high_C.wav"
+   ],
+   "pick": "cycle"
   },
   "shop-open": {
    "decision": "cue",
@@ -1827,10 +2352,6 @@
    "priority": "low",
    "shot": "workshop",
    "why": "A menu blip opens the workshop.",
-   "files": [
-    "select_5.wav"
-   ],
-   "pick": "cycle",
    "bus": "ui",
    "gain": "ui",
    "gainId": "audio.sfx.gain.ui",
@@ -1839,7 +2360,11 @@
    "alternates": [
     "confirm_3.wav",
     "equip_1.wav"
-   ]
+   ],
+   "files": [
+    "select_5.wav"
+   ],
+   "pick": "cycle"
   },
   "purchase": {
    "decision": "cue",
@@ -1850,10 +2375,7 @@
    "priority": "high",
    "shot": "workshop",
    "why": "Equip by name: a part is bought and fitted.",
-   "files": [
-    "equip_2.wav"
-   ],
-   "pick": "cycle",
+   "tone": "tone_purchase.wav",
    "bus": "ui",
    "gain": "reward",
    "gainId": "audio.sfx.gain.reward",
@@ -1862,7 +2384,11 @@
    "alternates": [
     "equip_1.wav",
     "collect_7.wav"
-   ]
+   ],
+   "files": [
+    "equip_2.wav"
+   ],
+   "pick": "cycle"
   },
   "purchase-denied": {
    "decision": "cue",
@@ -1873,10 +2399,7 @@
    "priority": "medium",
    "shot": "workshop",
    "why": "A short cancel refuses the sale.",
-   "files": [
-    "cancel_4.wav"
-   ],
-   "pick": "cycle",
+   "tone": "tone_purchase_denied.wav",
    "bus": "ui",
    "gain": "alert",
    "gainId": "audio.sfx.gain.alert",
@@ -1885,7 +2408,11 @@
    "alternates": [
     "cancel_2.wav",
     "blocked.wav"
-   ]
+   ],
+   "files": [
+    "cancel_4.wav"
+   ],
+   "pick": "cycle"
   },
   "shop-skip": {
    "decision": "silence",
@@ -1895,7 +2422,15 @@
    "freq": "once",
    "priority": "low",
    "shot": "workshop",
-   "why": "Nothing to buy, so there's nothing to hear."
+   "why": "Nothing to buy, so there's nothing to hear.",
+   "bus": "sfx",
+   "gain": "reward",
+   "gainId": "audio.sfx.gain.reward",
+   "cooldown": "once",
+   "cooldownId": "audio.sfx.cooldown.once",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "credit": {
    "decision": "cue",
@@ -1906,10 +2441,6 @@
    "priority": "low",
    "shot": "report",
    "why": "A coin collect: payroll for a write-off.",
-   "files": [
-    "collect_5.wav"
-   ],
-   "pick": "cycle",
    "bus": "sfx",
    "gain": "reward",
    "gainId": "audio.sfx.gain.reward",
@@ -1918,7 +2449,11 @@
    "alternates": [
     "collect_6.wav",
     "confirm_2.wav"
-   ]
+   ],
+   "files": [
+    "collect_5.wav"
+   ],
+   "pick": "cycle"
   },
   "road-cleared": {
    "decision": "cue",
@@ -1929,10 +2464,6 @@
    "priority": "medium",
    "shot": "report",
    "why": "A long rising powerup: the met quota outranks any capped combo hit.",
-   "files": [
-    "powerup_1.wav"
-   ],
-   "pick": "cycle",
    "bus": "sfx",
    "gain": "reward",
    "gainId": "audio.sfx.gain.reward",
@@ -1941,7 +2472,11 @@
    "alternates": [
     "powerup_3.wav",
     "level_up.wav"
-   ]
+   ],
+   "files": [
+    "powerup_1.wav"
+   ],
+   "pick": "cycle"
   },
   "grade": {
    "decision": "cue",
@@ -1952,10 +2487,7 @@
    "priority": "high",
    "shot": "report",
    "why": "A rising powerup: a tougher grade.",
-   "files": [
-    "powerup_3.wav"
-   ],
-   "pick": "cycle",
+   "tone": "tone_grade.wav",
    "bus": "sfx",
    "gain": "reward",
    "gainId": "audio.sfx.gain.reward",
@@ -1964,7 +2496,11 @@
    "alternates": [
     "powerup_1.wav",
     "level_up.wav"
-   ]
+   ],
+   "files": [
+    "powerup_3.wav"
+   ],
+   "pick": "cycle"
   },
   "ending": {
    "decision": "cue",
@@ -1975,10 +2511,6 @@
    "priority": "high",
    "shot": "ending",
    "why": "A deadpan readout: the Corporation files the report.",
-   "files": [
-    "computer_1.wav"
-   ],
-   "pick": "cycle",
    "bus": "sfx",
    "gain": "story",
    "gainId": "audio.sfx.gain.story",
@@ -1988,6 +2520,10 @@
     "chime.wav",
     "computer_2.wav"
    ],
+   "files": [
+    "computer_1.wav"
+   ],
+   "pick": "cycle",
    "variants": [
     "ending.win",
     "ending.fail"
@@ -2002,6 +2538,7 @@
    "priority": "high",
    "shot": "ending",
    "why": "The loudest powerup: Licensed or Certified ends bigger than any failed test.",
+   "tone": "tone_ending_win.wav",
    "variantOf": "ending",
    "when": {
     "kind": [
@@ -2009,10 +2546,6 @@
      "Certified"
     ]
    },
-   "files": [
-    "powerup_5.wav"
-   ],
-   "pick": "cycle",
    "bus": "sfx",
    "gain": "big",
    "gainId": "audio.sfx.gain.big",
@@ -2021,7 +2554,11 @@
    "alternates": [
     "level_up.wav",
     "powerup_1.wav"
-   ]
+   ],
+   "files": [
+    "powerup_5.wav"
+   ],
+   "pick": "cycle"
   },
   "ending.fail": {
    "decision": "cue",
@@ -2039,10 +2576,6 @@
      "Non-compliant"
     ]
    },
-   "files": [
-    "lose_1.wav"
-   ],
-   "pick": "cycle",
    "bus": "sfx",
    "gain": "big",
    "gainId": "audio.sfx.gain.big",
@@ -2051,7 +2584,11 @@
    "alternates": [
     "lose_3.wav",
     "uh-oh.wav"
-   ]
+   ],
+   "files": [
+    "lose_1.wav"
+   ],
+   "pick": "cycle"
   },
   "milestone": {
    "decision": "silence",
@@ -2061,7 +2598,15 @@
    "freq": "once",
    "priority": "low",
    "shot": "play",
-   "why": "It's an internal log the player never sees."
+   "why": "It's an internal log the player never sees.",
+   "bus": "sfx",
+   "gain": "reward",
+   "gainId": "audio.sfx.gain.reward",
+   "cooldown": "once",
+   "cooldownId": "audio.sfx.cooldown.once",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "bark": {
    "decision": "cue",
@@ -2072,11 +2617,6 @@
    "priority": "medium",
    "shot": "play",
    "why": "A bubble pop: a car's line appears.",
-   "files": [
-    "bubble.wav",
-    "select_1.wav"
-   ],
-   "pick": "random",
    "bus": "sfx",
    "gain": "ambient",
    "gainId": "audio.sfx.gain.ambient",
@@ -2086,6 +2626,11 @@
     "select_2.wav",
     "computer_2.wav"
    ],
+   "files": [
+    "bubble.wav",
+    "select_1.wav"
+   ],
+   "pick": "random",
    "variants": [
     "bark.shout"
    ]
@@ -2103,11 +2648,6 @@
    "when": {
     "style": "shout"
    },
-   "files": [
-    "select_5.wav",
-    "select_4.wav"
-   ],
-   "pick": "random",
    "bus": "sfx",
    "gain": "ambient",
    "gainId": "audio.sfx.gain.ambient",
@@ -2116,7 +2656,12 @@
    "alternates": [
     "bubble.wav",
     "blocked.wav"
-   ]
+   ],
+   "files": [
+    "select_5.wav",
+    "select_4.wav"
+   ],
+   "pick": "random"
   },
   "intro-hit": {
    "decision": "silence",
@@ -2126,7 +2671,15 @@
    "freq": "once",
    "priority": "low",
    "shot": "intro",
-   "why": "Track 1 owns the intro; a looping hit would grate."
+   "why": "Track 1 owns the intro; a looping hit would grate.",
+   "bus": "sfx",
+   "gain": "story",
+   "gainId": "audio.sfx.gain.story",
+   "cooldown": "once",
+   "cooldownId": "audio.sfx.cooldown.once",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "learned": {
    "decision": "silence",
@@ -2136,7 +2689,15 @@
    "freq": "once",
    "priority": "low",
    "shot": "play",
-   "why": "The bark sound already plays this line."
+   "why": "The bark sound already plays this line.",
+   "bus": "sfx",
+   "gain": "ambient",
+   "gainId": "audio.sfx.gain.ambient",
+   "cooldown": "once",
+   "cooldownId": "audio.sfx.cooldown.once",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "upgrade-seen": {
    "decision": "silence",
@@ -2146,7 +2707,15 @@
    "freq": "once",
    "priority": "low",
    "shot": "play",
-   "why": "The bark sound already plays this line."
+   "why": "The bark sound already plays this line.",
+   "bus": "sfx",
+   "gain": "ambient",
+   "gainId": "audio.sfx.gain.ambient",
+   "cooldown": "once",
+   "cooldownId": "audio.sfx.cooldown.once",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   },
   "part-seen": {
    "decision": "silence",
@@ -2156,7 +2725,15 @@
    "freq": "once",
    "priority": "low",
    "shot": "play",
-   "why": "The bark sound already plays this line."
+   "why": "The bark sound already plays this line.",
+   "bus": "sfx",
+   "gain": "ambient",
+   "gainId": "audio.sfx.gain.ambient",
+   "cooldown": "once",
+   "cooldownId": "audio.sfx.cooldown.once",
+   "alternates": [],
+   "files": [],
+   "pick": "random"
   }
  },
  "files": {
@@ -2165,700 +2742,1611 @@
    "seconds": 0.481,
    "level": -17.6,
    "family": "animal",
-   "peak": -4.8
+   "peak": -4.8,
+   "dir": "sfx"
   },
   "animal_bird_tweet.wav": {
    "trimDb": 2.5,
    "seconds": 0.639,
    "level": -20.5,
    "family": "animal",
-   "peak": -13.7
+   "peak": -13.7,
+   "dir": "sfx"
   },
   "animal_cat.wav": {
    "trimDb": 6.4,
    "seconds": 0.488,
    "level": -24.4,
    "family": "animal",
-   "peak": -11.1
+   "peak": -11.1,
+   "dir": "sfx"
   },
   "animal_cow.wav": {
    "trimDb": 4.9,
    "seconds": 0.605,
    "level": -22.9,
    "family": "animal",
-   "peak": -9.8
+   "peak": -9.8,
+   "dir": "sfx"
   },
   "animal_dog_big.wav": {
    "trimDb": 7.4,
    "seconds": 0.462,
    "level": -25.4,
    "family": "animal",
-   "peak": -18.6
+   "peak": -18.6,
+   "dir": "sfx"
   },
   "animal_dog_small.wav": {
    "trimDb": 7.7,
    "seconds": 0.462,
    "level": -25.7,
    "family": "animal",
-   "peak": -15.4
+   "peak": -15.4,
+   "dir": "sfx"
   },
   "animal_frog.wav": {
    "trimDb": 9.5,
    "seconds": 0.445,
    "level": -27.5,
    "family": "animal",
-   "peak": -14.9
+   "peak": -14.9,
+   "dir": "sfx"
   },
   "blocked.wav": {
    "trimDb": 6.5,
    "seconds": 0.11,
    "level": -24.5,
    "family": "blocked",
-   "peak": -13.8
+   "peak": -13.8,
+   "dir": "sfx"
   },
   "boost.wav": {
    "trimDb": 8.5,
    "seconds": 1.032,
    "level": -26.5,
    "family": "boost",
-   "peak": -12.8
+   "peak": -12.8,
+   "dir": "sfx"
   },
   "bubble.wav": {
    "trimDb": 5.7,
    "seconds": 0.332,
    "level": -23.7,
    "family": "bubble",
-   "peak": -12.8
+   "peak": -12.8,
+   "dir": "sfx"
   },
   "cancel_1.wav": {
    "trimDb": 5.4,
    "seconds": 0.188,
    "level": -23.4,
    "family": "cancel",
-   "peak": -13.1
+   "peak": -13.1,
+   "dir": "sfx"
   },
   "cancel_2.wav": {
    "trimDb": 7.6,
    "seconds": 0.185,
    "level": -25.6,
    "family": "cancel",
-   "peak": -17.0
+   "peak": -17.0,
+   "dir": "sfx"
   },
   "cancel_3.wav": {
    "trimDb": 3.9,
    "seconds": 0.152,
    "level": -21.9,
    "family": "cancel",
-   "peak": -12.7
+   "peak": -12.7,
+   "dir": "sfx"
   },
   "cancel_4.wav": {
    "trimDb": 7.1,
    "seconds": 0.188,
    "level": -25.1,
    "family": "cancel",
-   "peak": -12.8
+   "peak": -12.8,
+   "dir": "sfx"
   },
   "chime.wav": {
    "trimDb": 2.3,
    "seconds": 0.766,
    "level": -20.3,
    "family": "chime",
-   "peak": -12.6
+   "peak": -12.6,
+   "dir": "sfx"
   },
   "collect_1.wav": {
    "trimDb": 6.2,
    "seconds": 0.347,
    "level": -24.2,
    "family": "collect",
-   "peak": -12.7
+   "peak": -12.7,
+   "dir": "sfx"
   },
   "collect_2.wav": {
    "trimDb": 7.6,
    "seconds": 0.472,
    "level": -25.6,
    "family": "collect",
-   "peak": -13.0
+   "peak": -13.0,
+   "dir": "sfx"
   },
   "collect_3.wav": {
    "trimDb": 6.9,
    "seconds": 0.215,
    "level": -24.9,
    "family": "collect",
-   "peak": -12.9
+   "peak": -12.9,
+   "dir": "sfx"
   },
   "collect_4.wav": {
    "trimDb": 7.7,
    "seconds": 0.212,
    "level": -25.7,
    "family": "collect",
-   "peak": -13.0
+   "peak": -13.0,
+   "dir": "sfx"
   },
   "collect_5.wav": {
    "trimDb": 9.0,
    "seconds": 0.531,
    "level": -27.0,
    "family": "collect",
-   "peak": -13.0
+   "peak": -13.0,
+   "dir": "sfx"
   },
   "collect_6.wav": {
    "trimDb": 8.3,
    "seconds": 0.531,
    "level": -26.3,
    "family": "collect",
-   "peak": -13.0
+   "peak": -13.0,
+   "dir": "sfx"
   },
   "collect_7.wav": {
    "trimDb": 4.9,
    "seconds": 0.194,
    "level": -22.9,
    "family": "collect",
-   "peak": -12.7
+   "peak": -12.7,
+   "dir": "sfx"
   },
   "computer_1.wav": {
    "trimDb": 0.6,
    "seconds": 1.297,
    "level": -18.6,
    "family": "computer",
-   "peak": -12.6
+   "peak": -12.6,
+   "dir": "sfx"
   },
   "computer_2.wav": {
    "trimDb": 3.6,
    "seconds": 0.639,
    "level": -21.6,
    "family": "computer",
-   "peak": -13.7
+   "peak": -13.7,
+   "dir": "sfx"
   },
   "confirm_1.wav": {
    "trimDb": 9.9,
    "seconds": 0.242,
    "level": -27.9,
    "family": "confirm",
-   "peak": -10.9
+   "peak": -10.9,
+   "dir": "sfx"
   },
   "confirm_2.wav": {
    "trimDb": 6.8,
    "seconds": 0.444,
    "level": -24.8,
    "family": "confirm",
-   "peak": -12.8
+   "peak": -12.8,
+   "dir": "sfx"
   },
   "confirm_3.wav": {
    "trimDb": 7.0,
    "seconds": 0.409,
    "level": -25.0,
    "family": "confirm",
-   "peak": -12.8
+   "peak": -12.8,
+   "dir": "sfx"
   },
   "confirm_4.wav": {
    "trimDb": 5.2,
    "seconds": 0.156,
    "level": -23.2,
    "family": "confirm",
-   "peak": -12.9
+   "peak": -12.9,
+   "dir": "sfx"
   },
   "disappear.wav": {
    "trimDb": 9.9,
    "seconds": 0.843,
    "level": -28.3,
    "family": "disappear",
-   "peak": -10.9
+   "peak": -10.9,
+   "dir": "sfx"
   },
   "door_close.wav": {
    "trimDb": 7.8,
    "seconds": 0.137,
    "level": -25.8,
    "family": "door_close",
-   "peak": -13.2
+   "peak": -13.2,
+   "dir": "sfx"
   },
   "earthquake.wav": {
    "trimDb": 8.9,
    "seconds": 1.635,
    "level": -26.9,
    "family": "earthquake",
-   "peak": -10.0
+   "peak": -10.0,
+   "dir": "sfx"
   },
   "engine.wav": {
    "trimDb": 11.0,
    "seconds": 1.357,
    "level": -29.0,
    "family": "engine",
-   "peak": -12.3
+   "peak": -12.3,
+   "dir": "sfx"
   },
   "equip_1.wav": {
    "trimDb": 8.9,
    "seconds": 0.209,
    "level": -26.9,
    "family": "equip",
-   "peak": -17.5
+   "peak": -17.5,
+   "dir": "sfx"
   },
   "equip_2.wav": {
    "trimDb": 7.9,
    "seconds": 0.285,
    "level": -25.9,
    "family": "equip",
-   "peak": -13.8
+   "peak": -13.8,
+   "dir": "sfx"
   },
   "explosion_1.wav": {
    "trimDb": 8.8,
    "seconds": 0.416,
    "level": -26.8,
    "family": "explosion",
-   "peak": -13.9
+   "peak": -13.9,
+   "dir": "sfx"
   },
   "explosion_2.wav": {
    "trimDb": 9.3,
    "seconds": 0.603,
    "level": -27.3,
    "family": "explosion",
-   "peak": -12.7
+   "peak": -12.7,
+   "dir": "sfx"
   },
   "explosion_3.wav": {
    "trimDb": 9.6,
    "seconds": 0.816,
    "level": -27.6,
    "family": "explosion",
-   "peak": -13.9
+   "peak": -13.9,
+   "dir": "sfx"
   },
   "explosion_4.wav": {
    "trimDb": 7.7,
    "seconds": 0.862,
    "level": -25.7,
    "family": "explosion",
-   "peak": -11.7
+   "peak": -11.7,
+   "dir": "sfx"
   },
   "explosion_5.wav": {
    "trimDb": 8.3,
    "seconds": 0.685,
    "level": -26.3,
    "family": "explosion",
-   "peak": -11.0
+   "peak": -11.0,
+   "dir": "sfx"
   },
   "fall.wav": {
    "trimDb": 4.3,
    "seconds": 2.221,
    "level": -22.3,
    "family": "fall",
-   "peak": -12.7
+   "peak": -12.7,
+   "dir": "sfx"
   },
   "fire_1.wav": {
    "trimDb": 5.4,
    "seconds": 0.359,
    "level": -23.4,
    "family": "fire",
-   "peak": -11.3
+   "peak": -11.3,
+   "dir": "sfx"
   },
   "fire_2.wav": {
    "trimDb": 4.2,
    "seconds": 0.365,
    "level": -22.2,
    "family": "fire",
-   "peak": -11.3
+   "peak": -11.3,
+   "dir": "sfx"
   },
   "fire_3.wav": {
    "trimDb": 10.0,
    "seconds": 0.899,
    "level": -28.0,
    "family": "fire",
-   "peak": -11.2
+   "peak": -11.2,
+   "dir": "sfx"
   },
   "ghostly_laugh.wav": {
    "trimDb": 3.7,
    "seconds": 0.666,
    "level": -21.7,
    "family": "ghostly_laugh",
-   "peak": -7.8
+   "peak": -7.8,
+   "dir": "sfx"
   },
   "harsh_destruction.wav": {
    "trimDb": 7.7,
    "seconds": 0.692,
    "level": -25.7,
    "family": "harsh_destruction",
-   "peak": -11.9
+   "peak": -11.9,
+   "dir": "sfx"
   },
   "hurt_1.wav": {
    "trimDb": 6.4,
    "seconds": 0.14,
    "level": -24.4,
    "family": "hurt",
-   "peak": -14.1
+   "peak": -14.1,
+   "dir": "sfx"
   },
   "hurt_2.wav": {
    "trimDb": 5.8,
    "seconds": 0.195,
    "level": -23.8,
    "family": "hurt",
-   "peak": -11.8
+   "peak": -11.8,
+   "dir": "sfx"
   },
   "hurt_3.wav": {
    "trimDb": 5.9,
    "seconds": 0.204,
    "level": -23.9,
    "family": "hurt",
-   "peak": -12.9
+   "peak": -12.9,
+   "dir": "sfx"
   },
   "hurt_4.wav": {
    "trimDb": 5.3,
    "seconds": 0.135,
    "level": -23.3,
    "family": "hurt",
-   "peak": -12.3
+   "peak": -12.3,
+   "dir": "sfx"
   },
   "jump_1.wav": {
    "trimDb": 5.6,
    "seconds": 0.361,
    "level": -23.6,
    "family": "jump",
-   "peak": -12.8
+   "peak": -12.8,
+   "dir": "sfx"
   },
   "jump_2.wav": {
    "trimDb": 6.4,
    "seconds": 0.405,
    "level": -24.4,
    "family": "jump",
-   "peak": -12.7
+   "peak": -12.7,
+   "dir": "sfx"
   },
   "jump_3.wav": {
    "trimDb": 6.4,
    "seconds": 0.405,
    "level": -24.4,
    "family": "jump",
-   "peak": -12.7
+   "peak": -12.7,
+   "dir": "sfx"
   },
   "jump_4.wav": {
    "trimDb": 6.7,
    "seconds": 0.213,
    "level": -24.7,
    "family": "jump",
-   "peak": -16.9
+   "peak": -16.9,
+   "dir": "sfx"
   },
   "land.wav": {
    "trimDb": 1.1,
    "seconds": 0.101,
    "level": -19.1,
    "family": "land",
-   "peak": -12.1
+   "peak": -12.1,
+   "dir": "sfx"
   },
   "laser_1.wav": {
    "trimDb": 6.2,
    "seconds": 0.34,
    "level": -24.2,
    "family": "laser",
-   "peak": -13.1
+   "peak": -13.1,
+   "dir": "sfx"
   },
   "laser_2.wav": {
    "trimDb": 7.6,
    "seconds": 0.396,
    "level": -25.6,
    "family": "laser",
-   "peak": -16.6
+   "peak": -16.6,
+   "dir": "sfx"
   },
   "laser_3.wav": {
    "trimDb": 4.1,
    "seconds": 0.377,
    "level": -22.1,
    "family": "laser",
-   "peak": -12.6
+   "peak": -12.6,
+   "dir": "sfx"
   },
   "laser_4.wav": {
    "trimDb": 5.6,
    "seconds": 0.26,
    "level": -23.6,
    "family": "laser",
-   "peak": -12.7
+   "peak": -12.7,
+   "dir": "sfx"
   },
   "laser_5.wav": {
    "trimDb": 3.5,
    "seconds": 0.473,
    "level": -21.5,
    "family": "laser",
-   "peak": -12.6
+   "peak": -12.6,
+   "dir": "sfx"
   },
   "laser_6.wav": {
    "trimDb": 6.5,
    "seconds": 0.772,
    "level": -24.5,
    "family": "laser",
-   "peak": -12.6
+   "peak": -12.6,
+   "dir": "sfx"
   },
   "level_up.wav": {
    "trimDb": 10.2,
    "seconds": 0.959,
    "level": -28.2,
    "family": "level_up",
-   "peak": -16.8
+   "peak": -16.8,
+   "dir": "sfx"
   },
   "lightning.wav": {
    "trimDb": 4.3,
    "seconds": 0.68,
    "level": -22.3,
    "family": "lightning",
-   "peak": -5.5
+   "peak": -5.5,
+   "dir": "sfx"
   },
   "lose_1.wav": {
    "trimDb": 6.3,
    "seconds": 0.942,
    "level": -24.3,
    "family": "lose",
-   "peak": -12.7
+   "peak": -12.7,
+   "dir": "sfx"
   },
   "lose_2.wav": {
    "trimDb": 6.2,
    "seconds": 0.675,
    "level": -24.2,
    "family": "lose",
-   "peak": -12.7
+   "peak": -12.7,
+   "dir": "sfx"
   },
   "lose_3.wav": {
    "trimDb": 6.9,
    "seconds": 0.759,
    "level": -24.9,
    "family": "lose",
-   "peak": -12.9
+   "peak": -12.9,
+   "dir": "sfx"
   },
   "lose_4.wav": {
    "trimDb": 6.4,
    "seconds": 0.649,
    "level": -24.4,
    "family": "lose",
-   "peak": -12.8
+   "peak": -12.8,
+   "dir": "sfx"
   },
   "mystery_1.wav": {
    "trimDb": 9.7,
    "seconds": 3.294,
    "level": -27.7,
    "family": "mystery",
-   "peak": -14.8
+   "peak": -14.8,
+   "dir": "sfx"
   },
   "note_C.wav": {
    "trimDb": 8.0,
    "seconds": 0.841,
    "level": -26.0,
    "family": "note",
-   "peak": -17.1
+   "peak": -17.1,
+   "dir": "sfx"
   },
   "note_D.wav": {
    "trimDb": 8.0,
    "seconds": 0.841,
    "level": -26.0,
    "family": "note",
-   "peak": -16.6
+   "peak": -16.6,
+   "dir": "sfx"
   },
   "note_E.wav": {
    "trimDb": 7.9,
    "seconds": 0.841,
    "level": -25.9,
    "family": "note",
-   "peak": -16.2
+   "peak": -16.2,
+   "dir": "sfx"
   },
   "note_F.wav": {
    "trimDb": 7.9,
    "seconds": 0.841,
    "level": -25.9,
    "family": "note",
-   "peak": -16.0
+   "peak": -16.0,
+   "dir": "sfx"
   },
   "note_G.wav": {
    "trimDb": 7.8,
    "seconds": 0.841,
    "level": -25.8,
    "family": "note",
-   "peak": -15.6
+   "peak": -15.6,
+   "dir": "sfx"
   },
   "note_high_A.wav": {
    "trimDb": 7.6,
    "seconds": 0.841,
    "level": -25.6,
    "family": "note",
-   "peak": -15.2
+   "peak": -15.2,
+   "dir": "sfx"
   },
   "note_high_B.wav": {
    "trimDb": 7.4,
    "seconds": 0.841,
    "level": -25.4,
    "family": "note",
-   "peak": -14.9
+   "peak": -14.9,
+   "dir": "sfx"
   },
   "note_high_C.wav": {
    "trimDb": 7.3,
    "seconds": 0.841,
    "level": -25.3,
    "family": "note",
-   "peak": -14.8
+   "peak": -14.8,
+   "dir": "sfx"
   },
   "powerup_1.wav": {
    "trimDb": 10.1,
    "seconds": 1.101,
    "level": -28.1,
    "family": "powerup",
-   "peak": -12.9
+   "peak": -12.9,
+   "dir": "sfx"
   },
   "powerup_2.wav": {
    "trimDb": 9.3,
    "seconds": 0.661,
    "level": -27.3,
    "family": "powerup",
-   "peak": -12.8
+   "peak": -12.8,
+   "dir": "sfx"
   },
   "powerup_3.wav": {
    "trimDb": 9.6,
    "seconds": 0.914,
    "level": -27.6,
    "family": "powerup",
-   "peak": -12.7
+   "peak": -12.7,
+   "dir": "sfx"
   },
   "powerup_4.wav": {
    "trimDb": 8.8,
    "seconds": 0.672,
    "level": -26.8,
    "family": "powerup",
-   "peak": -12.7
+   "peak": -12.7,
+   "dir": "sfx"
   },
   "powerup_5.wav": {
    "trimDb": 1.5,
    "seconds": 0.791,
    "level": -19.5,
    "family": "powerup",
-   "peak": -12.6
+   "peak": -12.6,
+   "dir": "sfx"
   },
   "select_1.wav": {
    "trimDb": 2.7,
    "seconds": 0.121,
    "level": -20.7,
    "family": "select",
-   "peak": -12.7
+   "peak": -12.7,
+   "dir": "sfx"
   },
   "select_2.wav": {
    "trimDb": 6.3,
    "seconds": 0.161,
    "level": -24.3,
    "family": "select",
-   "peak": -12.8
+   "peak": -12.8,
+   "dir": "sfx"
   },
   "select_3.wav": {
    "trimDb": 2.7,
    "seconds": 0.104,
    "level": -20.7,
    "family": "select",
-   "peak": -12.7
+   "peak": -12.7,
+   "dir": "sfx"
   },
   "select_4.wav": {
    "trimDb": 7.3,
    "seconds": 0.2,
    "level": -25.3,
    "family": "select",
-   "peak": -12.8
+   "peak": -12.8,
+   "dir": "sfx"
   },
   "select_5.wav": {
    "trimDb": 4.7,
    "seconds": 0.274,
    "level": -22.7,
    "family": "select",
-   "peak": -12.6
+   "peak": -12.6,
+   "dir": "sfx"
   },
   "shrink.wav": {
    "trimDb": 6.1,
    "seconds": 0.33,
    "level": -24.1,
    "family": "shrink",
-   "peak": -16.7
+   "peak": -16.7,
+   "dir": "sfx"
   },
   "siren.wav": {
    "trimDb": 10.3,
    "seconds": 0.841,
    "level": -28.3,
    "family": "siren",
-   "peak": -17.7
+   "peak": -17.7,
+   "dir": "sfx"
   },
   "slippery.wav": {
    "trimDb": 8.0,
    "seconds": 0.825,
    "level": -26.0,
    "family": "slippery",
-   "peak": -14.5
+   "peak": -14.5,
+   "dir": "sfx"
   },
   "soft_destruction.wav": {
    "trimDb": 9.2,
    "seconds": 0.471,
    "level": -27.2,
    "family": "soft_destruction",
-   "peak": -17.9
+   "peak": -17.9,
+   "dir": "sfx"
   },
   "stat_decrease.wav": {
    "trimDb": 9.6,
    "seconds": 0.768,
    "level": -27.6,
    "family": "stat_decrease",
-   "peak": -12.8
+   "peak": -12.8,
+   "dir": "sfx"
   },
   "stat_increase.wav": {
    "trimDb": 9.3,
    "seconds": 0.768,
    "level": -27.3,
    "family": "stat_increase",
-   "peak": -12.8
+   "peak": -12.8,
+   "dir": "sfx"
   },
   "swim_1.wav": {
    "trimDb": 6.9,
    "seconds": 0.504,
    "level": -24.9,
    "family": "swim",
-   "peak": -12.7
+   "peak": -12.7,
+   "dir": "sfx"
   },
   "swim_2.wav": {
    "trimDb": 6.2,
    "seconds": 0.522,
    "level": -24.2,
    "family": "swim",
-   "peak": -12.7
+   "peak": -12.7,
+   "dir": "sfx"
   },
   "teleport.wav": {
    "trimDb": 8.8,
    "seconds": 1.0,
    "level": -26.8,
    "family": "teleport",
-   "peak": -13.6
+   "peak": -13.6,
+   "dir": "sfx"
   },
   "tidal_wave.wav": {
    "trimDb": 9.8,
    "seconds": 2.194,
    "level": -27.8,
    "family": "tidal_wave",
-   "peak": -13.0
+   "peak": -13.0,
+   "dir": "sfx"
   },
   "ufo.wav": {
    "trimDb": 9.9,
    "seconds": 2.421,
    "level": -27.9,
    "family": "ufo",
-   "peak": -13.6
+   "peak": -13.6,
+   "dir": "sfx"
   },
   "uh-oh.wav": {
    "trimDb": 8.0,
    "seconds": 0.992,
    "level": -26.0,
    "family": "uh-oh",
-   "peak": -12.7
+   "peak": -12.7,
+   "dir": "sfx"
   },
   "water_1.wav": {
    "trimDb": 5.4,
    "seconds": 1.752,
    "level": -23.4,
    "family": "water",
-   "peak": -12.1
+   "peak": -12.1,
+   "dir": "sfx"
   },
   "water_2.wav": {
    "trimDb": 8.4,
    "seconds": 1.656,
    "level": -26.4,
    "family": "water",
-   "peak": -14.1
+   "peak": -14.1,
+   "dir": "sfx"
   },
   "wobble.wav": {
    "trimDb": 3.5,
    "seconds": 0.353,
    "level": -21.5,
    "family": "wobble",
-   "peak": -12.6
+   "peak": -12.6,
+   "dir": "sfx"
+  },
+  "tone_combo.wav": {
+   "trimDb": 4.3,
+   "seconds": 0.28,
+   "level": -22.3,
+   "family": "tone",
+   "peak": -5.5,
+   "dir": "tones"
+  },
+  "tone_combo_end.wav": {
+   "trimDb": 5.0,
+   "seconds": 0.2,
+   "level": -23.6,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_combo_max.wav": {
+   "trimDb": 4.3,
+   "seconds": 0.28,
+   "level": -22.3,
+   "family": "tone",
+   "peak": -5.5,
+   "dir": "tones"
+  },
+  "tone_cone_hit.wav": {
+   "trimDb": 2.1,
+   "seconds": 0.16,
+   "level": -20.1,
+   "family": "tone",
+   "peak": -4.3,
+   "dir": "tones"
+  },
+  "tone_deck_drop.wav": {
+   "trimDb": 2.5,
+   "seconds": 0.5,
+   "level": -20.5,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_delivered.wav": {
+   "trimDb": 5.0,
+   "seconds": 0.2,
+   "level": -23.7,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_denied.wav": {
+   "trimDb": 2.2,
+   "seconds": 0.21,
+   "level": -20.2,
+   "family": "tone",
+   "peak": -4.9,
+   "dir": "tones"
+  },
+  "tone_drone_dispatch.wav": {
+   "trimDb": 3.5,
+   "seconds": 0.68,
+   "level": -22.4,
+   "family": "tone",
+   "peak": -4.5,
+   "dir": "tones"
+  },
+  "tone_drone_dispatch_rescue.wav": {
+   "trimDb": 3.5,
+   "seconds": 0.68,
+   "level": -22.4,
+   "family": "tone",
+   "peak": -4.5,
+   "dir": "tones"
+  },
+  "tone_drone_drop.wav": {
+   "trimDb": 1.5,
+   "seconds": 0.18,
+   "level": -19.5,
+   "family": "tone",
+   "peak": -5.1,
+   "dir": "tones"
+  },
+  "tone_drone_pickup.wav": {
+   "trimDb": 1.9,
+   "seconds": 0.16,
+   "level": -19.9,
+   "family": "tone",
+   "peak": -4.9,
+   "dir": "tones"
+  },
+  "tone_drop.wav": {
+   "trimDb": 5.0,
+   "seconds": 0.14,
+   "level": -25.0,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_ending_win.wav": {
+   "trimDb": 2.8,
+   "seconds": 0.51,
+   "level": -20.8,
+   "family": "tone",
+   "peak": -5.2,
+   "dir": "tones"
+  },
+  "tone_gift.wav": {
+   "trimDb": 4.0,
+   "seconds": 2.8,
+   "level": -22.0,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_grade.wav": {
+   "trimDb": -0.5,
+   "seconds": 0.34,
+   "level": -17.5,
+   "family": "tone",
+   "peak": -4.2,
+   "dir": "tones"
+  },
+  "tone_held.wav": {
+   "trimDb": 0.7,
+   "seconds": 0.24,
+   "level": -18.7,
+   "family": "tone",
+   "peak": -4.6,
+   "dir": "tones"
+  },
+  "tone_hitch.wav": {
+   "trimDb": 1.9,
+   "seconds": 0.16,
+   "level": -19.9,
+   "family": "tone",
+   "peak": -5.0,
+   "dir": "tones"
+  },
+  "tone_honk.wav": {
+   "trimDb": 5.0,
+   "seconds": 0.13,
+   "level": -23.4,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_honk_body.wav": {
+   "trimDb": -0.7,
+   "seconds": 0.48,
+   "level": -17.3,
+   "family": "tone",
+   "peak": -4.2,
+   "dir": "tones"
+  },
+  "tone_impact.wav": {
+   "trimDb": 5.0,
+   "seconds": 0.3,
+   "level": -28.0,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_impact_big.wav": {
+   "trimDb": 5.0,
+   "seconds": 0.38,
+   "level": -28.2,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_impact_drop.wav": {
+   "trimDb": 4.9,
+   "seconds": 0.33,
+   "level": -23.4,
+   "family": "tone",
+   "peak": -5.9,
+   "dir": "tones"
+  },
+  "tone_jump.wav": {
+   "trimDb": 5.0,
+   "seconds": 0.2,
+   "level": -24.0,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_jump_dash.wav": {
+   "trimDb": 5.0,
+   "seconds": 0.26,
+   "level": -23.4,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_jump_land.wav": {
+   "trimDb": 1.9,
+   "seconds": 0.16,
+   "level": -19.9,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_knock.wav": {
+   "trimDb": 5.0,
+   "seconds": 0.18,
+   "level": -27.8,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_land.wav": {
+   "trimDb": 3.6,
+   "seconds": 0.32,
+   "level": -21.6,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_learn_standoff.wav": {
+   "trimDb": 5.0,
+   "seconds": 0.2,
+   "level": -23.7,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_lunge.wav": {
+   "trimDb": 5.0,
+   "seconds": 0.26,
+   "level": -26.2,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_miss.wav": {
+   "trimDb": 4.9,
+   "seconds": 0.38,
+   "level": -26.7,
+   "family": "tone",
+   "peak": -5.9,
+   "dir": "tones"
+  },
+  "tone_near_miss.wav": {
+   "trimDb": 4.8,
+   "seconds": 0.33,
+   "level": -25.8,
+   "family": "tone",
+   "peak": -5.8,
+   "dir": "tones"
+  },
+  "tone_pickup.wav": {
+   "trimDb": 5.0,
+   "seconds": 0.13,
+   "level": -25.4,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_punt.wav": {
+   "trimDb": 5.0,
+   "seconds": 0.13,
+   "level": -25.4,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_purchase.wav": {
+   "trimDb": 1.1,
+   "seconds": 0.32,
+   "level": -19.1,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_purchase_denied.wav": {
+   "trimDb": 1.0,
+   "seconds": 0.2,
+   "level": -19.0,
+   "family": "tone",
+   "peak": -5.1,
+   "dir": "tones"
+  },
+  "tone_push.wav": {
+   "trimDb": 5.0,
+   "seconds": 0.2,
+   "level": -24.0,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_rail_jump.wav": {
+   "trimDb": 5.0,
+   "seconds": 0.18,
+   "level": -24.0,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_rescued.wav": {
+   "trimDb": 5.0,
+   "seconds": 0.2,
+   "level": -23.7,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_screen.wav": {
+   "trimDb": 5.0,
+   "seconds": 0.2,
+   "level": -23.5,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_skid.wav": {
+   "trimDb": 3.1,
+   "seconds": 0.26,
+   "level": -22.3,
+   "family": "tone",
+   "peak": -4.1,
+   "dir": "tones"
+  },
+  "tone_sling.wav": {
+   "trimDb": 5.0,
+   "seconds": 0.22,
+   "level": -23.7,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_slip.wav": {
+   "trimDb": 3.7,
+   "seconds": 0.22,
+   "level": -21.7,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_splash.wav": {
+   "trimDb": 5.0,
+   "seconds": 0.48,
+   "level": -24.3,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_stair.wav": {
+   "trimDb": 5.0,
+   "seconds": 0.13,
+   "level": -25.3,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_story_clear.wav": {
+   "trimDb": 2.4,
+   "seconds": 0.49,
+   "level": -20.4,
+   "family": "tone",
+   "peak": -5.2,
+   "dir": "tones"
+  },
+  "tone_story_count.wav": {
+   "trimDb": 5.0,
+   "seconds": 0.2,
+   "level": -23.6,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_story_deliver.wav": {
+   "trimDb": 3.0,
+   "seconds": 0.68,
+   "level": -21.0,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_story_enter.wav": {
+   "trimDb": 3.9,
+   "seconds": 0.34,
+   "level": -21.9,
+   "family": "tone",
+   "peak": -5.2,
+   "dir": "tones"
+  },
+  "tone_story_fence.wav": {
+   "trimDb": 1.9,
+   "seconds": 0.16,
+   "level": -19.9,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_story_ferried.wav": {
+   "trimDb": 1.5,
+   "seconds": 0.18,
+   "level": -19.5,
+   "family": "tone",
+   "peak": -5.1,
+   "dir": "tones"
+  },
+  "tone_story_ferry.wav": {
+   "trimDb": 3.5,
+   "seconds": 0.68,
+   "level": -22.4,
+   "family": "tone",
+   "peak": -4.5,
+   "dir": "tones"
+  },
+  "tone_story_miss.wav": {
+   "trimDb": 1.2,
+   "seconds": 0.2,
+   "level": -19.2,
+   "family": "tone",
+   "peak": -5.0,
+   "dir": "tones"
+  },
+  "tone_throw.wav": {
+   "trimDb": 5.0,
+   "seconds": 0.24,
+   "level": -23.3,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_touch_spent.wav": {
+   "trimDb": 4.9,
+   "seconds": 0.2,
+   "level": -26.4,
+   "family": "tone",
+   "peak": -5.9,
+   "dir": "tones"
+  },
+  "tone_unstick_reverse.wav": {
+   "trimDb": 3.3,
+   "seconds": 0.39,
+   "level": -21.7,
+   "family": "tone",
+   "peak": -4.3,
+   "dir": "tones"
+  },
+  "tone_unveil_lift.wav": {
+   "trimDb": 3.8,
+   "seconds": 1.0,
+   "level": -21.8,
+   "family": "tone",
+   "peak": -5.1,
+   "dir": "tones"
+  },
+  "tone_writeoff.wav": {
+   "trimDb": 4.7,
+   "seconds": 0.68,
+   "level": -26.7,
+   "family": "tone",
+   "peak": -5.7,
+   "dir": "tones"
+  }
+ },
+ "picks": {
+  "by": "Lawrence",
+  "file": "content/audio/picks_lawrence.json",
+  "changed": {
+   "ui-start": {
+    "was": {
+     "files": [
+      "confirm_1.wav"
+     ]
+    },
+    "now": {
+     "files": [
+      "equip_2.wav"
+     ]
+    }
+   },
+   "lunge": {
+    "was": {
+     "files": [
+      "jump_4.wav"
+     ]
+    },
+    "now": {
+     "files": [
+      "wobble.wav"
+     ]
+    }
+   },
+   "rail-jump": {
+    "was": {
+     "decision": "cue"
+    },
+    "now": {
+     "decision": "synth"
+    }
+   },
+   "level": {
+    "was": {
+     "decision": "silence",
+     "files": null,
+     "gain": null,
+     "cooldown": null
+    },
+    "now": {
+     "decision": "cue",
+     "files": [
+      "bubble.wav"
+     ],
+     "gain": "hit",
+     "cooldown": "action"
+    }
+   },
+   "push": {
+    "was": {
+     "files": [
+      "door_close.wav"
+     ]
+    },
+    "now": {
+     "files": [
+      "hurt_3.wav"
+     ]
+    }
+   },
+   "slip": {
+    "was": {
+     "decision": "cue"
+    },
+    "now": {
+     "decision": "synth"
+    }
+   },
+   "sling": {
+    "was": {
+     "files": [
+      "shrink.wav"
+     ]
+    },
+    "now": {
+     "files": [
+      "equip_2.wav"
+     ]
+    }
+   },
+   "denied": {
+    "was": {},
+    "now": {
+     "gainDb": 3.5
+    }
+   },
+   "impact.big": {
+    "was": {
+     "files": [
+      "harsh_destruction.wav",
+      "explosion_1.wav"
+     ]
+    },
+    "now": {
+     "files": [
+      "explosion_1.wav"
+     ]
+    }
+   },
+   "held": {
+    "was": {
+     "files": [
+      "equip_2.wav"
+     ]
+    },
+    "now": {
+     "files": [
+      "cancel_1.wav"
+     ]
+    }
+   },
+   "touch-spent": {
+    "was": {
+     "decision": "silence"
+    },
+    "now": {
+     "decision": "synth"
+    }
+   },
+   "writeoff": {
+    "was": {
+     "files": [
+      "explosion_4.wav"
+     ]
+    },
+    "now": {
+     "files": [
+      "explosion_3.wav"
+     ]
+    }
+   },
+   "part-break": {
+    "was": {
+     "files": [
+      "fire_1.wav"
+     ]
+    },
+    "now": {
+     "files": [
+      "explosion_2.wav"
+     ]
+    }
+   },
+   "low-health": {
+    "was": {
+     "files": [
+      "siren.wav"
+     ]
+    },
+    "now": {
+     "files": [
+      "wobble.wav"
+     ]
+    }
+   },
+   "near-miss": {
+    "was": {
+     "gain": null,
+     "cooldown": null
+    },
+    "now": {
+     "gain": "hit",
+     "cooldown": "burst"
+    }
+   },
+   "miss": {
+    "was": {
+     "decision": "silence"
+    },
+    "now": {
+     "decision": "synth"
+    }
+   },
+   "drop": {
+    "was": {
+     "decision": "synth",
+     "files": null,
+     "gain": null,
+     "cooldown": null
+    },
+    "now": {
+     "decision": "cue",
+     "files": [
+      "collect_4.wav"
+     ],
+     "gain": "hit",
+     "cooldown": "action"
+    }
+   },
+   "pickup": {
+    "was": {
+     "files": [
+      "collect_3.wav"
+     ]
+    },
+    "now": {
+     "files": [
+      "collect_7.wav"
+     ]
+    }
+   },
+   "punt": {
+    "was": {
+     "gain": null,
+     "cooldown": null
+    },
+    "now": {
+     "gain": "hit",
+     "cooldown": "action"
+    }
+   },
+   "cone-hit": {
+    "was": {
+     "decision": "cue"
+    },
+    "now": {
+     "decision": "synth"
+    }
+   },
+   "cone-struck": {
+    "was": {
+     "decision": "silence",
+     "files": null,
+     "gain": null,
+     "cooldown": null
+    },
+    "now": {
+     "decision": "cue",
+     "files": [
+      "select_1.wav"
+     ],
+     "gain": "hit",
+     "cooldown": "ambient"
+    }
+   }
+  },
+  "raw": {
+   "sfx": {
+    "ui-start": {
+     "files": [
+      "equip_2.wav"
+     ]
+    },
+    "lunge": {
+     "files": [
+      "wobble.wav"
+     ]
+    },
+    "rail-jump": {
+     "decision": "synth"
+    },
+    "level": {
+     "decision": "cue",
+     "bus": "sfx",
+     "gain": "hit",
+     "cooldown": "action",
+     "files": [
+      "bubble.wav"
+     ]
+    },
+    "push": {
+     "files": [
+      "hurt_3.wav"
+     ]
+    },
+    "slip": {
+     "decision": "synth"
+    },
+    "sling": {
+     "files": [
+      "equip_2.wav"
+     ]
+    },
+    "denied": {
+     "gainDb": 3.5
+    },
+    "impact.big": {
+     "files": [
+      "explosion_1.wav"
+     ]
+    },
+    "held": {
+     "files": [
+      "cancel_1.wav"
+     ]
+    },
+    "touch-spent": {
+     "decision": "synth"
+    },
+    "writeoff": {
+     "files": [
+      "explosion_3.wav"
+     ]
+    },
+    "part-break": {
+     "files": [
+      "explosion_2.wav"
+     ]
+    },
+    "low-health": {
+     "files": [
+      "wobble.wav"
+     ]
+    },
+    "near-miss": {
+     "bus": "sfx",
+     "gain": "hit",
+     "cooldown": "burst"
+    },
+    "miss": {
+     "decision": "synth"
+    },
+    "drop": {
+     "decision": "cue",
+     "bus": "sfx",
+     "gain": "hit",
+     "cooldown": "action",
+     "files": [
+      "collect_4.wav"
+     ]
+    },
+    "pickup": {
+     "files": [
+      "collect_7.wav"
+     ]
+    },
+    "punt": {
+     "bus": "sfx",
+     "gain": "hit",
+     "cooldown": "action"
+    },
+    "cone-hit": {
+     "decision": "synth"
+    },
+    "cone-struck": {
+     "decision": "cue",
+     "bus": "sfx",
+     "gain": "hit",
+     "cooldown": "ambient",
+     "files": [
+      "select_1.wav"
+     ]
+    },
+    "cone-rest": {
+     "bus": "sfx",
+     "gain": "hit",
+     "cooldown": "ambient"
+    }
+   }
   }
  },
  "credits": {

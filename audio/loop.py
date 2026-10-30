@@ -42,7 +42,7 @@ def ingame(f):
 def inv_table():
     rows = ["| file | seconds | measured dB | in game dB (after trim) | family |", "|---|---:|---:|---:|---|"]
     for f in INV["files"]:
-        if f["folder"] == "sfx":
+        if f["folder"] in ("sfx", "tones"):
             rows.append(f"| {f['file'].split('/', 1)[1]} | {f['duration']:.2f} | {f['level']} | {ingame(f)} | {f['family']} |")
     mus = ["| track | file | seconds | title |", "|---|---|---:|---|"]
     for f in INV["files"]:

@@ -67,9 +67,9 @@ def gdd():
     a("")
     a("### 0.1 Readings (proposed; taken without a ruling)")
     a("")
-    a("| # | Reading | Registry / where to change |")
+    a("| # | Reading | Recorded as (registry) · changed in |")
     a("|---|---|---|")
-    a("| Q1 | \"Splash Screen\" is the intro screen. It shows PRESS ANY KEY; the first press only unlocks audio and starts Track 1. The next press is START | `audio.music.track.intro`; Sound Lab › Music |")
+    a("| Q1 | \"Splash Screen\" is the intro screen. It shows PRESS ANY KEY; the first press only unlocks audio and starts Track 1. The next press is START | `audio.music.track.intro` · Sound Lab › Music |")
     a("| Q2 | Track 2 plays through a district's first level card. The level track starts with the drone drop | `audio.music.track.card` (0: continue) |")
     a(f"| Q3 | Story: tile *n* in story order plays slot ((*n* − 1) mod {len(M['rotation'])}) + 1 of the rotation. Arcade: one track per run, the next slot each run | `audio.music.levelRotation` ({REG['audio.music.levelRotation']['default']}) |")
     a(f"| Q4 | Pause ducks the music to {REG['audio.music.pauseDuck']['default']}. Gift screen, report and workshop keep the level track. Endings: {tname(M['states']['ending'])}. Finale and CERTIFIED: {tname(M['states']['finale'])}. Credits: {tname(M['states']['credits'])} (the agent's choice; the handover proposed Track 1) | `audio.music.track.*` |")
@@ -80,7 +80,8 @@ def gdd():
     a("")
     a("- **Engine:** `prototypes/p9/audio.js`. `game.js` creates it only when `audio.enabled` is 1. Prototype 9 sets 1; the registry default is 0.")
     a("- **Buses:** music, SFX, UI under a master. Levels: `audio.music.volume`, `audio.sfx.volume`, `audio.ui.volume`.")
-    a("- **Synth fallback:** Prototype 8.4's procedural sounds route through the SFX bus at `audio.synth.gain`. A `synth` entry keeps them.")
+    a("- **Generated tones:** Prototype 8.4's procedural sounds, rendered to WAV by `audio/tones.py` (57 tones; one new, for slip). A `synth` entry plays its event's tone through the mix: gain class, cooldown, trim. An event with no entry or tone keeps the live synth, on the SFX bus at `audio.synth.gain`.")
+    a("- **Lawrence's picks:** `content/audio/picks_lawrence.json`, his Sound Lab export, over the agent's map (row 603). His fine gain becomes `audio.sfx.offset.<cue>`.")
     a("- **Hush:** a cue or a stated silence hushes the synth for its event. Hit juice still draws.")
     a("- **Loudness:** each file is trimmed toward `audio.sfx.targetLufs` or `audio.music.targetLufs`. Trims cap at `audio.trim.maxBoostDb` and `audio.trim.peakCeilingDb`.")
     a("- **Weight:** gain classes set it. `audio.sfx.gain.<class>`, in dB after the trim.")
@@ -103,6 +104,8 @@ def gdd():
         scr, det, rid = MUSIC_ROWS[m["id"]]
         a(f"| `music.{m['id']}` | {scr} | {det} | {state_cell(m['id'])} | yes | crossfade `audio.music.crossfadeSeconds` | {rid} |")
     a("")
+    a("- **Registry column:** the integrator records each state's track there from the map. The build reads `cues.json`; the Sound Lab and the map change it.")
+    a("")
     a("| Track | File | Length | Measured | Trim | Plays in |")
     a("|---|---|---:|---:|---:|---|")
     uses = {}
@@ -119,7 +122,7 @@ def gdd():
     a("")
     a("## 3 SFX (WAV)")
     a("")
-    a("Columns: the cue; what triggers it, with its code site; the files (a pool); bus; volume ID; cooldown ID. Variants are indented under their event.")
+    a("Columns: the cue; what triggers it, with its code site; the files (a pool), or the generated tone; bus; volume ID; cooldown ID. Variants are indented under their event. **L** marks Lawrence's pick (row 603); the agent's pick follows it.")
     a("")
     for g in EV["groups"]:
         evs = [e for e in EV["events"] if e["group"] == g["id"]]
@@ -136,15 +139,23 @@ def gdd():
                 trig = c["what"] if cid == e["id"] else c["label"]
                 if cid == e["id"] and e["where"]:
                     trig += f" `{', '.join(e['where'][:2])}`"
+                lw = ""
+                if c.get("by"):
+                    ag = c.get("agent", {})
+                    lw = " **L** (agent: " + (", ".join(f"`{f}`" for f in ag.get("files") or []) if ag.get("decision") == "cue" else ag.get("decision", "—")) + ")"
+                vol = f"`{c['gainId']}`" + (f" + `{c['offsetId']}`" if c.get("offsetId") else "")
                 if c["decision"] == "cue":
-                    a(f"| {name} | {trig} | {files(c)} | {c['bus']} | `{c['gainId']}` | `{c['cooldownId']}` |")
+                    a(f"| {name} | {trig} | {files(c)}{lw} | {c['bus']} | {vol} | `{c['cooldownId']}` |")
+                elif c["decision"] == "synth" and c.get("tone"):
+                    a(f"| {name} | {trig} | tone `{c['tone']}`{lw} | {c['bus']} | {vol} | `{c['cooldownId']}` |")
                 else:
-                    note = {"silence": "*silence*", "synth": "*Prototype 8.4 synth*", "base": f"*as `sfx.{c.get('variantOf')}`*"}[c["decision"]]
-                    a(f"| {name} | {trig} | {note}: {c['why']} | — | — | — |")
+                    note = {"silence": "*silence*", "synth": "*no tone: the live synth*", "base": f"*as `sfx.{c.get('variantOf')}`*"}[c["decision"]]
+                    a(f"| {name} | {trig} | {note}{lw}: {c['why'].split(' Agent: ')[0]} | — | — | — |")
         a("")
     n = {k: sum(c["decision"] == k for c in C["sfx"].values()) for k in ("cue", "silence", "synth", "base")}
-    used = sorted({f for c in C["sfx"].values() for f in c.get("files", [])})
-    a(f"**Totals:** {len(C['sfx'])} entries: {n['cue']} cues, {n['silence']} silences, {n['synth']} synth, {n['base']} on its base. {len(used)} of {INV['sfx']} files used.")
+    used = sorted({f for c in C["sfx"].values() if c["decision"] == "cue" for f in c.get("files", [])})
+    a(f"**Totals:** {len(C['sfx'])} entries: {n['cue']} cues, {n['silence']} silences, {n['synth']} generated tones, {n['base']} on its base. "
+      f"{len(used)} of {INV['sfx']} pack files used; {INV.get('tones', 0)} generated tones in `prototypes/p9/audio/tones/`. Lawrence's picks: {len(C['picks']['changed'])} entries.")
     a("")
     a("## 4 Gameplay points")
     a("")
@@ -195,8 +206,9 @@ def gdd():
     a("")
     a("- **D86:** the Credits card's audio lines widen Style Guide C1. Needs Lawrence's ruling.")
     a("- **Q1–Q6:** readings taken, not ruled (DECISIONS 591–596).")
-    a("- **Honk:** the pack has no horn. The agent kept Prototype 8.4's synth horn (C2 overruled by the reviewer).")
-    a("- **Silenced by the agent:** car-notice and car-brake. Switch them on in the Sound Lab to hear the edge cues.")
+    a("- **Honk and cone hits:** the pack has no horn. Honks play Prototype 8.4's horn as generated tones; Lawrence set cone hits to their tone too (C2, user-decided).")
+    a("- **Tone fidelity:** a generated tone is one rendering. Prototype 8.4 scaled some of its sounds with the hit's force; the tones take the middle of each range.")
+    a("- **Silenced:** car-notice and car-brake (the agent), cone-rest (Lawrence's pick left it so). Switch them on in the Sound Lab.")
     a("- **Licence:** the pack's credit lines only. The licence texts were not supplied.")
     a("- **Devices:** the MP3 fallback for Safari and iOS is untested on a device.")
     a("- **Pages:** `gh-pages` is pushed. GitHub Pages needs switching on in the repo's settings once.")

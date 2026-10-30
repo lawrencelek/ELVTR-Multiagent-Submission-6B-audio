@@ -11,6 +11,7 @@ The reviewer and the refiner read this whole guide. Every rule has an ID, a seve
   - **Bodies and machines:** dashes, jumps, hits, cones, cars, landings. Physical, short, punchy.
   - **The Corporation's system:** menus, notices, drones, counts, gifts, grades, the plaque. Clean, synthetic, official.
 - **The pack:** 100 WAV effects (Chequered Ink) and six OGG tracks (ansimuz). Retro, synthetic. Names describe use: `hurt_*`, `select_*`, `confirm_*`, `collect_*`, `powerup_*`, `explosion_*`.
+- **Generated tones:** `tone_<event>.wav`, Prototype 8.4's procedural sounds rendered by `audio/tones.py` (from run 4 on). A `synth` entry plays its event's tone.
 
 ## 1. The request (Lawrence, verbatim)
 
@@ -39,7 +40,7 @@ The reviewer and the refiner read this whole guide. Every rule has an ID, a seve
 
 **Cooldown classes** (seconds between plays of one cue; `audio.sfx.cooldown.<class>`): `ui`, `action`, `burst`, `frame`, `ambient`, `once`. A cue may name a specific ID instead (`audio.sfx.cooldown.honk`, `audio.sfx.cooldown.bark`).
 
-**Decisions per event:** `cue` (files from the pack), `silence` (no sound, with a reason), `synth` (keep Prototype 8.4's procedural sound), `base` (a variant plays its base event's cue).
+**Decisions per event:** `cue` (files from the pack), `silence` (no sound, with a reason), `synth` (the event's generated tone: Prototype 8.4's procedural sound, rendered), `base` (a variant plays its base event's cue).
 
 ## 3. Rules
 
@@ -94,4 +95,4 @@ Severity: blocking −4, major −2, minor −1. Each broken rule deducts once p
 
 ## 4. Precedence
 
-The request (§1) beats this guide. A row Lawrence decided in `DECISIONS.md` beats both.
+The request (§1) beats this guide. A row Lawrence decided in `DECISIONS.md` beats both: his Sound Lab picks (row 603) are placed over the accepted map, as written.

@@ -19,7 +19,7 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 ![START: the mode select, Track 2](shots/title.jpg)
 
 - **Music:** menu · Track 2 (summer nights)
-- **`sfx.ui-start`** · START: `confirm_1.wav` · pool `confirm_1.wav` · alternates `select_5.wav`, `equip_2.wav`
+- **`sfx.ui-start`** · START: `equip_2.wav` · pool `equip_2.wav` · alternates `confirm_1.wav`, `select_5.wav`
 
 ## 4. cursor moves
 
@@ -67,13 +67,15 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 ## 10. Arcade: play
 
 - **Music:** level · Track 3 (chibi robot b)
+- **`sfx.near-miss`** · Near-miss: `tone_near_miss.wav` · pool — · alternates —
 - **`sfx.bark`** · Bark bubble: `bubble.wav` · pool `bubble.wav`, `select_1.wav` · alternates `select_2.wav`, `computer_2.wav`
 - **`sfx.dropped-in`** · Dummy set down: `land.wav` · pool `land.wav` · alternates `door_close.wav`, `blocked.wav`
 
 ## 11. Arcade: a dash
 
 - **Music:** level · Track 3 (chibi robot b)
-- **`sfx.lunge`** · Dash: `jump_4.wav` · pool `jump_4.wav` · alternates `shrink.wav`, `wobble.wav`
+- **`sfx.lunge`** · Dash: `wobble.wav` · pool `wobble.wav` · alternates `jump_4.wav`, `shrink.wav`
+- **`sfx.screen`** · Screen flip: `tone_screen.wav` · pool — · alternates —
 
 ## 12. Arcade: a jump
 
@@ -83,7 +85,7 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 ## 13. Arcade: a hit
 
 - **Music:** level · Track 3 (chibi robot b)
-- **`sfx.impact`** · Hit: `hurt_3.wav` · pool `hurt_1.wav`, `hurt_2.wav`, `hurt_3.wav`, `hurt_4.wav` · alternates `soft_destruction.wav`, `explosion_1.wav`
+- **`sfx.impact`** · Hit: `hurt_4.wav` · pool `hurt_1.wav`, `hurt_2.wav`, `hurt_3.wav`, `hurt_4.wav` · alternates `soft_destruction.wav`, `explosion_1.wav`
 
 ## 14. Arcade: a combo
 
@@ -97,8 +99,8 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 ![Arcade: cones](shots/cones.jpg)
 
 - **Music:** level · Track 3 (chibi robot b)
-- **`sfx.pickup`** · Cone picked up: `collect_3.wav` · pool `collect_3.wav` · alternates `collect_4.wav`, `equip_1.wav`
-- **`sfx.cone-hit`** · Cone hit: `explosion_2.wav` · pool `explosion_2.wav` · alternates `explosion_1.wav`, `harsh_destruction.wav`
+- **`sfx.pickup`** · Cone picked up: `collect_7.wav` · pool `collect_7.wav` · alternates `collect_3.wav`, `collect_4.wav`, `equip_1.wav`
+- **`sfx.cone-hit`** · Cone hit: `tone_cone_hit.wav` · pool `explosion_2.wav` · alternates `explosion_1.wav`, `harsh_destruction.wav`
 
 ## 16. drones
 
@@ -113,7 +115,7 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 ![Arcade: a write-off](shots/writeoff.jpg)
 
 - **Music:** level · Track 3 (chibi robot b)
-- **`sfx.writeoff`** · Write-off: `explosion_4.wav` · pool `explosion_4.wav` · alternates `explosion_3.wav`, `harsh_destruction.wav`
+- **`sfx.writeoff`** · Write-off: `explosion_3.wav` · pool `explosion_3.wav` · alternates `explosion_4.wav`, `harsh_destruction.wav`
 - **`sfx.credit`** · Credits paid: `collect_5.wav` · pool `collect_5.wav` · alternates `collect_6.wav`, `confirm_2.wav`
 
 ## 18. Arcade: the report
@@ -227,9 +229,10 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 ![Story: a dash](shots/dash.jpg)
 
 - **Music:** level · Track 3 (chibi robot b)
-- **`sfx.lunge`** · Dash: `jump_4.wav` · pool `jump_4.wav` · alternates `shrink.wav`, `wobble.wav`
+- **`sfx.lunge`** · Dash: `wobble.wav` · pool `wobble.wav` · alternates `jump_4.wav`, `shrink.wav`
+- **`sfx.knock`** · Knock: `tone_knock.wav` · pool — · alternates —
 - **`sfx.bark`** · Bark bubble: `select_1.wav` · pool `bubble.wav`, `select_1.wav` · alternates `select_2.wav`, `computer_2.wav`
-- **`sfx.impact`** · Hit: `hurt_4.wav` · pool `hurt_1.wav`, `hurt_2.wav`, `hurt_3.wav`, `hurt_4.wav` · alternates `soft_destruction.wav`, `explosion_1.wav`
+- **`sfx.impact`** · Hit: `hurt_2.wav` · pool `hurt_1.wav`, `hurt_2.wav`, `hurt_3.wav`, `hurt_4.wav` · alternates `soft_destruction.wav`, `explosion_1.wav`
 
 ## 34. Story: a jump
 
@@ -244,7 +247,7 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 
 - **Music:** level · Track 3 (chibi robot b)
 - **`sfx.jump-land`** · Jump lands: `land.wav` · pool `land.wav` · alternates `blocked.wav`, `door_close.wav`
-- **`sfx.impact.big`** · A big hit: `explosion_1.wav` · pool `harsh_destruction.wav`, `explosion_1.wav` · alternates `explosion_2.wav`, `soft_destruction.wav`
+- **`sfx.impact.big`** · A big hit: `explosion_1.wav` · pool `explosion_1.wav` · alternates `harsh_destruction.wav`, `explosion_2.wav`, `soft_destruction.wav`
 
 ## 36. Story: counted, cleared
 
@@ -265,8 +268,9 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 ## 38. Story: the report
 
 - **Music:** level · Track 3 (chibi robot b)
+- **`sfx.near-miss`** · Near-miss: `tone_near_miss.wav` · pool — · alternates —
 - **`sfx.bark`** · Bark bubble: `bubble.wav` · pool `bubble.wav`, `select_1.wav` · alternates `select_2.wav`, `computer_2.wav`
-- **`sfx.writeoff`** · Write-off: `explosion_4.wav` · pool `explosion_4.wav` · alternates `explosion_3.wav`, `harsh_destruction.wav`
+- **`sfx.writeoff`** · Write-off: `explosion_3.wav` · pool `explosion_3.wav` · alternates `explosion_4.wav`, `harsh_destruction.wav`
 - **`sfx.story-count`** · Counted: `stat_increase.wav` · pool `stat_increase.wav` · alternates `collect_5.wav`, `confirm_2.wav`
 - **`sfx.story-clear`** · Tile cleared: `powerup_5.wav` · pool `powerup_5.wav` · alternates `level_up.wav`, `powerup_1.wav`
 
@@ -289,6 +293,7 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 
 - **Music:** level · Track 4 (happywalking)
 - **`sfx.ui-ok`** · Confirm: `confirm_4.wav` · pool `confirm_4.wav` · alternates `confirm_1.wav`, `select_5.wav`
+- **`sfx.screen`** · Screen flip: `tone_screen.wav` · pool — · alternates —
 - **`sfx.story-enter`** · Tile in test: `computer_1.wav` · pool `computer_1.wav` · alternates `computer_2.wav`, `chime.wav`
 
 ## 42. Story: play on tile 2: the next level track

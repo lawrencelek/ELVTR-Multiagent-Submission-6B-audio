@@ -1,6 +1,6 @@
 """Inventory of the audio pack. No model.
 
-Lists each file: name, folder, bytes, duration, channels, sample rate, codec, integrated loudness (LUFS),
+Lists each file (the pack's music and sfx, and the generated tones from audio/tones.py): name, folder, bytes, duration, channels, sample rate, codec, integrated loudness (LUFS),
 true peak (dBTP) and sample peak (dBFS). Short SFX (< 0.4 s) have no gated integrated loudness, so the
 whole-file RMS is also kept; `level` is LUFS where measured, else RMS. Output: content/audio/inventory.json.
 
@@ -14,9 +14,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 PACK = ROOT / "prototypes" / "p9" / "audio"
 OUT = ROOT / "content" / "audio" / "inventory.json"
-CREDITS = {"music": "ansimuz on itch.io", "sfx": "Chequered Ink on itch.io"}
+CREDITS = {"music": "ansimuz on itch.io", "sfx": "Chequered Ink on itch.io", "tones": "Generated: Prototype 8.4's synth recipes (audio/tones.py)"}
 RENAMED = {"track6_ansimuz-itch-io_fantasy-dragon.ogg": "track6_ansimuz-itch-io_fantasy Dragon.ogg"}  # no spaces in URLs
-SOURCE = {"music": "itch.io (assets/audio/licence/music-credit.txt)", "sfx": "itch.io (assets/audio/licence/sfx-credit.txt)"}
+SOURCE = {"music": "itch.io (assets/audio/licence/music-credit.txt)", "sfx": "itch.io (assets/audio/licence/sfx-credit.txt)", "tones": "audio/tones.py"}
 
 
 def probe(p):
@@ -52,24 +52,27 @@ def loudness(p):
 def family(name):
     """'collect_3' -> 'collect'; 'note_high_A' -> 'note'; 'animal_dog_big' -> 'animal'."""
     stem = Path(name).stem
+    if stem.startswith("tone_"):
+        return "tone"
     base = re.sub(r"_\d+$", "", stem)
     return base.split("_")[0] if base.startswith(("note_", "animal_")) else base
 
 
 def main():
     files = []
-    for folder in ("music", "sfx"):
+    for folder in ("music", "sfx", "tones"):
         for p in sorted((PACK / folder).iterdir()):
             if p.suffix.lower() not in (".ogg", ".wav"):
                 continue
             rec = {"file": f"{folder}/{p.name}", "name": p.stem, "folder": folder, "bytes": p.stat().st_size,
-                   "family": family(p.name) if folder == "sfx" else None}
+                   "family": family(p.name) if folder != "music" else None}
             rec.update(probe(p))
             rec.update(loudness(p))
             # One level per file for the bus trims: integrated LUFS where gated loudness exists, else whole-file RMS.
             rec["level"] = rec["lufs"] if rec["lufs"] is not None else rec["rmsDb"]
             rec["levelSource"] = "lufs" if rec["lufs"] is not None else "rms"
-            rec.update({"credit": CREDITS[folder], "source": SOURCE[folder], "licence": "royalty-free pack; credit line supplied by the user; licence text not supplied"})
+            rec.update({"credit": CREDITS[folder], "source": SOURCE[folder],
+                        "licence": "generated for this game" if folder == "tones" else "royalty-free pack; credit line supplied by the user; licence text not supplied"})
             if folder == "music":
                 if p.name in RENAMED:
                     rec["original"] = RENAMED[p.name]
@@ -79,10 +82,10 @@ def main():
             files.append(rec)
     OUT.parent.mkdir(parents=True, exist_ok=True)
     doc = {"generated_by": "audio/inventory.py", "pack": "prototypes/p9/audio/", "count": len(files),
-           "music": sum(f["folder"] == "music" for f in files), "sfx": sum(f["folder"] == "sfx" for f in files),
+           "music": sum(f["folder"] == "music" for f in files), "sfx": sum(f["folder"] == "sfx" for f in files), "tones": sum(f["folder"] == "tones" for f in files),
            "files": files}
     OUT.write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
-    print(f"{OUT.relative_to(ROOT)}: {doc['music']} music, {doc['sfx']} sfx")
+    print(f"{OUT.relative_to(ROOT)}: {doc['music']} music, {doc['sfx']} sfx, {doc['tones']} tones")
 
 
 if __name__ == "__main__":
