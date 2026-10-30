@@ -12614,6 +12614,94 @@
     "max": 1
    },
    "purpose": "BODY 0 read as a write-off that did not happen (row 620)"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "source": "Edit 100 (P9): Lawrence, 30 October 19:10, after the QA run: 'change the icon on a spent car is a TICK' (DECISIONS row 624)",
+   "status": "user-confirmed",
+   "type": "number",
+   "id": "ui.spentTick",
+   "group": "UI",
+   "owner": "Systems design",
+   "label": "Spent tick",
+   "description": "1: a spent car carries a tick on its roof, upright, white edged in ink, and the cue key shows it beside 'Already hit you'; it replaces the slash. 0: Prototype 8.4's mark (grey; the slash when ui.cueKey.simple is 0). Prototype 9 sets 1",
+   "unit": "flag",
+   "default": 0,
+   "applyAt": "next-run",
+   "validation": {
+    "min": 0,
+    "max": 1
+   },
+   "purpose": "A spent car reads as done at a glance (row 624)"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "source": "Edit 100 (P9): Lawrence's ruling, 30 October 11:30 (DECISIONS row 623)",
+   "status": "user-confirmed",
+   "applyAt": "next-run",
+   "id": "audio.sfx.honkMaxPerCar",
+   "group": "Audio",
+   "owner": "Audio",
+   "label": "Honks per car",
+   "unit": "count",
+   "type": "number",
+   "default": 2,
+   "validation": {
+    "min": 0,
+    "max": 20
+   },
+   "description": "A car's horn sounds this many times at most, however often it is stuck (the horn mark still shows). 0: no cap",
+   "purpose": "Lawrence, after the QA run: a stuck car honked 20 times a minute (row 623)"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "source": "Edit 100 (P9): Lawrence's ruling, 30 October 11:30 (DECISIONS row 624)",
+   "status": "user-confirmed",
+   "applyAt": "next-run",
+   "id": "audio.sfx.spentRepeatMax",
+   "group": "Audio",
+   "owner": "Audio",
+   "label": "Spent repeats",
+   "unit": "count",
+   "type": "number",
+   "default": 2,
+   "validation": {
+    "min": 0,
+    "max": 20
+   },
+   "description": "Knock and touch-spent off one spent car: each sounds this many times at most in any audio.sfx.spentRepeatSeconds. 0: no cap",
+   "purpose": "Lawrence, after the QA run: leaning on a spent car knocked 57–74 times a minute (row 624)"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "source": "Edit 100 (P9): Lawrence's ruling, 30 October 11:30 (DECISIONS row 624)",
+   "status": "user-confirmed",
+   "applyAt": "next-run",
+   "id": "audio.sfx.spentRepeatSeconds",
+   "group": "Audio",
+   "owner": "Audio",
+   "label": "Spent window",
+   "unit": "s",
+   "type": "number",
+   "default": 2,
+   "validation": {
+    "min": 0.1,
+    "max": 30
+   },
+   "description": "The window audio.sfx.spentRepeatMax counts in, sim seconds",
+   "purpose": "Lawrence: 2 max within a 2 second window (row 624)"
   }
  ],
  "tables": {

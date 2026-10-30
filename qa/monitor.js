@@ -36,13 +36,23 @@
   let synthFrame = null;
   function synthNote(type) { const k = type + '@' + QA.stats.frames; if (synthFrame === k) return; synthFrame = k; sound('synth:' + type, gt()); }
   // ---- frame gaps: the game loop stalling. This rAF runs before the game's each frame: no event is being handled yet
-  let lastF = 0, lastScr = null;
+  let lastF = 0, lastScr = null, lastPh = null, lastTile = null;
   const raf = window.requestAnimationFrame.bind(window);
   (function tick(t) {
     QA.stats.frames++; QA.curEv = null;
-    const app = window.__dummies, scr = app && app.screen, building = scr === 'loading' || lastScr === 'loading' || lastScr === 'arcade' || lastScr === 'title' || !!(app && app.sim && app.sim.phase !== 'play' && app.sim.t < 31);
-    if (lastF && !document.hidden) { const g = t - lastF; if (g > 250) { QA.stats.gaps++; QA.stats.gapMax = Math.max(QA.stats.gapMax, g); if (building) QA.stats.loadStallMax = Math.max(QA.stats.loadStallMax || 0, g); else if (g > 1500) add('frame-stall', 'major', 'the game loop paused ' + Math.round(g) + ' ms in play', null, 'stall:' + (app && app.sim ? app.sim.levelId + ':' + app.sim.screenName() : scr)); } }
-    lastF = t; lastScr = scr; raf(tick);
+    const app = window.__dummies, scr = app && app.screen, s = app && app.sim, ph = s && s.phase, tile = s && s.screenName ? s.screenName() : null;
+    const building = scr === 'loading' || lastScr === 'loading' || lastScr === 'arcade' || lastScr === 'title' || !!(s && s.phase !== 'play' && s.t < 31);
+    if (lastF && !document.hidden) {
+      const g = t - lastF;
+      if (g > 250) {
+        QA.stats.gaps++; QA.stats.gapMax = Math.max(QA.stats.gapMax, g);
+        const cross = lastPh === 'scroll' || ph === 'scroll' || (lastTile && tile && lastTile !== tile); // the next screen built as the dummy crosses
+        if (building) QA.stats.loadStallMax = Math.max(QA.stats.loadStallMax || 0, g);
+        else if (cross) { QA.stats.crossStallMax = Math.max(QA.stats.crossStallMax || 0, g); QA.stats.crossStalls = (QA.stats.crossStalls || 0) + 1; }
+        else if (g > 1500) add('frame-stall', 'major', 'the game loop paused ' + Math.round(g) + ' ms in play (phase ' + lastPh + ' → ' + ph + ')', { before: lastPh, after: ph }, 'stall:' + (s ? s.levelId + ':' + tile : scr));
+      }
+    }
+    lastF = t; lastScr = scr; lastPh = ph; lastTile = tile; raf(tick);
   })(0);
   window.addEventListener('error', (e) => add('page-error', 'critical', String(e.message) + ' @' + (e.filename || '').split('/').pop() + ':' + e.lineno, null, 'err:' + String(e.message).slice(0, 80)));
   window.addEventListener('unhandledrejection', (e) => { const m = String(e.reason && e.reason.message || e.reason); if (/play\(\)|interrupted|AbortError|NotAllowedError/.test(m)) return; add('page-error', 'major', 'unhandled rejection: ' + m, null, 'rej:' + m.slice(0, 60)); });

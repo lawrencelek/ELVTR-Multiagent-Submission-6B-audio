@@ -26,6 +26,7 @@ PICKS = [ROOT / "content" / "audio" / f for f in (       # Lawrence's picks from
     "picks_lawrence_2_tones.json",  # the three events he asked new tones for, set to play them (row 607)
     "picks_lawrence_3.json",        # 30 October 11:30: the chassis blip; the music rulings and fades (rows 609–618)
     "picks_lawrence_4.json",        # 30 October 12:06: the generated tracks on the ship and the three run ends (row 619)
+    "picks_lawrence_5.json",        # 30 October 19:10: after the QA run, car-notice and barks silent (row 625)
 )]
 TONES = ROOT / "content" / "audio" / "tones.json"            # generated tones (audio/tones.py)
 OUT = ROOT / "content" / "audio" / "cues.json"
@@ -72,6 +73,9 @@ PARAMS = [  # id, label, unit, default, min, max, description, purpose
     ("audio.sfx.maxVoices", "Voices", "count", 16, 1, 64, "Effects playing at once; a new one past the cap is dropped", "Combos and traffic never pile up"),
     ("audio.sfx.pitchJitter", "Pitch jitter", "ratio", 0.04, 0, 0.2, "Each effect plays at a rate up to this far from 1 (not menus)", "Repeated hits vary"),
     ("audio.sfx.lowHealthAt", "Low health", "ratio", 0.3, 0, 1, "The low-health cue sounds when the chassis falls below this share of its maximum, once until it recovers", "§6.6: a threshold crossing, not the frame"),
+    ("audio.sfx.honkMaxPerCar", "Honks per car", "count", 2, 0, 20, "A car's horn sounds this many times at most, however often it is stuck (the horn mark still shows). 0: no cap", "Lawrence, after the QA run: a stuck car honked 20 times a minute (row 623)"),
+    ("audio.sfx.spentRepeatMax", "Spent repeats", "count", 2, 0, 20, "Knock and touch-spent off one spent car: each sounds this many times at most in any audio.sfx.spentRepeatSeconds. 0: no cap", "Lawrence, after the QA run: leaning on a spent car knocked 57–74 times a minute (row 624)"),
+    ("audio.sfx.spentRepeatSeconds", "Spent window", "s", 2, 0.1, 30, "The window audio.sfx.spentRepeatMax counts in, sim seconds", "Lawrence: 2 max within a 2 second window (row 624)"),
     ("audio.synth.gain", "Synth level", "ratio", 1, 0, 2, "Prototype 8.4's live synth, through the SFX bus, for an event with no entry and no generated tone", "§6.1: the synth stays as a fallback"),
 ]
 
@@ -82,6 +86,7 @@ RULED = {  # Lawrence's rulings, 30 October 11:30: the IDs they fix (status user
     "audio.music.track.intro": 617, "audio.music.fadeInSeconds": 609, "audio.music.fadeOutSeconds": 609, "audio.music.track.card": 610,
     "audio.music.levelRotation": 611, "audio.music.pauseDuck": 612, "audio.music.screenDuck": 612, "audio.music.track.credits": 612,
     "audio.music.track.finale": 612, "audio.music.writeoffDuck": 613, "audio.sfx.cooldown.bark": 614,
+    "audio.sfx.honkMaxPerCar": 623, "audio.sfx.spentRepeatMax": 624, "audio.sfx.spentRepeatSeconds": 624,
     "audio.music.track.licensed": 619, "audio.music.track.failed": 619, "audio.music.track.noncompliant": 619, "audio.music.track.certified": 619,
 }
 

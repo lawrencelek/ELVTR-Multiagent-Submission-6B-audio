@@ -590,6 +590,24 @@
     window.addEventListener('keydown', (e) => { Snd.init(); if (app.audioGate && app.screen === 'intro' && !['a', 'b', 'ok', 'pause', 'up', 'down', 'left', 'right'].includes(MAP[e.code])) { app.audioGate = false; AUD.ui('gate'); } }, true); // a key that queues no menu press lifts the gate here
     window.addEventListener('pointerdown', (e) => { Snd.init(); if (app.audioGate && app.screen === 'intro' && e.target !== cv) { app.audioGate = false; AUD.ui('gate'); } }, true);
   }
+  // Edit 100 (P9; the QA run, rows 623–624): caps on sounds that repeat. true: this event plays nothing (logged 'gated').
+  // A car honks audio.sfx.honkMaxPerCar times at most; knock and touch-spent off one spent car play audio.sfx.spentRepeatMax
+  // times at most in any audio.sfx.spentRepeatSeconds. 0 turns a cap off
+  function audGate(e, s) {
+    if (!e.car || (e.type !== 'honk' && e.type !== 'knock' && e.type !== 'touch-spent')) return false;
+    const g = fx.audGate && fx.audGate.sim === s ? fx.audGate : (fx.audGate = { sim: s, honk: new Map(), spent: new Map() });
+    const gated = () => { AUD.log.push({ t: +(app.realT || 0).toFixed(3), kind: 'gated', id: e.type, file: null, car: e.car }); return true; };
+    if (e.type === 'honk') {
+      const n = AUD.param('audio.sfx.honkMaxPerCar', 0); if (!(n > 0)) return false;
+      const k = (g.honk.get(e.car) || 0) + 1; g.honk.set(e.car, k); return k > n ? gated() : false;
+    }
+    const n = AUD.param('audio.sfx.spentRepeatMax', 0), w = AUD.param('audio.sfx.spentRepeatSeconds', 2);
+    if (!(n > 0)) return false;
+    if (e.type === 'knock') { const c = carsOf(s).find((q) => q.id === e.car); if (!c || !c.spent) return false; }
+    const key = e.type + '|' + e.car, ts = (g.spent.get(key) || []).filter((t) => e.t - t < w - 1e-9);
+    if (ts.length >= n) { g.spent.set(key, ts); return gated(); }
+    ts.push(e.t); g.spent.set(key, ts); return false;
+  }
   // Edit 100: the fields a cue's variants test (content/audio/cues.json): a big hit, the combo cap
   function audEv(e0) {
     const x = Object.assign({}, e0);
@@ -871,7 +889,7 @@
       if (e0.type === 'purchase') fx.pendingNodes.push(e0.node); // node id, as the fleet database keys it
       if (e0.type === 'chassis' && fx.pendingNodes.length) { fx.upgradeWatch = fx.pendingNodes[fx.pendingNodes.length - 1]; fx.pendingNodes = []; }
       const e = enrich(e0);
-      Snd.hush = AUD ? AUD.event(audEv(e0)) : false; // Edit 100 (P9): a cue or a stated silence hushes the synth for this event
+      Snd.hush = AUD ? audGate(e0, s) || AUD.event(audEv(e0)) : false; // Edit 100 (P9): a cue or a stated silence hushes the synth for this event; a capped repeat is silent
       const hj = hitJuice(e, s);
       const juiced = hj.done || juice(e0, s);
       // P3: barks are not drawn. A legible bubble at ui.typeSecondary would cover the 400 × 300 field.
@@ -1552,6 +1570,13 @@
       FB.rect(x - 1, y - 1, x, y, K.white);
     }
   }
+  // Edit 100 (P9, ui.spentTick; Lawrence, row 624): a spent car carries a tick on its roof, upright, white edged in ink
+  const TICK = [[-3, -1], [-2, 0], [-1, 1], [0, 0], [1, -1], [2, -2], [3, -3], [4, -4]];
+  function tickMark(put, cx, cy) {
+    const x0 = Math.round(cx), y0 = Math.round(cy) + 1;
+    for (const [u, v] of TICK) for (let j = -1; j <= 1; j++) for (let i = -1; i <= 1; i++) put(x0 + u + i, y0 + v + j, K.roofInk);
+    for (const [u, v] of TICK) put(x0 + u, y0 + v, K.white);
+  }
   // Roof marks (4.2.2): state pip and spent slash, drawn after every sprite so nothing occludes them.
   function pip(Bf, cue, cx, cy, loc, f, side) {
     if (cue === 'committed' || cue === 'expiring') {
@@ -1572,7 +1597,8 @@
     const P = s.P, hgt = EXT(P['vehicles.' + c.cls + '.height']), ca = Math.cos(c.h), sa = Math.sin(c.h);
     const lf = c._lift || 0, loc = (u, v) => [c.x / U + (u * ca - v * sa) / U, c.y / U - hgt - lf + (u * sa + v * ca) / U];
     const simple = P['ui.cueKey.simple']; // Edit 99 (P8.4): a spent car is grey (no slash); noticed and slowing read from its lights (no chevron, no triangle)
-    if (c.spent && !simple) { const a = loc(-c.L / 2 + 6, c.W / 2 - 3), e = loc(c.L / 2 - 6, -c.W / 2 + 3); PIX.line(a[0], a[1], e[0], e[1], (x, y) => { FB.put(x, y, K.roofInk); FB.put(x, y + 1, K.roofInk); }); }
+    if (c.spent && P['ui.spentTick']) { const m = loc(0, 0); tickMark((x, y, k) => FB.put(x, y, k), m[0], m[1]); } // Edit 100 (P9): the tick replaces the slash
+    else if (c.spent && !simple) { const a = loc(-c.L / 2 + 6, c.W / 2 - 3), e = loc(c.L / 2 - 6, -c.W / 2 + 3); PIX.line(a[0], a[1], e[0], e[1], (x, y) => { FB.put(x, y, K.roofInk); FB.put(x, y + 1, K.roofInk); }); }
     const cue = s.carCue(c);
     if (simple && (cue === 'intention' || cue === 'caution')) return;
     let f = 1, side = 0;
@@ -3058,7 +3084,7 @@
       for (let x = 0; x < 10; x++) for (let y = 6; y < 19; y++) B.mix(x, y, K.brakeGlow, x > 5 ? 0.55 : x > 2 ? 0.35 : 0.18);
       if (cue === 'interrupted8') { const cy = 12 - EXT(22); pip(B, 'interrupted', 24, cy, loc(24, cy), 1, 0); }
     }
-    else if (cue === 'spent8') { const S = greyCar(PIX.car('sedan', 28, 14, EXT(22), 0, false)); PIX.blit(B, S, 16, 12); }
+    else if (cue === 'spent8') { const S = greyCar(PIX.car('sedan', 28, 14, EXT(22), 0, false)); PIX.blit(B, S, 16, 12); if (SIM8 && SIM8['ui.spentTick']) tickMark((x, y, k) => B.put(x, y, k), 16, 12 - EXT(22)); } // Edit 100: the tick
     else if (cue === 'notice' || cue === 'notice0') {
       car(false); if (cue === 'notice') { for (const yy of [8, 14]) B.rect(29, yy, 30, yy + 1, K.white); for (let x = 31; x < 40; x++) for (let y = 6; y <= 16; y++) if (Math.abs(y - 11) <= 3 + (x - 31) * 0.5) B.mix(x, y, K.beam, 0.55); }
     }
@@ -3758,5 +3784,5 @@
   window.__dummiesInput = { faceWords: () => Object.fromEntries(FACE.map((f) => [f[0], faceWord({ id: f[0], w: f[4] }, app.sim).word])), TOUCH, pad, touchLayout, touchLayoutCss, FOUR, touchEditStart, touchEditEnd, touchEditSize, editBar, saveTouchCfg }; // Edit 75–76: for the tests
   window.__dummiesUI = { carLook: () => (app.sim ? carsOf(app.sim).filter((c) => !c.ghost).map((c) => ({ id: c.id, noticed: noticed(app.sim, c), flash: flashOn(app.sim, c), spent: !!c.spent, grey: !!(c.spent && app.sim.P['proto.art.spentGrey']), brk: !!c._brk, state: c.state, v: +c.v.toFixed(1) })) : []), // Edit 99 (P8.4)
     titleItems, pauseItems, credits: () => !!app.credits, scores: () => hsRead(), scoreTables: () => hsTables().map((t) => t.key), hsLast: () => app.hsLast, saves: () => allSlots().map((v, i) => v && { n: i + 1, name: v.name, saved: v.saved, stamp: stamp(v.saved), lines: slotLines(v), progress: JSON.parse(JSON.stringify(v.progress)) }), hits: () => HITS.map((q2) => ({ x: q2.x, y: q2.y, w: q2.w, h: q2.h, tag: q2.tag })), slotActs, // Edit 88. Edit 97 (P8.2): scores, scoreTables, hsLast. Edit 98 (P8.3): saves, hits and slotActs restored (8.2 had commented them out)
-    controlItems: () => controlItems(), hud: () => app.hud && JSON.parse(JSON.stringify(Object.assign({ field: { x: FX - 6, y: FY - 6, w: FW + 12, h: FH + 12 } }, app.hud))), objective, optionItems, controlRows: () => app.sim && controlRows(app.sim), deviceOf, giftReady, gift: () => fx.gift && { node: fx.gift.node, age: app.realT - fx.gift.t0 }, pinGift: (a) => { if (fx.gift) fx.gift.pin = a; } }; // Edit 83–84: for the tests
+    controlItems: () => controlItems(), hud: () => app.hud && JSON.parse(JSON.stringify(Object.assign({ field: { x: FX - 6, y: FY - 6, w: FW + 12, h: FH + 12 } }, app.hud))), objective, optionItems, controlRows: () => app.sim && controlRows(app.sim), deviceOf, giftReady, gift: () => fx.gift && { node: fx.gift.node, age: app.realT - fx.gift.t0 }, pinGift: (a) => { if (fx.gift) fx.gift.pin = a; }, audGate: (e) => !!(AUD && app.sim && audGate(e, app.sim)) }; // Edit 83–84: for the tests. Edit 100: the sound caps
 })();

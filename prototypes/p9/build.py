@@ -31,7 +31,7 @@ sim = dict({'arcade.grades': 1, 'ui.introScreen': 1, 'ui.levelCard': 1, 'world.d
            **{k: byid[k]['default'] for k in ('arcade.grade.healthStep', 'arcade.grade.densityStep', 'arcade.grade.max', 'highscore.tableSize', 'ui.intro.loopSeconds', 'ui.splash.cycleSeconds')})
 sim.update({'proto.driver.coneSteepPass': 1, 'proto.art.beamStraight': 1, 'proto.art.brakeGlowStopped': 1, 'proto.art.spentGrey': 1, 'ui.cueKey.simple': 1, 'ui.layerEdgeFix': 1,  # Edit 99 (P8.4)
             'proto.art.noticeFlashHz': 4, 'proto.droneConeSeconds': 0, 'proto.stopCue': 0})
-sim.update({'audio.enabled': 1, 'story.coneBaitSeconds': 6, 'story.floorHold': 1, 'ui.hud.bodyCeil': 1})  # Edit 100 (P9): the audio engine on; the cone brief and the floor (row 620). Registry defaults 0
+sim.update({'audio.enabled': 1, 'story.coneBaitSeconds': 6, 'story.floorHold': 1, 'ui.hud.bodyCeil': 1, 'ui.spentTick': 1})  # Edit 100 (P9): the audio engine on; the cone brief and the floor (row 620); the spent tick (row 624). Registry defaults 0
 assert all(k in byid for k in sim), [k for k in sim if k not in byid]
 scripts += f'<script>\nwindow.DUMMIES_SIM = {json.dumps(sim)}; // Edit 97–100 (P8.2–9): registry {reg["registryVersion"]}; the flags 1 here (registry default 0)\n</script>\n'
 scripts += f'<script>\n{(p7 / "story.js").read_text(encoding="utf-8")}\n</script>\n'

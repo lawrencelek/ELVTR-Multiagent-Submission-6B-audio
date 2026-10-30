@@ -323,18 +323,8 @@
     },
     {
      "kind": "sfx",
-     "id": "bark",
-     "file": "select_1.wav"
-    },
-    {
-     "kind": "sfx",
      "id": "dropped-in",
      "file": "land.wav"
-    },
-    {
-     "kind": "sfx",
-     "id": "car-notice",
-     "file": "tone_car_notice.wav"
     }
    ]
   },
@@ -376,8 +366,8 @@
    "cues": [
     {
      "kind": "sfx",
-     "id": "denied",
-     "file": "tone_denied.wav"
+     "id": "jump.dash",
+     "file": "jump_3.wav"
     }
    ]
   },
@@ -393,6 +383,11 @@
     "duck": 1
    },
    "cues": [
+    {
+     "kind": "sfx",
+     "id": "jump-land",
+     "file": "land.wav"
+    },
     {
      "kind": "sfx",
      "id": "impact",
@@ -930,11 +925,6 @@
      "kind": "sfx",
      "id": "dropped-in",
      "file": "land.wav"
-    },
-    {
-     "kind": "sfx",
-     "id": "car-notice",
-     "file": "tone_car_notice.wav"
     }
    ]
   },
@@ -957,18 +947,8 @@
     },
     {
      "kind": "sfx",
-     "id": "knock",
-     "file": "tone_knock.wav"
-    },
-    {
-     "kind": "sfx",
-     "id": "bark",
-     "file": "bubble.wav"
-    },
-    {
-     "kind": "sfx",
-     "id": "impact",
-     "file": "tone_impact.wav"
+     "id": "near-miss",
+     "file": "tone_near_miss.wav"
     }
    ]
   },
@@ -986,8 +966,8 @@
    "cues": [
     {
      "kind": "sfx",
-     "id": "car-notice",
-     "file": "tone_car_notice.wav"
+     "id": "near-miss",
+     "file": "tone_near_miss.wav"
     },
     {
      "kind": "sfx",
@@ -1012,21 +992,6 @@
      "kind": "sfx",
      "id": "jump-land",
      "file": "land.wav"
-    },
-    {
-     "kind": "sfx",
-     "id": "car-notice",
-     "file": "tone_car_notice.wav"
-    },
-    {
-     "kind": "sfx",
-     "id": "impact.big",
-     "file": "tone_impact_big.wav"
-    },
-    {
-     "kind": "sfx",
-     "id": "car-notice",
-     "file": "tone_car_notice.wav"
     }
    ]
   },
@@ -1042,6 +1007,11 @@
     "duck": 1
    },
    "cues": [
+    {
+     "kind": "sfx",
+     "id": "impact.big",
+     "file": "tone_impact_big.wav"
+    },
     {
      "kind": "sfx",
      "id": "story-deliver",
@@ -1073,18 +1043,13 @@
    "cues": [
     {
      "kind": "sfx",
+     "id": "near-miss",
+     "file": "tone_near_miss.wav"
+    },
+    {
+     "kind": "sfx",
      "id": "gift",
      "file": "powerup_5.wav"
-    },
-    {
-     "kind": "sfx",
-     "id": "car-notice",
-     "file": "tone_car_notice.wav"
-    },
-    {
-     "kind": "sfx",
-     "id": "car-notice",
-     "file": "tone_car_notice.wav"
     }
    ]
   },
@@ -1104,16 +1069,6 @@
      "kind": "sfx",
      "id": "near-miss",
      "file": "tone_near_miss.wav"
-    },
-    {
-     "kind": "sfx",
-     "id": "bark",
-     "file": "select_1.wav"
-    },
-    {
-     "kind": "sfx",
-     "id": "car-notice",
-     "file": "tone_car_notice.wav"
     },
     {
      "kind": "sfx",
@@ -1158,6 +1113,11 @@
      "kind": "sfx",
      "id": "story-ferry",
      "file": "ufo.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "near-miss",
+     "file": "tone_near_miss.wav"
     }
    ]
   },
@@ -1250,11 +1210,6 @@
      "kind": "state",
      "id": "level",
      "file": null
-    },
-    {
-     "kind": "sfx",
-     "id": "car-notice",
-     "file": "tone_car_notice.wav"
     }
    ]
   },
@@ -1357,7 +1312,7 @@
  },
  "errors": [],
  "audio": {
-  "log": 133,
+  "log": 124,
   "settings": {
    "master": 9,
    "music": 8,

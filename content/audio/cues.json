@@ -59,7 +59,10 @@
   "audio.music.track.licensed": 8,
   "audio.music.track.failed": 9,
   "audio.music.track.noncompliant": 10,
-  "audio.music.track.certified": 7
+  "audio.music.track.certified": 7,
+  "audio.sfx.honkMaxPerCar": 2,
+  "audio.sfx.spentRepeatMax": 2,
+  "audio.sfx.spentRepeatSeconds": 2
  },
  "music": {
   "tracks": {
@@ -1802,7 +1805,7 @@
    "offsetId": "audio.sfx.offset.learn-standoff"
   },
   "car-notice": {
-   "decision": "synth",
+   "decision": "silence",
    "label": "Car notices you",
    "what": "A car's headlights start to flash: it has noticed the dummy.",
    "group": "cars",
@@ -2836,14 +2839,25 @@
    "pick": "random"
   },
   "bark": {
-   "decision": "cue",
+   "decision": "silence",
    "label": "Bark bubble",
    "what": "A car's line appears in the message strip.",
    "group": "barks",
    "freq": "burst",
    "priority": "medium",
    "shot": "play",
-   "why": "A bubble pop: a car's line appears.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: A bubble pop: a car's line appears.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "cue",
+    "files": [
+     "bubble.wav",
+     "select_1.wav"
+    ],
+    "gain": "ambient",
+    "cooldown": "bark",
+    "why": "A bubble pop: a car's line appears."
+   },
    "bus": "sfx",
    "gain": "ambient",
    "gainId": "audio.sfx.gain.ambient",
@@ -2863,14 +2877,25 @@
    ]
   },
   "bark.shout": {
-   "decision": "cue",
+   "decision": "silence",
    "label": "A shouted line",
    "what": "A car's line appears in the message strip.",
    "group": "barks",
    "freq": "burst",
    "priority": "medium",
    "shot": "play",
-   "why": "Brighter chirps lift a shouted line.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: Brighter chirps lift a shouted line.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "cue",
+    "files": [
+     "select_5.wav",
+     "select_4.wav"
+    ],
+    "gain": "ambient",
+    "cooldown": "bark",
+    "why": "Brighter chirps lift a shouted line."
+   },
    "variantOf": "bark",
    "when": {
     "style": "shout"
@@ -4300,7 +4325,8 @@
    "content/audio/picks_lawrence_2.json",
    "content/audio/picks_lawrence_2_tones.json",
    "content/audio/picks_lawrence_3.json",
-   "content/audio/picks_lawrence_4.json"
+   "content/audio/picks_lawrence_4.json",
+   "content/audio/picks_lawrence_5.json"
   ],
   "changed": {
    "ui-start": {
@@ -4641,7 +4667,7 @@
      "decision": "silence"
     },
     "now": {
-     "decision": "synth"
+     "decision": "silence"
     }
    },
    "drone-dispatch.rescue": {
@@ -4689,6 +4715,22 @@
     },
     "now": {
      "decision": "synth"
+    }
+   },
+   "bark": {
+    "was": {
+     "decision": "cue"
+    },
+    "now": {
+     "decision": "silence"
+    }
+   },
+   "bark.shout": {
+    "was": {
+     "decision": "cue"
+    },
+    "now": {
+     "decision": "silence"
     }
    }
   },
@@ -4816,7 +4858,7 @@
      "gainDb": -3
     },
     "car-notice": {
-     "decision": "synth"
+     "decision": "silence"
     },
     "drone-dispatch.rescue": {
      "gainDb": -3
@@ -4830,6 +4872,12 @@
     "unveil-lift": {
      "gainDb": -4,
      "decision": "synth"
+    },
+    "bark": {
+     "decision": "silence"
+    },
+    "bark.shout": {
+     "decision": "silence"
     }
    }
   }

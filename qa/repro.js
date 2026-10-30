@@ -62,6 +62,24 @@ function serve() {
     await wait(S); await report('stand still ' + SECS + ' s');
     for (let i = 0; i < S / 1200; i++) { await pg.keyboard.down('ArrowUp'); await wait(600); await pg.keyboard.up('ArrowUp'); await pg.keyboard.down('ArrowDown'); await wait(600); await pg.keyboard.up('ArrowDown'); }
     await report('step up and down ' + SECS + ' s');
+  } else if (SCEN === 'lean') { // every car spent; the dummy walks into the nearest one, again and again
+    const t1 = Date.now() + S, held = new Set(), K = { up: 'ArrowUp', down: 'ArrowDown', left: 'ArrowLeft', right: 'ArrowRight' };
+    while (Date.now() < t1) {
+      const d = await ev(() => { const s = window.__dummies.sim, b = s.body; for (const c of s.cars) c.spent = true; const cs = s.cars.filter((c) => !c.ghost && s.meets(c)).sort((p, q) => Math.hypot(p.x - b.x, p.y - b.y) - Math.hypot(q.x - b.x, q.y - b.y)); const c = cs[0]; return c ? [c.x - b.x, c.y - b.y] : null; });
+      const want = new Set(); if (d) { const l = Math.hypot(d[0], d[1]) || 1; if (d[1] < -0.38 * l) want.add('up'); if (d[1] > 0.38 * l) want.add('down'); if (d[0] < -0.38 * l) want.add('left'); if (d[0] > 0.38 * l) want.add('right'); }
+      for (const k of [...held]) if (!want.has(k)) { held.delete(k); await pg.keyboard.up(K[k]); }
+      for (const k of want) if (!held.has(k)) { held.add(k); await pg.keyboard.down(K[k]); }
+      await wait(250);
+    }
+    for (const k of held) await pg.keyboard.up(K[k]);
+    const g = await ev((n0) => { const A = window.__dummiesAudio, out = {}; for (const e of window.__evlog.slice(n0)) if (/^(knock|touch-spent|honk)$/.test(e.type)) { const k = e.type + ' ' + e.car; (out[k] = out[k] || { events: 0, gated: 0, t: [] }).events++; out[k].t.push(e.t); }
+      for (const l of A.log) if (l.kind === 'gated' && out[l.id + ' ' + l.car]) out[l.id + ' ' + l.car].gated++; return out; }, st0.log);
+    console.log('== per car (events, gated: silent by the cap)'); for (const [k, v] of Object.entries(g).sort((a, b) => b[1].events - a[1].events).slice(0, 10)) console.log(k, v.events, v.gated, JSON.stringify(v.t.slice(0, 12)));
+    await report('lean on spent cars ' + SECS + ' s');
+  } else if (SCEN === 'tick') { // every car on screen spent: the roof tick (ui.spentTick)
+    await ev(() => { for (const c of window.__dummies.sim.cars) c.spent = true; }); await wait(400);
+    await pg.locator('#game').screenshot({ path: path.join(__dirname, 'tick.png') });
+    const cs = await ev(() => { const S = window.__dummiesScale(); return window.__dummies.sim.cars.filter((c) => !c.ghost).map((c) => [Math.round(c.x), Math.round(c.y)]); }); console.log('cars', JSON.stringify(cs));
   } else if (SCEN === 'shot') { await pg.locator('#game').screenshot({ path: path.join(__dirname, 'repro.jpg') }); }
   else if (SCEN === 'eval') { console.log(await ev(new Function(process.argv[5] || 'return 1'))); }
   if (errs.length) console.log('page errors', errs);
