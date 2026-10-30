@@ -14,7 +14,9 @@
 
 **Try it:**
 
-- **[Prototype 9](prototypes/p9/dummies_p9.html)**, the game with sound. Press any key on the intro screen to start the sound. MUSIC, SOUND and MUTE are in the pause menu's Options.
+- **[Prototype 9](prototypes/p9/dummies_p9.html)**, the game with sound. Press any key on the intro screen to start the sound.
+  - A sound control sits top right on the intro, the mode select and the pause pages: a mute button and a volume slider. M mutes; − and + step the volume.
+  - Options has VOLUME, MUSIC, SOUND and MUTE.
 - **[The Sound Lab](prototypes/p9/sound_lab.html)**, an audition page:
   - every cue and music state, beside a screenshot of its moment;
   - swap files and tracks, change weights, play timed sequences;
@@ -34,8 +36,8 @@
 | **Evidence** | [`audio/runs/`](audio/runs/): every agent input and output, every map version, lint, a `trace.md` per run |
 | **The cue map** | [`content/audio/cues.json`](content/audio/cues.json): the agent's accepted map ([`design.json`](content/audio/design.json)) with Lawrence's picks over it ([`picks_lawrence.json`](content/audio/picks_lawrence.json), [`picks_lawrence_2.json`](content/audio/picks_lawrence_2.json), [`picks_lawrence_2_tones.json`](content/audio/picks_lawrence_2_tones.json)) |
 | **Generated tones** | [`audio/tones.py`](audio/tones.py) → `prototypes/p9/audio/tones/` (65 WAV) and [`content/audio/tones.json`](content/audio/tones.json) |
-| **Tests** | `prototypes/p9/test_p9.js`: 34/34 ([`shots/test_p9.json`](prototypes/p9/shots/test_p9.json)) |
-| **Decisions** | [`DECISIONS.md`](DECISIONS.md) rows 591–607; open D86 |
+| **Tests** | `prototypes/p9/test_p9.js`: 37/37 ([`shots/test_p9.json`](prototypes/p9/shots/test_p9.json)) |
+| **Decisions** | [`DECISIONS.md`](DECISIONS.md) rows 591–608; open D86 |
 
 ## 1 The agent
 
@@ -152,7 +154,7 @@ flowchart TD
   - Menus click, move and go back.
   - **Edge cues:** low health (a threshold), a car that notices the dummy, brake lights coming on, a part breaking, the intro loop's hit.
   - The intro waits for a first press before it plays anything.
-  - Options: MUSIC, SOUND, MUTE, saved in the browser.
+  - The sound control (row 608): mute and volume, top right, in one place on the intro, the mode select and the pause pages; larger on touch. Options: VOLUME, MUSIC, SOUND, MUTE. All saved in the browser.
 - **Safety:** a failure inside the engine never stops the game.
   - `create()` falls back to the shipped map, and every entry point is guarded.
   - Picks from the Lab or a link are cleaned before use: malformed ones are dropped.
@@ -186,14 +188,15 @@ flowchart TD
 
 ## 6 Tests
 
-`cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84` → 34/34:
+`cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84` → 37/37:
 
 - every file in the cue map loads, tones included;
 - nothing plays before the first press;
 - each screen of the tour plays its state's track: 14 checks, Story tiles 1 and 2 included;
 - every catalogued event and variant does what the map says (107: cue, tone, silence or base);
 - START, cursor moves, the Arcade run's track, the pause duck;
-- Options shows MUSIC, SOUND and MUTE, and saves them;
+- Options shows VOLUME, MUSIC, SOUND and MUTE, and saves them;
+- the sound control sits in one place on three screens, mutes, sets the volume, and lifts the intro's gate without START; M and − work;
 - the game takes the Lab's picks from `#audio=`; malformed picks are dropped and the game still starts;
 - no page or engine errors;
 - Prototype 8.4 draws the same strings (barks and live counts aside), and its frozen file is unchanged.

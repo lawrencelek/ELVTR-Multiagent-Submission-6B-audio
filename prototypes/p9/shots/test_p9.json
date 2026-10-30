@@ -1,6 +1,6 @@
 {
- "passed": 34,
- "total": 34,
+ "passed": 37,
+ "total": 37,
  "results": [
   {
    "name": "every file in the cue map loads (146)",
@@ -133,14 +133,29 @@
    "detail": "duck 0.35"
   },
   {
-   "name": "Options shows MUSIC, SOUND and MUTE",
+   "name": "Options shows VOLUME, MUSIC, SOUND and MUTE",
    "pass": true,
-   "detail": "Music: 8 / 10 · Sound: 8 / 10 · Mute: off"
+   "detail": "Volume: 10 / 10 · Music: 8 / 10 · Sound: 8 / 10 · Mute: off"
   },
   {
-   "name": "MUSIC − twice is saved (dummies.p9.audio)",
+   "name": "VOLUME − twice is saved (dummies.p9.audio)",
    "pass": true,
-   "detail": "{\"music\":6,\"sound\":8,\"mute\":false}"
+   "detail": "{\"master\":8,\"music\":8,\"sound\":8,\"mute\":false}"
+  },
+  {
+   "name": "the pause page's sound control mutes, and its slider sets the volume and unmutes",
+   "pass": true,
+   "detail": "[[true,true,true],[false,5]]"
+  },
+  {
+   "name": "the sound control sits in one place on the intro, the mode select and the pause page; on the intro it lifts the gate without START",
+   "pass": true,
+   "detail": "[[1040,8,224],[1040,8,224],[1040,8,224,36],[\"intro\",false]]"
+  },
+  {
+   "name": "M toggles mute; − steps the volume down one and unmutes",
+   "pass": true,
+   "detail": "[{\"master\":5,\"music\":8,\"sound\":8,\"mute\":true},{\"master\":5,\"music\":8,\"sound\":8,\"mute\":false},{\"master\":4,\"music\":8,\"sound\":8,\"mute\":false}]"
   },
   {
    "name": "the game takes the Sound Lab's picks from #audio= and keeps them",

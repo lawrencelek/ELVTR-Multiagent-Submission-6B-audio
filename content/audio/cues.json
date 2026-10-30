@@ -51,7 +51,8 @@
   "audio.sfx.offset.splash": -3.5,
   "audio.sfx.offset.learn-standoff": -3.0,
   "audio.sfx.offset.drone-dispatch.rescue": -3.0,
-  "audio.sfx.offset.unveil-lift": -4.0
+  "audio.sfx.offset.unveil-lift": -4.0,
+  "audio.settings.master": 10
  },
  "music": {
   "tracks": {

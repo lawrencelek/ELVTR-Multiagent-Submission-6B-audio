@@ -44,6 +44,7 @@ PARAMS = [  # id, label, unit, default, min, max, description, purpose
     ("audio.music.volume", "Music bus", "ratio", 0.5, 0, 1, "The music bus at MUSIC 10", "Music under the effects"),
     ("audio.sfx.volume", "SFX bus", "ratio", 0.85, 0, 1, "The effects bus at SOUND 10", "Bodies, machines and story beats"),
     ("audio.ui.volume", "UI bus", "ratio", 0.7, 0, 1, "The menu bus at SOUND 10", "Menus a step under play"),
+    ("audio.settings.master", "VOLUME default", "steps", 10, 0, 10, "The sound control's slider, out of 10, over every bus (intro, mode select, pause; Options › Volume); saved as dummies.p9.audio", "Lawrence: a sound on/off button and a volume slider (row 608)"),
     ("audio.settings.music", "MUSIC default", "steps", 8, 0, 10, "Options › Music, out of 10, until the player sets it (saved as dummies.p9.audio)", "Replaces the unsaved Sound on/off"),
     ("audio.settings.sound", "SOUND default", "steps", 8, 0, 10, "Options › Sound, out of 10, for the SFX and UI buses", "Replaces the unsaved Sound on/off"),
     ("audio.music.crossfadeSeconds", "Crossfade", "s", 1.5, 0.05, 6, "Seconds for one track to fade into the next", "No hard cuts between screens"),

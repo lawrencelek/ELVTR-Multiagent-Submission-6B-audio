@@ -84,7 +84,7 @@
     const local = root.location && root.location.protocol === 'file:';
     const saved = store.get(SETTINGS_KEY) || {};
     const num = (v, d) => (typeof v === 'number' && isFinite(v) ? Math.max(0, Math.min(10, Math.round(v))) : d);
-    const settings = { music: num(saved.music, P('audio.settings.music', 8)), sound: num(saved.sound, P('audio.settings.sound', 8)), mute: saved.mute === true };
+    const settings = { master: num(saved.master, P('audio.settings.master', 10)), music: num(saved.music, P('audio.settings.music', 8)), sound: num(saved.sound, P('audio.settings.sound', 8)), mute: saved.mute === true };
     const A = {
       ctx: null, unlocked: false, log: [], files: CUES.files, cues: CUES, settings, local,
       buffers: new Map(), pending: new Map(), failed: new Set(), last: new Map(), lastFile: new Map(), cyc: new Map(), voices: [], errors: [],
@@ -102,11 +102,12 @@
       A.bus.synth = g(A.bus.sfx); // Prototype 8.4's live synth, for an event with no entry and no tone
       applyVolumes();
     }
-    function busLevel(name) {
+    function busLevel(name) { // VOLUME (the sound control) × MUSIC or SOUND (Options) × the bus's level
       if (settings.mute) return 0;
-      if (name === 'music') return P('audio.music.volume', 0.5) * settings.music / 10;
-      if (name === 'ui') return P('audio.ui.volume', 0.7) * settings.sound / 10;
-      return P('audio.sfx.volume', 0.85) * settings.sound / 10;
+      const m = settings.master / 10;
+      if (name === 'music') return m * P('audio.music.volume', 0.5) * settings.music / 10;
+      if (name === 'ui') return m * P('audio.ui.volume', 0.7) * settings.sound / 10;
+      return m * P('audio.sfx.volume', 0.85) * settings.sound / 10;
     }
     function applyVolumes() {
       if (!A.bus) return;
@@ -114,7 +115,7 @@
       A.bus.music.gain.value = 1; // the music's level is set per player each frame (crossfade × duck × bus)
       A.bus.synth.gain.value = P('audio.synth.gain', 1);
     }
-    function saveSettings() { store.set(SETTINGS_KEY, { music: settings.music, sound: settings.sound, mute: settings.mute }); applyVolumes(); }
+    function saveSettings() { store.set(SETTINGS_KEY, { master: settings.master, music: settings.music, sound: settings.sound, mute: settings.mute }); applyVolumes(); for (const p of A.music.players) if (p) output(p, p.vol * A.music.duck); }
 
     // ---------- unlock: Snd.init calls this inside the key, pointer or touch handler. Audio counts as unlocked only once the
     // context runs: a press the browser does not count as a gesture (Escape, a gamepad) leaves it waiting for the next one
@@ -307,9 +308,10 @@
     function nudge(which, d) { settings[which] = Math.max(0, Math.min(10, Math.round(settings[which] + d))); saveSettings(); }
     function cycle(which) { settings[which] = settings[which] >= 10 ? 0 : settings[which] + 1; saveSettings(); }
     function toggleMute() { settings.mute = !settings.mute; saveSettings(); }
+    function setVolume(v) { settings.master = Math.max(0, Math.min(10, Math.round(v))); if (settings.master > 0) settings.mute = false; saveSettings(); } // moving the slider unmutes
     function setPicks(picks) { const p = sanitize(picks, root.DUMMIES_CUES); store.set(LAB_KEY, p); CUES = merge(root.DUMMIES_CUES, p); A.cues = CUES; A.files = CUES.files; preload(); A.music.state = null; }
 
-    Object.assign(A, { param: (id, d) => P(id, d), unlock: guard(unlock), event: guard(event, false), ui: guard(ui, false), frame: guard(frame), nudge, cycle, toggleMute, setPicks: guard(setPicks), applyVolumes, musicState, resolve, running: () => !!(A.ctx && A.ctx.state === 'running'), synthOut: () => (A.bus ? A.bus.synth : null) });
+    Object.assign(A, { param: (id, d) => P(id, d), unlock: guard(unlock), event: guard(event, false), ui: guard(ui, false), frame: guard(frame), nudge, cycle, toggleMute, setVolume, setPicks: guard(setPicks), applyVolumes, musicState, resolve, running: () => !!(A.ctx && A.ctx.state === 'running'), synthOut: () => (A.bus ? A.bus.synth : null) });
     Object.defineProperty(A, 'state', { get: () => A.music.state }); Object.defineProperty(A, 'track', { get: () => A.music.track });
     root.__dummiesAudio = A;
     return A;

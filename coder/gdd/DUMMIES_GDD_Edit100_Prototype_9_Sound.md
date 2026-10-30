@@ -1,6 +1,6 @@
 # DUMMIES GDD — Edit 100 · Prototype 9 · Sound
 
-**30 October 2026 · Lawrence Lek** · Build `prototypes/p9/dummies_p9.html` · Registry `edit100-2026-10-30` · Cue map `content/audio/cues.json`, run `20261030-014423-cues` (10/10, confirmed) · Tests 34/34
+**30 October 2026 · Lawrence Lek** · Build `prototypes/p9/dummies_p9.html` · Registry `edit100-2026-10-30` · Cue map `content/audio/cues.json`, run `20261030-014423-cues` (10/10, confirmed) · Tests 37/37
 
 ## 0 Request
 
@@ -36,7 +36,8 @@
 - **Crossfade:** two music players fade over `audio.music.crossfadeSeconds`. Hidden tabs suspend audio.
 - **Files:** WAV and OGG beside the page in `prototypes/p9/audio/`, loaded by URL. Each track has an MP3 copy for browsers without Ogg.
 - **On `file://`:** `fetch` fails, so effects and music fall back to `<audio>` elements.
-- **Options:** Music 0–10, Sound 0–10, Mute. Left and right adjust; OK steps. Saved as `dummies.p9.audio`. Defaults `audio.settings.music`, `audio.settings.sound`.
+- **Sound control (row 608):** a mute button and a volume slider (`audio.settings.master`), top right, in one place on the intro, the mode select and the pause pages. A tap on the speaker mutes; a tap or a drag on the slider sets the volume and unmutes. M mutes; − and + step the volume. Larger on touch. On the intro it lifts the audio gate without START.
+- **Options:** Volume 0–10, Music 0–10, Sound 0–10, Mute. Left and right adjust; OK steps. Saved as `dummies.p9.audio`. Defaults `audio.settings.master`, `audio.settings.music`, `audio.settings.sound`.
 - **Sound Lab picks:** `prototypes/p9/sound_lab.html` saves them as `dummies.p9.audio.lab`. The game merges them at load. `#audio=<base64 JSON>` carries them across origins.
 - **Edge cues** (§6.6 of the handover): low health crosses `audio.sfx.lowHealthAt`. A car starts flashing (noticed). Brake lights come on. A part breaks. The intro loop's hit.
 - **Credits:** two lines, the pack's credits: "Music by ansimuz", "Sound effects by Chequered Ink". Proposed widening of Style Guide C1 (D86, open).
@@ -303,8 +304,11 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 - PASS · a cursor move plays ui-move
 - PASS · Arcade run 1 plays the rotation's first track
 - PASS · pause ducks the music to audio.music.pauseDuck (0.35)
-- PASS · Options shows MUSIC, SOUND and MUTE
-- PASS · MUSIC − twice is saved (dummies.p9.audio)
+- PASS · Options shows VOLUME, MUSIC, SOUND and MUTE
+- PASS · VOLUME − twice is saved (dummies.p9.audio)
+- PASS · the pause page's sound control mutes, and its slider sets the volume and unmutes
+- PASS · the sound control sits in one place on the intro, the mode select and the pause page; on the intro it lifts the gate without START
+- PASS · M toggles mute; − steps the volume down one and unmutes
 - PASS · the game takes the Sound Lab's picks from #audio= and keeps them
 - PASS · malformed picks are dropped and the game starts; an emptied pool is silent
 - PASS · no page errors in the hook tests
@@ -316,7 +320,7 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 
 - **SFX:** 100 mono WAV, 44.1 kHz. 0.10–3.29 s. Level -29.0 to -17.6 dB (LUFS, or RMS under 0.4 s).
 - **Music:** six stereo OGG, 48 kHz, 66–123 s, -16.7 to -9.1 LUFS.
-- **Build:** `dummies_p9.html` 1,393,952 bytes. Audio beside it: 31.4 MB.
+- **Build:** `dummies_p9.html` 1,399,543 bytes. Audio beside it: 31.4 MB.
 
 ## 8 Registry (edit100)
 
@@ -334,6 +338,7 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 | `audio.music.track.intro` | 1 | track | Track on the intro screen |
 | `audio.music.track.menu` | 2 | track | Track on every menu until the level starts |
 | `audio.music.volume` | 0.5 | ratio | The music bus at MUSIC 10 |
+| `audio.settings.master` | 10 | steps | The sound control's slider, out of 10, over every bus (intro, mode select, pause; Options › Volume); saved as dummies.p9.audio |
 | `audio.settings.music` | 8 | steps | Options › Music, out of 10, until the player sets it (saved as dummies.p9.audio) |
 | `audio.settings.sound` | 8 | steps | Options › Sound, out of 10, for the SFX and UI buses |
 | `audio.sfx.cooldown.action` | 0.06 | s | Seconds between two plays of one cue in class 'action': one player action |

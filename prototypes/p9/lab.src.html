@@ -226,6 +226,7 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
     <div class="brand"><b>DUMMIES</b><span>Sound Lab · P9</span></div>
     <div class="now" id="now" aria-live="polite"><i></i><span>Press any play button. Audio starts on your first click.</span></div>
     <div class="mix">
+      <label class="fader" for="vol-master">VOLUME <input id="vol-master" type="range" min="0" max="10" step="1"><output id="vol-master-o"></output></label>
       <label class="fader" for="vol-music">MUSIC <input id="vol-music" type="range" min="0" max="10" step="1"><output id="vol-music-o"></output></label>
       <label class="fader" for="vol-sound">SOUND <input id="vol-sound" type="range" min="0" max="10" step="1"><output id="vol-sound-o"></output></label>
       <button class="btn quiet" id="btn-mute" type="button" aria-pressed="false">Mute</button>
@@ -375,7 +376,7 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
   }
   const stored = store.get(KEY);
   let picks = norm(stored);
-  const vs = Object.assign({ music: L.params['audio.settings.music'] ? L.params['audio.settings.music'].value : 8, sound: L.params['audio.settings.sound'] ? L.params['audio.settings.sound'].value : 8, mute: false }, store.get(VKEY) || {});
+  const vs = Object.assign({ master: L.params['audio.settings.master'] ? L.params['audio.settings.master'].value : 10, music: L.params['audio.settings.music'] ? L.params['audio.settings.music'].value : 8, sound: L.params['audio.settings.sound'] ? L.params['audio.settings.sound'].value : 8, mute: false }, store.get(VKEY) || {});
   function clean() {
     for (const [id, p] of Object.entries(picks.sfx)) { if (!p || !Object.keys(p).length) delete picks.sfx[id]; }
     for (const [k, v] of Object.entries(picks.music.states)) if (v === L.music.states[k]) delete picks.music.states[k];
@@ -385,7 +386,7 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
   function empty() { return !Object.keys(picks.sfx).length && !Object.keys(picks.music.states).length && !picks.music.rotation && !Object.keys(picks.params).length; }
   function exportable() { clean(); const o = {}; if (Object.keys(picks.sfx).length) o.sfx = picks.sfx; const m = {}; if (Object.keys(picks.music.states).length) m.states = picks.music.states; if (picks.music.rotation) m.rotation = picks.music.rotation; if (Object.keys(m).length) o.music = m; if (Object.keys(picks.params).length) o.params = picks.params; return o; }
   function save() { clean(); store.set(KEY, empty() ? null : exportable()); badge(); gameLink(); }
-  function saveVs() { store.set(VKEY, { music: vs.music, sound: vs.sound, mute: vs.mute }); applyVols(); }
+  function saveVs() { store.set(VKEY, { master: vs.master, music: vs.music, sound: vs.sound, mute: vs.mute }); applyVols(); }
   function b64(o) { const s = JSON.stringify(o); return btoa(unescape(encodeURIComponent(s))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
   function gameLink() { const a = $('#btn-game'); a.href = 'dummies_p9.html' + (empty() ? '' : '#audio=' + b64(exportable())); }
   function changedCount() { clean(); return Object.keys(picks.sfx).length + Object.keys(picks.music.states).length + (picks.music.rotation ? 1 : 0) + Object.keys(picks.params).length; }
@@ -428,7 +429,7 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
     if (AC && AC.state === 'suspended') AC.resume();
     return AC;
   }
-  function busLevel(b) { if (vs.mute) return 0; if (b === 'music') return param('audio.music.volume') * vs.music / 10; if (b === 'ui') return param('audio.ui.volume') * vs.sound / 10; return param('audio.sfx.volume') * vs.sound / 10; }
+  function busLevel(b) { if (vs.mute) return 0; const m = vs.master / 10; if (b === 'music') return m * param('audio.music.volume') * vs.music / 10; if (b === 'ui') return m * param('audio.ui.volume') * vs.sound / 10; return m * param('audio.sfx.volume') * vs.sound / 10; }
   function applyVols() { if (BUS) { BUS.sfx.gain.value = busLevel('sfx'); BUS.ui.gain.value = busLevel('ui'); BUS.synth.gain.value = param('audio.synth.gain'); } for (const p of MP) if (p) out(p); }
   const sfxUrl = (f) => 'audio/' + ((L.files[f] && L.files[f].dir) || 'sfx') + '/' + encodeURIComponent(f);
   function buf(f) {
@@ -745,7 +746,7 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
   $('#fx-changed').addEventListener('click', (e) => { fx.changed = !fx.changed; e.currentTarget.setAttribute('aria-pressed', fx.changed); drawEffects(); });
   $('#pick-search').addEventListener('input', drawPicker);
   for (const d of $$('dialog')) d.addEventListener('click', (e) => { if (e.target === d) d.close(); });
-  for (const [k, el] of [['music', $('#vol-music')], ['sound', $('#vol-sound')]]) { el.value = vs[k]; $('#vol-' + k + '-o').textContent = vs[k]; el.addEventListener('input', () => { vs[k] = +el.value; $('#vol-' + k + '-o').textContent = el.value; saveVs(); }); }
+  for (const [k, el] of [['master', $('#vol-master')], ['music', $('#vol-music')], ['sound', $('#vol-sound')]]) { el.value = vs[k]; $('#vol-' + k + '-o').textContent = vs[k]; el.addEventListener('input', () => { vs[k] = +el.value; $('#vol-' + k + '-o').textContent = el.value; saveVs(); }); }
   const mb = $('#btn-mute'); const muteUi = () => { mb.setAttribute('aria-pressed', vs.mute); mb.classList.toggle('on', vs.mute); mb.textContent = vs.mute ? 'Muted' : 'Mute'; }; muteUi();
   mb.addEventListener('click', () => { vs.mute = !vs.mute; saveVs(); muteUi(); });
   const bb = $('#btn-bed'); bb.addEventListener('click', () => { bed = !bed; bb.setAttribute('aria-pressed', bed); bb.classList.toggle('on', bed); if (bed) playTrack(rotation()[0]); else stopMusic(); });

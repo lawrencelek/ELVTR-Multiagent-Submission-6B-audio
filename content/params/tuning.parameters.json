@@ -12372,6 +12372,28 @@
    },
    "description": "Fine gain on sfx.unveil-lift, after its gain class",
    "purpose": "Lawrence's pick in the Sound Lab"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "source": "Edit 100 (P9): sound design; values proposed by the sound designer agent and the integrator; Lawrence to confirm",
+   "status": "proposed",
+   "applyAt": "next-run",
+   "id": "audio.settings.master",
+   "group": "Audio",
+   "owner": "Audio",
+   "label": "VOLUME default",
+   "unit": "steps",
+   "type": "number",
+   "default": 10,
+   "validation": {
+    "min": 0,
+    "max": 10
+   },
+   "description": "The sound control's slider, out of 10, over every bus (intro, mode select, pause; Options › Volume); saved as dummies.p9.audio",
+   "purpose": "Lawrence: a sound on/off button and a volume slider (row 608)"
   }
  ],
  "tables": {

@@ -889,13 +889,13 @@
     },
     {
      "kind": "sfx",
-     "id": "impact.big",
-     "file": "tone_impact_big.wav"
+     "id": "car-notice",
+     "file": "tone_car_notice.wav"
     },
     {
      "kind": "sfx",
-     "id": "car-notice",
-     "file": "tone_car_notice.wav"
+     "id": "impact.big",
+     "file": "tone_impact_big.wav"
     }
    ]
   },
@@ -940,18 +940,18 @@
    "cues": [
     {
      "kind": "sfx",
+     "id": "car-notice",
+     "file": "tone_car_notice.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "car-notice",
+     "file": "tone_car_notice.wav"
+    },
+    {
+     "kind": "sfx",
      "id": "gift",
      "file": "powerup_5.wav"
-    },
-    {
-     "kind": "sfx",
-     "id": "car-notice",
-     "file": "tone_car_notice.wav"
-    },
-    {
-     "kind": "sfx",
-     "id": "car-notice",
-     "file": "tone_car_notice.wav"
     }
    ]
   },
@@ -1067,16 +1067,6 @@
     },
     {
      "kind": "sfx",
-     "id": "near-miss",
-     "file": "tone_near_miss.wav"
-    },
-    {
-     "kind": "sfx",
-     "id": "bark",
-     "file": "select_1.wav"
-    },
-    {
-     "kind": "sfx",
      "id": "screen",
      "file": "tone_screen.wav"
     },
@@ -1112,6 +1102,11 @@
      "kind": "ui",
      "id": "ui-ok",
      "file": "confirm_4.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "car-notice",
+     "file": "tone_car_notice.wav"
     },
     {
      "kind": "sfx",
@@ -1204,8 +1199,9 @@
  },
  "errors": [],
  "audio": {
-  "log": 120,
+  "log": 119,
   "settings": {
+   "master": 9,
    "music": 8,
    "sound": 8,
    "mute": false

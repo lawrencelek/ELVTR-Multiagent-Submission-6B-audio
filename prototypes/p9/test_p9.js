@@ -94,10 +94,31 @@ const get = (url) => new Promise((res) => http.get(url, (r) => { r.resume(); res
   for (let i = 0; i < oi; i++) { await pg.keyboard.press('ArrowDown'); await pg.waitForTimeout(80); }
   await pg.keyboard.press('Space'); await pg.waitForTimeout(300);
   const items = await pg.evaluate(() => window.__dummiesUI.optionItems());
-  ok('Options shows MUSIC, SOUND and MUTE', /^Music: \d+ \/ 10$/.test(items[0]) && /^Sound: \d+ \/ 10$/.test(items[1]) && /^Mute: (on|off)$/.test(items[2]), items.slice(0, 3).join(' · '));
+  ok('Options shows VOLUME, MUSIC, SOUND and MUTE', /^Volume: \d+ \/ 10$/.test(items[0]) && /^Music: \d+ \/ 10$/.test(items[1]) && /^Sound: \d+ \/ 10$/.test(items[2]) && /^Mute: (on|off)$/.test(items[3]), items.slice(0, 4).join(' · '));
   await pg.keyboard.press('ArrowLeft'); await pg.waitForTimeout(150); await pg.keyboard.press('ArrowLeft'); await pg.waitForTimeout(150);
   const saved = await pg.evaluate(() => JSON.parse(localStorage.getItem('dummies.p9.audio') || 'null'));
-  ok('MUSIC − twice is saved (dummies.p9.audio)', saved && saved.music === CUES.params['audio.settings.music'] - 2, JSON.stringify(saved));
+  ok('VOLUME − twice is saved (dummies.p9.audio)', saved && saved.master === CUES.params['audio.settings.master'] - 2 && saved.music === CUES.params['audio.settings.music'], JSON.stringify(saved));
+  // the sound control (row 608): top right on the intro, the mode select and the pause pages, in the same place
+  const ctl = () => pg.evaluate(() => { const c = window.__dummies.sndCtl, S = window.__dummiesScale(), r = document.getElementById('game').getBoundingClientRect(), d = window.devicePixelRatio || 1; if (!c) return null; const f = (x, y) => [r.left + (x * S.scale + S.ox) / d, r.top + (y * S.scale + S.oy) / d]; return { ref: [c.x, c.y, c.w, c.h], icon: f(c.x + 20, c.y + c.h / 2), mid: f((c.sx0 + c.sx1) / 2, c.y + c.h / 2) }; });
+  const onPause = await ctl();
+  await pg.mouse.click(onPause.icon[0], onPause.icon[1]); await pg.waitForTimeout(150);
+  const m1 = await pg.evaluate(() => [window.__dummiesAudio.settings.mute, window.__dummies.paused, JSON.parse(localStorage.getItem('dummies.p9.audio')).mute]);
+  await pg.mouse.click(onPause.mid[0], onPause.mid[1]); await pg.waitForTimeout(150);
+  const m2 = await pg.evaluate(() => [window.__dummiesAudio.settings.mute, window.__dummiesAudio.settings.master]);
+  ok('the pause page\'s sound control mutes, and its slider sets the volume and unmutes', m1[0] === true && m1[1] === true && m1[2] === true && m2[0] === false && m2[1] === 5, JSON.stringify([m1, m2]));
+  const pgI = await ctx.newPage(); await pgI.goto(base + 'dummies_p9.html'); await pgI.waitForTimeout(900);
+  const onIntro = await pgI.evaluate(() => window.__dummies.sndCtl && [window.__dummies.sndCtl.x, window.__dummies.sndCtl.y, window.__dummies.sndCtl.w]);
+  const iv = await pgI.evaluate(() => { const c = window.__dummies.sndCtl, S = window.__dummiesScale(), r = document.getElementById('game').getBoundingClientRect(), d = window.devicePixelRatio || 1; return [r.left + (c.x * 1 + 20) * S.scale / d + S.ox / d, r.top + (c.y + c.h / 2) * S.scale / d + S.oy / d]; });
+  await pgI.mouse.click(iv[0], iv[1]); await pgI.waitForTimeout(200);
+  const gateUp = await pgI.evaluate(() => [window.__dummies.screen, window.__dummies.audioGate]);
+  await pgI.keyboard.press('Space'); await pgI.waitForTimeout(500);
+  const onTitle = await pgI.evaluate(() => window.__dummies.sndCtl && [window.__dummies.sndCtl.x, window.__dummies.sndCtl.y, window.__dummies.sndCtl.w]);
+  ok('the sound control sits in one place on the intro, the mode select and the pause page; on the intro it lifts the gate without START', onIntro && onTitle && onIntro.join() === onTitle.join() && onIntro.join() === onPause.ref.slice(0, 3).join() && gateUp[0] === 'intro' && gateUp[1] === false, JSON.stringify([onIntro, onTitle, onPause.ref, gateUp]));
+  const sv = () => pgI.evaluate(() => Object.assign({}, window.__dummiesAudio.settings));
+  const k0 = await sv(); await pgI.keyboard.press('KeyM'); await pgI.waitForTimeout(100); const k1 = await sv();
+  await pgI.keyboard.press('Minus'); await pgI.waitForTimeout(100); const k2 = await sv();
+  ok('M toggles mute; − steps the volume down one and unmutes', k1.mute === !k0.mute && k2.master === Math.max(0, k1.master - 1) && (k2.master === 0 || !k2.mute), JSON.stringify([k0, k1, k2]));
+  await pgI.close();
   // the Sound Lab's picks, by URL
   const picks = { sfx: { lunge: { files: ['boost.wav'] }, impact: { decision: 'silence' } }, music: { states: { menu: 5 }, rotation: [6, 5] } };
   const b64 = Buffer.from(JSON.stringify(picks)).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
