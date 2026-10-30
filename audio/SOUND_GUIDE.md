@@ -83,7 +83,7 @@ Severity: blocking −4, major −2, minor −1. Each broken rule deducts once p
 
 | ID | Sev. | Rule | Test |
 |---|---|---|---|
-| M1 | blocking | The request's three spans hold | Intro not Track 1; any menu state not Track 2; levels not Tracks 3–6 |
+| M1 | blocking | The request's three spans hold | Intro not Track 1; any menu state not Track 2; levels not Tracks 3–6. The level card may play the level's track (Lawrence, row 610) |
 | M2 | major | Levels alternate | Rotation not four distinct tracks from 3–6; neighbouring Story tiles on one track; Arcade not rotating per run |
 | M3 | minor | Open states are stated | Pause, credits, ending or finale with no state and reason |
 
@@ -95,4 +95,4 @@ Severity: blocking −4, major −2, minor −1. Each broken rule deducts once p
 
 ## 4. Precedence
 
-The request (§1) beats this guide. A row Lawrence decided in `DECISIONS.md` beats both: his Sound Lab picks (row 603) are placed over the accepted map, as written.
+The request (§1) beats this guide. A row Lawrence decided in `DECISIONS.md` beats both: his Sound Lab picks (rows 603, 607) and his rulings (rows 609–618: the card starts the level's track, the start tile sets it, the ducks, the fades, Credits on Track 1) are placed over the accepted map, as written.

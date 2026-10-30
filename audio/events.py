@@ -166,11 +166,13 @@ E = {
 # Music states: what the game shows → the state the engine plays (prototypes/p9/audio.js, musicState)
 MUSIC = [
     ("intro", "Intro screen", "DUMMIES, the front-on animation, START (after the first press).", "app.screen 'intro'", "intro", "Edit 98"),
-    ("menu", "Menus", "Mode select, save slots, name entry, Story splash, map, district select, high scores, loading.", "app.screen title, saves, splash, storymap, arcade, scores, loading", "title", "Edit 81, 88, 97, 98"),
+    ("menu", "Menus", "Mode select, save slots, name entry, Story splash, map, district select, high scores. Loading holds the track playing.", "app.screen title, saves, splash, storymap, arcade, scores", "title", "Edit 81, 88, 97, 98"),
     ("credits", "Credits card", "The Credits card, from the title or the ending.", "app.credits", "credits", "Edit 95"),
-    ("card", "Level card", "The level card before the drone drop, at a district's start.", "phase 'brief', no level track yet", "card", "Edit 98"),
-    ("level", "Levels", "Play, the drone drop, write-off holds, flips, ferries, the gift screen, reports, the workshop.", "app.screen 'game', phases play … shop", "play", "Edit 81, 98"),
-    ("pause", "Pause", "Pause, options, controls: the level track, ducked.", "app.paused", "pause", "Edit 86"),
+    ("card", "Level card", "Every level card: a district's start, and each new tile after the ferry. It starts the level's track (Lawrence, Q2).", "phase 'brief'", "card", "Edit 98"),
+    ("level", "Levels", "Play, the drone drop, flips, ferries. The track holds from its card to the next card (Lawrence, Q3).", "app.screen 'game', phases play, drop, scroll, hitstop", "play", "Edit 81, 98"),
+    ("screens", "Gift, report, workshop", "The gift screen, the level report and the workshop: the level track at 70% (Lawrence, Q4).", "phases gift, report, shop", "report", "Edit 82, 84"),
+    ("writeoff", "Write-off", "The write-off hold: the level track at 50% (Lawrence, Q5).", "phase 'writeoff'", "writeoff", "Edit 26"),
+    ("pause", "Pause", "Pause, options, controls: the level track at 35%.", "app.paused", "pause", "Edit 86"),
     ("ending", "Run ends", "Licensed, Failed test, Non-compliant.", "phase 'ending' (not Certified)", "ending", "Edit 97"),
     ("finale", "Finale", "The unveiling, the voyage, CERTIFIED.", "phase unveil, voyage; ending Certified", "plaque", "Edit 94"),
 ]

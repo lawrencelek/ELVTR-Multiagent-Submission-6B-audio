@@ -9,14 +9,15 @@
 - **Evidence first, no model:** an inventory of the pack (length, loudness, peak) and a catalogue of the 94 places the code can make a sound.
 - **The loop:** a **designer** proposes the cue map. **Lint** measures what a script can. A **reviewer** scores the map out of 10 against a sound guide. A **refiner** fixes what the REASON names. A fresh reviewer must confirm 10/10.
 - **After the loop:** an **integrator** writes the cue map the build plays, and its registry IDs.
-- **Then Lawrence chose:** his picks from the Sound Lab sit over the agent's map, as his decision (rows 603, 607).
+- **Then Lawrence chose:** his picks from the Sound Lab sit over the agent's map, as his decision (rows 603, 607). His rulings set the music's rules and fades (rows 609–618).
 - **Generated tones:** every sound Prototype 8.4 synthesised is rendered to a WAV file, so a `synth` cue plays in the same mix as the pack (row 604).
 
 **Try it:**
 
 - **[Prototype 9](prototypes/p9/dummies_p9.html)**, the game with sound. Press any key on the intro screen to start the sound.
   - A sound control sits top right on the intro, the mode select and the pause pages: a mute button and a volume slider. M mutes; − and + step the volume.
-  - Options has VOLUME, MUSIC, SOUND and MUTE.
+  - Its caret (▾) opens a dropdown with separate MUSIC and SFX sliders.
+  - Options has VOLUME, MUSIC, SFX and MUTE.
 - **[The Sound Lab](prototypes/p9/sound_lab.html)**, an audition page:
   - every cue and music state, beside a screenshot of its moment;
   - swap files and tracks, change weights, play timed sequences;
@@ -32,15 +33,15 @@
 | Deliverable | Where |
 |---|---|
 | **Documentation:** which SFX (WAV) and MUSIC (OGG) cues play where | [GDD Edit 100](coder/gdd/DUMMIES_GDD_Edit100_Prototype_9_Sound.md): §2 MUSIC, §3 SFX (every cue, its trigger, files, bus, volume ID, cooldown ID) |
-| **Gameplay points with screenshots** | [`prototypes/p9/SOUND_TOUR.md`](prototypes/p9/SOUND_TOUR.md): 44 steps, 28 screenshots, each cue heard and its alternates |
+| **Gameplay points with screenshots** | [`prototypes/p9/SOUND_TOUR.md`](prototypes/p9/SOUND_TOUR.md): 45 steps, 29 screenshots, each cue heard and its alternates |
 | **The audition page** | [`prototypes/p9/sound_lab.html`](prototypes/p9/sound_lab.html) (built by `make_lab.py`) |
 | **The new build** | [`prototypes/p9/dummies_p9.html`](prototypes/p9/dummies_p9.html) with `prototypes/p9/audio/` (built by `build.py`) |
 | **The agent** | [`audio/`](audio/): `inventory.py`, `events.py`, `loop.py`, `lint.py`, `llm.py`, `integrate.py`, `agents/`, [`SOUND_GUIDE.md`](audio/SOUND_GUIDE.md) |
 | **Evidence** | [`audio/runs/`](audio/runs/): every agent input and output, every map version, lint, a `trace.md` per run |
-| **The cue map** | [`content/audio/cues.json`](content/audio/cues.json): the agent's accepted map ([`design.json`](content/audio/design.json)) with Lawrence's picks over it ([`picks_lawrence.json`](content/audio/picks_lawrence.json), [`picks_lawrence_2.json`](content/audio/picks_lawrence_2.json), [`picks_lawrence_2_tones.json`](content/audio/picks_lawrence_2_tones.json)) |
-| **Generated tones** | [`audio/tones.py`](audio/tones.py) → `prototypes/p9/audio/tones/` (65 WAV) and [`content/audio/tones.json`](content/audio/tones.json) |
-| **Tests** | `prototypes/p9/test_p9.js`: 37/37 ([`shots/test_p9.json`](prototypes/p9/shots/test_p9.json)) |
-| **Decisions** | [`DECISIONS.md`](DECISIONS.md) rows 591–608; open D86 |
+| **The cue map** | [`content/audio/cues.json`](content/audio/cues.json): the agent's accepted map ([`design.json`](content/audio/design.json)) with Lawrence's picks over it ([`picks_lawrence.json`](content/audio/picks_lawrence.json), [`picks_lawrence_2.json`](content/audio/picks_lawrence_2.json), [`picks_lawrence_2_tones.json`](content/audio/picks_lawrence_2_tones.json), [`picks_lawrence_3.json`](content/audio/picks_lawrence_3.json)) |
+| **Generated tones** | [`audio/tones.py`](audio/tones.py) → `prototypes/p9/audio/tones/` (66 WAV) and [`content/audio/tones.json`](content/audio/tones.json) |
+| **Tests** | `prototypes/p9/test_p9.js`: 42/42 ([`shots/test_p9.json`](prototypes/p9/shots/test_p9.json)) |
+| **Decisions** | [`DECISIONS.md`](DECISIONS.md) rows 591–618; D86 closed |
 
 ## 1 The agent
 
@@ -124,7 +125,9 @@ flowchart TD
 - **Back to silence:** levels and empty dashes.
 - **Quieter:** long jumps, deck drops, the river splash, a model learning, the river rescue, the cloth lifting.
 
-**The map the game ships:** 53 cues from 43 files, 23 silences, 31 generated tones.
+**Lawrence's third round** (row 614): the new chassis plays a generated blip, `tone_chassis.wav`, so it no longer shares `bubble.wav` with the bark bubbles. A fix makes his `teleport.wav` level-start pick play at last (row 618).
+
+**The map the game ships:** 52 cues from 43 files, 23 silences, 32 generated tones.
 
 ## 3 Music
 
@@ -132,16 +135,19 @@ flowchart TD
 |---|---|
 | Intro screen (after the first press) | Track 1 · megabot |
 | Menus: mode select, saves, splash, map, district select, high scores, loading | Track 2 · summer nights |
-| A district's first level card | Track 2 continues |
-| Levels: drone drop, play, ferry, gift screen, report, workshop | Rotation: Tracks 3, 4, 5, 6 |
-| Pause | The level track, ducked to 0.35 |
+| Every level card | The level's track starts |
+| Levels: drone drop, play, ferry | Rotation: Tracks 3, 4, 5, 6 |
+| Gift screen, report, workshop | The level track at 70% |
+| Write-off | The level track at 50% |
+| Pause | The level track at 35% |
 | Run ends (Licensed, Failed test, Non-compliant) | Track 2 |
 | Finale (unveiling, voyage, CERTIFIED) | Track 1 |
-| Credits | Track 2 |
+| Credits | Track 1 |
 
-- **Story:** tile *n* plays slot ((*n* − 1) mod 4) + 1, so neighbouring tiles always differ.
-- **Arcade:** the next slot each run.
-- **The readings (Q1–Q6)** follow the handover's proposals, taken without a ruling. The Sound Lab changes any of them (rows 591–596).
+- **Story:** the tile *n* a level card announces plays slot ((*n* − 1) mod 4) + 1, so neighbouring tiles always differ. The track holds until the next card: walking back to a cleared tile never changes it.
+- **Arcade:** each level's card takes the next slot.
+- **Fades:** every track fades in over 0.3 s from each start and out over 0.3 s at each end, the loop's seam included.
+- **Lawrence ruled on all six readings** (rows 609–617). Endings on Track 2 were not ruled on.
 
 ## 4 The engine
 
@@ -150,14 +156,14 @@ flowchart TD
 - **Buses:** music, SFX and UI under a master.
 - **Loudness:** each file is trimmed to a target per bus.
 - **Weight and spam:** gain classes, cooldown classes, a voice cap, pitch jitter.
-- **Music:** two players crossfade.
+- **Music:** three players. 0.3 s fades at every start and end, the loop's seam included. Ducks for pause, the gift screen, report and workshop, and the write-off.
 - **Generated tones:** a `synth` entry plays its event's tone, rendered from Prototype 8.4's recipe, with the same gain class, cooldown and trim as a pack file. An event with no tone keeps the live synth.
 - **Hooks in `game.js`:** about 30 small, gated hooks.
   - Every sim event and derived case asks the cue map first. A cue or a stated silence hushes the synth for that event.
   - Menus click, move and go back.
   - **Edge cues:** low health (a threshold), a car that notices the dummy, brake lights coming on, a part breaking, the intro loop's hit.
   - The intro waits for a first press before it plays anything.
-  - The sound control (row 608): mute and volume, top right, in one place on the intro, the mode select and the pause pages; larger on touch. Options: VOLUME, MUSIC, SOUND, MUTE. All saved in the browser.
+  - The sound control (row 608): mute and volume, top right, in one place on the intro, the mode select and the pause pages; larger on touch. Its dropdown (row 616): MUSIC and SFX sliders. Options: VOLUME, MUSIC, SFX, MUTE. All saved in the browser.
 - **Safety:** a failure inside the engine never stops the game.
   - `create()` falls back to the shipped map, and every entry point is guarded.
   - Picks from the Lab or a link are cleaned before use: malformed ones are dropped.
@@ -180,10 +186,11 @@ flowchart TD
   - the six tracks;
   - each screen's track;
   - the rotation, drawn on the Story's 27 tiles and Arcade's runs;
-  - the mix: bus levels, crossfade, duck, gain classes.
+  - the mix: bus levels, fades, ducks, gain classes;
+  - the VOLUME, MUSIC and SFX faders, shared with the game.
 - **Sequences:** twelve timed moments over their music, among them a combo to the cap, a write-off, the drone drop, the river rescue and the finale.
-- **Tour:** the 44 steps of `tour_p9.js`, with the cues each fired.
-- **Library:** the pack and the 65 generated tones by family, with each file's length, level and users.
+- **Tour:** the 45 steps of `tour_p9.js`, with the cues each fired.
+- **Library:** the pack and the 66 generated tones by family, with each file's length, level and users.
 - **Picks:**
   - **Play the game with these picks** opens Prototype 9 with them.
   - **Export** gives JSON and a plain summary to send back.
@@ -191,25 +198,28 @@ flowchart TD
 
 ## 6 Tests
 
-`cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84` → 37/37:
+`cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84` → 42/42:
 
 - every file in the cue map loads, tones included;
 - nothing plays before the first press;
-- each screen of the tour plays its state's track: 14 checks, Story tiles 1 and 2 included;
+- each screen of the tour plays its state's track: 16 checks, the cards, the ferry and Story tiles 1 and 2 included;
+- the ducks: write-off 0.5; report, workshop and gift screen 0.7;
+- the fades: the music dips to silence at the loop's seam and comes back;
 - every catalogued event and variant does what the map says (107: cue, tone, silence or base);
 - START, cursor moves, the Arcade run's track, the pause duck;
-- Options shows VOLUME, MUSIC, SOUND and MUTE, and saves them;
+- Options shows VOLUME, MUSIC, SFX and MUTE, and saves them;
 - the sound control sits in one place on three screens, mutes, sets the volume, and lifts the intro's gate without START; M and − work;
+- its dropdown sets MUSIC and SFX apart, saves them, and a tap away only closes it;
 - the game takes the Lab's picks from `#audio=`; malformed picks are dropped and the game still starts;
 - no page or engine errors;
 - Prototype 8.4 draws the same strings (barks and live counts aside), and its frozen file is unchanged.
 
 ## 7 Open
 
-- **D86:** the Credits card gains "Music by ansimuz" and "Sound effects by Chequered Ink". This widens Style Guide C1, so it needs Lawrence's ruling.
 - **Licence:** only the pack's credit lines were supplied, not its licence texts.
 - **Devices:** the MP3 fallback for Safari and iOS is untested on a device.
-- **Silenced by the agent:** the car edge cues (car-notice, car-brake). The Lab switches them on.
+- **Silenced:** 23 entries, among them brake lights coming on. The Lab switches any on.
+- **Endings:** Licensed, Failed test and Non-compliant play Track 2. Not ruled on.
 - **Tone fidelity:** each tone is one rendering. Prototype 8.4 scaled some sounds with the hit's force; the tones take the middle of each range.
 
 ## 8 Run it

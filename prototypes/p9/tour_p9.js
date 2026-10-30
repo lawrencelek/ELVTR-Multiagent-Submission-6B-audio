@@ -15,7 +15,9 @@ function serve() {
     const srv = http.createServer((req, res) => {
       const p = path.join(ROOT, decodeURIComponent(req.url.split('?')[0].split('#')[0]));
       if (!p.startsWith(ROOT) || !fs.existsSync(p) || fs.statSync(p).isDirectory()) { res.writeHead(404); res.end(); return; }
-      res.writeHead(200, { 'Content-Type': TYPES[path.extname(p)] || 'application/octet-stream' }); fs.createReadStream(p).pipe(res);
+      const size = fs.statSync(p).size, m = /bytes=(\d*)-(\d*)/.exec(req.headers.range || ''), ty = TYPES[path.extname(p)] || 'application/octet-stream';
+      if (m) { const a = m[1] ? +m[1] : 0, b = m[2] ? +m[2] : size - 1; res.writeHead(206, { 'Content-Type': ty, 'Content-Length': b - a + 1, 'Content-Range': `bytes ${a}-${b}/${size}`, 'Accept-Ranges': 'bytes' }); fs.createReadStream(p, { start: a, end: b }).pipe(res); return; }
+      res.writeHead(200, { 'Content-Type': ty, 'Content-Length': size, 'Accept-Ranges': 'bytes' }); fs.createReadStream(p).pipe(res); // lengths and ranges, as GitHub Pages sends them
     });
     srv.listen(0, '127.0.0.1', () => ok(srv));
   });
@@ -36,9 +38,9 @@ function serve() {
   const steps = [], shots = {};
   let seen = 0;
   const mark = async (name, shot) => {
-    const st = await pg.evaluate((n) => { const A = window.__dummiesAudio, L = A ? A.log.slice(n) : []; return { n: A ? A.log.length : 0, cues: L, state: A && A.state, track: A && A.track, screen: window.__dummies.screen, phase: window.__dummies.sim && window.__dummies.sim.phase }; }, seen);
+    const st = await pg.evaluate((n) => { const A = window.__dummiesAudio, L = A ? A.log.slice(n) : []; return { n: A ? A.log.length : 0, cues: L, state: A && A.state, track: A && A.track, duck: A ? +A.music.duck.toFixed(2) : null, screen: window.__dummies.screen, phase: window.__dummies.sim && window.__dummies.sim.phase }; }, seen);
     seen = st.n;
-    const step = { step: steps.length + 1, name, shot: shot || null, screen: st.screen, phase: st.phase || null, music: { state: st.state, track: st.track }, cues: st.cues.map((c) => ({ kind: c.kind, id: c.id, file: c.file })) };
+    const step = { step: steps.length + 1, name, shot: shot || null, screen: st.screen, phase: st.phase || null, music: { state: st.state, track: st.track, duck: st.duck }, cues: st.cues.map((c) => ({ kind: c.kind, id: c.id, file: c.file })) };
     steps.push(step);
     if (process.env.TOUR_VERBOSE) console.log(step.step, name, '|', st.screen, st.phase || '', '|', st.state, st.track, '|', step.cues.map((c) => c.id + (c.file ? '=' + c.file : '')).join(' '));
     if (shot && !shots[shot]) { await pg.locator('#game').screenshot({ path: path.join(OUT, shot + '.jpg'), type: 'jpeg', quality: 82 }); shots[shot] = step.step; }
@@ -60,6 +62,8 @@ function serve() {
   await key('Space', 1, 1200); await mark('the first press: audio unlocks, Track 1');
   await key('Space', 1, 800); await mark('START: the mode select, Track 2', 'title');
   await key('ArrowRight', 1, 250); await key('ArrowLeft', 1, 250); await mark('cursor moves');
+  const caret = await pg.evaluate(() => { const c = window.__dummies.sndCtl, S = window.__dummiesScale(), r = document.getElementById('game').getBoundingClientRect(), d = window.devicePixelRatio || 1; return c && [r.left + ((c.cx0 + 18) * S.scale + S.ox) / d, r.top + ((c.y + c.h / 2) * S.scale + S.oy) / d]; });
+  if (caret) { await pg.mouse.click(caret[0], caret[1]); await pg.waitForTimeout(300); await mark('the sound control\'s dropdown: MUSIC and SFX', 'sound'); await pg.mouse.click(caret[0], caret[1]); await pg.waitForTimeout(200); }
   const it = await items();
   if (it.includes('CREDITS')) { await goTo('CREDITS'); await key('Space', 1, 600); await mark('the Credits card', 'credits'); await key('Space', 1, 400); }
   if (it.includes('HIGH SCORES')) { await goTo('HIGH SCORES'); await key('Space', 1, 600); await mark('high scores', 'scores'); await key('ShiftLeft', 1, 400); }
@@ -91,7 +95,7 @@ function serve() {
   await live(); await pg.waitForTimeout(600);
   await key('Escape', 1, 500); await mark('pause: the music ducks', 'pause');
   const oi = await pg.evaluate(() => window.__dummiesUI.pauseItems().indexOf('Options'));
-  if (oi >= 0) { await key('ArrowDown', oi); await key('Space', 1, 500); await mark('Options: MUSIC, SOUND, MUTE', 'options'); await key('ArrowRight', 1, 250); await key('ArrowLeft', 1, 250); await mark('Options: SOUND adjusted'); await key('Escape', 1, 300); await key('ArrowUp', oi); }
+  if (oi >= 0) { await key('ArrowDown', oi); await key('Space', 1, 500); await mark('Options: VOLUME, MUSIC, SFX, MUTE', 'options'); await key('ArrowRight', 1, 250); await key('ArrowLeft', 1, 250); await mark('Options: VOLUME adjusted'); await key('Escape', 1, 300); await key('ArrowUp', oi); }
   await key('Escape', 1, 500); await mark('resume');
   await sim(() => { const s = window.__dummies.sim; s.phase = 'play'; s.end('Licensed'); }); await pg.waitForTimeout(900); await mark('Arcade ends: Licensed', 'ending');
   await pg.evaluate(() => { window.__dummies.screen = 'title'; window.__dummies.sim = null; window.__dummies.titleSel = 0; }); await pg.waitForTimeout(600); await mark('back to the title');

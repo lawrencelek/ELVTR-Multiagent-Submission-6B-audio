@@ -24,6 +24,7 @@ PICKS = [ROOT / "content" / "audio" / f for f in (       # Lawrence's picks from
     "picks_lawrence.json",          # 30 October 02:18 (row 603)
     "picks_lawrence_2.json",        # 30 October 10:39 (row 607)
     "picks_lawrence_2_tones.json",  # the three events he asked new tones for, set to play them (row 607)
+    "picks_lawrence_3.json",        # 30 October 11:30: the chassis blip; the music rulings and fades (rows 609–618)
 )]
 TONES = ROOT / "content" / "audio" / "tones.json"            # generated tones (audio/tones.py)
 OUT = ROOT / "content" / "audio" / "cues.json"
@@ -47,15 +48,19 @@ PARAMS = [  # id, label, unit, default, min, max, description, purpose
     ("audio.settings.master", "VOLUME default", "steps", 10, 0, 10, "The sound control's slider, out of 10, over every bus (intro, mode select, pause; Options › Volume); saved as dummies.p9.audio", "Lawrence: a sound on/off button and a volume slider (row 608)"),
     ("audio.settings.music", "MUSIC default", "steps", 8, 0, 10, "Options › Music, out of 10, until the player sets it (saved as dummies.p9.audio)", "Replaces the unsaved Sound on/off"),
     ("audio.settings.sound", "SOUND default", "steps", 8, 0, 10, "Options › Sound, out of 10, for the SFX and UI buses", "Replaces the unsaved Sound on/off"),
-    ("audio.music.crossfadeSeconds", "Crossfade", "s", 1.5, 0.05, 6, "Seconds for one track to fade into the next", "No hard cuts between screens"),
+    ("audio.music.fadeInSeconds", "Fade in", "s", 0.3, 0.01, 6, "Seconds a track fades in from each start: a new screen's track, and the loop's restart", "Lawrence: a 0.3 s fade in when the track starts (row 609)"),
+    ("audio.music.fadeOutSeconds", "Fade out", "s", 0.3, 0.01, 6, "Seconds a track fades out when it stops, gives way to the next, or reaches the file's end before the loop", "Lawrence: a 0.3 s fade out when the track finishes (row 609)"),
     ("audio.music.pauseDuck", "Pause duck", "ratio", 0.35, 0, 1, "The music's level while paused, as a share of its level in play", "Q4: pause ducks the music"),
+    ("audio.music.screenDuck", "Screen duck", "ratio", 0.7, 0, 1, "The level track's level on the gift screen, the level report and the workshop, as a share of its level in play", "Lawrence, Q4 (row 612)"),
+    ("audio.music.writeoffDuck", "Write-off duck", "ratio", 0.5, 0, 1, "The level track's level through the write-off hold, as a share of its level in play", "Lawrence, Q5 (row 613)"),
+    ("audio.music.duckSeconds", "Duck time", "s", 0.25, 0.01, 4, "Seconds a duck takes to go fully down or back up", "No jump in level between screens"),
     ("audio.music.track.intro", "Intro track", "track", 1, 0, 6, "Track on the intro screen", "Request: Track 1, the splash screen"),
     ("audio.music.track.menu", "Menu track", "track", 2, 0, 6, "Track on every menu until the level starts", "Request: Track 2 from the menu until just before the level starts"),
     ("audio.music.track.credits", "Credits track", "track", 2, 0, 6, "Track on the Credits card (0: the current track continues)", "Q4"),
-    ("audio.music.track.card", "Level card track", "track", 0, 0, 6, "Track on a district's first level card (0: the menu track continues)", "Q2"),
+    ("audio.music.track.card", "Level card track", "track", -1, -1, 6, "Track on a level card. −1: the level's own track, from the tile the card announces; 0: the track playing continues; 1–6: that track", "Lawrence, Q2 (row 610)"),
     ("audio.music.track.ending", "Ending track", "track", 2, 0, 6, "Track on Licensed, Failed test and Non-compliant", "Q4"),
     ("audio.music.track.finale", "Finale track", "track", 1, 0, 6, "Track for the unveiling, the voyage and CERTIFIED", "Q4"),
-    ("audio.music.levelRotation", "Level rotation", "digits", 3456, 0, 66666666, "Level tracks in order, one digit each. Story: tile n plays digit ((n − 1) mod count) + 1. Arcade: run n does", "Request: Tracks 3–6 alternate between levels and maps; Q3"),
+    ("audio.music.levelRotation", "Level rotation", "digits", 3456, 0, 66666666, "Level tracks in order, one digit each. Story: the tile n a level card announces plays digit ((n − 1) mod count) + 1, until the next card. Arcade: the session's level n does", "Request: Tracks 3–6 alternate between levels and maps; Lawrence, Q3 (row 611)"),
     ("audio.music.targetLufs", "Music target", "LUFS", -16, -40, 0, "Integrated loudness each track is trimmed toward", "One level for every track"),
     ("audio.sfx.targetLufs", "SFX target", "LUFS", -18, -40, 0, "Loudness each effect is trimmed toward (integrated LUFS, or RMS under 0.4 s)", "One level for every effect"),
     ("audio.trim.maxBoostDb", "Trim cap", "dB", 12, 0, 24, "The largest boost or cut a trim applies", "Quiet files do not jump"),
@@ -67,6 +72,14 @@ PARAMS = [  # id, label, unit, default, min, max, description, purpose
 ]
 
 
+RETIRED = {"audio.music.crossfadeSeconds": "superseded by audio.music.fadeInSeconds and fadeOutSeconds (row 609)"}
+RULED = {  # Lawrence's rulings, 30 October 11:30: the IDs they fix (status user-confirmed)
+    "audio.music.track.intro": 617, "audio.music.fadeInSeconds": 609, "audio.music.fadeOutSeconds": 609, "audio.music.track.card": 610,
+    "audio.music.levelRotation": 611, "audio.music.pauseDuck": 612, "audio.music.screenDuck": 612, "audio.music.track.credits": 612,
+    "audio.music.track.finale": 612, "audio.music.writeoffDuck": 613, "audio.sfx.cooldown.bark": 614,
+}
+
+
 def reg_entry(id_, label, unit, default, lo, hi, desc, purpose):
     return {"editable": True, "protectedReason": None, "integrationStatus": "prototype-p9", "boundaryStatus": "proposed-adapter-contract-not-implemented",
             "source": SRC, "status": "proposed", "applyAt": "next-run", "id": id_, "group": "Audio", "owner": "Audio", "label": label,
@@ -74,7 +87,7 @@ def reg_entry(id_, label, unit, default, lo, hi, desc, purpose):
 
 
 def track_no(v, mus):
-    if isinstance(v, int) or v in ("continue", "rotation", "duck", "none"):
+    if isinstance(v, int) or v in ("continue", "rotation", "duck", "none", "level"):
         return v
     for f in mus:
         if v and (v == f["file"].split("/", 1)[1] or v == f["name"] or v == f.get("original")):
@@ -183,6 +196,30 @@ def main():
                 changed[eid] = d
         if "tones" not in pf.name:  # what his browser may still hold: the latest export per entry
             raw.update(picks.get("sfx") or {})
+    music_by, prm_user = {}, {}
+    for pf in PICKS:  # Lawrence's music rulings and the values he set (row 609 on)
+        if not pf.exists():
+            continue
+        mp = json.loads(pf.read_text(encoding="utf-8"))
+        for k, v in ((mp.get("music") or {}).get("states") or {}).items():
+            m["music"]["states"][k] = v
+            music_by[k] = "Lawrence"
+        for k in ("storyRule", "arcadeRule"):
+            if (mp.get("music") or {}).get(k):
+                m["music"][k] = mp["music"][k]
+        prm_user.update(mp.get("params") or {})
+    m["music"]["states"].setdefault("screens", "duck")
+    m["music"]["states"].setdefault("writeoff", "duck")
+    m["music"]["why"] = dict(m["music"].get("why") or {}, **{
+        "intro": "Lawrence (Q1): Track 1 behind PRESS ANY KEY; the first press starts it.",
+        "card": "Lawrence (Q2): the level card starts the level's track, from the tile it announces.",
+        "level": "Lawrence (Q3): the track holds from its card to the next, so a cleared tile walked back to keeps it.",
+        "screens": "Lawrence (Q4): the gift screen, report and workshop keep the level track at 70%.",
+        "writeoff": "Lawrence (Q5): a write-off drops the level track to 50%.",
+        "pause": "Lawrence (Q4): pause drops the level track to 35%.",
+        "credits": "Lawrence (Q4): Credits play Track 1, as the finale does.",
+        "finale": "Lawrence (Q4): Track 1 bookends the story.",
+    })
     tones = json.loads(TONES.read_text(encoding="utf-8"))["tones"] if TONES.exists() else {}
     F = L.lint(m, EV, INV)
     blocking = [f for f in F if f["severity"] == "blocking"]
@@ -192,16 +229,25 @@ def main():
     have = {e["id"] for e in reg["entries"]}
     st, rot = m["music"]["states"], m["music"]["rotation"]
     vals = {p[0]: p[3] for p in PARAMS}
+    vals.update({k: v for k, v in prm_user.items() if k in vals})
     for k in ("intro", "menu", "credits", "card", "ending", "finale"):
         v = st.get(k)
-        vals["audio.music.track." + k] = v if isinstance(v, int) else 0
+        vals["audio.music.track." + k] = v if isinstance(v, int) else -1 if v == "level" else 0
     vals["audio.music.levelRotation"] = int("".join(str(n) for n in rot))
     new = [reg_entry(*p[:3], vals[p[0]], *p[4:]) for p in PARAMS]
+    for e in new:
+        if e["id"] in RULED:
+            e.update(status="user-confirmed", source=f"Edit 100 (P9): Lawrence's ruling, 30 October 11:30 (DECISIONS row {RULED[e['id']]})")
     new += [reg_entry(f"audio.sfx.gain.{k}", f"Gain: {k}", "dB", v, -40, 12, f"Gain class '{k}' on its bus: {GAIN_USE[k]}", "Sound Guide §2") for k, v in GAIN_DB.items()]
     new += [reg_entry(f"audio.sfx.cooldown.{k}", f"Cooldown: {k}", "s", v, 0, 10, f"Seconds between two plays of one cue in class '{k}': {COOL_USE[k]}", "Sound Guide §2; S1") for k, v in COOL_S.items()]
     new += [dict(reg_entry(f"audio.sfx.offset.{x['event']}", f"Offset: {x['event']}", "dB", x["offsetDb"], -24, 24, f"Fine gain on sfx.{x['event']}, after its gain class",
                            "Lawrence's pick in the Sound Lab"), status="user-confirmed", source="Edit 100 (P9): Lawrence's Sound Lab picks, 30 October (row 603)")
             for x in m["sfx"] if x.get("offsetDb")]
+    for e in new:
+        if e["id"].startswith("audio.sfx.cooldown.") and e["id"] in RULED:
+            e.update(status="user-confirmed", source=f"Edit 100 (P9): Lawrence's ruling, 30 October 11:30 (DECISIONS row {RULED[e['id']]})")
+    gone = [e["id"] for e in reg["entries"] if e["id"] in RETIRED]
+    reg["entries"] = [e for e in reg["entries"] if e["id"] not in RETIRED]
     added = 0
     for e in new:
         if e["id"] in have:
@@ -246,7 +292,8 @@ def main():
         "generated_by": "audio/integrate.py", "registryVersion": REG_VERSION, "run": m.get("run"), "accepted": m.get("accepted"), "score": m.get("score"),
         "base": "audio/", "params": prm,
         "music": {"tracks": tracks, "states": st, "rotation": rot, "storyRule": m["music"].get("storyRule", "tile"),
-                  "arcadeRule": m["music"].get("arcadeRule", "run"), "why": m["music"].get("why", {})},
+                  "arcadeRule": m["music"].get("arcadeRule", "run"), "why": m["music"].get("why", {}), "by": music_by,
+                  "retired": RETIRED},
         "sfx": sfx, "files": files, "picks": {"by": "Lawrence", "files": [str(p.relative_to(ROOT)) for p in PICKS if p.exists()], "changed": changed, "raw": {"sfx": raw}},
         "credits": {"music": INV["files"][0]["credit"], "sfx": next(f["credit"] for f in INV["files"] if f["folder"] == "sfx")},
     }
@@ -255,7 +302,7 @@ def main():
     print(f"{OUT.relative_to(ROOT)}: {sum(c['decision'] == 'cue' for c in sfx.values())} cues, {sum(c['decision'] == 'silence' for c in sfx.values())} silences, "
           f"{sum(c['decision'] == 'synth' for c in sfx.values())} synth, {sum(c['decision'] == 'base' for c in sfx.values())} base; {len(used)} files used. "
           f"{sum(1 for c in sfx.values() if c['decision'] == 'synth' and c.get('tone'))} synth entries play a generated tone. "
-          f"Lawrence changed {len(changed)}. Registry {REG_VERSION}: {len(reg['entries'])} entries ({added} added). Lint: {L.summary(F)}")
+          f"Lawrence changed {len(changed)}; music states he set: {sorted(music_by)}. Registry {REG_VERSION}: {len(reg['entries'])} entries ({added} added, {len(gone)} retired). Lint: {L.summary(F)}")
 
 
 if __name__ == "__main__":

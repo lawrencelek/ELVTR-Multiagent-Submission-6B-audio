@@ -102,7 +102,7 @@
 ## 11 Builds and records
 
 - **Current build:** `prototypes/p9/dummies_p9.html` (Edit 100), in `lawrencelek/ELVTR-Multiagent-Submission-6B-audio`. Prototypes 8–8.4 and 1–7.13 frozen.
-- **Decisions:** `DECISIONS.md`, rows 1–608; open items in its D table (newest D77–D86).
+- **Decisions:** `DECISIONS.md`, rows 1–618; open items in its D table (newest D77–D85; D86 closed).
 - **Text sources:** `content/story/story_v2.json`, `prototypes/p8/lore.js`. Prototype 7.13 keeps `story.json` and Farsight.
 - **Style Guide Agent:** Assignment 6, `style/` (V1 for 7.13; V2 for 8).
 - **Sound Designer Agent:** `audio/` in the sound repo; GDD Edit 100; the Sound Lab `prototypes/p9/sound_lab.html`.
@@ -111,17 +111,20 @@
 
 - **Engine:** `prototypes/p9/audio.js`, on when `audio.enabled` is 1 (build value 1; registry default 0).
 - **Pack:** six OGG tracks (ansimuz), 100 WAV effects (Chequered Ink), beside the page; an MP3 copy of each track.
-- **Music:** Track 1 intro and finale; Track 2 menus, level cards, run ends, Credits; levels rotate Tracks 3–6 (`audio.music.levelRotation`).
-  - Story: tile *n* plays slot ((*n* − 1) mod 4) + 1. Arcade: one slot per run.
-  - Pause ducks to `audio.music.pauseDuck`. Crossfade `audio.music.crossfadeSeconds`.
-- **Effects:** cue map `content/audio/cues.json`: 107 entries. 53 cues, 23 stated silences, 31 generated tones (among them the hits and the honk).
-- **Lawrence's picks** (rows 603, 607): his Sound Lab choices over the agent's map, 37 entries (`content/audio/picks_lawrence*.json`).
-- **Generated tones** (rows 604, 606): Prototype 8.4's synth rendered to `prototypes/p9/audio/tones/`, and nine new tones (65 files). A `synth` entry plays its tone in the mix.
+- **Music:** Track 1 intro, finale and Credits; Track 2 menus and run ends; levels rotate Tracks 3–6 (`audio.music.levelRotation`) (rows 610–612, 617).
+  - Each level card starts its level's track (`audio.music.track.card` −1). Story: the card's tile *n* plays slot ((*n* − 1) mod 4) + 1. Arcade: each level's card, the next slot.
+  - The track holds until the next card: a cleared tile walked back to keeps it (row 611).
+  - Ducks: pause `audio.music.pauseDuck`; gift screen, report, workshop `audio.music.screenDuck`; write-off `audio.music.writeoffDuck` (rows 612–613).
+  - Fades: `audio.music.fadeInSeconds` at every start, `audio.music.fadeOutSeconds` at every end, the loop's seam included (row 609).
+- **Effects:** cue map `content/audio/cues.json`: 107 entries. 52 cues, 23 stated silences, 32 generated tones (among them the hits, the honk and the new chassis's blip).
+- **Lawrence's picks** (rows 603, 607, 614): his Sound Lab choices over the agent's map, 37 entries (`content/audio/picks_lawrence*.json`).
+- **Generated tones** (rows 604, 606): Prototype 8.4's synth rendered to `prototypes/p9/audio/tones/`, and ten new tones (66 files). A `synth` entry plays its tone in the mix.
 - **Mix:** buses `audio.music.volume`, `audio.sfx.volume`, `audio.ui.volume`. Gain classes `audio.sfx.gain.<class>`. Cooldowns `audio.sfx.cooldown.<class>`.
 - **Limits:** voices `audio.sfx.maxVoices`; jitter `audio.sfx.pitchJitter`. Trims toward `audio.sfx.targetLufs` and `audio.music.targetLufs`.
 - **Edge cues:** low health below `audio.sfx.lowHealthAt`; a car noticing the dummy; brake lights; a part breaking; the intro's hit.
 - **Sound control:** mute and a volume slider (`audio.settings.master`), top right on the intro, the mode select and the pause pages (row 608). M mutes; − and + step it.
-- **Options:** Volume, Music, Sound, Mute; saved as `dummies.p9.audio` (defaults `audio.settings.master`, `audio.settings.music`, `audio.settings.sound`).
+  - Its dropdown: MUSIC (`audio.settings.music`) and SFX (`audio.settings.sound`) sliders (row 616).
+- **Options:** Volume, Music, SFX, Mute; saved as `dummies.p9.audio` (defaults `audio.settings.master`, `audio.settings.music`, `audio.settings.sound`).
 - **Sound Lab:** auditions every cue and state. Picks are saved as `dummies.p9.audio.lab`, and the game reads them.
-- **Credits card:** adds "Music by ansimuz", "Sound effects by Chequered Ink". Widens Style Guide C1 (D86, open).
-- **Readings Q1–Q6:** taken, not ruled (rows 591–596). Review fixes: row 605.
+- **Credits card:** adds "Music by ansimuz", "Sound effects by Chequered Ink". Style Guide V2 C1 widened to the makers of licensed music and sound (row 615).
+- **Q1–Q6:** ruled by Lawrence (rows 609–617). Review fixes: row 605. Level-start chassis fix: row 618.

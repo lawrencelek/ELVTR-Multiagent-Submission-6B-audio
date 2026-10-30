@@ -12,12 +12,11 @@
   "audio.ui.volume": 0.7,
   "audio.settings.music": 8,
   "audio.settings.sound": 8,
-  "audio.music.crossfadeSeconds": 1.5,
   "audio.music.pauseDuck": 0.35,
   "audio.music.track.intro": 1,
   "audio.music.track.menu": 2,
-  "audio.music.track.credits": 2,
-  "audio.music.track.card": 0,
+  "audio.music.track.credits": 1,
+  "audio.music.track.card": -1,
   "audio.music.track.ending": 2,
   "audio.music.track.finale": 1,
   "audio.music.levelRotation": 3456,
@@ -52,7 +51,12 @@
   "audio.sfx.offset.learn-standoff": -3.0,
   "audio.sfx.offset.drone-dispatch.rescue": -3.0,
   "audio.sfx.offset.unveil-lift": -4.0,
-  "audio.settings.master": 10
+  "audio.settings.master": 10,
+  "audio.music.fadeInSeconds": 0.3,
+  "audio.music.fadeOutSeconds": 0.3,
+  "audio.music.screenDuck": 0.7,
+  "audio.music.writeoffDuck": 0.5,
+  "audio.music.duckSeconds": 0.25
  },
  "music": {
   "tracks": {
@@ -108,12 +112,14 @@
   "states": {
    "intro": 1,
    "menu": 2,
-   "credits": 2,
-   "card": "continue",
+   "credits": 1,
+   "card": "level",
    "level": "rotation",
    "pause": "duck",
    "ending": 2,
-   "finale": 1
+   "finale": 1,
+   "screens": "duck",
+   "writeoff": "duck"
   },
   "rotation": [
    3,
@@ -121,17 +127,26 @@
    5,
    6
   ],
-  "storyRule": "tile",
-  "arcadeRule": "run",
+  "storyRule": "card",
+  "arcadeRule": "level",
   "why": {
-   "intro": "The request names Track 1 for the splash screen.",
+   "intro": "Lawrence (Q1): Track 1 behind PRESS ANY KEY; the first press starts it.",
    "menu": "The request runs Track 2 from menu to level start.",
-   "credits": "Credits is a menu card, so Track 2 holds.",
-   "card": "The card comes before the level starts, so Track 2 continues.",
-   "level": "Tracks 3–6 alternate per tile in Story and per run in Arcade.",
-   "pause": "Pause ducks the level track so play resumes seamlessly.",
+   "credits": "Lawrence (Q4): Credits play Track 1, as the finale does.",
+   "card": "Lawrence (Q2): the level card starts the level's track, from the tile it announces.",
+   "level": "Lawrence (Q3): the track holds from its card to the next, so a cleared tile walked back to keeps it.",
+   "pause": "Lawrence (Q4): pause drops the level track to 35%.",
    "ending": "Run ends lead back to menus, so Track 2 returns.",
-   "finale": "Megabot bookends the story: the intro theme crowns the monument."
+   "finale": "Lawrence (Q4): Track 1 bookends the story.",
+   "screens": "Lawrence (Q4): the gift screen, report and workshop keep the level track at 70%.",
+   "writeoff": "Lawrence (Q5): a write-off drops the level track to 50%."
+  },
+  "by": {
+   "card": "Lawrence",
+   "credits": "Lawrence"
+  },
+  "retired": {
+   "audio.music.crossfadeSeconds": "superseded by audio.music.fadeInSeconds and fadeOutSeconds (row 609)"
   }
  },
  "sfx": {
@@ -1001,7 +1016,7 @@
    "pick": "cycle"
   },
   "chassis": {
-   "decision": "cue",
+   "decision": "synth",
    "label": "New chassis",
    "what": "A chassis is issued: at a level's start, under the card, and after each write-off.",
    "group": "hits",
@@ -1019,6 +1034,7 @@
     "cooldown": "once",
     "why": "A clean beam-in suits Sinofuturist replacement stock."
    },
+   "tone": "tone_chassis.wav",
    "bus": "sfx",
    "gain": "story",
    "gainId": "audio.sfx.gain.story",
@@ -1051,6 +1067,7 @@
     "decision": "base",
     "why": "A level's first chassis beams in like every other; it plays the chassis cue."
    },
+   "tone": "tone_chassis.wav",
    "variantOf": "chassis",
    "when": {
     "start": true
@@ -3708,6 +3725,14 @@
    "peak": -6.0,
    "dir": "tones"
   },
+  "tone_chassis.wav": {
+   "trimDb": 5.0,
+   "seconds": 0.15,
+   "level": -23.7,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
   "tone_combo.wav": {
    "trimDb": 4.3,
    "seconds": 0.28,
@@ -4226,7 +4251,8 @@
   "files": [
    "content/audio/picks_lawrence.json",
    "content/audio/picks_lawrence_2.json",
-   "content/audio/picks_lawrence_2_tones.json"
+   "content/audio/picks_lawrence_2_tones.json",
+   "content/audio/picks_lawrence_3.json"
   ],
   "changed": {
    "ui-start": {
@@ -4533,7 +4559,8 @@
     "now": {
      "files": [
       "bubble.wav"
-     ]
+     ],
+     "decision": "synth"
     }
    },
    "combo.max": {
@@ -4727,9 +4754,7 @@
      ]
     },
     "chassis": {
-     "files": [
-      "bubble.wav"
-     ]
+     "decision": "synth"
     },
     "combo.max": {
      "files": [

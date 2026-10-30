@@ -113,8 +113,8 @@
    "id": "menu",
    "cue": "music.menu",
    "label": "Menus",
-   "what": "Mode select, save slots, name entry, Story splash, map, district select, high scores, loading.",
-   "detect": "app.screen title, saves, splash, storymap, arcade, scores, loading",
+   "what": "Mode select, save slots, name entry, Story splash, map, district select, high scores. Loading holds the track playing.",
+   "detect": "app.screen title, saves, splash, storymap, arcade, scores",
    "shot": "title",
    "gdd": "Edit 81, 88, 97, 98"
   },
@@ -131,8 +131,8 @@
    "id": "card",
    "cue": "music.card",
    "label": "Level card",
-   "what": "The level card before the drone drop, at a district's start.",
-   "detect": "phase 'brief', no level track yet",
+   "what": "Every level card: a district's start, and each new tile after the ferry. It starts the level's track (Lawrence, Q2).",
+   "detect": "phase 'brief'",
    "shot": "card",
    "gdd": "Edit 98"
   },
@@ -140,16 +140,34 @@
    "id": "level",
    "cue": "music.level",
    "label": "Levels",
-   "what": "Play, the drone drop, write-off holds, flips, ferries, the gift screen, reports, the workshop.",
-   "detect": "app.screen 'game', phases play … shop",
+   "what": "Play, the drone drop, flips, ferries. The track holds from its card to the next card (Lawrence, Q3).",
+   "detect": "app.screen 'game', phases play, drop, scroll, hitstop",
    "shot": "play",
    "gdd": "Edit 81, 98"
+  },
+  {
+   "id": "screens",
+   "cue": "music.screens",
+   "label": "Gift, report, workshop",
+   "what": "The gift screen, the level report and the workshop: the level track at 70% (Lawrence, Q4).",
+   "detect": "phases gift, report, shop",
+   "shot": "report",
+   "gdd": "Edit 82, 84"
+  },
+  {
+   "id": "writeoff",
+   "cue": "music.writeoff",
+   "label": "Write-off",
+   "what": "The write-off hold: the level track at 50% (Lawrence, Q5).",
+   "detect": "phase 'writeoff'",
+   "shot": "writeoff",
+   "gdd": "Edit 26"
   },
   {
    "id": "pause",
    "cue": "music.pause",
    "label": "Pause",
-   "what": "Pause, options, controls: the level track, ducked.",
+   "what": "Pause, options, controls: the level track at 35%.",
    "detect": "app.paused",
    "shot": "pause",
    "gdd": "Edit 86"
@@ -781,7 +799,7 @@
    "shot": "play",
    "kind": "derived",
    "where": [
-    "G:688"
+    "G:693"
    ],
    "synthNow": true,
    "juiceLayersWithSound": 1,
@@ -802,7 +820,7 @@
    "shot": "dash",
    "kind": "derived",
    "where": [
-    "G:698"
+    "G:703"
    ],
    "synthNow": true,
    "juiceLayersWithSound": 1,
@@ -2105,7 +2123,7 @@
    "shot": "play",
    "kind": "derived",
    "where": [
-    "G:857"
+    "G:862"
    ],
    "synthNow": false,
    "juiceLayersWithSound": 0,
@@ -2126,7 +2144,7 @@
    "shot": "play",
    "kind": "derived",
    "where": [
-    "G:879"
+    "G:884"
    ],
    "synthNow": false,
    "juiceLayersWithSound": 0,
@@ -2147,7 +2165,7 @@
    "shot": "play",
    "kind": "derived",
    "where": [
-    "G:883"
+    "G:888"
    ],
    "synthNow": false,
    "juiceLayersWithSound": 0,

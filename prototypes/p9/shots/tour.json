@@ -9,7 +9,8 @@
    "phase": null,
    "music": {
     "state": null,
-    "track": null
+    "track": null,
+    "duck": 1
    },
    "cues": []
   },
@@ -21,7 +22,8 @@
    "phase": null,
    "music": {
     "state": "intro",
-    "track": 1
+    "track": 1,
+    "duck": 1
    },
    "cues": [
     {
@@ -49,7 +51,8 @@
    "phase": null,
    "music": {
     "state": "menu",
-    "track": 2
+    "track": 2,
+    "duck": 1
    },
    "cues": [
     {
@@ -77,7 +80,8 @@
    "phase": null,
    "music": {
     "state": "menu",
-    "track": 2
+    "track": 2,
+    "duck": 1
    },
    "cues": [
     {
@@ -94,13 +98,27 @@
   },
   {
    "step": 5,
+   "name": "the sound control's dropdown: MUSIC and SFX",
+   "shot": "sound",
+   "screen": "title",
+   "phase": null,
+   "music": {
+    "state": "menu",
+    "track": 2,
+    "duck": 1
+   },
+   "cues": []
+  },
+  {
+   "step": 6,
    "name": "the Credits card",
    "shot": "credits",
    "screen": "title",
    "phase": null,
    "music": {
     "state": "credits",
-    "track": 2
+    "track": 1,
+    "duck": 1
    },
    "cues": [
     {
@@ -127,18 +145,24 @@
      "kind": "state",
      "id": "credits",
      "file": null
+    },
+    {
+     "kind": "music",
+     "id": "track1",
+     "file": "music/track1_ansimuz-itch-io_megabot.ogg"
     }
    ]
   },
   {
-   "step": 6,
+   "step": 7,
    "name": "high scores",
    "shot": "scores",
    "screen": "scores",
    "phase": null,
    "music": {
     "state": "menu",
-    "track": 2
+    "track": 2,
+    "duck": 1
    },
    "cues": [
     {
@@ -152,42 +176,9 @@
      "file": null
     },
     {
-     "kind": "ui",
-     "id": "ui-move",
-     "file": "select_3.wav"
-    },
-    {
-     "kind": "ui",
-     "id": "ui-move",
-     "file": "select_3.wav"
-    },
-    {
-     "kind": "ui",
-     "id": "ui-move",
-     "file": "select_3.wav"
-    },
-    {
-     "kind": "ui",
-     "id": "ui-ok",
-     "file": "confirm_4.wav"
-    }
-   ]
-  },
-  {
-   "step": 7,
-   "name": "Arcade: district select",
-   "shot": "arcade",
-   "screen": "arcade",
-   "phase": null,
-   "music": {
-    "state": "menu",
-    "track": 2
-   },
-   "cues": [
-    {
-     "kind": "ui",
-     "id": "ui-back",
-     "file": "cancel_3.wav"
+     "kind": "music",
+     "id": "track2",
+     "file": "music/track2_ansimuz-itch-io_summer-nights.ogg"
     },
     {
      "kind": "ui",
@@ -213,13 +204,53 @@
   },
   {
    "step": 8,
+   "name": "Arcade: district select",
+   "shot": "arcade",
+   "screen": "arcade",
+   "phase": null,
+   "music": {
+    "state": "menu",
+    "track": 2,
+    "duck": 1
+   },
+   "cues": [
+    {
+     "kind": "ui",
+     "id": "ui-back",
+     "file": "cancel_3.wav"
+    },
+    {
+     "kind": "ui",
+     "id": "ui-move",
+     "file": "select_3.wav"
+    },
+    {
+     "kind": "ui",
+     "id": "ui-move",
+     "file": "select_3.wav"
+    },
+    {
+     "kind": "ui",
+     "id": "ui-move",
+     "file": "select_3.wav"
+    },
+    {
+     "kind": "ui",
+     "id": "ui-ok",
+     "file": "confirm_4.wav"
+    }
+   ]
+  },
+  {
+   "step": 9,
    "name": "Arcade: the level card",
    "shot": null,
    "screen": "game",
    "phase": "brief",
    "music": {
-    "state": "menu",
-    "track": 2
+    "state": "card",
+    "track": 3,
+    "duck": 1
    },
    "cues": [
     {
@@ -229,20 +260,31 @@
     },
     {
      "kind": "sfx",
-     "id": "chassis",
-     "file": "bubble.wav"
+     "id": "chassis.start",
+     "file": "teleport.wav"
+    },
+    {
+     "kind": "state",
+     "id": "card",
+     "file": null
+    },
+    {
+     "kind": "music",
+     "id": "track3",
+     "file": "music/track3_ansimuz-itch-io_chibi-robot-b.ogg"
     }
    ]
   },
   {
-   "step": 9,
+   "step": 10,
    "name": "Arcade: the drone drop, the level track",
    "shot": null,
    "screen": "game",
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3
+    "track": 3,
+    "duck": 1
    },
    "cues": [
     {
@@ -259,23 +301,19 @@
      "kind": "state",
      "id": "level",
      "file": null
-    },
-    {
-     "kind": "music",
-     "id": "track3",
-     "file": "music/track3_ansimuz-itch-io_chibi-robot-b.ogg"
     }
    ]
   },
   {
-   "step": 10,
+   "step": 11,
    "name": "Arcade: play",
    "shot": null,
    "screen": "game",
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3
+    "track": 3,
+    "duck": 1
    },
    "cues": [
     {
@@ -286,7 +324,7 @@
     {
      "kind": "sfx",
      "id": "bark",
-     "file": "bubble.wav"
+     "file": "select_1.wav"
     },
     {
      "kind": "sfx",
@@ -301,14 +339,15 @@
    ]
   },
   {
-   "step": 11,
+   "step": 12,
    "name": "Arcade: a dash",
    "shot": null,
    "screen": "game",
    "phase": "scroll",
    "music": {
     "state": "level",
-    "track": 3
+    "track": 3,
+    "duck": 1
    },
    "cues": [
     {
@@ -324,14 +363,15 @@
    ]
   },
   {
-   "step": 12,
+   "step": 13,
    "name": "Arcade: a jump",
    "shot": null,
    "screen": "game",
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3
+    "track": 3,
+    "duck": 1
    },
    "cues": [
     {
@@ -342,14 +382,15 @@
    ]
   },
   {
-   "step": 13,
+   "step": 14,
    "name": "Arcade: a hit",
    "shot": null,
    "screen": "game",
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3
+    "track": 3,
+    "duck": 1
    },
    "cues": [
     {
@@ -360,14 +401,15 @@
    ]
   },
   {
-   "step": 14,
+   "step": 15,
    "name": "Arcade: a combo",
    "shot": "combo",
    "screen": "game",
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3
+    "track": 3,
+    "duck": 1
    },
    "cues": [
     {
@@ -378,14 +420,15 @@
    ]
   },
   {
-   "step": 15,
+   "step": 16,
    "name": "Arcade: cones",
    "shot": "cones",
    "screen": "game",
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3
+    "track": 3,
+    "duck": 1
    },
    "cues": [
     {
@@ -401,14 +444,15 @@
    ]
   },
   {
-   "step": 16,
+   "step": 17,
    "name": "drones",
    "shot": "drone",
    "screen": "game",
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3
+    "track": 3,
+    "duck": 1
    },
    "cues": [
     {
@@ -424,14 +468,15 @@
    ]
   },
   {
-   "step": 17,
+   "step": 18,
    "name": "Arcade: a write-off",
    "shot": "writeoff",
    "screen": "game",
    "phase": "writeoff",
    "music": {
     "state": "level",
-    "track": 3
+    "track": 3,
+    "duck": 0.5
    },
    "cues": [
     {
@@ -447,26 +492,28 @@
    ]
   },
   {
-   "step": 18,
+   "step": 19,
    "name": "Arcade: the report",
    "shot": "report",
    "screen": "game",
    "phase": "report",
    "music": {
     "state": "level",
-    "track": 3
+    "track": 3,
+    "duck": 0.7
    },
    "cues": []
   },
   {
-   "step": 19,
+   "step": 20,
    "name": "Arcade: the workshop",
    "shot": "workshop",
    "screen": "game",
    "phase": "shop",
    "music": {
     "state": "level",
-    "track": 3
+    "track": 3,
+    "duck": 0.7
    },
    "cues": [
     {
@@ -482,14 +529,15 @@
    ]
   },
   {
-   "step": 20,
+   "step": 21,
    "name": "Arcade: a purchase",
    "shot": null,
    "screen": "game",
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3
+    "track": 3,
+    "duck": 1
    },
    "cues": [
     {
@@ -500,19 +548,20 @@
     {
      "kind": "sfx",
      "id": "chassis",
-     "file": "bubble.wav"
+     "file": "tone_chassis.wav"
     }
    ]
   },
   {
-   "step": 21,
+   "step": 22,
    "name": "pause: the music ducks",
    "shot": "pause",
    "screen": "game",
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3
+    "track": 3,
+    "duck": 0.35
    },
    "cues": [
     {
@@ -533,14 +582,15 @@
    ]
   },
   {
-   "step": 22,
-   "name": "Options: MUSIC, SOUND, MUTE",
+   "step": 23,
+   "name": "Options: VOLUME, MUSIC, SFX, MUTE",
    "shot": "options",
    "screen": "game",
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3
+    "track": 3,
+    "duck": 0.35
    },
    "cues": [
     {
@@ -566,14 +616,15 @@
    ]
   },
   {
-   "step": 23,
-   "name": "Options: SOUND adjusted",
+   "step": 24,
+   "name": "Options: VOLUME adjusted",
    "shot": null,
    "screen": "game",
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3
+    "track": 3,
+    "duck": 0.35
    },
    "cues": [
     {
@@ -589,14 +640,15 @@
    ]
   },
   {
-   "step": 24,
+   "step": 25,
    "name": "resume",
    "shot": null,
    "screen": "game",
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3
+    "track": 3,
+    "duck": 1
    },
    "cues": [
     {
@@ -627,14 +679,15 @@
    ]
   },
   {
-   "step": 25,
+   "step": 26,
    "name": "Arcade ends: Licensed",
    "shot": "ending",
    "screen": "game",
    "phase": "ending",
    "music": {
     "state": "ending",
-    "track": 2
+    "track": 2,
+    "duck": 1
    },
    "cues": [
     {
@@ -655,14 +708,15 @@
    ]
   },
   {
-   "step": 26,
+   "step": 27,
    "name": "back to the title",
    "shot": null,
    "screen": "title",
    "phase": null,
    "music": {
     "state": "menu",
-    "track": 2
+    "track": 2,
+    "duck": 1
    },
    "cues": [
     {
@@ -673,32 +727,15 @@
    ]
   },
   {
-   "step": 27,
+   "step": 28,
    "name": "Story: save slots",
    "shot": "saves",
    "screen": "saves",
    "phase": null,
    "music": {
     "state": "menu",
-    "track": 2
-   },
-   "cues": [
-    {
-     "kind": "ui",
-     "id": "ui-ok",
-     "file": "confirm_4.wav"
-    }
-   ]
-  },
-  {
-   "step": 28,
-   "name": "Story: the splash",
-   "shot": "splash",
-   "screen": "splash",
-   "phase": null,
-   "music": {
-    "state": "menu",
-    "track": 2
+    "track": 2,
+    "duck": 1
    },
    "cues": [
     {
@@ -710,13 +747,14 @@
   },
   {
    "step": 29,
-   "name": "Story: the map",
-   "shot": "map",
-   "screen": "storymap",
+   "name": "Story: the splash",
+   "shot": "splash",
+   "screen": "splash",
    "phase": null,
    "music": {
     "state": "menu",
-    "track": 2
+    "track": 2,
+    "duck": 1
    },
    "cues": [
     {
@@ -728,13 +766,33 @@
   },
   {
    "step": 30,
+   "name": "Story: the map",
+   "shot": "map",
+   "screen": "storymap",
+   "phase": null,
+   "music": {
+    "state": "menu",
+    "track": 2,
+    "duck": 1
+   },
+   "cues": [
+    {
+     "kind": "ui",
+     "id": "ui-ok",
+     "file": "confirm_4.wav"
+    }
+   ]
+  },
+  {
+   "step": 31,
    "name": "Story: the level card (A1)",
    "shot": "card",
    "screen": "game",
    "phase": "brief",
    "music": {
-    "state": "menu",
-    "track": 2
+    "state": "card",
+    "track": 3,
+    "duck": 1
    },
    "cues": [
     {
@@ -744,25 +802,36 @@
     },
     {
      "kind": "sfx",
-     "id": "chassis",
-     "file": "bubble.wav"
+     "id": "chassis.start",
+     "file": "teleport.wav"
     },
     {
      "kind": "sfx",
      "id": "story-enter",
      "file": "computer_1.wav"
+    },
+    {
+     "kind": "state",
+     "id": "card",
+     "file": null
+    },
+    {
+     "kind": "music",
+     "id": "track3",
+     "file": "music/track3_ansimuz-itch-io_chibi-robot-b.ogg"
     }
    ]
   },
   {
-   "step": 31,
+   "step": 32,
    "name": "Story: the drone drop",
    "shot": "drop",
    "screen": "game",
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3
+    "track": 3,
+    "duck": 1
    },
    "cues": [
     {
@@ -779,23 +848,19 @@
      "kind": "state",
      "id": "level",
      "file": null
-    },
-    {
-     "kind": "music",
-     "id": "track3",
-     "file": "music/track3_ansimuz-itch-io_chibi-robot-b.ogg"
     }
    ]
   },
   {
-   "step": 32,
+   "step": 33,
    "name": "Story: play on tile 1",
    "shot": "play",
    "screen": "game",
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3
+    "track": 3,
+    "duck": 1
    },
    "cues": [
     {
@@ -811,14 +876,15 @@
    ]
   },
   {
-   "step": 33,
+   "step": 34,
    "name": "Story: a dash",
    "shot": "dash",
    "screen": "game",
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3
+    "track": 3,
+    "duck": 1
    },
    "cues": [
     {
@@ -834,7 +900,7 @@
     {
      "kind": "sfx",
      "id": "bark",
-     "file": "select_1.wav"
+     "file": "bubble.wav"
     },
     {
      "kind": "sfx",
@@ -844,14 +910,15 @@
    ]
   },
   {
-   "step": 34,
+   "step": 35,
    "name": "Story: a jump",
    "shot": "jump",
    "screen": "game",
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3
+    "track": 3,
+    "duck": 1
    },
    "cues": [
     {
@@ -867,14 +934,15 @@
    ]
   },
   {
-   "step": 35,
+   "step": 36,
    "name": "Story: a big hit",
    "shot": "impact",
    "screen": "game",
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3
+    "track": 3,
+    "duck": 1
    },
    "cues": [
     {
@@ -889,27 +957,28 @@
     },
     {
      "kind": "sfx",
-     "id": "car-notice",
-     "file": "tone_car_notice.wav"
-    },
-    {
-     "kind": "sfx",
      "id": "impact.big",
      "file": "tone_impact_big.wav"
     }
    ]
   },
   {
-   "step": 36,
+   "step": 37,
    "name": "Story: counted, cleared",
    "shot": "story",
    "screen": "game",
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3
+    "track": 3,
+    "duck": 1
    },
    "cues": [
+    {
+     "kind": "sfx",
+     "id": "car-notice",
+     "file": "tone_car_notice.wav"
+    },
     {
      "kind": "sfx",
      "id": "story-deliver",
@@ -928,42 +997,44 @@
    ]
   },
   {
-   "step": 37,
+   "step": 38,
    "name": "Story: the gift screen",
    "shot": "gift",
    "screen": "game",
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3
+    "track": 3,
+    "duck": 1
    },
    "cues": [
     {
      "kind": "sfx",
-     "id": "car-notice",
-     "file": "tone_car_notice.wav"
-    },
-    {
-     "kind": "sfx",
-     "id": "car-notice",
-     "file": "tone_car_notice.wav"
-    },
-    {
-     "kind": "sfx",
      "id": "gift",
      "file": "powerup_5.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "car-notice",
+     "file": "tone_car_notice.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "car-notice",
+     "file": "tone_car_notice.wav"
     }
    ]
   },
   {
-   "step": 38,
+   "step": 39,
    "name": "Story: the report",
    "shot": null,
    "screen": "game",
    "phase": "report",
    "music": {
     "state": "level",
-    "track": 3
+    "track": 3,
+    "duck": 0.7
    },
    "cues": [
     {
@@ -974,12 +1045,7 @@
     {
      "kind": "sfx",
      "id": "bark",
-     "file": "bubble.wav"
-    },
-    {
-     "kind": "sfx",
-     "id": "car-notice",
-     "file": "tone_car_notice.wav"
+     "file": "select_1.wav"
     },
     {
      "kind": "sfx",
@@ -999,14 +1065,15 @@
    ]
   },
   {
-   "step": 39,
+   "step": 40,
    "name": "Story: the ferry to the next tile",
    "shot": "ferry",
    "screen": "game",
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3
+    "track": 3,
+    "duck": 1
    },
    "cues": [
     {
@@ -1017,7 +1084,7 @@
     {
      "kind": "sfx",
      "id": "chassis",
-     "file": "bubble.wav"
+     "file": "tone_chassis.wav"
     },
     {
      "kind": "sfx",
@@ -1027,14 +1094,15 @@
    ]
   },
   {
-   "step": 40,
+   "step": 41,
    "name": "Story: the gift screen (ferry)",
    "shot": null,
    "screen": "game",
    "phase": "gift",
    "music": {
     "state": "level",
-    "track": 3
+    "track": 3,
+    "duck": 0.7
    },
    "cues": [
     {
@@ -1050,14 +1118,15 @@
    ]
   },
   {
-   "step": 41,
+   "step": 42,
    "name": "Story: the next card",
    "shot": null,
    "screen": "game",
    "phase": "brief",
    "music": {
-    "state": "level",
-    "track": 4
+    "state": "card",
+    "track": 4,
+    "duck": 1
    },
    "cues": [
     {
@@ -1076,26 +1145,32 @@
      "file": "computer_1.wav"
     },
     {
-     "kind": "music",
-     "id": "track4",
-     "file": "music/track4_ansimuz-itch-io_happywalking.ogg"
-    },
-    {
      "kind": "sfx",
      "id": "story-ferried",
      "file": "laser_5.wav"
+    },
+    {
+     "kind": "state",
+     "id": "card",
+     "file": null
+    },
+    {
+     "kind": "music",
+     "id": "track4",
+     "file": "music/track4_ansimuz-itch-io_happywalking.ogg"
     }
    ]
   },
   {
-   "step": 42,
+   "step": 43,
    "name": "Story: play on tile 2: the next level track",
    "shot": null,
    "screen": "game",
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 4
+    "track": 4,
+    "duck": 1
    },
    "cues": [
     {
@@ -1104,9 +1179,9 @@
      "file": "confirm_4.wav"
     },
     {
-     "kind": "sfx",
-     "id": "car-notice",
-     "file": "tone_car_notice.wav"
+     "kind": "state",
+     "id": "level",
+     "file": null
     },
     {
      "kind": "sfx",
@@ -1116,14 +1191,15 @@
    ]
   },
   {
-   "step": 43,
+   "step": 44,
    "name": "the finale: the plaque, Track 1",
    "shot": "plaque",
    "screen": "game",
    "phase": "unveil",
    "music": {
     "state": "finale",
-    "track": 1
+    "track": 1,
+    "duck": 1
    },
    "cues": [
     {
@@ -1149,14 +1225,15 @@
    ]
   },
   {
-   "step": 44,
+   "step": 45,
    "name": "CERTIFIED",
    "shot": "certified",
    "screen": "game",
    "phase": "ending",
    "music": {
     "state": "finale",
-    "track": 1
+    "track": 1,
+    "duck": 1
    },
    "cues": [
     {
@@ -1170,36 +1247,37 @@
  "shots": {
   "intro": 1,
   "title": 3,
-  "credits": 5,
-  "scores": 6,
-  "arcade": 7,
-  "combo": 14,
-  "cones": 15,
-  "drone": 16,
-  "writeoff": 17,
-  "report": 18,
-  "workshop": 19,
-  "pause": 21,
-  "options": 22,
-  "ending": 25,
-  "saves": 27,
-  "splash": 28,
-  "map": 29,
-  "card": 30,
-  "drop": 31,
-  "play": 32,
-  "dash": 33,
-  "jump": 34,
-  "impact": 35,
-  "story": 36,
-  "gift": 37,
-  "ferry": 39,
-  "plaque": 43,
-  "certified": 44
+  "sound": 5,
+  "credits": 6,
+  "scores": 7,
+  "arcade": 8,
+  "combo": 15,
+  "cones": 16,
+  "drone": 17,
+  "writeoff": 18,
+  "report": 19,
+  "workshop": 20,
+  "pause": 22,
+  "options": 23,
+  "ending": 26,
+  "saves": 28,
+  "splash": 29,
+  "map": 30,
+  "card": 31,
+  "drop": 32,
+  "play": 33,
+  "dash": 34,
+  "jump": 35,
+  "impact": 36,
+  "story": 37,
+  "gift": 38,
+  "ferry": 40,
+  "plaque": 44,
+  "certified": 45
  },
  "errors": [],
  "audio": {
-  "log": 119,
+  "log": 123,
   "settings": {
    "master": 9,
    "music": 8,

@@ -1,6 +1,6 @@
 # DUMMIES GDD — Edit 100 · Prototype 9 · Sound
 
-**30 October 2026 · Lawrence Lek** · Build `prototypes/p9/dummies_p9.html` · Registry `edit100-2026-10-30` · Cue map `content/audio/cues.json`, run `20261030-014423-cues` (10/10, confirmed) · Tests 37/37
+**30 October 2026 · Lawrence Lek** · Build `prototypes/p9/dummies_p9.html` · Registry `edit100-2026-10-30` · Cue map `content/audio/cues.json`, run `20261030-014423-cues` (10/10, confirmed) · Tests 42/42
 
 ## 0 Request
 
@@ -10,68 +10,75 @@
 
 > I want to create new version of DUMMIES game with SFX with latest prototype … try out different sfx and music for different stages … make a dummy page with testing out different SFX and music for the gameplay points.
 
-### 0.1 Readings (proposed; taken without a ruling)
+> (30 October 11:30) We also need separate SFX and music volume options (maybe via a dropdown?). Also - for music, add small 0.3 second fades in when the track starts and 0.3 second fadeout when the track finishes.
 
-| # | Reading | Recorded as (registry) · changed in |
+### 0.1 Rulings (Lawrence, 30 October 11:30; DECISIONS rows 609–618)
+
+| # | Ruling | Registry |
 |---|---|---|
-| Q1 | "Splash Screen" is the intro screen. It shows PRESS ANY KEY; the first press only unlocks audio and starts Track 1. The next press is START | `audio.music.track.intro` · Sound Lab › Music |
-| Q2 | Track 2 plays through a district's first level card. The level track starts with the drone drop | `audio.music.track.card` (0: continue) |
-| Q3 | Story: tile *n* in story order plays slot ((*n* − 1) mod 4) + 1 of the rotation. Arcade: one track per run, the next slot each run | `audio.music.levelRotation` (3456) |
-| Q4 | Pause ducks the music to 0.35. Gift screen, report and workshop keep the level track. Endings: Track 2 (summer nights). Finale and CERTIFIED: Track 1 (megabot). Credits: Track 2 (summer nights) (the agent's choice; the handover proposed Track 1) | `audio.music.track.*` |
-| Q5 | A write-off keeps the level track playing | — |
-| Q6 | Each new bark bubble plays a soft blip; a shouted line a brighter one | `sfx.bark`, `sfx.bark.shout` |
+| Q1 | "Splash Screen" is the intro screen. It shows PRESS ANY KEY; the first press only unlocks audio and starts Track 1. The next press is START | `audio.music.track.intro` (1) |
+| Q2 | The level card starts the level's track | `audio.music.track.card` (−1: the level's track) |
+| Q3 | The start tile sets the track. Story: the tile *n* a level card announces plays slot ((*n* − 1) mod 4) + 1. The track holds until the next card: a walk back to a cleared tile, the ferry and a write-off never change it. Arcade: each level's card takes the next slot | `audio.music.levelRotation` (3456) |
+| Q4 | Pause: the level track at 0.35. Gift screen, report, workshop: the level track at 0.7. Finale and CERTIFIED: Track 1 (megabot). Credits: Track 1 (megabot). Endings (not ruled): Track 2 (summer nights) | `audio.music.pauseDuck`, `audio.music.screenDuck`, `audio.music.track.*` |
+| Q5 | A write-off drops the level track to 0.5; it keeps playing | `audio.music.writeoffDuck` |
+| Q6 | Each new bark bubble keeps its soft blip; a shouted line a brighter one. The new chassis no longer shares `bubble.wav`: it plays a generated blip | `sfx.bark`, `sfx.bark.shout`, `sfx.chassis` |
+| Fades | Every track fades in over 0.3 s from each start and out over 0.3 s at each end, the loop's seam included. A switch is the two, overlapped | `audio.music.fadeInSeconds`, `audio.music.fadeOutSeconds` |
 
 ## 1 System
 
 - **Engine:** `prototypes/p9/audio.js`. `game.js` creates it only when `audio.enabled` is 1. Prototype 9 sets 1; the registry default is 0.
 - **Buses:** music, SFX, UI under a master. Levels: `audio.music.volume`, `audio.sfx.volume`, `audio.ui.volume`.
-- **Generated tones:** Prototype 8.4's procedural sounds, rendered to WAV by `audio/tones.py` (65 files: 8.4's recipes, plus new tones for slip and for the eight events Lawrence asked for (row 606); a replaced 8.4 tone stays as `tone_<event>_p84.wav`). A `synth` entry plays its event's tone through the mix: gain class, cooldown, trim. An event with no entry or tone keeps the live synth, on the SFX bus at `audio.synth.gain`.
-- **Lawrence's picks:** his Sound Lab exports over the agent's map, in order: `content/audio/picks_lawrence.json` (row 603), `picks_lawrence_2.json` and `picks_lawrence_2_tones.json` (row 607). His fine gain becomes `audio.sfx.offset.<cue>`.
+- **Generated tones:** Prototype 8.4's procedural sounds, rendered to WAV by `audio/tones.py` (66 files: 8.4's recipes, plus new tones for slip and for the eight events Lawrence asked for (row 606); a replaced 8.4 tone stays as `tone_<event>_p84.wav`). A `synth` entry plays its event's tone through the mix: gain class, cooldown, trim. An event with no entry or tone keeps the live synth, on the SFX bus at `audio.synth.gain`.
+- **Lawrence's picks:** his Sound Lab exports over the agent's map, in order: `content/audio/picks_lawrence.json` (row 603), `picks_lawrence_2.json` and `picks_lawrence_2_tones.json` (row 607), `picks_lawrence_3.json` (his rulings: the chassis blip, the music states and values; rows 609–618). His fine gain becomes `audio.sfx.offset.<cue>`.
 - **Hush:** a cue or a stated silence hushes the synth for its event. Hit juice still draws.
 - **Loudness:** each file is trimmed toward `audio.sfx.targetLufs` or `audio.music.targetLufs`. Trims cap at `audio.trim.maxBoostDb` and `audio.trim.peakCeilingDb`.
 - **Weight:** gain classes set it. `audio.sfx.gain.<class>`, in dB after the trim.
 - **Spam:** each cue waits its cooldown, `audio.sfx.cooldown.<class>`. At most `audio.sfx.maxVoices` play at once.
 - **Variation:** pools play at random, never the same file twice running, or in turn. Non-menu cues vary pitch by `audio.sfx.pitchJitter`.
 - **First gesture:** any key, click or tap unlocks audio. Name entry and the touch listener now unlock too.
-- **Crossfade:** two music players fade over `audio.music.crossfadeSeconds`. Hidden tabs suspend audio.
+- **Fades:** each track fades in over `audio.music.fadeInSeconds` from every start and out over `audio.music.fadeOutSeconds` before the file ends, so the loop's seam dips and returns. A switch fades the old track out and the new one in, overlapped; three players keep quick switches whole. Hidden tabs suspend audio.
+- **Ducks:** pause `audio.music.pauseDuck`; the gift screen, report and workshop `audio.music.screenDuck`; the write-off hold `audio.music.writeoffDuck`. Pause wins. Each glides over `audio.music.duckSeconds`.
 - **Files:** WAV and OGG beside the page in `prototypes/p9/audio/`, loaded by URL. Each track has an MP3 copy for browsers without Ogg.
 - **On `file://`:** `fetch` fails, so effects and music fall back to `<audio>` elements.
 - **Sound control (row 608):** a mute button and a volume slider (`audio.settings.master`), top right, in one place on the intro, the mode select and the pause pages. A tap on the speaker mutes; a tap or a drag on the slider sets the volume and unmutes. M mutes; − and + step the volume. Larger on touch. On the intro it lifts the audio gate without START.
-- **Options:** Volume 0–10, Music 0–10, Sound 0–10, Mute. Left and right adjust; OK steps. Saved as `dummies.p9.audio`. Defaults `audio.settings.master`, `audio.settings.music`, `audio.settings.sound`.
+- **Its dropdown (row 616):** the caret opens MUSIC (`audio.settings.music`) and SFX (`audio.settings.sound`), a slider each, under the control. A slider moved unmutes. A tap away closes it and does nothing else. It closes when play resumes.
+- **Options:** Volume 0–10, Music 0–10, SFX 0–10, Mute. Left and right adjust; OK steps. Saved as `dummies.p9.audio`. Defaults `audio.settings.master`, `audio.settings.music`, `audio.settings.sound`.
 - **Sound Lab picks:** `prototypes/p9/sound_lab.html` saves them as `dummies.p9.audio.lab`. The game merges them at load. `#audio=<base64 JSON>` carries them across origins.
 - **Edge cues** (§6.6 of the handover): low health crosses `audio.sfx.lowHealthAt`. A car starts flashing (noticed). Brake lights come on. A part breaks. The intro loop's hit.
-- **Credits:** two lines, the pack's credits: "Music by ansimuz", "Sound effects by Chequered Ink". Proposed widening of Style Guide C1 (D86, open).
+- **Credits:** two lines, the pack's credits: "Music by ansimuz", "Sound effects by Chequered Ink". Style Guide V2's C1 widened to the makers of licensed music and sound (D86 closed; row 615).
 
 ## 2 MUSIC (OGG)
 
 | State | Screens | Detect | Track | Loop | Transition | Registry |
 |---|---|---|---|---|---|---|
-| `music.intro` | Intro screen (DUMMIES, START), after the first press | `app.screen` intro | Track 1 (megabot) | yes | crossfade `audio.music.crossfadeSeconds` | `audio.music.track.intro` |
-| `music.menu` | Mode select, save slots, name entry, Story splash, story map, district select, high scores, loading | `app.screen` title, saves, splash, storymap, arcade, scores, loading | Track 2 (summer nights) | yes | crossfade `audio.music.crossfadeSeconds` | `audio.music.track.menu` |
-| `music.credits` | The Credits card, from the title or an ending | `app.credits` | Track 2 (summer nights) | yes | crossfade `audio.music.crossfadeSeconds` | `audio.music.track.credits` |
-| `music.card` | A district's first level card (Q2) | phase `brief` before a level track | Track 2 continues (`audio.music.track.card` 0) | yes | crossfade `audio.music.crossfadeSeconds` | `audio.music.track.card` |
-| `music.level` | Drone drop, play, write-off hold, flips, ferry, gift screen, report, workshop; a card between tiles keeps the track | `app.screen` game, other phases | Rotation: Track 3 → Track 4 → Track 5 → Track 6 | yes | crossfade `audio.music.crossfadeSeconds` | `audio.music.levelRotation` |
-| `music.pause` | Pause, Options, Controls; window blur | `app.paused` | The level track, ducked to `audio.music.pauseDuck` | yes | crossfade `audio.music.crossfadeSeconds` | `audio.music.pauseDuck` |
-| `music.ending` | Licensed, Failed test, Non-compliant | phase `ending`, not Certified | Track 2 (summer nights) | yes | crossfade `audio.music.crossfadeSeconds` | `audio.music.track.ending` |
-| `music.finale` | The unveiling, the voyage, CERTIFIED | phase `unveil`, `voyage`; ending Certified | Track 1 (megabot) | yes | crossfade `audio.music.crossfadeSeconds` | `audio.music.track.finale` |
+| `music.intro` | Intro screen (DUMMIES, START), after the first press | `app.screen` intro | Track 1 (megabot) | yes | fade in `audio.music.fadeInSeconds`, out `audio.music.fadeOutSeconds` | `audio.music.track.intro` |
+| `music.menu` | Mode select, save slots, name entry, Story splash, story map, district select, high scores. Loading holds the track playing | `app.screen` title, saves, splash, storymap, arcade, scores | Track 2 (summer nights) | yes | fade in `audio.music.fadeInSeconds`, out `audio.music.fadeOutSeconds` | `audio.music.track.menu` |
+| `music.credits` | The Credits card, from the title or an ending | `app.credits` | Track 1 (megabot) | yes | fade in `audio.music.fadeInSeconds`, out `audio.music.fadeOutSeconds` | `audio.music.track.credits` |
+| `music.card` | Every level card: a district's start, each new tile after the ferry, each Arcade level (Q2) | phase `brief` | The level's track, from the tile the card announces (`audio.music.track.card` −1) | yes | fade in `audio.music.fadeInSeconds`, out `audio.music.fadeOutSeconds` | `audio.music.track.card` |
+| `music.level` | Drone drop, play, flips, ferry. The track holds from its card to the next card (Q3) | `app.screen` game, other phases | Rotation: Track 3 → Track 4 → Track 5 → Track 6 | yes | fade in `audio.music.fadeInSeconds`, out `audio.music.fadeOutSeconds` | `audio.music.levelRotation` |
+| `music.screens` | The gift screen, the level report, the workshop (Q4) | phases `gift`, `report`, `shop` | The level track at 0.7 (`audio.music.screenDuck`) | yes | duck over `audio.music.duckSeconds` | `audio.music.screenDuck` |
+| `music.writeoff` | The write-off hold (Q5) | phase `writeoff` | The level track at 0.5 (`audio.music.writeoffDuck`) | yes | duck over `audio.music.duckSeconds` | `audio.music.writeoffDuck` |
+| `music.pause` | Pause, Options, Controls; window blur | `app.paused` | The level track at 0.35 (`audio.music.pauseDuck`) | yes | duck over `audio.music.duckSeconds` | `audio.music.pauseDuck` |
+| `music.ending` | Licensed, Failed test, Non-compliant | phase `ending`, not Certified | Track 2 (summer nights) | yes | fade in `audio.music.fadeInSeconds`, out `audio.music.fadeOutSeconds` | `audio.music.track.ending` |
+| `music.finale` | The unveiling, the voyage, CERTIFIED | phase `unveil`, `voyage`; ending Certified | Track 1 (megabot) | yes | fade in `audio.music.fadeInSeconds`, out `audio.music.fadeOutSeconds` | `audio.music.track.finale` |
 
 - **Registry column:** the integrator records each state's track there from the map. The build reads `cues.json`; the Sound Lab and the map change it.
 
 | Track | File | Length | Measured | Trim | Plays in |
 |---|---|---:|---:|---:|---|
-| 1 · megabot | `music/track1_ansimuz-itch-io_megabot.ogg` | 1:12 | -10.4 LUFS | -5.6 dB | intro, finale |
-| 2 · summer nights | `music/track2_ansimuz-itch-io_summer-nights.ogg` | 1:12 | -14.5 LUFS | -1.5 dB | menu, credits, ending |
+| 1 · megabot | `music/track1_ansimuz-itch-io_megabot.ogg` | 1:12 | -10.4 LUFS | -5.6 dB | intro, credits, finale |
+| 2 · summer nights | `music/track2_ansimuz-itch-io_summer-nights.ogg` | 1:12 | -14.5 LUFS | -1.5 dB | menu, ending |
 | 3 · chibi robot b | `music/track3_ansimuz-itch-io_chibi-robot-b.ogg` | 2:03 | -11.3 LUFS | -4.7 dB | level slot 1 |
 | 4 · happywalking | `music/track4_ansimuz-itch-io_happywalking.ogg` | 1:43 | -13.5 LUFS | -2.5 dB | level slot 2 |
 | 5 · dark happy world | `music/track5_ansimuz-itch-io_dark-happy-world.ogg` | 1:36 | -9.1 LUFS | -6.9 dB | level slot 3 |
 | 6 · fantasy Dragon | `music/track6_ansimuz-itch-io_fantasy-dragon.ogg` | 1:06 | -16.7 LUFS | +0.7 dB | level slot 4 |
 
-- **Story tiles:** tile *n* = Monument A1 … Waterfront B2 in story order, 1–27. A tile's track starts when the dummy is on it: the drone drop, or the ferry's flip.
-- **Arcade:** run *n* plays slot ((*n* − 1) mod 4) + 1. Retrying a district is a new run.
+- **Story tiles:** tile *n* = Monument A1 … Waterfront B2 in story order, 1–27. A level card announces its tile; that tile's track starts with the card and holds until the next card.
+- **Arcade:** the session's level *n* plays slot ((*n* − 1) mod 4) + 1, from its card. A district's next road is the next level.
 
 ## 3 SFX (WAV)
 
-Columns: the cue; what triggers it, with its code site; the files (a pool), or the generated tone; bus; volume ID; cooldown ID. Variants are indented under their event. **L** marks Lawrence's pick (rows 603, 607); the agent's pick follows it.
+Columns: the cue; what triggers it, with its code site; the files (a pool), or the generated tone; bus; volume ID; cooldown ID. Variants are indented under their event. **L** marks Lawrence's pick (rows 603, 607, 614); the agent's pick follows it.
 
 ### 3.1 Menus and interface
 
@@ -121,7 +128,7 @@ Columns: the cue; what triggers it, with its code site; the files (a pool), or t
 | `sfx.knock` | A car shoves the dummy without damage. `S:2106, W:2346` | tone `tone_knock.wav` | sfx | `audio.sfx.gain.hit` | `audio.sfx.cooldown.frame` |
 | `sfx.touch-spent` | The dummy touches a spent car: no reward. `S:3233` | tone `tone_touch_spent.wav` **L** (agent: silence) | sfx | `audio.sfx.gain.hit` | `audio.sfx.cooldown.frame` |
 | `sfx.writeoff` | The chassis is written off: health reaches zero. `S:3284` | tone `tone_writeoff.wav` **L** (agent: `explosion_4.wav`) | sfx | `audio.sfx.gain.big` | `audio.sfx.cooldown.once` |
-| `sfx.chassis` | A chassis is issued: at a level's start, under the card, and after each write-off. `S:1666` | `bubble.wav` **L** (agent: `teleport.wav`) | sfx | `audio.sfx.gain.story` | `audio.sfx.cooldown.once` |
+| `sfx.chassis` | A chassis is issued: at a level's start, under the card, and after each write-off. `S:1666` | tone `tone_chassis.wav` **L** (agent: `teleport.wav`) | sfx | `audio.sfx.gain.story` | `audio.sfx.cooldown.once` |
 | ↳ `sfx.chassis.start` | At a level's start, under the level card | `teleport.wav` **L** (agent: base) | sfx | `audio.sfx.gain.hit` | `audio.sfx.cooldown.once` |
 | `sfx.part-break` | A body part reaches broken (level 3). | tone `tone_part_break.wav` **L** (agent: `fire_1.wav`) | sfx | `audio.sfx.gain.alert` | `audio.sfx.cooldown.once` |
 | `sfx.low-health` | The chassis falls below audio.sfx.lowHealthAt of its maximum. | tone `tone_low_health.wav` **L** (agent: `siren.wav`) | sfx | `audio.sfx.gain.alert` | `audio.sfx.cooldown.once` |
@@ -130,8 +137,8 @@ Columns: the cue; what triggers it, with its code site; the files (a pool), or t
 
 | Cue | Trigger | Files | Bus | Volume ID | Cooldown ID |
 |---|---|---|---|---|---|
-| `sfx.near-miss` | A fast car passes close without touching. `G:688` | tone `tone_near_miss.wav` **L** (agent: synth) | sfx | `audio.sfx.gain.hit` | `audio.sfx.cooldown.burst` |
-| `sfx.miss` | A dash ends with no contact. `G:698` | *silence* **L** (agent: silence): Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). | — | — | — |
+| `sfx.near-miss` | A fast car passes close without touching. `G:693` | tone `tone_near_miss.wav` **L** (agent: synth) | sfx | `audio.sfx.gain.hit` | `audio.sfx.cooldown.burst` |
+| `sfx.miss` | A dash ends with no contact. `G:703` | *silence* **L** (agent: silence): Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). | — | — | — |
 
 ### 3.6 Cones
 
@@ -240,9 +247,9 @@ Columns: the cue; what triggers it, with its code site; the files (a pool), or t
 |---|---|---|---|---|---|
 | `sfx.bark` | A car's line appears in the message strip. | `bubble.wav`, `select_1.wav` | sfx | `audio.sfx.gain.ambient` | `audio.sfx.cooldown.bark` |
 | ↳ `sfx.bark.shout` | A shouted line | `select_5.wav`, `select_4.wav` | sfx | `audio.sfx.gain.ambient` | `audio.sfx.cooldown.bark` |
-| `sfx.learned` | A model that learned returns and says so (a bark). `G:857` | *silence*: The bark sound already plays this line. | — | — | — |
-| `sfx.upgrade-seen` | A car remarks on a new module (a bark). `G:879` | *silence*: The bark sound already plays this line. | — | — | — |
-| `sfx.part-seen` | A car remarks on a broken part (a bark). `G:883` | *silence*: The bark sound already plays this line. | — | — | — |
+| `sfx.learned` | A model that learned returns and says so (a bark). `G:862` | *silence*: The bark sound already plays this line. | — | — | — |
+| `sfx.upgrade-seen` | A car remarks on a new module (a bark). `G:884` | *silence*: The bark sound already plays this line. | — | — | — |
+| `sfx.part-seen` | A car remarks on a broken part (a bark). `G:888` | *silence*: The bark sound already plays this line. | — | — | — |
 
 ### 3.14 Intro screen
 
@@ -250,7 +257,7 @@ Columns: the cue; what triggers it, with its code site; the files (a pool), or t
 |---|---|---|---|---|---|
 | `sfx.intro-hit` | The intro loop: the car meets the dummy. | *silence*: Track 1 owns the intro; a looping hit would grate. | — | — | — |
 
-**Totals:** 107 entries: 53 cues, 23 silences, 31 generated tones, 0 on its base. 43 of 100 pack files used; 65 generated tones in `prototypes/p9/audio/tones/`. Lawrence's picks: 37 entries.
+**Totals:** 107 entries: 52 cues, 23 silences, 32 generated tones, 0 on its base. 43 of 100 pack files used; 66 generated tones in `prototypes/p9/audio/tones/`. Lawrence's picks: 37 entries.
 
 ## 4 Gameplay points
 
@@ -278,66 +285,75 @@ python3 audio/integrate.py && python3 prototypes/p9/build.py
 cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && python3 prototypes/p9/make_lab.py && python3 audio/make_gdd.py
 ```
 
-- PASS · every file in the cue map loads (146)
+- PASS · every file in the cue map loads (147)
 - PASS · the tour ran without page errors
 - PASS · nothing plays before the first press
 - PASS · music on "the first press": intro, Track 1
 - PASS · music on "START": menu, Track 2
-- PASS · music on "the Credits card": credits, Track 2
+- PASS · music on "the Credits card": credits, Track 1
 - PASS · music on "Arcade: district select": menu, Track 2
-- PASS · music on "Arcade: the level card": menu, Track 2
+- PASS · music on "Arcade: the level card": card, Track 3
 - PASS · music on "Arcade: the drone drop": level, Track 3
 - PASS · music on "Arcade ends: Licensed": ending, Track 2
 - PASS · music on "Story: save slots": menu, Track 2
 - PASS · music on "Story: the map": menu, Track 2
-- PASS · music on "Story: the level card (A1)": menu, Track 2
+- PASS · music on "Story: the level card (A1)": card, Track 3
 - PASS · music on "Story: the drone drop": level, Track 3
+- PASS · music on "Story: the ferry to the next tile": level, Track 3
+- PASS · music on "Story: the next card": card, Track 4
 - PASS · music on "Story: play on tile 2": level, Track 4
 - PASS · music on "the finale": finale, Track 1
 - PASS · music on "CERTIFIED": finale, Track 1
-- PASS · the tour heard 38 cues through the game's hooks
+- PASS · the music ducks: write-off 0.5, report, workshop and gift screen 0.7, play 1
+- PASS · the tour heard 39 cues through the game's hooks
 - PASS · the intro waits behind the gate
 - PASS · an unmapped key unlocks audio and starts Track 1
-- PASS · every catalogued event and variant does what the map says (107: 53 cue, 23 silence, 31 synth)
+- PASS · every catalogued event and variant does what the map says (107: 52 cue, 23 silence, 32 synth)
 - PASS · the catalogue and the cue map hold the same 107 entries
-- PASS · START plays ui-start and crossfades to Track 2
+- PASS · START plays ui-start and fades to Track 2
+- PASS · music fades out before the loop's end and back in after it (0.3 s, 0.3 s)
 - PASS · a cursor move plays ui-move
 - PASS · Arcade run 1 plays the rotation's first track
 - PASS · pause ducks the music to audio.music.pauseDuck (0.35)
-- PASS · Options shows VOLUME, MUSIC, SOUND and MUTE
+- PASS · Options shows VOLUME, MUSIC, SFX and MUTE
 - PASS · VOLUME − twice is saved (dummies.p9.audio)
 - PASS · the pause page's sound control mutes, and its slider sets the volume and unmutes
 - PASS · the sound control sits in one place on the intro, the mode select and the pause page; on the intro it lifts the gate without START
 - PASS · M toggles mute; − steps the volume down one and unmutes
+- PASS · the dropdown opens MUSIC and SFX sliders, each sets its own level (saved); a tap away only closes it
 - PASS · the game takes the Sound Lab's picks from #audio= and keeps them
 - PASS · malformed picks are dropped and the game starts; an emptied pool is silent
 - PASS · no page errors in the hook tests
 - PASS · no audio engine errors
-- PASS · Prototype 8.4 rebuilt from the shared code draws what the frozen build draws, barks and live counts aside (316 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 316 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)
+- PASS · Prototype 8.4 rebuilt from the shared code draws what the frozen build draws, barks and live counts aside (315 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 316 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)
 - PASS · the frozen dummies_p8_4.html is unchanged (md5 9f5549201d88891f9f0b22c461602909)
 
 ## 7 Measured
 
 - **SFX:** 100 mono WAV, 44.1 kHz. 0.10–3.29 s. Level -29.0 to -17.6 dB (LUFS, or RMS under 0.4 s).
 - **Music:** six stereo OGG, 48 kHz, 66–123 s, -16.7 to -9.1 LUFS.
-- **Build:** `dummies_p9.html` 1,399,543 bytes. Audio beside it: 31.4 MB.
+- **Build:** `dummies_p9.html` 1,405,826 bytes. Audio beside it: 31.4 MB.
 
 ## 8 Registry (edit100)
 
 | ID | Default | Unit | Description |
 |---|---:|---|---|
 | `audio.enabled` | 0 | flag | 1: the WAV and OGG cue map plays (prototypes/p9/audio.js); 0: Prototype 8.4's synth only. Prototype 9 sets 1 |
-| `audio.music.crossfadeSeconds` | 1.5 | s | Seconds for one track to fade into the next |
-| `audio.music.levelRotation` | 3456 | digits | Level tracks in order, one digit each. Story: tile n plays digit ((n − 1) mod count) + 1. Arcade: run n does |
+| `audio.music.duckSeconds` | 0.25 | s | Seconds a duck takes to go fully down or back up |
+| `audio.music.fadeInSeconds` | 0.3 | s | Seconds a track fades in from each start: a new screen's track, and the loop's restart |
+| `audio.music.fadeOutSeconds` | 0.3 | s | Seconds a track fades out when it stops, gives way to the next, or reaches the file's end before the loop |
+| `audio.music.levelRotation` | 3456 | digits | Level tracks in order, one digit each. Story: the tile n a level card announces plays digit ((n − 1) mod count) + 1, until the next card. Arcade: the session's level n does |
 | `audio.music.pauseDuck` | 0.35 | ratio | The music's level while paused, as a share of its level in play |
+| `audio.music.screenDuck` | 0.7 | ratio | The level track's level on the gift screen, the level report and the workshop, as a share of its level in play |
 | `audio.music.targetLufs` | -16 | LUFS | Integrated loudness each track is trimmed toward |
-| `audio.music.track.card` | 0 | track | Track on a district's first level card (0: the menu track continues) |
-| `audio.music.track.credits` | 2 | track | Track on the Credits card (0: the current track continues) |
+| `audio.music.track.card` | -1 | track | Track on a level card. −1: the level's own track, from the tile the card announces; 0: the track playing continues; 1–6: that track |
+| `audio.music.track.credits` | 1 | track | Track on the Credits card (0: the current track continues) |
 | `audio.music.track.ending` | 2 | track | Track on Licensed, Failed test and Non-compliant |
 | `audio.music.track.finale` | 1 | track | Track for the unveiling, the voyage and CERTIFIED |
 | `audio.music.track.intro` | 1 | track | Track on the intro screen |
 | `audio.music.track.menu` | 2 | track | Track on every menu until the level starts |
 | `audio.music.volume` | 0.5 | ratio | The music bus at MUSIC 10 |
+| `audio.music.writeoffDuck` | 0.5 | ratio | The level track's level through the write-off hold, as a share of its level in play |
 | `audio.settings.master` | 10 | steps | The sound control's slider, out of 10, over every bus (intro, mode select, pause; Options › Volume); saved as dummies.p9.audio |
 | `audio.settings.music` | 8 | steps | Options › Music, out of 10, until the player sets it (saved as dummies.p9.audio) |
 | `audio.settings.sound` | 8 | steps | Options › Sound, out of 10, for the SFX and UI buses |
@@ -376,11 +392,10 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 
 ## 9 Open
 
-- **D86:** the Credits card's audio lines widen Style Guide C1. Needs Lawrence's ruling.
-- **Q1–Q6:** readings taken, not ruled (DECISIONS 591–596).
+- **Endings:** Licensed, Failed test and Non-compliant play Track 2. Not ruled; the Sound Lab changes it.
 - **Honk and cone hits:** the pack has no horn. Honks play Prototype 8.4's horn as generated tones; Lawrence set cone hits to their tone too (C2, user-decided).
 - **Tone fidelity:** a generated tone is one rendering. Prototype 8.4 scaled some of its sounds with the hit's force; the tones take the middle of each range.
-- **Silenced:** car-notice and car-brake (the agent), cone-rest (Lawrence's pick left it so). Switch them on in the Sound Lab.
+- **Silenced:** 23 entries (§3). Switch any on in the Sound Lab.
 - **Licence:** the pack's credit lines only. The licence texts were not supplied.
 - **Devices:** the MP3 fallback for Safari and iOS is untested on a device.
-- **Pages:** `gh-pages` is pushed. GitHub Pages needs switching on in the repo's settings once.
+- **Seam on odd servers:** a host that sends no file length gives the music no duration; the engine then takes the inventory's length for the fade out.

@@ -30,18 +30,26 @@ def state_cell(k):
     if k == "level":
         return "Rotation: " + " → ".join(f"Track {n}" for n in M["rotation"])
     if k == "pause":
-        return "The level track, ducked to `audio.music.pauseDuck`"
+        return f"The level track at {REG['audio.music.pauseDuck']['default']} (`audio.music.pauseDuck`)"
+    if k == "screens":
+        return f"The level track at {REG['audio.music.screenDuck']['default']} (`audio.music.screenDuck`)"
+    if k == "writeoff":
+        return f"The level track at {REG['audio.music.writeoffDuck']['default']} (`audio.music.writeoffDuck`)"
+    if v == "level":
+        return "The level's track, from the tile the card announces (`audio.music.track.card` −1)"
     if v == "continue":
-        return "Track 2 continues (`audio.music.track.card` 0)"
+        return "The track playing continues (`audio.music.track.card` 0)"
     return tname(v)
 
 
 MUSIC_ROWS = {
     "intro": ("Intro screen (DUMMIES, START), after the first press", "`app.screen` intro", "`audio.music.track.intro`"),
-    "menu": ("Mode select, save slots, name entry, Story splash, story map, district select, high scores, loading", "`app.screen` title, saves, splash, storymap, arcade, scores, loading", "`audio.music.track.menu`"),
+    "menu": ("Mode select, save slots, name entry, Story splash, story map, district select, high scores. Loading holds the track playing", "`app.screen` title, saves, splash, storymap, arcade, scores", "`audio.music.track.menu`"),
     "credits": ("The Credits card, from the title or an ending", "`app.credits`", "`audio.music.track.credits`"),
-    "card": ("A district's first level card (Q2)", "phase `brief` before a level track", "`audio.music.track.card`"),
-    "level": ("Drone drop, play, write-off hold, flips, ferry, gift screen, report, workshop; a card between tiles keeps the track", "`app.screen` game, other phases", "`audio.music.levelRotation`"),
+    "card": ("Every level card: a district's start, each new tile after the ferry, each Arcade level (Q2)", "phase `brief`", "`audio.music.track.card`"),
+    "level": ("Drone drop, play, flips, ferry. The track holds from its card to the next card (Q3)", "`app.screen` game, other phases", "`audio.music.levelRotation`"),
+    "screens": ("The gift screen, the level report, the workshop (Q4)", "phases `gift`, `report`, `shop`", "`audio.music.screenDuck`"),
+    "writeoff": ("The write-off hold (Q5)", "phase `writeoff`", "`audio.music.writeoffDuck`"),
     "pause": ("Pause, Options, Controls; window blur", "`app.paused`", "`audio.music.pauseDuck`"),
     "ending": ("Licensed, Failed test, Non-compliant", "phase `ending`, not Certified", "`audio.music.track.ending`"),
     "finale": ("The unveiling, the voyage, CERTIFIED", "phase `unveil`, `voyage`; ending Certified", "`audio.music.track.finale`"),
@@ -65,37 +73,42 @@ def gdd():
     a("")
     a("> I want to create new version of DUMMIES game with SFX with latest prototype … try out different sfx and music for different stages … make a dummy page with testing out different SFX and music for the gameplay points.")
     a("")
-    a("### 0.1 Readings (proposed; taken without a ruling)")
+    a("> (30 October 11:30) We also need separate SFX and music volume options (maybe via a dropdown?). Also - for music, add small 0.3 second fades in when the track starts and 0.3 second fadeout when the track finishes.")
     a("")
-    a("| # | Reading | Recorded as (registry) · changed in |")
+    a("### 0.1 Rulings (Lawrence, 30 October 11:30; DECISIONS rows 609–618)")
+    a("")
+    a("| # | Ruling | Registry |")
     a("|---|---|---|")
-    a("| Q1 | \"Splash Screen\" is the intro screen. It shows PRESS ANY KEY; the first press only unlocks audio and starts Track 1. The next press is START | `audio.music.track.intro` · Sound Lab › Music |")
-    a("| Q2 | Track 2 plays through a district's first level card. The level track starts with the drone drop | `audio.music.track.card` (0: continue) |")
-    a(f"| Q3 | Story: tile *n* in story order plays slot ((*n* − 1) mod {len(M['rotation'])}) + 1 of the rotation. Arcade: one track per run, the next slot each run | `audio.music.levelRotation` ({REG['audio.music.levelRotation']['default']}) |")
-    a(f"| Q4 | Pause ducks the music to {REG['audio.music.pauseDuck']['default']}. Gift screen, report and workshop keep the level track. Endings: {tname(M['states']['ending'])}. Finale and CERTIFIED: {tname(M['states']['finale'])}. Credits: {tname(M['states']['credits'])} (the agent's choice; the handover proposed Track 1) | `audio.music.track.*` |")
-    a("| Q5 | A write-off keeps the level track playing | — |")
-    a("| Q6 | Each new bark bubble plays a soft blip; a shouted line a brighter one | `sfx.bark`, `sfx.bark.shout` |")
+    a("| Q1 | \"Splash Screen\" is the intro screen. It shows PRESS ANY KEY; the first press only unlocks audio and starts Track 1. The next press is START | `audio.music.track.intro` (1) |")
+    a("| Q2 | The level card starts the level's track | `audio.music.track.card` (−1: the level's track) |")
+    a(f"| Q3 | The start tile sets the track. Story: the tile *n* a level card announces plays slot ((*n* − 1) mod {len(M['rotation'])}) + 1. The track holds until the next card: a walk back to a cleared tile, the ferry and a write-off never change it. Arcade: each level's card takes the next slot | `audio.music.levelRotation` ({REG['audio.music.levelRotation']['default']}) |")
+    a(f"| Q4 | Pause: the level track at {REG['audio.music.pauseDuck']['default']}. Gift screen, report, workshop: the level track at {REG['audio.music.screenDuck']['default']}. Finale and CERTIFIED: {tname(M['states']['finale'])}. Credits: {tname(M['states']['credits'])}. Endings (not ruled): {tname(M['states']['ending'])} | `audio.music.pauseDuck`, `audio.music.screenDuck`, `audio.music.track.*` |")
+    a(f"| Q5 | A write-off drops the level track to {REG['audio.music.writeoffDuck']['default']}; it keeps playing | `audio.music.writeoffDuck` |")
+    a("| Q6 | Each new bark bubble keeps its soft blip; a shouted line a brighter one. The new chassis no longer shares `bubble.wav`: it plays a generated blip | `sfx.bark`, `sfx.bark.shout`, `sfx.chassis` |")
+    a(f"| Fades | Every track fades in over {REG['audio.music.fadeInSeconds']['default']} s from each start and out over {REG['audio.music.fadeOutSeconds']['default']} s at each end, the loop's seam included. A switch is the two, overlapped | `audio.music.fadeInSeconds`, `audio.music.fadeOutSeconds` |")
     a("")
     a("## 1 System")
     a("")
     a("- **Engine:** `prototypes/p9/audio.js`. `game.js` creates it only when `audio.enabled` is 1. Prototype 9 sets 1; the registry default is 0.")
     a("- **Buses:** music, SFX, UI under a master. Levels: `audio.music.volume`, `audio.sfx.volume`, `audio.ui.volume`.")
     a(f"- **Generated tones:** Prototype 8.4's procedural sounds, rendered to WAV by `audio/tones.py` ({INV.get('tones', 0)} files: 8.4's recipes, plus new tones for slip and for the eight events Lawrence asked for (row 606); a replaced 8.4 tone stays as `tone_<event>_p84.wav`). A `synth` entry plays its event's tone through the mix: gain class, cooldown, trim. An event with no entry or tone keeps the live synth, on the SFX bus at `audio.synth.gain`.")
-    a("- **Lawrence's picks:** his Sound Lab exports over the agent's map, in order: `content/audio/picks_lawrence.json` (row 603), `picks_lawrence_2.json` and `picks_lawrence_2_tones.json` (row 607). His fine gain becomes `audio.sfx.offset.<cue>`.")
+    a("- **Lawrence's picks:** his Sound Lab exports over the agent's map, in order: `content/audio/picks_lawrence.json` (row 603), `picks_lawrence_2.json` and `picks_lawrence_2_tones.json` (row 607), `picks_lawrence_3.json` (his rulings: the chassis blip, the music states and values; rows 609–618). His fine gain becomes `audio.sfx.offset.<cue>`.")
     a("- **Hush:** a cue or a stated silence hushes the synth for its event. Hit juice still draws.")
     a("- **Loudness:** each file is trimmed toward `audio.sfx.targetLufs` or `audio.music.targetLufs`. Trims cap at `audio.trim.maxBoostDb` and `audio.trim.peakCeilingDb`.")
     a("- **Weight:** gain classes set it. `audio.sfx.gain.<class>`, in dB after the trim.")
     a("- **Spam:** each cue waits its cooldown, `audio.sfx.cooldown.<class>`. At most `audio.sfx.maxVoices` play at once.")
     a("- **Variation:** pools play at random, never the same file twice running, or in turn. Non-menu cues vary pitch by `audio.sfx.pitchJitter`.")
     a("- **First gesture:** any key, click or tap unlocks audio. Name entry and the touch listener now unlock too.")
-    a("- **Crossfade:** two music players fade over `audio.music.crossfadeSeconds`. Hidden tabs suspend audio.")
+    a("- **Fades:** each track fades in over `audio.music.fadeInSeconds` from every start and out over `audio.music.fadeOutSeconds` before the file ends, so the loop's seam dips and returns. A switch fades the old track out and the new one in, overlapped; three players keep quick switches whole. Hidden tabs suspend audio.")
+    a("- **Ducks:** pause `audio.music.pauseDuck`; the gift screen, report and workshop `audio.music.screenDuck`; the write-off hold `audio.music.writeoffDuck`. Pause wins. Each glides over `audio.music.duckSeconds`.")
     a("- **Files:** WAV and OGG beside the page in `prototypes/p9/audio/`, loaded by URL. Each track has an MP3 copy for browsers without Ogg.")
     a("- **On `file://`:** `fetch` fails, so effects and music fall back to `<audio>` elements.")
     a("- **Sound control (row 608):** a mute button and a volume slider (`audio.settings.master`), top right, in one place on the intro, the mode select and the pause pages. A tap on the speaker mutes; a tap or a drag on the slider sets the volume and unmutes. M mutes; − and + step the volume. Larger on touch. On the intro it lifts the audio gate without START.")
-    a("- **Options:** Volume 0–10, Music 0–10, Sound 0–10, Mute. Left and right adjust; OK steps. Saved as `dummies.p9.audio`. Defaults `audio.settings.master`, `audio.settings.music`, `audio.settings.sound`.")
+    a("- **Its dropdown (row 616):** the caret opens MUSIC (`audio.settings.music`) and SFX (`audio.settings.sound`), a slider each, under the control. A slider moved unmutes. A tap away closes it and does nothing else. It closes when play resumes.")
+    a("- **Options:** Volume 0–10, Music 0–10, SFX 0–10, Mute. Left and right adjust; OK steps. Saved as `dummies.p9.audio`. Defaults `audio.settings.master`, `audio.settings.music`, `audio.settings.sound`.")
     a("- **Sound Lab picks:** `prototypes/p9/sound_lab.html` saves them as `dummies.p9.audio.lab`. The game merges them at load. `#audio=<base64 JSON>` carries them across origins.")
     a("- **Edge cues** (§6.6 of the handover): low health crosses `audio.sfx.lowHealthAt`. A car starts flashing (noticed). Brake lights come on. A part breaks. The intro loop's hit.")
-    a("- **Credits:** two lines, the pack's credits: \"Music by ansimuz\", \"Sound effects by Chequered Ink\". Proposed widening of Style Guide C1 (D86, open).")
+    a("- **Credits:** two lines, the pack's credits: \"Music by ansimuz\", \"Sound effects by Chequered Ink\". Style Guide V2's C1 widened to the makers of licensed music and sound (D86 closed; row 615).")
     a("")
     a("## 2 MUSIC (OGG)")
     a("")
@@ -103,7 +116,8 @@ def gdd():
     a("|---|---|---|---|---|---|---|")
     for m in EV["music"]:
         scr, det, rid = MUSIC_ROWS[m["id"]]
-        a(f"| `music.{m['id']}` | {scr} | {det} | {state_cell(m['id'])} | yes | crossfade `audio.music.crossfadeSeconds` | {rid} |")
+        tr = "duck over `audio.music.duckSeconds`" if M["states"].get(m["id"]) == "duck" else "fade in `audio.music.fadeInSeconds`, out `audio.music.fadeOutSeconds`"
+        a(f"| `music.{m['id']}` | {scr} | {det} | {state_cell(m['id'])} | yes | {tr} | {rid} |")
     a("")
     a("- **Registry column:** the integrator records each state's track there from the map. The build reads `cues.json`; the Sound Lab and the map change it.")
     a("")
@@ -118,12 +132,12 @@ def gdd():
     for n, t in sorted(TR.items()):
         a(f"| {n} · {t['title']} | `{t['file']}` | {int(t['seconds'] // 60)}:{int(t['seconds'] % 60):02d} | {t['level']} LUFS | {t['trimDb']:+.1f} dB | {', '.join(uses.get(n, ['—']))} |")
     a("")
-    a("- **Story tiles:** tile *n* = Monument A1 … Waterfront B2 in story order, 1–27. A tile's track starts when the dummy is on it: the drone drop, or the ferry's flip.")
-    a("- **Arcade:** run *n* plays slot ((*n* − 1) mod 4) + 1. Retrying a district is a new run.")
+    a("- **Story tiles:** tile *n* = Monument A1 … Waterfront B2 in story order, 1–27. A level card announces its tile; that tile's track starts with the card and holds until the next card.")
+    a("- **Arcade:** the session's level *n* plays slot ((*n* − 1) mod 4) + 1, from its card. A district's next road is the next level.")
     a("")
     a("## 3 SFX (WAV)")
     a("")
-    a("Columns: the cue; what triggers it, with its code site; the files (a pool), or the generated tone; bus; volume ID; cooldown ID. Variants are indented under their event. **L** marks Lawrence's pick (rows 603, 607); the agent's pick follows it.")
+    a("Columns: the cue; what triggers it, with its code site; the files (a pool), or the generated tone; bus; volume ID; cooldown ID. Variants are indented under their event. **L** marks Lawrence's pick (rows 603, 607, 614); the agent's pick follows it.")
     a("")
     for g in EV["groups"]:
         evs = [e for e in EV["events"] if e["group"] == g["id"]]
@@ -203,16 +217,16 @@ def gdd():
         e = REG[k]
         a(f"| `{k}` | {e['default']} | {e['unit']} | {e['description']} |")
     a("")
+    n_sil = sum(c["decision"] == "silence" for c in C["sfx"].values())
     a("## 9 Open")
     a("")
-    a("- **D86:** the Credits card's audio lines widen Style Guide C1. Needs Lawrence's ruling.")
-    a("- **Q1–Q6:** readings taken, not ruled (DECISIONS 591–596).")
+    a("- **Endings:** Licensed, Failed test and Non-compliant play Track 2. Not ruled; the Sound Lab changes it.")
     a("- **Honk and cone hits:** the pack has no horn. Honks play Prototype 8.4's horn as generated tones; Lawrence set cone hits to their tone too (C2, user-decided).")
     a("- **Tone fidelity:** a generated tone is one rendering. Prototype 8.4 scaled some of its sounds with the hit's force; the tones take the middle of each range.")
-    a("- **Silenced:** car-notice and car-brake (the agent), cone-rest (Lawrence's pick left it so). Switch them on in the Sound Lab.")
+    a(f"- **Silenced:** {n_sil} entries (§3). Switch any on in the Sound Lab.")
     a("- **Licence:** the pack's credit lines only. The licence texts were not supplied.")
     a("- **Devices:** the MP3 fallback for Safari and iOS is untested on a device.")
-    a("- **Pages:** `gh-pages` is pushed. GitHub Pages needs switching on in the repo's settings once.")
+    a("- **Seam on odd servers:** a host that sends no file length gives the music no duration; the engine then takes the inventory's length for the fade out.")
     OUT.write_text("\n".join(L) + "\n", encoding="utf-8")
     return OUT
 

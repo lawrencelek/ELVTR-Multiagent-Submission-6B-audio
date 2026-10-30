@@ -1,9 +1,9 @@
 {
- "passed": 37,
- "total": 37,
+ "passed": 42,
+ "total": 42,
  "results": [
   {
-   "name": "every file in the cue map loads (146)",
+   "name": "every file in the cue map loads (147)",
    "pass": true,
    "detail": ""
   },
@@ -28,9 +28,9 @@
    "detail": "menu, Track 2"
   },
   {
-   "name": "music on \"the Credits card\": credits, Track 2",
+   "name": "music on \"the Credits card\": credits, Track 1",
    "pass": true,
-   "detail": "credits, Track 2"
+   "detail": "credits, Track 1"
   },
   {
    "name": "music on \"Arcade: district select\": menu, Track 2",
@@ -38,9 +38,9 @@
    "detail": "menu, Track 2"
   },
   {
-   "name": "music on \"Arcade: the level card\": menu, Track 2",
+   "name": "music on \"Arcade: the level card\": card, Track 3",
    "pass": true,
-   "detail": "menu, Track 2"
+   "detail": "card, Track 3"
   },
   {
    "name": "music on \"Arcade: the drone drop\": level, Track 3",
@@ -63,14 +63,24 @@
    "detail": "menu, Track 2"
   },
   {
-   "name": "music on \"Story: the level card (A1)\": menu, Track 2",
+   "name": "music on \"Story: the level card (A1)\": card, Track 3",
    "pass": true,
-   "detail": "menu, Track 2"
+   "detail": "card, Track 3"
   },
   {
    "name": "music on \"Story: the drone drop\": level, Track 3",
    "pass": true,
    "detail": "level, Track 3"
+  },
+  {
+   "name": "music on \"Story: the ferry to the next tile\": level, Track 3",
+   "pass": true,
+   "detail": "level, Track 3"
+  },
+  {
+   "name": "music on \"Story: the next card\": card, Track 4",
+   "pass": true,
+   "detail": "card, Track 4"
   },
   {
    "name": "music on \"Story: play on tile 2\": level, Track 4",
@@ -88,9 +98,14 @@
    "detail": "finale, Track 1"
   },
   {
-   "name": "the tour heard 38 cues through the game's hooks",
+   "name": "the music ducks: write-off 0.5, report, workshop and gift screen 0.7, play 1",
    "pass": true,
-   "detail": "ui-start ui-move ui-ok ui-back chassis drop-in near-miss bark dropped-in car-notice lunge screen denied impact combo pickup cone-hit drone-dispatch drone-dispatch.rescue writeoff credit shop-open jump jump-land ui-pause ending.win story-enter knock impact.big story-deliver story-count story-clear gift story-ferry story-gift story-ferried unveil unveil-lift"
+   "detail": "Arcade: play 1/1 · Arcade: a write-off 0.5/0.5 · Arcade: the report 0.7/0.7 · Arcade: the workshop 0.7/0.7 · Story: the gift screen (ferry) 0.7/0.7"
+  },
+  {
+   "name": "the tour heard 39 cues through the game's hooks",
+   "pass": true,
+   "detail": "ui-start ui-move ui-ok ui-back chassis.start drop-in near-miss bark dropped-in car-notice lunge screen denied impact combo pickup cone-hit drone-dispatch drone-dispatch.rescue writeoff credit shop-open chassis jump jump-land ui-pause ending.win story-enter knock impact.big story-deliver story-count story-clear gift story-ferry story-gift story-ferried unveil unveil-lift"
   },
   {
    "name": "the intro waits behind the gate",
@@ -103,7 +118,7 @@
    "detail": ""
   },
   {
-   "name": "every catalogued event and variant does what the map says (107: 53 cue, 23 silence, 31 synth)",
+   "name": "every catalogued event and variant does what the map says (107: 52 cue, 23 silence, 32 synth)",
    "pass": true,
    "detail": ""
   },
@@ -113,9 +128,14 @@
    "detail": ""
   },
   {
-   "name": "START plays ui-start and crossfades to Track 2",
+   "name": "START plays ui-start and fades to Track 2",
    "pass": true,
    "detail": ""
+  },
+  {
+   "name": "music fades out before the loop's end and back in after it (0.3 s, 0.3 s)",
+   "pass": true,
+   "detail": "min 0, end 1, looped true"
   },
   {
    "name": "a cursor move plays ui-move",
@@ -133,9 +153,9 @@
    "detail": "duck 0.35"
   },
   {
-   "name": "Options shows VOLUME, MUSIC, SOUND and MUTE",
+   "name": "Options shows VOLUME, MUSIC, SFX and MUTE",
    "pass": true,
-   "detail": "Volume: 10 / 10 · Music: 8 / 10 · Sound: 8 / 10 · Mute: off"
+   "detail": "Volume: 10 / 10 · Music: 8 / 10 · SFX: 8 / 10 · Mute: off"
   },
   {
    "name": "VOLUME − twice is saved (dummies.p9.audio)",
@@ -150,12 +170,17 @@
   {
    "name": "the sound control sits in one place on the intro, the mode select and the pause page; on the intro it lifts the gate without START",
    "pass": true,
-   "detail": "[[1040,8,224],[1040,8,224],[1040,8,224,36],[\"intro\",false]]"
+   "detail": "[[1002,8,262],[1002,8,262],[1002,8,262,36],[\"intro\",false]]"
   },
   {
    "name": "M toggles mute; − steps the volume down one and unmutes",
    "pass": true,
    "detail": "[{\"master\":5,\"music\":8,\"sound\":8,\"mute\":true},{\"master\":5,\"music\":8,\"sound\":8,\"mute\":false},{\"master\":4,\"music\":8,\"sound\":8,\"mute\":false}]"
+  },
+  {
+   "name": "the dropdown opens MUSIC and SFX sliders, each sets its own level (saved); a tap away only closes it",
+   "pass": true,
+   "detail": "[true,[3,9,{\"master\":4,\"music\":3,\"sound\":9,\"mute\":false}],[\"title\",0],[false,\"title\",0]]"
   },
   {
    "name": "the game takes the Sound Lab's picks from #audio= and keeps them",
@@ -178,7 +203,7 @@
    "detail": "[]"
   },
   {
-   "name": "Prototype 8.4 rebuilt from the shared code draws what the frozen build draws, barks and live counts aside (316 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 316 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)",
+   "name": "Prototype 8.4 rebuilt from the shared code draws what the frozen build draws, barks and live counts aside (315 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 316 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)",
    "pass": true,
    "detail": ""
   },

@@ -118,11 +118,11 @@ def lint(m, events, inv):
         add("music.intro", "M1", "blocking", f"intro plays {st.get('intro')}, not Track 1")
     if st.get("menu") != 2:
         add("music.menu", "M1", "blocking", f"menus play {st.get('menu')}, not Track 2")
-    if st.get("card") not in (2, "continue"):
+    if st.get("card") not in (2, "continue", "level"):  # "level": Lawrence's Q2 ruling (DECISIONS row 610), over the request's reading
         add("music.card", "M1", "blocking", f"the level card plays {st.get('card')}; the request runs Track 2 until just before the level starts")
     if sorted(rot) != [3, 4, 5, 6]:
         add("music.level", "M2", "major", f"rotation {rot} is not Tracks 3–6, each once")
-    if mu.get("storyRule") != "tile" or mu.get("arcadeRule") != "run":
+    if mu.get("storyRule") not in ("tile", "card") or mu.get("arcadeRule") not in ("run", "level"):  # "card", "level": rows 611, 613
         add("music.level", "M2", "major", f"rules {mu.get('storyRule')}/{mu.get('arcadeRule')}")
     for k in ("pause", "credits", "ending", "finale"):
         if k not in st:

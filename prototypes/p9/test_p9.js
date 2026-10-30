@@ -15,7 +15,8 @@ const TOUR = JSON.parse(fs.readFileSync(path.join(HERE, 'shots/tour.json'), 'utf
 const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json', '.wav': 'audio/wav', '.ogg': 'audio/ogg', '.mp3': 'audio/mpeg', '.jpg': 'image/jpeg' };
 const results = []; const ok = (name, pass, detail) => { results.push({ name, pass: !!pass, detail: detail || '' }); console.log((pass ? 'PASS ' : 'FAIL ') + name + (detail ? ' · ' + detail : '')); };
 
-function serve() { return new Promise((res) => { const srv = http.createServer((req, r) => { const p = path.join(ROOT, decodeURIComponent(req.url.split('?')[0].split('#')[0])); if (!p.startsWith(ROOT) || !fs.existsSync(p) || fs.statSync(p).isDirectory()) { r.writeHead(404); r.end(); return; } r.writeHead(200, { 'Content-Type': TYPES[path.extname(p)] || 'application/octet-stream' }); fs.createReadStream(p).pipe(r); }); srv.listen(0, '127.0.0.1', () => res(srv)); }); }
+// serve(): lengths and ranges, as GitHub Pages sends them, so the music's duration is known
+function serve() { return new Promise((res) => { const srv = http.createServer((req, r) => { const p = path.join(ROOT, decodeURIComponent(req.url.split('?')[0].split('#')[0])); if (!p.startsWith(ROOT) || !fs.existsSync(p) || fs.statSync(p).isDirectory()) { r.writeHead(404); r.end(); return; } const size = fs.statSync(p).size, m = /bytes=(\d*)-(\d*)/.exec(req.headers.range || ''), ty = TYPES[path.extname(p)] || 'application/octet-stream'; if (m) { const a = m[1] ? +m[1] : 0, b = m[2] ? +m[2] : size - 1; r.writeHead(206, { 'Content-Type': ty, 'Content-Length': b - a + 1, 'Content-Range': `bytes ${a}-${b}/${size}`, 'Accept-Ranges': 'bytes' }); fs.createReadStream(p, { start: a, end: b }).pipe(r); return; } r.writeHead(200, { 'Content-Type': ty, 'Content-Length': size, 'Accept-Ranges': 'bytes' }); fs.createReadStream(p).pipe(r); }); srv.listen(0, '127.0.0.1', () => res(srv)); }); }
 const get = (url) => new Promise((res) => http.get(url, (r) => { r.resume(); res(r.statusCode); }).on('error', () => res(0)));
 
 (async () => {
@@ -33,11 +34,16 @@ const get = (url) => new Promise((res) => http.get(url, (r) => { r.resume(); res
   ok('the tour ran without page errors', !TOUR.errors.length, TOUR.errors.join(' | '));
   ok('nothing plays before the first press', !S[0].cues.some((c) => c.kind === 'sfx' || c.kind === 'music' || c.kind === 'ui') && at('intro').music.state == null);
   const want = { 'the first press': ['intro', CUES.music.states.intro], 'START': ['menu', CUES.music.states.menu], 'the Credits card': ['credits', typeof CUES.music.states.credits === 'number' ? CUES.music.states.credits : CUES.music.states.menu],
-    'Arcade: district select': ['menu', CUES.music.states.menu], 'Arcade: the level card': ['menu', CUES.music.states.menu], 'Arcade: the drone drop': ['level', CUES.music.rotation[0]],
+    'Arcade: district select': ['menu', CUES.music.states.menu], 'Arcade: the level card': ['card', CUES.music.rotation[0]], 'Arcade: the drone drop': ['level', CUES.music.rotation[0]],
     'Arcade ends: Licensed': ['ending', CUES.music.states.ending], 'Story: save slots': ['menu', CUES.music.states.menu], 'Story: the map': ['menu', CUES.music.states.menu],
-    'Story: the level card (A1)': ['menu', CUES.music.states.menu], 'Story: the drone drop': ['level', CUES.music.rotation[0]], 'Story: play on tile 2': ['level', CUES.music.rotation[1 % CUES.music.rotation.length]],
+    'Story: the level card (A1)': ['card', CUES.music.rotation[0]], 'Story: the drone drop': ['level', CUES.music.rotation[0]], 'Story: the ferry to the next tile': ['level', CUES.music.rotation[0]],
+    'Story: the next card': ['card', CUES.music.rotation[1 % CUES.music.rotation.length]], 'Story: play on tile 2': ['level', CUES.music.rotation[1 % CUES.music.rotation.length]],
     'the finale': ['finale', CUES.music.states.finale], 'CERTIFIED': ['finale', CUES.music.states.finale] };
   for (const [name, [st, tr]] of Object.entries(want)) { const s = at(name); ok('music on "' + name + '": ' + st + ', Track ' + tr, s.music && s.music.state === st && s.music.track === tr, s.music ? s.music.state + ', Track ' + s.music.track : 'step missing'); }
+  // Lawrence's ducks (rows 612, 613): the write-off 50%, the report and the workshop 70%, play 100%
+  const ducks = { 'Arcade: play': 1, 'Arcade: a write-off': CUES.params['audio.music.writeoffDuck'], 'Arcade: the report': CUES.params['audio.music.screenDuck'], 'Arcade: the workshop': CUES.params['audio.music.screenDuck'], 'Story: the gift screen (ferry)': CUES.params['audio.music.screenDuck'] };
+  const dk = Object.entries(ducks).map(([n, want]) => [n, want, (at(n).music || {}).duck]);
+  ok('the music ducks: write-off ' + CUES.params['audio.music.writeoffDuck'] + ', report, workshop and gift screen ' + CUES.params['audio.music.screenDuck'] + ', play 1', dk.every(([, w, got]) => got != null && Math.abs(got - w) < 0.06), dk.map(([n, w, g]) => n + ' ' + g + '/' + w).join(' · '));
   const heard = new Set(S.flatMap((s) => s.cues.filter((c) => c.kind === 'sfx' || c.kind === 'ui').map((c) => c.id)));
   ok('the tour heard ' + heard.size + ' cues through the game\'s hooks', heard.size >= 25, [...heard].join(' '));
 
@@ -77,7 +83,17 @@ const get = (url) => new Promise((res) => http.get(url, (r) => { r.resume(); res
 
   // ---- 4. the game's hooks
   await pg.keyboard.press('Space'); await pg.waitForTimeout(600);
-  ok('START plays ui-start and crossfades to Track ' + CUES.music.states.menu, await pg.evaluate((t) => window.__dummiesAudio.log.some((l) => l.id === 'ui-start') && window.__dummiesAudio.track === t, CUES.music.states.menu));
+  ok('START plays ui-start and fades to Track ' + CUES.music.states.menu, await pg.evaluate((t) => window.__dummiesAudio.log.some((l) => l.id === 'ui-start') && window.__dummiesAudio.track === t, CUES.music.states.menu));
+  // the fades (row 609): the track dips to silence at the loop's seam and comes back, frame by frame
+  const fade = await pg.evaluate(() => new Promise((done) => {
+    const A = window.__dummiesAudio, p = A.music.players[A.music.cur], out = [];
+    const go = () => { const mid = p.level; p.el.currentTime = p.el.duration - 0.4; const t0 = performance.now();
+      const f = () => { out.push([+p.el.currentTime.toFixed(3), +(p.level / mid).toFixed(3)]); if (performance.now() - t0 < 1300) requestAnimationFrame(f); else done({ mid, out, dur: p.el.duration }); }; requestAnimationFrame(f); };
+    let n = 0; const ready = () => { if (p && isFinite(p.el.duration) && !p.el.paused && p.el.currentTime > 0) { p.el.currentTime = p.el.duration / 2; setTimeout(go, 500); } else if (++n < 100) setTimeout(ready, 100); else done({ none: true, dur: p && p.el.duration, paused: p && p.el.paused }); };
+    ready(); // the track's length is known once it loads
+  }));
+  const fmin = fade && fade.out && Math.min(...fade.out.map((x) => x[1])), fend = fade && fade.out && fade.out[fade.out.length - 1][1], looped = fade && fade.out && fade.out.some((x) => x[0] < 0.2);
+  ok('music fades out before the loop\'s end and back in after it (' + CUES.params['audio.music.fadeOutSeconds'] + ' s, ' + CUES.params['audio.music.fadeInSeconds'] + ' s)', fade && fade.out && fade.mid > 0 && looped && fmin < 0.15 && fend > 0.9, fade && fade.out ? 'min ' + fmin + ', end ' + fend + ', looped ' + looped : JSON.stringify(fade));
   await pg.keyboard.press('ArrowRight'); await pg.waitForTimeout(200);
   ok('a cursor move plays ui-move', await pg.evaluate(() => window.__dummiesAudio.log.slice(-3).some((l) => l.id === 'ui-move')));
   // Arcade to play, then pause
@@ -94,7 +110,7 @@ const get = (url) => new Promise((res) => http.get(url, (r) => { r.resume(); res
   for (let i = 0; i < oi; i++) { await pg.keyboard.press('ArrowDown'); await pg.waitForTimeout(80); }
   await pg.keyboard.press('Space'); await pg.waitForTimeout(300);
   const items = await pg.evaluate(() => window.__dummiesUI.optionItems());
-  ok('Options shows VOLUME, MUSIC, SOUND and MUTE', /^Volume: \d+ \/ 10$/.test(items[0]) && /^Music: \d+ \/ 10$/.test(items[1]) && /^Sound: \d+ \/ 10$/.test(items[2]) && /^Mute: (on|off)$/.test(items[3]), items.slice(0, 4).join(' · '));
+  ok('Options shows VOLUME, MUSIC, SFX and MUTE', /^Volume: \d+ \/ 10$/.test(items[0]) && /^Music: \d+ \/ 10$/.test(items[1]) && /^SFX: \d+ \/ 10$/.test(items[2]) && /^Mute: (on|off)$/.test(items[3]), items.slice(0, 4).join(' · '));
   await pg.keyboard.press('ArrowLeft'); await pg.waitForTimeout(150); await pg.keyboard.press('ArrowLeft'); await pg.waitForTimeout(150);
   const saved = await pg.evaluate(() => JSON.parse(localStorage.getItem('dummies.p9.audio') || 'null'));
   ok('VOLUME − twice is saved (dummies.p9.audio)', saved && saved.master === CUES.params['audio.settings.master'] - 2 && saved.music === CUES.params['audio.settings.music'], JSON.stringify(saved));
@@ -118,6 +134,16 @@ const get = (url) => new Promise((res) => http.get(url, (r) => { r.resume(); res
   const k0 = await sv(); await pgI.keyboard.press('KeyM'); await pgI.waitForTimeout(100); const k1 = await sv();
   await pgI.keyboard.press('Minus'); await pgI.waitForTimeout(100); const k2 = await sv();
   ok('M toggles mute; − steps the volume down one and unmutes', k1.mute === !k0.mute && k2.master === Math.max(0, k1.master - 1) && (k2.master === 0 || !k2.mute), JSON.stringify([k0, k1, k2]));
+  // the dropdown (row 616): the caret opens MUSIC and SFX; each slider sets its own level; a tap away closes it, and only that
+  const toPx = (x, y) => pgI.evaluate(([x, y]) => { const S = window.__dummiesScale(), r = document.getElementById('game').getBoundingClientRect(), d = window.devicePixelRatio || 1; return [r.left + (x * S.scale + S.ox) / d, r.top + (y * S.scale + S.oy) / d]; }, [x, y]);
+  let cc = await pgI.evaluate(() => window.__dummies.sndCtl); let q = await toPx(cc.cx0 + 18, cc.y + cc.h / 2); await pgI.mouse.click(q[0], q[1]); await pgI.waitForTimeout(200);
+  cc = await pgI.evaluate(() => window.__dummies.sndCtl);
+  const rowsOk = !!(cc.panel && cc.panel.rows.length === 2 && cc.panel.rows[0].key === 'music' && cc.panel.rows[1].key === 'sound');
+  if (rowsOk) { const [r0, r1] = cc.panel.rows; q = await toPx(r0.sx0 + (r0.sx1 - r0.sx0) * 0.3, (r0.y0 + r0.y1) / 2); await pgI.mouse.click(q[0], q[1]); await pgI.waitForTimeout(120); q = await toPx(r1.sx0 + (r1.sx1 - r1.sx0) * 0.9, (r1.y0 + r1.y1) / 2); await pgI.mouse.click(q[0], q[1]); await pgI.waitForTimeout(120); }
+  const lv = await pgI.evaluate(() => [window.__dummiesAudio.settings.music, window.__dummiesAudio.settings.sound, JSON.parse(localStorage.getItem('dummies.p9.audio'))]);
+  const scr0 = await pgI.evaluate(() => [window.__dummies.screen, window.__dummies.titleSel]); q = await toPx(200, 420); await pgI.mouse.click(q[0], q[1]); await pgI.waitForTimeout(200);
+  const away = await pgI.evaluate(() => [!!window.__dummies.sndOpen, window.__dummies.screen, window.__dummies.titleSel]);
+  ok('the dropdown opens MUSIC and SFX sliders, each sets its own level (saved); a tap away only closes it', rowsOk && lv[0] === 3 && lv[1] === 9 && lv[2].music === 3 && lv[2].sound === 9 && away[0] === false && away[1] === scr0[0] && away[2] === scr0[1], JSON.stringify([rowsOk, lv, scr0, away]));
   await pgI.close();
   // the Sound Lab's picks, by URL
   const picks = { sfx: { lunge: { files: ['boost.wav'] }, impact: { decision: 'silence' } }, music: { states: { menu: 5 }, rotation: [6, 5] } };

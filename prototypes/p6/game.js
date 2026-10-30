@@ -595,7 +595,7 @@
     const x = Object.assign({}, e0);
     if (e0.type === 'impact') x.big = (e0.assessed || 0) >= (pv('proto.hits.big.assessedMin') || 200);
     if (e0.type === 'combo') x.max = (e0.mult || 0) >= (pv('scoring.comboMax') || 5) - 1e-9;
-    if (e0.type === 'chassis') x.start = !!(app.sim && (app.sim.t || 0) < 0.5); // the first chassis, under the level card
+    if (e0.type === 'chassis') { x.start = !!app.sim && fx.audChassisSim !== app.sim; fx.audChassisSim = app.sim; } // the level's first chassis, under its card. The sim's clock is no guide: traffic warms up 30 s first
     return x;
   }
   const THEME_NAME = { start: 'Start screen', flyover: 'Pillars', barrier: 'Barrier run', plain: 'Open street',
@@ -1078,7 +1078,7 @@
         if (m === 'up') app.optSel = (app.optSel + OI.length - 1) % OI.length;
         else if (m === 'down') app.optSel = (app.optSel + 1) % OI.length;
         else if (m === 'ok') optionDo(OI[app.optSel]);
-        else if (AUD && (m === 'left' || m === 'right') && /^(Volume|Music|Sound)/.test(OI[app.optSel])) { const it = OI[app.optSel], d = m === 'right' ? 1 : -1; if (it.startsWith('Volume')) AUD.setVolume(AUD.settings.master + d); else AUD.nudge(it.startsWith('Music') ? 'music' : 'sound', d); } // Edit 100
+        else if (AUD && (m === 'left' || m === 'right') && /^(Volume|Music|SFX)/.test(OI[app.optSel])) { const it = OI[app.optSel], d = m === 'right' ? 1 : -1; if (it.startsWith('Volume')) AUD.setVolume(AUD.settings.master + d); else AUD.setLevel(it.startsWith('Music') ? 'music' : 'sound', AUD.settings[it.startsWith('Music') ? 'music' : 'sound'] + d); } // Edit 100
         continue;
       }
       if (app.paused) {
@@ -3090,7 +3090,7 @@
   const PAL_NAME = window.PIX_PALETTE_NAME || 'cyber', PAL_NEXT = { cyber: 'day', day: 'night', night: 'cyber' };
   const deviceOf = () => (TOUCH.on ? 'touch' : app.device === 'pad' ? 'pad' : 'keys');
   function optionItems() {
-    const out = AUD ? ['Volume: ' + AUD.settings.master + ' / 10', 'Music: ' + AUD.settings.music + ' / 10', 'Sound: ' + AUD.settings.sound + ' / 10', 'Mute: ' + (AUD.settings.mute ? 'on' : 'off')] : ['Sound: ' + (app.sound ? 'on' : 'off')]; // Edit 100 (P9): volumes, saved
+    const out = AUD ? ['Volume: ' + AUD.settings.master + ' / 10', 'Music: ' + AUD.settings.music + ' / 10', 'SFX: ' + AUD.settings.sound + ' / 10', 'Mute: ' + (AUD.settings.mute ? 'on' : 'off')] : ['Sound: ' + (app.sound ? 'on' : 'off')]; // Edit 100 (P9): volumes, saved
     out.push('Palette: ' + PAL_NAME + ' → ' + PAL_NEXT[PAL_NAME], 'Full screen: ' + (document.fullscreenElement ? 'on' : 'off'));
     if (!TOUCH.on) out.push('Tuning panel', 'Gamepad setup');
     out.push('Back');
@@ -3099,7 +3099,7 @@
   function optionDo(it) {
     if (AUD && it.startsWith('Volume')) { Snd.init(); AUD.setVolume(AUD.settings.master >= 10 ? 0 : AUD.settings.master + 1); }
     else if (AUD && it.startsWith('Music')) { Snd.init(); AUD.cycle('music'); }
-    else if (AUD && it.startsWith('Sound')) { Snd.init(); AUD.cycle('sound'); }
+    else if (AUD && it.startsWith('SFX')) { Snd.init(); AUD.cycle('sound'); }
     else if (AUD && it.startsWith('Mute')) { Snd.init(); AUD.toggleMute(); }
     else if (it.startsWith('Sound')) { app.sound = !app.sound; Snd.init(); const b = document.getElementById('btn-sound'); if (b) { b.textContent = app.sound ? 'Sound on' : 'Sound off'; b.setAttribute('aria-pressed', String(app.sound)); } }
     else if (it.startsWith('Palette')) { if (app.mode === 'story') saveStory(); const b = document.getElementById('btn-pal'); if (b) b.click(); }
@@ -3141,45 +3141,70 @@
     wrapText(d === 'touch' ? 'A gamepad or keyboard shows its own controls here once used.' : d === 'pad' ? 'Any pad works. Press G or hold Start to map its buttons.' : 'A gamepad shows its own buttons here once pressed.', x + 20, y + h - 44, w - 40, 22, '400 17px ' + F_UI, FT.dim, 2);
   }
   // Edit 100 (P9): the sound control. A mute button and a volume slider (audio.settings.master), top right, in the same place on
-  // the intro, the mode select and the pause pages. M mutes, − and + step the volume. A drag sets it. Bigger on touch
-  const SND = { w: 224, h: 36 }, sndK = () => (TOUCH.on ? 1.45 : 1); // a finger's reach on touch
+  // the intro, the mode select and the pause pages. M mutes, − and + step the volume. A drag sets it. Bigger on touch.
+  // Its caret opens a dropdown with MUSIC and SFX (audio.settings.music, audio.settings.sound), each its own slider (row 616)
+  const SND = { w: 262, h: 36, row: 40 }, sndK = () => (TOUCH.on ? 1.45 : 1); // a finger's reach on touch
+  function sndSlider(sx0, sx1, cy, v, on, k) {
+    const kx = sx0 + (sx1 - sx0) * v / 10;
+    ctx.save(); ctx.lineWidth = 6 * k; ctx.lineCap = 'round'; ctx.strokeStyle = FT.track; ctx.beginPath(); ctx.moveTo(sx0, cy); ctx.lineTo(sx1, cy); ctx.stroke();
+    ctx.strokeStyle = on ? FT.accent : FT.off; ctx.beginPath(); ctx.moveTo(sx0, cy); ctx.lineTo(Math.max(sx0 + 0.1, kx), cy); ctx.stroke();
+    ctx.fillStyle = on ? C.dummy : FT.off; ctx.beginPath(); ctx.arc(kx, cy, 8 * k, 0, TAU); ctx.fill(); ctx.strokeStyle = FT.bezel; ctx.lineWidth = 2; ctx.stroke(); ctx.restore();
+  }
   function drawSoundCtl(x, y, w) {
     if (!AUD) return;
     const k = sndK(); w *= k; if (x + w > VW - 8) x = VW - 8 - w;
-    const h = SND.h * k, st = AUD.settings, v = st.master, on = !st.mute && v > 0, cy = y + h / 2, ix = x + 20 * k;
-    ctx.save(); ctx.translate(ix, cy); ctx.scale(k, k); ctx.translate(-ix, -cy); // the speaker, at the control's scale
-    ctx.restore(); ctx.save();
-    rr(x, y, w, h, h / 2); ctx.fillStyle = FT.banner; ctx.fill(); ctx.strokeStyle = FT.itemEdge; ctx.lineWidth = 1.5; ctx.stroke();
+    const h = SND.h * k, st = AUD.settings, v = st.master, on = !st.mute && v > 0, cy = y + h / 2, ix = x + 20 * k, open = !!app.sndOpen;
+    ctx.save();
+    rr(x, y, w, h, h / 2); ctx.fillStyle = FT.banner; ctx.fill(); ctx.strokeStyle = open ? FT.accent : FT.itemEdge; ctx.lineWidth = 1.5; ctx.stroke();
     ctx.translate(ix, cy); ctx.scale(k, k); ctx.translate(-ix, -cy);
     ctx.fillStyle = on ? FT.text : FT.off; ctx.beginPath(); // the speaker
     ctx.moveTo(ix - 9, cy - 4); ctx.lineTo(ix - 4, cy - 4); ctx.lineTo(ix + 2, cy - 9); ctx.lineTo(ix + 2, cy + 9); ctx.lineTo(ix - 4, cy + 4); ctx.lineTo(ix - 9, cy + 4); ctx.closePath(); ctx.fill();
     ctx.lineWidth = 2; ctx.lineCap = 'round';
     if (on) { ctx.strokeStyle = FT.accent; for (const r of [6, 11]) { ctx.beginPath(); ctx.arc(ix + 3, cy, r, -0.75, 0.75); ctx.stroke(); } }
     else { ctx.strokeStyle = C.warning; ctx.beginPath(); ctx.moveTo(ix + 6, cy - 5); ctx.lineTo(ix + 15, cy + 5); ctx.moveTo(ix + 15, cy - 5); ctx.lineTo(ix + 6, cy + 5); ctx.stroke(); }
-    ctx.restore(); ctx.save();
-    const sx0 = x + 50 * k, sx1 = x + w - 54 * k, kx = sx0 + (sx1 - sx0) * v / 10;
-    ctx.lineWidth = 6 * k; ctx.lineCap = 'round'; ctx.strokeStyle = FT.track; ctx.beginPath(); ctx.moveTo(sx0, cy); ctx.lineTo(sx1, cy); ctx.stroke();
-    ctx.strokeStyle = on ? FT.accent : FT.off; ctx.beginPath(); ctx.moveTo(sx0, cy); ctx.lineTo(Math.max(sx0 + 0.1, kx), cy); ctx.stroke();
-    ctx.fillStyle = on ? C.dummy : FT.off; ctx.beginPath(); ctx.arc(kx, cy, 8 * k, 0, TAU); ctx.fill(); ctx.strokeStyle = FT.bezel; ctx.lineWidth = 2; ctx.stroke();
     ctx.restore();
-    txt(st.mute ? 'OFF' : String(v), x + w - 16 * k, cy + 5 * k, '700 ' + Math.round(15 * k) + 'px ' + F_MONO, on ? FT.text : FT.off, 'right');
-    app.sndCtl = { x, y, w, h, sx0, sx1 };
+    const sx0 = x + 50 * k, sx1 = x + w - 88 * k, cx0 = x + w - 38 * k; // the slider; the value; the caret's zone
+    sndSlider(sx0, sx1, cy, v, on, k);
+    txt(st.mute ? 'OFF' : String(v), cx0 - 6 * k, cy + 5 * k, '700 ' + Math.round(15 * k) + 'px ' + F_MONO, on ? FT.text : FT.off, 'right');
+    ctx.save(); ctx.strokeStyle = FT.itemEdge; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(cx0, y + 7 * k); ctx.lineTo(cx0, y + h - 7 * k); ctx.stroke(); // the caret
+    const ax = cx0 + 19 * k, sg = open ? -1 : 1; ctx.fillStyle = open ? FT.accent : FT.text; ctx.beginPath(); // ▾ closed, ▴ open
+    ctx.moveTo(ax - 6 * k, cy - 3 * k * sg); ctx.lineTo(ax + 6 * k, cy - 3 * k * sg); ctx.lineTo(ax, cy + 4 * k * sg); ctx.closePath(); ctx.fill(); ctx.restore();
+    const c = { x, y, w, h, sx0, sx1, cx0, panel: null };
+    if (open) { // the dropdown: MUSIC and SFX, under the pill
+      const py = y + h + 6 * k, rh = SND.row * k, ph = rh * 2 + 12 * k, rows = [];
+      ctx.save(); rr(x, py, w, ph, 14 * k); ctx.fillStyle = FT.bg[0]; ctx.fill(); ctx.fillStyle = FT.banner; ctx.fill(); ctx.strokeStyle = FT.accent; ctx.lineWidth = 1.5; ctx.stroke(); ctx.restore();
+      [['music', 'MUSIC'], ['sound', 'SFX']].forEach(([key, lab], i) => {
+        const ry = py + 6 * k + i * rh, rcy = ry + rh / 2, lv = st[key], lon = !st.mute && lv > 0 && v > 0, rx0 = x + 76 * k, rx1 = x + w - 54 * k;
+        txt(lab, x + 16 * k, rcy + 5 * k, '700 ' + Math.round(14 * k) + 'px ' + F_UI, lon ? FT.text : FT.off);
+        sndSlider(rx0, rx1, rcy, lv, lon, k);
+        txt(String(lv), x + w - 16 * k, rcy + 5 * k, '700 ' + Math.round(15 * k) + 'px ' + F_MONO, lon ? FT.text : FT.off, 'right');
+        rows.push({ key, y0: ry, y1: ry + rh, sx0: rx0, sx1: rx1 });
+      });
+      c.panel = { x, y: py, w, h: ph, rows };
+    }
+    app.sndCtl = c;
   }
   if (AUD) {
     let drag = null;
     const refXY = (e) => { const r = cv.getBoundingClientRect(), d = window.devicePixelRatio || 1; return [((e.clientX - r.left) * d - ox) / scale, ((e.clientY - r.top) * d - oy) / scale]; };
-    const setFrom = (rx) => { const c = app.sndCtl; if (c) AUD.setVolume(Math.round(clamp((rx - c.sx0) / (c.sx1 - c.sx0), 0, 1) * 10)); };
+    const level = (rx, a, b) => Math.round(clamp((rx - a) / (b - a), 0, 1) * 10);
+    const setFrom = (rx) => { const c = app.sndCtl; if (!c || !drag) return; if (drag.key === 'master') AUD.setVolume(level(rx, c.sx0, c.sx1)); else { const r = c.panel && c.panel.rows.find((q) => q.key === drag.key); if (r) AUD.setLevel(drag.key, level(rx, r.sx0, r.sx1)); } };
+    const inside = (rx, ry, q, pad) => q && rx >= q.x - pad && rx <= q.x + q.w + pad && ry >= q.y - pad && ry <= q.y + q.h + pad;
     cv.addEventListener('pointerdown', (e) => {
       const c = app.sndCtl; if (!c) return;
-      const [rx, ry] = refXY(e); if (rx < c.x - 4 || rx > c.x + c.w + 4 || ry < c.y - 6 || ry > c.y + c.h + 6) return;
+      const [rx, ry] = refXY(e), k = sndK(), onPill = inside(rx, ry, c, 4 * k), onPanel = inside(rx, ry, c.panel, 4 * k);
+      if (!onPill && !onPanel) { if (app.sndOpen) { app.sndOpen = false; e.preventDefault(); e.stopImmediatePropagation(); } return; } // a tap away closes the dropdown, and only that
       e.preventDefault(); e.stopImmediatePropagation(); Snd.init(); // the control's own: no tap reaches the menu or the touch keys
       if (app.audioGate && app.screen === 'intro') { app.audioGate = false; AUD.ui('gate'); } // reaching for the sound lifts the gate
-      if (rx < c.sx0 - 12 * sndK()) { AUD.toggleMute(); return; }
-      drag = e.pointerId; try { cv.setPointerCapture(e.pointerId); } catch (err) { /* not offered */ }
+      if (onPill && rx < c.sx0 - 12 * k) { AUD.toggleMute(); return; }
+      if (onPill && rx >= c.cx0) { app.sndOpen = !app.sndOpen; return; }
+      if (onPill) drag = { id: e.pointerId, key: 'master' };
+      else { const r = c.panel.rows.find((q) => ry >= q.y0 && ry < q.y1) || c.panel.rows[ry < c.panel.y + c.panel.h / 2 ? 0 : 1]; drag = { id: e.pointerId, key: r.key }; }
+      try { cv.setPointerCapture(e.pointerId); } catch (err) { /* not offered */ }
       setFrom(rx);
     }, true);
-    cv.addEventListener('pointermove', (e) => { if (drag !== e.pointerId) return; e.preventDefault(); e.stopImmediatePropagation(); setFrom(refXY(e)[0]); }, true);
-    for (const t of ['pointerup', 'pointercancel']) cv.addEventListener(t, (e) => { if (drag !== e.pointerId) return; drag = null; e.stopImmediatePropagation(); }, true);
+    cv.addEventListener('pointermove', (e) => { if (!drag || drag.id !== e.pointerId) return; e.preventDefault(); e.stopImmediatePropagation(); setFrom(refXY(e)[0]); }, true);
+    for (const t of ['pointerup', 'pointercancel']) cv.addEventListener(t, (e) => { if (!drag || drag.id !== e.pointerId) return; drag = null; e.stopImmediatePropagation(); }, true);
   }
   function drawPause(s) {
     veil();
@@ -3199,7 +3224,7 @@
     if (STORY) wrapText(appStatus(), x + 22, y + h - 18, w - 44, 18, '400 13px ' + F_MONO, FT.dim, 1); // Edit 86: the build line, off the page
     if (page === 'controls') drawControls(s, x + w + 16, y, FW - 36 - w - 16, h);
     else drawCueKey(x + w + 16, y, FW - 36 - w - 16, h);
-    if (AUD) { const k = sndK(); ctx.fillStyle = FT.bg[0]; ctx.fillRect(VW - 24 - SND.w * k, 0, SND.w * k + 24, SND.h * k + 14); drawSoundCtl(VW - 16 - SND.w, 8, SND.w); } // Edit 100: the sound control, where the intro and the mode select have it, over the points while paused
+    if (AUD) { const k = sndK(); ctx.fillStyle = FT.bg[0]; ctx.fillRect(VW - 24 - SND.w * k, 0, SND.w * k + 24, SND.h * k + 14); drawSoundCtl(VW - 16 - SND.w, 8, SND.w); } // Edit 100: the sound control, where the intro and the mode select have it, over the points while paused; its dropdown draws its own panel
   }
   function drawEnding(s) {
     veil();
@@ -3718,6 +3743,7 @@
     processEvents();
     if (AUD) audioFrame(dt); // Edit 100 (P9)
     render();
+    if (AUD && !app.sndCtl) app.sndOpen = false; // Edit 100: the dropdown closes with the control (back in play)
     const pi = pad.info, padTxt = pad.blocked ? 'gamepads blocked on this page: open the downloaded file' : pi && pi.id ? 'pad: ' + pi.id.slice(0, 40) + (pi.mapping === 'standard' ? '' : ' (no standard mapping: hold START or G to set up)') : 'pad: none seen — press any button on it';
     const st = BUILD + ' · ' + SW + ' × ' + SH + ' ×' + kpx.toFixed(2) + ' · ' + (app.tuned ? 'TUNED RUN · UNRANKED' : 'registry values') + ' · ' + padTxt; app.statusLine = st;
     if (statusEl && statusEl.textContent !== st) statusEl.textContent = st;

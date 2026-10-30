@@ -228,7 +228,7 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
     <div class="mix">
       <label class="fader" for="vol-master">VOLUME <input id="vol-master" type="range" min="0" max="10" step="1"><output id="vol-master-o"></output></label>
       <label class="fader" for="vol-music">MUSIC <input id="vol-music" type="range" min="0" max="10" step="1"><output id="vol-music-o"></output></label>
-      <label class="fader" for="vol-sound">SOUND <input id="vol-sound" type="range" min="0" max="10" step="1"><output id="vol-sound-o"></output></label>
+      <label class="fader" for="vol-sound">SFX <input id="vol-sound" type="range" min="0" max="10" step="1"><output id="vol-sound-o"></output></label>
       <button class="btn quiet" id="btn-mute" type="button" aria-pressed="false">Mute</button>
       <button class="btn quiet" id="btn-bed" type="button" aria-pressed="false" title="Play the level track under the effects you audition">Music bed</button>
       <button class="btn quiet" id="btn-stop" type="button">Stop all</button>
@@ -267,7 +267,7 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
   <section class="room" id="room-music" data-room="music" hidden>
     <div class="lede">
       <h2>Music</h2>
-      <p>Track 1 on the intro, Track 2 from the menus until a level starts, Tracks 3 to 6 alternating between levels and maps. Change any screen's track, reorder the rotation, and hear it with the crossfade the game uses.</p>
+      <p>Track 1 on the intro, Track 2 from the menus until a level starts, Tracks 3 to 6 alternating between levels and maps. Change any screen's track, reorder the rotation, and hear it with the game's fades: 0.3 s in at every start, 0.3 s out at every end, the loop's seam included.</p>
     </div>
     <h3>The six tracks</h3>
     <div class="tracks" id="mu-tracks"></div>
@@ -340,7 +340,7 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
   const fmtS = (s) => { s = Math.round(s); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
   const sign = (x) => (x > 0 ? '+' : x < 0 ? '−' : '±') + Math.abs(Math.round(x * 10) / 10);
 
-  // ---------- picks (the key the game reads) and the shared MUSIC / SOUND settings
+  // ---------- picks (the key the game reads) and the shared VOLUME / MUSIC / SFX settings
   const isObj = (o) => !!o && typeof o === 'object' && !Array.isArray(o);
   function norm(p) { // the game's own cleaning (audio.js sanitize): unknown ids, bad files and odd values are dropped
     p = isObj(p) ? p : {}; const out = { sfx: {}, music: { states: {}, rotation: null }, params: {} }, T = L.music.tracks, okT = (v) => Number.isInteger(v) && T[v];
@@ -357,7 +357,7 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
       if (Object.keys(c).length) out.sfx[id] = c;
     }
     const m = isObj(p.music) ? p.music : {};
-    if (isObj(m.states)) for (const [k, v] of Object.entries(m.states)) if (L.music.states[k] !== undefined && (okT(v) || v === 'continue' || v === 'none')) out.music.states[k] = v;
+    if (isObj(m.states)) for (const [k, v] of Object.entries(m.states)) if (L.music.states[k] !== undefined && L.music.states[k] !== 'duck' && (okT(v) || v === 'continue' || v === 'none' || (k === 'card' && v === 'level'))) out.music.states[k] = v;
     if (Array.isArray(m.rotation)) { const r = m.rotation.filter(okT).slice(0, 8); if (r.length) out.music.rotation = r; }
     for (const [k, v] of Object.entries(isObj(p.params) ? p.params : {})) if (L.params[k] && typeof v === 'number' && isFinite(v)) out.params[k] = v;
     for (const id of Object.keys(out.sfx)) tidy(id, out.sfx);
@@ -465,7 +465,7 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
     if (!quiet) say(f, id);
   }
 
-  // ---------- music: two players and the game's crossfade
+  // ---------- music: two players, the game's fades (audio.music.fadeInSeconds, fadeOutSeconds) and its seam at the loop
   const MP = [null, null]; let cur = -1, curTrack = null, duck = 1, raf = 0;
   const oggOk = (() => { try { return !!document.createElement('audio').canPlayType('audio/ogg; codecs="vorbis"'); } catch (e) { return true; } })();
   function trackUrl(n) { const t = L.music.tracks[n]; return 'audio/' + (oggOk || !t.mp3 ? t.file : t.mp3).split('/').map(encodeURIComponent).join('/'); }
@@ -475,14 +475,20 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
     if (!local && ac()) { try { el.crossOrigin = 'anonymous'; p.node = AC.createMediaElementSource(el); p.gain = AC.createGain(); p.gain.gain.value = 0; p.node.connect(p.gain); p.gain.connect(BUS.music); } catch (e) { p.node = null; p.gain = null; } }
     return (MP[i] = p);
   }
-  function out(p) { const lvl = Math.max(0, Math.min(1, p.vol * duck * busLevel('music') * Math.pow(10, (p.trim || 0) / 20))); if (p.gain) p.gain.gain.value = lvl; else p.el.volume = lvl; }
-  function tick(t0) {
+  function seam(p) { // as the game: in from each start, out before the file's end
+    const el = p.el, dur = isFinite(el.duration) ? el.duration : p.seconds, t = el.currentTime || 0, fi = Math.max(0.01, param('audio.music.fadeInSeconds')), fo = Math.max(0.01, param('audio.music.fadeOutSeconds'));
+    if (!isFinite(dur) || !(dur > fi + fo)) return Math.min(1, t / fi);
+    return Math.max(0, Math.min(1, t / fi, (dur - t) / fo));
+  }
+  function out(p) { const lvl = Math.max(0, Math.min(1, p.vol * seam(p) * duck * busLevel('music') * Math.pow(10, (p.trim || 0) / 20))); if (p.gain) { try { p.gain.gain.setTargetAtTime(lvl, AC.currentTime, 0.012); } catch (e) { p.gain.gain.value = lvl; } } else p.el.volume = lvl; }
+  function tick() {
     let last = performance.now();
     const step = (now) => {
-      const dt = Math.min(0.1, (now - last) / 1000); last = now; const xf = Math.max(0.05, param('audio.music.crossfadeSeconds'));
-      let moving = false;
-      for (const p of MP) { if (!p) continue; const d = p.want - p.vol; if (Math.abs(d) > 1e-3) { p.vol += Math.sign(d) * Math.min(Math.abs(d), dt / xf); moving = true; } else p.vol = p.want; out(p); if (p.want === 0 && p.vol <= 0 && !p.el.paused) p.el.pause(); }
-      raf = moving ? requestAnimationFrame(step) : 0;
+      const dt = Math.min(0.1, (now - last) / 1000); last = now;
+      const fi = Math.max(0.01, param('audio.music.fadeInSeconds')), fo = Math.max(0.01, param('audio.music.fadeOutSeconds'));
+      let live = false;
+      for (const p of MP) { if (!p) continue; const d = p.want - p.vol; p.vol += d > 0 ? Math.min(d, dt / fi) : Math.max(d, -dt / fo); out(p); if (p.want === 0 && p.vol <= 0 && !p.el.paused) p.el.pause(); if (!p.el.paused) live = true; }
+      raf = live ? requestAnimationFrame(step) : 0; // runs while a track plays: the seam needs every frame
     };
     if (!raf) raf = requestAnimationFrame(step);
   }
@@ -493,7 +499,7 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
     if (curTrack === n && cur >= 0 && !MP[cur].el.paused) { for (const p of MP) if (p) out(p); nowPlaying(); return; }
     const prev = cur >= 0 ? MP[cur] : null, i = cur === 0 ? 1 : 0, p = player(i);
     if (prev) prev.want = 0;
-    cur = i; curTrack = n; p.trim = (L.music.tracks[n] || {}).trimDb || 0; p.want = 1; p.vol = prev ? 0 : 0.0001;
+    cur = i; curTrack = n; p.trim = (L.music.tracks[n] || {}).trimDb || 0; p.seconds = (L.music.tracks[n] || {}).seconds || NaN; p.want = 1; p.vol = 1; // a fresh start: the seam fades it in
     const src = trackUrl(n); if (p.el.dataset.src !== src) { p.el.src = src; p.el.dataset.src = src; }
     try { p.el.currentTime = o.at || 0; } catch (e) { /* not loaded */ }
     const pr = p.el.play(); if (pr && pr.catch) pr.catch(() => {});
@@ -508,8 +514,8 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
   }
   function stateTrack(k) { // the track a music state plays now (levels: the first slot of the rotation)
     let v = stateOf(k);
-    if (k === 'level' || v === 'rotation') return rotation()[0];
-    if (k === 'pause') return rotation()[0];
+    if (k === 'level' || v === 'rotation' || v === 'level') return rotation()[0];
+    if (v === 'duck') return rotation()[0]; // pause, the gift screen and report, a write-off: the level track, ducked
     if (v === 'continue') return stateOf('menu');
     return typeof v === 'number' && v > 0 ? v : null;
   }
@@ -580,32 +586,34 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
   // ---------- Music
   function trackOptions(v, k) {
     const opts = []; for (let n = 1; n <= 6; n++) opts.push(['' + n, 'Track ' + n + ' · ' + L.music.tracks[n].title]);
+    if (k === 'card') opts.unshift(['level', 'The level\'s track (from the tile)']);
     if (k === 'card' || k === 'credits') opts.push(['continue', 'Keep the current track']);
-    if (k !== 'level' && k !== 'pause') opts.push(['none', 'Silence']);
+    if (k !== 'level') opts.push(['none', 'Silence']);
     if (k === 'level') return '<option>Rotation (below)</option>';
-    if (k === 'pause') return '<option>The level track, ducked</option>';
+    if (DUCKS[k]) return '<option>The level track at ' + Math.round(param(DUCKS[k]) * 100) + '%</option>';
     return opts.map(([val, lab]) => '<option value="' + val + '"' + (String(v) === val ? ' selected' : '') + '>' + esc(lab) + '</option>').join('');
   }
+  const DUCKS = { pause: 'audio.music.pauseDuck', screens: 'audio.music.screenDuck', writeoff: 'audio.music.writeoffDuck' };
   function drawMusic() {
-    const used = {}; for (const m of L.musicStates) { const t = stateTrack(m.id); if (t && m.id !== 'level' && m.id !== 'pause') (used[t] = used[t] || []).push(m.label); }
+    const used = {}; for (const m of L.musicStates) { const t = stateTrack(m.id); if (t && m.id !== 'level' && !DUCKS[m.id] && stateOf(m.id) !== 'level') (used[t] = used[t] || []).push(m.label); }
     rotation().forEach((t, i) => (used[t] = used[t] || []).push('Levels slot ' + (i + 1)));
     $('#mu-tracks').innerHTML = Object.entries(L.music.tracks).map(([n, t]) => '<div class="track panel"><button class="btn play" type="button" data-act="track" data-track="' + n + '" aria-label="Play Track ' + n + '">' + PLAY + '</button><h4><span class="track-dot" style="background:' + TRACK_VAR(n) + '"></span><span>Track ' + n + ' · ' + esc(t.title) + '</span></h4><p>' + fmtS(t.seconds) + ' · ' + t.level + ' LUFS → trim ' + sign(t.trimDb) + ' dB</p><p>' + esc((used[n] || ['unused']).join(', ')) + '</p></div>').join('');
     $('#mu-states').innerHTML = L.musicStates.map((m) => {
       const v = stateOf(m.id), ch = picks.music.states[m.id] != null || (m.id === 'level' && picks.music.rotation);
       const why = (L.music.why || {})[m.id];
       return '<article class="state panel">' + shotHtml(m.shot, m.label) + '<div class="in"><h4>' + esc(m.label) + (ch ? ' <span class="pill changed">changed</span>' : '') + '</h4><p>' + esc(m.what) + '</p>'
-        + '<div class="ctl"><select data-act="state" data-k="' + m.id + '" aria-label="Track for ' + esc(m.label) + '"' + (m.id === 'level' || m.id === 'pause' ? ' disabled' : '') + '>' + trackOptions(v, m.id) + '</select><button class="btn play" type="button" data-act="statePlay" data-k="' + m.id + '" aria-label="Play ' + esc(m.label) + '">' + PLAY + '</button></div>'
-        + (why ? '<p class="why"><b>Designer:</b> ' + esc(why) + '</p>' : '') + '</div></article>';
+        + '<div class="ctl"><select data-act="state" data-k="' + m.id + '" aria-label="Track for ' + esc(m.label) + '"' + (m.id === 'level' || DUCKS[m.id] ? ' disabled' : '') + '>' + trackOptions(v, m.id) + '</select><button class="btn play" type="button" data-act="statePlay" data-k="' + m.id + '" aria-label="Play ' + esc(m.label) + '">' + PLAY + '</button></div>'
+        + (why ? (/^Lawrence \(/.test(why) ? '<p class="why"><b>' + esc(why.slice(0, why.indexOf(':') + 1)) + '</b> ' + esc(why.slice(why.indexOf(':') + 2)) + '</p>' : '<p class="why"><b>Designer:</b> ' + esc(why) + '</p>') : '') + '</div></article>';
     }).join('');
     const R = rotation();
     let tm = '<div class="rot-slots"><span class="note">Rotation:</span>' + R.map((t, i) => '<label for="rot-' + i + '">' + (i + 1) + ' <select id="rot-' + i + '" data-act="rot" data-i="' + i + '">' + [1, 2, 3, 4, 5, 6].map((n) => '<option value="' + n + '"' + (n === t ? ' selected' : '') + '>Track ' + n + '</option>').join('') + '</select></label>').join('')
       + (R.length < 6 ? '<button class="btn" type="button" data-act="rotAdd">+ Slot</button>' : '') + (R.length > 1 ? '<button class="btn quiet" type="button" data-act="rotDel">− Slot</button>' : '') + '</div>';
     let n = 0;
     tm += '<div class="tilemap" aria-label="Story tiles and their tracks">' + L.tiles.map((d) => '<div class="district"><div><b>' + esc(d.name) + '</b><small>' + esc(d.act || '') + '</small></div><div class="tiles">' + d.order.map((t) => { n++; const tr = R[(n - 1) % R.length]; return '<button class="tile" type="button" data-act="track" data-track="' + tr + '" style="background:' + TRACK_VAR(tr) + '" title="Tile ' + n + ' · ' + esc(d.name + ' ' + t + (d.titles[t] ? ' · ' + d.titles[t] : '')) + ': Track ' + tr + '">' + t + '<small>T' + tr + '</small></button>'; }).join('') + '</div></div>').join('') + '</div>';
-    tm += '<div class="runs"><span class="note" style="padding:0;color:var(--ink-2)">Arcade, run by run:</span>' + [1, 2, 3, 4, 5, 6].map((r) => { const tr = R[(r - 1) % R.length]; return '<span style="background:' + TRACK_VAR(tr) + '">Run ' + r + ' · T' + tr + '</span>'; }).join('') + '</div>';
-    tm += '<p class="note">Story: tile <i>n</i> in story order plays slot ((<i>n</i> − 1) mod ' + R.length + ') + 1, so neighbouring tiles differ. A tile\'s track starts with its drone drop, or as the ferry carries you in. A write-off keeps the track playing.</p>';
+    tm += '<div class="runs"><span class="note" style="padding:0;color:var(--ink-2)">Arcade, level by level:</span>' + [1, 2, 3, 4, 5, 6].map((r) => { const tr = R[(r - 1) % R.length]; return '<span style="background:' + TRACK_VAR(tr) + '">Level ' + r + ' · T' + tr + '</span>'; }).join('') + '</div>';
+    tm += '<p class="note">Story: the tile <i>n</i> a level card announces plays slot ((<i>n</i> − 1) mod ' + R.length + ') + 1, so neighbouring tiles differ. The track starts with the card and holds until the next card: the ferry, a walk back to a cleared tile and a write-off never change it. A write-off drops it to ' + Math.round(param('audio.music.writeoffDuck') * 100) + '%; the gift screen, report and workshop to ' + Math.round(param('audio.music.screenDuck') * 100) + '%.</p>';
     $('#mu-rot').innerHTML = tm;
-    const P = ['audio.music.volume', 'audio.sfx.volume', 'audio.ui.volume', 'audio.music.crossfadeSeconds', 'audio.music.pauseDuck', 'audio.sfx.pitchJitter', 'audio.synth.gain', 'audio.sfx.maxVoices'].concat(GAINS.map((g) => 'audio.sfx.gain.' + g));
+    const P = ['audio.music.volume', 'audio.sfx.volume', 'audio.ui.volume', 'audio.music.fadeInSeconds', 'audio.music.fadeOutSeconds', 'audio.music.pauseDuck', 'audio.music.screenDuck', 'audio.music.writeoffDuck', 'audio.music.duckSeconds', 'audio.sfx.pitchJitter', 'audio.synth.gain', 'audio.sfx.maxVoices'].concat(GAINS.map((g) => 'audio.sfx.gain.' + g));
     $('#mu-mix').innerHTML = P.filter((id) => L.params[id]).map((id) => { const p = L.params[id], v = param(id), st = p.unit === 'dB' ? 0.5 : p.unit === 'count' ? 1 : p.unit === 's' ? 0.05 : 0.01; const lo = p.unit === 'dB' ? -24 : p.min, hi = p.unit === 'dB' ? 6 : p.unit === 'count' ? 32 : p.unit === 's' ? 4 : p.max;
       return '<div class="param"><label for="p-' + id + '">' + esc(p.label) + (picks.params[id] != null ? ' <span class="pill changed">changed</span>' : '') + '</label><output id="o-' + id + '">' + v + ' ' + esc(p.unit === 'ratio' ? '' : p.unit) + '</output><input id="p-' + id + '" type="range" min="' + lo + '" max="' + hi + '" step="' + st + '" value="' + v + '" data-act="param" data-pid="' + id + '"><code>' + esc(id) + '</code></div>'; }).join('');
   }
@@ -717,7 +725,7 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
     else if (act === 'grp') { fx.group = b.dataset.g; drawGroups(); drawEffects(); }
     else if (act === 'shot') { const s = b.dataset.shot; if (!L.shots[s]) return; $('#shot-img').src = L.shots[s]; $('#shot-h').textContent = b.getAttribute('aria-label').replace('Screenshot: ', ''); $('#shotdlg').showModal(); }
     else if (act === 'track') { const n = +b.dataset.track; if (curTrack === n) stopMusic(); else playTrack(n); }
-    else if (act === 'statePlay') { const k = b.dataset.k, t = stateTrack(k); if (!t) { stopMusic(); toast('Silence on this screen'); } else playTrack(t, { duck: k === 'pause' ? param('audio.music.pauseDuck') : 1 }); }
+    else if (act === 'statePlay') { const k = b.dataset.k, t = stateTrack(k); if (!t) { stopMusic(); toast('Silence on this screen'); } else playTrack(t, { duck: DUCKS[k] ? param(DUCKS[k]) : 1 }); }
     else if (act === 'rotAdd') { const R = rotation().slice(); R.push(3 + (R.length % 4)); picks.music.rotation = R; save(); drawMusic(); }
     else if (act === 'rotDel') { const R = rotation().slice(0, -1); picks.music.rotation = R; save(); drawMusic(); }
     else if (act === 'seq') playSeq(+b.dataset.i, true);
@@ -736,7 +744,7 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
     if (act === 'db') { setPick(id, { gainDb: +t.value }); playCue(id, true); }
     else if (act === 'gain') { setPick(id, { gain: t.value }); playCue(id, true); }
     else if (act === 'cool') setPick(id, { cooldown: t.value });
-    else if (act === 'state') { const k = t.dataset.k, v = t.value === 'continue' || t.value === 'none' ? t.value : +t.value; picks.music.states[k] = v; save(); drawMusic(); const tr = stateTrack(k); if (tr) playTrack(tr); else stopMusic(); }
+    else if (act === 'state') { const k = t.dataset.k, v = t.value === 'continue' || t.value === 'none' || t.value === 'level' ? t.value : +t.value; picks.music.states[k] = v; save(); drawMusic(); const tr = stateTrack(k); if (tr) playTrack(tr); else stopMusic(); }
     else if (act === 'rot') { const R = rotation().slice(); R[+t.dataset.i] = +t.value; picks.music.rotation = R; save(); drawMusic(); }
     else if (act === 'param') drawMusic();
   });

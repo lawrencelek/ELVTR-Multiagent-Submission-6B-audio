@@ -83,6 +83,8 @@ NEW = {
                   + [[T, 1567.98, 1567.98, 0.36, 0.04, "sine", 0.21], [N, 6000, 3000, 0.06, 0.05, None, 0.2]]),  # banked: a chord, a ring
     "honk": [[T, 415, 410, 0.32, 0.05, "square", 0], [T, 330, 326, 0.32, 0.04, "square", 0]],       # a two-tone horn, held: longer than 8.4's blip
     "car-notice": [[T, 1318.5, 1318.5, 0.05, 0.04, "sine", 0], [T, 1760, 1760, 0.07, 0.04, "sine", 0.08]],  # the headlights' double flash
+    # Lawrence, 30 October 11:30 (DECISIONS row 614): the new chassis plays a blip, not bubble.wav (the bark's)
+    "chassis": [[T, 987.77, 1318.5, 0.07, 0.06, "sine", 0], [T, 1975.5, 2637, 0.045, 0.012, "sine", 0]],  # one soft rising blip
 }
 
 

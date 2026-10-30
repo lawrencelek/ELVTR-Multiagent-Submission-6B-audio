@@ -1,5 +1,6 @@
 // Prototype 9 (GDD Edit 100): the audio engine. WAV cues, generated tones and OGG music from content/audio/cues.json
-// (window.DUMMIES_CUES): three buses (music, sfx, ui) under a master, loudness trims per file, crossfades, the pause duck,
+// (window.DUMMIES_CUES): three buses (music, sfx, ui) under a master, loudness trims per file, 0.3 s fades at every track's
+// start and end (the loop's seam too), the level card's track, the ducks (pause, the gift screen, report and workshop, a write-off),
 // cooldowns, a voice cap, saved volumes (dummies.p9.audio), and the Sound Lab's picks (dummies.p9.audio.lab, or
 // #audio=<base64 JSON> in the URL). game.js creates it only when window.DUMMIES_SIM['audio.enabled'] is 1, so builds without
 // it are unchanged. Files load by URL, beside the page (audio/sfx, audio/tones, audio/music). On http(s) the effects decode
@@ -37,7 +38,7 @@
       if (Object.keys(c).length) out.sfx[id] = c;
     }
     const m = isObj(p.music) ? p.music : {}, ok = (v) => Number.isInteger(v) && tracks[v];
-    if (isObj(m.states)) for (const [k, v] of Object.entries(m.states)) if (base.music.states[k] !== undefined && (ok(v) || v === 'continue' || v === 'none')) out.music.states = Object.assign(out.music.states || {}, { [k]: v });
+    if (isObj(m.states)) for (const [k, v] of Object.entries(m.states)) if (base.music.states[k] !== undefined && base.music.states[k] !== 'duck' && (ok(v) || v === 'continue' || v === 'none' || (k === 'card' && v === 'level'))) out.music.states = Object.assign(out.music.states || {}, { [k]: v });
     if (Array.isArray(m.rotation)) { const r = m.rotation.filter(ok).slice(0, 8); if (r.length) out.music.rotation = r; }
     for (const [id, v] of Object.entries(isObj(p.params) ? p.params : {})) if (base.params[id] != null && typeof v === 'number' && isFinite(v)) out.params[id] = v;
     return out;
@@ -88,7 +89,7 @@
     const A = {
       ctx: null, unlocked: false, log: [], files: CUES.files, cues: CUES, settings, local,
       buffers: new Map(), pending: new Map(), failed: new Set(), last: new Map(), lastFile: new Map(), cyc: new Map(), voices: [], errors: [],
-      music: { players: [null, null, null], cur: -1, track: null, state: null, levelTrack: null, duck: 1, retryT: 0 },
+      music: { players: [null, null, null], cur: -1, track: null, state: null, levelTrack: null, inCard: false, duck: 1, retryT: 0 },
       bus: null, useElements: local,
     };
     function logIt(kind, id, file) { A.log.push({ t: +(app.realT || 0).toFixed(3), kind, id, file: file || null }); if (A.log.length > 800) A.log.splice(0, A.log.length - 800); }
@@ -102,7 +103,7 @@
       A.bus.synth = g(A.bus.sfx); // Prototype 8.4's live synth, for an event with no entry and no tone
       applyVolumes();
     }
-    function busLevel(name) { // VOLUME (the sound control) × MUSIC or SOUND (Options) × the bus's level
+    function busLevel(name) { // VOLUME (the sound control) × MUSIC or SFX (its dropdown; Options) × the bus's level
       if (settings.mute) return 0;
       const m = settings.master / 10;
       if (name === 'music') return m * P('audio.music.volume', 0.5) * settings.music / 10;
@@ -112,10 +113,10 @@
     function applyVolumes() {
       if (!A.bus) return;
       for (const b of ['sfx', 'ui']) A.bus[b].gain.value = busLevel(b);
-      A.bus.music.gain.value = 1; // the music's level is set per player each frame (crossfade × duck × bus)
+      A.bus.music.gain.value = 1; // the music's level is set per player each frame (fade × seam × duck × bus)
       A.bus.synth.gain.value = P('audio.synth.gain', 1);
     }
-    function saveSettings() { store.set(SETTINGS_KEY, { master: settings.master, music: settings.music, sound: settings.sound, mute: settings.mute }); applyVolumes(); for (const p of A.music.players) if (p) output(p, p.vol * A.music.duck); }
+    function saveSettings() { store.set(SETTINGS_KEY, { master: settings.master, music: settings.music, sound: settings.sound, mute: settings.mute }); applyVolumes(); for (const p of A.music.players) if (p) output(p); }
 
     // ---------- unlock: Snd.init calls this inside the key, pointer or touch handler. Audio counts as unlocked only once the
     // context runs: a press the browser does not count as a gesture (Escape, a gamepad) leaves it waiting for the next one
@@ -228,9 +229,17 @@
       return p;
     }
     function bless(p) { try { p.el.muted = true; const pr = p.el.play(); if (pr && pr.then) pr.then(() => { if (!p.track) p.el.pause(); p.el.muted = false; }).catch(() => { p.el.muted = false; }); else { p.el.pause(); p.el.muted = false; } } catch (e) { /* no audio */ } }
-    function output(p, v) { // v: the player's fade × the duck; the bus level and the track's trim on top
-      const lvl = Math.max(0, Math.min(1, v * busLevel('music') * db(p.trimDb || 0)));
-      if (p.gain) p.gain.gain.value = lvl; else p.el.volume = lvl;
+    // The track's own start and end (audio.music.fadeInSeconds, fadeOutSeconds): it fades in from each start, the loop's
+    // restart included, and out before the file ends. Before the file's length is known it waits at the start
+    function seam(p) {
+      const el = p.el, dur = isFinite(el.duration) ? el.duration : p.seconds, t = el.currentTime || 0, fi = Math.max(0.01, P('audio.music.fadeInSeconds', 0.3)), fo = Math.max(0.01, P('audio.music.fadeOutSeconds', 0.3)); // a server that sends no length: the inventory's
+      if (!isFinite(dur) || !(dur > fi + fo)) return Math.min(1, t / fi);
+      return Math.max(0, Math.min(1, t / fi, (dur - t) / fo));
+    }
+    function output(p) { // the player's fade × the seam × the duck; the bus level and the track's trim on top
+      const lvl = Math.max(0, Math.min(1, p.vol * seam(p) * A.music.duck * busLevel('music') * db(p.trimDb || 0)));
+      if (p.gain) { try { p.gain.gain.setTargetAtTime(lvl, A.ctx.currentTime, 0.012); } catch (e) { p.gain.gain.value = lvl; } } else p.el.volume = lvl; // a short glide: no zipper at 60 steps a second
+      p.level = lvl;
     }
     function play(p) { const pr = p.el.play(); if (pr && pr.catch) pr.catch(() => {}); }
     function startTrack(n) {
@@ -242,22 +251,25 @@
       let i = M.players.findIndex((q) => q.track === n && !q.el.paused); // still fading out: bring it back, no restart
       if (i < 0) { i = M.players.findIndex((q) => q.vol <= 0.001 && q.want === 0 && q.track == null); if (i < 0) i = M.players.reduce((b, q, k) => (k !== M.cur && q.vol < M.players[b].vol ? k : b), M.cur === 0 ? 1 : 0); }
       const p = M.players[i]; M.cur = i; p.want = 1;
-      if (p.track !== n) {
+      if (p.track !== n) { // a fresh start: the seam fades it in from 0 s, so the player itself opens at once
         const src = trackUrl(n);
-        p.track = n; p.trimDb = (CUES.music.tracks[n] || {}).trimDb || 0; p.vol = 0; output(p, 0);
+        p.track = n; p.trimDb = (CUES.music.tracks[n] || {}).trimDb || 0; p.seconds = (CUES.music.tracks[n] || {}).seconds || NaN; p.vol = 1;
         if (p.el.getAttribute('data-src') !== src) { p.el.src = src; p.el.setAttribute('data-src', src); }
         try { p.el.currentTime = 0; } catch (e) { /* not loaded */ }
+        output(p);
       }
       play(p);
       logIt('music', 'track' + n, (CUES.music.tracks[n] || {}).file);
     }
     function stateTrack(st) {
       const v = CUES.music.states[st];
-      if (st === 'level') return levelTrack();
+      if (st === 'level') return A.music.levelTrack != null ? A.music.levelTrack : levelTrack();
+      if (st === 'card' && v === 'level') return A.music.levelTrack;
       if (typeof v === 'number') return v;
       if (v === 'none' || v === 0) return null;
-      return A.music.track;
+      return A.music.track; // 'continue'
     }
+    // The level's track: Story, the tile the level card announces (its start tile); Arcade, the level's count this session
     function levelTrack() {
       const R = CUES.music.rotation && CUES.music.rotation.length ? CUES.music.rotation : [3, 4, 5, 6], v = A.view || {};
       const n = v.mode === 'story' && v.tileN ? v.tileN : Math.max(1, v.runN || 1);
@@ -268,29 +280,42 @@
       if (!A.unlocked || v.gate) return null;
       if (v.credits) return 'credits';
       if (v.screen === 'intro') return 'intro';
+      if (v.screen === 'loading') return null; // a district building: the music holds until its card
       if (v.screen !== 'game') return 'menu';
       if (v.phase === 'unveil' || v.phase === 'voyage' || v.voyage || (v.phase === 'ending' && v.ending === 'Certified')) return 'finale';
       if (v.phase === 'ending') return 'ending';
-      if (v.phase === 'brief') return A.music.state === 'level' ? 'level' : 'card'; // Q2: a district's first card keeps Track 2; a card between tiles keeps the level track
+      if (v.phase === 'brief') return 'card'; // Q2 (Lawrence): the level card starts the level's track
       return 'level';
+    }
+    // The ducks (Lawrence, Q4 and Q5): pause; the gift screen, the report and the workshop; a write-off. Pause wins
+    function duckOf(v) {
+      let d = 1;
+      if (v.phase === 'writeoff') d = P('audio.music.writeoffDuck', 0.5);
+      else if (v.phase === 'gift' || v.phase === 'report' || v.phase === 'shop') d = P('audio.music.screenDuck', 0.7);
+      if (v.paused) d = Math.min(d, P('audio.music.pauseDuck', 0.35));
+      return d;
     }
     function frame(v) {
       A.view = v;
       if (!A.ctx || !A.unlocked) return;
-      let st = musicState(v);
-      if (st === 'card' && CUES.music.states.card === 'continue') st = A.music.state || 'menu';
+      const M = A.music, st = musicState(v), cs = CUES.music.states.card;
+      // Q3 (Lawrence): each level card sets the level's track from the tile it announces; it holds until the next card,
+      // so walking back to a cleared tile, the ferry and a write-off never change it
+      if (st === 'card' && !M.inCard) { M.inCard = true; M.levelTrack = cs === 'level' ? levelTrack() : null; }
+      if (st !== 'card' && st != null) M.inCard = false;
+      if (st === 'level' && M.levelTrack == null) M.levelTrack = levelTrack(); // a level that opens without its card (a gift still owed)
+      if (st != null && st !== 'level' && st !== 'card') M.levelTrack = null;
       if (st != null) {
-        const n = st === 'level' && v.phase === 'brief' && A.music.levelTrack != null ? A.music.levelTrack : stateTrack(st);
-        if (st === 'level') A.music.levelTrack = n; else if (st !== 'card') A.music.levelTrack = null;
-        if (A.music.state !== st || A.music.track !== n) { if (A.music.state !== st) logIt('state', st, null); A.music.state = st; startTrack(n); }
+        const n = stateTrack(st);
+        if (M.state !== st || M.track !== n) { if (M.state !== st) logIt('state', st, null); M.state = st; startTrack(n); }
       }
-      const duckTo = v.paused ? P('audio.music.pauseDuck', 0.35) : 1, dt = Math.max(0, Math.min(0.1, v.dt || 1 / 60));
-      const xf = Math.max(0.05, P('audio.music.crossfadeSeconds', 1.5)), step = dt / xf;
-      A.music.duck += Math.sign(duckTo - A.music.duck) * Math.min(Math.abs(duckTo - A.music.duck), dt / 0.25);
-      for (const p of A.music.players) {
+      const duckTo = duckOf(v), dt = Math.max(0, Math.min(0.1, v.dt || 1 / 60));
+      const fi = Math.max(0.01, P('audio.music.fadeInSeconds', 0.3)), fo = Math.max(0.01, P('audio.music.fadeOutSeconds', 0.3));
+      M.duck += Math.sign(duckTo - M.duck) * Math.min(Math.abs(duckTo - M.duck), dt / Math.max(0.01, P('audio.music.duckSeconds', 0.25)));
+      for (const p of M.players) {
         if (!p) continue;
-        p.vol += Math.sign(p.want - p.vol) * Math.min(Math.abs(p.want - p.vol), step);
-        output(p, p.vol * A.music.duck);
+        const d = p.want - p.vol; p.vol += d > 0 ? Math.min(d, dt / fi) : Math.max(d, -dt / fo); // a switch: out over fadeOut, in over fadeIn
+        output(p);
         if (p.want === 0 && p.vol <= 0 && !p.el.paused) { p.el.pause(); p.track = null; }
       }
       const cur = A.music.cur >= 0 ? A.music.players[A.music.cur] : null; // a play() the browser refused: try again each second
@@ -304,14 +329,15 @@
     }
     try { document.addEventListener('visibilitychange', () => suspend(document.hidden)); } catch (e) { /* no document */ }
 
-    // ---------- options (MUSIC, SOUND, MUTE) and the lab's picks
+    // ---------- options (VOLUME, MUSIC, SFX, MUTE) and the lab's picks
     function nudge(which, d) { settings[which] = Math.max(0, Math.min(10, Math.round(settings[which] + d))); saveSettings(); }
+    function setLevel(which, v) { if (!(which in settings) || which === 'mute') return; settings[which] = Math.max(0, Math.min(10, Math.round(v))); if (settings[which] > 0) settings.mute = false; saveSettings(); } // the dropdown's MUSIC and SFX sliders; moving one unmutes
     function cycle(which) { settings[which] = settings[which] >= 10 ? 0 : settings[which] + 1; saveSettings(); }
     function toggleMute() { settings.mute = !settings.mute; saveSettings(); }
     function setVolume(v) { settings.master = Math.max(0, Math.min(10, Math.round(v))); if (settings.master > 0) settings.mute = false; saveSettings(); } // moving the slider unmutes
     function setPicks(picks) { const p = sanitize(picks, root.DUMMIES_CUES); store.set(LAB_KEY, p); CUES = merge(root.DUMMIES_CUES, p); A.cues = CUES; A.files = CUES.files; preload(); A.music.state = null; }
 
-    Object.assign(A, { param: (id, d) => P(id, d), unlock: guard(unlock), event: guard(event, false), ui: guard(ui, false), frame: guard(frame), nudge, cycle, toggleMute, setVolume, setPicks: guard(setPicks), applyVolumes, musicState, resolve, running: () => !!(A.ctx && A.ctx.state === 'running'), synthOut: () => (A.bus ? A.bus.synth : null) });
+    Object.assign(A, { param: (id, d) => P(id, d), unlock: guard(unlock), event: guard(event, false), ui: guard(ui, false), frame: guard(frame), nudge, cycle, toggleMute, setVolume, setLevel, setPicks: guard(setPicks), duckOf, applyVolumes, musicState, resolve, running: () => !!(A.ctx && A.ctx.state === 'running'), synthOut: () => (A.bus ? A.bus.synth : null) });
     Object.defineProperty(A, 'state', { get: () => A.music.state }); Object.defineProperty(A, 'track', { get: () => A.music.track });
     root.__dummiesAudio = A;
     return A;

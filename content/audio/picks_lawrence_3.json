@@ -1,0 +1,17 @@
+{
+ "note": "Lawrence, 30 October 11:30: the rulings on Q1-Q6 and the music fades (DECISIONS rows 609-618). Placed over the map by audio/integrate.py",
+ "sfx": {
+  "chassis": {"decision": "synth"}
+ },
+ "music": {
+  "states": {"card": "level", "credits": 1},
+  "storyRule": "card",
+  "arcadeRule": "level"
+ },
+ "params": {
+  "audio.music.fadeInSeconds": 0.3,
+  "audio.music.fadeOutSeconds": 0.3,
+  "audio.music.screenDuck": 0.7,
+  "audio.music.writeoffDuck": 0.5
+ }
+}
