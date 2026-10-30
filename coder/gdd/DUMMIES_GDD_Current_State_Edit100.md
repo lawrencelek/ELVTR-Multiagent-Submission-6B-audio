@@ -102,7 +102,7 @@
 ## 11 Builds and records
 
 - **Current build:** `prototypes/p9/dummies_p9.html` (Edit 100), in `lawrencelek/ELVTR-Multiagent-Submission-6B-audio`. Prototypes 8–8.4 and 1–7.13 frozen.
-- **Decisions:** `DECISIONS.md`, rows 1–602; open items in its D table (newest D77–D86).
+- **Decisions:** `DECISIONS.md`, rows 1–605; open items in its D table (newest D77–D86).
 - **Text sources:** `content/story/story_v2.json`, `prototypes/p8/lore.js`. Prototype 7.13 keeps `story.json` and Farsight.
 - **Style Guide Agent:** Assignment 6, `style/` (V1 for 7.13; V2 for 8).
 - **Sound Designer Agent:** `audio/` in the sound repo; GDD Edit 100; the Sound Lab `prototypes/p9/sound_lab.html`.
@@ -114,11 +114,13 @@
 - **Music:** Track 1 intro and finale; Track 2 menus, level cards, run ends, Credits; levels rotate Tracks 3–6 (`audio.music.levelRotation`).
   - Story: tile *n* plays slot ((*n* − 1) mod 4) + 1. Arcade: one slot per run.
   - Pause ducks to `audio.music.pauseDuck`. Crossfade `audio.music.crossfadeSeconds`.
-- **Effects:** cue map `content/audio/cues.json`: 107 entries. 66 cues, 28 stated silences, 12 on Prototype 8.4's synth (among them the honk).
+- **Effects:** cue map `content/audio/cues.json`: 107 entries. 66 cues, 24 stated silences, 16 generated tones (among them the honk), 1 on its base.
+- **Lawrence's picks** (row 603): his Sound Lab choices over the agent's map, 21 entries (`content/audio/picks_lawrence.json`).
+- **Generated tones** (row 604): Prototype 8.4's synth rendered to `prototypes/p9/audio/tones/` (57; slip's is new). A `synth` entry plays its tone in the mix.
 - **Mix:** buses `audio.music.volume`, `audio.sfx.volume`, `audio.ui.volume`. Gain classes `audio.sfx.gain.<class>`. Cooldowns `audio.sfx.cooldown.<class>`.
 - **Limits:** voices `audio.sfx.maxVoices`; jitter `audio.sfx.pitchJitter`. Trims toward `audio.sfx.targetLufs` and `audio.music.targetLufs`.
 - **Edge cues:** low health below `audio.sfx.lowHealthAt`; a car noticing the dummy; brake lights; a part breaking; the intro's hit.
 - **Options:** Music, Sound, Mute; saved as `dummies.p9.audio` (defaults `audio.settings.music`, `audio.settings.sound`).
 - **Sound Lab:** auditions every cue and state. Picks are saved as `dummies.p9.audio.lab`, and the game reads them.
 - **Credits card:** adds "Music by ansimuz", "Sound effects by Chequered Ink". Widens Style Guide C1 (D86, open).
-- **Readings Q1–Q6:** taken, not ruled (rows 591–596).
+- **Readings Q1–Q6:** taken, not ruled (rows 591–596). Review fixes: row 605.
