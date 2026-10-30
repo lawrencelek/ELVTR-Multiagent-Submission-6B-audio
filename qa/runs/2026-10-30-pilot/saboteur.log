@@ -1,0 +1,24 @@
+[saboteur] seed 202, 30 min, http://127.0.0.1:43931/prototypes/p9/dummies_p9.html
+[saboteur 59.1s] MAJOR sound-loop: cue:car-notice sounded in 20 of the last 30 seconds (38 times in 60 s)
+[saboteur 62.8s] game/play waterfront B2 · findings 1 · probes 0 (trapped 0) · runs 1
+[saboteur 111.4s] MAJOR sound-loop: cue:bark sounded in 20 of the last 30 seconds (30 times in 60 s)
+[saboteur 123.5s] game/play waterfront B2 · findings 2 · probes 0 (trapped 0) · runs 1
+[saboteur 150.2s] MAJOR sound-loop: cue:knock sounded in 20 of the last 30 seconds (57 times in 60 s)
+[saboteur 158.8s] MINOR sound-spam: cue:knock sounded 60 times in 60 s
+[saboteur 176.4s] MAJOR frame-stall: the game loop paused 2400 ms in play
+[saboteur 185.1s] game/play waterfront B2 · findings 5 · probes 0 (trapped 0) · runs 1
+[saboteur 193.6s] MINOR sound-spam: cue:car-notice sounded 77 times in 60 s
+[saboteur 240.0s] MINOR sound-spam: cue:touch-spent sounded 60 times in 60 s
+[saboteur 245.4s] game/play waterfront B2 · findings 7 · probes 0 (trapped 0) · runs 1
+[saboteur 247.5s] MAJOR sound-loop: cue:touch-spent sounded in 20 of the last 30 seconds (74 times in 60 s)
+[saboteur 305.7s] game/play monument B2 · findings 8 · probes 0 (trapped 0) · runs 2
+[saboteur 342.7s] MAJOR frame-stall: the game loop paused 2167 ms in play
+[saboteur 366.3s] game/play monument B2 · findings 9 · probes 0 (trapped 0) · runs 2
+[saboteur 427.1s] game/play monument C2 · findings 9 · probes 0 (trapped 0) · runs 2
+[saboteur 479.7s] MAJOR sound-loop: cue:honk.body sounded in 20 of the last 30 seconds (20 times in 60 s)
+[saboteur 487.5s] game/play monument C2 · findings 10 · probes 0 (trapped 0) · runs 2
+[saboteur 548.6s] game/play monument C2 · findings 10 · probes 0 (trapped 0) · runs 2
+[saboteur 610.1s] game/ending monument C2 · findings 10 · probes 0 (trapped 0) · runs 2
+[saboteur 670.3s] arcade/-   · findings 10 · probes 0 (trapped 0) · runs 2
+[saboteur 701.4s] CRITICAL flow-stuck: stuck on arcade||false|false|false|false for 90 s while the agent pressed through it
+[saboteur 731.1s] arcade/-   · findings 11 · probes 0 (trapped 0) · runs 2

@@ -51,7 +51,7 @@ function serve() {
   const report = async (label) => {
     const r = await ev((n0) => {
       const L = window.__evlog.slice(n0), by = {}, cars = {};
-      for (const e of L) { by[e.type] = (by[e.type] || 0) + 1; if (e.car && /notice|honk|bark|brake/.test(e.type)) { const k = e.type + ' ' + e.car; cars[k] = cars[k] || []; cars[k].push(e.t); } }
+      for (const e of L) { by[e.type] = (by[e.type] || 0) + 1; if (e.car && /notice|honk|bark|brake|knock|touch|impact/.test(e.type)) { const k = e.type + ' ' + e.car; cars[k] = cars[k] || []; cars[k].push(e.t); } }
       const many = Object.entries(cars).filter(([, ts]) => ts.length > 2).sort((a, b) => b[1].length - a[1].length).slice(0, 12).map(([k, ts]) => [k, ts.length, ts.slice(0, 10)]);
       const A = window.__dummiesAudio, played = A.log.filter((e) => e.kind === 'sfx').reduce((o, e) => ((o[e.id] = (o[e.id] || 0) + 1), o), {});
       return { events: by, repeatCars: many, played, findings: window.__qa.findings.map((f) => [f.type, f.detail, f.count]) };

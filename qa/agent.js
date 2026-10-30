@@ -111,11 +111,14 @@ function fitAll() { const s = window.__dummies.sim; if (!s || !s.run || !window.
     if (st.name) { for (let i = 0; i < 3; i++) await press(pick(['KeyQ', 'KeyA', 'KeyZ', 'Digit7'])); return press('Enter'); }
     if (st.screen === 'intro') return press('Space');
     if (st.screen === 'title') { const i = st.titleItems.indexOf('ARCADE'), cur = st.titleSel % st.titleItems.length; if (cur !== i) return press('ArrowDown'); return press('Space'); }
-    if (st.screen === 'arcade') {
-      const target = districtTurn % (st.levels || 5);
-      if (st.level !== target) return press('ArrowDown');
-      if (!menu.diffSet) { menu.diffSet = true; if (chance(0.5)) await press(pick(['ArrowLeft', 'ArrowRight'])); }
-      menu.diffSet = false; counts.runs++; return press('Space');
+    if (st.screen === 'arcade') { // the select lists only the districts open so far: learn how many from the cursor's wrap
+      const A = menu.arc || (menu.arc = { n: null, last: null, presses: 0 });
+      if (A.last != null && st.level < A.last) A.n = A.last + 1;
+      const target = districtTurn % (A.n || st.levels || 5);
+      if (st.level !== target && A.presses < 8) { A.last = st.level; A.presses++; return press('ArrowDown'); }
+      A.last = null; A.presses = 0;
+      if (chance(0.5)) await press(pick(['ArrowLeft', 'ArrowRight']));
+      counts.runs++; note('district ' + st.level); return press('Space');
     }
     if (st.screen === 'scores' || st.screen === 'saves' || st.screen === 'storymap') return press('ShiftLeft');
     if (st.screen === 'loading') return wait(200);

@@ -1,0 +1,16 @@
+[chaos] seed 303, 30 min, http://127.0.0.1:37813/prototypes/p9/dummies_p9.html
+[chaos 6.3s] MAJOR frame-stall: the game loop paused 2650 ms in play
+[chaos 66.9s] game/play waterfront A2 · findings 1 · probes 0 (trapped 0) · runs 1
+[chaos 127.7s] game/play waterfront A3 · findings 1 · probes 0 (trapped 0) · runs 1
+[chaos 187.9s] game/play waterfront A3 · findings 1 · probes 0 (trapped 0) · runs 1
+[chaos 255.1s] game/play waterfront B3 · findings 1 · probes 0 (trapped 0) · runs 1
+[chaos 318.4s] game/play waterfront C2 · findings 1 · probes 0 (trapped 0) · runs 2
+[chaos 358.7s] MAJOR sound-loop: cue:car-notice sounded in 20 of the last 30 seconds (33 times in 60 s)
+[chaos 378.7s] game/play waterfront B2 · findings 2 · probes 0 (trapped 0) · runs 2
+[chaos 396.8s] MAJOR frame-stall: the game loop paused 1533 ms in play
+[chaos 445.2s] game/play waterfront C2 · findings 3 · probes 0 (trapped 0) · runs 2
+[chaos 506.8s] game/play waterfront C3 · findings 3 · probes 0 (trapped 0) · runs 2
+[chaos 567.5s] game/play waterfront C2 · findings 3 · probes 0 (trapped 0) · runs 2
+[chaos 627.9s] game/play waterfront C3 · findings 3 · probes 0 (trapped 0) · runs 2
+[chaos 688.1s] game/play waterfront B1 · findings 3 · probes 0 (trapped 0) · runs 2
+[chaos 720.0s] game/play waterfront B1 · findings 3 · probes 0 (trapped 0) · runs 2

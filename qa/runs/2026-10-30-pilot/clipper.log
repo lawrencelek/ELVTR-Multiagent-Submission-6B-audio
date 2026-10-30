@@ -1,0 +1,14 @@
+[clipper] seed 101, 30 min, http://127.0.0.1:43885/prototypes/p9/dummies_p9.html
+[clipper 62.1s] game/play waterfront B1 · findings 0 · probes 1 (trapped 0) · runs 1
+[clipper 120.4s] MAJOR frame-stall: the game loop paused 1950 ms in play
+[clipper 123.8s] game/play waterfront C1 · findings 1 · probes 1 (trapped 0) · runs 1
+[clipper 183.0s] game/play waterfront C1 · findings 1 · probes 1 (trapped 0) · runs 1
+[clipper 243.1s] game/play waterfront C1 · findings 1 · probes 1 (trapped 0) · runs 1
+[clipper 303.3s] game/play waterfront B1 · findings 1 · probes 1 (trapped 0) · runs 1
+[clipper 365.3s] game/play waterfront B1 · findings 1 · probes 1 (trapped 0) · runs 1
+[clipper 425.6s] game/play waterfront A1 · findings 1 · probes 1 (trapped 0) · runs 1
+[clipper 486.2s] game/play waterfront A2 · findings 1 · probes 1 (trapped 0) · runs 1
+[clipper 546.6s] game/play waterfront A3 · findings 1 · probes 1 (trapped 0) · runs 1
+[clipper 606.9s] game/play waterfront A3 · findings 1 · probes 1 (trapped 0) · runs 1
+[clipper 667.1s] game/play waterfront B2 · findings 1 · probes 1 (trapped 0) · runs 1
+[clipper 727.5s] game/play waterfront B2 · findings 1 · probes 1 (trapped 0) · runs 1
