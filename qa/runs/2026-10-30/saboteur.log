@@ -1,0 +1,43 @@
+[saboteur] seed 202, 30 min, http://127.0.0.1:38015/prototypes/p9/dummies_p9.html
+[saboteur 62.4s] game/play waterfront B2 · findings 0 · probes 0 (trapped 0) · runs 1
+[saboteur 80.1s] MAJOR sound-loop: cue:car-notice sounded in 20 of the last 30 seconds (52 times in 60 s)
+[saboteur 123.4s] game/play waterfront B2 · findings 1 · probes 0 (trapped 0) · runs 1
+[saboteur 129.7s] MAJOR sound-loop: cue:knock sounded in 20 of the last 30 seconds (47 times in 60 s)
+[saboteur 135.9s] MAJOR sound-loop: cue:touch-spent sounded in 20 of the last 30 seconds (54 times in 60 s)
+[saboteur 137.0s] MINOR sound-spam: cue:car-notice sounded 62 times in 60 s
+[saboteur 155.0s] MAJOR frame-stall: the game loop paused 2033 ms in play
+[saboteur 167.8s] MINOR sound-spam: cue:touch-spent sounded 77 times in 60 s
+[saboteur 185.3s] game/play waterfront B2 · findings 6 · probes 0 (trapped 0) · runs 1
+[saboteur 195.3s] MINOR sound-spam: cue:knock sounded 65 times in 60 s
+[saboteur 245.6s] game/play monument B2 · findings 7 · probes 0 (trapped 0) · runs 2
+[saboteur 306.0s] game/play monument C2 · findings 7 · probes 0 (trapped 0) · runs 2
+[saboteur 366.1s] game/play monument C2 · findings 7 · probes 0 (trapped 0) · runs 2
+[saboteur 418.5s] MAJOR sound-loop: cue:bark sounded in 20 of the last 30 seconds (30 times in 60 s)
+[saboteur 426.3s] game/play monument C2 · findings 8 · probes 0 (trapped 0) · runs 2
+[saboteur 473.1s] MAJOR frame-stall: the game loop paused 2033 ms in play
+[saboteur 487.1s] game/play monument C1 · findings 9 · probes 0 (trapped 0) · runs 2
+[saboteur 547.4s] game/play monument C2 · findings 9 · probes 0 (trapped 0) · runs 2
+[saboteur 608.0s] game/play parkland B2 · findings 9 · probes 0 (trapped 0) · runs 3
+[saboteur 661.8s] MAJOR frame-stall: the game loop paused 1650 ms in play
+[saboteur 668.1s] game/play parkland B1 · findings 10 · probes 0 (trapped 0) · runs 3
+[saboteur 728.8s] game/play parkland B1 · findings 10 · probes 0 (trapped 0) · runs 3
+[saboteur 789.1s] game/play parkland B1 · findings 10 · probes 0 (trapped 0) · runs 3
+[saboteur 829.1s] MAJOR frame-stall: the game loop paused 1683 ms in play
+[saboteur 850.1s] game/play parkland A1 · findings 11 · probes 0 (trapped 0) · runs 3
+[saboteur 911.9s] game/play parkland A1 · findings 11 · probes 0 (trapped 0) · runs 3
+[saboteur 973.0s] game/play parkland A1 · findings 11 · probes 0 (trapped 0) · runs 3
+[saboteur 1034.8s] game/play parkland A1 · findings 11 · probes 0 (trapped 0) · runs 3
+[saboteur 1095.0s] game/play parkland A1 · findings 11 · probes 0 (trapped 0) · runs 3
+[saboteur 1158.6s] game/brief parkland B2 · findings 11 · probes 0 (trapped 0) · runs 3
+[saboteur 1218.9s] game/play parkland C3 · findings 11 · probes 0 (trapped 0) · runs 3
+[saboteur 1279.6s] game/play parkland C3 · findings 11 · probes 0 (trapped 0) · runs 3
+[saboteur 1340.9s] game/play parkland C3 · findings 11 · probes 0 (trapped 0) · runs 3
+[saboteur 1401.3s] game/play parkland C3 · findings 11 · probes 0 (trapped 0) · runs 3
+[saboteur 1452.0s] MAJOR frame-stall: the game loop paused 1533 ms in play
+[saboteur 1461.7s] game/ending parkland C2 · findings 12 · probes 0 (trapped 0) · runs 3
+[saboteur 1521.9s] game/play parkland B2 · findings 12 · probes 0 (trapped 0) · runs 3
+[saboteur 1582.0s] game/play parkland B2 · findings 12 · probes 0 (trapped 0) · runs 3
+[saboteur 1642.1s] game/play parkland A2 · findings 12 · probes 0 (trapped 0) · runs 3
+[saboteur 1702.4s] game/play parkland A1 · findings 12 · probes 0 (trapped 0) · runs 3
+[saboteur 1763.7s] game/play parkland A1 · findings 12 · probes 0 (trapped 0) · runs 3
+[saboteur] done: 12 findings {"sound-loop":4,"sound-spam":3,"frame-stall":5}

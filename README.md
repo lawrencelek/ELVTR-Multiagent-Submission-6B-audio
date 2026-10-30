@@ -38,6 +38,7 @@
 | **Gameplay points with screenshots** | [`prototypes/p9/SOUND_TOUR.md`](prototypes/p9/SOUND_TOUR.md): 47 steps, 31 screenshots, each cue heard and its alternates |
 | **The audition page** | [`prototypes/p9/sound_lab.html`](prototypes/p9/sound_lab.html) (built by `make_lab.py`) |
 | **The text review** | [`prototypes/p9/text_lab.html`](prototypes/p9/text_lab.html) and [`content/text/REVIEW.md`](content/text/REVIEW.md): every line, before and after. Inventory `text/inventory.py`, brief `text/BRIEF.md`, lint `text/lint.py`, reviewer `text/REVIEWER.md` |
+| **Adversarial QA** | [`qa/REPORT.md`](qa/REPORT.md): an agent played Arcade 3 × 30 min to break it (`qa/agent.js`, `qa/monitor.js`); findings QA-01–06, evidence in [`qa/runs/`](qa/runs/) |
 | **The new build** | [`prototypes/p9/dummies_p9.html`](prototypes/p9/dummies_p9.html) with `prototypes/p9/audio/` (built by `build.py`) |
 | **The agent** | [`audio/`](audio/): `inventory.py`, `events.py`, `loop.py`, `lint.py`, `llm.py`, `integrate.py`, `agents/`, [`SOUND_GUIDE.md`](audio/SOUND_GUIDE.md) |
 | **Evidence** | [`audio/runs/`](audio/runs/): every agent input and output, every map version, lint, a `trace.md` per run |
@@ -180,6 +181,17 @@ Lawrence: "messages such as 'HELD AT 1 · the brief wants cone-baited car' are n
 - **Result:** 127 changes proposed, none over a limit. One held line per brief, from Lawrence's example: "Try harder. Bait a car with a cone, then get hit by it."
 - **Nothing is applied** until Lawrence decides in the Text Lab.
 
+## 3.3 Adversarial QA (rows 622–625)
+
+Lawrence: "conduct an adversarial QA game agent who wants to break the game and set them to run in the arcade mode for 30 minutes. Look particular at collisions, getting stuck, and never ending sound triggers."
+
+- **Agent:** `qa/agent.js`, three personas in parallel, 30 min each: clipper (walls, edges, cars), saboteur (lanes, cones, hitches), chaos (keys, pause, mute, blur, resize). 65.8 game minutes, 11 runs.
+- **Monitor:** `qa/monitor.js`, inside the page, 10 Hz, on the game's clock. Collisions, stuck states, sound loops, music.
+- **Found:** four sound loops. A blocked car honked every 1.4 s without end (QA-01). Leaning on a spent car knocked ~16 times a second (QA-02). car-notice and barks rang near-constantly (QA-03, QA-04).
+- **Clean:** no collision fault, trapped body, stuck mode, phase, car or menu; no music or engine fault.
+- **Fixed** (Lawrence, 19:10): `audio.sfx.honkMaxPerCar` 2; `audio.sfx.spentRepeatMax` 2 per `audio.sfx.spentRepeatSeconds` 2; a tick on a spent car (`ui.spentTick`); car-notice and barks silent. Each verified in play (`qa/repro.js`).
+- **Open:** D88, the lean jitter in the sim.
+
 ## 4 The engine
 
 `prototypes/p9/audio.js`, created by `game.js` only when `audio.enabled` is 1. Prototypes 8 to 8.4 never set it.
@@ -229,7 +241,7 @@ Lawrence: "messages such as 'HELD AT 1 · the brief wants cone-baited car' are n
 
 ## 6 Tests
 
-`cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84` → 46/46:
+`cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84` → 49/49:
 
 - every file in the cue map loads, tones included;
 - nothing plays before the first press;
@@ -242,6 +254,7 @@ Lawrence: "messages such as 'HELD AT 1 · the brief wants cone-baited car' are n
 - the sound control sits in one place on three screens, mutes, sets the volume, and lifts the intro's gate without START; M and − work;
 - its dropdown sets MUSIC and SFX apart, saves them, and a tap away only closes it;
 - the cone brief on Monument A2: a stop for the dummy 2 s after the cone writes off and counts; a miss holds at 1, small hits included; BODY never reads 0 alive (row 620);
+- the QA caps: a car honks twice at most; knock and touch-spent off a spent car twice in any 2 s, live cars free; car-notice and barks silent (rows 623–625);
 - the game takes the Lab's picks from `#audio=`; malformed picks are dropped and the game still starts;
 - no page or engine errors;
 - Prototype 8.4 draws the same strings (barks and live counts aside), and its frozen file is unchanged.
@@ -250,7 +263,8 @@ Lawrence: "messages such as 'HELD AT 1 · the brief wants cone-baited car' are n
 
 - **Licence:** only the pack's credit lines were supplied, not its licence texts.
 - **Devices:** the MP3 fallback for Safari and iOS is untested on a device.
-- **Silenced:** 23 entries, among them brake lights coming on. The Lab switches any on.
+- **The lean jitter** (D88): leaning on a stopped car knocks ~16 times a second in the sim; only its sound is capped.
+- **Silenced:** 26 entries, among them brake lights coming on, car-notice and barks. The Lab switches any on.
 - **Generated music:** checked by numbers (loudness, spectrum, structure), not by ear. Swap any of the four in the Lab.
 - **Tone fidelity:** each tone is one rendering. Prototype 8.4 scaled some sounds with the hit's force; the tones take the middle of each range.
 

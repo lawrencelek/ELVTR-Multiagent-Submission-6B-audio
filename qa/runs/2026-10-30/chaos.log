@@ -1,0 +1,38 @@
+[chaos] seed 303, 30 min, http://127.0.0.1:43489/prototypes/p9/dummies_p9.html
+[chaos 5.4s] MAJOR frame-stall: the game loop paused 1550 ms in play
+[chaos 65.6s] game/play waterfront A2 · findings 1 · probes 0 (trapped 0) · runs 1
+[chaos 126.8s] game/play waterfront A3 · findings 1 · probes 0 (trapped 0) · runs 1
+[chaos 186.7s] MAJOR frame-stall: the game loop paused 1767 ms in play
+[chaos 187.6s] game/play waterfront A3 · findings 2 · probes 0 (trapped 0) · runs 1
+[chaos 249.3s] game/play waterfront B3 · findings 2 · probes 0 (trapped 0) · runs 1
+[chaos 315.5s] game/play waterfront C2 · findings 2 · probes 0 (trapped 0) · runs 2
+[chaos 380.0s] game/play waterfront B2 · findings 2 · probes 0 (trapped 0) · runs 2
+[chaos 388.2s] MAJOR frame-stall: the game loop paused 2367 ms in play
+[chaos 447.0s] game/play waterfront B2 · findings 3 · probes 0 (trapped 0) · runs 3
+[chaos 462.7s] MAJOR frame-stall: the game loop paused 1583 ms in play
+[chaos 507.9s] game/play waterfront A3 · findings 4 · probes 0 (trapped 0) · runs 3
+[chaos 570.4s] game/play waterfront B2 · findings 4 · probes 0 (trapped 0) · runs 3
+[chaos 600.5s] game/play waterfront B2 · findings 4 · probes 0 (trapped 0) · runs 3
+[chaos 663.0s] game/play waterfront A3 · findings 4 · probes 0 (trapped 0) · runs 3
+[chaos 723.7s] game/play waterfront A2 · findings 4 · probes 0 (trapped 0) · runs 3
+[chaos 784.0s] game/play waterfront A2 · findings 4 · probes 0 (trapped 0) · runs 3
+[chaos 844.6s] game/play waterfront C2 · findings 4 · probes 0 (trapped 0) · runs 4
+[chaos 884.6s] MAJOR sound-loop: cue:car-notice sounded in 20 of the last 30 seconds (33 times in 60 s)
+[chaos 914.1s] game/play waterfront B2 · findings 5 · probes 0 (trapped 0) · runs 4
+[chaos 974.2s] game/play waterfront B2 · findings 5 · probes 0 (trapped 0) · runs 4
+[chaos 1048.3s] game/play waterfront B1 · findings 5 · probes 0 (trapped 0) · runs 5
+[chaos 1093.3s] MAJOR frame-stall: the game loop paused 3000 ms in play
+[chaos 1109.4s] game/play waterfront B1 · findings 6 · probes 0 (trapped 0) · runs 5
+[chaos 1170.5s] game/play waterfront B2 · findings 6 · probes 0 (trapped 0) · runs 5
+[chaos 1200.5s] game/play waterfront B3 · findings 6 · probes 0 (trapped 0) · runs 5
+[chaos 1261.4s] game/play waterfront B2 · findings 6 · probes 0 (trapped 0) · runs 5
+[chaos 1324.3s] game/play waterfront A3 · findings 6 · probes 0 (trapped 0) · runs 5
+[chaos 1385.9s] game/play waterfront A3 · findings 6 · probes 0 (trapped 0) · runs 5
+[chaos 1446.1s] game/play waterfront A3 · findings 6 · probes 0 (trapped 0) · runs 5
+[chaos 1507.6s] game/play waterfront B2 · findings 6 · probes 0 (trapped 0) · runs 6
+[chaos 1571.2s] game/play waterfront C3 · findings 6 · probes 0 (trapped 0) · runs 6
+[chaos 1631.7s] game/play waterfront C2 · findings 6 · probes 0 (trapped 0) · runs 6
+[chaos 1692.6s] game/play waterfront C2 · findings 6 · probes 0 (trapped 0) · runs 6
+[chaos 1740.7s] MAJOR frame-stall: the game loop paused 3217 ms in play
+[chaos 1753.3s] game/play waterfront C2 · findings 7 · probes 0 (trapped 0) · runs 6
+[chaos] done: 7 findings {"frame-stall":6,"sound-loop":1}

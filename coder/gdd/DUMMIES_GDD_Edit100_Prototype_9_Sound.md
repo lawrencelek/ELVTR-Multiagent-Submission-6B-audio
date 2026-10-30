@@ -1,6 +1,6 @@
 # DUMMIES GDD — Edit 100 · Prototype 9 · Sound
 
-**30 October 2026 · Lawrence Lek** · Build `prototypes/p9/dummies_p9.html` · Registry `edit100-2026-10-30` · Cue map `content/audio/cues.json`, run `20261030-014423-cues` (10/10, confirmed) · Tests 46/46
+**30 October 2026 · Lawrence Lek** · Build `prototypes/p9/dummies_p9.html` · Registry `edit100-2026-10-30` · Cue map `content/audio/cues.json`, run `20261030-014423-cues` (10/10, confirmed) · Tests 49/49
 
 ## 0 Request
 
@@ -21,7 +21,7 @@
 | Q3 | The start tile sets the track. Story: the tile *n* a level card announces plays slot ((*n* − 1) mod 4) + 1. The track holds until the next card: a walk back to a cleared tile, the ferry and a write-off never change it. Arcade: each level's card takes the next slot | `audio.music.levelRotation` (3456) |
 | Q4 | Pause: the level track at 0.35. Gift screen, report, workshop: the level track at 0.7. Finale and CERTIFIED: Track 1 (megabot). Credits: Track 1 (megabot) | `audio.music.pauseDuck`, `audio.music.screenDuck`, `audio.music.track.*` |
 | Q5 | A write-off drops the level track to 0.5; it keeps playing | `audio.music.writeoffDuck` |
-| Q6 | Each new bark bubble keeps its soft blip; a shouted line a brighter one. The new chassis no longer shares `bubble.wav`: it plays a generated blip | `sfx.bark`, `sfx.bark.shout`, `sfx.chassis` |
+| Q6 | The new chassis no longer shares `bubble.wav`: it plays a generated blip. Barks kept a blip until row 625 silenced them (§10) | `sfx.chassis`; `sfx.bark`, `sfx.bark.shout` |
 | Endings | Each has a track of its own, generated (row 619): at the ship Track 7 (certified); Licensed Track 8 (licensed); Failed test Track 9 (failed test); Non-compliant Track 10 (non-compliant) | `audio.music.track.certified`, `.licensed`, `.failed`, `.noncompliant` |
 | Fades | Every track fades in over 0.3 s from each start and out over 0.3 s at each end, the loop's seam included. A switch is the two, overlapped | `audio.music.fadeInSeconds`, `audio.music.fadeOutSeconds` |
 
@@ -189,7 +189,7 @@ Columns: the cue; what triggers it, with its code site; the files (a pool), or t
 | `sfx.unstick` | A stuck car reverses or replans. `S:2989, S:3026` | *silence*: Replans are invisible; only reversing earns a sound. | — | — | — |
 | ↳ `sfx.unstick.reverse` | Reversing beeps | tone `tone_unstick_reverse.wav` | sfx | `audio.sfx.gain.ambient` | `audio.sfx.cooldown.ambient` |
 | `sfx.learn-standoff` | A car model learns to stop further back. `S:3259` | `computer_2.wav` **L** (agent: `computer_2.wav`) | sfx | `audio.sfx.gain.story` + `audio.sfx.offset.learn-standoff` | `audio.sfx.cooldown.once` |
-| `sfx.car-notice` | A car's headlights start to flash: it has noticed the dummy. | tone `tone_car_notice.wav` **L** (agent: silence) | sfx | `audio.sfx.gain.alert` | `audio.sfx.cooldown.burst` |
+| `sfx.car-notice` | A car's headlights start to flash: it has noticed the dummy. | *silence* **L** (agent: silence): Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). | — | — | — |
 | `sfx.car-brake` | A car's brake lights come on as it brakes for safety. | *silence*: Constant traffic chatter; brake lights carry it. | — | — | — |
 | `sfx.commit` | A car commits to a manoeuvre. `S:2854` | *silence*: Internal traffic state; the player sees the move. | — | — | — |
 | `sfx.interrupt` | A car's manoeuvre is interrupted. `S:3007` | *silence*: Internal traffic state; constant chatter would mask the hits. | — | — | — |
@@ -254,8 +254,8 @@ Columns: the cue; what triggers it, with its code site; the files (a pool), or t
 
 | Cue | Trigger | Files | Bus | Volume ID | Cooldown ID |
 |---|---|---|---|---|---|
-| `sfx.bark` | A car's line appears in the message strip. | `bubble.wav`, `select_1.wav` | sfx | `audio.sfx.gain.ambient` | `audio.sfx.cooldown.bark` |
-| ↳ `sfx.bark.shout` | A shouted line | `select_5.wav`, `select_4.wav` | sfx | `audio.sfx.gain.ambient` | `audio.sfx.cooldown.bark` |
+| `sfx.bark` | A car's line appears in the message strip. | *silence* **L** (agent: `bubble.wav`, `select_1.wav`): Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). | — | — | — |
+| ↳ `sfx.bark.shout` | A shouted line | *silence* **L** (agent: `select_5.wav`, `select_4.wav`): Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). | — | — | — |
 | `sfx.learned` | A model that learned returns and says so (a bark). `G:862` | *silence*: The bark sound already plays this line. | — | — | — |
 | `sfx.upgrade-seen` | A car remarks on a new module (a bark). `G:884` | *silence*: The bark sound already plays this line. | — | — | — |
 | `sfx.part-seen` | A car remarks on a broken part (a bark). `G:888` | *silence*: The bark sound already plays this line. | — | — | — |
@@ -266,7 +266,7 @@ Columns: the cue; what triggers it, with its code site; the files (a pool), or t
 |---|---|---|---|---|---|
 | `sfx.intro-hit` | The intro loop: the car meets the dummy. | *silence*: Track 1 owns the intro; a looping hit would grate. | — | — | — |
 
-**Totals:** 107 entries: 52 cues, 23 silences, 32 generated tones, 0 on its base. 43 of 100 pack files used; 66 generated tones in `prototypes/p9/audio/tones/`. Lawrence's picks: 37 entries.
+**Totals:** 107 entries: 50 cues, 26 silences, 31 generated tones, 0 on its base. 41 of 100 pack files used; 66 generated tones in `prototypes/p9/audio/tones/`. Lawrence's picks: 39 entries.
 
 ## 4 Gameplay points
 
@@ -316,10 +316,10 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 - PASS · music on "the finale": finale, Track 1
 - PASS · music on "CERTIFIED": certified, Track 7
 - PASS · the music ducks: write-off 0.5, report, workshop and gift screen 0.7, play 1
-- PASS · the tour heard 40 cues through the game's hooks
+- PASS · the tour heard 37 cues through the game's hooks
 - PASS · the intro waits behind the gate
 - PASS · an unmapped key unlocks audio and starts Track 1
-- PASS · every catalogued event and variant does what the map says (107: 52 cue, 23 silence, 32 synth)
+- PASS · every catalogued event and variant does what the map says (107: 50 cue, 26 silence, 31 synth)
 - PASS · the catalogue and the cue map hold the same 107 entries
 - PASS · START plays ui-start and fades to Track 2
 - PASS · music fades out before the loop's end and back in after it (0.3 s, 0.3 s)
@@ -330,6 +330,9 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 - PASS · VOLUME − twice is saved (dummies.p9.audio)
 - PASS · a live chassis never reads BODY 0 (ui.hud.bodyCeil): 0.3 health reads 1
 - PASS · the cone brief counts the chain the cone starts; a miss holds at 1, small hits included; at 1 a hit to the brief writes off (row 620)
+- PASS · a car honks 2 times at most (audio.sfx.honkMaxPerCar; row 623)
+- PASS · knock and touch-spent off one spent car: 2 in any 2 s, each (audio.sfx.spentRepeatMax, spentRepeatSeconds; row 624); a live car is not capped
+- PASS · car-notice and barks are silent (row 625)
 - PASS · the pause page's sound control mutes, and its slider sets the volume and unmutes
 - PASS · the sound control sits in one place on the intro, the mode select and the pause page; on the intro it lifts the gate without START
 - PASS · M toggles mute; − steps the volume down one and unmutes
@@ -338,14 +341,14 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 - PASS · malformed picks are dropped and the game starts; an emptied pool is silent
 - PASS · no page errors in the hook tests
 - PASS · no audio engine errors
-- PASS · Prototype 8.4 rebuilt from the shared code draws what the frozen build draws, barks and live counts aside (315 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 315 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)
+- PASS · Prototype 8.4 rebuilt from the shared code draws what the frozen build draws, barks and live counts aside (316 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 316 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)
 - PASS · the frozen dummies_p8_4.html is unchanged (md5 9f5549201d88891f9f0b22c461602909)
 
 ## 7 Measured
 
 - **SFX:** 100 mono WAV, 44.1 kHz. 0.10–3.29 s. Level -29.0 to -17.6 dB (LUFS, or RMS under 0.4 s).
 - **Music:** 10 stereo OGG: six from the pack (48 kHz, 66–123 s) and four generated (44.1 kHz, 31–63 s). -16.7 to -9.1 LUFS.
-- **Build:** `dummies_p9.html` 1,409,651 bytes. Audio beside it: 37.9 MB.
+- **Build:** `dummies_p9.html` 1,412,984 bytes. Audio beside it: 37.9 MB.
 
 ## 8 Registry (edit100)
 
@@ -389,6 +392,7 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 | `audio.sfx.gain.reward` | -3 | dB | Gain class 'reward' on its bus: points and progress |
 | `audio.sfx.gain.story` | -5 | dB | Gain class 'story' on its bus: Corporation notices, drones, the ferry |
 | `audio.sfx.gain.ui` | -6 | dB | Gain class 'ui' on its bus: menu moves and confirms |
+| `audio.sfx.honkMaxPerCar` | 2 | count | A car's horn sounds this many times at most, however often it is stuck (the horn mark still shows). 0: no cap |
 | `audio.sfx.lowHealthAt` | 0.3 | ratio | The low-health cue sounds when the chassis falls below this share of its maximum, once until it recovers |
 | `audio.sfx.maxVoices` | 16 | count | Effects playing at once; a new one past the cap is dropped |
 | `audio.sfx.offset.deck-drop` | -2.5 | dB | Fine gain on sfx.deck-drop, after its gain class |
@@ -399,6 +403,8 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 | `audio.sfx.offset.splash` | -3.5 | dB | Fine gain on sfx.splash, after its gain class |
 | `audio.sfx.offset.unveil-lift` | -4.0 | dB | Fine gain on sfx.unveil-lift, after its gain class |
 | `audio.sfx.pitchJitter` | 0.04 | ratio | Each effect plays at a rate up to this far from 1 (not menus) |
+| `audio.sfx.spentRepeatMax` | 2 | count | Knock and touch-spent off one spent car: each sounds this many times at most in any audio.sfx.spentRepeatSeconds. 0: no cap |
+| `audio.sfx.spentRepeatSeconds` | 2 | s | The window audio.sfx.spentRepeatMax counts in, sim seconds |
 | `audio.sfx.targetLufs` | -18 | LUFS | Loudness each effect is trimmed toward (integrated LUFS, or RMS under 0.4 s) |
 | `audio.sfx.volume` | 0.85 | ratio | The effects bus at SOUND 10 |
 | `audio.synth.gain` | 1 | ratio | Prototype 8.4's live synth, through the SFX bus, for an event with no entry and no generated tone |
@@ -417,12 +423,24 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 - **The toast:** "HELD AT 1 · the brief wants cone-baited car" names the brief.
 - **Frozen builds:** registry defaults 0. Prototypes 7.10–8.4 keep their rule.
 
-## 10 Open
+## 10 QA fixes (rows 622–625)
 
+> (30 October 19:10) Fix honk - 2 max per car once they are stuck. Fix knock and touch spent - change the icon on a spent car is a TICK. Only 2 max knock spent per car within a 2 second window. Fix car-notice and bark - no sounds.
+
+- **The run** (row 622): an adversarial QA agent played Arcade, three personas for 30 min each (`qa/agent.js`, `qa/monitor.js`). Report: `qa/REPORT.md`.
+- **Honk** (QA-01, row 623): a car's horn sounds `audio.sfx.honkMaxPerCar` (2) times at most. The cap counts the sim's honk and the draw's 1.4 s repeat. The "!" mark still flashes.
+- **Spent repeats** (QA-02, row 624): knock and touch-spent off one spent car sound `audio.sfx.spentRepeatMax` (2) times each in any `audio.sfx.spentRepeatSeconds` (2 s). A live car is not capped.
+- **Spent tick** (row 624): `ui.spentTick` (1). A spent car carries a tick on its roof, upright, white edged in ink. The cue key shows it beside "Already hit you".
+- **Silent** (QA-03, QA-04, row 625): `car-notice`, `bark`, `bark.shout`. The headlamp flash and the bubbles still show.
+- **Where:** `game.js` `audGate`, before the cue map. A capped event logs `gated` and hushes the synth.
+
+## 11 Open
+
+- **The lean jitter** (D88): leaning on a stopped car starts a new contact every few frames, ~16 knocks a second. Row 624 caps the sound only.
 - **Generated music:** four tracks composed in code (`audio/music_gen.py`) to fill the pack's gaps. Heard here only as numbers: loudness, spectrum, structure. Lawrence's ear decides; the Sound Lab swaps any of them.
 - **Honk and cone hits:** the pack has no horn. Honks play Prototype 8.4's horn as generated tones; Lawrence set cone hits to their tone too (C2, user-decided).
 - **Tone fidelity:** a generated tone is one rendering. Prototype 8.4 scaled some of its sounds with the hit's force; the tones take the middle of each range.
-- **Silenced:** 23 entries (§3). Switch any on in the Sound Lab.
+- **Silenced:** 26 entries (§3). Switch any on in the Sound Lab.
 - **Licence:** the pack's credit lines only. The licence texts were not supplied.
 - **Devices:** the MP3 fallback for Safari and iOS is untested on a device.
 - **Seam on odd servers:** a host that sends no file length gives the music no duration; the engine then takes the inventory's length for the fade out.

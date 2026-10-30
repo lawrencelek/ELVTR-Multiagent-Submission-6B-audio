@@ -1,0 +1,35 @@
+[clipper] seed 101, 30 min, http://127.0.0.1:45723/prototypes/p9/dummies_p9.html
+[clipper 35.3s] MAJOR sound-loop: cue:car-notice sounded in 20 of the last 30 seconds (25 times in 60 s)
+[clipper 62.3s] game/play waterfront B2 · findings 1 · probes 0 (trapped 0) · runs 1
+[clipper 122.7s] game/play waterfront B3 · findings 1 · probes 2 (trapped 0) · runs 1
+[clipper 151.2s] MAJOR frame-stall: the game loop paused 1567 ms in play
+[clipper 164.7s] MAJOR frame-stall: the game loop paused 1950 ms in play
+[clipper 183.6s] game/scroll waterfront B2 · findings 3 · probes 2 (trapped 0) · runs 1
+[clipper 246.5s] game/brief waterfront B2 · findings 3 · probes 2 (trapped 0) · runs 1
+[clipper 274.3s] MAJOR frame-stall: the game loop paused 2917 ms in play
+[clipper 306.5s] game/play waterfront B2 · findings 4 · probes 2 (trapped 0) · runs 1
+[clipper 366.7s] game/play waterfront A2 · findings 4 · probes 2 (trapped 0) · runs 1
+[clipper 427.1s] game/play waterfront A2 · findings 4 · probes 2 (trapped 0) · runs 1
+[clipper 487.3s] game/play waterfront B3 · findings 4 · probes 2 (trapped 0) · runs 1
+[clipper 561.5s] game/play waterfront B2 · findings 4 · probes 2 (trapped 0) · runs 1
+[clipper 622.4s] game/play waterfront B2 · findings 4 · probes 2 (trapped 0) · runs 1
+[clipper 683.8s] game/play waterfront B2 · findings 4 · probes 2 (trapped 0) · runs 1
+[clipper 744.4s] game/play waterfront B3 · findings 4 · probes 2 (trapped 0) · runs 1
+[clipper 806.5s] game/play waterfront B3 · findings 4 · probes 2 (trapped 0) · runs 1
+[clipper 868.8s] game/play waterfront C2 · findings 4 · probes 2 (trapped 0) · runs 1
+[clipper 900.3s] game/play waterfront B2 · findings 4 · probes 2 (trapped 0) · runs 1
+[clipper 960.4s] game/play waterfront B3 · findings 4 · probes 2 (trapped 0) · runs 1
+[clipper 1021.8s] game/play waterfront B3 · findings 4 · probes 2 (trapped 0) · runs 1
+[clipper 1082.1s] game/play waterfront B3 · findings 4 · probes 2 (trapped 0) · runs 1
+[clipper 1142.5s] game/play waterfront B2 · findings 4 · probes 2 (trapped 0) · runs 1
+[clipper 1203.9s] game/play waterfront B1 · findings 4 · probes 2 (trapped 0) · runs 1
+[clipper 1264.8s] game/play waterfront B1 · findings 4 · probes 2 (trapped 0) · runs 1
+[clipper 1324.6s] game/play waterfront B1 · findings 4 · probes 2 (trapped 0) · runs 1
+[clipper 1384.8s] game/play waterfront B1 · findings 4 · probes 2 (trapped 0) · runs 1
+[clipper 1444.9s] game/play waterfront B1 · findings 4 · probes 2 (trapped 0) · runs 1
+[clipper 1505.5s] game/play waterfront B3 · findings 4 · probes 2 (trapped 0) · runs 1
+[clipper 1566.1s] game/play waterfront C3 · findings 4 · probes 2 (trapped 0) · runs 1
+[clipper 1626.3s] game/scroll waterfront B2 · findings 4 · probes 2 (trapped 0) · runs 1
+[clipper 1686.4s] game/play waterfront C2 · findings 4 · probes 2 (trapped 0) · runs 1
+[clipper 1747.5s] game/play monument B2 · findings 4 · probes 2 (trapped 0) · runs 2
+[clipper] done: 4 findings {"sound-loop":1,"frame-stall":3}

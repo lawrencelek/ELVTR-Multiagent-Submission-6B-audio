@@ -1,0 +1,84 @@
+{
+ "persona": "clipper",
+ "seed": 101,
+ "minutes": 4,
+ "wall": 240.1,
+ "counts": {
+  "probes": 4,
+  "wallStops": 4,
+  "trapped": 0,
+  "reloads": 0,
+  "crashes": 0,
+  "runs": 1,
+  "districts": {
+   "waterfront": 1561
+  },
+  "actions": 483
+ },
+ "shots": 0,
+ "findings": 0,
+ "bySev": {},
+ "byType": {},
+ "monitor": {
+  "samples": 2287,
+  "osc": 0,
+  "src": 139,
+  "oscPeak": 0,
+  "log": {
+   "unlock": 1,
+   "state": 4,
+   "music": 3,
+   "ui": 7,
+   "sfx": 132,
+   "gated": 594
+  },
+  "sounds": {
+   "cue:ui-start": 1,
+   "cue:ui-move": 3,
+   "cue:ui-ok": 3,
+   "cue:chassis.start": 1,
+   "cue:drop-in": 1,
+   "cue:dropped-in": 1,
+   "cue:jump": 1,
+   "cue:jump-land": 5,
+   "cue:lunge": 8,
+   "cue:punt": 22,
+   "cue:near-miss": 13,
+   "cue:knock": 20,
+   "cue:impact": 7,
+   "cue:combo": 1,
+   "cue:touch-spent": 15,
+   "cue:denied": 1,
+   "cue:combo-end": 1,
+   "cue:screen": 2,
+   "cue:cone-stop": 1,
+   "cue:cone-struck": 1,
+   "cue:stair": 15,
+   "cue:jump.dash": 4,
+   "cue:honk.body": 2,
+   "cue:learn-standoff": 1,
+   "cue:splash": 3,
+   "cue:drone-dispatch.rescue": 3,
+   "cue:rescued": 3
+  },
+  "frames": 11232,
+  "gaps": 4,
+  "gapMax": 4133.1,
+  "simT0": 29.999999999999577,
+  "real0": 2.433299999999999,
+  "simAcc": 231.18333333342488,
+  "writeoffs": 0,
+  "endings": {},
+  "districts": {
+   "waterfront": 2264
+  },
+  "tiles": {
+   "waterfront:B2": 992,
+   "waterfront:A2": 36,
+   "waterfront:A3": 1236
+  },
+  "sims": 1,
+  "loadStallMax": 4133.1
+ },
+ "monitorFindings": []
+}

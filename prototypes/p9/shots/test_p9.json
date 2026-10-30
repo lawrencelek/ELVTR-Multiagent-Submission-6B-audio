@@ -1,6 +1,6 @@
 {
- "passed": 46,
- "total": 46,
+ "passed": 49,
+ "total": 49,
  "results": [
   {
    "name": "every file in the cue map loads (155)",
@@ -113,9 +113,9 @@
    "detail": "Arcade: play 1/1 · Arcade: a write-off 0.5/0.5 · Arcade: the report 0.7/0.7 · Arcade: the workshop 0.7/0.7 · Story: the gift screen (ferry) 0.7/0.7"
   },
   {
-   "name": "the tour heard 40 cues through the game's hooks",
+   "name": "the tour heard 37 cues through the game's hooks",
    "pass": true,
-   "detail": "ui-start ui-move ui-ok ui-back chassis.start drop-in near-miss bark dropped-in car-notice lunge screen denied impact combo pickup cone-hit drone-dispatch drone-dispatch.rescue writeoff credit shop-open chassis jump jump-land ui-pause ending.win ending.fail story-enter knock impact.big story-deliver story-count story-clear gift story-ferry story-gift story-ferried unveil unveil-lift"
+   "detail": "ui-start ui-move ui-ok ui-back chassis.start drop-in near-miss dropped-in lunge screen jump.dash jump-land impact combo pickup cone-hit drone-dispatch drone-dispatch.rescue writeoff credit shop-open chassis jump ui-pause ending.win ending.fail story-enter impact.big story-deliver story-count story-clear gift story-ferry story-gift story-ferried unveil unveil-lift"
   },
   {
    "name": "the intro waits behind the gate",
@@ -128,7 +128,7 @@
    "detail": ""
   },
   {
-   "name": "every catalogued event and variant does what the map says (107: 52 cue, 23 silence, 32 synth)",
+   "name": "every catalogued event and variant does what the map says (107: 50 cue, 26 silence, 31 synth)",
    "pass": true,
    "detail": ""
   },
@@ -183,6 +183,21 @@
    "detail": "{\"oldCone\":{\"tile\":\"A2\",\"alive\":true,\"health\":1,\"coned\":false,\"counted\":false},\"smallMiss\":{\"tile\":\"A2\",\"alive\":true,\"health\":1,\"coned\":false,\"counted\":false},\"chain\":{\"tile\":\"A2\",\"alive\":false,\"health\":0,\"coned\":true,\"counted\":true},\"floorBrief\":{\"tile\":\"A2\",\"alive\":false,\"health\":0,\"coned\":true,\"counted\":true}}"
   },
   {
+   "name": "a car honks 2 times at most (audio.sfx.honkMaxPerCar; row 623)",
+   "pass": true,
+   "detail": "[false,false,true,true]"
+  },
+  {
+   "name": "knock and touch-spent off one spent car: 2 in any 2 s, each (audio.sfx.spentRepeatMax, spentRepeatSeconds; row 624); a live car is not capped",
+   "pass": true,
+   "detail": "[[false,false,true,true,false],[false,false,true,false],[false,false,false]]"
+  },
+  {
+   "name": "car-notice and barks are silent (row 625)",
+   "pass": true,
+   "detail": "{\"honk\":[false,false,true,true],\"spent\":[false,false,true,true,false],\"knock\":[false,false,true,false],\"live\":[false,false,false],\"silent\":[true,true,true],\"played\":[],\"decisions\":[\"silence\",\"silence\",\"silence\"],\"P\":[2,2,2]}"
+  },
+  {
    "name": "the pause page's sound control mutes, and its slider sets the volume and unmutes",
    "pass": true,
    "detail": "[[true,true,true],[false,5]]"
@@ -223,7 +238,7 @@
    "detail": "[]"
   },
   {
-   "name": "Prototype 8.4 rebuilt from the shared code draws what the frozen build draws, barks and live counts aside (315 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 315 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)",
+   "name": "Prototype 8.4 rebuilt from the shared code draws what the frozen build draws, barks and live counts aside (316 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 316 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)",
    "pass": true,
    "detail": ""
   },

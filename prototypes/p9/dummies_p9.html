@@ -14022,7 +14022,7 @@ window.DUMMIES_CUES = {"generated_by": "audio/integrate.py", "registryVersion": 
         FB.rect(rx, y0, rx + 4, y0 + h - 1, K.tagBorder); FB.rect(rx + 1, y0 + 1, rx + 3, y0 + h - 2, K.tagFill);
         PIX.smallText(FB, '!', rx + 2, y0 + 2, K.tagInk);
       }
-      const last = fx.horn.get(c.id) || 0; if (c.honkAt === 'body' && app.realT - last > 1.4) { if (!(AUD && AUD.event({ type: 'honk', at: 'body', repeat: true, car: c.id }))) horn(); fx.horn.set(c.id, app.realT); } // Edit 100: the repeat is the honk cue
+      const last = fx.horn.get(c.id) || 0; if (c.honkAt === 'body' && app.realT - last > 1.4) { if (!(AUD && (audGate({ type: 'honk', at: 'body', repeat: true, car: c.id, t: s.t }, s) || AUD.event({ type: 'honk', at: 'body', repeat: true, car: c.id })))) horn(); fx.horn.set(c.id, app.realT); } // Edit 100: the repeat is the honk cue; it counts toward audio.sfx.honkMaxPerCar (row 623)
     }
   }
   function drawDrone(s, d) {

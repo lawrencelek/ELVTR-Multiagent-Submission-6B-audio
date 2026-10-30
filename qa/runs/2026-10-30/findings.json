@@ -1,0 +1,1843 @@
+{
+ "coverage": {
+  "chaos": {
+   "wall_min": 30.0,
+   "sim_min": 19.5,
+   "runs": 6,
+   "actions": 3621,
+   "probes": 0,
+   "wallStops": 0,
+   "trapped": 0,
+   "reloads": 0,
+   "writeoffs": 0,
+   "endings": {
+    "Failed test": 1
+   },
+   "districts": [
+    "waterfront"
+   ],
+   "tiles": 7,
+   "gapMax_ms": 23766,
+   "loadStallMax_ms": 23766,
+   "osc": 0,
+   "cues": 2309,
+   "topSounds": [
+    [
+     "cue:car-notice",
+     465
+    ],
+    [
+     "cue:denied.locked",
+     387
+    ],
+    [
+     "cue:ui-move",
+     195
+    ],
+    [
+     "cue:bark",
+     195
+    ],
+    [
+     "cue:ui-back",
+     167
+    ],
+    [
+     "cue:ui-pause",
+     144
+    ],
+    [
+     "cue:knock",
+     105
+    ],
+    [
+     "cue:lunge",
+     102
+    ],
+    [
+     "cue:screen",
+     99
+    ],
+    [
+     "cue:touch-spent",
+     75
+    ],
+    [
+     "cue:near-miss",
+     55
+    ],
+    [
+     "cue:ui-ok",
+     51
+    ]
+   ],
+   "simMinPerWallMin": 0.65
+  },
+  "clipper": {
+   "wall_min": 30.0,
+   "sim_min": 22.4,
+   "runs": 2,
+   "actions": 1749,
+   "probes": 2,
+   "wallStops": 2,
+   "trapped": 0,
+   "reloads": 0,
+   "writeoffs": 0,
+   "endings": {
+    "Failed test": 6
+   },
+   "districts": [
+    "monument",
+    "waterfront"
+   ],
+   "tiles": 7,
+   "gapMax_ms": 19949,
+   "loadStallMax_ms": 19949,
+   "osc": 0,
+   "cues": 1396,
+   "topSounds": [
+    [
+     "cue:car-notice",
+     539
+    ],
+    [
+     "cue:bark",
+     175
+    ],
+    [
+     "cue:knock",
+     101
+    ],
+    [
+     "cue:touch-spent",
+     72
+    ],
+    [
+     "cue:punt",
+     70
+    ],
+    [
+     "cue:screen",
+     57
+    ],
+    [
+     "cue:lunge",
+     53
+    ],
+    [
+     "cue:jump-land",
+     46
+    ],
+    [
+     "cue:impact",
+     42
+    ],
+    [
+     "cue:near-miss",
+     40
+    ],
+    [
+     "cue:ui-move",
+     28
+    ],
+    [
+     "cue:stair",
+     27
+    ]
+   ],
+   "simMinPerWallMin": 0.75
+  },
+  "saboteur": {
+   "wall_min": 30.0,
+   "sim_min": 23.9,
+   "runs": 3,
+   "actions": 1137,
+   "probes": 0,
+   "wallStops": 0,
+   "trapped": 0,
+   "reloads": 0,
+   "writeoffs": 2,
+   "endings": {
+    "Failed test": 4
+   },
+   "districts": [
+    "monument",
+    "parkland",
+    "waterfront"
+   ],
+   "tiles": 12,
+   "gapMax_ms": 13716,
+   "loadStallMax_ms": 13716,
+   "osc": 0,
+   "cues": 3444,
+   "topSounds": [
+    [
+     "cue:knock",
+     769
+    ],
+    [
+     "cue:touch-spent",
+     658
+    ],
+    [
+     "cue:car-notice",
+     611
+    ],
+    [
+     "cue:bark",
+     490
+    ],
+    [
+     "cue:impact",
+     155
+    ],
+    [
+     "cue:punt",
+     152
+    ],
+    [
+     "cue:honk.body",
+     125
+    ],
+    [
+     "cue:near-miss",
+     105
+    ],
+    [
+     "cue:denied",
+     104
+    ],
+    [
+     "cue:combo",
+     47
+    ],
+    [
+     "cue:learn-standoff",
+     30
+    ],
+    [
+     "cue:combo-end",
+     28
+    ]
+   ],
+   "simMinPerWallMin": 0.8
+  }
+ },
+ "families": [
+  {
+   "family": "sound-loop|cue:knock",
+   "type": "sound-loop",
+   "group": "sound",
+   "sev": "major",
+   "spots": 1,
+   "hits": 115,
+   "personas": [
+    "saboteur"
+   ],
+   "detail": "cue:knock sounded in 20 of the last 30 seconds (47 times in 60 s)",
+   "first": {
+    "persona": "saboteur",
+    "wall": 128.1,
+    "state": {
+     "screen": "game",
+     "phase": "play",
+     "paused": false,
+     "district": "waterfront",
+     "tile": "B2",
+     "simT": 126.88,
+     "music": {
+      "state": "level",
+      "track": 3,
+      "duck": 1
+     },
+     "body": {
+      "x": 531.3,
+      "y": 281.1,
+      "level": 0,
+      "mode": "idle",
+      "alive": true,
+      "health": 540.6,
+      "vx": 0,
+      "vy": 0,
+      "held": false,
+      "z": 0,
+      "stair": false
+     }
+    },
+    "extra": {
+     "key": "cue:knock",
+     "perMin": 47,
+     "file": "tone_knock.wav",
+     "phase": "play",
+     "mode": "idle",
+     "alive": true,
+     "still": true,
+     "cars": [
+      {
+       "id": "waterfront\u00b7B1\u00b7car116",
+       "state": "cruise",
+       "v": 33.9,
+       "spent": true,
+       "standoff": false,
+       "d": 158
+      },
+      {
+       "id": "waterfront\u00b7B1\u00b7car154",
+       "state": "cruise",
+       "v": 71,
+       "spent": false,
+       "standoff": false,
+       "d": 163
+      },
+      {
+       "id": "waterfront\u00b7B1\u00b7car163",
+       "state": "caution",
+       "v": 59.2,
+       "spent": false,
+       "standoff": false,
+       "d": 57
+      },
+      {
+       "id": "waterfront\u00b7A3\u00b7car148",
+       "state": "committed",
+       "v": 0,
+       "spent": true,
+       "standoff": true,
+       "d": 39
+      },
+      {
+       "id": "waterfront\u00b7C2\u00b7car167",
+       "state": "committed",
+       "v": 0,
+       "spent": false,
+       "standoff": true,
+       "d": 80
+      },
+      {
+       "id": "waterfront\u00b7C2\u00b7car175",
+       "state": "interrupted",
+       "v": 31.9,
+       "spent": false,
+       "standoff": true,
+       "d": 170
+      }
+     ]
+    },
+    "shot": "002_sound-loop.jpg",
+    "inputs": [
+     [
+      90.7,
+      "hold down"
+     ],
+     [
+      95.2,
+      "hold right"
+     ],
+     [
+      95.4,
+      "hold up+right"
+     ],
+     [
+      98,
+      "hold right"
+     ],
+     [
+      105,
+      "hold down+left"
+     ],
+     [
+      105,
+      "press KeyI"
+     ],
+     [
+      107.5,
+      "hold down+right"
+     ],
+     [
+      108.1,
+      "hold right"
+     ],
+     [
+      110.6,
+      "hold up+left"
+     ],
+     [
+      110.9,
+      "press KeyI"
+     ],
+     [
+      111.2,
+      "hold left"
+     ],
+     [
+      112.1,
+      "hold up"
+     ],
+     [
+      112.8,
+      "hold up+left"
+     ],
+     [
+      114.6,
+      "hold up+left"
+     ],
+     [
+      114.9,
+      "hold left"
+     ],
+     [
+      116.3,
+      "hold up+left"
+     ],
+     [
+      116.3,
+      "press Space"
+     ],
+     [
+      116.6,
+      "hold down+left"
+     ],
+     [
+      117.4,
+      "hold up+right"
+     ],
+     [
+      119,
+      "hold down+left"
+     ],
+     [
+      119.8,
+      "hold left"
+     ],
+     [
+      120.6,
+      "press KeyJ"
+     ],
+     [
+      121.5,
+      "hold down"
+     ],
+     [
+      124.2,
+      "hold down+left"
+     ],
+     [
+      124.8,
+      "hold down"
+     ]
+    ]
+   },
+   "examples": []
+  },
+  {
+   "family": "sound-loop|cue:touch-spent",
+   "type": "sound-loop",
+   "group": "sound",
+   "sev": "major",
+   "spots": 1,
+   "hits": 88,
+   "personas": [
+    "saboteur"
+   ],
+   "detail": "cue:touch-spent sounded in 20 of the last 30 seconds (54 times in 60 s)",
+   "first": {
+    "persona": "saboteur",
+    "wall": 132.5,
+    "state": {
+     "screen": "game",
+     "phase": "play",
+     "paused": false,
+     "district": "waterfront",
+     "tile": "B2",
+     "simT": 130.72,
+     "music": {
+      "state": "level",
+      "track": 3,
+      "duck": 1
+     },
+     "body": {
+      "x": 531.1,
+      "y": 281.1,
+      "level": 0,
+      "mode": "knock",
+      "alive": true,
+      "health": 540.6,
+      "vx": 0,
+      "vy": -1.1,
+      "held": false,
+      "z": 0,
+      "stair": false
+     }
+    },
+    "extra": {
+     "key": "cue:touch-spent",
+     "perMin": 54,
+     "file": "tone_touch_spent.wav",
+     "phase": "play",
+     "mode": "knock",
+     "alive": true,
+     "still": true,
+     "cars": [
+      {
+       "id": "waterfront\u00b7B1\u00b7car116",
+       "state": "cruise",
+       "v": 5.4,
+       "spent": true,
+       "standoff": false,
+       "d": 109
+      },
+      {
+       "id": "waterfront\u00b7B1\u00b7car163",
+       "state": "cruise",
+       "v": 64.7,
+       "spent": false,
+       "standoff": false,
+       "d": 156
+      },
+      {
+       "id": "waterfront\u00b7A3\u00b7car148",
+       "state": "committed",
+       "v": 0,
+       "spent": true,
+       "standoff": true,
+       "d": 39
+      },
+      {
+       "id": "waterfront\u00b7C2\u00b7car167",
+       "state": "committed",
+       "v": 0,
+       "spent": false,
+       "standoff": true,
+       "d": 80
+      },
+      {
+       "id": "waterfront\u00b7C2\u00b7car175",
+       "state": "committed",
+       "v": 0,
+       "spent": false,
+       "standoff": true,
+       "d": 143
+      },
+      {
+       "id": "waterfront\u00b7A3\u00b7car160",
+       "state": "committed",
+       "v": 34.9,
+       "spent": false,
+       "standoff": true,
+       "d": 194
+      }
+     ]
+    },
+    "shot": "003_sound-loop.jpg",
+    "inputs": [
+     [
+      95.2,
+      "hold right"
+     ],
+     [
+      95.4,
+      "hold up+right"
+     ],
+     [
+      98,
+      "hold right"
+     ],
+     [
+      105,
+      "hold down+left"
+     ],
+     [
+      105,
+      "press KeyI"
+     ],
+     [
+      107.5,
+      "hold down+right"
+     ],
+     [
+      108.1,
+      "hold right"
+     ],
+     [
+      110.6,
+      "hold up+left"
+     ],
+     [
+      110.9,
+      "press KeyI"
+     ],
+     [
+      111.2,
+      "hold left"
+     ],
+     [
+      112.1,
+      "hold up"
+     ],
+     [
+      112.8,
+      "hold up+left"
+     ],
+     [
+      114.6,
+      "hold up+left"
+     ],
+     [
+      114.9,
+      "hold left"
+     ],
+     [
+      116.3,
+      "hold up+left"
+     ],
+     [
+      116.3,
+      "press Space"
+     ],
+     [
+      116.6,
+      "hold down+left"
+     ],
+     [
+      117.4,
+      "hold up+right"
+     ],
+     [
+      119,
+      "hold down+left"
+     ],
+     [
+      119.8,
+      "hold left"
+     ],
+     [
+      120.6,
+      "press KeyJ"
+     ],
+     [
+      121.5,
+      "hold down"
+     ],
+     [
+      124.2,
+      "hold down+left"
+     ],
+     [
+      124.8,
+      "hold down"
+     ],
+     [
+      132.4,
+      "hold right"
+     ]
+    ]
+   },
+   "examples": []
+  },
+  {
+   "family": "sound-loop|cue:car-notice",
+   "type": "sound-loop",
+   "group": "sound",
+   "sev": "major",
+   "spots": 3,
+   "hits": 73,
+   "personas": [
+    "chaos",
+    "clipper",
+    "saboteur"
+   ],
+   "detail": "cue:car-notice sounded in 20 of the last 30 seconds (25 times in 60 s)",
+   "first": {
+    "persona": "clipper",
+    "wall": 34.7,
+    "state": {
+     "screen": "game",
+     "phase": "play",
+     "paused": false,
+     "district": "waterfront",
+     "tile": "B2",
+     "simT": 56.58,
+     "music": {
+      "state": "level",
+      "track": 3,
+      "duck": 1
+     },
+     "body": {
+      "x": 552.6,
+      "y": 247.8,
+      "level": 0,
+      "mode": "move",
+      "alive": true,
+      "health": 1000,
+      "vx": 114.6,
+      "vy": -114.6,
+      "held": false,
+      "z": 0,
+      "stair": false
+     }
+    },
+    "extra": {
+     "key": "cue:car-notice",
+     "perMin": 25,
+     "file": "tone_car_notice.wav",
+     "phase": "play",
+     "mode": "move",
+     "alive": true,
+     "still": false,
+     "cars": [
+      {
+       "id": "waterfront\u00b7C2\u00b7car41",
+       "state": "cruise",
+       "v": 69.7,
+       "spent": false,
+       "standoff": false,
+       "d": 180
+      },
+      {
+       "id": "waterfront\u00b7B1\u00b7car74",
+       "state": "caution",
+       "v": 82,
+       "spent": false,
+       "standoff": false,
+       "d": 200
+      },
+      {
+       "id": "waterfront\u00b7C2\u00b7car79",
+       "state": "cruise",
+       "v": 37.8,
+       "spent": false,
+       "standoff": false,
+       "d": 176
+      }
+     ]
+    },
+    "shot": "001_sound-loop.jpg",
+    "inputs": [
+     [
+      19.3,
+      "hold up+left"
+     ],
+     [
+      19.5,
+      "hold right+up"
+     ],
+     [
+      19.8,
+      "hold right+down"
+     ],
+     [
+      19.9,
+      "hold up+right"
+     ],
+     [
+      20.1,
+      "hold left+down"
+     ],
+     [
+      20.3,
+      "hold up+left"
+     ],
+     [
+      20.6,
+      "hold right+up"
+     ],
+     [
+      20.8,
+      "hold right+down"
+     ],
+     [
+      21,
+      "hold up+right"
+     ],
+     [
+      21.3,
+      "hold left+down"
+     ],
+     [
+      21.6,
+      "hold up+left"
+     ],
+     [
+      21.8,
+      "hold up+right"
+     ],
+     [
+      21.9,
+      "hold up"
+     ],
+     [
+      26.5,
+      "hold up+right"
+     ],
+     [
+      27,
+      "hold up"
+     ],
+     [
+      27.7,
+      "hold up+right"
+     ],
+     [
+      28,
+      "hold up"
+     ],
+     [
+      28.3,
+      "hold up+right"
+     ],
+     [
+      28.5,
+      "hold up+left"
+     ],
+     [
+      28.7,
+      "hold up"
+     ],
+     [
+      28.8,
+      "hold up+right"
+     ],
+     [
+      29.1,
+      "hold up+left"
+     ],
+     [
+      29.3,
+      "hold up+right"
+     ],
+     [
+      29.4,
+      "hold up"
+     ],
+     [
+      32.5,
+      "hold up+right"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "persona": "saboteur",
+     "detail": "cue:car-notice sounded in 20 of the last 30 seconds (52 times in 60 s)",
+     "shot": "001_sound-loop.jpg",
+     "state": {
+      "screen": "game",
+      "phase": "play",
+      "paused": false,
+      "district": "waterfront",
+      "tile": "B2",
+      "simT": 85.92,
+      "music": {
+       "state": "level",
+       "track": 3,
+       "duck": 1
+      },
+      "body": {
+       "x": 405.8,
+       "y": 436.2,
+       "level": 0,
+       "mode": "move",
+       "alive": true,
+       "health": 753.87,
+       "vx": -17.4,
+       "vy": 3.4,
+       "held": true,
+       "z": 0,
+       "stair": false
+      }
+     }
+    },
+    {
+     "persona": "chaos",
+     "detail": "cue:car-notice sounded in 20 of the last 30 seconds (33 times in 60 s)",
+     "shot": "005_sound-loop.jpg",
+     "state": {
+      "screen": "game",
+      "phase": "play",
+      "paused": false,
+      "district": "waterfront",
+      "tile": "B2",
+      "simT": 93.35,
+      "music": {
+       "state": "level",
+       "track": 4,
+       "duck": 1
+      },
+      "body": {
+       "x": 253.1,
+       "y": 208.3,
+       "level": 0,
+       "mode": "idle",
+       "alive": true,
+       "health": 544.39,
+       "vx": 0,
+       "vy": 0,
+       "held": false,
+       "z": 0,
+       "stair": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "family": "frame-stall",
+   "type": "frame-stall",
+   "group": "stuck",
+   "sev": "major",
+   "spots": 14,
+   "hits": 46,
+   "personas": [
+    "chaos",
+    "clipper",
+    "saboteur"
+   ],
+   "detail": "the game loop paused 1550 ms in play",
+   "first": {
+    "persona": "chaos",
+    "wall": 4,
+    "state": {
+     "paused": false,
+     "tile": null,
+     "simT": null,
+     "music": null,
+     "body": null
+    },
+    "extra": null,
+    "shot": "001_frame-stall.jpg",
+    "inputs": [
+     [
+      3.6,
+      "press Space"
+     ]
+    ]
+   },
+   "examples": [
+    {
+     "persona": "clipper",
+     "detail": "the game loop paused 1567 ms in play",
+     "shot": "002_frame-stall.jpg",
+     "state": {
+      "screen": "game",
+      "phase": "play",
+      "paused": false,
+      "district": "waterfront",
+      "tile": "B3",
+      "simT": 156.78,
+      "music": {
+       "state": "level",
+       "track": 3,
+       "duck": 1
+      },
+      "body": {
+       "x": 496.9,
+       "y": 66.2,
+       "level": 0,
+       "mode": "move",
+       "alive": true,
+       "health": 958.01,
+       "vx": 0,
+       "vy": -160.3,
+       "held": false,
+       "z": 0,
+       "stair": false
+      }
+     }
+    },
+    {
+     "persona": "saboteur",
+     "detail": "the game loop paused 2033 ms in play",
+     "shot": "004_frame-stall.jpg",
+     "state": {
+      "screen": "game",
+      "phase": "play",
+      "paused": false,
+      "district": "waterfront",
+      "tile": "B2",
+      "simT": 146.17,
+      "music": {
+       "state": "level",
+       "track": 3,
+       "duck": 1
+      },
+      "body": {
+       "x": 506.6,
+       "y": 294.6,
+       "level": 0,
+       "mode": "move",
+       "alive": true,
+       "health": 462.68,
+       "vx": 0,
+       "vy": 77.3,
+       "held": false,
+       "z": 0,
+       "stair": false
+      }
+     }
+    },
+    {
+     "persona": "clipper",
+     "detail": "the game loop paused 1950 ms in play",
+     "shot": "003_frame-stall.jpg",
+     "state": {
+      "screen": "game",
+      "phase": "play",
+      "paused": false,
+      "district": "waterfront",
+      "tile": "C2",
+      "simT": 163.9,
+      "music": {
+       "state": "level",
+       "track": 3,
+       "duck": 1
+      },
+      "body": {
+       "x": 23.4,
+       "y": 583,
+       "level": 0,
+       "mode": "coast",
+       "alive": true,
+       "health": 958.01,
+       "vx": 45.7,
+       "vy": 0,
+       "held": false,
+       "z": 0,
+       "stair": false
+      }
+     }
+    },
+    {
+     "persona": "chaos",
+     "detail": "the game loop paused 1767 ms in play",
+     "shot": "002_frame-stall.jpg",
+     "state": {
+      "screen": "game",
+      "phase": "play",
+      "paused": false,
+      "district": "waterfront",
+      "tile": "A3",
+      "simT": 150.33,
+      "music": {
+       "state": "level",
+       "track": 3,
+       "duck": 1
+      },
+      "body": {
+       "x": 29,
+       "y": 268.2,
+       "level": 0,
+       "mode": "rescue",
+       "alive": true,
+       "health": 799.98,
+       "vx": 0,
+       "vy": 0,
+       "held": false,
+       "z": 0,
+       "stair": false
+      }
+     }
+    },
+    {
+     "persona": "clipper",
+     "detail": "the game loop paused 2917 ms in play",
+     "shot": "004_frame-stall.jpg",
+     "state": {
+      "screen": "game",
+      "phase": "play",
+      "paused": false,
+      "district": "waterfront",
+      "tile": "B2",
+      "simT": 45.62,
+      "music": {
+       "state": "level",
+       "track": 4,
+       "duck": 1
+      },
+      "body": {
+       "x": 572.9,
+       "y": 564.1,
+       "level": 0,
+       "mode": "move",
+       "alive": true,
+       "health": 949.47,
+       "vx": 19.7,
+       "vy": -80.6,
+       "held": false,
+       "z": 0,
+       "stair": false
+      }
+     }
+    }
+   ]
+  },
+  {
+   "family": "sound-loop|cue:bark",
+   "type": "sound-loop",
+   "group": "sound",
+   "sev": "major",
+   "spots": 1,
+   "hits": 28,
+   "personas": [
+    "saboteur"
+   ],
+   "detail": "cue:bark sounded in 20 of the last 30 seconds (30 times in 60 s)",
+   "first": {
+    "persona": "saboteur",
+    "wall": 417.5,
+    "state": {
+     "screen": "game",
+     "phase": "play",
+     "paused": false,
+     "district": "monument",
+     "tile": "C2",
+     "simT": 177.67,
+     "music": {
+      "state": "level",
+      "track": 4,
+      "duck": 1
+     },
+     "body": {
+      "x": 513,
+      "y": 335.9,
+      "level": 0,
+      "mode": "idle",
+      "alive": true,
+      "health": 350.03,
+      "vx": 0,
+      "vy": 0,
+      "held": false,
+      "z": 0,
+      "stair": false
+     }
+    },
+    "extra": {
+     "key": "cue:bark",
+     "perMin": 30,
+     "file": "select_1.wav",
+     "phase": "play",
+     "mode": "idle",
+     "alive": true,
+     "still": true,
+     "cars": [
+      {
+       "id": "monument\u00b7C3\u00b7car183",
+       "state": "cruise",
+       "v": 83.5,
+       "spent": true,
+       "standoff": false,
+       "d": 128
+      },
+      {
+       "id": "monument\u00b7C3\u00b7car190",
+       "state": "committed",
+       "v": 0,
+       "spent": true,
+       "standoff": true,
+       "d": 143
+      },
+      {
+       "id": "monument\u00b7A1\u00b7car238",
+       "state": "caution",
+       "v": 60.5,
+       "spent": false,
+       "standoff": false,
+       "d": 69
+      }
+     ]
+    },
+    "shot": "005_sound-loop.jpg",
+    "inputs": [
+     [
+      302.9,
+      "press KeyJ"
+     ],
+     [
+      308.1,
+      "hold up"
+     ],
+     [
+      309.8,
+      "hold up+right"
+     ],
+     [
+      310.3,
+      "hold up"
+     ],
+     [
+      310.6,
+      "hold up+left"
+     ],
+     [
+      310.7,
+      "hold up"
+     ],
+     [
+      316.7,
+      "hold left"
+     ],
+     [
+      335.4,
+      "hold up+right"
+     ],
+     [
+      335.5,
+      "hold up"
+     ],
+     [
+      359.8,
+      "hold down+left"
+     ],
+     [
+      360.6,
+      "hold left"
+     ],
+     [
+      360.7,
+      "hold down+left"
+     ],
+     [
+      360.9,
+      "hold left"
+     ],
+     [
+      361.1,
+      "hold down+left"
+     ],
+     [
+      376,
+      "hold right"
+     ],
+     [
+      377,
+      "hold right"
+     ],
+     [
+      400.1,
+      "hold down"
+     ],
+     [
+      402,
+      "hold left"
+     ],
+     [
+      405.3,
+      "hold up+right"
+     ],
+     [
+      405.9,
+      "hold up"
+     ],
+     [
+      406.5,
+      "hold down+left"
+     ],
+     [
+      406.9,
+      "hold left"
+     ],
+     [
+      410.9,
+      "hold up+right"
+     ],
+     [
+      411.9,
+      "hold down+left"
+     ],
+     [
+      414.1,
+      "hold right"
+     ]
+    ]
+   },
+   "examples": []
+  },
+  {
+   "family": "sound-spam|cue:knock",
+   "type": "sound-spam",
+   "group": "sound",
+   "sev": "minor",
+   "spots": 1,
+   "hits": 106,
+   "personas": [
+    "saboteur"
+   ],
+   "detail": "cue:knock sounded 65 times in 60 s",
+   "first": {
+    "persona": "saboteur",
+    "wall": 195.3,
+    "state": {
+     "screen": "game",
+     "phase": "hitstop",
+     "paused": false,
+     "district": "waterfront",
+     "tile": "B2",
+     "simT": 180.13,
+     "music": {
+      "state": "level",
+      "track": 3,
+      "duck": 1
+     },
+     "body": {
+      "x": 202.7,
+      "y": 363.4,
+      "level": 0,
+      "mode": "knock",
+      "alive": true,
+      "health": 434.44,
+      "vx": 68.9,
+      "vy": -66.6,
+      "held": false,
+      "z": 0,
+      "stair": false
+     }
+    },
+    "extra": {
+     "key": "cue:knock",
+     "file": "tone_knock.wav",
+     "phase": "hitstop",
+     "mode": "knock",
+     "alive": true,
+     "still": false,
+     "cars": [
+      {
+       "id": "waterfront\u00b7A2\u00b7car228",
+       "state": "committed",
+       "v": 71,
+       "spent": false,
+       "standoff": false,
+       "d": 133
+      },
+      {
+       "id": "waterfront\u00b7B1\u00b7car235",
+       "state": "committed",
+       "v": 36.6,
+       "spent": false,
+       "standoff": false,
+       "d": 121
+      },
+      {
+       "id": "waterfront\u00b7A2\u00b7car240",
+       "state": "intention",
+       "v": 44.1,
+       "spent": true,
+       "standoff": false,
+       "d": 42
+      }
+     ]
+    },
+    "shot": null,
+    "inputs": [
+     [
+      144.6,
+      "press KeyJ"
+     ],
+     [
+      145,
+      "hold down+left"
+     ],
+     [
+      146.3,
+      "hold down"
+     ],
+     [
+      153.8,
+      "hold right"
+     ],
+     [
+      155.3,
+      "hold down"
+     ],
+     [
+      157,
+      "hold down+left"
+     ],
+     [
+      157.5,
+      "hold left"
+     ],
+     [
+      157.6,
+      "press KeyJ"
+     ],
+     [
+      157.8,
+      "hitch try"
+     ],
+     [
+      158.3,
+      "hold down+right"
+     ],
+     [
+      158.6,
+      "hold down+left"
+     ],
+     [
+      161.7,
+      "hold down"
+     ],
+     [
+      164.3,
+      "hold right"
+     ],
+     [
+      164.8,
+      "hold down+left"
+     ],
+     [
+      167.8,
+      "hold down"
+     ],
+     [
+      168.2,
+      "hold down+left"
+     ],
+     [
+      190.8,
+      "hold down+right"
+     ],
+     [
+      191.4,
+      "hold down"
+     ],
+     [
+      192.1,
+      "hold down+right"
+     ],
+     [
+      192.4,
+      "press KeyJ"
+     ],
+     [
+      192.7,
+      "hold up+left"
+     ],
+     [
+      193.6,
+      "hold up"
+     ],
+     [
+      193.8,
+      "hold up+left"
+     ],
+     [
+      194,
+      "hold up"
+     ],
+     [
+      194.2,
+      "press KeyJ"
+     ]
+    ]
+   },
+   "examples": []
+  },
+  {
+   "family": "sound-spam|cue:touch-spent",
+   "type": "sound-spam",
+   "group": "sound",
+   "sev": "minor",
+   "spots": 1,
+   "hits": 80,
+   "personas": [
+    "saboteur"
+   ],
+   "detail": "cue:touch-spent sounded 77 times in 60 s",
+   "first": {
+    "persona": "saboteur",
+    "wall": 167.8,
+    "state": {
+     "screen": "game",
+     "phase": "play",
+     "paused": false,
+     "district": "waterfront",
+     "tile": "B2",
+     "simT": 156.92,
+     "music": {
+      "state": "level",
+      "track": 3,
+      "duck": 1
+     },
+     "body": {
+      "x": 289.9,
+      "y": 277.6,
+      "level": 0,
+      "mode": "knock",
+      "alive": true,
+      "health": 448.91,
+      "vx": -55.5,
+      "vy": 78.2,
+      "held": false,
+      "z": 0,
+      "stair": false
+     }
+    },
+    "extra": {
+     "key": "cue:touch-spent",
+     "file": "tone_touch_spent.wav",
+     "phase": "play",
+     "mode": "knock",
+     "alive": true,
+     "still": false,
+     "cars": [
+      {
+       "id": "waterfront\u00b7A2\u00b7car155",
+       "state": "cruise",
+       "v": 43.1,
+       "spent": true,
+       "standoff": false,
+       "d": 181
+      },
+      {
+       "id": "waterfront\u00b7B1\u00b7car163",
+       "state": "cruise",
+       "v": 41.6,
+       "spent": true,
+       "standoff": false,
+       "d": 74
+      },
+      {
+       "id": "waterfront\u00b7B1\u00b7car171",
+       "state": "committed",
+       "v": 12.5,
+       "spent": true,
+       "standoff": true,
+       "d": 99
+      },
+      {
+       "id": "waterfront\u00b7C2\u00b7car175",
+       "state": "intention",
+       "v": 42.6,
+       "spent": true,
+       "standoff": false,
+       "d": 38
+      },
+      {
+       "id": "waterfront\u00b7A2\u00b7car194",
+       "state": "cruise",
+       "v": 34.2,
+       "spent": false,
+       "standoff": false,
+       "d": 191
+      },
+      {
+       "id": "waterfront\u00b7C3\u00b7car179",
+       "state": "caution",
+       "v": 41.2,
+       "spent": true,
+       "standoff": false,
+       "d": 155
+      }
+     ]
+    },
+    "shot": null,
+    "inputs": [
+     [
+      138.1,
+      "hold down+left"
+     ],
+     [
+      138.1,
+      "press KeyJ"
+     ],
+     [
+      138.3,
+      "hitch try"
+     ],
+     [
+      138.6,
+      "hold up+left"
+     ],
+     [
+      140.2,
+      "hold down"
+     ],
+     [
+      142,
+      "hold up+right"
+     ],
+     [
+      143.7,
+      "hold up"
+     ],
+     [
+      144,
+      "hold up+right"
+     ],
+     [
+      144.2,
+      "hold down"
+     ],
+     [
+      144.4,
+      "hold down+left"
+     ],
+     [
+      144.6,
+      "press KeyJ"
+     ],
+     [
+      145,
+      "hold down+left"
+     ],
+     [
+      146.3,
+      "hold down"
+     ],
+     [
+      153.8,
+      "hold right"
+     ],
+     [
+      155.3,
+      "hold down"
+     ],
+     [
+      157,
+      "hold down+left"
+     ],
+     [
+      157.5,
+      "hold left"
+     ],
+     [
+      157.6,
+      "press KeyJ"
+     ],
+     [
+      157.8,
+      "hitch try"
+     ],
+     [
+      158.3,
+      "hold down+right"
+     ],
+     [
+      158.6,
+      "hold down+left"
+     ],
+     [
+      161.7,
+      "hold down"
+     ],
+     [
+      164.3,
+      "hold right"
+     ],
+     [
+      164.8,
+      "hold down+left"
+     ],
+     [
+      167.8,
+      "hold down"
+     ]
+    ]
+   },
+   "examples": []
+  },
+  {
+   "family": "sound-spam|cue:car-notice",
+   "type": "sound-spam",
+   "group": "sound",
+   "sev": "minor",
+   "spots": 1,
+   "hits": 10,
+   "personas": [
+    "saboteur"
+   ],
+   "detail": "cue:car-notice sounded 62 times in 60 s",
+   "first": {
+    "persona": "saboteur",
+    "wall": 137,
+    "state": {
+     "screen": "game",
+     "phase": "play",
+     "paused": false,
+     "district": "waterfront",
+     "tile": "B2",
+     "simT": 133.37,
+     "music": {
+      "state": "level",
+      "track": 3,
+      "duck": 1
+     },
+     "body": {
+      "x": 572.6,
+      "y": 281,
+      "level": 0,
+      "mode": "knock",
+      "alive": true,
+      "health": 537.98,
+      "vx": -3.1,
+      "vy": 0,
+      "held": false,
+      "z": 0,
+      "stair": false
+     }
+    },
+    "extra": {
+     "key": "cue:car-notice",
+     "file": "tone_car_notice.wav",
+     "phase": "play",
+     "mode": "knock",
+     "alive": true,
+     "still": true,
+     "cars": [
+      {
+       "id": "waterfront\u00b7B1\u00b7car116",
+       "state": "cruise",
+       "v": 59.3,
+       "spent": true,
+       "standoff": false,
+       "d": 78
+      },
+      {
+       "id": "waterfront\u00b7B1\u00b7car154",
+       "state": "cruise",
+       "v": 71,
+       "spent": false,
+       "standoff": false,
+       "d": 176
+      },
+      {
+       "id": "waterfront\u00b7A3\u00b7car148",
+       "state": "caution",
+       "v": 65.9,
+       "spent": true,
+       "standoff": false,
+       "d": 44
+      },
+      {
+       "id": "waterfront\u00b7C2\u00b7car167",
+       "state": "committed",
+       "v": 0,
+       "spent": true,
+       "standoff": true,
+       "d": 40
+      },
+      {
+       "id": "waterfront\u00b7C2\u00b7car175",
+       "state": "committed",
+       "v": 0,
+       "spent": false,
+       "standoff": true,
+       "d": 101
+      },
+      {
+       "id": "waterfront\u00b7A3\u00b7car160",
+       "state": "cruise",
+       "v": 31.8,
+       "spent": false,
+       "standoff": false,
+       "d": 168
+      }
+     ]
+    },
+    "shot": null,
+    "inputs": [
+     [
+      95.2,
+      "hold right"
+     ],
+     [
+      95.4,
+      "hold up+right"
+     ],
+     [
+      98,
+      "hold right"
+     ],
+     [
+      105,
+      "hold down+left"
+     ],
+     [
+      105,
+      "press KeyI"
+     ],
+     [
+      107.5,
+      "hold down+right"
+     ],
+     [
+      108.1,
+      "hold right"
+     ],
+     [
+      110.6,
+      "hold up+left"
+     ],
+     [
+      110.9,
+      "press KeyI"
+     ],
+     [
+      111.2,
+      "hold left"
+     ],
+     [
+      112.1,
+      "hold up"
+     ],
+     [
+      112.8,
+      "hold up+left"
+     ],
+     [
+      114.6,
+      "hold up+left"
+     ],
+     [
+      114.9,
+      "hold left"
+     ],
+     [
+      116.3,
+      "hold up+left"
+     ],
+     [
+      116.3,
+      "press Space"
+     ],
+     [
+      116.6,
+      "hold down+left"
+     ],
+     [
+      117.4,
+      "hold up+right"
+     ],
+     [
+      119,
+      "hold down+left"
+     ],
+     [
+      119.8,
+      "hold left"
+     ],
+     [
+      120.6,
+      "press KeyJ"
+     ],
+     [
+      121.5,
+      "hold down"
+     ],
+     [
+      124.2,
+      "hold down+left"
+     ],
+     [
+      124.8,
+      "hold down"
+     ],
+     [
+      132.4,
+      "hold right"
+     ]
+    ]
+   },
+   "examples": []
+  }
+ ]
+}
