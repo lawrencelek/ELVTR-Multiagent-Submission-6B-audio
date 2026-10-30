@@ -1,0 +1,42 @@
+{
+ "msg.held.dash": {
+  "after": "Try harder. Finish it with a dash into a car.",
+  "why": "T15: per brief; the fix names the move"
+ },
+ "msg.held.drop": {
+  "after": "Wrong angle. Drop onto a car from above.",
+  "why": "T15: per brief"
+ },
+ "msg.held.jump": {
+  "after": "Grounded effort. Jump into a car to finish.",
+  "why": "T15: per brief"
+ },
+ "msg.held.level": {
+  "after": "Too low. Take the last hit on a raised road.",
+  "why": "T15: per brief"
+ },
+ "msg.held.cone": {
+  "after": "Try harder. Bait a car to divert, then get hit.",
+  "why": "Lawrence's example, to the brief's limits"
+ },
+ "msg.held.push": {
+  "after": "Out of order. Push off a car; take the next one.",
+  "why": "T15: per brief; push, then the next car"
+ },
+ "msg.held.bounce": {
+  "after": "Too steady. Take the last hit while thrown.",
+  "why": "T15: per brief"
+ },
+ "msg.held.struck": {
+  "after": "Too eager. Stand still and let a car strike.",
+  "why": "T15: per brief; not dashing"
+ },
+ "msg.held.combo": {
+  "after": "Short chain. Make the last hit link {n} or later.",
+  "why": "T15: per brief; keeps the link number"
+ },
+ "msg.held.cls": {
+  "after": "Wrong vehicle. Only a {cls} may finish you.",
+  "why": "T15: per brief; keeps the class"
+ }
+}

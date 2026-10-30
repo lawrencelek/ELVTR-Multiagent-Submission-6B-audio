@@ -1,13 +1,13 @@
 {
  "generated_by": "text/inventory.py",
  "build": "prototypes/p9/dummies_p9.html",
- "count": 359,
+ "count": 369,
  "groups": {
   "Car barks": 147,
   "Story": 42,
   "Notices": 27,
   "Labels": 21,
-  "Feedback": 46,
+  "Feedback": 56,
   "Endings and screens": 29,
   "Objective strip": 9,
   "Interface chrome": 38
@@ -4635,6 +4635,160 @@
    "placeholders": [
     "{brief}",
     "{health}"
+   ],
+   "shot": "writeoff",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.held.dash",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "HELD AT 1 · the brief wants dash into a car",
+   "trigger": "toast: held, on a dash brief",
+   "source": "prototypes/p6/game.js 'held' (one line per brief: new)",
+   "placeholders": [],
+   "shot": "writeoff",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.held.drop",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "HELD AT 1 · the brief wants drop onto a car",
+   "trigger": "toast: held, on a drop brief",
+   "source": "prototypes/p6/game.js 'held' (new)",
+   "placeholders": [],
+   "shot": "writeoff",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.held.jump",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "HELD AT 1 · the brief wants jump into a car",
+   "trigger": "toast: held, on a jump brief",
+   "source": "prototypes/p6/game.js 'held' (new)",
+   "placeholders": [],
+   "shot": "writeoff",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.held.level",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "HELD AT 1 · the brief wants on a raised road",
+   "trigger": "toast: held, on a raised-road brief",
+   "source": "prototypes/p6/game.js 'held' (new)",
+   "placeholders": [],
+   "shot": "writeoff",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.held.cone",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "HELD AT 1 · the brief wants cone-baited car",
+   "trigger": "toast: held, on a cone brief (the line Lawrence quoted)",
+   "source": "prototypes/p6/game.js 'held' (new)",
+   "placeholders": [],
+   "shot": "writeoff",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.held.push",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "HELD AT 1 · the brief wants push off a car",
+   "trigger": "toast: held, on a push brief",
+   "source": "prototypes/p6/game.js 'held' (new)",
+   "placeholders": [],
+   "shot": "writeoff",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.held.bounce",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "HELD AT 1 · the brief wants thrown into a car",
+   "trigger": "toast: held, on a bounce brief",
+   "source": "prototypes/p6/game.js 'held' (new)",
+   "placeholders": [],
+   "shot": "writeoff",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.held.struck",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "HELD AT 1 · the brief wants struck, not dashing",
+   "trigger": "toast: held, on a struck brief",
+   "source": "prototypes/p6/game.js 'held' (new)",
+   "placeholders": [],
+   "shot": "writeoff",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.held.combo",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "HELD AT 1 · the brief wants combo ×{n}",
+   "trigger": "toast: held, on a combo brief",
+   "source": "prototypes/p6/game.js 'held' (new)",
+   "placeholders": [
+    "{n}"
+   ],
+   "shot": "writeoff",
+   "locked": false,
+   "limit": {
+    "chars": 60
+   }
+  },
+  {
+   "id": "msg.held.cls",
+   "group": "Feedback",
+   "speaker": "Dummy Corporation",
+   "kind": "message",
+   "text": "HELD AT 1 · the brief wants a {cls}",
+   "trigger": "toast: held, on a vehicle-class brief",
+   "source": "prototypes/p6/game.js 'held' (new)",
+   "placeholders": [
+    "{cls}"
    ],
    "shot": "writeoff",
    "locked": false,

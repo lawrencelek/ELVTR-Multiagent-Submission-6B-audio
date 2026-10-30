@@ -19,7 +19,7 @@ BANNED = ["farsight", "kill", "killed", "kills", "die", "died", "dies", "dead", 
 FILL = {"{brief}": "cone-baited car", "{tile}": "A2", "{next}": "A3", "{n}": "1", "{need}": "1", "{health}": "1", "{part}": "Battery 1", "{PART}": "BATTERY 1",
         "{TILE}": "B1", "{district}": "Monument", "{points}": "2,500", "{bonus}": "1,200", "{mult}": "2", "{moves}": "DASH › JUMP", "{capacity}": "3",
         "{screen}": "A2", "{landmark}": "Lantern monument", "{model}": "VAN-02", "{metres}": "4.5", "{name}": "TEST DUMMY 1", "{g}": "2", "{G}": "2",
-        "{count}": "0", "{balance}": "3", "{price}": "3", "{total}": "27", "{node}": "Battery 1", "{N}": "3", "{chassis}": "01", "{credits}": "3"}
+        "{count}": "0", "{balance}": "3", "{price}": "3", "{total}": "27", "{node}": "Battery 1", "{N}": "3", "{chassis}": "01", "{credits}": "3", "{cls}": "van"}
 PH = re.compile(r"\{[A-Za-z]+\}")
 
 

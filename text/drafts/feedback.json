@@ -1,0 +1,338 @@
+{
+ "copy.toast.touch-spent": {
+  "after": "Already assessed: no points. Find a fresh car.",
+  "why": "T15: verdict, then the fix; was three sentences (F6)"
+ },
+ "copy.toast.purchase": {
+  "after": "{node} will be installed on the next chassis.",
+  "why": "kept: T16 status, crisp and correct"
+ },
+ "copy.toast.learn-standoff": {
+  "after": "{model} revised its stop line to {metres} m.",
+  "why": "kept: T16 status; flat log of the fleet learning"
+ },
+ "copy.toast.refusal-locked": {
+  "after": "Premature. Complete one body before refusing.",
+  "why": "T15: put-down, then the fix"
+ },
+ "copy.denied.lunge": {
+  "after": "Impatient. Wait for charge and recovery, then dash.",
+  "why": "T15: put-down, then the fix; the move is the dash (A)"
+ },
+ "copy.denied.pickup": {
+  "after": "Nothing in reach. Stand by a cone, then grab (X).",
+  "why": "T15: adds the fix; names grab (X)"
+ },
+ "copy.denied.drop": {
+  "after": "No legal room. Face open ground to set the cone down.",
+  "why": "T15: verdict, then the fix"
+ },
+ "copy.denied.throw": {
+  "after": "Cone retained. Face open road, then throw (Y).",
+  "why": "T15: verdict, then the fix; names throw (Y)"
+ },
+ "copy.endings.Non-compliant": {
+  "after": "Testing declined. Your refusal has been recorded.",
+  "why": "kept: dry, flat, in canon"
+ },
+ "copy.report.title": {
+  "after": "Chassis {chassis} written off.",
+  "why": "kept: T16 status, crisp"
+ },
+ "copy.report.credit": {
+  "after": "One body credit granted. Balance: {credits}.",
+  "why": "kept: T16 status, crisp"
+ },
+ "copy.shop.deploy": {
+  "after": "Deploy next chassis",
+  "why": "kept: workshop row, plain instruction"
+ },
+ "copy.shop.bank": {
+  "after": "Keep {credits} in credit. Deploy next chassis",
+  "why": "kept: workshop row, plain instruction"
+ },
+ "place.levels.z1": {
+  "after": "Low highway: own cars only. Broken parapets drop you down.",
+  "why": "fits 60 characters; same two facts"
+ },
+ "place.levels.z2Highway": {
+  "after": "High highway: fast cars. A broken parapet is a long fall.",
+  "why": "fits 60 characters; same two facts"
+ },
+ "place.levels.roof": {
+  "after": "Roof: no traffic. Step off a ledge to reach the street.",
+  "why": "fits 60 characters; varies a repeated phrase (T14)"
+ },
+ "msg.held": {
+  "after": "Try harder. Held at {health}; last hit: {brief}.",
+  "why": "T15: Lawrence's put-down, then the brief as the fix"
+ },
+ "msg.story-count": {
+  "after": "COUNTED · {tile} {n} / {need}",
+  "why": "kept: T16 caps tally, crisp"
+ },
+ "msg.story-miss.task": {
+  "after": "NOT COUNTED · Off brief. Retry: {brief}.",
+  "why": "T15: put-down, then the fix in the imperative"
+ },
+ "msg.story-miss.cleared": {
+  "after": "NOT COUNTED · Redundant. {tile} is cleared; move on.",
+  "why": "T15: put-down, then the fix"
+ },
+ "msg.story-miss.elsewhere": {
+  "after": "NOT COUNTED · Off site: {tile} is not in test. Check the map.",
+  "why": "T15: put-down, then the fix"
+ },
+ "msg.story-clear": {
+  "after": "TILE {tile} CLEARED · {next} OPEN",
+  "why": "kept: T16 caps tally, crisp"
+ },
+ "msg.fence.unsurveyed": {
+  "after": "Ambitious. {tile} is unsurveyed; clear the tile in test.",
+  "why": "T15: dry put-down, then the fix"
+ },
+ "msg.fence.clear-first": {
+  "after": "Unauthorised exit. Clear {tile} first ({n} / {need}).",
+  "why": "T15: procedural put-down, then the fix"
+ },
+ "msg.hop": {
+  "after": "Hops clear nothing. Run, then jump.",
+  "why": "T15: put-down cut to three words; same joke"
+ },
+ "msg.rail": {
+  "after": "Over the rail",
+  "why": "kept: T16 status, crisp"
+ },
+ "msg.hitch": {
+  "after": "Hitched. X lets go; A slings you off with a dash.",
+  "why": "kept: teaches the controls accurately (X, A)"
+ },
+ "msg.slip": {
+  "after": "No traction. Step off the puddle to dash.",
+  "why": "T15: short verdict, then the fix"
+ },
+ "msg.not-fitted": {
+  "after": "Not fitted yet. Keep clearing; a drone will deliver it.",
+  "why": "T15: adds the fix; drone delivers parts by tile"
+ },
+ "msg.deny.jump": {
+  "after": "Grounded. Wait for charge, or finish the move.",
+  "why": "T15: put-down, then the fix"
+ },
+ "msg.deny.jump.charge": {
+  "after": "Battery flat. Let it recharge, then jump.",
+  "why": "T15: verdict, then the fix; the battery refills"
+ },
+ "msg.deny.push.spent": {
+  "after": "Overdrawn. Land to get your pushes back.",
+  "why": "T15: corporate put-down, then the fix"
+ },
+ "msg.deny.push.nothing": {
+  "after": "Pushing air. Hit or touch a car first.",
+  "why": "T15: put-down, then the fix"
+ },
+ "msg.deny.drop.hold": {
+  "after": "Hold X to put the cone down",
+  "why": "kept: teaches the control accurately (hold X)"
+ },
+ "msg.deny.throw.empty": {
+  "after": "Empty-handed. Grab a cone (X), then throw (Y).",
+  "why": "T15: put-down, then the fix; controls kept"
+ },
+ "msg.cones": {
+  "after": "Cones {n} / {capacity}",
+  "why": "kept: T16 tally, crisp"
+ },
+ "msg.combo": {
+  "after": "COMBO {n} · {moves} · ×{mult} · +{bonus}",
+  "why": "kept: T16 caps tally, crisp"
+ },
+ "msg.combo-banked": {
+  "after": "COMBO BANKED · {n} hits · ×{mult} · {points}",
+  "why": "kept: T16 caps tally, crisp"
+ },
+ "msg.cone-hit": {
+  "after": "CONE HIT · +{points}",
+  "why": "kept: T16 caps tally, crisp"
+ },
+ "msg.screen": {
+  "after": "{screen} · {landmark}",
+  "why": "kept: place name only"
+ },
+ "msg.purchase.upgrade": {
+  "after": "{part} fitted · {n} upgrades left",
+  "why": "kept: T16 status, crisp"
+ },
+ "msg.purchase-denied.max": {
+  "after": "Already top rank. Upgrade a different part.",
+  "why": "V1: drops 'level'; T15 verdict, then the fix"
+ },
+ "msg.level.walk": {
+  "after": "Walkway: no traffic. Step off the side onto the cars below.",
+  "why": "fits 60 characters; same instruction"
+ },
+ "msg.level.ring": {
+  "after": "Ring deck: cars yield at the entries. Escalators go down.",
+  "why": "fits 60 characters; same instruction"
+ },
+ "msg.level.terrace": {
+  "after": "Terrace: step off the edge to drop to the beach.",
+  "why": "kept: plain hint, fits the strip"
+ },
+ "msg.level.hill": {
+  "after": "Hilltop: live traffic. Step off the cliff to the valley.",
+  "why": "fits 60 characters; drops the Z1 code"
+ },
+ "msg.volume": {
+  "after": "Volume {n} / 10",
+  "why": "kept: Interface line, plain"
+ },
+ "msg.mute": {
+  "after": "Sound off · M",
+  "why": "kept: Interface line, plain"
+ },
+ "obj.task": {
+  "after": "Write off a body. Last hit: {brief} ({n} of {need}).",
+  "why": "kept: the strip's brief, imperative and clear"
+ },
+ "obj.any": {
+  "after": "Write off a body ({n} of {need}).",
+  "why": "kept: the strip's brief, imperative and clear"
+ },
+ "obj.drone.deliver": {
+  "after": "Delivering {part}.",
+  "why": "kept: T16 drone caption, crisp"
+ },
+ "obj.drone.bring": {
+  "after": "Bringing {part}, then on to {tile}.",
+  "why": "kept: T16 drone caption, crisp"
+ },
+ "obj.drone.ferry": {
+  "after": "Carrying the chassis to {tile}.",
+  "why": "kept: T16 drone caption, crisp"
+ },
+ "obj.drone.voyage": {
+  "after": "Carrying you, Certified, to the ship at {tile}.",
+  "why": "canon: Certified takes a capital C; addresses you (T5)"
+ },
+ "obj.cleared": {
+  "after": "{district} is cleared. As expected.",
+  "why": "T16: praise withheld"
+ },
+ "obj.arcade": {
+  "after": "Grade {g}: write off {n} bodies for grade {next} ({count} of {n}).",
+  "why": "kept: the strip's goal, clear"
+ },
+ "obj.arcade.top": {
+  "after": "Grade {g}, the top grade: write off all you can.",
+  "why": "kept: the strip's goal, clear"
+ },
+ "rep.counted": {
+  "after": "Adequate. Counted for {tile}: {n} of {need}, {points} points.",
+  "why": "T16: praise withheld; varies a repeated phrase (T14)"
+ },
+ "rep.task": {
+  "after": "Wrong finish, {points} points, not counted. Next body's last hit: {brief}.",
+  "why": "T15: put-down, then the fix"
+ },
+ "rep.cleared": {
+  "after": "Surplus: {tile} was already cleared, so not counted ({points} points). Advance.",
+  "why": "T15: put-down, then the fix"
+ },
+ "rep.elsewhere": {
+  "after": "Wrong tile: {tile} is not in test, so not counted ({points} points). Consult the map.",
+  "why": "T15: put-down, then the fix"
+ },
+ "rep.credit": {
+  "after": "+{n} credits for the body; balance {balance}. {part} is yours for {price}.",
+  "why": "F6: two sentences, was three"
+ },
+ "rep.full": {
+  "after": "+{n} credits for the body; balance {balance}. Every track is full.",
+  "why": "F6: two sentences, was three"
+ },
+ "rep.next": {
+  "after": "{part} · {district} {tile} (tile {n} of {total}).",
+  "why": "kept: status, crisp"
+ },
+ "shop.keep": {
+  "after": "Keep {n} upgrades for later, or fit them now.",
+  "why": "kept: plain workshop note"
+ },
+ "shop.ready": {
+  "after": "Chassis {n} is ready.",
+  "why": "kept: T16 status, crisp"
+ },
+ "shop.top": {
+  "after": "{part} is at its top rank.",
+  "why": "V1: 'level' is banned; rank is canon (F7)"
+ },
+ "map.unsurveyed": {
+  "after": "Clear the tiles before it. The map opens one tile at a time.",
+  "why": "kept: plain map note, accurate"
+ },
+ "map.fences": {
+  "after": "Fenced until cleared. Cleared tiles stay open.",
+  "why": "kept: plain map note, accurate"
+ },
+ "map.need": {
+  "after": "One counted write-off clears the tile.",
+  "why": "kept: plain map note, accurate"
+ },
+ "map.needN": {
+  "after": "{n} counted write-offs clear the tile ({count} so far).",
+  "why": "kept: plain map note, accurate"
+ },
+ "card.sub": {
+  "after": "Tile {tile}. Test {n} of {total}.",
+  "why": "V1: 'level' is banned; tiles are in test"
+ },
+ "pause.story": {
+  "after": "The story map saves this tile's count. The chassis in service is lost.",
+  "why": "T3: training framing, not 'in play'"
+ },
+ "pause.refuse-locked": {
+  "after": "Refusal opens after one completed body.",
+  "why": "kept: plain pause note"
+ },
+ "pause.refuse": {
+  "after": "Refusal is a deliberate ending.",
+  "why": "kept: dry, flat, in canon"
+ },
+ "end.certified.fallback": {
+  "after": "All {total} tiles of the Test City are tested. You are Certified.",
+  "why": "canon: the ending is CERTIFIED; capital C"
+ },
+ "scores.none.arcade": {
+  "after": "Nothing on file. Work a shift in {district}.",
+  "why": "V1: drops 'scores'; T15 put-down, then the fix"
+ },
+ "scores.none.story": {
+  "after": "Position vacant. Become Certified to fill it.",
+  "why": "V1: drops 'scores'; dry put-down, then the fix"
+ },
+ "saves.none": {
+  "after": "No story saved here.",
+  "why": "kept: Interface line, plain"
+ },
+ "saves.rename": {
+  "after": "Type to replace the name, or OK to keep it.",
+  "why": "kept: Interface line, plain"
+ },
+ "saves.full": {
+  "after": "All {n} slots in use: choose one to overwrite",
+  "why": "kept: Interface line, plain"
+ },
+ "saves.saved": {
+  "after": "Saved: {name}",
+  "why": "kept: Interface line, plain"
+ },
+ "saves.renamed": {
+  "after": "Renamed: {name}",
+  "why": "kept: Interface line, plain"
+ },
+ "saves.erased": {
+  "after": "Erased: {name}",
+  "why": "kept: Interface line, plain"
+ }
+}

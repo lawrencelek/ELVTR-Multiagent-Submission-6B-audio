@@ -129,6 +129,17 @@ def copy_items():
 CURATED = [
     # the brief: held, counted, not counted
     ("msg.held", "Feedback", "HELD AT {health} · the brief wants {brief}", "toast: a hit that would write off the chassis misses the brief; the chassis is held (row 620)", "game.js processEvents 'held'", "writeoff"),
+    # the held chassis, one line per brief (Lawrence's example: "Try harder - bait a car to divert and get hit."). Before: the one generic line, filled
+    ("msg.held.dash", "Feedback", "HELD AT 1 · the brief wants dash into a car", "toast: held, on a dash brief", "game.js 'held' (one line per brief: new)", "writeoff"),
+    ("msg.held.drop", "Feedback", "HELD AT 1 · the brief wants drop onto a car", "toast: held, on a drop brief", "game.js 'held' (new)", "writeoff"),
+    ("msg.held.jump", "Feedback", "HELD AT 1 · the brief wants jump into a car", "toast: held, on a jump brief", "game.js 'held' (new)", "writeoff"),
+    ("msg.held.level", "Feedback", "HELD AT 1 · the brief wants on a raised road", "toast: held, on a raised-road brief", "game.js 'held' (new)", "writeoff"),
+    ("msg.held.cone", "Feedback", "HELD AT 1 · the brief wants cone-baited car", "toast: held, on a cone brief (the line Lawrence quoted)", "game.js 'held' (new)", "writeoff"),
+    ("msg.held.push", "Feedback", "HELD AT 1 · the brief wants push off a car", "toast: held, on a push brief", "game.js 'held' (new)", "writeoff"),
+    ("msg.held.bounce", "Feedback", "HELD AT 1 · the brief wants thrown into a car", "toast: held, on a bounce brief", "game.js 'held' (new)", "writeoff"),
+    ("msg.held.struck", "Feedback", "HELD AT 1 · the brief wants struck, not dashing", "toast: held, on a struck brief", "game.js 'held' (new)", "writeoff"),
+    ("msg.held.combo", "Feedback", "HELD AT 1 · the brief wants combo ×{n}", "toast: held, on a combo brief", "game.js 'held' (new)", "writeoff"),
+    ("msg.held.cls", "Feedback", "HELD AT 1 · the brief wants a {cls}", "toast: held, on a vehicle-class brief", "game.js 'held' (new)", "writeoff"),
     ("msg.story-count", "Feedback", "COUNTED · {tile} {n} / {need}", "toast: a write-off counts for the tile", "game.js 'story-count'", "story"),
     ("msg.story-miss.task", "Feedback", "NOT COUNTED · the brief wants {brief}", "toast: a write-off misses the brief", "game.js 'story-miss'", "writeoff"),
     ("msg.story-miss.cleared", "Feedback", "NOT COUNTED · {tile} is already cleared", "toast: a write-off on a cleared tile", "game.js 'story-miss'", "writeoff"),

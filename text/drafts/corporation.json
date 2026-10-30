@@ -1,0 +1,362 @@
+{
+ "story.act.monument": {
+  "after": "Dummy Corporation welcomes you off the factory floor. The cars are your colleagues; Certification is earned, not issued.",
+  "why": "T1 V2.10: flat procedural put-down; goal kept"
+ },
+ "story.tale.monument.A1": {
+  "after": "Fresh off the factory floor, you're ready to do some damage to yourself. Make your engineers proud.",
+  "why": "kept: Lawrence's line (U1)"
+ },
+ "story.tale.monument.B1": {
+  "after": "Battery 1 is fitted. The skybridge was built for shoppers who never came; staff watch you dash into a colleague.",
+  "why": "kept: skybridge joke already dry; Battery 1, dash, place"
+ },
+ "story.tale.monument.C1": {
+  "after": "The LED drum lights each bend. Step off the high road onto a car: gravity is company policy.",
+  "why": "kept: 'gravity is company policy' is the target register"
+ },
+ "story.tale.monument.C2": {
+  "after": "The road runs through the portal tower at the sixth floor. Take your write-off up there; ignore the view.",
+  "why": "kept: 'ignore the view' already a flat put-down"
+ },
+ "story.tale.monument.B2": {
+  "after": "The plaque reads ZERO ACCIDENTS: a target, not a record. Stand near it until a colleague finds you.",
+  "why": "kept: ZERO ACCIDENTS exact; duty matches struck"
+ },
+ "story.tale.monument.A2": {
+  "after": "The neon shops sell nothing, but the traffic reads them. Hands 1 is fitted: bait a colleague with a cone.",
+  "why": "kept: place, Hands 1, cone duty; deadpan"
+ },
+ "story.tale.monument.A3": {
+  "after": "The stacked cubes rose one budget at a time. Build the same way: one hit, then another, quickly.",
+  "why": "kept: place turned to the combo; deadpan"
+ },
+ "story.tale.monument.B3": {
+  "after": "Two screens advertise to each other; neither advertises you yet. Legs 1 is fitted: jump into a passing car.",
+  "why": "T14: 'jump into a car' in four lines; dry put-down, place and Legs 1 kept"
+ },
+ "story.tale.monument.C3": {
+  "after": "The gateway thanked the car that wrote you off for driving safely. Let one colleague throw you into the next.",
+  "why": "kept: gateway's thanks is the dry joke; bounce duty"
+ },
+ "story.act.parkland": {
+  "after": "The Expo opens to clients when this park passes. Your training keeps them safe.",
+  "why": "kept: states service to clients; motivates"
+ },
+ "story.tale.parkland.C1": {
+  "after": "The lantern, the Expo's first exhibit, is lit for clients. With Arms 1, push off one car into the next.",
+  "why": "kept: lantern, Arms 1, push duty"
+ },
+ "story.tale.parkland.C2": {
+  "after": "Our board watches opening day from these terraces. A van delivers the catering; arrange for it to deliver you.",
+  "why": "kept: catering van joke lands; board, not clients, watches"
+ },
+ "story.tale.parkland.C3": {
+  "after": "The arch is the Expo's gate; visitors circle the roundabout once. You go faster: chain hits before each is forgotten.",
+  "why": "kept: 'before each is forgotten' already dry"
+ },
+ "story.tale.parkland.B3": {
+  "after": "The obelisk marks the surveyors' first stake. Police escort a school party here on opening day; test the escort first.",
+  "why": "R5: 'them' could read as the school party; the police are the brief"
+ },
+ "story.tale.parkland.A3": {
+  "after": "A wedding faces the traffic from the belvedere. Legs 2 is fitted: jump into a car, so no guest does.",
+  "why": "kept: 'so no guest does' is service, deadpan"
+ },
+ "story.tale.parkland.A2": {
+  "after": "The dome is the Expo's showroom; you are the exhibit. Hands 2 is fitted: bait a car with a cone.",
+  "why": "kept: 'you are the exhibit' already the put-down"
+ },
+ "story.tale.parkland.A1": {
+  "after": "The gardener's pools need cars that stop. Teach them with Arms 2: push off one car into the next.",
+  "why": "kept: gardener's pools, Arms 2, push duty"
+ },
+ "story.tale.parkland.B1": {
+  "after": "The cascade was built to drown out the traffic. The traffic got louder; take your hit up on the highway.",
+  "why": "kept: cascade joke already dry; raised road duty"
+ },
+ "story.tale.parkland.B2": {
+  "after": "The board watches the ring over the pools and applauds the cars. Battery 2 is fitted: chain your hits.",
+  "why": "Canon row 520: board applauds the cars at B2; praise withheld (T16)"
+ },
+ "story.act.waterfront": {
+  "after": "Certified dummies ship across the river, to be sacrificed in service to our clients. Your papers are being prepared, provisionally.",
+  "why": "T1 V2.10: asset under review; sacrifice stated plainly (V10)"
+ },
+ "story.tale.waterfront.A1": {
+  "after": "The bus carries engineers through the west portal to the bridge. It never misses; take its hit.",
+  "why": "kept: 'it never misses' flat; bus duty"
+ },
+ "story.tale.waterfront.B1": {
+  "after": "Cars go into the tunnel under the hill, and data comes back. Legs 3 is fitted: leap into one.",
+  "why": "kept: tunnel and data; Legs 3, jump"
+ },
+ "story.tale.waterfront.C1": {
+  "after": "The east portal faces away from its twin. Police here check papers; your Certification needs their fleet on record.",
+  "why": "kept: east portal, police duty, Certification goal"
+ },
+ "story.tale.waterfront.C2": {
+  "after": "The east beach terrace served tourists, then sensors. Drop from its rail onto a car; ships wait for the Certified.",
+  "why": "kept: terrace detail; drop duty; ships motivate"
+ },
+ "story.tale.waterfront.C3": {
+  "after": "The pier tower logs all that floats: containers, ducks, one dummy. Be thrown into a car to earn your entry.",
+  "why": "kept: 'one dummy' in the log is the put-down"
+ },
+ "story.tale.waterfront.B3": {
+  "after": "The stilt houses keep Chassis 0 behind glass. Arms 3 is fitted; push off a car and show it progress.",
+  "why": "kept: Chassis 0 canon; Arms 3, push duty"
+ },
+ "story.tale.waterfront.A3": {
+  "after": "The west tower keeps the customs log. Your entry reads PURPOSE DESTRUCTION: honour it on the raised road.",
+  "why": "kept: customs log canon; raised road duty"
+ },
+ "story.tale.waterfront.A2": {
+  "after": "Sand from three provinces lies under the west beach terrace. Place a cone; one more clean reading before the ceremony.",
+  "why": "kept: west beach terrace; cone duty; ceremony"
+ },
+ "story.tale.waterfront.B2": {
+  "after": "The circus monument, cast from your written-off chassis, reads ZERO ACCIDENTS (EXCLUDING TESTS). Battery 3 is fitted; chain your hits.",
+  "why": "kept: ZERO ACCIDENTS (EXCLUDING TESTS) exact; Battery 3"
+ },
+ "story.brief.any": {
+  "after": "Walk into the path of the incoming vehicles. Time your approach, and choose your angle carefully. Bonus points for combinations and lethal hits.",
+  "why": "kept: Lawrence's line (U1)"
+ },
+ "story.brief.dash": {
+  "after": "Dash into a car. Only a dash counts as the final hit.",
+  "why": "T14: 'the final hit must' in seven briefs"
+ },
+ "story.brief.drop": {
+  "after": "Drop onto a car from above. Your last hit must be that drop.",
+  "why": "T14: 'the final hit must' in seven briefs"
+ },
+ "story.brief.jump": {
+  "after": "Jump into traffic. The jump must be the final hit.",
+  "why": "T14: 'jump into a car' in four lines"
+ },
+ "story.brief.level": {
+  "after": "Climb to a raised road. Write off the chassis up there, not on the street.",
+  "why": "T14: 'the final hit must'; glossary write-off"
+ },
+ "story.brief.cone": {
+  "after": "Place a cone to bait a car. The car that reacts must deliver the final hit.",
+  "why": "T14; names the bait, as Lawrence's cone line does"
+ },
+ "story.brief.push": {
+  "after": "Push off from one car into another. The second car delivers the final hit.",
+  "why": "T14: 'push off one car', 'the final hit must' repeated"
+ },
+ "story.brief.bounce": {
+  "after": "Let one car throw you into another. Take the final hit while a hit is still throwing you.",
+  "why": "kept: imperative goal, then the final hit; varied phrasing"
+ },
+ "story.brief.struck": {
+  "after": "Walk or stand in the traffic. A car must deliver the final hit while you are not dashing.",
+  "why": "kept: imperative goal, then the final hit"
+ },
+ "story.brief.combo": {
+  "after": "Chain your hits into a combo. The final hit must be link {n} or later.",
+  "why": "kept: goal and {n} intact; one of two 'final hit must'"
+ },
+ "story.brief.cls": {
+  "after": "Step in front of the {clsLong}. The final hit must come from a {cls}.",
+  "why": "kept: 'a {cls}' feeds the article fix in taskText"
+ },
+ "story.ending": {
+  "after": "Your model has passed, adequately, and will be manufactured for our clients. A Corporation drone carries you to the ship.",
+  "why": "T16: praise withheld; 'adequately' is the amendment's own register"
+ },
+ "notice.n01": {
+  "after": "You are a Dummy Corporation trainee. Each write-off is logged and reviewed; make it worth the paperwork.",
+  "why": "T14: slogan in two notices; Arcade has no Certification; asset under review"
+ },
+ "notice.n02": {
+  "after": "Welcome, trainee. Every write-off brings Certification closer.",
+  "why": "kept: title line; slogan now in one notice only"
+ },
+ "notice.n03": {
+  "after": "Get your Dummy Certification in Shenzhen Smart City and learn about the Corporation.",
+  "why": "kept: Lawrence's line (U1)"
+ },
+ "notice.n04": {
+  "after": "TRAINING BRIEF",
+  "why": "kept: caps label (F10)"
+ },
+ "notice.n05": {
+  "after": "TRAINING BRIEF · {LABEL}",
+  "why": "kept: caps label, {LABEL} (F10)"
+ },
+ "notice.n06": {
+  "after": "CORPORATION DRONE",
+  "why": "kept: caps label (V4)"
+ },
+ "notice.n07": {
+  "after": "CORPORATION DRONE · DELIVERING {PART}",
+  "why": "kept: crisp drone caption, {PART} (T16)"
+ },
+ "notice.n08": {
+  "after": "CORPORATION DRONE · {PART} ON BOARD · THEN {TILE}",
+  "why": "kept: crisp drone caption, placeholders (T16)"
+ },
+ "notice.n09": {
+  "after": "CORPORATION DRONE · CARRYING YOU TO {TILE}",
+  "why": "kept: crisp drone caption, {TILE} (T16)"
+ },
+ "notice.n10": {
+  "after": "CORPORATION DRONE · INCOMING",
+  "why": "kept: caps label (F10)"
+ },
+ "notice.n11": {
+  "after": "CORPORATION GIFT · +{N} CREDITS",
+  "why": "kept: caps toast, {N} (F10)"
+ },
+ "notice.n12": {
+  "after": "NEXT FROM THE CORPORATION",
+  "why": "kept: caps label (F10)"
+ },
+ "notice.n13": {
+  "after": "A Corporation drone brings this part.",
+  "why": "kept: workshop status, crisp"
+ },
+ "notice.n14": {
+  "after": "A Corporation drone brings this part. Delivery follows results; keep training.",
+  "why": "T14: 'a Corporation drone brings' in four lines; dry nudge"
+ },
+ "notice.n15": {
+  "after": "Not for sale. Reach its tile; a drone delivers it.",
+  "why": "T15: denial gets a put-down, then the fix; T14"
+ },
+ "notice.n16": {
+  "after": "Not fitted yet; the drone brings it",
+  "why": "T14: 'a Corporation drone brings' in four lines; form kept"
+ },
+ "notice.n17": {
+  "after": "Chassis in the river; drone dispatched. Cars do not swim.",
+  "why": "T16: one put-down in the three drone lines"
+ },
+ "notice.n18": {
+  "after": "Corporation drone dispatched. Obstruction will be relocated.",
+  "why": "kept: 'Obstruction will be relocated' already deadpan"
+ },
+ "notice.n19": {
+  "after": "Corporation drone: chassis recovered from the river",
+  "why": "kept: status line stays crisp (T16)"
+ },
+ "notice.n20": {
+  "after": "Training complete. The Corporation thanks you for your service.",
+  "why": "kept: deadpan thanks; no cheer"
+ },
+ "notice.n21": {
+  "after": "Traffic exhausted. Results insufficient; report to the bay.",
+  "why": "T15: a miss gets a two-word put-down, then the order"
+ },
+ "notice.n22": {
+  "after": "DUMMY CORPORATION",
+  "why": "kept: caps label (V4)"
+ },
+ "notice.n23": {
+  "after": "DUMMY CORP",
+  "why": "kept: narrow sign form (V4)"
+ },
+ "notice.n24": {
+  "after": "Neon shops, LED walls; one road splits round the monument under the walkway ring. Your training begins here.",
+  "why": "kept: district blurb names its place"
+ },
+ "notice.n25": {
+  "after": "Water and concrete; a boulevard passes under the raised ring. Your write-offs open the Expo to clients.",
+  "why": "kept: district blurb; service to clients"
+ },
+ "notice.n26": {
+  "after": "A hill walled by towers; bridges cross the drive and the river. Certified dummies ship across it to clients.",
+  "why": "kept: district blurb; Certified ship to clients"
+ },
+ "notice.n27": {
+  "after": "Calibration Campus",
+  "why": "kept: label; district not in play"
+ },
+ "notice.n28": {
+  "after": "Towers and barriers. Corporation Tower stands over your training.",
+  "why": "kept: district not in play"
+ },
+ "notice.n29": {
+  "after": "The test centre the city was modelled on. Hits on its impact plates count for more.",
+  "why": "kept: district not in play"
+ },
+ "notice.n30": {
+  "after": "Two flyovers cross it, one above the other. Corporation Tower stands at the centre; towers shade your training.",
+  "why": "kept: district not in play"
+ },
+ "notice.n31": {
+  "after": "Impact plates mark the road at the centre. A write-off on a plate counts for more.",
+  "why": "kept: district not in play"
+ },
+ "notice.n32": {
+  "after": "Corporation Tower Plaza",
+  "why": "kept: label; district not in play"
+ },
+ "notice.n33": {
+  "after": "Corporation Tower",
+  "why": "kept: label; district not in play"
+ },
+ "notice.n34": {
+  "after": "Get hit in fun, creative, and destructive ways before the vehicles run out.",
+  "why": "kept: Lawrence's line (U1)"
+ },
+ "notice.n35": {
+  "after": "GRADE {G} · TOUGHER CHASSIS · DENSER TRAFFIC",
+  "why": "kept: crisp caps status, {G} (T16)"
+ },
+ "notice.n36": {
+  "after": "Self-driving cars are designed never to hit anyone. Your training: get hit, in combos, and earn your parts.",
+  "why": "kept: states the training plainly; motivates"
+ },
+ "notice.n37": {
+  "after": "Write off bodies; every {Q} write-offs, the grade rises. Keep training until the vehicles run out.",
+  "why": "kept: Arcade card, {Q} intact"
+ },
+ "label.any": {
+  "after": "ANY WRITE-OFF",
+  "why": "kept: caps brief label, form kept (F10)"
+ },
+ "label.dash": {
+  "after": "DASH INTO A CAR",
+  "why": "kept: caps brief label, form kept (F10)"
+ },
+ "label.drop": {
+  "after": "DROP ONTO A CAR",
+  "why": "kept: caps brief label, form kept (F10)"
+ },
+ "label.jump": {
+  "after": "JUMP INTO A CAR",
+  "why": "kept: caps brief label, form kept (F10)"
+ },
+ "label.level": {
+  "after": "ON A RAISED ROAD",
+  "why": "kept: caps brief label, form kept (F10)"
+ },
+ "label.cone": {
+  "after": "CONE-BAITED CAR",
+  "why": "kept: caps brief label, form kept (F10)"
+ },
+ "label.push": {
+  "after": "PUSH OFF A CAR",
+  "why": "kept: caps brief label, form kept (F10)"
+ },
+ "label.bounce": {
+  "after": "THROWN INTO A CAR",
+  "why": "kept: caps brief label, form kept (F10)"
+ },
+ "label.struck": {
+  "after": "STRUCK, NOT DASHING",
+  "why": "kept: caps brief label, form kept (F10)"
+ },
+ "label.combo": {
+  "after": "COMBO ×{n}",
+  "why": "kept: caps brief label, form kept (F10)"
+ },
+ "label.cls": {
+  "after": "A {cls}",
+  "why": "kept: caps brief label, form kept (F10)"
+ }
+}
