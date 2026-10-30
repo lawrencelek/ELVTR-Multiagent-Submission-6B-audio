@@ -122,7 +122,7 @@
     'story.traffic.parkland.C1': 1.75, 'story.traffic.parkland.C2': 1.75, 'story.traffic.parkland.C3': 1, 'story.traffic.parkland.B3': 1.25, 'story.traffic.parkland.A3': 2, 'story.traffic.parkland.A2': 1.5, 'story.traffic.parkland.A1': 1, 'story.traffic.parkland.B1': 2, 'story.traffic.parkland.B2': 1.25,
     'story.traffic.waterfront.A1': 1, 'story.traffic.waterfront.B1': 1.5, 'story.traffic.waterfront.C1': 1, 'story.traffic.waterfront.C2': 1.5, 'story.traffic.waterfront.C3': 1, 'story.traffic.waterfront.B3': 1, 'story.traffic.waterfront.A3': 1, 'story.traffic.waterfront.A2': 1.5, 'story.traffic.waterfront.B2': 1,
     'proto.bounce.maxThrow': 0, 'story.ferryDepth': 160, 'story.saveSlots': 3, 'story.saveNameMax': 12, 'story.level.firstPoints': 6500, 'story.level.stepPoints': 2000, 'story.level.max': 9, 'story.level.upgrades': 1,
-    'proto.batteryModel': 0, 'abilities.battery.dashCharges': 1, 'damage.bodyHealthOnFoot': 500, 'story.missFloor': 1, 'world.dummyMonument': 0, 'world.storyArt': 0, // Edit 92 (P7.11): the story's tile art, cosmetic only // Edit 91 (P7.10): Battery 1 the dash, 2 a second charge, 3 a faster recharge; the chassis on foot; a miss holds at 1 // Edit 89 (P7.8): the dummy's level from points; an upgrade a level. Edit 88 (P7.7): save slots; a slot name's longest. Edit 83 (P7.2): the knock's longest slide (0: no cap; P7.2 sets it); how far in from the entry edge the drone sets the dummy down
+    'proto.batteryModel': 0, 'abilities.battery.dashCharges': 1, 'damage.bodyHealthOnFoot': 500, 'story.missFloor': 1, 'story.coneBaitSeconds': 0, 'story.floorHold': 0, 'world.dummyMonument': 0, 'world.storyArt': 0, // Edit 92 (P7.11): the story's tile art, cosmetic only // Edit 91 (P7.10): Battery 1 the dash, 2 a second charge, 3 a faster recharge; the chassis on foot; a miss holds at 1 // Edit 89 (P7.8): the dummy's level from points; an upgrade a level. Edit 88 (P7.7): save slots; a slot name's longest. Edit 83 (P7.2): the knock's longest slide (0: no cap; P7.2 sets it); how far in from the entry edge the drone sets the dummy down
     'economy.creditsPerWriteOff': 1, 'story.price.ability.level1': 3, 'story.price.ability.level2': 4, 'story.price.ability.level3': 5, 'story.giftCredits': 3,
     'story.writeOffs.monument.A1': 1, 'story.writeOffs.monument.B1': 1, 'story.writeOffs.monument.C1': 1, 'story.writeOffs.monument.C2': 1, 'story.writeOffs.monument.B2': 1, 'story.writeOffs.monument.A2': 1, 'story.writeOffs.monument.A3': 1, 'story.writeOffs.monument.B3': 1, 'story.writeOffs.monument.C3': 1,
     'story.writeOffs.parkland.C1': 1, 'story.writeOffs.parkland.C2': 2, 'story.writeOffs.parkland.C3': 1, 'story.writeOffs.parkland.B3': 1, 'story.writeOffs.parkland.A3': 1, 'story.writeOffs.parkland.A2': 2, 'story.writeOffs.parkland.A1': 1, 'story.writeOffs.parkland.B1': 1, 'story.writeOffs.parkland.B2': 2,
@@ -2097,7 +2097,7 @@
           c.inEpisode = true;
           const ph = impulseImpact(P, b.vx, b.vy, c.vx, c.vy, nx, ny, c.cls, b.mode === 'lunge' || b.mode === 'knock');
           contacts.push({ k, car: c, closing: Math.max(0, rel), ph, px: res.cx, py: res.cy, zone: zoneOf(res.qx, res.qy, c),
-            carState: this.carCue(c), cause: c.cause, lunging: b.mode === 'lunge', bodySpeed: hyp(b.vx, b.vy), carSpeed: c.v, stopped: c.v < 5 || !!(c.man && c.man.standoff) });
+            carState: this.carCue(c), cause: c.cause, coneT: c.coneT, lunging: b.mode === 'lunge', bodySpeed: hyp(b.vx, b.vy), carSpeed: c.v, stopped: c.v < 5 || !!(c.man && c.man.standoff) });
           if (P['proto.damageModel'] && ph.un > 1e-6) knock = ph.knock;
         }
         b.x += res.nx * res.pen; b.y += res.ny * res.pen;
@@ -2237,7 +2237,7 @@
         if (!res) continue;
         c.touched = true; c.inEpisode = true;
         const ph = dropImpact(P, d.vx, d.vy, c, res, v);
-        contacts.push({ k, car: c, closing: ph.un, ph, px: b.x, py: b.y, zone: zoneOf(res.qx, res.qy, c), carState: this.carCue(c), cause: c.cause, lunging: false,
+        contacts.push({ k, car: c, closing: ph.un, ph, px: b.x, py: b.y, zone: zoneOf(res.qx, res.qy, c), carState: this.carCue(c), cause: c.cause, coneT: c.coneT, lunging: false,
           bodySpeed: v, carSpeed: c.v, stopped: c.v < 5 || !!(c.man && c.man.standoff), drop: true, dropZ: d.fromZ, dropFrom: d.fromKind });
         b.x += res.nx * res.pen; b.y += res.ny * res.pen;
         this.emit('land', { car: c.id, x: +b.x.toFixed(1), y: +b.y.toFixed(1), level: b.level, fromZ: d.fromZ, h: d.h, fromKind: d.fromKind });
@@ -2850,6 +2850,7 @@
       else m.v0 = c.v;
       m.until = this.t + this.remaining(c, m);
       c.man = m; c.state = 'committed'; c.cause = cause; c.intent = null; c.intentFor = null; c.signal = null;
+      if (cause === 'cone') c.coneT = this.t; // Edit 100 (P9, row 620): when the car last reacted to a cone (story.coneBaitSeconds)
       if (tg) c.dodge = { s: tg.s, id: tg.id };
       this.emit('commit', { car: c.id, man: m.type, cause, d1: m.d1 != null ? +m.d1.toFixed(2) : null });
     }
@@ -3002,7 +3003,7 @@
         if (c.man && c.state === 'committed' && c.man.type !== 'reverse') {
           const ob = this.obstacleAhead(c);
           if (ob) {
-            c.state = 'interrupted'; c.interruptT = this.t; c.clearT = 0;
+            c.state = 'interrupted'; c.interruptT = this.t; c.clearT = 0; if (ob === 'cone') c.coneT = this.t;
             Object.assign(c.man, { halt: true, v0: c.v, tv: this.t, until: Infinity });
             this.emit('interrupt', { car: c.id, by: ob });
           }
@@ -3241,7 +3242,13 @@
         const kind = ct.drop ? 'drop' : ct.kind || (ct.jump ? 'jump' : ct.lunging ? 'dash' : 'struck');
         const cl = this.comboLink(kind, assessed * plate * hw), combo = cl.n, mult = cl.mult;
         let lost = Math.min(b.health, assessed); // Edit 91: a hit that would write the chassis off can be held at a floor (Story: a miss of the brief)
-        const floor = lost >= b.health - 1e-9 && this.hitFloor ? this.hitFloor({ kind, cause: ct.cause, cls: c.cls, combo, level: b.level }) : 0;
+        // Edit 100 (P9, row 620): a car that reacted to a cone within story.coneBaitSeconds is cone-baited, its swerve, its return
+        // and its stop for the dummy after it. With story.floorHold, a miss never takes the chassis below story.missFloor, small
+        // hits included, and at the floor a hit to the brief writes it off
+        const cbs = P['story.coneBaitSeconds'] || 0, coned = ct.cause === 'cone' || (cbs > 0 && ct.coneT != null && this.t - ct.coneT <= cbs + 1e-9);
+        const brief = { kind, cause: ct.cause, coned, cls: c.cls, combo, level: b.level }, mf = P['story.missFloor'] || 0, fh = !!P['story.floorHold'];
+        const floor = this.hitFloor && (lost >= b.health - 1e-9 || (fh && b.health - lost < mf - 1e-9)) ? this.hitFloor(brief) : 0;
+        if (fh && !floor && b.health <= mf + 1e-9 && this.briefHit && this.briefHit(brief)) lost = b.health;
         const held = floor > 0 && b.health - lost < floor;
         if (held) lost = Math.max(0, b.health - floor);
         b.health = Math.max(0, b.health - lost);
@@ -3263,7 +3270,7 @@
         const ev = { car: c.id, model: c.model, cls: c.cls, zone: ct.zone, part, closing: +ct.closing.toFixed(3),
           angle: +ct.ph.angle.toFixed(1), dv: +ct.ph.dvd.toFixed(2), strike: +ct.ph.un.toFixed(2),
           raw: +raw.toFixed(3), assessed: +assessed.toFixed(3), lost: +lost.toFixed(3), health: +b.health.toFixed(3),
-          carState: ct.carState, cause: ct.cause, bait, lunging: ct.lunging, learned, stopped: ct.stopped, learnedStandoff, plate: plate > 1, highway: hw > 1, drop: !!ct.drop, deck: !!c.deck, dropZ: ct.drop ? ct.dropZ : 0, dropFrom: ct.drop ? ct.dropFrom : null,
+          carState: ct.carState, cause: ct.cause, coned, bait, lunging: ct.lunging, learned, stopped: ct.stopped, learnedStandoff, plate: plate > 1, highway: hw > 1, drop: !!ct.drop, deck: !!c.deck, dropZ: ct.drop ? ct.dropZ : 0, dropFrom: ct.drop ? ct.dropFrom : null,
           combo, mult, kind, jump: !!ct.jump, ricochet: !!ct.ricochet, held };
         this.emit('impact', ev); b.hits.push(ev);
         if (held) this.emit('held', { health: b.health, kind, car: c.id });

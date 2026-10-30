@@ -271,7 +271,7 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 
 - **Music:** level · Track 3 (chibi robot b)
 - **`sfx.jump-land`** · Jump lands: `land.wav` · pool `land.wav` · alternates `blocked.wav`, `door_close.wav`
-- **`sfx.car-notice`** · Car notices you: `tone_car_notice.wav` · pool — · alternates —
+- **`sfx.car-notice`** · Car notices you: `tone_car_notice.wav` ×2 · pool — · alternates —
 - **`sfx.impact.big`** · A big hit: `tone_impact_big.wav` · pool `explosion_1.wav` · alternates `harsh_destruction.wav`, `explosion_2.wav`, `soft_destruction.wav`
 
 ## 39. Story: counted, cleared
@@ -279,7 +279,6 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 ![Story: counted, cleared](shots/story.jpg)
 
 - **Music:** level · Track 3 (chibi robot b)
-- **`sfx.car-notice`** · Car notices you: `tone_car_notice.wav` · pool — · alternates —
 - **`sfx.story-deliver`** · Delivery drone: `engine.wav` · pool `engine.wav` · alternates `ufo.wav`, `boost.wav`
 - **`sfx.story-count`** · Counted: `stat_increase.wav` · pool `stat_increase.wav` · alternates `collect_5.wav`, `confirm_2.wav`
 - **`sfx.story-clear`** · Tile cleared: `powerup_5.wav` · pool `powerup_5.wav` · alternates `level_up.wav`, `powerup_1.wav`

@@ -1022,6 +1022,11 @@
      "kind": "sfx",
      "id": "impact.big",
      "file": "tone_impact_big.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "car-notice",
+     "file": "tone_car_notice.wav"
     }
    ]
   },
@@ -1037,11 +1042,6 @@
     "duck": 1
    },
    "cues": [
-    {
-     "kind": "sfx",
-     "id": "car-notice",
-     "file": "tone_car_notice.wav"
-    },
     {
      "kind": "sfx",
      "id": "story-deliver",

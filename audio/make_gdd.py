@@ -59,6 +59,10 @@ MUSIC_ROWS = {
 }
 
 
+import re as _re
+SIMP = json.loads(_re.search(r"window\.DUMMIES_SIM = (\{.*?\});", (ROOT / "prototypes/p9/dummies_p9.html").read_text(encoding="utf-8")).group(1))
+
+
 def gdd():
     L = []
     a = L.append
@@ -223,7 +227,18 @@ def gdd():
         a(f"| `{k}` | {e['default']} | {e['unit']} | {e['description']} |")
     a("")
     n_sil = sum(c["decision"] == "silence" for c in C["sfx"].values())
-    a("## 9 Open")
+    a("## 9 Play fix: the cone brief and the floor (row 620)")
+    a("")
+    a("> (30 October 13:07) I died on a cone-baited car but my body did not die.")
+    a("")
+    a(f"- **Cone-baited:** a car that reacted to a cone within `story.coneBaitSeconds` ({SIMP.get('story.coneBaitSeconds')} s) counts. Its swerve or stop, its return to lane and its stop for the dummy after all count.")
+    a("- **Why:** on Monument A2, cars that swerved round a cone then stopped for the dummy (30 times) or returned to lane (9) within 6 s. A hit then counted as \"body\" or \"return\", never the cone.")
+    a(f"- **The floor** (`story.floorHold` {SIMP.get('story.floorHold')}): a miss of the brief never takes the chassis below `story.missFloor` ({REG['story.missFloor']['default']}), small hits included. At the floor, a hit to the brief writes it off.")
+    a(f"- **The readout** (`ui.hud.bodyCeil` {SIMP.get('ui.hud.bodyCeil')}): a live chassis reads at least 1. BODY 0 means written off.")
+    a("- **The toast:** \"HELD AT 1 · the brief wants cone-baited car\" names the brief.")
+    a("- **Frozen builds:** registry defaults 0. Prototypes 7.10–8.4 keep their rule.")
+    a("")
+    a("## 10 Open")
     a("")
     a("- **Generated music:** four tracks composed in code (`audio/music_gen.py`) to fill the pack's gaps. Heard here only as numbers: loudness, spectrum, structure. Lawrence's ear decides; the Sound Lab swaps any of them.")
     a("- **Honk and cone hits:** the pack has no horn. Honks play Prototype 8.4's horn as generated tones; Lawrence set cone hits to their tone too (C2, user-decided).")

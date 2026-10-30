@@ -88,7 +88,7 @@
     switch (task.kind) {
       case 'drop': case 'jump': case 'push': case 'bounce': case 'struck': case 'dash': return hit.kind === task.kind;
       case 'level': return (level || 0) >= 1;
-      case 'cone': return hit.cause === 'cone';
+      case 'cone': return hit.cause === 'cone' || !!hit.coned; // Edit 100 (P9, row 620): coned, a cone reaction within story.coneBaitSeconds
       case 'combo': return (hit.combo || 1) >= P[task.param];
       case 'cls': return hit.cls === task.cls;
       default: return false;
@@ -347,6 +347,12 @@
       const t = this.screenName(); if (t !== activeTile(this.story, this.levelId)) return 0;
       const tile = tileOf(this.levelId, t);
       return !tile || meets(tile.task, h, h.level, this.P) ? 0 : this.P['story.missFloor'] || 0;
+    }
+    briefHit(h) { // Edit 100 (P9, row 620): in the tile in test, does this hit meet the brief (story.floorHold)
+      if (!this.storyMode || !this.entered || !this.story) return false;
+      const t = this.screenName(); if (t !== activeTile(this.story, this.levelId)) return false;
+      const tile = tileOf(this.levelId, t);
+      return !!tile && meets(tile.task, h, h.level, this.P);
     }
     writeOff() {
       const b = this.body, hit = b.hits[b.hits.length - 1] || null, level = b.level || 0;

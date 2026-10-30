@@ -295,7 +295,7 @@ document.getElementById('btn-full').addEventListener('click', () => {
     'story.traffic.parkland.C1': 1.75, 'story.traffic.parkland.C2': 1.75, 'story.traffic.parkland.C3': 1, 'story.traffic.parkland.B3': 1.25, 'story.traffic.parkland.A3': 2, 'story.traffic.parkland.A2': 1.5, 'story.traffic.parkland.A1': 1, 'story.traffic.parkland.B1': 2, 'story.traffic.parkland.B2': 1.25,
     'story.traffic.waterfront.A1': 1, 'story.traffic.waterfront.B1': 1.5, 'story.traffic.waterfront.C1': 1, 'story.traffic.waterfront.C2': 1.5, 'story.traffic.waterfront.C3': 1, 'story.traffic.waterfront.B3': 1, 'story.traffic.waterfront.A3': 1, 'story.traffic.waterfront.A2': 1.5, 'story.traffic.waterfront.B2': 1,
     'proto.bounce.maxThrow': 0, 'story.ferryDepth': 160, 'story.saveSlots': 3, 'story.saveNameMax': 12, 'story.level.firstPoints': 6500, 'story.level.stepPoints': 2000, 'story.level.max': 9, 'story.level.upgrades': 1,
-    'proto.batteryModel': 0, 'abilities.battery.dashCharges': 1, 'damage.bodyHealthOnFoot': 500, 'story.missFloor': 1, 'world.dummyMonument': 0, 'world.storyArt': 0, // Edit 92 (P7.11): the story's tile art, cosmetic only // Edit 91 (P7.10): Battery 1 the dash, 2 a second charge, 3 a faster recharge; the chassis on foot; a miss holds at 1 // Edit 89 (P7.8): the dummy's level from points; an upgrade a level. Edit 88 (P7.7): save slots; a slot name's longest. Edit 83 (P7.2): the knock's longest slide (0: no cap; P7.2 sets it); how far in from the entry edge the drone sets the dummy down
+    'proto.batteryModel': 0, 'abilities.battery.dashCharges': 1, 'damage.bodyHealthOnFoot': 500, 'story.missFloor': 1, 'story.coneBaitSeconds': 0, 'story.floorHold': 0, 'world.dummyMonument': 0, 'world.storyArt': 0, // Edit 92 (P7.11): the story's tile art, cosmetic only // Edit 91 (P7.10): Battery 1 the dash, 2 a second charge, 3 a faster recharge; the chassis on foot; a miss holds at 1 // Edit 89 (P7.8): the dummy's level from points; an upgrade a level. Edit 88 (P7.7): save slots; a slot name's longest. Edit 83 (P7.2): the knock's longest slide (0: no cap; P7.2 sets it); how far in from the entry edge the drone sets the dummy down
     'economy.creditsPerWriteOff': 1, 'story.price.ability.level1': 3, 'story.price.ability.level2': 4, 'story.price.ability.level3': 5, 'story.giftCredits': 3,
     'story.writeOffs.monument.A1': 1, 'story.writeOffs.monument.B1': 1, 'story.writeOffs.monument.C1': 1, 'story.writeOffs.monument.C2': 1, 'story.writeOffs.monument.B2': 1, 'story.writeOffs.monument.A2': 1, 'story.writeOffs.monument.A3': 1, 'story.writeOffs.monument.B3': 1, 'story.writeOffs.monument.C3': 1,
     'story.writeOffs.parkland.C1': 1, 'story.writeOffs.parkland.C2': 2, 'story.writeOffs.parkland.C3': 1, 'story.writeOffs.parkland.B3': 1, 'story.writeOffs.parkland.A3': 1, 'story.writeOffs.parkland.A2': 2, 'story.writeOffs.parkland.A1': 1, 'story.writeOffs.parkland.B1': 1, 'story.writeOffs.parkland.B2': 2,
@@ -2270,7 +2270,7 @@ document.getElementById('btn-full').addEventListener('click', () => {
           c.inEpisode = true;
           const ph = impulseImpact(P, b.vx, b.vy, c.vx, c.vy, nx, ny, c.cls, b.mode === 'lunge' || b.mode === 'knock');
           contacts.push({ k, car: c, closing: Math.max(0, rel), ph, px: res.cx, py: res.cy, zone: zoneOf(res.qx, res.qy, c),
-            carState: this.carCue(c), cause: c.cause, lunging: b.mode === 'lunge', bodySpeed: hyp(b.vx, b.vy), carSpeed: c.v, stopped: c.v < 5 || !!(c.man && c.man.standoff) });
+            carState: this.carCue(c), cause: c.cause, coneT: c.coneT, lunging: b.mode === 'lunge', bodySpeed: hyp(b.vx, b.vy), carSpeed: c.v, stopped: c.v < 5 || !!(c.man && c.man.standoff) });
           if (P['proto.damageModel'] && ph.un > 1e-6) knock = ph.knock;
         }
         b.x += res.nx * res.pen; b.y += res.ny * res.pen;
@@ -2410,7 +2410,7 @@ document.getElementById('btn-full').addEventListener('click', () => {
         if (!res) continue;
         c.touched = true; c.inEpisode = true;
         const ph = dropImpact(P, d.vx, d.vy, c, res, v);
-        contacts.push({ k, car: c, closing: ph.un, ph, px: b.x, py: b.y, zone: zoneOf(res.qx, res.qy, c), carState: this.carCue(c), cause: c.cause, lunging: false,
+        contacts.push({ k, car: c, closing: ph.un, ph, px: b.x, py: b.y, zone: zoneOf(res.qx, res.qy, c), carState: this.carCue(c), cause: c.cause, coneT: c.coneT, lunging: false,
           bodySpeed: v, carSpeed: c.v, stopped: c.v < 5 || !!(c.man && c.man.standoff), drop: true, dropZ: d.fromZ, dropFrom: d.fromKind });
         b.x += res.nx * res.pen; b.y += res.ny * res.pen;
         this.emit('land', { car: c.id, x: +b.x.toFixed(1), y: +b.y.toFixed(1), level: b.level, fromZ: d.fromZ, h: d.h, fromKind: d.fromKind });
@@ -3023,6 +3023,7 @@ document.getElementById('btn-full').addEventListener('click', () => {
       else m.v0 = c.v;
       m.until = this.t + this.remaining(c, m);
       c.man = m; c.state = 'committed'; c.cause = cause; c.intent = null; c.intentFor = null; c.signal = null;
+      if (cause === 'cone') c.coneT = this.t; // Edit 100 (P9, row 620): when the car last reacted to a cone (story.coneBaitSeconds)
       if (tg) c.dodge = { s: tg.s, id: tg.id };
       this.emit('commit', { car: c.id, man: m.type, cause, d1: m.d1 != null ? +m.d1.toFixed(2) : null });
     }
@@ -3175,7 +3176,7 @@ document.getElementById('btn-full').addEventListener('click', () => {
         if (c.man && c.state === 'committed' && c.man.type !== 'reverse') {
           const ob = this.obstacleAhead(c);
           if (ob) {
-            c.state = 'interrupted'; c.interruptT = this.t; c.clearT = 0;
+            c.state = 'interrupted'; c.interruptT = this.t; c.clearT = 0; if (ob === 'cone') c.coneT = this.t;
             Object.assign(c.man, { halt: true, v0: c.v, tv: this.t, until: Infinity });
             this.emit('interrupt', { car: c.id, by: ob });
           }
@@ -3414,7 +3415,13 @@ document.getElementById('btn-full').addEventListener('click', () => {
         const kind = ct.drop ? 'drop' : ct.kind || (ct.jump ? 'jump' : ct.lunging ? 'dash' : 'struck');
         const cl = this.comboLink(kind, assessed * plate * hw), combo = cl.n, mult = cl.mult;
         let lost = Math.min(b.health, assessed); // Edit 91: a hit that would write the chassis off can be held at a floor (Story: a miss of the brief)
-        const floor = lost >= b.health - 1e-9 && this.hitFloor ? this.hitFloor({ kind, cause: ct.cause, cls: c.cls, combo, level: b.level }) : 0;
+        // Edit 100 (P9, row 620): a car that reacted to a cone within story.coneBaitSeconds is cone-baited, its swerve, its return
+        // and its stop for the dummy after it. With story.floorHold, a miss never takes the chassis below story.missFloor, small
+        // hits included, and at the floor a hit to the brief writes it off
+        const cbs = P['story.coneBaitSeconds'] || 0, coned = ct.cause === 'cone' || (cbs > 0 && ct.coneT != null && this.t - ct.coneT <= cbs + 1e-9);
+        const brief = { kind, cause: ct.cause, coned, cls: c.cls, combo, level: b.level }, mf = P['story.missFloor'] || 0, fh = !!P['story.floorHold'];
+        const floor = this.hitFloor && (lost >= b.health - 1e-9 || (fh && b.health - lost < mf - 1e-9)) ? this.hitFloor(brief) : 0;
+        if (fh && !floor && b.health <= mf + 1e-9 && this.briefHit && this.briefHit(brief)) lost = b.health;
         const held = floor > 0 && b.health - lost < floor;
         if (held) lost = Math.max(0, b.health - floor);
         b.health = Math.max(0, b.health - lost);
@@ -3436,7 +3443,7 @@ document.getElementById('btn-full').addEventListener('click', () => {
         const ev = { car: c.id, model: c.model, cls: c.cls, zone: ct.zone, part, closing: +ct.closing.toFixed(3),
           angle: +ct.ph.angle.toFixed(1), dv: +ct.ph.dvd.toFixed(2), strike: +ct.ph.un.toFixed(2),
           raw: +raw.toFixed(3), assessed: +assessed.toFixed(3), lost: +lost.toFixed(3), health: +b.health.toFixed(3),
-          carState: ct.carState, cause: ct.cause, bait, lunging: ct.lunging, learned, stopped: ct.stopped, learnedStandoff, plate: plate > 1, highway: hw > 1, drop: !!ct.drop, deck: !!c.deck, dropZ: ct.drop ? ct.dropZ : 0, dropFrom: ct.drop ? ct.dropFrom : null,
+          carState: ct.carState, cause: ct.cause, coned, bait, lunging: ct.lunging, learned, stopped: ct.stopped, learnedStandoff, plate: plate > 1, highway: hw > 1, drop: !!ct.drop, deck: !!c.deck, dropZ: ct.drop ? ct.dropZ : 0, dropFrom: ct.drop ? ct.dropFrom : null,
           combo, mult, kind, jump: !!ct.jump, ricochet: !!ct.ricochet, held };
         this.emit('impact', ev); b.hits.push(ev);
         if (held) this.emit('held', { health: b.health, kind, car: c.id });
@@ -11461,7 +11468,7 @@ window.DUMMIES_LORE.build = 'P9'; // Edit 100: the build; the text is 8.3's (lor
 window.DUMMIES_CREDITS.lines = window.DUMMIES_CREDITS.lines.concat(["Music by ansimuz", "Sound effects by Chequered Ink"]); // Edit 100: the pack's credits
 </script>
 <script>
-window.DUMMIES_SIM = {"arcade.grades": 1, "ui.introScreen": 1, "ui.levelCard": 1, "world.droneDropIn": 1, "ui.storySplash": 1, "arcade.grade.healthStep": 0.25, "arcade.grade.densityStep": 0.2, "arcade.grade.max": 5, "highscore.tableSize": 10, "ui.intro.loopSeconds": 6.5, "ui.splash.cycleSeconds": 3.6, "proto.driver.coneSteepPass": 1, "proto.art.beamStraight": 1, "proto.art.brakeGlowStopped": 1, "proto.art.spentGrey": 1, "ui.cueKey.simple": 1, "ui.layerEdgeFix": 1, "proto.art.noticeFlashHz": 4, "proto.droneConeSeconds": 0, "proto.stopCue": 0, "audio.enabled": 1}; // Edit 97–100 (P8.2–9): registry edit100-2026-10-30; the flags 1 here (registry default 0)
+window.DUMMIES_SIM = {"arcade.grades": 1, "ui.introScreen": 1, "ui.levelCard": 1, "world.droneDropIn": 1, "ui.storySplash": 1, "arcade.grade.healthStep": 0.25, "arcade.grade.densityStep": 0.2, "arcade.grade.max": 5, "highscore.tableSize": 10, "ui.intro.loopSeconds": 6.5, "ui.splash.cycleSeconds": 3.6, "proto.driver.coneSteepPass": 1, "proto.art.beamStraight": 1, "proto.art.brakeGlowStopped": 1, "proto.art.spentGrey": 1, "ui.cueKey.simple": 1, "ui.layerEdgeFix": 1, "proto.art.noticeFlashHz": 4, "proto.droneConeSeconds": 0, "proto.stopCue": 0, "audio.enabled": 1, "story.coneBaitSeconds": 6, "story.floorHold": 1, "ui.hud.bodyCeil": 1}; // Edit 97–100 (P8.2–9): registry edit100-2026-10-30; the flags 1 here (registry default 0)
 </script>
 <script>
 /* DUMMIES P7.3 (GDD Edits 81–84): Story mode, and Arcade's verbs. The Test City, tile by tile: Monument, then Parkland, then Waterfront.
@@ -11554,7 +11561,7 @@ window.DUMMIES_SIM = {"arcade.grades": 1, "ui.introScreen": 1, "ui.levelCard": 1
     switch (task.kind) {
       case 'drop': case 'jump': case 'push': case 'bounce': case 'struck': case 'dash': return hit.kind === task.kind;
       case 'level': return (level || 0) >= 1;
-      case 'cone': return hit.cause === 'cone';
+      case 'cone': return hit.cause === 'cone' || !!hit.coned; // Edit 100 (P9, row 620): coned, a cone reaction within story.coneBaitSeconds
       case 'combo': return (hit.combo || 1) >= P[task.param];
       case 'cls': return hit.cls === task.cls;
       default: return false;
@@ -11813,6 +11820,12 @@ window.DUMMIES_SIM = {"arcade.grades": 1, "ui.introScreen": 1, "ui.levelCard": 1
       const t = this.screenName(); if (t !== activeTile(this.story, this.levelId)) return 0;
       const tile = tileOf(this.levelId, t);
       return !tile || meets(tile.task, h, h.level, this.P) ? 0 : this.P['story.missFloor'] || 0;
+    }
+    briefHit(h) { // Edit 100 (P9, row 620): in the tile in test, does this hit meet the brief (story.floorHold)
+      if (!this.storyMode || !this.entered || !this.story) return false;
+      const t = this.screenName(); if (t !== activeTile(this.story, this.levelId)) return false;
+      const tile = tileOf(this.levelId, t);
+      return !!tile && meets(tile.task, h, h.level, this.P);
     }
     writeOff() {
       const b = this.body, hit = b.hits[b.hits.length - 1] || null, level = b.level || 0;
@@ -13326,7 +13339,7 @@ window.DUMMIES_CUES = {"generated_by": "audio/integrate.py", "registryVersion": 
         }
         case 'purchase': [523, 659, 784].forEach((f, j) => Snd.tone(f, f, 0.1, 'triangle', 0.07, j * 0.07)); Snd.tone(150, 60, 0.18, 'square', 0.06, 0.02); fx.fit = { node: e.node, t0: app.realT }; toast(e.unit === 'upgrade' ? NODE(e.node).name + ' fitted' + (e.upgrades ? ' · ' + e.upgrades + ' upgrade' + (e.upgrades === 1 ? '' : 's') + ' left' : '') : copy('toast.purchase', '{node} installed', { node: NODE(e.node).name })); break; // Edit 89: the fit lands on the workshop's chassis
         case 'purchase-denied': Snd.tone(180, 140, 0.12, 'square', 0.04); toast(e.why === 'max' ? 'That part is at its top level' : /^gift/.test(e.why) ? LT('n15', 'A Farsight drone brings that part') : e.why[0].toUpperCase() + e.why.slice(1)); break; // Edit 89
-        case 'held': Snd.tone(240, 200, 0.16, 'square', 0.05); toast('Not the brief: chassis held at ' + num(e.health)); break; // Edit 91: a miss of the brief does not write the chassis off
+        case 'held': Snd.tone(240, 200, 0.16, 'square', 0.05); { const tk = s.P['story.floorHold'] && STORY && STORY.tileOf(s.levelId, s.screenName()); toast(tk && tk.task ? 'HELD AT ' + num(Math.max(1, Math.ceil(e.health - 1e-6))) + ' · the brief wants ' + STORY.taskText(tk.task, s.P).label.toLowerCase() : 'Not the brief: chassis held at ' + num(e.health)); } break; // Edit 91: a miss of the brief does not write the chassis off. Edit 100 (P9, row 620): the toast names the brief
         case 'shop-open': if (STORY && ABIL4) { const k = SHOP_GRID.findIndex((g) => { const n = nextLevel(s, g[0]); return n && s.canBuy(n).ok; }); app.shopCol = Math.max(0, k); app.shopRow = k >= 0 ? 0 : SHOP_ROWS; fx.fit = null; } break; // Edit 89: the workshop opens on a part an upgrade fits
         case 'pickup': Snd.tone(700, 950, 0.05, 'triangle', 0.06); if (ABIL && s.coneCapacity() > 1) toast('Cones ' + (e.n || 1) + ' / ' + s.coneCapacity()); break;
         case 'drop': Snd.tone(500, 380, 0.06, 'triangle', 0.05); break;
@@ -14612,7 +14625,7 @@ window.DUMMIES_CUES = {"generated_by": "audio/integrate.py", "registryVersion": 
   }
   // Left: the body's numbers. Health first and largest; dash beneath.
   function drawHUD(s) {
-    const b = s.body, P = s.P, hp = b.alive ? b.health : 0, frac = clamp(hp / maxHP(s), 0, 1); // Edit 91: on foot, a lighter chassis
+    const b = s.body, P = s.P, hp = b.alive ? (SIM8 && SIM8['ui.hud.bodyCeil'] ? Math.max(1, Math.ceil(b.health - 1e-6)) : b.health) : 0, frac = clamp(hp / maxHP(s), 0, 1); // Edit 91: on foot, a lighter chassis. Edit 100 (P9, row 620): a live chassis never reads 0
     const X = 16, W = FX - 32, TX = 30, BW = W - 28; // left column: as wide as the space beside the field
     const BY = STORY ? FY - 6 : 62, BH = STORY ? 86 : 150, DY = BY + BH + 10; // Edit 87: on the field's top edge // Edit 86 (P7.5): BODY as tall as DASH: the number on the label's row, the bar beneath
     panel(X, BY, W, BH); app.hud = { body: { x: X, y: BY, w: W, h: BH } }; // Edit 87: the boxes as drawn, for the tests

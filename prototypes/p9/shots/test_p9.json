@@ -1,6 +1,6 @@
 {
- "passed": 44,
- "total": 44,
+ "passed": 46,
+ "total": 46,
  "results": [
   {
    "name": "every file in the cue map loads (155)",
@@ -173,6 +173,16 @@
    "detail": "{\"master\":8,\"music\":8,\"sound\":8,\"mute\":false}"
   },
   {
+   "name": "a live chassis never reads BODY 0 (ui.hud.bodyCeil): 0.3 health reads 1",
+   "pass": true,
+   "detail": "1"
+  },
+  {
+   "name": "the cone brief counts the chain the cone starts; a miss holds at 1, small hits included; at 1 a hit to the brief writes off (row 620)",
+   "pass": true,
+   "detail": "{\"oldCone\":{\"tile\":\"A2\",\"alive\":true,\"health\":1,\"coned\":false,\"counted\":false},\"smallMiss\":{\"tile\":\"A2\",\"alive\":true,\"health\":1,\"coned\":false,\"counted\":false},\"chain\":{\"tile\":\"A2\",\"alive\":false,\"health\":0,\"coned\":true,\"counted\":true},\"floorBrief\":{\"tile\":\"A2\",\"alive\":false,\"health\":0,\"coned\":true,\"counted\":true}}"
+  },
+  {
    "name": "the pause page's sound control mutes, and its slider sets the volume and unmutes",
    "pass": true,
    "detail": "[[true,true,true],[false,5]]"
@@ -213,7 +223,7 @@
    "detail": "[]"
   },
   {
-   "name": "Prototype 8.4 rebuilt from the shared code draws what the frozen build draws, barks and live counts aside (315 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 316 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)",
+   "name": "Prototype 8.4 rebuilt from the shared code draws what the frozen build draws, barks and live counts aside (315 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 315 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)",
    "pass": true,
    "detail": ""
   },

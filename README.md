@@ -41,8 +41,8 @@
 | **The cue map** | [`content/audio/cues.json`](content/audio/cues.json): the agent's accepted map ([`design.json`](content/audio/design.json)) with Lawrence's picks over it ([`picks_lawrence.json`](content/audio/picks_lawrence.json), [`picks_lawrence_2.json`](content/audio/picks_lawrence_2.json), [`picks_lawrence_2_tones.json`](content/audio/picks_lawrence_2_tones.json), [`picks_lawrence_3.json`](content/audio/picks_lawrence_3.json), [`picks_lawrence_4.json`](content/audio/picks_lawrence_4.json)) |
 | **Generated tones** | [`audio/tones.py`](audio/tones.py) → `prototypes/p9/audio/tones/` (66 WAV) and [`content/audio/tones.json`](content/audio/tones.json) |
 | **Generated music** | [`audio/music_gen.py`](audio/music_gen.py) → Tracks 7–10 in `prototypes/p9/audio/music/` (OGG and MP3) and [`content/audio/music_gen.json`](content/audio/music_gen.json) |
-| **Tests** | `prototypes/p9/test_p9.js`: 44/44 ([`shots/test_p9.json`](prototypes/p9/shots/test_p9.json)) |
-| **Decisions** | [`DECISIONS.md`](DECISIONS.md) rows 591–619; D86 closed |
+| **Tests** | `prototypes/p9/test_p9.js`: 46/46 ([`shots/test_p9.json`](prototypes/p9/shots/test_p9.json)) |
+| **Decisions** | [`DECISIONS.md`](DECISIONS.md) rows 591–620; D86 closed |
 
 ## 1 The agent
 
@@ -158,6 +158,14 @@ flowchart TD
   - **9 · failed test:** 66 BPM, A minor: a slow line, a wobbling pad, a heartbeat.
   - **10 · non-compliant:** 100 BPM: hold music, off-beat electric piano, a cold chime.
 
+## 3.1 A play fix (row 620)
+
+Lawrence: "I died on a cone-baited car but my body did not die."
+
+- **Cause:** a car that swerved round a cone, then stopped for the dummy or returned to its lane, no longer counted as cone-baited. On Monument A2, 39 cars reacted to a cone; within 6 s they made 30 stops for the dummy and 9 returns to lane, each a moment a hit would not count. A tap under 1 health then left 0.4 alive, which read BODY 0.
+- **Fix:** a cone reaction counts for `story.coneBaitSeconds` (6 s). At 1 health a miss holds, small hits included; a hit to the brief writes off. A live chassis never reads BODY 0.
+- **Frozen builds keep the old rule:** the three IDs default to 0 in the registry.
+
 ## 4 The engine
 
 `prototypes/p9/audio.js`, created by `game.js` only when `audio.enabled` is 1. Prototypes 8 to 8.4 never set it.
@@ -207,7 +215,7 @@ flowchart TD
 
 ## 6 Tests
 
-`cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84` → 44/44:
+`cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84` → 46/46:
 
 - every file in the cue map loads, tones included;
 - nothing plays before the first press;
@@ -219,6 +227,7 @@ flowchart TD
 - Options shows VOLUME, MUSIC, SFX and MUTE, and saves them;
 - the sound control sits in one place on three screens, mutes, sets the volume, and lifts the intro's gate without START; M and − work;
 - its dropdown sets MUSIC and SFX apart, saves them, and a tap away only closes it;
+- the cone brief on Monument A2: a stop for the dummy 2 s after the cone writes off and counts; a miss holds at 1, small hits included; BODY never reads 0 alive (row 620);
 - the game takes the Lab's picks from `#audio=`; malformed picks are dropped and the game still starts;
 - no page or engine errors;
 - Prototype 8.4 draws the same strings (barks and live counts aside), and its frozen file is unchanged.

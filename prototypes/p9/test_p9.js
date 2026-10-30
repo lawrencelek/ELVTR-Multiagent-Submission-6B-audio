@@ -114,6 +114,32 @@ const get = (url) => new Promise((res) => http.get(url, (r) => { r.resume(); res
   await pg.keyboard.press('ArrowLeft'); await pg.waitForTimeout(150); await pg.keyboard.press('ArrowLeft'); await pg.waitForTimeout(150);
   const saved = await pg.evaluate(() => JSON.parse(localStorage.getItem('dummies.p9.audio') || 'null'));
   ok('VOLUME − twice is saved (dummies.p9.audio)', saved && saved.master === CUES.params['audio.settings.master'] - 2 && saved.music === CUES.params['audio.settings.music'], JSON.stringify(saved));
+  // the BODY readout (row 620): a live chassis at 0.3 health reads 1, not 0
+  const bodyTxt = await pg.evaluate(() => new Promise((done) => {
+    const s = window.__dummies.sim; s.body.health = 0.3; const seen = []; const f0 = CanvasRenderingContext2D.prototype.fillText;
+    CanvasRenderingContext2D.prototype.fillText = function (t, x, y, w) { seen.push(String(t)); return f0.apply(this, arguments); };
+    setTimeout(() => { CanvasRenderingContext2D.prototype.fillText = f0; const i = seen.lastIndexOf('BODY'); s.body.health = 300; done(i >= 0 ? seen[i + 1] : null); }, 200);
+  }));
+  ok('a live chassis never reads BODY 0 (ui.hud.bodyCeil): 0.3 health reads ' + bodyTxt, bodyTxt === '1', String(bodyTxt));
+  // the cone brief and the floor (row 620), on Monument A2 itself (brief: a cone-baited car)
+  const brief = await pg.evaluate(() => {
+    const mk = () => { const pr = STORY.newProgress(); pr.district = 'monument'; pr.done = { monument: ['A1', 'B1', 'C1', 'C2', 'B2'] }; for (const n of ['legs1', 'hands1', 'battery1']) pr.owned[n] = true;
+      const s = new STORY.StorySim('monument', Object.assign({}, window.DUMMIES_SIM), pr); let n = 0;
+      while ((s.phase !== 'play' || s.rescue) && n++ < 6000) { if (s.phase === 'brief') s.continueBrief(); else if (s.phase === 'gift') s.continueGift(); else s.step({}); }
+      return s; };
+    const hit = (s, o) => { const c = s.cars.find((q) => !q.ghost && !q.deck); c.spent = false; c.cause = o.cause; c.coneT = o.ago == null ? undefined : s.t - o.ago; const b = s.body; b.health = o.health; s.events.length = 0;
+      s.account([{ k: 0, car: c, closing: 1, ph: { raw: o.dmg, assessed: o.dmg, un: 1, angle: 0, dvd: 1, knock: null }, px: b.x, py: b.y, zone: 'front', carState: 'committed', cause: c.cause, coneT: c.coneT, lunging: true, stopped: false }]);
+      const imp = s.events.find((e) => e.type === 'impact'); return { tile: s.screenName(), alive: b.alive, health: +b.health.toFixed(3), coned: !!(imp && imp.coned), counted: s.events.some((e) => e.type === 'story-count') }; };
+    const a = mk(), out = {};
+    out.oldCone = hit(a, { cause: 'body', ago: 20, health: 200, dmg: 400 });       // reacted to a cone 20 s ago: not baited, held at the floor
+    out.smallMiss = hit(a, { cause: 'body', health: 1, dmg: 0.6 });                // a tap that misses, at the floor: stays at 1
+    out.chain = hit(mk(), { cause: 'body', ago: 2, health: 300, dmg: 400 });       // stopped for the dummy 2 s after the cone: baited, written off, counted
+    out.floorBrief = hit(mk(), { cause: 'cone', health: 1, dmg: 0.6 });            // at the floor, a small hit to the brief: written off
+    return out;
+  });
+  ok('the cone brief counts the chain the cone starts; a miss holds at 1, small hits included; at 1 a hit to the brief writes off (row 620)',
+    brief.oldCone.tile === 'A2' && brief.oldCone.alive && brief.oldCone.health === 1 && !brief.oldCone.coned && brief.smallMiss.alive && brief.smallMiss.health === 1
+    && !brief.chain.alive && brief.chain.coned && brief.chain.counted && !brief.floorBrief.alive && brief.floorBrief.counted, JSON.stringify(brief));
   // the sound control (row 608): top right on the intro, the mode select and the pause pages, in the same place
   const ctl = () => pg.evaluate(() => { const c = window.__dummies.sndCtl, S = window.__dummiesScale(), r = document.getElementById('game').getBoundingClientRect(), d = window.devicePixelRatio || 1; if (!c) return null; const f = (x, y) => [r.left + (x * S.scale + S.ox) / d, r.top + (y * S.scale + S.oy) / d]; return { ref: [c.x, c.y, c.w, c.h], icon: f(c.x + 20, c.y + c.h / 2), mid: f((c.sx0 + c.sx1) / 2, c.y + c.h / 2) }; });
   const onPause = await ctl();

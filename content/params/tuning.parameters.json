@@ -12548,6 +12548,72 @@
    },
    "description": "Track from the set-down at the ship: CERTIFIED",
    "purpose": "Lawrence: one for the end at the ship (row 619)"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "source": "Edit 100 (P9): Lawrence's report, 30 October 13:07: written off by a cone-baited car, the chassis held (DECISIONS row 620); values proposed by the assistant",
+   "status": "proposed",
+   "type": "number",
+   "id": "story.coneBaitSeconds",
+   "group": "Story",
+   "owner": "Systems design",
+   "label": "Cone-bait memory",
+   "description": "A car that reacted to a cone within this many seconds counts as cone-baited for a brief: its swerve or stop, its return to lane, its stop for the dummy after. 0: only a car whose latest reaction was to the cone. Prototype 9 sets 6",
+   "unit": "s",
+   "default": 0,
+   "applyAt": "next-run",
+   "validation": {
+    "min": 0,
+    "max": 20
+   },
+   "purpose": "The cone brief counts the chain the cone starts (row 620)"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "source": "Edit 100 (P9): Lawrence's report, 30 October 13:07: written off by a cone-baited car, the chassis held (DECISIONS row 620); values proposed by the assistant",
+   "status": "proposed",
+   "type": "number",
+   "id": "story.floorHold",
+   "group": "Story",
+   "owner": "Systems design",
+   "label": "Floor hold",
+   "description": "1: on the tile in test, a hit that misses the brief never takes the chassis below story.missFloor, small hits included; at the floor, a hit to the brief writes it off. 0: Prototype 7.10–8.4's rule (lethal hits only). Prototype 9 sets 1",
+   "unit": "flag",
+   "default": 0,
+   "applyAt": "next-run",
+   "validation": {
+    "min": 0,
+    "max": 1
+   },
+   "purpose": "No chassis left alive below the floor (row 620)"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "source": "Edit 100 (P9): Lawrence's report, 30 October 13:07: written off by a cone-baited car, the chassis held (DECISIONS row 620); values proposed by the assistant",
+   "status": "proposed",
+   "type": "number",
+   "id": "ui.hud.bodyCeil",
+   "group": "UI",
+   "owner": "Systems design",
+   "label": "BODY never 0 alive",
+   "description": "1: the BODY readout of a live chassis rounds up, never below 1; 0 shows only when it is written off. Prototype 9 sets 1",
+   "unit": "flag",
+   "default": 0,
+   "applyAt": "next-run",
+   "validation": {
+    "min": 0,
+    "max": 1
+   },
+   "purpose": "BODY 0 read as a write-off that did not happen (row 620)"
   }
  ],
  "tables": {

@@ -1,6 +1,6 @@
 # DUMMIES GDD — Edit 100 · Prototype 9 · Sound
 
-**30 October 2026 · Lawrence Lek** · Build `prototypes/p9/dummies_p9.html` · Registry `edit100-2026-10-30` · Cue map `content/audio/cues.json`, run `20261030-014423-cues` (10/10, confirmed) · Tests 44/44
+**30 October 2026 · Lawrence Lek** · Build `prototypes/p9/dummies_p9.html` · Registry `edit100-2026-10-30` · Cue map `content/audio/cues.json`, run `20261030-014423-cues` (10/10, confirmed) · Tests 46/46
 
 ## 0 Request
 
@@ -328,6 +328,8 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 - PASS · pause ducks the music to audio.music.pauseDuck (0.35)
 - PASS · Options shows VOLUME, MUSIC, SFX and MUTE
 - PASS · VOLUME − twice is saved (dummies.p9.audio)
+- PASS · a live chassis never reads BODY 0 (ui.hud.bodyCeil): 0.3 health reads 1
+- PASS · the cone brief counts the chain the cone starts; a miss holds at 1, small hits included; at 1 a hit to the brief writes off (row 620)
 - PASS · the pause page's sound control mutes, and its slider sets the volume and unmutes
 - PASS · the sound control sits in one place on the intro, the mode select and the pause page; on the intro it lifts the gate without START
 - PASS · M toggles mute; − steps the volume down one and unmutes
@@ -336,14 +338,14 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 - PASS · malformed picks are dropped and the game starts; an emptied pool is silent
 - PASS · no page errors in the hook tests
 - PASS · no audio engine errors
-- PASS · Prototype 8.4 rebuilt from the shared code draws what the frozen build draws, barks and live counts aside (315 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 316 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)
+- PASS · Prototype 8.4 rebuilt from the shared code draws what the frozen build draws, barks and live counts aside (315 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 315 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)
 - PASS · the frozen dummies_p8_4.html is unchanged (md5 9f5549201d88891f9f0b22c461602909)
 
 ## 7 Measured
 
 - **SFX:** 100 mono WAV, 44.1 kHz. 0.10–3.29 s. Level -29.0 to -17.6 dB (LUFS, or RMS under 0.4 s).
 - **Music:** 10 stereo OGG: six from the pack (48 kHz, 66–123 s) and four generated (44.1 kHz, 31–63 s). -16.7 to -9.1 LUFS.
-- **Build:** `dummies_p9.html` 1,407,671 bytes. Audio beside it: 37.9 MB.
+- **Build:** `dummies_p9.html` 1,409,651 bytes. Audio beside it: 37.9 MB.
 
 ## 8 Registry (edit100)
 
@@ -404,7 +406,18 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 | `audio.trim.peakCeilingDb` | -1 | dBFS | An effect's boost stops where its peak would pass this |
 | `audio.ui.volume` | 0.7 | ratio | The menu bus at SOUND 10 |
 
-## 9 Open
+## 9 Play fix: the cone brief and the floor (row 620)
+
+> (30 October 13:07) I died on a cone-baited car but my body did not die.
+
+- **Cone-baited:** a car that reacted to a cone within `story.coneBaitSeconds` (6 s) counts. Its swerve or stop, its return to lane and its stop for the dummy after all count.
+- **Why:** on Monument A2, cars that swerved round a cone then stopped for the dummy (30 times) or returned to lane (9) within 6 s. A hit then counted as "body" or "return", never the cone.
+- **The floor** (`story.floorHold` 1): a miss of the brief never takes the chassis below `story.missFloor` (1), small hits included. At the floor, a hit to the brief writes it off.
+- **The readout** (`ui.hud.bodyCeil` 1): a live chassis reads at least 1. BODY 0 means written off.
+- **The toast:** "HELD AT 1 · the brief wants cone-baited car" names the brief.
+- **Frozen builds:** registry defaults 0. Prototypes 7.10–8.4 keep their rule.
+
+## 10 Open
 
 - **Generated music:** four tracks composed in code (`audio/music_gen.py`) to fill the pack's gaps. Heard here only as numbers: loudness, spectrum, structure. Lawrence's ear decides; the Sound Lab swaps any of them.
 - **Honk and cone hits:** the pack has no horn. Honks play Prototype 8.4's horn as generated tones; Lawrence set cone hits to their tone too (C2, user-decided).

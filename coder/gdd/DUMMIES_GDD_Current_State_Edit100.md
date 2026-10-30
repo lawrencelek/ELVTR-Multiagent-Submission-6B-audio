@@ -46,7 +46,9 @@
 - **27 tiles:** Monument A1 → Waterfront B2, in the order of row 450.
 - **Write-offs per tile:** `story.writeOffs.<district>.<tile>`; 34 bodies in all (Edit 93).
 - **Briefs:** task kinds any, dash, drop, jump, level, cone, push, bounce, struck, combo, cls. Only the last hit counts (row 464).
-- **Miss floor:** a fatal hit off the brief leaves `story.missFloor` health (Edit 91).
+- **Miss floor:** a fatal hit off the brief leaves `story.missFloor` health (Edit 91). Prototype 9: no miss takes the chassis below it; at the floor a hit to the brief writes it off (`story.floorHold`, row 620).
+- **Cone brief:** a car that reacted to a cone within `story.coneBaitSeconds` counts: its swerve, return or stop for the dummy after (Prototype 9, row 620).
+- **BODY readout:** a live chassis reads at least 1 (`ui.hud.bodyCeil`, Prototype 9, row 620).
 - **On foot:** `damage.bodyHealthOnFoot` until Battery 1; then `damage.bodyHealth` (Edit 91).
 - **Parts by drone (Edit 93):** Monument Battery 1 B1, Hands 1 A2, Legs 1 B3. Parkland Arms 1 C1, Legs 2 A3, Hands 2 A2, Arms 2 A1, Battery 2 B2. Waterfront Legs 3 B1, Arms 3 B3, Battery 3 B2.
 - **No credits, no levels:** points are the score (Edit 91).
@@ -102,7 +104,7 @@
 ## 11 Builds and records
 
 - **Current build:** `prototypes/p9/dummies_p9.html` (Edit 100), in `lawrencelek/ELVTR-Multiagent-Submission-6B-audio`. Prototypes 8–8.4 and 1–7.13 frozen.
-- **Decisions:** `DECISIONS.md`, rows 1–619; open items in its D table (newest D77–D85; D86 closed).
+- **Decisions:** `DECISIONS.md`, rows 1–620; open items in its D table (newest D77–D85; D86 closed).
 - **Text sources:** `content/story/story_v2.json`, `prototypes/p8/lore.js`. Prototype 7.13 keeps `story.json` and Farsight.
 - **Style Guide Agent:** Assignment 6, `style/` (V1 for 7.13; V2 for 8).
 - **Sound Designer Agent:** `audio/` in the sound repo; GDD Edit 100; the Sound Lab `prototypes/p9/sound_lab.html`.

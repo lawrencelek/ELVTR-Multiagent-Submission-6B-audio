@@ -943,7 +943,7 @@
         }
         case 'purchase': [523, 659, 784].forEach((f, j) => Snd.tone(f, f, 0.1, 'triangle', 0.07, j * 0.07)); Snd.tone(150, 60, 0.18, 'square', 0.06, 0.02); fx.fit = { node: e.node, t0: app.realT }; toast(e.unit === 'upgrade' ? NODE(e.node).name + ' fitted' + (e.upgrades ? ' · ' + e.upgrades + ' upgrade' + (e.upgrades === 1 ? '' : 's') + ' left' : '') : copy('toast.purchase', '{node} installed', { node: NODE(e.node).name })); break; // Edit 89: the fit lands on the workshop's chassis
         case 'purchase-denied': Snd.tone(180, 140, 0.12, 'square', 0.04); toast(e.why === 'max' ? 'That part is at its top level' : /^gift/.test(e.why) ? LT('n15', 'A Farsight drone brings that part') : e.why[0].toUpperCase() + e.why.slice(1)); break; // Edit 89
-        case 'held': Snd.tone(240, 200, 0.16, 'square', 0.05); toast('Not the brief: chassis held at ' + num(e.health)); break; // Edit 91: a miss of the brief does not write the chassis off
+        case 'held': Snd.tone(240, 200, 0.16, 'square', 0.05); { const tk = s.P['story.floorHold'] && STORY && STORY.tileOf(s.levelId, s.screenName()); toast(tk && tk.task ? 'HELD AT ' + num(Math.max(1, Math.ceil(e.health - 1e-6))) + ' · the brief wants ' + STORY.taskText(tk.task, s.P).label.toLowerCase() : 'Not the brief: chassis held at ' + num(e.health)); } break; // Edit 91: a miss of the brief does not write the chassis off. Edit 100 (P9, row 620): the toast names the brief
         case 'shop-open': if (STORY && ABIL4) { const k = SHOP_GRID.findIndex((g) => { const n = nextLevel(s, g[0]); return n && s.canBuy(n).ok; }); app.shopCol = Math.max(0, k); app.shopRow = k >= 0 ? 0 : SHOP_ROWS; fx.fit = null; } break; // Edit 89: the workshop opens on a part an upgrade fits
         case 'pickup': Snd.tone(700, 950, 0.05, 'triangle', 0.06); if (ABIL && s.coneCapacity() > 1) toast('Cones ' + (e.n || 1) + ' / ' + s.coneCapacity()); break;
         case 'drop': Snd.tone(500, 380, 0.06, 'triangle', 0.05); break;
@@ -2229,7 +2229,7 @@
   }
   // Left: the body's numbers. Health first and largest; dash beneath.
   function drawHUD(s) {
-    const b = s.body, P = s.P, hp = b.alive ? b.health : 0, frac = clamp(hp / maxHP(s), 0, 1); // Edit 91: on foot, a lighter chassis
+    const b = s.body, P = s.P, hp = b.alive ? (SIM8 && SIM8['ui.hud.bodyCeil'] ? Math.max(1, Math.ceil(b.health - 1e-6)) : b.health) : 0, frac = clamp(hp / maxHP(s), 0, 1); // Edit 91: on foot, a lighter chassis. Edit 100 (P9, row 620): a live chassis never reads 0
     const X = 16, W = FX - 32, TX = 30, BW = W - 28; // left column: as wide as the space beside the field
     const BY = STORY ? FY - 6 : 62, BH = STORY ? 86 : 150, DY = BY + BH + 10; // Edit 87: on the field's top edge // Edit 86 (P7.5): BODY as tall as DASH: the number on the label's row, the bar beneath
     panel(X, BY, W, BH); app.hud = { body: { x: X, y: BY, w: W, h: BH } }; // Edit 87: the boxes as drawn, for the tests
