@@ -1,0 +1,8 @@
+{
+ "_note": "Lawrence asked for new tones for these three (30 October 10:39) without setting them to play the tone; they play it (row 607). The Sound Lab switches them back.",
+ "sfx": {
+  "low-health": {"decision": "synth"},
+  "cone-stop": {"decision": "synth"},
+  "combo-end": {"decision": "synth"}
+ }
+}

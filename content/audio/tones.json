@@ -1,7 +1,7 @@
 {
  "generated_by": "audio/tones.py",
  "folder": "prototypes/p9/audio/tones/",
- "count": 57,
+ "count": 65,
  "tones": {
   "lunge": {
    "file": "tone_lunge.wav",
@@ -343,8 +343,8 @@
    ],
    "seconds": 0.68
   },
-  "near-miss": {
-   "file": "tone_near_miss.wav",
+  "near-miss/p84": {
+   "file": "tone_near_miss_p84.wav",
    "source": "Prototype 8.4",
    "voices": [
     [
@@ -523,8 +523,8 @@
    ],
    "seconds": 0.28
   },
-  "combo-end": {
-   "file": "tone_combo_end.wav",
+  "combo-end/p84": {
+   "file": "tone_combo_end_p84.wav",
    "source": "Prototype 8.4",
    "voices": [
     [
@@ -587,8 +587,8 @@
    ],
    "seconds": 0.2
   },
-  "honk": {
-   "file": "tone_honk.wav",
+  "honk/p84": {
+   "file": "tone_honk_p84.wav",
    "source": "Prototype 8.4",
    "voices": [
     [
@@ -1274,6 +1274,278 @@
     ]
    ],
    "seconds": 0.22
+  },
+  "near-miss": {
+   "file": "tone_near_miss.wav",
+   "source": "Edit 100",
+   "voices": [
+    [
+     "noise",
+     300,
+     2600,
+     0.16,
+     0.1,
+     null,
+     0
+    ],
+    [
+     "noise",
+     2600,
+     500,
+     0.24,
+     0.08,
+     null,
+     0.14
+    ],
+    [
+     "tone",
+     660,
+     430,
+     0.32,
+     0.03,
+     "triangle",
+     0.04
+    ]
+   ],
+   "seconds": 0.46
+  },
+  "low-health": {
+   "file": "tone_low_health.wav",
+   "source": "Edit 100",
+   "voices": [
+    [
+     "tone",
+     880,
+     880,
+     0.09,
+     0.07,
+     "square",
+     0
+    ],
+    [
+     "tone",
+     660,
+     660,
+     0.09,
+     0.07,
+     "square",
+     0.14
+    ],
+    [
+     "tone",
+     880,
+     880,
+     0.09,
+     0.07,
+     "square",
+     0.28
+    ],
+    [
+     "tone",
+     660,
+     640,
+     0.14,
+     0.07,
+     "square",
+     0.42
+    ]
+   ],
+   "seconds": 0.64
+  },
+  "part-break": {
+   "file": "tone_part_break.wav",
+   "source": "Edit 100",
+   "voices": [
+    [
+     "noise",
+     5200,
+     1200,
+     0.08,
+     0.2,
+     null,
+     0
+    ],
+    [
+     "tone",
+     1400,
+     300,
+     0.12,
+     0.06,
+     "square",
+     0.02
+    ],
+    [
+     "noise",
+     1800,
+     400,
+     0.26,
+     0.08,
+     null,
+     0.05
+    ]
+   ],
+   "seconds": 0.39
+  },
+  "cone-struck": {
+   "file": "tone_cone_struck.wav",
+   "source": "Edit 100",
+   "voices": [
+    [
+     "noise",
+     2500,
+     900,
+     0.07,
+     0.18,
+     null,
+     0
+    ],
+    [
+     "tone",
+     420,
+     260,
+     0.1,
+     0.08,
+     "triangle",
+     0
+    ],
+    [
+     "tone",
+     900,
+     700,
+     0.05,
+     0.04,
+     "triangle",
+     0.03
+    ]
+   ],
+   "seconds": 0.18
+  },
+  "cone-stop": {
+   "file": "tone_cone_stop.wav",
+   "source": "Edit 100",
+   "voices": [
+    [
+     "noise",
+     1200,
+     500,
+     0.18,
+     0.08,
+     null,
+     0
+    ],
+    [
+     "tone",
+     300,
+     220,
+     0.06,
+     0.05,
+     "sine",
+     0.16
+    ]
+   ],
+   "seconds": 0.3
+  },
+  "combo-end": {
+   "file": "tone_combo_end.wav",
+   "source": "Edit 100",
+   "voices": [
+    [
+     "tone",
+     784,
+     784,
+     0.12,
+     0.07,
+     "triangle",
+     0.0
+    ],
+    [
+     "tone",
+     987.77,
+     987.77,
+     0.12,
+     0.07,
+     "triangle",
+     0.07
+    ],
+    [
+     "tone",
+     1174.66,
+     1174.66,
+     0.12,
+     0.07,
+     "triangle",
+     0.14
+    ],
+    [
+     "tone",
+     1567.98,
+     1567.98,
+     0.36,
+     0.04,
+     "sine",
+     0.21
+    ],
+    [
+     "noise",
+     6000,
+     3000,
+     0.06,
+     0.05,
+     null,
+     0.2
+    ]
+   ],
+   "seconds": 0.65
+  },
+  "honk": {
+   "file": "tone_honk.wav",
+   "source": "Edit 100",
+   "voices": [
+    [
+     "tone",
+     415,
+     410,
+     0.32,
+     0.05,
+     "square",
+     0
+    ],
+    [
+     "tone",
+     330,
+     326,
+     0.32,
+     0.04,
+     "square",
+     0
+    ]
+   ],
+   "seconds": 0.4
+  },
+  "car-notice": {
+   "file": "tone_car_notice.wav",
+   "source": "Edit 100",
+   "voices": [
+    [
+     "tone",
+     1318.5,
+     1318.5,
+     0.05,
+     0.04,
+     "sine",
+     0
+    ],
+    [
+     "tone",
+     1760,
+     1760,
+     0.07,
+     0.04,
+     "sine",
+     0.08
+    ]
+   ],
+   "seconds": 0.23
   }
  }
 }

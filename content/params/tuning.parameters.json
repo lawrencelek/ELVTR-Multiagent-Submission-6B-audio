@@ -12240,6 +12240,138 @@
    },
    "description": "Fine gain on sfx.denied, after its gain class",
    "purpose": "Lawrence's pick in the Sound Lab"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "source": "Edit 100 (P9): Lawrence's Sound Lab picks, 30 October (row 603)",
+   "status": "user-confirmed",
+   "applyAt": "next-run",
+   "id": "audio.sfx.offset.jump.dash",
+   "group": "Audio",
+   "owner": "Audio",
+   "label": "Offset: jump.dash",
+   "unit": "dB",
+   "type": "number",
+   "default": -4.0,
+   "validation": {
+    "min": -24,
+    "max": 24
+   },
+   "description": "Fine gain on sfx.jump.dash, after its gain class",
+   "purpose": "Lawrence's pick in the Sound Lab"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "source": "Edit 100 (P9): Lawrence's Sound Lab picks, 30 October (row 603)",
+   "status": "user-confirmed",
+   "applyAt": "next-run",
+   "id": "audio.sfx.offset.deck-drop",
+   "group": "Audio",
+   "owner": "Audio",
+   "label": "Offset: deck-drop",
+   "unit": "dB",
+   "type": "number",
+   "default": -2.5,
+   "validation": {
+    "min": -24,
+    "max": 24
+   },
+   "description": "Fine gain on sfx.deck-drop, after its gain class",
+   "purpose": "Lawrence's pick in the Sound Lab"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "source": "Edit 100 (P9): Lawrence's Sound Lab picks, 30 October (row 603)",
+   "status": "user-confirmed",
+   "applyAt": "next-run",
+   "id": "audio.sfx.offset.splash",
+   "group": "Audio",
+   "owner": "Audio",
+   "label": "Offset: splash",
+   "unit": "dB",
+   "type": "number",
+   "default": -3.5,
+   "validation": {
+    "min": -24,
+    "max": 24
+   },
+   "description": "Fine gain on sfx.splash, after its gain class",
+   "purpose": "Lawrence's pick in the Sound Lab"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "source": "Edit 100 (P9): Lawrence's Sound Lab picks, 30 October (row 603)",
+   "status": "user-confirmed",
+   "applyAt": "next-run",
+   "id": "audio.sfx.offset.learn-standoff",
+   "group": "Audio",
+   "owner": "Audio",
+   "label": "Offset: learn-standoff",
+   "unit": "dB",
+   "type": "number",
+   "default": -3.0,
+   "validation": {
+    "min": -24,
+    "max": 24
+   },
+   "description": "Fine gain on sfx.learn-standoff, after its gain class",
+   "purpose": "Lawrence's pick in the Sound Lab"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "source": "Edit 100 (P9): Lawrence's Sound Lab picks, 30 October (row 603)",
+   "status": "user-confirmed",
+   "applyAt": "next-run",
+   "id": "audio.sfx.offset.drone-dispatch.rescue",
+   "group": "Audio",
+   "owner": "Audio",
+   "label": "Offset: drone-dispatch.rescue",
+   "unit": "dB",
+   "type": "number",
+   "default": -3.0,
+   "validation": {
+    "min": -24,
+    "max": 24
+   },
+   "description": "Fine gain on sfx.drone-dispatch.rescue, after its gain class",
+   "purpose": "Lawrence's pick in the Sound Lab"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "source": "Edit 100 (P9): Lawrence's Sound Lab picks, 30 October (row 603)",
+   "status": "user-confirmed",
+   "applyAt": "next-run",
+   "id": "audio.sfx.offset.unveil-lift",
+   "group": "Audio",
+   "owner": "Audio",
+   "label": "Offset: unveil-lift",
+   "unit": "dB",
+   "type": "number",
+   "default": -4.0,
+   "validation": {
+    "min": -24,
+    "max": 24
+   },
+   "description": "Fine gain on sfx.unveil-lift, after its gain class",
+   "purpose": "Lawrence's pick in the Sound Lab"
   }
  ],
  "tables": {

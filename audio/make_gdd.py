@@ -80,8 +80,8 @@ def gdd():
     a("")
     a("- **Engine:** `prototypes/p9/audio.js`. `game.js` creates it only when `audio.enabled` is 1. Prototype 9 sets 1; the registry default is 0.")
     a("- **Buses:** music, SFX, UI under a master. Levels: `audio.music.volume`, `audio.sfx.volume`, `audio.ui.volume`.")
-    a("- **Generated tones:** Prototype 8.4's procedural sounds, rendered to WAV by `audio/tones.py` (57 tones; one new, for slip). A `synth` entry plays its event's tone through the mix: gain class, cooldown, trim. An event with no entry or tone keeps the live synth, on the SFX bus at `audio.synth.gain`.")
-    a("- **Lawrence's picks:** `content/audio/picks_lawrence.json`, his Sound Lab export, over the agent's map (row 603). His fine gain becomes `audio.sfx.offset.<cue>`.")
+    a(f"- **Generated tones:** Prototype 8.4's procedural sounds, rendered to WAV by `audio/tones.py` ({INV.get('tones', 0)} files: 8.4's recipes, plus new tones for slip and for the eight events Lawrence asked for (row 606); a replaced 8.4 tone stays as `tone_<event>_p84.wav`). A `synth` entry plays its event's tone through the mix: gain class, cooldown, trim. An event with no entry or tone keeps the live synth, on the SFX bus at `audio.synth.gain`.")
+    a("- **Lawrence's picks:** his Sound Lab exports over the agent's map, in order: `content/audio/picks_lawrence.json` (row 603), `picks_lawrence_2.json` and `picks_lawrence_2_tones.json` (row 607). His fine gain becomes `audio.sfx.offset.<cue>`.")
     a("- **Hush:** a cue or a stated silence hushes the synth for its event. Hit juice still draws.")
     a("- **Loudness:** each file is trimmed toward `audio.sfx.targetLufs` or `audio.music.targetLufs`. Trims cap at `audio.trim.maxBoostDb` and `audio.trim.peakCeilingDb`.")
     a("- **Weight:** gain classes set it. `audio.sfx.gain.<class>`, in dB after the trim.")
@@ -122,7 +122,7 @@ def gdd():
     a("")
     a("## 3 SFX (WAV)")
     a("")
-    a("Columns: the cue; what triggers it, with its code site; the files (a pool), or the generated tone; bus; volume ID; cooldown ID. Variants are indented under their event. **L** marks Lawrence's pick (row 603); the agent's pick follows it.")
+    a("Columns: the cue; what triggers it, with its code site; the files (a pool), or the generated tone; bus; volume ID; cooldown ID. Variants are indented under their event. **L** marks Lawrence's pick (rows 603, 607); the agent's pick follows it.")
     a("")
     for g in EV["groups"]:
         evs = [e for e in EV["events"] if e["group"] == g["id"]]

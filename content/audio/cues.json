@@ -45,7 +45,13 @@
   "audio.sfx.cooldown.once": 0,
   "audio.sfx.cooldown.honk": 1.4,
   "audio.sfx.cooldown.bark": 0.8,
-  "audio.sfx.offset.denied": 3.5
+  "audio.sfx.offset.denied": 3.5,
+  "audio.sfx.offset.jump.dash": -4.0,
+  "audio.sfx.offset.deck-drop": -2.5,
+  "audio.sfx.offset.splash": -3.5,
+  "audio.sfx.offset.learn-standoff": -3.0,
+  "audio.sfx.offset.drone-dispatch.rescue": -3.0,
+  "audio.sfx.offset.unveil-lift": -4.0
  },
  "music": {
   "tracks": {
@@ -228,7 +234,7 @@
    "freq": "once",
    "priority": "high",
    "shot": "intro",
-   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: A distinct confirm opens the game.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: A distinct confirm opens the game.",
    "by": "Lawrence",
    "agent": {
     "decision": "cue",
@@ -279,7 +285,7 @@
    "freq": "action",
    "priority": "high",
    "shot": "dash",
-   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: A short spring launch reads as a lunge.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: A short spring launch reads as a lunge.",
    "by": "Lawrence",
    "agent": {
     "decision": "cue",
@@ -340,7 +346,17 @@
    "freq": "action",
    "priority": "high",
    "shot": "jump",
-   "why": "A longer rise marks the long jump.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: A longer rise marks the long jump.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "cue",
+    "files": [
+     "jump_3.wav"
+    ],
+    "gain": "move",
+    "cooldown": "action",
+    "why": "A longer rise marks the long jump."
+   },
    "tone": "tone_jump_dash.wav",
    "variantOf": "jump",
    "when": {
@@ -358,7 +374,8 @@
    "files": [
     "jump_3.wav"
    ],
-   "pick": "cycle"
+   "pick": "cycle",
+   "offsetId": "audio.sfx.offset.jump.dash"
   },
   "jump-land": {
    "decision": "cue",
@@ -447,7 +464,12 @@
    "freq": "action",
    "priority": "medium",
    "shot": "play",
-   "why": "The landing cue carries the drop; the 8.4 step-off stays light.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: The landing cue carries the drop; the 8.4 step-off stays light.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "synth",
+    "why": "The landing cue carries the drop; the 8.4 step-off stays light."
+   },
    "tone": "tone_deck_drop.wav",
    "bus": "sfx",
    "gain": "move",
@@ -456,7 +478,8 @@
    "cooldownId": "audio.sfx.cooldown.action",
    "alternates": [],
    "files": [],
-   "pick": "random"
+   "pick": "random",
+   "offsetId": "audio.sfx.offset.deck-drop"
   },
   "rail-jump": {
    "decision": "synth",
@@ -466,7 +489,7 @@
    "freq": "action",
    "priority": "low",
    "shot": "play",
-   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: A vault is a jump; it reuses the long-jump rise.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: A vault is a jump; it reuses the long-jump rise.",
    "by": "Lawrence",
    "agent": {
     "decision": "cue",
@@ -512,14 +535,14 @@
    "pick": "random"
   },
   "level": {
-   "decision": "cue",
+   "decision": "silence",
    "label": "New level",
    "what": "The dummy reaches a new level: walkway, deck, roof.",
    "group": "moves",
    "freq": "action",
    "priority": "low",
    "shot": "play",
-   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: The stair sound already marks the climb.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: The stair sound already marks the climb.",
    "by": "Lawrence",
    "agent": {
     "decision": "silence",
@@ -544,7 +567,7 @@
    "freq": "action",
    "priority": "medium",
    "shot": "play",
-   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: A wobble sells feet losing grip on water.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: A wobble sells feet losing grip on water.",
    "by": "Lawrence",
    "agent": {
     "decision": "cue",
@@ -571,14 +594,14 @@
    "pick": "cycle"
   },
   "push": {
-   "decision": "cue",
+   "decision": "synth",
    "label": "Push off a car",
    "what": "Arms: the dummy pushes off a car (Y).",
    "group": "abilities",
    "freq": "action",
    "priority": "high",
    "shot": "play",
-   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: Palms on a car panel make a flat metal thunk.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: Palms on a car panel make a flat metal thunk.",
    "by": "Lawrence",
    "agent": {
     "decision": "cue",
@@ -606,14 +629,24 @@
    "pick": "cycle"
   },
   "hitch": {
-   "decision": "cue",
+   "decision": "synth",
    "label": "Hitch a car",
    "what": "The dummy grabs a passing car (X).",
    "group": "abilities",
    "freq": "action",
    "priority": "high",
    "shot": "play",
-   "why": "A clamp click reads as a grip that locks on.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: A clamp click reads as a grip that locks on.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "cue",
+    "files": [
+     "equip_1.wav"
+    ],
+    "gain": "move",
+    "cooldown": "action",
+    "why": "A clamp click reads as a grip that locks on."
+   },
    "tone": "tone_hitch.wav",
    "bus": "sfx",
    "gain": "move",
@@ -630,14 +663,14 @@
    "pick": "cycle"
   },
   "sling": {
-   "decision": "cue",
+   "decision": "synth",
    "label": "Sling off",
    "what": "The dummy lets go of a hitched car with speed.",
    "group": "abilities",
    "freq": "action",
    "priority": "high",
    "shot": "play",
-   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: A falling sweep sells the release at speed.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: A falling sweep sells the release at speed.",
    "by": "Lawrence",
    "agent": {
     "decision": "cue",
@@ -665,14 +698,14 @@
    "pick": "cycle"
   },
   "denied": {
-   "decision": "cue",
+   "decision": "synth",
    "label": "Denied",
    "what": "A move is refused: no charge, or not fitted yet.",
    "group": "abilities",
    "freq": "action",
    "priority": "medium",
    "shot": "play",
-   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: The name matches: a refused move.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: The name matches: a refused move.",
    "by": "Lawrence",
    "agent": {
     "decision": "cue",
@@ -731,14 +764,27 @@
    "pick": "cycle"
   },
   "impact": {
-   "decision": "cue",
+   "decision": "synth",
    "label": "Hit",
    "what": "A car hits the dummy. Damage, points, the burst.",
    "group": "hits",
    "freq": "burst",
    "priority": "high",
    "shot": "impact",
-   "why": "Four hurt variants keep repeated combo hits fresh.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: Four hurt variants keep repeated combo hits fresh.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "cue",
+    "files": [
+     "hurt_1.wav",
+     "hurt_2.wav",
+     "hurt_3.wav",
+     "hurt_4.wav"
+    ],
+    "gain": "hit",
+    "cooldown": "burst",
+    "why": "Four hurt variants keep repeated combo hits fresh."
+   },
    "tone": "tone_impact.wav",
    "bus": "sfx",
    "gain": "hit",
@@ -762,14 +808,14 @@
    ]
   },
   "impact.big": {
-   "decision": "cue",
+   "decision": "synth",
    "label": "A big hit",
    "what": "A car hits the dummy. Damage, points, the burst.",
    "group": "hits",
    "freq": "burst",
    "priority": "high",
    "shot": "impact",
-   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: Crunch and blast give big hits weight.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: Crunch and blast give big hits weight.",
    "by": "Lawrence",
    "agent": {
     "decision": "cue",
@@ -802,14 +848,25 @@
    "pick": "random"
   },
   "impact.drop": {
-   "decision": "cue",
+   "decision": "synth",
    "label": "A drop onto a car",
    "what": "A car hits the dummy. Damage, points, the burst.",
    "group": "hits",
    "freq": "burst",
    "priority": "high",
    "shot": "impact",
-   "why": "A soft crumple suits a drop onto a car.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: A soft crumple suits a drop onto a car.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "cue",
+    "files": [
+     "soft_destruction.wav",
+     "hurt_3.wav"
+    ],
+    "gain": "hit",
+    "cooldown": "burst",
+    "why": "A soft crumple suits a drop onto a car."
+   },
    "tone": "tone_impact_drop.wav",
    "variantOf": "impact",
    "when": {
@@ -831,14 +888,14 @@
    "pick": "random"
   },
   "held": {
-   "decision": "cue",
+   "decision": "synth",
    "label": "Chassis held",
    "what": "Story: a hit that misses the brief; the chassis holds at the floor.",
    "group": "hits",
    "freq": "once",
    "priority": "medium",
    "shot": "impact",
-   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: A clamp click: the Corporation holds the chassis floor.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: A clamp click: the Corporation holds the chassis floor.",
    "by": "Lawrence",
    "agent": {
     "decision": "cue",
@@ -892,7 +949,7 @@
    "freq": "frame",
    "priority": "low",
    "shot": "play",
-   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: Spent cars pay nothing; silence teaches that.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: Spent cars pay nothing; silence teaches that.",
    "by": "Lawrence",
    "agent": {
     "decision": "silence",
@@ -909,14 +966,14 @@
    "pick": "random"
   },
   "writeoff": {
-   "decision": "cue",
+   "decision": "synth",
    "label": "Write-off",
    "what": "The chassis is written off: health reaches zero.",
    "group": "hits",
    "freq": "once",
    "priority": "high",
    "shot": "writeoff",
-   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: The loudest explosion marks the biggest body beat.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: The loudest explosion marks the biggest body beat.",
    "by": "Lawrence",
    "agent": {
     "decision": "cue",
@@ -950,18 +1007,29 @@
    "freq": "once",
    "priority": "medium",
    "shot": "play",
-   "why": "A clean beam-in suits Sinofuturist replacement stock.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: A clean beam-in suits Sinofuturist replacement stock.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "cue",
+    "files": [
+     "teleport.wav"
+    ],
+    "gain": "story",
+    "cooldown": "once",
+    "why": "A clean beam-in suits Sinofuturist replacement stock."
+   },
    "bus": "sfx",
    "gain": "story",
    "gainId": "audio.sfx.gain.story",
    "cooldown": "once",
    "cooldownId": "audio.sfx.cooldown.once",
    "alternates": [
+    "teleport.wav",
     "powerup_3.wav",
     "equip_2.wav"
    ],
    "files": [
-    "teleport.wav"
+    "bubble.wav"
    ],
    "pick": "cycle",
    "variants": [
@@ -969,14 +1037,19 @@
    ]
   },
   "chassis.start": {
-   "decision": "base",
+   "decision": "cue",
    "label": "At a level's start, under the level card",
    "what": "A chassis is issued: at a level's start, under the card, and after each write-off.",
    "group": "hits",
    "freq": "once",
    "priority": "medium",
    "shot": "play",
-   "why": "A level's first chassis beams in like every other; it plays the chassis cue.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: A level's first chassis beams in like every other; it plays the chassis cue.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "base",
+    "why": "A level's first chassis beams in like every other; it plays the chassis cue."
+   },
    "variantOf": "chassis",
    "when": {
     "start": true
@@ -987,18 +1060,20 @@
    "cooldown": "once",
    "cooldownId": "audio.sfx.cooldown.once",
    "alternates": [],
-   "files": [],
+   "files": [
+    "teleport.wav"
+   ],
    "pick": "random"
   },
   "part-break": {
-   "decision": "cue",
+   "decision": "synth",
    "label": "Part breaks",
    "what": "A body part reaches broken (level 3).",
    "group": "hits",
    "freq": "once",
    "priority": "medium",
    "shot": "impact",
-   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: A spark crackle: a part shorts out.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: A spark crackle: a part shorts out.",
    "by": "Lawrence",
    "agent": {
     "decision": "cue",
@@ -1009,6 +1084,7 @@
     "cooldown": "once",
     "why": "A spark crackle: a part shorts out."
    },
+   "tone": "tone_part_break.wav",
    "bus": "sfx",
    "gain": "alert",
    "gainId": "audio.sfx.gain.alert",
@@ -1025,14 +1101,14 @@
    "pick": "cycle"
   },
   "low-health": {
-   "decision": "cue",
+   "decision": "synth",
    "label": "Low health",
    "what": "The chassis falls below audio.sfx.lowHealthAt of its maximum.",
    "group": "hits",
    "freq": "once",
    "priority": "medium",
    "shot": "impact",
-   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: A city siren warns calmly without horror.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: A city siren warns calmly without horror.",
    "by": "Lawrence",
    "agent": {
     "decision": "cue",
@@ -1043,6 +1119,7 @@
     "cooldown": "once",
     "why": "A city siren warns calmly without horror."
    },
+   "tone": "tone_low_health.wav",
    "bus": "sfx",
    "gain": "alert",
    "gainId": "audio.sfx.gain.alert",
@@ -1066,7 +1143,7 @@
    "freq": "burst",
    "priority": "medium",
    "shot": "play",
-   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: The procedural whoosh tracks car speed; the pack has no pass-by.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: The procedural whoosh tracks car speed; the pack has no pass-by.",
    "by": "Lawrence",
    "agent": {
     "decision": "synth",
@@ -1083,14 +1160,14 @@
    "pick": "random"
   },
   "miss": {
-   "decision": "synth",
+   "decision": "silence",
    "label": "Dash misses",
    "what": "A dash ends with no contact.",
    "group": "near",
    "freq": "action",
    "priority": "low",
    "shot": "dash",
-   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: The lunge already sounds; an empty dash earns nothing.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: The lunge already sounds; an empty dash earns nothing.",
    "by": "Lawrence",
    "agent": {
     "decision": "silence",
@@ -1114,7 +1191,7 @@
    "freq": "action",
    "priority": "high",
    "shot": "cones",
-   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: A collect blip suits taking a cone.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: A collect blip suits taking a cone.",
    "by": "Lawrence",
    "agent": {
     "decision": "cue",
@@ -1149,7 +1226,7 @@
    "freq": "action",
    "priority": "medium",
    "shot": "cones",
-   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: The pack has no plastic tap; the 8.4 tap suits a cone.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: The pack has no plastic tap; the 8.4 tap suits a cone.",
    "by": "Lawrence",
    "agent": {
     "decision": "synth",
@@ -1199,7 +1276,7 @@
    "freq": "action",
    "priority": "low",
    "shot": "cones",
-   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: The light procedural kick keeps a low-stakes action quiet.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: The light procedural kick keeps a low-stakes action quiet.",
    "by": "Lawrence",
    "agent": {
     "decision": "synth",
@@ -1223,7 +1300,7 @@
    "freq": "once",
    "priority": "high",
    "shot": "cones",
-   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: A mid-size blast pays off the cone trap.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: A mid-size blast pays off the cone trap.",
    "by": "Lawrence",
    "agent": {
     "decision": "cue",
@@ -1250,19 +1327,20 @@
    "pick": "cycle"
   },
   "cone-struck": {
-   "decision": "cue",
+   "decision": "synth",
    "label": "Car strikes a cone",
    "what": "A car runs into a cone.",
    "group": "cones",
    "freq": "ambient",
    "priority": "low",
    "shot": "cones",
-   "why": "Lawrence's pick in the Sound Lab (DECISIONS row 603). Agent: The cone-hit sound carries the payoff; strikes would chatter.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: The cone-hit sound carries the payoff; strikes would chatter.",
    "by": "Lawrence",
    "agent": {
     "decision": "silence",
     "why": "The cone-hit sound carries the payoff; strikes would chatter."
    },
+   "tone": "tone_cone_struck.wav",
    "bus": "sfx",
    "gain": "hit",
    "gainId": "audio.sfx.gain.hit",
@@ -1275,14 +1353,20 @@
    "pick": "random"
   },
   "cone-stop": {
-   "decision": "silence",
+   "decision": "synth",
    "label": "Cone stops",
    "what": "A thrown cone stops sliding.",
    "group": "cones",
    "freq": "ambient",
    "priority": "low",
    "shot": "cones",
-   "why": "Background cone settling would clutter traffic.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: Background cone settling would clutter traffic.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "silence",
+    "why": "Background cone settling would clutter traffic."
+   },
+   "tone": "tone_cone_stop.wav",
    "bus": "sfx",
    "gain": "ambient",
    "gainId": "audio.sfx.gain.ambient",
@@ -1365,7 +1449,18 @@
    "freq": "burst",
    "priority": "high",
    "shot": "combo",
-   "why": "Two cycling powerups crown each capped hit without repeating.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: Two cycling powerups crown each capped hit without repeating.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "cue",
+    "files": [
+     "powerup_2.wav",
+     "powerup_4.wav"
+    ],
+    "gain": "reward",
+    "cooldown": "burst",
+    "why": "Two cycling powerups crown each capped hit without repeating."
+   },
    "tone": "tone_combo_max.wav",
    "variantOf": "combo",
    "when": {
@@ -1377,24 +1472,34 @@
    "cooldown": "burst",
    "cooldownId": "audio.sfx.cooldown.burst",
    "alternates": [
+    "powerup_4.wav",
     "collect_5.wav",
     "powerup_3.wav"
    ],
    "files": [
-    "powerup_2.wav",
-    "powerup_4.wav"
+    "powerup_2.wav"
    ],
    "pick": "cycle"
   },
   "combo-end": {
-   "decision": "cue",
+   "decision": "synth",
    "label": "Combo banked",
    "what": "The combo clock runs out; the combo is banked.",
    "group": "combos",
    "freq": "once",
    "priority": "medium",
    "shot": "combo",
-   "why": "A ledger chime: the combo is banked.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: A ledger chime: the combo is banked.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "cue",
+    "files": [
+     "chime.wav"
+    ],
+    "gain": "reward",
+    "cooldown": "once",
+    "why": "A ledger chime: the combo is banked."
+   },
    "tone": "tone_combo_end.wav",
    "bus": "sfx",
    "gain": "reward",
@@ -1418,7 +1523,17 @@
    "freq": "once",
    "priority": "high",
    "shot": "river",
-   "why": "A real splash matches a fall into the river.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: A real splash matches a fall into the river.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "cue",
+    "files": [
+     "water_1.wav"
+    ],
+    "gain": "big",
+    "cooldown": "once",
+    "why": "A real splash matches a fall into the river."
+   },
    "tone": "tone_splash.wav",
    "bus": "sfx",
    "gain": "big",
@@ -1432,7 +1547,8 @@
    "files": [
     "water_1.wav"
    ],
-   "pick": "cycle"
+   "pick": "cycle",
+   "offsetId": "audio.sfx.offset.splash"
   },
   "rescued": {
    "decision": "cue",
@@ -1593,7 +1709,17 @@
    "freq": "once",
    "priority": "medium",
    "shot": "play",
-   "why": "A computer chirp: the model updates its data.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: A computer chirp: the model updates its data.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "cue",
+    "files": [
+     "computer_2.wav"
+    ],
+    "gain": "story",
+    "cooldown": "once",
+    "why": "A computer chirp: the model updates its data."
+   },
    "tone": "tone_learn_standoff.wav",
    "bus": "sfx",
    "gain": "story",
@@ -1607,17 +1733,24 @@
    "files": [
     "computer_2.wav"
    ],
-   "pick": "cycle"
+   "pick": "cycle",
+   "offsetId": "audio.sfx.offset.learn-standoff"
   },
   "car-notice": {
-   "decision": "silence",
+   "decision": "synth",
    "label": "Car notices you",
    "what": "A car's headlights start to flash: it has noticed the dummy.",
    "group": "cars",
    "freq": "burst",
    "priority": "medium",
    "shot": "play",
-   "why": "Headlight flashes are the language; a sound would duplicate them.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: Headlight flashes are the language; a sound would duplicate them.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "silence",
+    "why": "Headlight flashes are the language; a sound would duplicate them."
+   },
+   "tone": "tone_car_notice.wav",
    "bus": "sfx",
    "gain": "alert",
    "gainId": "audio.sfx.gain.alert",
@@ -1888,7 +2021,17 @@
    "freq": "once",
    "priority": "medium",
    "shot": "drone",
-   "why": "An official siren marks the rescue run.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: An official siren marks the rescue run.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "cue",
+    "files": [
+     "siren.wav"
+    ],
+    "gain": "story",
+    "cooldown": "once",
+    "why": "An official siren marks the rescue run."
+   },
    "tone": "tone_drone_dispatch_rescue.wav",
    "variantOf": "drone-dispatch",
    "when": {
@@ -1906,7 +2049,8 @@
    "files": [
     "siren.wav"
    ],
-   "pick": "cycle"
+   "pick": "cycle",
+   "offsetId": "audio.sfx.offset.drone-dispatch.rescue"
   },
   "drone-pickup": {
    "decision": "cue",
@@ -2165,14 +2309,19 @@
    "pick": "cycle"
   },
   "story-ferried": {
-   "decision": "silence",
+   "decision": "cue",
    "label": "Ferried",
    "what": "The ferry sets the dummy down on the next tile.",
    "group": "story",
    "freq": "once",
    "priority": "low",
    "shot": "ferry",
-   "why": "The next tile's entry sound marks the arrival.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: The next tile's entry sound marks the arrival.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "silence",
+    "why": "The next tile's entry sound marks the arrival."
+   },
    "tone": "tone_story_ferried.wav",
    "bus": "sfx",
    "gain": "story",
@@ -2180,7 +2329,9 @@
    "cooldown": "once",
    "cooldownId": "audio.sfx.cooldown.once",
    "alternates": [],
-   "files": [],
+   "files": [
+    "laser_5.wav"
+   ],
    "pick": "random"
   },
   "story-fence": {
@@ -2274,14 +2425,24 @@
    "pick": "cycle"
   },
   "unveil-lift": {
-   "decision": "cue",
+   "decision": "synth",
    "label": "Cloth lifts",
    "what": "The cloth comes off the monument.",
    "group": "story",
    "freq": "once",
    "priority": "high",
    "shot": "plaque",
-   "why": "A sweeping vanish: the cloth comes off.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: A sweeping vanish: the cloth comes off.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "cue",
+    "files": [
+     "disappear.wav"
+    ],
+    "gain": "big",
+    "cooldown": "once",
+    "why": "A sweeping vanish: the cloth comes off."
+   },
    "tone": "tone_unveil_lift.wav",
    "bus": "sfx",
    "gain": "big",
@@ -2295,7 +2456,8 @@
    "files": [
     "disappear.wav"
    ],
-   "pick": "cycle"
+   "pick": "cycle",
+   "offsetId": "audio.sfx.offset.unveil-lift"
   },
   "voyage": {
    "decision": "cue",
@@ -3537,6 +3699,14 @@
    "peak": -12.6,
    "dir": "sfx"
   },
+  "tone_car_notice.wav": {
+   "trimDb": 4.5,
+   "seconds": 0.23,
+   "level": -22.5,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
   "tone_combo.wav": {
    "trimDb": 4.3,
    "seconds": 0.28,
@@ -3546,6 +3716,14 @@
    "dir": "tones"
   },
   "tone_combo_end.wav": {
+   "trimDb": 3.0,
+   "seconds": 0.65,
+   "level": -21.0,
+   "family": "tone",
+   "peak": -5.6,
+   "dir": "tones"
+  },
+  "tone_combo_end_p84.wav": {
    "trimDb": 5.0,
    "seconds": 0.2,
    "level": -23.6,
@@ -3567,6 +3745,22 @@
    "level": -20.1,
    "family": "tone",
    "peak": -4.3,
+   "dir": "tones"
+  },
+  "tone_cone_stop.wav": {
+   "trimDb": 5.0,
+   "seconds": 0.3,
+   "level": -25.1,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_cone_struck.wav": {
+   "trimDb": 5.0,
+   "seconds": 0.18,
+   "level": -25.9,
+   "family": "tone",
+   "peak": -6.0,
    "dir": "tones"
   },
   "tone_deck_drop.wav": {
@@ -3674,11 +3868,11 @@
    "dir": "tones"
   },
   "tone_honk.wav": {
-   "trimDb": 5.0,
-   "seconds": 0.13,
-   "level": -23.4,
+   "trimDb": 2.9,
+   "seconds": 0.4,
+   "level": -20.9,
    "family": "tone",
-   "peak": -6.0,
+   "peak": -4.9,
    "dir": "tones"
   },
   "tone_honk_body.wav": {
@@ -3687,6 +3881,14 @@
    "level": -17.3,
    "family": "tone",
    "peak": -4.2,
+   "dir": "tones"
+  },
+  "tone_honk_p84.wav": {
+   "trimDb": 5.0,
+   "seconds": 0.13,
+   "level": -23.4,
+   "family": "tone",
+   "peak": -6.0,
    "dir": "tones"
   },
   "tone_impact.wav": {
@@ -3761,6 +3963,14 @@
    "peak": -6.0,
    "dir": "tones"
   },
+  "tone_low_health.wav": {
+   "trimDb": 0.4,
+   "seconds": 0.64,
+   "level": -18.4,
+   "family": "tone",
+   "peak": -4.3,
+   "dir": "tones"
+  },
   "tone_lunge.wav": {
    "trimDb": 5.0,
    "seconds": 0.26,
@@ -3778,11 +3988,27 @@
    "dir": "tones"
   },
   "tone_near_miss.wav": {
+   "trimDb": 3.2,
+   "seconds": 0.46,
+   "level": -21.2,
+   "family": "tone",
+   "peak": -5.7,
+   "dir": "tones"
+  },
+  "tone_near_miss_p84.wav": {
    "trimDb": 4.8,
    "seconds": 0.33,
    "level": -25.8,
    "family": "tone",
    "peak": -5.8,
+   "dir": "tones"
+  },
+  "tone_part_break.wav": {
+   "trimDb": 5.0,
+   "seconds": 0.39,
+   "level": -27.6,
+   "family": "tone",
+   "peak": -6.0,
    "dir": "tones"
   },
   "tone_pickup.wav": {
@@ -3996,7 +4222,11 @@
  },
  "picks": {
   "by": "Lawrence",
-  "file": "content/audio/picks_lawrence.json",
+  "files": [
+   "content/audio/picks_lawrence.json",
+   "content/audio/picks_lawrence_2.json",
+   "content/audio/picks_lawrence_2_tones.json"
+  ],
   "changed": {
    "ui-start": {
     "was": {
@@ -4038,7 +4268,7 @@
      "cooldown": null
     },
     "now": {
-     "decision": "cue",
+     "decision": "silence",
      "files": [
       "bubble.wav"
      ],
@@ -4055,7 +4285,8 @@
     "now": {
      "files": [
       "hurt_3.wav"
-     ]
+     ],
+     "decision": "synth"
     }
    },
    "slip": {
@@ -4075,13 +4306,15 @@
     "now": {
      "files": [
       "equip_2.wav"
-     ]
+     ],
+     "decision": "synth"
     }
    },
    "denied": {
     "was": {},
     "now": {
-     "gainDb": 3.5
+     "gainDb": 3.5,
+     "decision": "synth"
     }
    },
    "impact.big": {
@@ -4094,7 +4327,8 @@
     "now": {
      "files": [
       "explosion_1.wav"
-     ]
+     ],
+     "decision": "synth"
     }
    },
    "held": {
@@ -4106,7 +4340,8 @@
     "now": {
      "files": [
       "cancel_1.wav"
-     ]
+     ],
+     "decision": "synth"
     }
    },
    "touch-spent": {
@@ -4126,7 +4361,8 @@
     "now": {
      "files": [
       "explosion_3.wav"
-     ]
+     ],
+     "decision": "synth"
     }
    },
    "part-break": {
@@ -4138,7 +4374,8 @@
     "now": {
      "files": [
       "explosion_2.wav"
-     ]
+     ],
+     "decision": "synth"
     }
    },
    "low-health": {
@@ -4150,7 +4387,8 @@
     "now": {
      "files": [
       "wobble.wav"
-     ]
+     ],
+     "decision": "synth"
     }
    },
    "near-miss": {
@@ -4168,7 +4406,7 @@
      "decision": "silence"
     },
     "now": {
-     "decision": "synth"
+     "decision": "silence"
     }
    },
    "drop": {
@@ -4225,12 +4463,156 @@
      "cooldown": null
     },
     "now": {
-     "decision": "cue",
+     "decision": "synth",
      "files": [
       "select_1.wav"
      ],
      "gain": "hit",
      "cooldown": "ambient"
+    }
+   },
+   "jump.dash": {
+    "was": {},
+    "now": {
+     "gainDb": -4.0
+    }
+   },
+   "deck-drop": {
+    "was": {},
+    "now": {
+     "gainDb": -2.5
+    }
+   },
+   "hitch": {
+    "was": {
+     "decision": "cue"
+    },
+    "now": {
+     "decision": "synth"
+    }
+   },
+   "impact": {
+    "was": {
+     "decision": "cue"
+    },
+    "now": {
+     "decision": "synth"
+    }
+   },
+   "impact.drop": {
+    "was": {
+     "decision": "cue"
+    },
+    "now": {
+     "decision": "synth"
+    }
+   },
+   "chassis.start": {
+    "was": {
+     "decision": "base",
+     "files": null,
+     "gain": null,
+     "cooldown": null
+    },
+    "now": {
+     "decision": "cue",
+     "files": [
+      "teleport.wav"
+     ],
+     "gain": "hit",
+     "cooldown": "once"
+    }
+   },
+   "chassis": {
+    "was": {
+     "files": [
+      "teleport.wav"
+     ]
+    },
+    "now": {
+     "files": [
+      "bubble.wav"
+     ]
+    }
+   },
+   "combo.max": {
+    "was": {
+     "files": [
+      "powerup_2.wav",
+      "powerup_4.wav"
+     ]
+    },
+    "now": {
+     "files": [
+      "powerup_2.wav"
+     ]
+    }
+   },
+   "splash": {
+    "was": {},
+    "now": {
+     "gainDb": -3.5
+    }
+   },
+   "learn-standoff": {
+    "was": {},
+    "now": {
+     "gainDb": -3.0
+    }
+   },
+   "car-notice": {
+    "was": {
+     "decision": "silence"
+    },
+    "now": {
+     "decision": "synth"
+    }
+   },
+   "drone-dispatch.rescue": {
+    "was": {},
+    "now": {
+     "gainDb": -3.0
+    }
+   },
+   "story-ferried": {
+    "was": {
+     "decision": "silence",
+     "files": null,
+     "gain": null,
+     "cooldown": null
+    },
+    "now": {
+     "decision": "cue",
+     "files": [
+      "laser_5.wav"
+     ],
+     "gain": "story",
+     "cooldown": "once"
+    }
+   },
+   "unveil-lift": {
+    "was": {
+     "decision": "cue"
+    },
+    "now": {
+     "decision": "synth",
+     "gainDb": -4.0
+    }
+   },
+   "cone-stop": {
+    "was": {
+     "decision": "silence"
+    },
+    "now": {
+     "decision": "synth"
+    }
+   },
+   "combo-end": {
+    "was": {
+     "decision": "cue"
+    },
+    "now": {
+     "decision": "synth"
     }
    }
   },
@@ -4250,52 +4632,34 @@
      "decision": "synth"
     },
     "level": {
-     "decision": "cue",
-     "bus": "sfx",
-     "gain": "hit",
-     "cooldown": "action",
-     "files": [
-      "bubble.wav"
-     ]
+     "decision": "silence"
     },
     "push": {
-     "files": [
-      "hurt_3.wav"
-     ]
+     "decision": "synth"
     },
     "slip": {
      "decision": "synth"
     },
     "sling": {
-     "files": [
-      "equip_2.wav"
-     ]
+     "decision": "synth"
     },
     "denied": {
-     "gainDb": 3.5
+     "decision": "synth"
     },
     "impact.big": {
-     "files": [
-      "explosion_1.wav"
-     ]
+     "decision": "synth"
     },
     "held": {
-     "files": [
-      "cancel_1.wav"
-     ]
+     "decision": "synth"
     },
     "touch-spent": {
      "decision": "synth"
     },
     "writeoff": {
-     "files": [
-      "explosion_3.wav"
-     ]
+     "decision": "synth"
     },
     "part-break": {
-     "files": [
-      "explosion_2.wav"
-     ]
+     "decision": "synth"
     },
     "low-health": {
      "files": [
@@ -4308,7 +4672,7 @@
      "cooldown": "burst"
     },
     "miss": {
-     "decision": "synth"
+     "decision": "silence"
     },
     "drop": {
      "decision": "cue",
@@ -4333,18 +4697,65 @@
      "decision": "synth"
     },
     "cone-struck": {
-     "decision": "cue",
-     "bus": "sfx",
-     "gain": "hit",
-     "cooldown": "ambient",
-     "files": [
-      "select_1.wav"
-     ]
+     "decision": "synth"
     },
     "cone-rest": {
      "bus": "sfx",
      "gain": "hit",
      "cooldown": "ambient"
+    },
+    "jump.dash": {
+     "gainDb": -4
+    },
+    "deck-drop": {
+     "gainDb": -2.5
+    },
+    "hitch": {
+     "decision": "synth"
+    },
+    "impact": {
+     "decision": "synth"
+    },
+    "impact.drop": {
+     "decision": "synth"
+    },
+    "chassis.start": {
+     "decision": "cue",
+     "files": [
+      "teleport.wav"
+     ]
+    },
+    "chassis": {
+     "files": [
+      "bubble.wav"
+     ]
+    },
+    "combo.max": {
+     "files": [
+      "powerup_2.wav"
+     ]
+    },
+    "splash": {
+     "gainDb": -3.5
+    },
+    "learn-standoff": {
+     "gainDb": -3
+    },
+    "car-notice": {
+     "decision": "synth"
+    },
+    "drone-dispatch.rescue": {
+     "gainDb": -3
+    },
+    "story-ferried": {
+     "decision": "cue",
+     "files": [
+      "laser_5.wav"
+     ]
+    },
+    "unveil-lift": {
+     "gainDb": -4,
+     "decision": "synth"
     }
    }
   }

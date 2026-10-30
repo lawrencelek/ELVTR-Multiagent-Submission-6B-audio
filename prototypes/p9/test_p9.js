@@ -127,9 +127,14 @@ const get = (url) => new Promise((res) => http.get(url, (r) => { r.resume(); res
     const audit = (html, out) => cp.execFileSync('node', [path.join(ROOT, 'prototypes/p8/text_audit.js'), html, out], { cwd: path.join(ROOT, 'prototypes/p8'), encoding: 'utf8' }).trim().split('\n')[0];
     const a1 = audit(orig, path.join(tmp, 'frozen.json')), a2 = audit(rebuilt, path.join(tmp, 'rebuilt.json'));
     const t1 = JSON.parse(fs.readFileSync(path.join(tmp, 'frozen.json'))), t2 = JSON.parse(fs.readFileSync(path.join(tmp, 'rebuilt.json')));
-    const s1 = new Set(t1.texts.map((t) => t.text)), s2 = new Set(t2.texts.map((t) => t.text)), dyn = /\d+:\d{2}|\d+ ms|JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC|pad:/;
+    // Live traffic makes two tours differ: car barks (wrapped, one line at a time) and objective counts. Those are not compared
+    const fleet = JSON.parse(fs.readFileSync(path.join(ROOT, 'content/db/fleet.json'), 'utf8')), win = { FLEET_DB: fleet };
+    try { require('vm').runInNewContext(fs.readFileSync(path.join(ROOT, 'prototypes/p8/lore.js'), 'utf8'), { window: win }); } catch (e) { /* lore patches only */ }
+    const barkText = fleet.barks.map((b) => String(b.text)), isBark = (x) => barkText.some((t) => t.includes(x.trim()) || x.trim().split(/\s+/).length > 2 && t.replace(/\{\w+\}/g, '').includes(x.trim().split(/\s+/).slice(0, 3).join(' ')));
+    const live = (x) => isBark(x) || /\(\d+ of \d+\)|\d+ \/ \d+/.test(x);
+    const s1 = new Set(t1.texts.map((t) => t.text).filter((x) => !live(x))), s2 = new Set(t2.texts.map((t) => t.text).filter((x) => !live(x))), dyn = /\d+:\d{2}|\d+ ms|JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC|pad:/;
     const diff = [...s1].filter((x) => !s2.has(x) && !dyn.test(x)).concat([...s2].filter((x) => !s1.has(x) && !dyn.test(x)));
-    ok('Prototype 8.4 rebuilt from the shared code draws what the frozen build draws (' + a1 + ' / ' + a2 + ')', !diff.length && !t2.errors.length, diff.slice(0, 8).join(' | '));
+    ok('Prototype 8.4 rebuilt from the shared code draws what the frozen build draws, barks and live counts aside (' + a1 + ' / ' + a2 + ')', !diff.length && !t2.errors.length, diff.slice(0, 8).join(' | '));
     ok('the frozen dummies_p8_4.html is unchanged (md5 9f5549201d88891f9f0b22c461602909)', require('crypto').createHash('md5').update(fs.readFileSync(orig)).digest('hex') === '9f5549201d88891f9f0b22c461602909');
   }
   srv.close();

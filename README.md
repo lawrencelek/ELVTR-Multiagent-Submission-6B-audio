@@ -9,7 +9,7 @@
 - **Evidence first, no model:** an inventory of the pack (length, loudness, peak) and a catalogue of the 94 places the code can make a sound.
 - **The loop:** a **designer** proposes the cue map. **Lint** measures what a script can. A **reviewer** scores the map out of 10 against a sound guide. A **refiner** fixes what the REASON names. A fresh reviewer must confirm 10/10.
 - **After the loop:** an **integrator** writes the cue map the build plays, and its registry IDs.
-- **Then Lawrence chose:** his picks from the Sound Lab sit over the agent's map, as his decision (row 603).
+- **Then Lawrence chose:** his picks from the Sound Lab sit over the agent's map, as his decision (rows 603, 607).
 - **Generated tones:** every sound Prototype 8.4 synthesised is rendered to a WAV file, so a `synth` cue plays in the same mix as the pack (row 604).
 
 **Try it:**
@@ -32,10 +32,10 @@
 | **The new build** | [`prototypes/p9/dummies_p9.html`](prototypes/p9/dummies_p9.html) with `prototypes/p9/audio/` (built by `build.py`) |
 | **The agent** | [`audio/`](audio/): `inventory.py`, `events.py`, `loop.py`, `lint.py`, `llm.py`, `integrate.py`, `agents/`, [`SOUND_GUIDE.md`](audio/SOUND_GUIDE.md) |
 | **Evidence** | [`audio/runs/`](audio/runs/): every agent input and output, every map version, lint, a `trace.md` per run |
-| **The cue map** | [`content/audio/cues.json`](content/audio/cues.json): the agent's accepted map ([`design.json`](content/audio/design.json)) with Lawrence's picks over it ([`picks_lawrence.json`](content/audio/picks_lawrence.json)) |
-| **Generated tones** | [`audio/tones.py`](audio/tones.py) → `prototypes/p9/audio/tones/` (57 WAV) and [`content/audio/tones.json`](content/audio/tones.json) |
+| **The cue map** | [`content/audio/cues.json`](content/audio/cues.json): the agent's accepted map ([`design.json`](content/audio/design.json)) with Lawrence's picks over it ([`picks_lawrence.json`](content/audio/picks_lawrence.json), [`picks_lawrence_2.json`](content/audio/picks_lawrence_2.json), [`picks_lawrence_2_tones.json`](content/audio/picks_lawrence_2_tones.json)) |
+| **Generated tones** | [`audio/tones.py`](audio/tones.py) → `prototypes/p9/audio/tones/` (65 WAV) and [`content/audio/tones.json`](content/audio/tones.json) |
 | **Tests** | `prototypes/p9/test_p9.js`: 34/34 ([`shots/test_p9.json`](prototypes/p9/shots/test_p9.json)) |
-| **Decisions** | [`DECISIONS.md`](DECISIONS.md) rows 591–605; open D86 |
+| **Decisions** | [`DECISIONS.md`](DECISIONS.md) rows 591–607; open D86 |
 
 ## 1 The agent
 
@@ -110,7 +110,16 @@ flowchart TD
 - **Set to their generated tones:** rail jumps, slips, spent cars, empty dashes, cone hits.
 - **Denied** is 3.5 dB louder.
 
-**The map the game ships:** 66 cues from 53 files, 24 silences, 16 generated tones, 1 on its base.
+**Lawrence's second round** (rows 606–607):
+
+- **Eight new tones:** near-miss, low health, part breaks, car strikes a cone, cone stops, combo banked, honk (longer), car notices you.
+  - The 8.4 tones they replace stay as `tone_<event>_p84.wav`.
+- **Hits play their generated tones:** hits, big hits, drop hits, write-offs, held chassis, the push, the hitch, the sling, denied, the cloth lifting.
+- **New files:** a new chassis gets `bubble.wav`, and the level start gets its own cue, `teleport.wav`. The ferry's set-down gets `laser_5.wav`.
+- **Back to silence:** levels and empty dashes.
+- **Quieter:** long jumps, deck drops, the river splash, a model learning, the river rescue, the cloth lifting.
+
+**The map the game ships:** 53 cues from 43 files, 23 silences, 31 generated tones.
 
 ## 3 Music
 
@@ -152,7 +161,7 @@ flowchart TD
   - the Lab and the game could disagree about a pick;
   - an emptied pool still played in the game.
   - It also flagged fades cut short and audio that unlocked before the browser allowed it. Both are fixed.
-- **Frozen builds:** Prototype 8.4 rebuilt from the changed shared code draws the same strings as the frozen build, on the same 32-step tour. `dummies_p8_4.html` is unchanged (md5 `9f5549201d88891f9f0b22c461602909`).
+- **Frozen builds:** Prototype 8.4 rebuilt from the changed shared code draws the same strings as the frozen build, on the same 32-step tour. Car barks and live counts are left out of the comparison: traffic varies them run to run. `dummies_p8_4.html` is unchanged (md5 `9f5549201d88891f9f0b22c461602909`).
 
 ## 5 The Sound Lab
 
@@ -169,7 +178,7 @@ flowchart TD
   - the mix: bus levels, crossfade, duck, gain classes.
 - **Sequences:** twelve timed moments over their music, among them a combo to the cap, a write-off, the drone drop, the river rescue and the finale.
 - **Tour:** the 44 steps of `tour_p9.js`, with the cues each fired.
-- **Library:** the pack and the 57 generated tones by family, with each file's length, level and users.
+- **Library:** the pack and the 65 generated tones by family, with each file's length, level and users.
 - **Picks:**
   - **Play the game with these picks** opens Prototype 9 with them.
   - **Export** gives JSON and a plain summary to send back.
@@ -187,7 +196,7 @@ flowchart TD
 - Options shows MUSIC, SOUND and MUTE, and saves them;
 - the game takes the Lab's picks from `#audio=`; malformed picks are dropped and the game still starts;
 - no page or engine errors;
-- Prototype 8.4 draws the same strings, and its frozen file is unchanged.
+- Prototype 8.4 draws the same strings (barks and live counts aside), and its frozen file is unchanged.
 
 ## 7 Open
 
@@ -207,7 +216,7 @@ python3 audio/inventory.py                     # the pack and the tones → cont
 python3 audio/events.py                        # the code → content/audio/events.json
 python3 audio/loop.py                          # the agent → audio/runs/<id>/, content/audio/design.json
 python3 audio/loop.py --from content/audio/design.json   # incremental, after the catalogue changes
-python3 audio/integrate.py                     # + picks_lawrence.json → content/audio/cues.json, registry edit100
+python3 audio/integrate.py                     # + Lawrence's picks → content/audio/cues.json, registry edit100
 python3 prototypes/p9/build.py                 # → prototypes/p9/dummies_p9.html
 cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../..
 python3 prototypes/p9/make_lab.py && python3 audio/make_gdd.py

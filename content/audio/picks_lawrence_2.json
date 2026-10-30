@@ -1,0 +1,28 @@
+{
+ "sfx": {
+  "jump.dash": {"gainDb": -4},
+  "deck-drop": {"gainDb": -2.5},
+  "level": {"decision": "silence"},
+  "push": {"decision": "synth"},
+  "sling": {"decision": "synth"},
+  "hitch": {"decision": "synth"},
+  "denied": {"decision": "synth"},
+  "impact": {"decision": "synth"},
+  "impact.big": {"decision": "synth"},
+  "impact.drop": {"decision": "synth"},
+  "held": {"decision": "synth"},
+  "writeoff": {"decision": "synth"},
+  "chassis.start": {"decision": "cue", "files": ["teleport.wav"]},
+  "chassis": {"files": ["bubble.wav"]},
+  "part-break": {"decision": "synth"},
+  "miss": {"decision": "silence"},
+  "cone-struck": {"decision": "synth"},
+  "combo.max": {"files": ["powerup_2.wav"]},
+  "splash": {"gainDb": -3.5},
+  "learn-standoff": {"gainDb": -3},
+  "car-notice": {"decision": "synth"},
+  "drone-dispatch.rescue": {"gainDb": -3},
+  "story-ferried": {"decision": "cue", "files": ["laser_5.wav"]},
+  "unveil-lift": {"gainDb": -4, "decision": "synth"}
+ }
+}

@@ -56,7 +56,7 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 
 - **Music:** menu · Track 2 (summer nights)
 - **`sfx.ui-ok`** · Confirm: `confirm_4.wav` · pool `confirm_4.wav` · alternates `confirm_1.wav`, `select_5.wav`
-- **`sfx.chassis`** · New chassis: `teleport.wav` · pool `teleport.wav` · alternates `powerup_3.wav`, `equip_2.wav`
+- **`sfx.chassis`** · New chassis: `bubble.wav` · pool `bubble.wav` · alternates `teleport.wav`, `powerup_3.wav`, `equip_2.wav`
 
 ## 9. Arcade: the drone drop, the level track
 
@@ -70,6 +70,7 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 - **`sfx.near-miss`** · Near-miss: `tone_near_miss.wav` · pool — · alternates —
 - **`sfx.bark`** · Bark bubble: `bubble.wav` · pool `bubble.wav`, `select_1.wav` · alternates `select_2.wav`, `computer_2.wav`
 - **`sfx.dropped-in`** · Dummy set down: `land.wav` · pool `land.wav` · alternates `door_close.wav`, `blocked.wav`
+- **`sfx.car-notice`** · Car notices you: `tone_car_notice.wav` · pool — · alternates —
 
 ## 11. Arcade: a dash
 
@@ -80,12 +81,12 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 ## 12. Arcade: a jump
 
 - **Music:** level · Track 3 (chibi robot b)
-- **`sfx.denied`** · Denied: `blocked.wav` · pool `blocked.wav` · alternates `cancel_2.wav`, `cancel_4.wav`
+- **`sfx.denied`** · Denied: `tone_denied.wav` · pool `blocked.wav` · alternates `cancel_2.wav`, `cancel_4.wav`
 
 ## 13. Arcade: a hit
 
 - **Music:** level · Track 3 (chibi robot b)
-- **`sfx.impact`** · Hit: `hurt_4.wav` · pool `hurt_1.wav`, `hurt_2.wav`, `hurt_3.wav`, `hurt_4.wav` · alternates `soft_destruction.wav`, `explosion_1.wav`
+- **`sfx.impact`** · Hit: `tone_impact.wav` · pool `hurt_1.wav`, `hurt_2.wav`, `hurt_3.wav`, `hurt_4.wav` · alternates `soft_destruction.wav`, `explosion_1.wav`
 
 ## 14. Arcade: a combo
 
@@ -115,7 +116,7 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 ![Arcade: a write-off](shots/writeoff.jpg)
 
 - **Music:** level · Track 3 (chibi robot b)
-- **`sfx.writeoff`** · Write-off: `explosion_3.wav` · pool `explosion_3.wav` · alternates `explosion_4.wav`, `harsh_destruction.wav`
+- **`sfx.writeoff`** · Write-off: `tone_writeoff.wav` · pool `explosion_3.wav` · alternates `explosion_4.wav`, `harsh_destruction.wav`
 - **`sfx.credit`** · Credits paid: `collect_5.wav` · pool `collect_5.wav` · alternates `collect_6.wav`, `confirm_2.wav`
 
 ## 18. Arcade: the report
@@ -137,7 +138,7 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 
 - **Music:** level · Track 3 (chibi robot b)
 - **`sfx.ui-ok`** · Confirm: `confirm_4.wav` · pool `confirm_4.wav` · alternates `confirm_1.wav`, `select_5.wav`
-- **`sfx.chassis`** · New chassis: `teleport.wav` · pool `teleport.wav` · alternates `powerup_3.wav`, `equip_2.wav`
+- **`sfx.chassis`** · New chassis: `bubble.wav` · pool `bubble.wav` · alternates `teleport.wav`, `powerup_3.wav`, `equip_2.wav`
 
 ## 21. pause: the music ducks
 
@@ -206,7 +207,7 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 
 - **Music:** menu · Track 2 (summer nights)
 - **`sfx.ui-ok`** · Confirm: `confirm_4.wav` · pool `confirm_4.wav` · alternates `confirm_1.wav`, `select_5.wav`
-- **`sfx.chassis`** · New chassis: `teleport.wav` · pool `teleport.wav` · alternates `powerup_3.wav`, `equip_2.wav`
+- **`sfx.chassis`** · New chassis: `bubble.wav` · pool `bubble.wav` · alternates `teleport.wav`, `powerup_3.wav`, `equip_2.wav`
 - **`sfx.story-enter`** · Tile in test: `computer_1.wav` · pool `computer_1.wav` · alternates `computer_2.wav`, `chime.wav`
 
 ## 31. Story: the drone drop
@@ -223,6 +224,7 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 
 - **Music:** level · Track 3 (chibi robot b)
 - **`sfx.dropped-in`** · Dummy set down: `land.wav` · pool `land.wav` · alternates `door_close.wav`, `blocked.wav`
+- **`sfx.car-notice`** · Car notices you: `tone_car_notice.wav` · pool — · alternates —
 
 ## 33. Story: a dash
 
@@ -232,13 +234,14 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 - **`sfx.lunge`** · Dash: `wobble.wav` · pool `wobble.wav` · alternates `jump_4.wav`, `shrink.wav`
 - **`sfx.knock`** · Knock: `tone_knock.wav` · pool — · alternates —
 - **`sfx.bark`** · Bark bubble: `select_1.wav` · pool `bubble.wav`, `select_1.wav` · alternates `select_2.wav`, `computer_2.wav`
-- **`sfx.impact`** · Hit: `hurt_2.wav` · pool `hurt_1.wav`, `hurt_2.wav`, `hurt_3.wav`, `hurt_4.wav` · alternates `soft_destruction.wav`, `explosion_1.wav`
+- **`sfx.impact`** · Hit: `tone_impact.wav` · pool `hurt_1.wav`, `hurt_2.wav`, `hurt_3.wav`, `hurt_4.wav` · alternates `soft_destruction.wav`, `explosion_1.wav`
 
 ## 34. Story: a jump
 
 ![Story: a jump](shots/jump.jpg)
 
 - **Music:** level · Track 3 (chibi robot b)
+- **`sfx.car-notice`** · Car notices you: `tone_car_notice.wav` · pool — · alternates —
 - **`sfx.jump`** · Jump: `jump_1.wav` · pool `jump_1.wav` · alternates `jump_3.wav`, `jump_2.wav`
 
 ## 35. Story: a big hit
@@ -247,7 +250,8 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 
 - **Music:** level · Track 3 (chibi robot b)
 - **`sfx.jump-land`** · Jump lands: `land.wav` · pool `land.wav` · alternates `blocked.wav`, `door_close.wav`
-- **`sfx.impact.big`** · A big hit: `explosion_1.wav` · pool `explosion_1.wav` · alternates `harsh_destruction.wav`, `explosion_2.wav`, `soft_destruction.wav`
+- **`sfx.car-notice`** · Car notices you: `tone_car_notice.wav` ×2 · pool — · alternates —
+- **`sfx.impact.big`** · A big hit: `tone_impact_big.wav` · pool `explosion_1.wav` · alternates `harsh_destruction.wav`, `explosion_2.wav`, `soft_destruction.wav`
 
 ## 36. Story: counted, cleared
 
@@ -264,13 +268,15 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 
 - **Music:** level · Track 3 (chibi robot b)
 - **`sfx.gift`** · Gift screen: `powerup_5.wav` · pool `powerup_5.wav` · alternates `powerup_3.wav`, `level_up.wav`
+- **`sfx.car-notice`** · Car notices you: `tone_car_notice.wav` ×2 · pool — · alternates —
 
 ## 38. Story: the report
 
 - **Music:** level · Track 3 (chibi robot b)
 - **`sfx.near-miss`** · Near-miss: `tone_near_miss.wav` · pool — · alternates —
 - **`sfx.bark`** · Bark bubble: `bubble.wav` · pool `bubble.wav`, `select_1.wav` · alternates `select_2.wav`, `computer_2.wav`
-- **`sfx.writeoff`** · Write-off: `explosion_3.wav` · pool `explosion_3.wav` · alternates `explosion_4.wav`, `harsh_destruction.wav`
+- **`sfx.car-notice`** · Car notices you: `tone_car_notice.wav` · pool — · alternates —
+- **`sfx.writeoff`** · Write-off: `tone_writeoff.wav` · pool `explosion_3.wav` · alternates `explosion_4.wav`, `harsh_destruction.wav`
 - **`sfx.story-count`** · Counted: `stat_increase.wav` · pool `stat_increase.wav` · alternates `collect_5.wav`, `confirm_2.wav`
 - **`sfx.story-clear`** · Tile cleared: `powerup_5.wav` · pool `powerup_5.wav` · alternates `level_up.wav`, `powerup_1.wav`
 
@@ -280,7 +286,7 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 
 - **Music:** level · Track 3 (chibi robot b)
 - **`sfx.ui-ok`** · Confirm: `confirm_4.wav` · pool `confirm_4.wav` · alternates `confirm_1.wav`, `select_5.wav`
-- **`sfx.chassis`** · New chassis: `teleport.wav` · pool `teleport.wav` · alternates `powerup_3.wav`, `equip_2.wav`
+- **`sfx.chassis`** · New chassis: `bubble.wav` · pool `bubble.wav` · alternates `teleport.wav`, `powerup_3.wav`, `equip_2.wav`
 - **`sfx.story-ferry`** · Ferry: `ufo.wav` · pool `ufo.wav` · alternates `engine.wav`, `teleport.wav`
 
 ## 40. Story: the gift screen (ferry)
@@ -293,13 +299,17 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 
 - **Music:** level · Track 4 (happywalking)
 - **`sfx.ui-ok`** · Confirm: `confirm_4.wav` · pool `confirm_4.wav` · alternates `confirm_1.wav`, `select_5.wav`
+- **`sfx.near-miss`** · Near-miss: `tone_near_miss.wav` · pool — · alternates —
+- **`sfx.bark`** · Bark bubble: `select_1.wav` · pool `bubble.wav`, `select_1.wav` · alternates `select_2.wav`, `computer_2.wav`
 - **`sfx.screen`** · Screen flip: `tone_screen.wav` · pool — · alternates —
 - **`sfx.story-enter`** · Tile in test: `computer_1.wav` · pool `computer_1.wav` · alternates `computer_2.wav`, `chime.wav`
+- **`sfx.story-ferried`** · Ferried: `laser_5.wav` · pool `laser_5.wav` · alternates —
 
 ## 42. Story: play on tile 2: the next level track
 
 - **Music:** level · Track 4 (happywalking)
 - **`sfx.ui-ok`** · Confirm: `confirm_4.wav` · pool `confirm_4.wav` · alternates `confirm_1.wav`, `select_5.wav`
+- **`sfx.car-notice`** · Car notices you: `tone_car_notice.wav` · pool — · alternates —
 
 ## 43. the finale: the plaque, Track 1
 
@@ -307,7 +317,7 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 
 - **Music:** finale · Track 1 (megabot)
 - **`sfx.unveil`** · Unveiling: `powerup_1.wav` · pool `powerup_1.wav` · alternates `powerup_3.wav`, `level_up.wav`
-- **`sfx.unveil-lift`** · Cloth lifts: `disappear.wav` · pool `disappear.wav` · alternates `teleport.wav`, `shrink.wav`
+- **`sfx.unveil-lift`** · Cloth lifts: `tone_unveil_lift.wav` · pool `disappear.wav` · alternates `teleport.wav`, `shrink.wav`
 
 ## 44. CERTIFIED
 

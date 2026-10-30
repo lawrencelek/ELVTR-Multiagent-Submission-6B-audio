@@ -230,7 +230,7 @@
     {
      "kind": "sfx",
      "id": "chassis",
-     "file": "teleport.wav"
+     "file": "bubble.wav"
     }
    ]
   },
@@ -292,6 +292,11 @@
      "kind": "sfx",
      "id": "dropped-in",
      "file": "land.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "car-notice",
+     "file": "tone_car_notice.wav"
     }
    ]
   },
@@ -332,7 +337,7 @@
     {
      "kind": "sfx",
      "id": "denied",
-     "file": "blocked.wav"
+     "file": "tone_denied.wav"
     }
    ]
   },
@@ -350,7 +355,7 @@
     {
      "kind": "sfx",
      "id": "impact",
-     "file": "hurt_4.wav"
+     "file": "tone_impact.wav"
     }
    ]
   },
@@ -432,7 +437,7 @@
     {
      "kind": "sfx",
      "id": "writeoff",
-     "file": "explosion_3.wav"
+     "file": "tone_writeoff.wav"
     },
     {
      "kind": "sfx",
@@ -495,7 +500,7 @@
     {
      "kind": "sfx",
      "id": "chassis",
-     "file": "teleport.wav"
+     "file": "bubble.wav"
     }
    ]
   },
@@ -740,7 +745,7 @@
     {
      "kind": "sfx",
      "id": "chassis",
-     "file": "teleport.wav"
+     "file": "bubble.wav"
     },
     {
      "kind": "sfx",
@@ -797,6 +802,11 @@
      "kind": "sfx",
      "id": "dropped-in",
      "file": "land.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "car-notice",
+     "file": "tone_car_notice.wav"
     }
    ]
   },
@@ -829,7 +839,7 @@
     {
      "kind": "sfx",
      "id": "impact",
-     "file": "hurt_2.wav"
+     "file": "tone_impact.wav"
     }
    ]
   },
@@ -844,6 +854,11 @@
     "track": 3
    },
    "cues": [
+    {
+     "kind": "sfx",
+     "id": "car-notice",
+     "file": "tone_car_notice.wav"
+    },
     {
      "kind": "sfx",
      "id": "jump",
@@ -869,8 +884,18 @@
     },
     {
      "kind": "sfx",
+     "id": "car-notice",
+     "file": "tone_car_notice.wav"
+    },
+    {
+     "kind": "sfx",
      "id": "impact.big",
-     "file": "explosion_1.wav"
+     "file": "tone_impact_big.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "car-notice",
+     "file": "tone_car_notice.wav"
     }
    ]
   },
@@ -917,6 +942,16 @@
      "kind": "sfx",
      "id": "gift",
      "file": "powerup_5.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "car-notice",
+     "file": "tone_car_notice.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "car-notice",
+     "file": "tone_car_notice.wav"
     }
    ]
   },
@@ -943,8 +978,13 @@
     },
     {
      "kind": "sfx",
+     "id": "car-notice",
+     "file": "tone_car_notice.wav"
+    },
+    {
+     "kind": "sfx",
      "id": "writeoff",
-     "file": "explosion_3.wav"
+     "file": "tone_writeoff.wav"
     },
     {
      "kind": "sfx",
@@ -977,7 +1017,7 @@
     {
      "kind": "sfx",
      "id": "chassis",
-     "file": "teleport.wav"
+     "file": "bubble.wav"
     },
     {
      "kind": "sfx",
@@ -1027,6 +1067,16 @@
     },
     {
      "kind": "sfx",
+     "id": "near-miss",
+     "file": "tone_near_miss.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "bark",
+     "file": "select_1.wav"
+    },
+    {
+     "kind": "sfx",
      "id": "screen",
      "file": "tone_screen.wav"
     },
@@ -1039,6 +1089,11 @@
      "kind": "music",
      "id": "track4",
      "file": "music/track4_ansimuz-itch-io_happywalking.ogg"
+    },
+    {
+     "kind": "sfx",
+     "id": "story-ferried",
+     "file": "laser_5.wav"
     }
    ]
   },
@@ -1057,6 +1112,11 @@
      "kind": "ui",
      "id": "ui-ok",
      "file": "confirm_4.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "car-notice",
+     "file": "tone_car_notice.wav"
     }
    ]
   },
@@ -1089,7 +1149,7 @@
     {
      "kind": "sfx",
      "id": "unveil-lift",
-     "file": "disappear.wav"
+     "file": "tone_unveil_lift.wav"
     }
    ]
   },
@@ -1144,7 +1204,7 @@
  },
  "errors": [],
  "audio": {
-  "log": 108,
+  "log": 120,
   "settings": {
    "music": 8,
    "sound": 8,

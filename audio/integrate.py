@@ -20,7 +20,11 @@ ROOT = Path(__file__).resolve().parents[1]
 INV = json.loads((ROOT / "content" / "audio" / "inventory.json").read_text(encoding="utf-8"))
 EV = json.loads((ROOT / "content" / "audio" / "events.json").read_text(encoding="utf-8"))
 DESIGN = ROOT / "content" / "audio" / "design.json"
-PICKS = ROOT / "content" / "audio" / "picks_lawrence.json"   # Lawrence's picks from the Sound Lab: user-decided, over the agent's map
+PICKS = [ROOT / "content" / "audio" / f for f in (       # Lawrence's picks from the Sound Lab, in order: user-decided, over the agent's map
+    "picks_lawrence.json",          # 30 October 02:18 (row 603)
+    "picks_lawrence_2.json",        # 30 October 10:39 (row 607)
+    "picks_lawrence_2_tones.json",  # the three events he asked new tones for, set to play them (row 607)
+)]
 TONES = ROOT / "content" / "audio" / "tones.json"            # generated tones (audio/tones.py)
 OUT = ROOT / "content" / "audio" / "cues.json"
 REGF = ROOT / "content" / "params" / "tuning.parameters.json"
@@ -98,6 +102,13 @@ GROUP_GAIN = {"ui": "ui", "moves": "move", "abilities": "move", "hits": "hit", "
               "cars": "alert", "drones": "story", "story": "story", "arcade": "reward", "barks": "ambient", "intro": "story"}
 
 
+def defaults(eid, e):
+    """The bus, gain class and cooldown class an entry gets when the map gives none: by group and frequency."""
+    gain = "ambient" if e["freq"] == "ambient" else GROUP_GAIN[e["group"]]
+    cd = "honk" if eid.startswith("honk") else {"once": "once", "action": "action", "burst": "burst", "frame": "frame", "ambient": "ambient"}[e["freq"]]
+    return {"bus": "ui" if e["group"] == "ui" else "sfx", "gain": gain, "cooldown": cd}
+
+
 def apply_picks(m, picks, cat):
     """Lawrence's picks (Sound Lab JSON) over the agent's map, as prototypes/p9/audio.js merges them: a pick's decision wins,
     else the map's; files replace the pool; bus, gain and cooldown replace the map's; gainDb becomes audio.sfx.offset.<id>.
@@ -119,6 +130,9 @@ def apply_picks(m, picks, cat):
         for k in ("bus", "gain", "cooldown"):
             if isinstance(p.get(k), str):
                 x[k] = p[k]
+        if x["decision"] == "cue":
+            for k, v in defaults(eid, cat[eid]).items():
+                x.setdefault(k, v) if x.get(k) else x.__setitem__(k, v)
         if isinstance(p.get("gainDb"), (int, float)) and p["gainDb"]:
             x["offsetDb"] = float(p["gainDb"])
         after = {k: x.get(k) for k in ("decision", "files", "gain", "cooldown")}
@@ -127,8 +141,9 @@ def apply_picks(m, picks, cat):
             diff["gainDb"] = x["offsetDb"]
         if diff:
             changed[eid] = {"was": {k: before[k] for k in diff if k in before}, "now": diff}
+            if not x.get("by"):
+                x["why"] = "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607)." + (" Agent: " + x.get("why", "") if x.get("why") else "")
             x["by"] = "Lawrence"
-            x["why"] = "Lawrence's pick in the Sound Lab (DECISIONS row 603)." + (" Agent: " + x.get("why", "") if x.get("why") else "")
     return changed
 
 
@@ -155,8 +170,18 @@ def main():
         sys.exit("content/audio/design.json is missing: run audio/loop.py first")
     m = normalise(json.loads(DESIGN.read_text(encoding="utf-8")))
     agent = {x["event"]: {k: x.get(k) for k in ("decision", "files", "gain", "cooldown", "why")} for x in m["sfx"]}
-    picks = json.loads(PICKS.read_text(encoding="utf-8")) if PICKS.exists() else {}
-    changed = apply_picks(m, picks, L.ids(EV))
+    changed, raw = {}, {}
+    for pf in PICKS:
+        if not pf.exists():
+            continue
+        picks = json.loads(pf.read_text(encoding="utf-8"))
+        for eid, d in apply_picks(m, picks, L.ids(EV)).items():
+            if eid in changed:
+                changed[eid]["now"].update(d["now"])
+            else:
+                changed[eid] = d
+        if "tones" not in pf.name:  # what his browser may still hold: the latest export per entry
+            raw.update(picks.get("sfx") or {})
     tones = json.loads(TONES.read_text(encoding="utf-8"))["tones"] if TONES.exists() else {}
     F = L.lint(m, EV, INV)
     blocking = [f for f in F if f["severity"] == "blocking"]
@@ -206,9 +231,9 @@ def main():
             c["variantOf"] = e["variantOf"]
             c["when"] = next(v["when"] for v in next(b for b in EV["events"] if b["id"] == e["variantOf"])["variants"] if v["id"] == x["event"])
         # every entry carries a bus, a gain class and a cooldown, so a tone or a cue picked later in the Lab plays in the mix
-        gain = x.get("gain") or ("ambient" if e["freq"] == "ambient" else GROUP_GAIN[e["group"]])
-        cd = x.get("cooldown") or ("honk" if x["event"].startswith("honk") else {"once": "once", "action": "action", "burst": "burst", "frame": "frame", "ambient": "ambient"}[e["freq"]])
-        c.update({"bus": x.get("bus") or ("ui" if e["group"] == "ui" else "sfx"), "gain": gain, "gainId": f"audio.sfx.gain.{gain}", "cooldown": cd,
+        dft = defaults(x["event"], e)
+        gain, cd = x.get("gain") or dft["gain"], x.get("cooldown") or dft["cooldown"]
+        c.update({"bus": x.get("bus") or dft["bus"], "gain": gain, "gainId": f"audio.sfx.gain.{gain}", "cooldown": cd,
                   "cooldownId": f"audio.sfx.cooldown.{cd}", "alternates": x.get("alternates", []), "files": x.get("files") or [], "pick": x.get("pick", "random")})
         if x.get("offsetDb"):
             c["offsetId"] = f"audio.sfx.offset.{x['event']}"
@@ -221,7 +246,7 @@ def main():
         "base": "audio/", "params": prm,
         "music": {"tracks": tracks, "states": st, "rotation": rot, "storyRule": m["music"].get("storyRule", "tile"),
                   "arcadeRule": m["music"].get("arcadeRule", "run"), "why": m["music"].get("why", {})},
-        "sfx": sfx, "files": files, "picks": {"by": "Lawrence", "file": "content/audio/picks_lawrence.json", "changed": changed, "raw": picks},
+        "sfx": sfx, "files": files, "picks": {"by": "Lawrence", "files": [str(p.relative_to(ROOT)) for p in PICKS if p.exists()], "changed": changed, "raw": {"sfx": raw}},
         "credits": {"music": INV["files"][0]["credit"], "sfx": next(f["credit"] for f in INV["files"] if f["folder"] == "sfx")},
     }
     OUT.write_text(json.dumps(out, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")

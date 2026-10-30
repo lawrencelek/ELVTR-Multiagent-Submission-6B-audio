@@ -69,6 +69,20 @@ SYNTH = {
 # Edit 100: tones Prototype 8.4 never had, for events Lawrence set to the synth (DECISIONS row 603)
 NEW = {
     "slip": [[T, 1200, 520, 0.14, 0.06, "sine", 0], [N, 4200, 1600, 0.12, 0.05, None, 0.02]],  # a squeak, then the slide
+    # Lawrence's request, 30 October 10:39 (DECISIONS row 606). Where Prototype 8.4 had a tone, it stays as tone_<event>_p84.wav
+    "near-miss": [[N, 300, 2600, 0.16, 0.1, None, 0], [N, 2600, 500, 0.24, 0.08, None, 0.14],
+                  [T, 660, 430, 0.32, 0.03, "triangle", 0.04]],                                  # in, past, away: a falling Doppler hint
+    "low-health": [[T, 880, 880, 0.09, 0.07, "square", 0], [T, 660, 660, 0.09, 0.07, "square", 0.14],
+                   [T, 880, 880, 0.09, 0.07, "square", 0.28], [T, 660, 640, 0.14, 0.07, "square", 0.42]],  # a two-note warning, twice
+    "part-break": [[N, 5200, 1200, 0.08, 0.2, None, 0], [T, 1400, 300, 0.12, 0.06, "square", 0.02],
+                   [N, 1800, 400, 0.26, 0.08, None, 0.05]],                                          # a crack, a spark, the rattle
+    "cone-struck": [[N, 2500, 900, 0.07, 0.18, None, 0], [T, 420, 260, 0.1, 0.08, "triangle", 0],
+                    [T, 900, 700, 0.05, 0.04, "triangle", 0.03]],                                    # a plastic thwack and a bounce
+    "cone-stop": [[N, 1200, 500, 0.18, 0.08, None, 0], [T, 300, 220, 0.06, 0.05, "sine", 0.16]],     # a short scrape, then it settles
+    "combo-end": ([[T, f, f, 0.12, 0.07, "triangle", j * 0.07] for j, f in enumerate((784, 987.77, 1174.66))]
+                  + [[T, 1567.98, 1567.98, 0.36, 0.04, "sine", 0.21], [N, 6000, 3000, 0.06, 0.05, None, 0.2]]),  # banked: a chord, a ring
+    "honk": [[T, 415, 410, 0.32, 0.05, "square", 0], [T, 330, 326, 0.32, 0.04, "square", 0]],       # a two-tone horn, held: longer than 8.4's blip
+    "car-notice": [[T, 1318.5, 1318.5, 0.05, 0.04, "sine", 0], [T, 1760, 1760, 0.07, 0.04, "sine", 0.08]],  # the headlights' double flash
 }
 
 
@@ -124,10 +138,13 @@ def name(eid):
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     index = {}
+    for f in OUT.glob("tone_*.wav"):  # every run writes the whole set
+        f.unlink()
     for src, table in (("Prototype 8.4", SYNTH), ("Edit 100", NEW)):
-        for eid, voices in table.items():
-            y = render(voices, seed=sum(map(ord, eid)))
-            f = OUT / name(eid)
+        for eid0, voices in table.items():
+            eid = eid0 + "/p84" if src == "Prototype 8.4" and eid0 in NEW else eid0  # a replaced 8.4 tone stays, as tone_<event>_p84.wav
+            y = render(voices, seed=sum(map(ord, eid0)))
+            f = OUT / name(eid.replace("/", "_"))
             with wave.open(str(f), "wb") as w:
                 w.setnchannels(1); w.setsampwidth(2); w.setframerate(RATE)
                 w.writeframes((np.clip(y, -1, 1) * 32767).astype("<i2").tobytes())
