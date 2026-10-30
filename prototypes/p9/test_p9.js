@@ -1,6 +1,6 @@
 // Prototype 9 (GDD Edit 100): the audio tests, headless.
 //   node test_p9.js [--p84]          run tour_p9.js first (it writes shots/tour.json)
-// 1. Files: every file in content/audio/cues.json loads over http (status 200), the music in OGG and M4A.
+// 1. Files: every file in content/audio/cues.json loads over http (status 200), the music in OGG and MP3.
 // 2. The tour (shots/tour.json): no page errors; each screen plays its state's track; nothing plays before the first press.
 // 3. Coverage: every catalogued event and variant, sent to the engine with the fields its `when` needs, plays a file from its
 //    own pool (a cue), plays its base's pool (base), or is handled silently (silence); synth leaves it to Prototype 8.4.
@@ -12,7 +12,7 @@ const HERE = __dirname, ROOT = path.resolve(HERE, '..', '..');
 const CUES = JSON.parse(fs.readFileSync(path.join(ROOT, 'content/audio/cues.json'), 'utf8'));
 const EVENTS = JSON.parse(fs.readFileSync(path.join(ROOT, 'content/audio/events.json'), 'utf8'));
 const TOUR = JSON.parse(fs.readFileSync(path.join(HERE, 'shots/tour.json'), 'utf8'));
-const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json', '.wav': 'audio/wav', '.ogg': 'audio/ogg', '.m4a': 'audio/mp4', '.jpg': 'image/jpeg' };
+const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json', '.wav': 'audio/wav', '.ogg': 'audio/ogg', '.mp3': 'audio/mpeg', '.jpg': 'image/jpeg' };
 const results = []; const ok = (name, pass, detail) => { results.push({ name, pass: !!pass, detail: detail || '' }); console.log((pass ? 'PASS ' : 'FAIL ') + name + (detail ? ' · ' + detail : '')); };
 
 function serve() { return new Promise((res) => { const srv = http.createServer((req, r) => { const p = path.join(ROOT, decodeURIComponent(req.url.split('?')[0].split('#')[0])); if (!p.startsWith(ROOT) || !fs.existsSync(p) || fs.statSync(p).isDirectory()) { r.writeHead(404); r.end(); return; } r.writeHead(200, { 'Content-Type': TYPES[path.extname(p)] || 'application/octet-stream' }); fs.createReadStream(p).pipe(r); }); srv.listen(0, '127.0.0.1', () => res(srv)); }); }
@@ -23,7 +23,7 @@ const get = (url) => new Promise((res) => http.get(url, (r) => { r.resume(); res
   // ---- 1. files
   const files = new Set();
   for (const c of Object.values(CUES.sfx)) for (const f of (c.files || []).concat(c.alternates || [])) files.add('audio/sfx/' + f);
-  for (const t of Object.values(CUES.music.tracks)) { files.add('audio/' + t.file); files.add('audio/' + t.m4a); }
+  for (const t of Object.values(CUES.music.tracks)) { files.add('audio/' + t.file); files.add('audio/' + t.mp3); }
   const bad = []; for (const f of files) { const st = await get(base + f.split('/').map(encodeURIComponent).join('/')); if (st !== 200) bad.push(f + ' ' + st); }
   ok('every file in the cue map loads (' + files.size + ')', !bad.length, bad.join(', '));
 

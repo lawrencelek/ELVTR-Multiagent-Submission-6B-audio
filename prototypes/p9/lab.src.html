@@ -453,7 +453,7 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
   // ---------- music: two players and the game's crossfade
   const MP = [null, null]; let cur = -1, curTrack = null, duck = 1, raf = 0;
   const oggOk = (() => { try { return !!document.createElement('audio').canPlayType('audio/ogg; codecs="vorbis"'); } catch (e) { return true; } })();
-  function trackUrl(n) { const t = L.music.tracks[n]; return 'audio/' + (oggOk || !t.m4a ? t.file : t.m4a).split('/').map(encodeURIComponent).join('/'); }
+  function trackUrl(n) { const t = L.music.tracks[n]; return 'audio/' + (oggOk || !t.mp3 ? t.file : t.mp3).split('/').map(encodeURIComponent).join('/'); }
   function player(i) {
     if (MP[i]) return MP[i];
     const el = new Audio(); el.loop = true; el.preload = 'auto'; const p = { el, node: null, gain: null, vol: 0, want: 0, trim: 0 };
@@ -644,6 +644,7 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
   }
 
   // ---------- export, import, reset
+  const top = (() => { try { return window.top === window; } catch (e) { return false; } })(); // a framed page cannot start a download
   function openExport() {
     const o = exportable(), json = JSON.stringify(o, null, 1), lines = [];
     for (const [id, p] of Object.entries(o.sfx || {})) { const c = cue(id); lines.push(id + ': ' + (c.decision === 'cue' ? (c.files || []).join(', ') + ' · ' + c.gain + (c.userDb ? ' ' + sign(c.userDb) + ' dB' : '') : DEC_LABEL[c.decision])); }
@@ -654,7 +655,7 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
     $('#io-body').innerHTML = (empty() ? '<p class="note">No changes yet: the designed map plays as it is.</p>' : '<p class="note">' + changedCount() + ' changes. Copy the JSON to keep it, or the summary to send in a message. The game in this browser already uses them.</p>')
       + '<h3>Summary</h3><textarea id="io-sum" readonly spellcheck="false" style="min-height:120px">' + esc(lines.join('\n') || 'No changes.') + '</textarea>'
       + '<h3>JSON</h3><textarea id="io-json" readonly spellcheck="false">' + esc(json) + '</textarea>'
-      + '<div style="display:flex;flex-wrap:wrap;gap:8px"><button class="btn primary" type="button" data-act="copy" data-t="io-json">Copy JSON</button><button class="btn" type="button" data-act="copy" data-t="io-sum">Copy summary</button><a class="btn quiet" download="dummies_sound_picks.json" href="data:application/json;charset=utf-8,' + encodeURIComponent(json) + '">Download .json</a></div>';
+      + '<div style="display:flex;flex-wrap:wrap;gap:8px"><button class="btn primary" type="button" data-act="copy" data-t="io-json">Copy JSON</button><button class="btn" type="button" data-act="copy" data-t="io-sum">Copy summary</button>' + (top ? '<a class="btn quiet" download="dummies_sound_picks.json" href="data:application/json;charset=utf-8,' + encodeURIComponent(json) + '">Download .json</a>' : '') + '</div>';
     $('#iodlg').showModal();
   }
   function openImport() {

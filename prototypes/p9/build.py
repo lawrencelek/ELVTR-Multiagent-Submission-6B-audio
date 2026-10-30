@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Prototype 9 (GDD Edit 100): sound. Prototype 8.4's game with the audio engine (p9/audio.js) and the cue map
 (content/audio/cues.json, from the sound designer agent: audio/loop.py → audio/integrate.py). WAV effects and OGG music
-load by URL from audio/ beside the page (an M4A copy of each track for browsers without Ogg). Shared code changes are gated by
+load by URL from audio/ beside the page (an MP3 copy of each track for browsers without Ogg). Shared code changes are gated by
 audio.enabled (window.DUMMIES_SIM), which this build alone sets to 1: Prototypes 8 to 8.4 stay frozen.
 Bundles p9/shell.html + ../jump/jump.js + ../p6/sim.js, pixel.js, lab.js, circus_valley.js, world6.js, content.js
 + content/db/fleet.json + content/story/story_v2.json + p8/lore.js + ../p7/story.js + ../controls/pads.js
@@ -44,6 +44,6 @@ full = shell.replace('<!--SCRIPTS-->', scripts)
 out.write_text(full, encoding='utf-8')
 missing = [f for c in cues['sfx'].values() for f in c.get('files', []) + c.get('alternates', []) if not (here / 'audio' / 'sfx' / f).exists()]
 missing += [t['file'] for t in cues['music']['tracks'].values() if not (here / 'audio' / t['file']).exists()]
-missing += [t['m4a'] for t in cues['music']['tracks'].values() if not (here / 'audio' / t['m4a']).exists()]
+missing += [t['mp3'] for t in cues['music']['tracks'].values() if not (here / 'audio' / t['mp3']).exists()]
 assert not missing, missing
 print(out.name, out.stat().st_size, 'bytes;', sum(c['decision'] == 'cue' for c in cues['sfx'].values()), 'cues; every audio file present')

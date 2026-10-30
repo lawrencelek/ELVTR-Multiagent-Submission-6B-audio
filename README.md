@@ -1,0 +1,198 @@
+# DUMMIES — Sound Designer Agent
+
+**ELVTR Multi-Agent Systems · Sound (Assignment 6B) · Lawrence Lek · 30 October 2026 · Prototype 9 · GDD Edit 100**
+
+**DUMMIES** is a top-down game. You are a crash-test dummy in training in SHENZHEN SMART CITY. Dummy Corporation narrates, deadpan and inspirational. Prototype 9 adds sound: six OGG tracks (ansimuz) and 100 WAV effects (Chequered Ink).
+
+**The agent:** a sound designer that reads the pack's file names and the game's code, and writes the cue map.
+
+- **Evidence first, no model:** an inventory of the pack (length, loudness, peak) and a catalogue of the 94 places the code can make a sound.
+- **The loop:** a **designer** proposes the cue map. **Lint** measures what a script can. A **reviewer** scores the map out of 10 against a sound guide. A **refiner** fixes what the REASON names. A fresh reviewer must confirm 10/10.
+- **After the loop:** an **integrator** writes the cue map the build plays, and its registry IDs.
+
+**Try it:**
+
+- **[Prototype 9](prototypes/p9/dummies_p9.html)**, the game with sound. Press any key on the intro screen to start the sound. MUSIC, SOUND and MUTE are in the pause menu's Options.
+- **[The Sound Lab](prototypes/p9/sound_lab.html)**, an audition page:
+  - every cue and music state, beside a screenshot of its moment;
+  - swap files and tracks, change weights, play timed sequences;
+  - the game picks up your choices in the same browser.
+- **On GitHub Pages:** `https://lawrencelek.github.io/ELVTR-Multiagent-Submission-6B-audio/`. Switch Pages on once: Settings › Pages › branch `gh-pages`, folder `/`.
+- **Locally:** `python3 -m http.server` in this folder, then open `http://localhost:8000/`. Opened as a file, the pages still play sound through a slower fallback.
+
+## At a glance
+
+| Deliverable | Where |
+|---|---|
+| **Documentation:** which SFX (WAV) and MUSIC (OGG) cues play where | [GDD Edit 100](coder/gdd/DUMMIES_GDD_Edit100_Prototype_9_Sound.md): §2 MUSIC, §3 SFX (every cue, its trigger, files, bus, volume ID, cooldown ID) |
+| **Gameplay points with screenshots** | [`prototypes/p9/SOUND_TOUR.md`](prototypes/p9/SOUND_TOUR.md): 44 steps, 28 screenshots, each cue heard and its alternates |
+| **The audition page** | [`prototypes/p9/sound_lab.html`](prototypes/p9/sound_lab.html) (built by `make_lab.py`) |
+| **The new build** | [`prototypes/p9/dummies_p9.html`](prototypes/p9/dummies_p9.html) with `prototypes/p9/audio/` (built by `build.py`) |
+| **The agent** | [`audio/`](audio/): `inventory.py`, `events.py`, `loop.py`, `lint.py`, `llm.py`, `integrate.py`, `agents/`, [`SOUND_GUIDE.md`](audio/SOUND_GUIDE.md) |
+| **Evidence** | [`audio/runs/`](audio/runs/): every agent input and output, every map version, lint, a `trace.md` per run |
+| **The cue map** | [`content/audio/cues.json`](content/audio/cues.json) (from [`design.json`](content/audio/design.json), the accepted map) |
+| **Tests** | `prototypes/p9/test_p9.js`: 33/33 ([`shots/test_p9.json`](prototypes/p9/shots/test_p9.json)) |
+| **Decisions** | [`DECISIONS.md`](DECISIONS.md) rows 591–602; open D86 |
+
+## 1 The agent
+
+```mermaid
+flowchart TD
+    INV[/"inventory.py: 106 files<br/>length, LUFS, true peak, RMS, credit"/]
+    EVT[/"events.py: 94 events + 13 variants<br/>from emit( sites, present( cases, screens"/]
+    DES["Designer agent<br/>agents/designer.md"]
+    LINT[["lint.py: measured evidence<br/>coverage, files, durations, cooldowns, clashes, music spans"]]
+    REV["Reviewer agent<br/>agents/reviewer.md + SOUND_GUIDE.md<br/>SCORE: X/10 · REASON"]
+    TEN{"10/10?"}
+    CONF["Fresh reviewer: confirm"]
+    REF["Refiner agent<br/>agents/refiner.md + SOUND_GUIDE.md"]
+    INT["integrate.py: cues.json, registry edit100<br/>loudness trims; refuses blocking lint"]
+    BUILD[/"build.py → dummies_p9.html · make_lab.py → sound_lab.html"/]
+    INV --> DES
+    EVT --> DES
+    DES --> LINT --> REV --> TEN
+    TEN -- no --> REF --> LINT
+    TEN -- yes --> CONF
+    CONF -- "10/10" --> INT --> BUILD
+    CONF -- "dissent: its REASON" --> REF
+```
+
+- **Three agents, no shared memory.** Each step is a fresh `claude -p` call with no tools, on Opus. The reviewer and refiner read the whole guide.
+- **The catalogue is generated from the code.** `events.py` scans every `emit('…')` in `sim.js`, `world6.js` and `story.js`, and every derived case in `game.js`. An event with no annotation fails the run, so the catalogue cannot drift from the build.
+- **The guide** (`audio/SOUND_GUIDE.md`): 17 rules in six sections, each with a severity and a test.
+  - **Coverage:** every event has an entry; high priority has a cue.
+  - **Fit:** the name, length, weight and tone suit the event.
+  - **Clashes and spam:** no shared file between events that fire together; cooldowns on per-frame events.
+  - **Loudness and licence:** every file measured and credited.
+  - **Music:** the request's three spans.
+  - **Alternates:** two or three for the Lab.
+- **Scoring:** blocking −4, major −2, minor −1, once per entry. The floor is 1.
+- **Lint is evidence, not the grade.** The reviewer must deduct each finding, or say why it is wrong.
+- **No human step inside.** A reply that breaks the format or its own arithmetic goes back once. The loop stops at three refinements.
+- **Replay:** `AUDIO_REPLAY=audio/runs/<id> python3 audio/loop.py` reruns from saved outputs, with no model calls.
+- **Incremental:** `--from <map>` starts from an accepted map, with no designer call. Use it when the catalogue grows.
+
+## 2 The runs
+
+| Run | Start | Scores | Result | Calls · cost |
+|---|---|---|---|---|
+| [`20261030-012347-cues`](audio/runs/20261030-012347-cues/trace.md) | Designer | 7 → 10 | 10/10, confirmed. Not integrated: four lint findings were blocking | 5 · $2.17 |
+| [`20261030-013331-cues`](audio/runs/20261030-013331-cues/trace.md) | Run 1's map | 4 → 9 → 9 → 9 | Stopped at the cap | 7 · $2.92 |
+| [`20261030-014423-cues`](audio/runs/20261030-014423-cues/trace.md) | Run 2's map | 5 → 10 | 10/10, confirmed. **Integrated** | 4 · $1.54 |
+
+**What each run taught the loop:**
+
+- **Run 1: the reviewers overruled lint.**
+  - Lint raised seven findings. Five were spellings: the designer named tracks by file name and a cooldown by its full registry ID.
+  - Both reviewers rejected all seven: "Lint should match tracks by the inventory's track number." The other two entries stated reasons the guide accepts.
+  - Lint now reads those spellings (row 598).
+  - The reviewer also caught three real faults:
+    - `level_up.wav` too quiet for a tile clear;
+    - a shouted bark on the alert class;
+    - `tidal_wave.wav`, a water disaster, as an alternate for a cloth lifting.
+- **Run 2: the catalogue grew, and the reviewer judged the wrong levels.**
+  - A new variant, `chassis.start`: the first chassis is issued under the level card. Lint found it missing (C1, blocking). The refiner added it.
+  - The reviewer then marked weight (F3) down three rounds running. It compared files' measured levels, which the integrator's loudness trims even out.
+  - The guide now states the trims and judges weight by gain class (row 599).
+- **Run 3:** the reviewer caught a renamed music file (L1, blocking) and a menu confirm offered as a landing alternate. One refinement reached 10/10, and a fresh reviewer confirmed it.
+
+**The accepted map** (107 entries):
+
+- **66 cues** from 58 of the 100 files.
+- **28 stated silences:** traffic chatter, internal states, beats another cue already covers.
+- **12 left to Prototype 8.4's synth.** The honk is one: the pack has no horn, and the synth keeps each tier's voice. The reviewers accepted that reason under C2.
+- **1 variant on its base.**
+
+## 3 Music
+
+| State | Track |
+|---|---|
+| Intro screen (after the first press) | Track 1 · megabot |
+| Menus: mode select, saves, splash, map, district select, high scores, loading | Track 2 · summer nights |
+| A district's first level card | Track 2 continues |
+| Levels: drone drop, play, ferry, gift screen, report, workshop | Rotation: Tracks 3, 4, 5, 6 |
+| Pause | The level track, ducked to 0.35 |
+| Run ends (Licensed, Failed test, Non-compliant) | Track 2 |
+| Finale (unveiling, voyage, CERTIFIED) | Track 1 |
+| Credits | Track 2 |
+
+- **Story:** tile *n* plays slot ((*n* − 1) mod 4) + 1, so neighbouring tiles always differ.
+- **Arcade:** the next slot each run.
+- **The readings (Q1–Q6)** follow the handover's proposals, taken without a ruling. The Sound Lab changes any of them (rows 591–596).
+
+## 4 The engine
+
+`prototypes/p9/audio.js`, created by `game.js` only when `audio.enabled` is 1. Prototypes 8 to 8.4 never set it.
+
+- **Buses:** music, SFX and UI under a master.
+- **Loudness:** each file is trimmed to a target per bus.
+- **Weight and spam:** gain classes, cooldown classes, a voice cap, pitch jitter.
+- **Music:** two players crossfade.
+- **Hooks in `game.js`:** about 30 small, gated hooks.
+  - Every sim event and derived case asks the cue map first. A cue or a stated silence hushes the synth for that event.
+  - Menus click, move and go back.
+  - **Edge cues:** low health (a threshold), a car that notices the dummy, brake lights coming on, a part breaking, the intro loop's hit.
+  - The intro waits for a first press before it plays anything.
+  - Options: MUSIC, SOUND, MUTE, saved in the browser.
+- **Safety:** a failure inside the engine never stops the game. Its entry points are guarded.
+- **Frozen builds:** Prototype 8.4 rebuilt from the changed shared code draws the same 315 strings as the frozen build. `dummies_p8_4.html` is unchanged (md5 `9f5549201d88891f9f0b22c461602909`).
+
+## 5 The Sound Lab
+
+- **Effects:** all 107 entries, grouped, filtered and searchable.
+  - Each has the screenshot of its moment.
+  - Choose Cue, Silence, Prototype 8.4's synth, or the base cue.
+  - Edit the pool: add, remove, or "use only this", from the designer's alternates or all 100 files.
+  - Set the gain class, a fine dB offset and the cooldown.
+  - **▶ Play as in the game** applies the trim, the class, the pool and the jitter. **▶ Prototype 8.4's sound** plays the old synth for comparison.
+- **Music:**
+  - the six tracks;
+  - each screen's track;
+  - the rotation, drawn on the Story's 27 tiles and Arcade's runs;
+  - the mix: bus levels, crossfade, duck, gain classes.
+- **Sequences:** twelve timed moments over their music, among them a combo to the cap, a write-off, the drone drop, the river rescue and the finale.
+- **Tour:** the 44 steps of `tour_p9.js`, with the cues each fired.
+- **Library:** the pack by family, with each file's length, level and users.
+- **Picks:**
+  - **Play the game with these picks** opens Prototype 9 with them.
+  - **Export** gives JSON and a plain summary to send back.
+  - **Import** and **Reset** are beside it.
+
+## 6 Tests
+
+`cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84` → 33/33:
+
+- every file in the cue map loads (83);
+- nothing plays before the first press;
+- each screen of the tour plays its state's track: 14 checks, Story tiles 1 and 2 included;
+- every catalogued event and variant does what the map says (107);
+- START, cursor moves, the Arcade run's track, the pause duck;
+- Options shows MUSIC, SOUND and MUTE, and saves them;
+- the game takes the Lab's picks from `#audio=`;
+- no page or engine errors;
+- Prototype 8.4 is unchanged.
+
+## 7 Open
+
+- **D86:** the Credits card gains "Music by ansimuz" and "Sound effects by Chequered Ink". This widens Style Guide C1, so it needs Lawrence's ruling.
+- **Licence:** only the pack's credit lines were supplied, not its licence texts.
+- **Devices:** the MP3 fallback for Safari and iOS is untested on a device.
+- **Silenced by the agent:** the car edge cues (car-notice, car-brake). The Lab switches them on.
+
+## 8 Run it
+
+Needs Python 3.9+, Node 18+, Playwright with Chromium, `ffmpeg`, and [Claude Code](https://claude.com/claude-code) signed in, for the agent only.
+
+```
+python3 prototypes/p8/build.py                 # reproduces dummies_p8_4.html; do not commit a changed 8.4
+python3 audio/inventory.py                     # the pack → content/audio/inventory.json
+python3 audio/events.py                        # the code → content/audio/events.json
+python3 audio/loop.py                          # the agent → audio/runs/<id>/, content/audio/design.json
+python3 audio/loop.py --from content/audio/design.json   # incremental, after the catalogue changes
+python3 audio/integrate.py                     # → content/audio/cues.json, registry edit100
+python3 prototypes/p9/build.py                 # → prototypes/p9/dummies_p9.html
+cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../..
+python3 prototypes/p9/make_lab.py && python3 audio/make_gdd.py
+```
+
+Seeded from `lawrencelek/ELVTR-dummies-agent-crew@49f17d4` ([`SOURCE.md`](SOURCE.md)).

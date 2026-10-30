@@ -188,7 +188,7 @@
 
     // ---------- music: two players for the crossfade
     const oggOk = (() => { try { return !!document.createElement('audio').canPlayType('audio/ogg; codecs="vorbis"'); } catch (e) { return true; } })();
-    function trackUrl(n) { const t = CUES.music.tracks[n]; if (!t) return null; return base + (oggOk || !t.m4a ? t.file : t.m4a).split('/').map(encodeURIComponent).join('/'); }
+    function trackUrl(n) { const t = CUES.music.tracks[n]; if (!t) return null; return base + (oggOk || !t.mp3 ? t.file : t.mp3).split('/').map(encodeURIComponent).join('/'); }
     function player(i) {
       let p = A.music.players[i];
       if (p) return p;

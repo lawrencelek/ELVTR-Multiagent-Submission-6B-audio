@@ -105,7 +105,7 @@ def trims(prm):
             t = prm["audio.music.targetLufs"] - f["level"]
             t = max(-prm["audio.trim.maxBoostDb"], min(prm["audio.trim.maxBoostDb"], t))
             name = f["file"].split("/", 1)[1]
-            tracks[str(f["track"])] = {"file": f["file"], "m4a": "music/m4a/" + Path(name).with_suffix(".m4a").name, "title": f["title"],
+            tracks[str(f["track"])] = {"file": f["file"], "mp3": "music/mp3/" + Path(name).with_suffix(".mp3").name, "title": f["title"],
                                         "seconds": f["duration"], "level": f["level"], "trimDb": round(t, 1)}
     return out, tracks
 

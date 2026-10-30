@@ -8,7 +8,7 @@
 const fs = require('fs'), path = require('path'), http = require('http');
 const HERE = __dirname, ROOT = path.resolve(HERE, '..', '..');
 const HTML = path.resolve(process.argv[2] || path.join(HERE, 'dummies_p9.html')), OUT = path.resolve(process.argv[3] || path.join(HERE, 'shots'));
-const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json', '.wav': 'audio/wav', '.ogg': 'audio/ogg', '.m4a': 'audio/mp4', '.png': 'image/png', '.jpg': 'image/jpeg' };
+const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json', '.wav': 'audio/wav', '.ogg': 'audio/ogg', '.mp3': 'audio/mpeg', '.png': 'image/png', '.jpg': 'image/jpeg' };
 
 function serve() {
   return new Promise((ok) => {

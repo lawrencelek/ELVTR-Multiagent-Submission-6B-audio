@@ -50,7 +50,7 @@
   "tracks": {
    "1": {
     "file": "music/track1_ansimuz-itch-io_megabot.ogg",
-    "m4a": "music/m4a/track1_ansimuz-itch-io_megabot.m4a",
+    "mp3": "music/mp3/track1_ansimuz-itch-io_megabot.mp3",
     "title": "megabot",
     "seconds": 72.0,
     "level": -10.4,
@@ -58,7 +58,7 @@
    },
    "2": {
     "file": "music/track2_ansimuz-itch-io_summer-nights.ogg",
-    "m4a": "music/m4a/track2_ansimuz-itch-io_summer-nights.m4a",
+    "mp3": "music/mp3/track2_ansimuz-itch-io_summer-nights.mp3",
     "title": "summer nights",
     "seconds": 72.0,
     "level": -14.5,
@@ -66,7 +66,7 @@
    },
    "3": {
     "file": "music/track3_ansimuz-itch-io_chibi-robot-b.ogg",
-    "m4a": "music/m4a/track3_ansimuz-itch-io_chibi-robot-b.m4a",
+    "mp3": "music/mp3/track3_ansimuz-itch-io_chibi-robot-b.mp3",
     "title": "chibi robot b",
     "seconds": 123.429,
     "level": -11.3,
@@ -74,7 +74,7 @@
    },
    "4": {
     "file": "music/track4_ansimuz-itch-io_happywalking.ogg",
-    "m4a": "music/m4a/track4_ansimuz-itch-io_happywalking.m4a",
+    "mp3": "music/mp3/track4_ansimuz-itch-io_happywalking.mp3",
     "title": "happywalking",
     "seconds": 103.399,
     "level": -13.5,
@@ -82,7 +82,7 @@
    },
    "5": {
     "file": "music/track5_ansimuz-itch-io_dark-happy-world.ogg",
-    "m4a": "music/m4a/track5_ansimuz-itch-io_dark-happy-world.m4a",
+    "mp3": "music/mp3/track5_ansimuz-itch-io_dark-happy-world.mp3",
     "title": "dark happy world",
     "seconds": 96.0,
     "level": -9.1,
@@ -90,7 +90,7 @@
    },
    "6": {
     "file": "music/track6_ansimuz-itch-io_fantasy-dragon.ogg",
-    "m4a": "music/m4a/track6_ansimuz-itch-io_fantasy-dragon.m4a",
+    "mp3": "music/mp3/track6_ansimuz-itch-io_fantasy-dragon.mp3",
     "title": "fantasy Dragon",
     "seconds": 66.462,
     "level": -16.7,
