@@ -91,6 +91,13 @@ RULED = {  # Lawrence's rulings, 30 October 11:30: the IDs they fix (status user
 }
 
 
+def alts(x):
+    """The Lab's alternates: generated ones made for this event first (audio/tones.py, `alternateFor`; row 626), then the designer's."""
+    tones = json.loads(TONES.read_text(encoding="utf-8"))["tones"] if TONES.exists() else {}
+    gen = [t["file"] for t in tones.values() if t.get("alternateFor") == x["event"]]
+    return list(dict.fromkeys(f for f in gen + (x.get("alternates") or []) if f not in (x.get("files") or [])))
+
+
 def reg_entry(id_, label, unit, default, lo, hi, desc, purpose):
     return {"editable": True, "protectedReason": None, "integrationStatus": "prototype-p9", "boundaryStatus": "proposed-adapter-contract-not-implemented",
             "source": SRC, "status": "proposed", "applyAt": "next-run", "id": id_, "group": "Audio", "owner": "Audio", "label": label,
@@ -302,7 +309,7 @@ def main():
         dft = defaults(x["event"], e)
         gain, cd = x.get("gain") or dft["gain"], x.get("cooldown") or dft["cooldown"]
         c.update({"bus": x.get("bus") or dft["bus"], "gain": gain, "gainId": f"audio.sfx.gain.{gain}", "cooldown": cd,
-                  "cooldownId": f"audio.sfx.cooldown.{cd}", "alternates": x.get("alternates", []), "files": x.get("files") or [], "pick": x.get("pick", "random")})
+                  "cooldownId": f"audio.sfx.cooldown.{cd}", "alternates": alts(x), "files": x.get("files") or [], "pick": x.get("pick", "random")})
         if x.get("offsetDb"):
             c["offsetId"] = f"audio.sfx.offset.{x['event']}"
         sfx[x["event"]] = c

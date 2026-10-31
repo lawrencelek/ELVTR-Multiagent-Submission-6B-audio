@@ -87,6 +87,71 @@ NEW = {
     "chassis": [[T, 987.77, 1318.5, 0.07, 0.06, "sine", 0], [T, 1975.5, 2637, 0.045, 0.012, "sine", 0]],  # one soft rising blip
 }
 
+# Lawrence, 31 October 00:20 (DECISIONS row 626): "it sounds crunchy but it should sound 'whooshy' but quite short". Three
+# alternates for the dash, offered in the Sound Lab beside his pick. Air, not grit: noise through a band-pass whose centre
+# moves, with a swell rather than a hit (no transient), and nothing above ~9 kHz. Layers: [from Hz, peak Hz, to Hz, Q, gain];
+# the centre glides from → peak by `peakAt` of the length, then peak → to. `body`: a soft sine [from Hz, to Hz, gain] under it.
+WHOOSH = {
+    "lunge/whoosh-a": {"seconds": 0.16, "peakAt": 0.32, "layers": [[900, 2600, 3600, 1.4, 1.0]], "note": "swish: bright and quick"},
+    "lunge/whoosh-b": {"seconds": 0.20, "peakAt": 0.30, "layers": [[350, 800, 1100, 0.9, 1.0], [2200, 4800, 6500, 1.6, 0.5]],
+                       "body": [160, 80, 0.12], "note": "air dash: a fuller push with a little weight"},
+    "lunge/whoosh-c": {"seconds": 0.24, "peakAt": 0.40, "layers": [[500, 2600, 800, 2.2, 1.0]], "flutter": [28, 0.25],
+                       "note": "pass-by: up and away, a cloth flutter"},
+}
+
+
+def svf_band(x, fc, q):
+    """A band-pass (TPT state-variable filter) whose centre fc[i] and Q move per sample: smooth under modulation."""
+    y = np.zeros(len(x))
+    ic1 = ic2 = 0.0
+    for i in range(len(x)):
+        g = math.tan(math.pi * min(fc[i], RATE * 0.45) / RATE)
+        k = 1.0 / q[i]
+        a1 = 1.0 / (1.0 + g * (g + k))
+        v3 = x[i] - ic2
+        v1 = a1 * ic1 + g * a1 * v3
+        v2 = ic2 + g * v1
+        ic1, ic2 = 2 * v1 - ic1, 2 * v2 - ic2
+        y[i] = v1
+    return y
+
+
+def whoosh(spec, seed):
+    n = int(spec["seconds"] * RATE)
+    t = np.arange(n) / RATE
+    u = t / spec["seconds"]
+    pk = spec["peakAt"]
+    rise = np.sin(0.5 * np.pi * np.clip(u / pk, 0, 1)) ** 2                    # a swell, not a hit
+    fall = np.cos(0.5 * np.pi * np.clip((u - pk) / (1 - pk), 0, 1)) ** 1.6
+    env = np.where(u < pk, rise, fall)
+    rng = np.random.default_rng(seed)
+    out = np.zeros(n)
+    for j, (f0, fp, f1, q, gain) in enumerate(spec["layers"]):
+        noise = rng.standard_normal(n)
+        k1, k2 = np.clip(u / pk, 0, 1), np.clip((u - pk) / (1 - pk), 0, 1)
+        fc = np.where(u < pk, f0 * (fp / f0) ** k1, fp * (f1 / fp) ** k2)       # the centre moves: the air goes past
+        qv = q * (0.8 + 0.4 * env)                                               # narrower at the peak: a touch of pitch
+        band = svf_band(noise, fc, qv)
+        out += gain * band / (np.std(band) or 1.0)
+    if spec.get("body"):
+        f0, f1, g = spec["body"]
+        f = f0 * (f1 / f0) ** u
+        out += g * 3 * np.sin(2 * np.pi * np.cumsum(f) / RATE)
+    if spec.get("flutter"):
+        hz, depth = spec["flutter"]
+        out *= 1 - depth + depth * (0.5 + 0.5 * np.sin(2 * np.pi * hz * t))
+    out *= env
+    a = math.exp(-2 * math.pi * 9000 / RATE)                                     # nothing gritty above ~9 kHz
+    y = np.zeros(n); prev = 0.0
+    for i in range(n):
+        prev = (1 - a) * out[i] + a * prev
+        y[i] = prev
+    y -= np.mean(y)
+    edge = int(0.003 * RATE)
+    y[:edge] *= np.linspace(0, 1, edge); y[-edge:] *= np.linspace(1, 0, edge)
+    peak = np.max(np.abs(y)) or 1.0
+    return y * (10 ** (PEAK_DB / 20) / peak)
+
 
 def osc(kind, f0, f1, dur, wav, n, total):
     t = np.arange(total) / RATE
@@ -151,6 +216,13 @@ def main():
                 w.setnchannels(1); w.setsampwidth(2); w.setframerate(RATE)
                 w.writeframes((np.clip(y, -1, 1) * 32767).astype("<i2").tobytes())
             index[eid] = {"file": f.name, "source": src, "voices": voices, "seconds": round(len(y) / RATE, 3)}
+    for eid, spec in WHOOSH.items():  # alternates for an event, not its tone: tone_<event>_<name>.wav
+        y = whoosh(spec, seed=sum(map(ord, eid)))
+        f = OUT / name(eid.replace("/", "_"))
+        with wave.open(str(f), "wb") as w:
+            w.setnchannels(1); w.setsampwidth(2); w.setframerate(RATE)
+            w.writeframes((np.clip(y, -1, 1) * 32767).astype("<i2").tobytes())
+        index[eid] = {"file": f.name, "source": "Edit 100 (row 626)", "alternateFor": eid.split("/")[0], "whoosh": spec, "seconds": round(len(y) / RATE, 3)}
     INDEX.write_text(json.dumps({"generated_by": "audio/tones.py", "folder": "prototypes/p9/audio/tones/", "count": len(index), "tones": index},
                                 indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"{INDEX.relative_to(ROOT)}: {len(index)} tones ({sum(v['source'] == 'Edit 100' for v in index.values())} new)")

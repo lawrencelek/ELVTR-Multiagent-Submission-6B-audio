@@ -1,7 +1,7 @@
 {
  "generated_by": "audio/tones.py",
  "folder": "prototypes/p9/audio/tones/",
- "count": 66,
+ "count": 69,
  "tones": {
   "lunge": {
    "file": "tone_lunge.wav",
@@ -1571,6 +1571,82 @@
     ]
    ],
    "seconds": 0.15
+  },
+  "lunge/whoosh-a": {
+   "file": "tone_lunge_whoosh_a.wav",
+   "source": "Edit 100 (row 626)",
+   "alternateFor": "lunge",
+   "whoosh": {
+    "seconds": 0.16,
+    "peakAt": 0.32,
+    "layers": [
+     [
+      900,
+      2600,
+      3600,
+      1.4,
+      1.0
+     ]
+    ],
+    "note": "swish: bright and quick"
+   },
+   "seconds": 0.16
+  },
+  "lunge/whoosh-b": {
+   "file": "tone_lunge_whoosh_b.wav",
+   "source": "Edit 100 (row 626)",
+   "alternateFor": "lunge",
+   "whoosh": {
+    "seconds": 0.2,
+    "peakAt": 0.3,
+    "layers": [
+     [
+      350,
+      800,
+      1100,
+      0.9,
+      1.0
+     ],
+     [
+      2200,
+      4800,
+      6500,
+      1.6,
+      0.5
+     ]
+    ],
+    "body": [
+     160,
+     80,
+     0.12
+    ],
+    "note": "air dash: a fuller push with a little weight"
+   },
+   "seconds": 0.2
+  },
+  "lunge/whoosh-c": {
+   "file": "tone_lunge_whoosh_c.wav",
+   "source": "Edit 100 (row 626)",
+   "alternateFor": "lunge",
+   "whoosh": {
+    "seconds": 0.24,
+    "peakAt": 0.4,
+    "layers": [
+     [
+      500,
+      2600,
+      800,
+      2.2,
+      1.0
+     ]
+    ],
+    "flutter": [
+     28,
+     0.25
+    ],
+    "note": "pass-by: up and away, a cloth flutter"
+   },
+   "seconds": 0.24
   }
  }
 }
