@@ -262,7 +262,7 @@ Lawrence: "conduct an adversarial QA game agent who wants to break the game and 
 ## 7 Open
 
 - **Licence:** only the pack's credit lines were supplied, not its licence texts.
-- **Devices:** the MP3 fallback for Safari and iOS is untested on a device.
+- **Devices:** Safari and iOS play Ogg Vorbis from 18.4; older ones get each track's MP3 (`canPlayType`). Effects are WAV everywhere. Untested on a device.
 - **The lean jitter** (D88): leaning on a stopped car knocks ~16 times a second in the sim; only its sound is capped.
 - **Silenced:** 26 entries, among them brake lights coming on, car-notice and barks. The Lab switches any on.
 - **Generated music:** checked by numbers (loudness, spectrum, structure), not by ear. Swap any of the four in the Lab.

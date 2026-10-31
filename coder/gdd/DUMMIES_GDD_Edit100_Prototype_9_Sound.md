@@ -443,9 +443,8 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 
 - **The lean jitter** (D88): leaning on a stopped car starts a new contact every few frames, ~16 knocks a second. Row 624 caps the sound only.
 - **Generated music:** four tracks composed in code (`audio/music_gen.py`) to fill the pack's gaps. Heard here only as numbers: loudness, spectrum, structure. Lawrence's ear decides; the Sound Lab swaps any of them.
-- **Honk and cone hits:** the pack has no horn. Honks play Prototype 8.4's horn as generated tones; Lawrence set cone hits to their tone too (C2, user-decided).
 - **Tone fidelity:** a generated tone is one rendering. Prototype 8.4 scaled some of its sounds with the hit's force; the tones take the middle of each range.
 - **Silenced:** 26 entries (§3). Switch any on in the Sound Lab.
 - **Licence:** the pack's credit lines only. The licence texts were not supplied.
-- **Devices:** the MP3 fallback for Safari and iOS is untested on a device.
+- **Devices:** Safari and iOS play Ogg Vorbis from 18.4. Older ones get each track's MP3 (`canPlayType`). Effects are WAV everywhere. Untested on a device.
 - **Seam on odd servers:** a host that sends no file length gives the music no duration; the engine then takes the inventory's length for the fade out.
