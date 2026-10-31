@@ -12878,6 +12878,116 @@
    "source": "Edit 100 (P9): Lawrence, 31 October 16:40: 'cones also should be visible (like the dummy) under overpasses and the highway' (DECISIONS row 637)",
    "description": "1: a cone on the ground or in flight is drawn again as a checker of its own pixels after the decks and overpasses, as the dummy and cars are (the x-ray pass), so a cone under a highway reads. 0: Prototype 8.4: a cone under a deck is hidden. Prototype 9 sets 1",
    "purpose": "Cones under decks read (row 637)"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "status": "user-confirmed",
+   "type": "number",
+   "applyAt": "next-run",
+   "id": "arcade.modes",
+   "group": "Arcade",
+   "owner": "Systems design",
+   "label": "Arcade modes",
+   "unit": "flag",
+   "default": 0,
+   "validation": {
+    "min": 0,
+    "max": 1
+   },
+   "source": "Edit 100 (P9): Lawrence, 31 October 16:40–16:5x: Arcade unclear; his choice: two modes, Time trial (10 write-offs, fastest) and Endless (one target everywhere) (DECISIONS row 639)",
+   "description": "1: Arcade asks for a mode above the district list: Time trial (arcade.trial.writeOffs, fastest wins) or Endless (the grades, arcade.endless.gradeWriteOffs a grade in every district). The high scores keep a fastest table per district and for Story. 0: Prototype 8.2–8.4's district quotas. Prototype 9 sets 1",
+   "purpose": "A clear Arcade goal (row 639)"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "status": "user-confirmed",
+   "type": "number",
+   "applyAt": "next-run",
+   "id": "arcade.trial.writeOffs",
+   "group": "Arcade",
+   "owner": "Systems design",
+   "label": "Time trial target",
+   "unit": "count",
+   "default": 10,
+   "validation": {
+    "min": 1,
+    "max": 50
+   },
+   "source": "Edit 100 (P9): Lawrence, 31 October 16:40–16:5x: Arcade unclear; his choice: two modes, Time trial (10 write-offs, fastest) and Endless (one target everywhere) (DECISIONS row 639)",
+   "description": "Time trial: the write-offs to finish. The clock runs in play only (not the card, report, workshop or pause); the cars running out first ends it Failed test",
+   "purpose": "Lawrence: 'time trial, like 10 write offs' (row 639)"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "status": "user-confirmed",
+   "type": "number",
+   "applyAt": "next-run",
+   "id": "arcade.endless.gradeWriteOffs",
+   "group": "Arcade",
+   "owner": "Systems design",
+   "label": "Endless grade target",
+   "unit": "count",
+   "default": 3,
+   "validation": {
+    "min": 1,
+    "max": 20
+   },
+   "source": "Edit 100 (P9): Lawrence, 31 October 16:40–16:5x: Arcade unclear; his choice: two modes, Time trial (10 write-offs, fastest) and Endless (one target everywhere) (DECISIONS row 639)",
+   "description": "Endless: write-offs per grade, the same in every district (replaces world.district.<id>.quota in Arcade)",
+   "purpose": "Lawrence: 'each zone should have the same write-off requirement' (row 639)"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "status": "user-confirmed",
+   "type": "number",
+   "applyAt": "next-run",
+   "id": "ui.exploreArrows",
+   "group": "UI",
+   "owner": "UX",
+   "label": "Exploration arrows",
+   "unit": "flag",
+   "default": 0,
+   "validation": {
+    "min": 0,
+    "max": 1
+   },
+   "source": "Edit 100 (P9): Lawrence, 31 October 16:40: 'in arcade mode, how can it be clear that you can explore the city? ... maybe the map has arrows that show where you can move to next?' (DECISIONS row 642)",
+   "description": "1: in Arcade, chevrons at each open stretch of the screen's edge point to the next screen, and the district map marks the screens next door you can walk to. Prototype 9 sets 1",
+   "purpose": "Exploring the district reads (row 642)"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "source": "Edit 100 (P9): Lawrence's ruling, 30 October 11:30 (DECISIONS row 643)",
+   "status": "user-confirmed",
+   "applyAt": "next-run",
+   "id": "audio.music.trackPerUpgrade",
+   "group": "Audio",
+   "owner": "Audio",
+   "label": "Track per upgrade",
+   "unit": "flag",
+   "type": "number",
+   "default": 1,
+   "validation": {
+    "min": 0,
+    "max": 1
+   },
+   "description": "1: each part fitted (a purchase in the workshop, a part by drone) moves the level music to the rotation's next track, until the next card. 0: the track holds from card to card (row 611)",
+   "purpose": "Lawrence: 'the music should change with each upgrade you get' (row 643)"
   }
  ],
  "tables": {

@@ -65,7 +65,8 @@
   "audio.sfx.spentRepeatSeconds": 2,
   "audio.sfx.dashDamagedAt": 0.45,
   "audio.sfx.dashWreckedAt": 0.7,
-  "audio.music.track.cleared": 11
+  "audio.music.track.cleared": 11,
+  "audio.music.trackPerUpgrade": 1
  },
  "music": {
   "tracks": {

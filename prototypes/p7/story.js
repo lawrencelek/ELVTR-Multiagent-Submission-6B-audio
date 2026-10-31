@@ -428,9 +428,20 @@
       const cy = Object.assign({}, carry || {}); cy.owned = Object.assign({ battery1: true }, cy.owned);
       super(id, Object.assign({}, P7SIM, SIM8, overrides || {}), cy, Object.assign({ single: true }, opts || {}));
       if (this.P['arcade.grades']) { this.health0 = this.P['damage.bodyHealth']; this.grade = 1; }
+      this.mode = (opts && opts.mode) || null; this.applyMode(); // Edit 100 (P9, row 639): Time trial or Endless
       if (this.P['ui.levelCard']) this.phase = 'brief'; // Edit 98 (P8.3): the level card first; then the drone drop
     }
-    continueBrief() { if (this.phase !== 'brief') return; this.phase = 'play'; if (this.P['world.droneDropIn']) startDropIn(this); }
+    // Edit 100 (P9, row 639; Lawrence, 31 October): two Arcade modes. Time trial: write off arcade.trial.writeOffs bodies; the clock
+    // (play only: not the card, the report, the workshop or pause) is the score; no grades. Endless: the grades, every district at
+    // arcade.endless.gradeWriteOffs a grade. No mode: Prototype 8.2–8.4's district quotas
+    applyMode() {
+      const P = this.P;
+      if (this.mode === 'trial') { this.quota = P['arcade.trial.writeOffs']; this.grade = 0; }
+      else if (this.mode === 'endless' && P['arcade.endless.gradeWriteOffs']) this.quota = P['arcade.endless.gradeWriteOffs'];
+    }
+    reset() { super.reset(); if (this.mode !== undefined) this.applyMode(); }
+    trialTime() { return this.trialT0 == null ? 0 : (this.run.ending && this.run.ending.trial != null ? this.run.ending.trial : this.t - this.trialT0); }
+    continueBrief() { if (this.phase !== 'brief') return; this.phase = 'play'; if (this.mode === 'trial' && this.trialT0 == null) this.trialT0 = this.t; if (this.P['world.droneDropIn']) startDropIn(this); }
     step(cmd) { if (this.phase === 'brief') return; super.step(cmd); }
     stepRescue(dt) { if (this.rescue && this.rescue.dropIn) return stepDropIn(this, dt); return super.stepRescue(dt); }
     gradeOf(n) { return Math.min(this.P['arcade.grade.max'], 1 + Math.floor(n / Math.max(1, this.quota))); }
@@ -442,6 +453,19 @@
     }
     checkTerminal() {
       const P = this.P, r = this.run;
+      if (this.mode === 'trial') { // row 639: the clock stops at the last write-off; the cars running out first fails it
+        if (r.ending) return;
+        this.slot = this.W6.admitted;
+        if (r.writeOffs >= this.quota) { const t = +(this.t - (this.trialT0 == null ? this.t : this.trialT0)).toFixed(2); this.end('Licensed'); r.ending.trial = t; return; }
+        if (this.slot >= this.schedule.length && this.allCars().every((c) => c.spent || c.deck)) return this.end('Failed test');
+        if (!this.body.alive && !this.body.reported) {
+          const b = this.body; b.reported = true; r.credits += P['economy.creditsPerWriteOff'];
+          this.report = { chassis: b.chassis, hits: b.hits.slice(), points: Math.round(r.points - b.points0), credits: r.credits, roadCleared: false, nextRoad: null };
+          this.emit('credit', { credits: r.credits });
+          this.phase = 'writeoff'; this.phaseT = P['feedback.writeOffSeconds']; this.pendingPhase = 'report';
+        }
+        return;
+      }
       if (!P['arcade.grades']) return super.checkTerminal();
       if (r.ending) return;
       this.slot = this.W6.admitted;

@@ -360,10 +360,20 @@
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3,
+    "track": 4,
     "duck": 1
    },
    "cues": [
+    {
+     "kind": "upgrade",
+     "id": "track4",
+     "file": null
+    },
+    {
+     "kind": "music",
+     "id": "track4",
+     "file": "music/track4_ansimuz-itch-io_happywalking.ogg"
+    },
     {
      "kind": "sfx",
      "id": "denied",
@@ -379,7 +389,7 @@
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3,
+    "track": 4,
     "duck": 1
    },
    "cues": [
@@ -398,7 +408,7 @@
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3,
+    "track": 4,
     "duck": 1
    },
    "cues": [
@@ -417,7 +427,7 @@
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3,
+    "track": 4,
     "duck": 1
    },
    "cues": [
@@ -441,7 +451,7 @@
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3,
+    "track": 4,
     "duck": 1
    },
    "cues": [
@@ -465,7 +475,7 @@
    "phase": "writeoff",
    "music": {
     "state": "level",
-    "track": 3,
+    "track": 4,
     "duck": 0.5
    },
    "cues": [
@@ -489,7 +499,7 @@
    "phase": "report",
    "music": {
     "state": "level",
-    "track": 3,
+    "track": 4,
     "duck": 0.7
    },
    "cues": []
@@ -502,7 +512,7 @@
    "phase": "shop",
    "music": {
     "state": "level",
-    "track": 3,
+    "track": 4,
     "duck": 0.7
    },
    "cues": [
@@ -526,7 +536,7 @@
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3,
+    "track": 4,
     "duck": 1
    },
    "cues": [
@@ -550,7 +560,7 @@
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3,
+    "track": 4,
     "duck": 0.35
    },
    "cues": [
@@ -579,7 +589,7 @@
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3,
+    "track": 4,
     "duck": 0.35
    },
    "cues": [
@@ -613,7 +623,7 @@
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3,
+    "track": 4,
     "duck": 0.35
    },
    "cues": [
@@ -637,7 +647,7 @@
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3,
+    "track": 4,
     "duck": 1
    },
    "cues": [
@@ -931,10 +941,20 @@
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3,
+    "track": 4,
     "duck": 1
    },
    "cues": [
+    {
+     "kind": "upgrade",
+     "id": "track4",
+     "file": null
+    },
+    {
+     "kind": "music",
+     "id": "track4",
+     "file": "music/track4_ansimuz-itch-io_happywalking.ogg"
+    },
     {
      "kind": "sfx",
      "id": "lunge",
@@ -942,8 +962,13 @@
     },
     {
      "kind": "sfx",
-     "id": "near-miss",
-     "file": "tone_near_miss.wav"
+     "id": "knock",
+     "file": "tone_knock.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "impact",
+     "file": "tone_impact.wav"
     }
    ]
   },
@@ -955,7 +980,7 @@
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3,
+    "track": 4,
     "duck": 1
    },
    "cues": [
@@ -963,11 +988,6 @@
      "kind": "sfx",
      "id": "jump",
      "file": "jump_1.wav"
-    },
-    {
-     "kind": "sfx",
-     "id": "near-miss",
-     "file": "tone_near_miss.wav"
     }
    ]
   },
@@ -979,7 +999,7 @@
    "phase": "play",
    "music": {
     "state": "level",
-    "track": 3,
+    "track": 4,
     "duck": 1
    },
    "cues": [
@@ -1048,13 +1068,13 @@
    "cues": [
     {
      "kind": "sfx",
-     "id": "near-miss",
-     "file": "tone_near_miss.wav"
+     "id": "gift",
+     "file": "powerup_5.wav"
     },
     {
      "kind": "sfx",
-     "id": "gift",
-     "file": "powerup_5.wav"
+     "id": "near-miss",
+     "file": "tone_near_miss.wav"
     }
    ]
   },
@@ -1118,11 +1138,6 @@
      "kind": "sfx",
      "id": "story-ferry",
      "file": "ufo.wav"
-    },
-    {
-     "kind": "sfx",
-     "id": "near-miss",
-     "file": "tone_near_miss.wav"
     }
    ]
   },
@@ -1322,7 +1337,7 @@
  },
  "errors": [],
  "audio": {
-  "log": 126,
+  "log": 129,
   "settings": {
    "master": 9,
    "music": 8,

@@ -66,6 +66,7 @@ PARAMS = [  # id, label, unit, default, min, max, description, purpose
     ("audio.music.track.failed", "Failed test track", "track", 2, 0, 10, "Track when a run ends Failed test", "Lawrence: its own track (row 619)"),
     ("audio.music.track.noncompliant", "Non-compliant track", "track", 2, 0, 10, "Track when a run ends Non-compliant (a refusal)", "Lawrence: its own track (row 619)"),
     ("audio.music.track.cleared", "Tile cleared track", "track", 11, 0, 11, "Track from a Story tile's clear to the next card: the write-off, the report, the ferry, the gift screen. Not ducked by them; pause ducks it", "Lawrence: 'Tile Cleared' music once a tile is cleared (row 631)"),
+    ("audio.music.trackPerUpgrade", "Track per upgrade", "flag", 1, 0, 1, "1: each part fitted (a purchase in the workshop, a part by drone) moves the level music to the rotation's next track, until the next card. 0: the track holds from card to card (row 611)", "Lawrence: 'the music should change with each upgrade you get' (row 643)"),
     ("audio.music.track.finale", "Finale track", "track", 1, 0, 10, "Track for the unveiling and the voyage", "Q4"),
     ("audio.music.track.certified", "At the ship track", "track", 1, 0, 10, "Track from the set-down at the ship: CERTIFIED", "Lawrence: one for the end at the ship (row 619)"),
     ("audio.music.levelRotation", "Level rotation", "digits", 3456, 0, 66666666, "Level tracks in order, one digit each. Story: the tile n a level card announces plays digit ((n − 1) mod count) + 1, until the next card. Arcade: the session's level n does", "Request: Tracks 3–6 alternate between levels and maps; Lawrence, Q3 (row 611)"),
@@ -91,7 +92,7 @@ RULED = {  # Lawrence's rulings, 30 October 11:30: the IDs they fix (status user
     "audio.music.track.intro": 617, "audio.music.fadeInSeconds": 609, "audio.music.fadeOutSeconds": 609, "audio.music.track.card": 610,
     "audio.music.levelRotation": 611, "audio.music.pauseDuck": 612, "audio.music.screenDuck": 612, "audio.music.track.credits": 612,
     "audio.music.track.finale": 612, "audio.music.writeoffDuck": 613, "audio.sfx.cooldown.bark": 614,
-    "audio.sfx.honkMaxPerCar": 623, "audio.sfx.dashDamagedAt": 629, "audio.sfx.dashWreckedAt": 629, "audio.music.track.cleared": 631, "audio.sfx.spentRepeatMax": 624, "audio.sfx.spentRepeatSeconds": 624,
+    "audio.sfx.honkMaxPerCar": 623, "audio.sfx.dashDamagedAt": 629, "audio.sfx.dashWreckedAt": 629, "audio.music.track.cleared": 631, "audio.music.trackPerUpgrade": 643, "audio.sfx.spentRepeatMax": 624, "audio.sfx.spentRepeatSeconds": 624,
     "audio.music.track.licensed": 619, "audio.music.track.failed": 619, "audio.music.track.noncompliant": 619, "audio.music.track.certified": 619,
 }
 

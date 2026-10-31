@@ -50,6 +50,7 @@
     shopCol: 0, shopRow: 0, endSel: 0, tune: {}, lastEv: 0, toast: null, realT: 0, sound: true, tuned: false,
     device: 'keys', padCmd: null, layoutY: null, showJumpable: false, // Edit 75: the device last used; pad setup; touch zones; the jumpable outline
     mode: 'arcade', titleSel: 0, story: null, mapSel: null, // Edit 81: the game mode; the title's row; story progress; the story map's cursor
+    arcadeMode: 'trial', arcOnMode: false, scoreBy: 'points', // Edit 100 (P9, row 639): Arcade's mode, the select's mode row; the high scores by points or time
     slot: 0, saveSel: 0, slotAct: 0, saveMode: null, saveConfirm: null, nameEntry: null, // Edit 88: the slot in play; the save screen's row, action, mode, confirm; the name entry
   };
   // Edit 89 (P7.8): every menu answers a tap (touch) or a click (mouse). Each frame, the screens drawn list their targets here,
@@ -98,7 +99,8 @@
   // text is the fallback given here, as before.
   const LORE = window.DUMMIES_LORE || null, CREDITS = window.DUMMIES_CREDITS || null;
   const LT = (id, fallback, vars) => fillIn(LORE && LORE.notices && LORE.notices[id] != null ? LORE.notices[id] : fallback, vars);
-  const SIM8 = window.DUMMIES_SIM || null, HS = SIM8 && SIM8['highscore.tableSize'] ? SIM8['highscore.tableSize'] : 0; // Edit 97 (P8.2): Prototype 8.2's values; the high scores
+  const SIM8 = window.DUMMIES_SIM || null, HS = SIM8 && SIM8['highscore.tableSize'] ? SIM8['highscore.tableSize'] : 0;
+  const MODES = !!(SIM8 && SIM8['arcade.modes']), pvs = (k) => (SIM8 && SIM8[k] != null ? SIM8[k] : pv(k)); // Edit 100 (P9, row 639): Arcade's two modes // Edit 97 (P8.2): Prototype 8.2's values; the high scores
   const INTRO = !!(SIM8 && SIM8['ui.introScreen']), CARD = !!(SIM8 && SIM8['ui.levelCard']), SPLASH = !!(SIM8 && SIM8['ui.storySplash']); // Edit 98 (P8.3)
   if (INTRO) { app.screen = 'intro'; app.introT0 = 0; }
   // Edit 100 (P9): the audio engine (prototypes/p9/audio.js), only when window.DUMMIES_SIM['audio.enabled'] is 1: cues for sim
@@ -171,7 +173,7 @@
     const nL = ((window.DISTRICT_DB || {}).districts || {})[LEVEL_LIST[i]], nLay = nL && nL.length ? nL.length : 1;
     const layout = app.tune['proto.layout'] != null ? app.tune['proto.layout'] : 1 + Math.floor(Math.random() * nLay);
     app.sim = W6 && app.mode === 'story' && STORY ? new STORY.StorySim(LEVEL_LIST[i], Object.assign({ 'proto.difficulty': app.difficulty }, app.tune, FIELD), app.story) // Edit 81: the district's tile in test
-      : W6 && STORY ? new STORY.ArcadeSim(LEVEL_LIST[i], Object.assign({ 'proto.difficulty': app.difficulty }, app.tune, FIELD), carry) // Edit 81: Arcade plays one district a run; Edit 84: its verbs come by drone
+      : W6 && STORY ? new STORY.ArcadeSim(LEVEL_LIST[i], Object.assign({ 'proto.difficulty': app.difficulty }, app.tune, FIELD), carry, MODES ? { mode: app.arcadeMode } : undefined) // Edit 81: Arcade plays one district a run; Edit 84: its verbs come by drone. Edit 100 (row 639): Time trial or Endless
       : W6 ? new W6.Sim6(LEVEL_LIST[i], Object.assign({ 'proto.difficulty': app.difficulty }, app.tune, FIELD), carry)
       : new Sim(LEVEL_LIST[i], Object.assign({ 'proto.difficulty': app.difficulty, 'proto.layout': layout }, app.tune, FIELD), carry);
     app.tuned = Object.keys(app.tune).length > 0;
@@ -1076,6 +1078,14 @@
       }
       if (app.screen === (STORY ? 'arcade' : 'title')) {
         if (m === 'back' && STORY) { app.screen = 'title'; continue; }
+        if (MODES && app.arcOnMode) { // Edit 100 (row 639): the mode row: left and right pick; down to the districts
+          if (m === 'left' || m === 'right') app.arcadeMode = app.arcadeMode === 'trial' ? 'endless' : 'trial';
+          else if (m === 'down') { app.arcOnMode = false; app.level = 0; }
+          else if (m === 'up') { app.arcOnMode = false; app.level = LEVEL_LIST.length - 1; }
+          else if (m === 'ok') { startLevel(app.level); return; }
+          continue;
+        }
+        if (MODES && ((m === 'up' && app.level === 0) || (m === 'down' && app.level === LEVEL_LIST.length - 1))) { app.arcOnMode = true; continue; }
         if (m === 'up') app.level = (app.level + LEVEL_LIST.length - 1) % LEVEL_LIST.length;
         else if (m === 'down') app.level = (app.level + 1) % LEVEL_LIST.length;
         else if (m === 'left') app.difficulty = Math.max(0, app.difficulty - 1);
@@ -1939,6 +1949,7 @@
     });
     { const dm = sc.dummyMonument, up = dm && dm.shroud ? shroudLift(s) : null; if (up != null) { PIX.blit(FB, dm.shroud, dm.x, dm.y - up); if (up > 0) drawDrone(s, { x: dm.x * U, y: (dm.y - dm.shroud.oy - up - 2) * U, alt: 0, state: 'lift' }); } } // Edit 94 (P7.13): the circus's monument, shrouded until B2 clears; manual review: a drone lifts the cloth away at the unveiling
     drawStoryFence(s); // Edit 81: a tile in test is fenced
+    drawExits(s); // Edit 100 (row 642): Arcade, the way on
     for (const c of cars) { ghost(carArt(s, c), c.x / U, c.y / U - (c._lift || 0)); relight(c); } // x-ray: a checker of each actor's own pixels, so an occluded car or dummy still reads
     if (b.alive && b._spr) ghost(b._spr, b._sx, b._sy);
     if (s.P['ui.conesXray']) for (const cn of s.cones) if (cn.state === 'free' || cn.state === 'flight') ghost(PIX.CONE, cn.x / U, (cn.y - coneLift(cn) * 1.2) / U); // Edit 100 (row 637): a cone under a deck or an overpass reads, as the dummy does
@@ -2105,6 +2116,7 @@
     }
     if (s.isCity && s.quota) {
       const rs = s.rescue; if (rs && (rs.gift || rs.given)) return [LT('n06', 'FARSIGHT DRONE'), 'Delivering ' + NODE(rs.gift || rs.given).name + '.']; // Edit 84
+      if (s.mode === 'trial') return ['TIME TRIAL · ' + INFO(s.levelId).name.toUpperCase(), 'Write off ' + s.quota + ' bodies (' + Math.min(s.run.writeOffs, s.quota) + ' of ' + s.quota + ') · ' + fmtClock(s.trialTime()) + (hsBestT(s.levelId) != null ? ' · best ' + fmtClock(hsBestT(s.levelId)) : '')]; // Edit 100 (row 639)
       let line = 'Write off ' + s.quota + ' bodies (' + s.run.writeOffs + ' of ' + s.quota + ').';
       if (s.grade) line = s.grade >= s.P['arcade.grade.max'] ? 'Grade ' + s.grade + ', the top grade: write off all you can.' // Edit 97 (P8.2): the grades
         : 'Grade ' + s.grade + ': write off ' + s.quota + ' bodies for grade ' + (s.grade + 1) + ' (' + (s.run.writeOffs - (s.grade - 1) * s.quota) + ' of ' + s.quota + ').';
@@ -2371,8 +2383,44 @@
       if (!sm || (cur && st !== 'active')) { rr(x, y, cw, ch, 5); ctx.strokeStyle = cur ? FT.accent : FT.itemEdge; ctx.lineWidth = cur ? 3 : 1;
         if (cur && FT.neon) { ctx.save(); ctx.shadowColor = FT.accent; ctx.shadowBlur = 8; ctx.stroke(); ctx.restore(); } else ctx.stroke(); }
     }
+    if (s.P['ui.exploreArrows'] && !sm) { // Edit 100 (row 642): the screens next door you can walk to, marked on the map
+      const ex = exitsOf(s), pulse = 0.55 + 0.45 * Math.sin(app.realT * 5), cx0 = gx + D.cur[0] * (cw + g), cy0 = gy + D.cur[1] * (ch + g);
+      ctx.save(); ctx.globalAlpha = pulse; ctx.fillStyle = C.dummy;
+      const tri = (x, y, dx, dy) => { const k = 6; ctx.beginPath(); ctx.moveTo(x + dx * k, y + dy * k); ctx.lineTo(x - dy * k * 0.8, y + dx * k * 0.8); ctx.lineTo(x + dy * k * 0.8, y - dx * k * 0.8); ctx.closePath(); ctx.fill(); };
+      for (const v of ex.N) tri(cx0 + v / Wd * cw, cy0 - 2, 0, -1);
+      for (const v of ex.S) tri(cx0 + v / Wd * cw, cy0 + ch + 2, 0, 1);
+      for (const v of ex.W) tri(cx0 - 2, cy0 + v / Hd * ch, -1, 0);
+      for (const v of ex.E) tri(cx0 + cw + 2, cy0 + v / Hd * ch, 1, 0);
+      ctx.restore();
+    }
     const b = s.body; // Edit 83: the objective sits on the bottom line; the live tile's yellow ring marks its fences
     if (b.alive) { const x = gx + D.cur[0] * (cw + g) + clamp(b.x / Wd, 0, 1) * cw, y = gy + D.cur[1] * (ch + g) + clamp(b.y / Hd, 0, 1) * ch; ctx.beginPath(); ctx.arc(x, y, 5, 0, TAU); ctx.fillStyle = C.dummy; ctx.fill(); ctx.strokeStyle = C.joints; ctx.lineWidth = 2; ctx.stroke(); }
+  }
+  // Edit 100 (P9, row 642; Lawrence: 'how can it be clear that you can explore the city?'): the open stretches of each screen edge,
+  // where the dummy can walk on to the next screen (sim edgeOpen), each marked at its middle. Cached per screen
+  function exitsOf(s) {
+    const key = s.levelId + ':' + (s.screenName ? s.screenName() : '') + ':' + (s.level && s.level.key);
+    if (fx.exits && fx.exits.key === key) return fx.exits;
+    const P = s.P, Wd = P['world.width'], Hd = P['world.height'], r = P['body.radius'], out = { key, N: [], S: [], E: [], W: [] };
+    for (const sd of ['N', 'S', 'E', 'W']) {
+      const len = sd === 'N' || sd === 'S' ? Wd : Hd; let run = null;
+      for (let v = r + 2; v <= len - r - 2; v += 8) {
+        let open = false; try { open = !!s.edgeOpen(sd, v); } catch (e) { open = false; }
+        if (open) { if (!run) run = [v, v]; else run[1] = v; }
+        if ((!open || v + 8 > len - r - 2) && run) { if (run[1] - run[0] >= 16) out[sd].push((run[0] + run[1]) / 2); run = null; }
+      }
+    }
+    fx.exits = out; return out;
+  }
+  function drawExits(s) { // chevrons at the open edges, pulsing, in the field's own pixels
+    if (!s.P['ui.exploreArrows'] || s.storyMode || app.mode === 'story' || !s.district) return;
+    const P = s.P, Wd = P['world.width'] / U, Hd = P['world.height'] / U, ex = exitsOf(s), a = 0.45 + 0.4 * Math.sin(app.realT * 5);
+    const chev = (x, y, dx, dy) => { for (let k = 0; k < 2; k++) for (let i = -4; i <= 4; i++) { const back = Math.abs(i) * 0.9, px = x + dx * (k * 4 - back) + dy * i, py = y + dy * (k * 4 - back) + dx * i;
+      FB.mix(Math.round(px), Math.round(py), K.white, a); FB.mix(Math.round(px + dx), Math.round(py + dy), K.white, a * 0.6); } };
+    for (const v of ex.N) chev(v / U, 9, 0, -1);
+    for (const v of ex.S) chev(v / U, Hd - 10, 0, 1);
+    for (const v of ex.W) chev(9, v / U, -1, 0);
+    for (const v of ex.E) chev(Wd - 10, v / U, 1, 0);
   }
   // Right: the chassis. Each part shows the damage it took (sim: impact.part, body.parts); installed modules glow aqua.
   const PART_NAME = { head: 'HEAD', torso: 'TORSO', armL: 'L ARM', armR: 'R ARM', legL: 'L LEG', legR: 'R LEG' };
@@ -2486,13 +2534,23 @@
     const TT = CTM && CTM.title, tv = { roads: LEVEL_LIST.length, q1: quotaOf(LEVEL_LIST[0]), q2: quotaOf(LEVEL_LIST[1]), q3: quotaOf(LEVEL_LIST[2]) };
     txt('DUMMIES', x + 30, y + 76, '900 64px ' + F_BRAND, FT.text);
     wrapText(TT && TT.lines ? fillIn(TT.lines[0], tv) : LT('n01', 'You are a FARSIGHT crash-test subject. Cars avoid you. Fool them into hitting you.'), x + 32, y + 116, w - 64, 30, fTxt, FT.dim, 2);
+    const dy0 = MODES ? 56 : 0; // Edit 100 (row 639): the mode row, then the districts
+    if (MODES) {
+      const my = y + 152, mw = (w - 56 - 12) / 2;
+      [['trial', 'TIME TRIAL', 'FASTEST ' + pvs('arcade.trial.writeOffs')], ['endless', 'ENDLESS', 'BEST POINTS']].forEach(([k, name, sub], i) => {
+        const mx = x + 28 + i * (mw + 12), on = app.arcadeMode === k, foc = on && app.arcOnMode;
+        hitbox(mx, my, mw, 44, 'arcmode:' + k, () => { app.arcadeMode = k; app.arcOnMode = true; });
+        rr(mx, my, mw, 44, 10); ctx.fillStyle = foc ? FT.sel : on ? FT.item : FT.track; ctx.fill(); ctx.strokeStyle = on ? FT.accent : FT.itemEdge; ctx.lineWidth = on ? 2.5 : 1; ctx.stroke();
+        txt(name, mx + 16, my + 29, fLab, foc ? FT.selText : on ? FT.text : FT.dim); txt(sub, mx + mw - 14, my + 28, '700 14px ' + F_UI, foc ? FT.selText : FT.dim, 'right');
+      });
+    }
     LEVEL_LIST.forEach((id, i) => { // Edit 41: five districts, in order (P6: three)
-      const yy = y + 160 + i * 46, on = i === app.level, q = quotaOf(id);
+      const yy = y + 160 + dy0 + i * 46, on = i === app.level && !(MODES && app.arcOnMode), q = MODES ? (app.arcadeMode === 'trial' ? pvs('arcade.trial.writeOffs') : pvs('arcade.endless.gradeWriteOffs')) : quotaOf(id);
       hitbox(x + 28, yy, w - 56, 40, 'district:' + id, () => { if (app.level === i) menuQ.push('ok'); else app.level = i; }); // Edit 89: tap to choose; tap again to start
       rr(x + 28, yy, w - 56, 40, 10); ctx.fillStyle = on ? FT.sel : FT.item; ctx.fill();
       ctx.strokeStyle = on ? FT.accent : FT.itemEdge; ctx.lineWidth = 1.5; ctx.stroke();
       txt((i + 1) + '  ' + INFO(id).name, x + 48, yy + 30, fLab, on ? FT.selText : FT.text);
-      txt(q + ' WRITE-OFF' + (q === 1 ? '' : 'S'), x + w - 48, yy + 28, fLab, on ? FT.selText : FT.dim, 'right');
+      txt(MODES ? (app.arcadeMode === 'trial' ? q + ' WRITE-OFFS · ' + hsBest(id) : q + ' A GRADE · ' + hsBest(id)) : q + ' WRITE-OFF' + (q === 1 ? '' : 'S'), x + w - 48, yy + 28, fLab, on ? FT.selText : FT.dim, 'right');
     });
     const dname = DIFFICULTIES[app.difficulty].name.toUpperCase(), dt = '◀  ' + dname + ' · ' + difficultyHealth(app.difficulty) + ' HEALTH  ▶';
     ctx.font = fKey; const dw = ctx.measureText(dt).width + 36;
@@ -3488,11 +3546,14 @@
   function hsName() { let n = hsNameMem; try { n = localStorage.getItem(HS_NAME_KEY) || n; } catch (e) { /* storage off */ } return n || HS_DEFAULT; }
   function hsSetName(n) { hsNameMem = n; try { localStorage.setItem(HS_NAME_KEY, n); } catch (e) { /* storage off */ } }
   function hsTables() { return LEVEL_LIST.map((id) => ({ key: 'arcade:' + id, name: INFO(id).name.toUpperCase(), arcade: true })).concat(STORY ? [{ key: 'story', name: 'STORY', arcade: false }] : []); }
-  function hsTabOf(key) { return Math.max(0, hsTables().findIndex((t) => t.key === key)); }
+  function hsTabOf(key) { app.scoreBy = /:time$/.test(key || '') ? 'time' : 'points'; const k = String(key || '').replace(/:time$/, ''); return Math.max(0, hsTables().findIndex((t) => t.key === k)); } // Edit 100: a :time table opens on FASTEST
+  function hsBestT(id) { const t = (hsRead().tables['arcade:' + id + ':time'] || [])[0]; return t ? t.t : null; } // Edit 100 (row 639): the district's fastest trial
+  function hsBest(id) { if (app.arcadeMode === 'trial') { const t = hsBestT(id); return t != null ? 'BEST ' + fmtClock(t) : 'NO TIME YET'; } const q = (hsRead().tables['arcade:' + id] || [])[0]; return q ? 'BEST ' + num(q.points) : 'NO SCORE YET'; }
+  function fmtClock(t) { const m = Math.floor(t / 60), sec = t - m * 60; return m + ':' + (sec < 10 ? '0' : '') + sec.toFixed(1); }
   function hsTableName(key) { const t = hsTables().find((q) => q.key === key); return t ? t.name : ''; }
   function hsEntry(L) { const t = (hsRead().tables[L.key] || []); return t.find((q) => q.at === L.at) || { name: '' }; }
   function hsAdd(key, entry) { // the entry's rank, 1 to highscore.tableSize; 0 when it misses the table
-    const v = hsRead(), t = (v.tables[key] || []).concat([entry]).sort((a, b) => b.points - a.points || a.at - b.at).slice(0, HS);
+    const byT = /:time$/.test(key), v = hsRead(), t = (v.tables[key] || []).concat([entry]).sort((a, b) => (byT ? a.t - b.t : b.points - a.points) || a.at - b.at).slice(0, HS); // Edit 100 (row 640): a :time table, fastest first
     v.tables[key] = t; hsWrite(v); return t.indexOf(entry) + 1;
   }
   function hsRename(L, name) { if (!L || !L.rank) return; const v = hsRead(), q = (v.tables[L.key] || []).find((e) => e.at === L.at); if (q) { q.name = name; hsWrite(v); } }
@@ -3502,8 +3563,11 @@
     if (s.storyMode) {
       if (kind !== 'Certified') return;
       const sv = app.slot && allSlots()[app.slot - 1], e = { name: sv ? sv.name : hsName(), points: en.points, chassis: (s.story && s.story.chassis) || 0, t: en.t, at: Date.now() };
-      app.hsLast = { key: 'story', at: e.at, rank: hsAdd('story', e) }; return;
+      app.hsLast = { key: 'story', at: e.at, rank: hsAdd('story', e) };
+      if (MODES) { const e2 = Object.assign({}, e, { at: e.at + 1 }), r2 = hsAdd('story:time', e2); if (r2 && (!app.hsLast.rank || r2 < app.hsLast.rank)) app.hsLast = { key: 'story:time', at: e2.at, rank: r2 }; } // Edit 100 (row 640): the fastest too
+      return;
     }
+    if (s.mode === 'trial') { if (kind !== 'Licensed' || en.trial == null) return; const e = { name: hsName(), points: en.points, grade: 0, writeOffs: en.writeOffs, t: en.trial, at: Date.now() }; app.hsLast = { key: 'arcade:' + s.levelId + ':time', at: e.at, rank: hsAdd('arcade:' + s.levelId + ':time', e) }; return; } // Edit 100 (row 639)
     const key = 'arcade:' + s.levelId, e = { name: hsName(), points: en.points, grade: en.grade || 0, writeOffs: en.writeOffs, t: en.t, at: Date.now() };
     app.hsLast = { key, at: e.at, rank: hsAdd(key, e) };
   }
@@ -3511,7 +3575,8 @@
   function nameStartScore() { if (!app.hsLast || !app.hsLast.rank) return; app.nameEntry = { kind: 'score', slot: 0, text: hsEntry(app.hsLast).name || hsName(), fresh: true, r: 3, c: 10 }; nameInput.value = ''; }
   function scoresMenu(m) {
     const n = hsTables().length;
-    if (m === 'left' || m === 'up') app.scoreTab = (app.scoreTab + n - 1) % n;
+    if (MODES && (m === 'up' || m === 'down')) app.scoreBy = app.scoreBy === 'time' ? 'points' : 'time'; // Edit 100 (row 640): best points or fastest
+    else if (m === 'left' || m === 'up') app.scoreTab = (app.scoreTab + n - 1) % n;
     else if (m === 'right' || m === 'down') app.scoreTab = (app.scoreTab + 1) % n;
     else if (m === 'ok' || m === 'back' || m === 'pause') app.screen = app.scoresFrom === 'game' && app.sim ? 'game' : 'title';
   }
@@ -3530,15 +3595,16 @@
       txt(t.name, tx + tw / 2, y + 83, fLab, on ? FT.selText : FT.text, 'center');
       hitbox(tx, y + 56, tw, 40, 'scores:' + t.key, () => { app.scoreTab = i; });
     });
-    const rows = hsRead().tables[tab.key] || [], L = app.hsLast;
+    const byT = MODES && app.scoreBy === 'time', tkey = tab.key + (byT ? ':time' : ''), rows = hsRead().tables[tkey] || [], L = app.hsLast; // Edit 100 (row 640)
+    if (MODES) { const lab = tab.arcade ? (byT ? 'TIME TRIAL · FASTEST ' + pvs('arcade.trial.writeOffs') : 'ENDLESS · BEST POINTS') : (byT ? 'FASTEST TO CERTIFIED' : 'BEST POINTS'); txt(lab + '   ▲▼', x + 24, y + 114, '700 15px ' + F_UI, FT.accent); hitbox(x + 24, y + 98, 360, 22, 'scores:by', () => menuQ.push('down')); }
     const cols = tab.arcade ? [['#', 0, 'left'], ['NAME', 36, 'left'], ['POINTS', 330, 'right'], ['GRADE', 410, 'right'], ['WRITE-OFFS', 530, 'right'], ['TIME', 610, 'right']]
       : [['#', 0, 'left'], ['NAME', 36, 'left'], ['POINTS', 330, 'right'], ['CHASSIS', 450, 'right'], ['TIME', 560, 'right']];
     const cx = x + 40, hy = y + 132, rh = Math.min(42, Math.floor((h - 132 - 70) / HS)), day = (ms) => { const d = new Date(ms); return d.getDate() + ' ' + MON[d.getMonth()]; };
     cols.forEach(([k, dx, al]) => txt(k, cx + dx, hy, '700 15px ' + F_UI, FT.dim, al));
     txt('DATE', x + w - 40, hy, '700 15px ' + F_UI, FT.dim, 'right');
-    if (!rows.length) wrapText(tab.arcade ? 'No scores yet. Play a shift in ' + INFO(tab.key.slice(7)).name + '.' : 'No scores yet. A Certified story run sets the first.', cx, hy + 48, w - 80, 26, fTxt, FT.dim, 2);
+    if (!rows.length) wrapText(tab.arcade ? (byT ? 'No times yet. Finish a time trial in ' : 'No scores yet. Play a shift in ') + INFO(tab.key.slice(7)).name + '.' : 'No scores yet. A Certified story run sets the first.', cx, hy + 48, w - 80, 26, fTxt, FT.dim, 2);
     rows.forEach((q, i) => {
-      const yy = hy + 16 + i * rh, me = L && L.key === tab.key && L.at === q.at;
+      const yy = hy + 16 + i * rh, me = L && L.key === tkey && L.at === q.at;
       if (me) { rr(x + 28, yy, w - 56, rh - 4, 8); ctx.fillStyle = FT.credit; ctx.fill(); ctx.strokeStyle = C.dummy; ctx.lineWidth = 1.5; ctx.stroke(); }
       const by = yy + rh / 2 + 6, col = me ? FT.text : i ? FT.text : C.dummy;
       const vals = tab.arcade ? [String(i + 1), q.name, num(q.points), q.grade ? String(q.grade) : '—', String(q.writeOffs), fmtT(q.t)] : [String(i + 1), q.name, num(q.points), String(q.chassis), fmtT(q.t)];
@@ -3754,7 +3820,8 @@
     }
     AUD.frame({ screen: app.screen, credits: !!app.credits, paused: !!app.paused, gate: !!app.audioGate, mode: app.mode, phase: ph, dt,
       voyage: !!(s && s.rescue && s.rescue.voyage), ending: s && s.run && s.run.ending ? s.run.ending.kind : null,
-      tileN: s && s.storyMode && STORY && s.screenName ? STORY.tileNumber(s.levelId, s.screenName()) : 0, runN: app.audioRun || 1 });
+      tileN: s && s.storyMode && STORY && s.screenName ? STORY.tileNumber(s.levelId, s.screenName()) : 0, runN: app.audioRun || 1,
+      parts: s && s.run && s.run.owned ? Object.keys(s.run.owned).filter((k) => s.run.owned[k]).length : null }); // Edit 100 (row 643): the parts fitted
   }
   // ---------- loop
   let last = performance.now(), acc = 0;

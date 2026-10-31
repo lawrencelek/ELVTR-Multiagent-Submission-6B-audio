@@ -192,6 +192,12 @@ Lawrence: "conduct an adversarial QA game agent who wants to break the game and 
 - **Fixed** (Lawrence, 19:10): `audio.sfx.honkMaxPerCar` 2; `audio.sfx.spentRepeatMax` 2 per `audio.sfx.spentRepeatSeconds` 2; a tick on a spent car (`ui.spentTick`); car-notice and barks silent. Each verified in play (`qa/repro.js`).
 - **Then:** the lean jitter (D88) closed by a 0.3 s contact grace (`proto.contactGraceSeconds`, row 630): 113 knocks in 40 s of leaning became 5.
 
+## 3.4 From Lawrence's play (rows 631–643)
+
+- **Music:** Track 11 when a Story tile clears (631); no fade at the loop (633); the next track with each upgrade (643).
+- **Fixes:** a moved cone frees the lane (632); the notice flash on the lamps (634); a quiet pause page (635); a drone fetches a lane cone after 5 s (636); cones x-ray under decks (637). The jam: not reproduced (638).
+- **Arcade:** Time trial, 10 write-offs, fastest; Endless, 3 a grade everywhere (639). Fastest tables, Story included (640). Prices 2, 4, 6, 8 (641). Exploration arrows (642).
+
 ## 4 The engine
 
 `prototypes/p9/audio.js`, created by `game.js` only when `audio.enabled` is 1. Prototypes 8 to 8.4 never set it.

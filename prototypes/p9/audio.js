@@ -311,7 +311,11 @@
       const M = A.music, st = musicState(v), cs = CUES.music.states.card;
       // Q3 (Lawrence): each level card sets the level's track from the tile it announces; it holds until the next card,
       // so walking back to a cleared tile, the ferry and a write-off never change it
-      if (st === 'card' && !M.inCard) { M.inCard = true; M.levelTrack = cs === 'level' ? levelTrack() : null; }
+      if (st === 'card' && !M.inCard) { M.inCard = true; M.levelTrack = cs === 'level' ? levelTrack() : null; M.partsSeen = v.parts; }
+      if (P('audio.music.trackPerUpgrade', 0) && v.parts != null) { // row 643 (Lawrence): each part fitted moves the level music on, to the rotation's next track
+        if (M.partsSeen == null || v.parts < M.partsSeen) M.partsSeen = v.parts; // a new run starts the count again
+        else if (v.parts > M.partsSeen) { M.partsSeen = v.parts; if (M.levelTrack != null) { const R = CUES.music.rotation && CUES.music.rotation.length ? CUES.music.rotation : [3, 4, 5, 6]; M.levelTrack = R[(R.indexOf(M.levelTrack) + 1) % R.length]; logIt('upgrade', 'track' + M.levelTrack, null); } }
+      }
       if (st !== 'card' && st != null) M.inCard = false;
       if (st === 'level' && M.levelTrack == null) M.levelTrack = levelTrack(); // a level that opens without its card (a gift still owed)
       if (st != null && st !== 'level' && st !== 'card') M.levelTrack = null;

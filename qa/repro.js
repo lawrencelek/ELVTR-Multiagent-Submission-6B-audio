@@ -36,6 +36,31 @@ function serve() {
   const ev = (fn, a) => pg.evaluate(fn, a);
   await pg.goto(url); await wait(1200);
   await key('Space', 1, 900); await key('Space', 1, 700);
+  pg.on('console', (m) => { if (m.type() === 'error') console.log('console error', m.text()); });
+  if (SCEN === 'modes') { // rows 639–642: the mode row, a time trial to its end, the fastest table, the arrows
+    for (let i = 0; i < 6; i++) { const ok = await ev(() => window.__dummiesUI.titleItems()[window.__dummies.titleSel % window.__dummiesUI.titleItems().length] === 'ARCADE'); if (ok) break; await key('ArrowDown'); }
+    await key('Space', 1, 600); await key('ArrowUp', 1, 300);
+    await pg.locator('#game').screenshot({ path: path.join(__dirname, 'runs', 'modes_select.png') });
+    console.log('select', JSON.stringify(await ev(() => ({ mode: window.__dummies.arcadeMode, onMode: window.__dummies.arcOnMode }))));
+    await key('ArrowDown', 1, 200); await key('Space');
+    for (let i = 0; i < 300 && !(await ev(() => window.__dummies.sim && window.__dummies.sim.phase === 'brief')); i++) await wait(100);
+    await key('Space', 1, 400);
+    for (let i = 0; i < 300 && !(await ev(() => { const s = window.__dummies.sim; return s.phase === 'play' && !s.rescue; })); i++) await wait(100);
+    await wait(2500);
+    console.log('trial', JSON.stringify(await ev(() => { const s = window.__dummies.sim; return { mode: s.mode, quota: s.quota, grade: s.grade, t: +s.trialTime().toFixed(2), obj: window.__dummiesUI.objective(s), prices: [1, 2, 3, 4].map((k) => s.P['economy.price.ability.level' + k]) }; })));
+    await pg.locator('#game').screenshot({ path: path.join(__dirname, 'runs', 'modes_trial.png') });
+    await ev(() => { const s = window.__dummies.sim; s.run.writeOffs = s.quota - 1; const b = s.body; b.hits.push({ kind: 'dash', cls: 'van', combo: 1, assessed: 120, lost: 30, angle: 90, model: 'VAN-02' }); b.health = 0; s.writeOff(); s.checkTerminal(); });
+    for (let i = 0; i < 100 && !(await ev(() => window.__dummies.sim.phase === 'ending')); i++) await wait(100);
+    await wait(800);
+    console.log('end', JSON.stringify(await ev(() => { const s = window.__dummies.sim; return { phase: s.phase, ending: s.run.ending, hsLast: window.__dummies.hsLast, tables: Object.keys(window.__dummiesUI.scores().tables) }; })));
+    await pg.locator('#game').screenshot({ path: path.join(__dirname, 'runs', 'modes_end.png') });
+    const it = await ev(() => window.__dummies.sim && null);
+    for (let i = 0; i < 3; i++) await key('ArrowDown', 1, 150); await key('Space', 1, 500); console.log('screen', await ev(() => window.__dummies.screen + ' tab ' + window.__dummies.scoreTab + ' by ' + window.__dummies.scoreBy));
+    await wait(500); await pg.locator('#game').screenshot({ path: path.join(__dirname, 'runs', 'modes_scores.png') });
+    await key('ArrowDown', 1, 400); await pg.locator('#game').screenshot({ path: path.join(__dirname, 'runs', 'modes_scores_time.png') });
+    console.log('by', await ev(() => window.__dummies.scoreBy));
+    await br.close(); srv.close(); return;
+  }
   for (let i = 0; i < 6; i++) { const ok = await ev(() => window.__dummiesUI.titleItems()[window.__dummies.titleSel % window.__dummiesUI.titleItems().length] === 'ARCADE'); if (ok) break; await key('ArrowDown'); }
   await key('Space', 1, 500);
   for (let i = 0; i < 6 && (await ev(() => window.__dummies.level)) !== +DIST; i++) await key('ArrowDown');
