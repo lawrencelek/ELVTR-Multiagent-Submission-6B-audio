@@ -1568,7 +1568,8 @@
     if (flashOn(s, c)) for (const sd of [-1, 1]) { // Edit 99: headlamps, just ahead of the bumper, with a glow on the road
       const u = c.L / 2 + 3, v = sd * (c.W / 2 - 4), x = Math.round((c.x + u * ca - v * sa) / U), y = Math.round((c.y + u * sa + v * ca) / U) - Math.round(hgt / 2);
       for (let j = -2; j <= 2; j++) for (let i = -2; i <= 2; i++) if (Math.abs(i) + Math.abs(j) <= 3) FB.mix(x + i, y + j, K.beam, 0.55);
-      FB.rect(x - 1, y - 1, x, y, K.white);
+      if (s.P['ui.lampsOnCar']) { const [lx, ly] = roof(c.L / 2 - 1, sd * (c.W / 2 - 3)); FB.rect(lx - 1, ly - 1, lx, ly, K.white); } // Edit 100 (row 634): the lamp on the art's own headlight
+      else FB.rect(x - 1, y - 1, x, y, K.white);
     }
   }
   // Edit 100 (P9, ui.spentTick; Lawrence, row 624): a spent car carries a tick on its roof, upright, white edged in ink
@@ -1940,6 +1941,7 @@
     drawStoryFence(s); // Edit 81: a tile in test is fenced
     for (const c of cars) { ghost(carArt(s, c), c.x / U, c.y / U - (c._lift || 0)); relight(c); } // x-ray: a checker of each actor's own pixels, so an occluded car or dummy still reads
     if (b.alive && b._spr) ghost(b._spr, b._sx, b._sy);
+    if (s.P['ui.conesXray']) for (const cn of s.cones) if (cn.state === 'free' || cn.state === 'flight') ghost(PIX.CONE, cn.x / U, (cn.y - coneLift(cn) * 1.2) / U); // Edit 100 (row 637): a cone under a deck or an overpass reads, as the dummy does
     if (b.alive && b.held) { const p = s.releasePoint(), n = s.carriedCones().length; for (let i = 0; i < n; i++) PIX.blit(FB, PIX.CONE, p.x / U, p.y / U - 4 - 3 * i - bodyLift(s)); } // Edit 78: a stack
     for (const c of mine) drawCarMarks(s, c);
     if (b.mode !== 'rescue') drawNose(s);
@@ -3087,7 +3089,8 @@
     }
     else if (cue === 'spent8') { const S = greyCar(PIX.car('sedan', 28, 14, EXT(22), 0, false)); PIX.blit(B, S, 16, 12); if (SIM8 && SIM8['ui.spentTick']) tickMark((x, y, k) => B.put(x, y, k), 16, 12 - EXT(22)); } // Edit 100: the tick
     else if (cue === 'notice' || cue === 'notice0') {
-      car(false); if (cue === 'notice') { for (const yy of [8, 14]) B.rect(29, yy, 30, yy + 1, K.white); for (let x = 31; x < 40; x++) for (let y = 6; y <= 16; y++) if (Math.abs(y - 11) <= 3 + (x - 31) * 0.5) B.mix(x, y, K.beam, 0.55); }
+      const r = car(false), dy = SIM8 && SIM8['ui.lampsOnCar'] ? r.cy - 12 : 0; // Edit 100 (row 634): the lamps on the car's own headlights, the beam level with them
+      if (cue === 'notice') { for (let x = 31; x < 40; x++) for (let y = 0; y < 20; y++) if (Math.abs(y - 11 - dy) <= 3 + (x - 31) * 0.5) B.mix(x, y, K.beam, 0.55); for (const yy of [8, 14]) B.rect(29, yy + dy, 30, yy + dy + 1, K.white); }
     }
     else if (cue === 'stoppoint') { car(false); PIX.polyline([[33, 4], [36, 4], [36, 18], [33, 18]], (x, y) => B.put(x, y, K.label)); }
     else if (cue === 'spent') { const r = car(false); PIX.line(r.cx - 4, r.cy + 3, r.cx + 4, r.cy - 3, (x, y) => { B.put(x, y, K.roofInk); B.put(x, y + 1, K.roofInk); }); }
@@ -3245,9 +3248,10 @@
       if (app.confirmRefuse && !story) items[2] = 'Confirm refusal';
       menuList(items, app.pauseSel, x + 18, y + 62, w - 36, (i) => !story && i === 2 && s.run.writeOffs < 1, 0, (i) => { if (app.pauseSel !== i) app.confirmRefuse = false; app.pauseSel = i; });
       const ny = STORY ? y + 62 + items.length * 54 + 16 : y + 362;
-      wrapText(story ? 'The story map saves this tile\'s count. The body in play is lost.' : s.run.writeOffs < 1 ? 'Refusal opens after one completed body.' : 'Refusal is a deliberate ending.', x + 22, ny, w - 44, 26, STORY ? '400 17px ' + F_UI : fTxt, FT.dim, 3);
+      const quiet = !!s.P['ui.pause.quiet']; // Edit 100 (row 635): no Story save note, no gamepad line
+      if (!(quiet && story)) wrapText(story ? 'The story map saves this tile\'s count. The body in play is lost.' : s.run.writeOffs < 1 ? 'Refusal opens after one completed body.' : 'Refusal is a deliberate ending.', x + 22, ny, w - 44, 26, STORY ? '400 17px ' + F_UI : fTxt, FT.dim, 3);
     }
-    if (pad.info && pad.info.monitor) wrapText('GAMEPAD ' + pad.info.monitor + ' · hold START to set up', x + 22, y + h - 92, w - 44, 22, fTxt, FT.dim, 4); // Edit 75: what the pad sends
+    if (pad.info && pad.info.monitor && !s.P['ui.pause.quiet']) wrapText('GAMEPAD ' + pad.info.monitor + ' · hold START to set up', x + 22, y + h - 92, w - 44, 22, fTxt, FT.dim, 4); // Edit 75: what the pad sends. Edit 100 (row 635): not on the quiet page
     if (STORY) wrapText(appStatus(), x + 22, y + h - 18, w - 44, 18, '400 13px ' + F_MONO, FT.dim, 1); // Edit 86: the build line, off the page
     if (page === 'controls') drawControls(s, x + w + 16, y, FW - 36 - w - 16, h);
     else drawCueKey(x + w + 16, y, FW - 36 - w - 16, h);

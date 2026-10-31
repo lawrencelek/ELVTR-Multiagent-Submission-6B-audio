@@ -108,6 +108,50 @@ function serve() {
       const got = await ev((n) => window.__dummiesAudio.log.slice(n).filter((l) => /^lunge/.test(l.id)).map((l) => l.id + ' ' + l.file), n0);
       console.log('health ' + share + ' (wear ' + (1 - share).toFixed(2) + '):', JSON.stringify(got));
     }
+  } else if (SCEN === 'conemove') { // Lawrence, 31 October 16:29: a cone moved; cars still divert round where it was
+    if (process.env.FLAG != null) await ev((f) => { window.__dummies.sim.P['proto.driver.dodgeFollowsCone'] = f; }, +process.env.FLAG);
+    let put = null;
+    for (let i = 0; i < 40 && !put; i++) { put = await ev(() => { const s = window.__dummies.sim, X = window.DUMMIES, cn = s.cones.find((q) => q.state === 'free'); if (!cn) return null;
+      for (const c of s.cars.filter((q) => !q.ghost && q.v > 20 && q.path && !q.deck)) { const p = X.pathAt(c.path, c.s + 180); if (p.x > 80 && p.x < 720 && p.y > 80 && p.y < 560) { cn.x = p.x; cn.y = p.y; cn.vx = 0; cn.vy = 0; return { cone: cn.id, x: Math.round(p.x), y: Math.round(p.y), path: c.id }; } }
+      return null; }); if (!put) await wait(250); }
+    console.log('cone placed', JSON.stringify(put));
+    const watch = async (secs, label) => { const t1 = Date.now() + secs * 1000, seen = {};
+      while (Date.now() < t1) { const r = await ev((cid) => { const s = window.__dummies.sim, cn = s.cones.find((q) => q.id === cid); return { t: +s.t.toFixed(1), cone: cn && [Math.round(cn.x), Math.round(cn.y), cn.state], cars: s.cars.filter((c) => !c.ghost).map((c) => ({ id: c.id, d: +c.d.toFixed(1), man: c.man && c.man.type, cause: c.cause, dodge: c.dodge && c.dodge.id, dodgeS: c.dodge && Math.round(c.dodge.s), s: Math.round(c.s), x: Math.round(c.x), y: Math.round(c.y), state: c.state })) }; }, put.cone);
+        for (const c of r.cars) if (c.dodge === put.cone || (c.cause === 'cone' && c.man)) { const k = c.id; if (!seen[k]) seen[k] = []; seen[k].push([r.t, c.state, c.man, c.d, 'dodgeS ' + c.dodgeS, 's ' + c.s, c.x + ',' + c.y]); }
+        await wait(250); }
+      console.log('==', label); for (const [k, v] of Object.entries(seen)) console.log(' ', k, JSON.stringify(v[0]), '…', JSON.stringify(v[v.length - 1]), v.length + ' samples');
+      return seen; };
+    await watch(10, 'cone in the lane, 10 s');
+    const moved = await ev((cid) => { const s = window.__dummies.sim, cn = s.cones.find((q) => q.id === cid); cn.x = cn.hx; cn.y = cn.hy; return [Math.round(cn.x), Math.round(cn.y)]; }, put.cone);
+    console.log('cone moved to', JSON.stringify(moved), 'at sim t', await ev(() => +window.__dummies.sim.t.toFixed(1)));
+    await wait(1500);
+    console.log('why', JSON.stringify(await ev(() => { const s = window.__dummies.sim, P = s.P; return s.cars.filter((c) => !c.ghost && c.dodge).map((c) => ({ id: c.id, d: +c.d.toFixed(1), gone: s.coneGone ? s.coneGone(c.dodge) : 'n/a', dodge: c.dodge, passedS: c.s - c.L / 2 > c.dodge.s + P['proto.returnClearance'],
+      bodyBeside: s.bodyBeside(c, -c.d), carBeside: s.carBeside(c, -c.d), corridor: s.corridorBlocked(c, -c.d), fwd: c.det && c.det.fwd && c.det.fwd.id, orbit: !!c.orbit, signal: c.signal, intent: c.intent && c.intent.type, man: c.man && c.man.type, state: c.state, flag: P['proto.driver.dodgeFollowsCone'] })); })));
+    await watch(20, 'after the move, 20 s');
+  } else if (SCEN === 'pauseshot') { // the pause page and its Controls page, with the cue key
+    await ev(() => { for (const c of window.__dummies.sim.cars) if (!c.ghost) c.hz = c.hz || { inPath: false }; });
+    await pg.keyboard.press('Escape'); await wait(700);
+    await pg.screenshot({ path: path.join(__dirname, 'runs', 'pause.png') });
+    const i = await ev(() => window.__dummiesUI.pauseItems().indexOf('Controls'));
+    for (let k = 0; k < i; k++) { await pg.keyboard.press('ArrowDown'); await wait(80); }
+    await pg.keyboard.press('Space'); await wait(700);
+    await pg.screenshot({ path: path.join(__dirname, 'runs', 'pause_controls.png') });
+    console.log('shots: qa/runs/pause.png, pause_controls.png');
+  } else if (SCEN === 'noticeicon') { // the cue key's 'Has noticed you' row, flash on and off; and a noticed car in play
+    await ev(() => { window.__dummies.sim.P['proto.art.noticeFlashHz'] = 0.25; });
+    await pg.keyboard.press('Escape'); await wait(400);
+    for (let k = 0; k < 2; k++) { await pg.screenshot({ path: path.join(__dirname, 'runs', 'notice_' + k + '.png'), clip: { x: 440, y: 110, width: 80, height: 50 } }); await wait(2100); }
+    await pg.keyboard.press('Escape'); await wait(300);
+    const car = await ev(() => { const s = window.__dummies.sim, b = s.body, c = s.cars.filter((q) => !q.ghost && !q.spent && q.x > 60 && q.x < 740 && q.y > 60 && q.y < 580)[0]; if (!c) return null; const ab = s.assessBody.bind(s); s.assessBody = (q) => ab(q) || { inPath: false, near: true, lx: 900, ly: 900, d: 900 }; const S = window.__dummiesScale(), r = document.getElementById('game').getBoundingClientRect(), d = window.devicePixelRatio || 1; window.__hold = setInterval(() => { c.hz = c.hz || { inPath: false }; c.nearT = 9; c.v = 0; }, 16); return { id: c.id, h: c.h, sx: r.left + ((c.x / 2) * S.scale + S.ox) / d, sy: r.top + ((c.y / 2) * S.scale + S.oy) / d, kpx: S.kpx }; });
+    await ev(() => { window.__dummies.sim.P['proto.art.noticeFlashHz'] = 0.004; }); console.log('car', JSON.stringify(car)); await wait(800); console.log('noticed', await ev(() => { const s = window.__dummies.sim; return JSON.stringify({ n: s.cars.length, hz: s.cars.filter((c) => c.hz).length, near: s.cars.filter((c) => c.hz && (c.nearT || 0) >= s.P['perception.reactionDelay']).length, look: window.__dummiesUI.carLook().map((l) => [l.noticed, l.flash]).slice(0, 6), hzP: s.P['proto.art.noticeFlashHz'] }); }));
+    if (car) for (let k = 0; k < 2; k++) { await pg.locator('#game').screenshot({ path: path.join(__dirname, 'runs', 'notice_car_' + k + '.png') }); await wait(2100); }
+    console.log('shots: qa/runs/notice_0.png, notice_1.png');
+  } else if (SCEN === 'conexray') { // row 637: a cone under a highway deck, with the x-ray and without
+    const at = await ev(() => { const s = window.__dummies.sim, fl = (s.level.floors || []).filter((f) => (f.kind === 'deck' || f.kind === 'walk' || f.kind === 'bridge') && f.w > 20 && f.h > 20); const cn = s.cones.find((q) => q.state === 'free'); if (!fl.length || !cn) { const rg = (s.level.floors || []).find((f) => f.kind === 'ring'); if (rg && cn) { const g = s.level.ring || rg; const cx = g.cx != null ? g.cx : 400, cy = g.cy != null ? g.cy : 320, R = g.R || g.r || g.Rin || 60; cn.x = cx + R * 0.0; cn.y = cy - (g.Rout || R) * 0.9; const c2 = s.cones.filter((q) => q.state === 'free')[1]; if (c2) { c2.x = cx - (g.Rout || R) * 0.9; c2.y = cy; } return { ring: Object.keys(g), cx, cy, R, Rout: g.Rout, x: cn.x, y: cn.y }; } return { floors: (s.level.floors || []).map((f) => f.kind) }; }
+      const f = fl[0], cxx = Math.max(f.x + 10, Math.min(f.x + f.w - 10, 400)), cyy = Math.max(f.y + 10, Math.min(f.y + f.h - 10, 320)); cn.x = cxx; cn.y = cyy; const c2 = s.cones.filter((q) => q.state === 'free')[1]; if (c2) { c2.x = cxx + 24; c2.y = cyy; }
+      const S = window.__dummiesScale(), r = document.getElementById('game').getBoundingClientRect(), d = window.devicePixelRatio || 1; return { x: cn.x, y: cn.y, f: [f.x, f.y, f.w, f.h], S }; });
+    console.log('cone at', JSON.stringify(at));
+    for (const f of [1, 0]) { await ev((v) => { window.__dummies.sim.P['ui.conesXray'] = v; }, f); await wait(300); await pg.locator('#game').screenshot({ path: path.join(__dirname, 'runs', 'cone_xray_' + f + '.png') }); }
   } else if (SCEN === 'tick') { // every car on screen spent: the roof tick (ui.spentTick)
     await ev(() => { for (const c of window.__dummies.sim.cars) c.spent = true; }); await wait(400);
     await pg.locator('#game').screenshot({ path: path.join(__dirname, 'runs', 'spent_tick.png') });

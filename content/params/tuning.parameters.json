@@ -12790,6 +12790,94 @@
    },
    "description": "Track from a Story tile's clear to the next card: the write-off, the report, the ferry, the gift screen. Not ducked by them; pause ducks it",
    "purpose": "Lawrence: 'Tile Cleared' music once a tile is cleared (row 631)"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "source": "Edit 100 (P9): Lawrence's report, 31 October 16:29: 'I put down a cone ... then i moved the cone to another place. and the cars still divert around the original location' (DECISIONS row 632); the fix proposed by the assistant",
+   "status": "proposed",
+   "type": "number",
+   "id": "proto.driver.dodgeFollowsCone",
+   "group": "Traffic",
+   "owner": "Systems design",
+   "label": "Dodge follows the cone",
+   "description": "1: a car that swerved round a cone returns to its lane once that cone is no longer where it stood (moved, carried, thrown or fetched), as soon as its commitment ends. A swerve already under way still finishes (Route locked). 0: Prototype 8.4's rule: it holds the other lane until it passes where the cone stood. Prototype 9 sets 1",
+   "unit": "flag",
+   "default": 0,
+   "applyAt": "next-run",
+   "validation": {
+    "min": 0,
+    "max": 1
+   },
+   "purpose": "Cars kept diverting round a cone that had moved (row 632)"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "status": "proposed",
+   "type": "number",
+   "unit": "flag",
+   "default": 0,
+   "applyAt": "next-run",
+   "validation": {
+    "min": 0,
+    "max": 1
+   },
+   "id": "ui.lampsOnCar",
+   "group": "UI",
+   "owner": "Art",
+   "label": "Lamps on the car",
+   "source": "Edit 100 (P9): Lawrence, 31 October 16:29: \"'has noticed you' icon is a bit weird cause the blinking headlights are not where the car headlights are\" (DECISIONS row 634)",
+   "description": "1: a car that has noticed the dummy flashes its lamps on the art's own headlights (the roof plane, at the front corners), in play and in the cue key; the glow stays on the road ahead. 0: Prototype 8.4's lamps, half a car's height lower and ahead of the bumper. Prototype 9 sets 1",
+   "purpose": "The flash sits on the headlights (row 634)"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "status": "proposed",
+   "type": "number",
+   "unit": "flag",
+   "default": 0,
+   "applyAt": "next-run",
+   "validation": {
+    "min": 0,
+    "max": 1
+   },
+   "id": "ui.pause.quiet",
+   "group": "UI",
+   "owner": "UX",
+   "label": "Quiet pause page",
+   "source": "Edit 100 (P9): Lawrence, 31 October 16:29: the pause screen shows 'gamepad #0' bottom left; 'the story map saves this tile's count' maybe should not show (DECISIONS row 635)",
+   "description": "1: the pause page drops the gamepad monitor line and Story's save note. 0: Prototype 8.4's page. Prototype 9 sets 1",
+   "purpose": "A clean pause page (row 635)"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "status": "proposed",
+   "type": "number",
+   "unit": "flag",
+   "default": 0,
+   "applyAt": "next-run",
+   "validation": {
+    "min": 0,
+    "max": 1
+   },
+   "id": "ui.conesXray",
+   "group": "UI",
+   "owner": "Art",
+   "label": "Cones x-ray",
+   "source": "Edit 100 (P9): Lawrence, 31 October 16:40: 'cones also should be visible (like the dummy) under overpasses and the highway' (DECISIONS row 637)",
+   "description": "1: a cone on the ground or in flight is drawn again as a checker of its own pixels after the decks and overpasses, as the dummy and cars are (the x-ray pass), so a cone under a highway reads. 0: Prototype 8.4: a cone under a deck is hidden. Prototype 9 sets 1",
+   "purpose": "Cones under decks read (row 637)"
   }
  ],
  "tables": {

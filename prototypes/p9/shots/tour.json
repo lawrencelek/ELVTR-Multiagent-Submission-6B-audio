@@ -1031,11 +1031,6 @@
      "kind": "music",
      "id": "track11",
      "file": "music/track11_dummies-generated_tile-cleared.ogg"
-    },
-    {
-     "kind": "sfx",
-     "id": "near-miss",
-     "file": "tone_near_miss.wav"
     }
    ]
   },
@@ -1051,6 +1046,11 @@
     "duck": 1
    },
    "cues": [
+    {
+     "kind": "sfx",
+     "id": "near-miss",
+     "file": "tone_near_miss.wav"
+    },
     {
      "kind": "sfx",
      "id": "gift",
@@ -1070,11 +1070,6 @@
     "duck": 1
    },
    "cues": [
-    {
-     "kind": "sfx",
-     "id": "near-miss",
-     "file": "tone_near_miss.wav"
-    },
     {
      "kind": "sfx",
      "id": "near-miss",
@@ -1123,6 +1118,11 @@
      "kind": "sfx",
      "id": "story-ferry",
      "file": "ufo.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "near-miss",
+     "file": "tone_near_miss.wav"
     }
    ]
   },
@@ -1166,11 +1166,6 @@
      "kind": "ui",
      "id": "ui-ok",
      "file": "confirm_4.wav"
-    },
-    {
-     "kind": "sfx",
-     "id": "near-miss",
-     "file": "tone_near_miss.wav"
     },
     {
      "kind": "sfx",
@@ -1327,7 +1322,7 @@
  },
  "errors": [],
  "audio": {
-  "log": 127,
+  "log": 126,
   "settings": {
    "master": 9,
    "music": 8,

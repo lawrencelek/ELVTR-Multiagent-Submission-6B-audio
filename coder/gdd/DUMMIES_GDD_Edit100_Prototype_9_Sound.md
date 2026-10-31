@@ -327,7 +327,7 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 - PASS · every catalogued event and variant does what the map says (109: 52 cue, 26 silence, 31 synth)
 - PASS · the catalogue and the cue map hold the same 109 entries
 - PASS · START plays ui-start and fades to Track 2
-- PASS · music fades out before the loop's end and back in after it (0.3 s, 0.3 s)
+- PASS · the music holds its level across the loop's seam: no fade there (row 633)
 - PASS · a cursor move plays ui-move
 - PASS · Arcade run 1 plays the rotation's first track
 - PASS · pause ducks the music to audio.music.pauseDuck (0.35)
@@ -346,14 +346,14 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 - PASS · malformed picks are dropped and the game starts; an emptied pool is silent
 - PASS · no page errors in the hook tests
 - PASS · no audio engine errors
-- PASS · Prototype 8.4 rebuilt from the shared code draws what the frozen build draws, barks and live counts aside (315 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 314 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)
+- PASS · Prototype 8.4 rebuilt from the shared code draws what the frozen build draws, barks and live counts aside (316 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 314 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)
 - PASS · the frozen dummies_p8_4.html is unchanged (md5 9f5549201d88891f9f0b22c461602909)
 
 ## 7 Measured
 
 - **SFX:** 100 mono WAV, 44.1 kHz. 0.10–3.29 s. Level -29.0 to -17.6 dB (LUFS, or RMS under 0.4 s).
 - **Music:** 11 stereo OGG: six from the pack (48 kHz, 66–123 s) and four generated (44.1 kHz, 31–63 s). -16.7 to -9.1 LUFS.
-- **Build:** `dummies_p9.html` 1,417,948 bytes. Audio beside it: 38.8 MB.
+- **Build:** `dummies_p9.html` 1,419,372 bytes. Audio beside it: 38.8 MB.
 
 ## 8 Registry (edit100)
 
@@ -441,6 +441,8 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 - **Spent tick** (row 624): `ui.spentTick` (1). A spent car carries a tick on its roof, upright, white edged in ink. The cue key shows it beside "Already hit you".
 - **Silent** (QA-03, QA-04, row 625): `car-notice`, `bark`, `bark.shout`. The headlamp flash and the bubbles still show.
 - **Where:** `game.js` `audGate`, before the cue map. A capped event logs `gated` and hushes the synth.
+- **Music fades** (row 633): in once, from the first note; out when the track stops or gives way. No fade at the loop.
+- **Play fixes** (rows 632, 634–637): a moved cone frees the lane (`proto.driver.dodgeFollowsCone` 1); the notice flash on the car's lamps (`ui.lampsOnCar`); a quiet pause page (`ui.pause.quiet`); a drone fetches a lane cone after `proto.droneConeSeconds` (5 s); cones under decks read (`ui.conesXray`).
 - **Contact grace** (QA-02, D88 closed, row 630): `proto.contactGraceSeconds` (0.3 s). A touch on the same car within it continues the contact: no new bounce, hit, knock or touch-spent. Leaning on a stopped car: 113 knocks in 40 s before, 5 after.
 - **The dash by wear** (row 629): `sfx.lunge` whoosh B1; `sfx.lunge.damaged` B2 from wear `audio.sfx.dashDamagedAt` (0.45); `sfx.lunge.wrecked` B3 from `audio.sfx.dashWreckedAt` (0.7). Wear: 1 − health ÷ maximum. The takes: generated, `audio/tones.py` (rows 626–628).
 

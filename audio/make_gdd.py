@@ -249,6 +249,8 @@ def gdd():
     a(f"- **Spent tick** (row 624): `ui.spentTick` ({SIMP.get('ui.spentTick')}). A spent car carries a tick on its roof, upright, white edged in ink. The cue key shows it beside \"Already hit you\".")
     a("- **Silent** (QA-03, QA-04, row 625): `car-notice`, `bark`, `bark.shout`. The headlamp flash and the bubbles still show.")
     a("- **Where:** `game.js` `audGate`, before the cue map. A capped event logs `gated` and hushes the synth.")
+    a("- **Music fades** (row 633): in once, from the first note; out when the track stops or gives way. No fade at the loop.")
+    a(f"- **Play fixes** (rows 632, 634–637): a moved cone frees the lane (`proto.driver.dodgeFollowsCone` {SIMP.get('proto.driver.dodgeFollowsCone')}); the notice flash on the car's lamps (`ui.lampsOnCar`); a quiet pause page (`ui.pause.quiet`); a drone fetches a lane cone after `proto.droneConeSeconds` ({SIMP.get('proto.droneConeSeconds')} s); cones under decks read (`ui.conesXray`).")
     a(f"- **Contact grace** (QA-02, D88 closed, row 630): `proto.contactGraceSeconds` ({SIMP.get('proto.contactGraceSeconds')} s). A touch on the same car within it continues the contact: no new bounce, hit, knock or touch-spent. Leaning on a stopped car: 113 knocks in 40 s before, 5 after.")
     a(f"- **The dash by wear** (row 629): `sfx.lunge` whoosh B1; `sfx.lunge.damaged` B2 from wear `audio.sfx.dashDamagedAt` ({REG['audio.sfx.dashDamagedAt']['default']}); `sfx.lunge.wrecked` B3 from `audio.sfx.dashWreckedAt` ({REG['audio.sfx.dashWreckedAt']['default']}). Wear: 1 − health ÷ maximum. The takes: generated, `audio/tones.py` (rows 626–628).")
     a("")

@@ -122,7 +122,7 @@
     'story.traffic.parkland.C1': 1.75, 'story.traffic.parkland.C2': 1.75, 'story.traffic.parkland.C3': 1, 'story.traffic.parkland.B3': 1.25, 'story.traffic.parkland.A3': 2, 'story.traffic.parkland.A2': 1.5, 'story.traffic.parkland.A1': 1, 'story.traffic.parkland.B1': 2, 'story.traffic.parkland.B2': 1.25,
     'story.traffic.waterfront.A1': 1, 'story.traffic.waterfront.B1': 1.5, 'story.traffic.waterfront.C1': 1, 'story.traffic.waterfront.C2': 1.5, 'story.traffic.waterfront.C3': 1, 'story.traffic.waterfront.B3': 1, 'story.traffic.waterfront.A3': 1, 'story.traffic.waterfront.A2': 1.5, 'story.traffic.waterfront.B2': 1,
     'proto.bounce.maxThrow': 0, 'story.ferryDepth': 160, 'story.saveSlots': 3, 'story.saveNameMax': 12, 'story.level.firstPoints': 6500, 'story.level.stepPoints': 2000, 'story.level.max': 9, 'story.level.upgrades': 1,
-    'proto.batteryModel': 0, 'abilities.battery.dashCharges': 1, 'damage.bodyHealthOnFoot': 500, 'story.missFloor': 1, 'story.coneBaitSeconds': 0, 'story.floorHold': 0, 'proto.contactGraceSeconds': 0, 'world.dummyMonument': 0, 'world.storyArt': 0, // Edit 92 (P7.11): the story's tile art, cosmetic only // Edit 91 (P7.10): Battery 1 the dash, 2 a second charge, 3 a faster recharge; the chassis on foot; a miss holds at 1 // Edit 89 (P7.8): the dummy's level from points; an upgrade a level. Edit 88 (P7.7): save slots; a slot name's longest. Edit 83 (P7.2): the knock's longest slide (0: no cap; P7.2 sets it); how far in from the entry edge the drone sets the dummy down
+    'proto.batteryModel': 0, 'abilities.battery.dashCharges': 1, 'damage.bodyHealthOnFoot': 500, 'story.missFloor': 1, 'story.coneBaitSeconds': 0, 'story.floorHold': 0, 'proto.contactGraceSeconds': 0, 'proto.driver.dodgeFollowsCone': 0, 'world.dummyMonument': 0, 'world.storyArt': 0, // Edit 92 (P7.11): the story's tile art, cosmetic only // Edit 91 (P7.10): Battery 1 the dash, 2 a second charge, 3 a faster recharge; the chassis on foot; a miss holds at 1 // Edit 89 (P7.8): the dummy's level from points; an upgrade a level. Edit 88 (P7.7): save slots; a slot name's longest. Edit 83 (P7.2): the knock's longest slide (0: no cap; P7.2 sets it); how far in from the entry edge the drone sets the dummy down
     'economy.creditsPerWriteOff': 1, 'story.price.ability.level1': 3, 'story.price.ability.level2': 4, 'story.price.ability.level3': 5, 'story.giftCredits': 3,
     'story.writeOffs.monument.A1': 1, 'story.writeOffs.monument.B1': 1, 'story.writeOffs.monument.C1': 1, 'story.writeOffs.monument.C2': 1, 'story.writeOffs.monument.B2': 1, 'story.writeOffs.monument.A2': 1, 'story.writeOffs.monument.A3': 1, 'story.writeOffs.monument.B3': 1, 'story.writeOffs.monument.C3': 1,
     'story.writeOffs.parkland.C1': 1, 'story.writeOffs.parkland.C2': 2, 'story.writeOffs.parkland.C3': 1, 'story.writeOffs.parkland.B3': 1, 'story.writeOffs.parkland.A3': 1, 'story.writeOffs.parkland.A2': 2, 'story.writeOffs.parkland.A1': 1, 'story.writeOffs.parkland.B1': 1, 'story.writeOffs.parkland.B2': 2,
@@ -2851,8 +2851,13 @@
       m.until = this.t + this.remaining(c, m);
       c.man = m; c.state = 'committed'; c.cause = cause; c.intent = null; c.intentFor = null; c.signal = null;
       if (cause === 'cone') c.coneT = this.t; // Edit 100 (P9, row 620): when the car last reacted to a cone (story.coneBaitSeconds)
-      if (tg) c.dodge = { s: tg.s, id: tg.id };
+      if (tg) c.dodge = { s: tg.s, id: tg.id, kind: tg.kind, x: tg.x, y: tg.y }; // Edit 100 (row 632): where the cone stood
       this.emit('commit', { car: c.id, man: m.type, cause, d1: m.d1 != null ? +m.d1.toFixed(2) : null });
+    }
+    coneGone(dg) { // Edit 100 (P9, row 632): the cone a car swerved round is no longer where it stood: moved, carried, thrown or fetched
+      if (!dg || dg.kind !== 'cone' || dg.x == null) return false;
+      const r = this.P['props.cone.radius'];
+      return !this.cones.some((cn) => cn.id === dg.id && cn.state === 'free' && hyp(cn.x - dg.x, cn.y - dg.y) < 2 * r);
     }
     obstacleAhead(c) {
       const P = this.P, r = P['props.cone.radius'];
@@ -3039,7 +3044,7 @@
         const lw = P['world.laneWidth'];
         const inPath = !!(hz && hz.inPath);
         const urgent = Math.abs(c.d) > lw / 2 && this.oncomingAhead(c, 420);
-        const passed = !c.dodge || c.s - c.L / 2 > c.dodge.s + P['proto.returnClearance'];
+        const passed = !c.dodge || c.s - c.L / 2 > c.dodge.s + P['proto.returnClearance'] || (P['proto.driver.dodgeFollowsCone'] && this.coneGone(c.dodge)); // Edit 100 (row 632): a moved cone frees the lane
         const canReturn = !(c.orbit && c.orbit.lane === 'in') && Math.abs(c.d) > 0.5 && !this.bodyBeside(c, -c.d) && !this.carBeside(c, -c.d) &&
           (urgent || (!det.fwd && !inPath && passed && !this.corridorBlocked(c, -c.d)));
         let holdSpeed = false;

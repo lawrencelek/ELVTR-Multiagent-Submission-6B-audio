@@ -276,19 +276,19 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 - **`sfx.story-deliver`** · Delivery drone: `engine.wav` · pool `engine.wav` · alternates `ufo.wav`, `boost.wav`
 - **`sfx.story-count`** · Counted: `stat_increase.wav` · pool `stat_increase.wav` · alternates `collect_5.wav`, `confirm_2.wav`
 - **`sfx.story-clear`** · Tile cleared: `powerup_5.wav` · pool `powerup_5.wav` · alternates `level_up.wav`, `powerup_1.wav`
-- **`sfx.near-miss`** · Near-miss: `tone_near_miss.wav` · pool — · alternates —
 
 ## 40. Story: the gift screen
 
 ![Story: the gift screen](shots/gift.jpg)
 
 - **Music:** cleared · Track 11 (tile cleared)
+- **`sfx.near-miss`** · Near-miss: `tone_near_miss.wav` · pool — · alternates —
 - **`sfx.gift`** · Gift screen: `powerup_5.wav` · pool `powerup_5.wav` · alternates `powerup_3.wav`, `level_up.wav`
 
 ## 41. Story: the report
 
 - **Music:** cleared · Track 11 (tile cleared)
-- **`sfx.near-miss`** · Near-miss: `tone_near_miss.wav` ×2 · pool — · alternates —
+- **`sfx.near-miss`** · Near-miss: `tone_near_miss.wav` · pool — · alternates —
 - **`sfx.writeoff`** · Write-off: `tone_writeoff.wav` · pool `explosion_3.wav` · alternates `explosion_4.wav`, `harsh_destruction.wav`
 - **`sfx.story-count`** · Counted: `stat_increase.wav` · pool `stat_increase.wav` · alternates `collect_5.wav`, `confirm_2.wav`
 - **`sfx.story-clear`** · Tile cleared: `powerup_5.wav` · pool `powerup_5.wav` · alternates `level_up.wav`, `powerup_1.wav`
@@ -301,6 +301,7 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 - **`sfx.ui-ok`** · Confirm: `confirm_4.wav` · pool `confirm_4.wav` · alternates `confirm_1.wav`, `select_5.wav`
 - **`sfx.chassis`** · New chassis: `tone_chassis.wav` · pool `bubble.wav` · alternates `teleport.wav`, `powerup_3.wav`, `equip_2.wav`
 - **`sfx.story-ferry`** · Ferry: `ufo.wav` · pool `ufo.wav` · alternates `engine.wav`, `teleport.wav`
+- **`sfx.near-miss`** · Near-miss: `tone_near_miss.wav` · pool — · alternates —
 
 ## 43. Story: the gift screen (ferry)
 
@@ -312,7 +313,7 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 
 - **Music:** card · Track 4 (happywalking)
 - **`sfx.ui-ok`** · Confirm: `confirm_4.wav` · pool `confirm_4.wav` · alternates `confirm_1.wav`, `select_5.wav`
-- **`sfx.near-miss`** · Near-miss: `tone_near_miss.wav` ×2 · pool — · alternates —
+- **`sfx.near-miss`** · Near-miss: `tone_near_miss.wav` · pool — · alternates —
 - **`sfx.screen`** · Screen flip: `tone_screen.wav` · pool — · alternates —
 - **`sfx.story-enter`** · Tile in test: `computer_1.wav` · pool `computer_1.wav` · alternates `computer_2.wav`, `chime.wav`
 - **`sfx.story-ferried`** · Ferried: `laser_5.wav` · pool `laser_5.wav` · alternates —

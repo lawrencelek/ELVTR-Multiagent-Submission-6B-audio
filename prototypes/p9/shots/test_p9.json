@@ -148,9 +148,9 @@
    "detail": ""
   },
   {
-   "name": "music fades out before the loop's end and back in after it (0.3 s, 0.3 s)",
+   "name": "the music holds its level across the loop's seam: no fade there (row 633)",
    "pass": true,
-   "detail": "min 0, end 1, looped true"
+   "detail": "min 1, end 1, looped true"
   },
   {
    "name": "a cursor move plays ui-move",
@@ -243,7 +243,7 @@
    "detail": "[]"
   },
   {
-   "name": "Prototype 8.4 rebuilt from the shared code draws what the frozen build draws, barks and live counts aside (315 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 314 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)",
+   "name": "Prototype 8.4 rebuilt from the shared code draws what the frozen build draws, barks and live counts aside (316 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 314 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)",
    "pass": true,
    "detail": ""
   },

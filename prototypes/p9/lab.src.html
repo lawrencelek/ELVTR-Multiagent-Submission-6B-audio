@@ -475,10 +475,11 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
     if (!local && ac()) { try { el.crossOrigin = 'anonymous'; p.node = AC.createMediaElementSource(el); p.gain = AC.createGain(); p.gain.gain.value = 0; p.node.connect(p.gain); p.gain.connect(BUS.music); } catch (e) { p.node = null; p.gain = null; } }
     return (MP[i] = p);
   }
-  function seam(p) { // as the game: in from each start, out before the file's end
-    const el = p.el, dur = isFinite(el.duration) ? el.duration : p.seconds, t = el.currentTime || 0, fi = Math.max(0.01, param('audio.music.fadeInSeconds')), fo = Math.max(0.01, param('audio.music.fadeOutSeconds'));
-    if (!isFinite(dur) || !(dur > fi + fo)) return Math.min(1, t / fi);
-    return Math.max(0, Math.min(1, t / fi, (dur - t) / fo));
+  function seam(p) { // as the game (row 633): in once, from the first note; no fade at the loop. The fade out is the switch's
+    const t = p.el.currentTime || 0, fi = Math.max(0.01, param('audio.music.fadeInSeconds'));
+    if (p.lastT != null && t < p.lastT - 0.5) p.passed = true;
+    p.lastT = t;
+    return p.passed ? 1 : Math.min(1, t / fi);
   }
   function out(p) { const lvl = Math.max(0, Math.min(1, p.vol * seam(p) * duck * busLevel('music') * Math.pow(10, (p.trim || 0) / 20))); if (p.gain) { try { p.gain.gain.setTargetAtTime(lvl, AC.currentTime, 0.012); } catch (e) { p.gain.gain.value = lvl; } } else p.el.volume = lvl; }
   function tick() {
@@ -499,7 +500,7 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
     if (curTrack === n && cur >= 0 && !MP[cur].el.paused) { for (const p of MP) if (p) out(p); nowPlaying(); return; }
     const prev = cur >= 0 ? MP[cur] : null, i = cur === 0 ? 1 : 0, p = player(i);
     if (prev) prev.want = 0;
-    cur = i; curTrack = n; p.trim = (L.music.tracks[n] || {}).trimDb || 0; p.seconds = (L.music.tracks[n] || {}).seconds || NaN; p.want = 1; p.vol = 1; // a fresh start: the seam fades it in
+    cur = i; curTrack = n; p.trim = (L.music.tracks[n] || {}).trimDb || 0; p.seconds = (L.music.tracks[n] || {}).seconds || NaN; p.want = 1; p.vol = 1; p.passed = false; p.lastT = null; // a fresh start: the seam fades it in, once
     const src = trackUrl(n); if (p.el.dataset.src !== src) { p.el.src = src; p.el.dataset.src = src; }
     try { p.el.currentTime = o.at || 0; } catch (e) { /* not loaded */ }
     const pr = p.el.play(); if (pr && pr.catch) pr.catch(() => {});

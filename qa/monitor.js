@@ -183,9 +183,9 @@
       if (hold('cc:' + pk, !!pair, 1.5)) add('car-overlap', 'major', 'car ' + pair[0] + ' has its centre inside car ' + pair[1] + ' for 1.5 s', { pair, states: pair.map((id) => { const c = cars.find((q) => q.id === id); return c && { state: c.state, v: +c.v.toFixed(1), man: c.man && c.man.type }; }) }, 'cc:' + key + ':' + pk);
     }
     for (const c of cars) {
-      if (c.spent && c.v < 1) { delete since['cs:' + c.id]; continue; }
+      if (c.deck && c.v < 1 && c.parked) { delete since['cs:' + c.id]; continue; } // spent cars count too (row 638: the pilot left them out)
       const waits = c.man && c.man.standoff || Math.hypot(c.x - b.x, c.y - b.y) < 140;
-      if (hold('cs:' + c.id, c.v < 1 && !waits, 45)) add('car-stuck', 'major', 'car ' + c.id + ' stopped 45 s with the dummy away (' + c.state + (c.man ? ', ' + c.man.type : '') + ')', { id: c.id, state: c.state, man: c.man && c.man.type, cause: c.cause, x: Math.round(c.x), y: Math.round(c.y) }, 'cs:' + key + ':' + c.id);
+      if (hold('cs:' + c.id, c.v < 1 && !waits, 30)) add('car-stuck', 'major', 'car ' + c.id + ' stopped 30 s with the dummy away (' + c.state + (c.man ? ', ' + c.man.type : '') + (c.spent ? ', spent' : '') + ')', { id: c.id, state: c.state, man: c.man && c.man.type, halt: c.man && c.man.halt, cause: c.cause, spent: !!c.spent, dodge: c.dodge && c.dodge.id, fwd: c.det && c.det.fwd && c.det.fwd.id, ob: (() => { try { return s.obstacleAhead(c); } catch (e) { return 'err'; } })(), stillT: c.stillT, x: Math.round(c.x), y: Math.round(c.y) }, 'cs:' + key + ':' + c.id);
     }
     // progress while the agent pushes a direction: noProgress asks the agent to probe
     trail.push([t, b.x, b.y]); while (trail.length && t - trail[0][0] > 3) trail.shift();

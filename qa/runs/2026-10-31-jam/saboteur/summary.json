@@ -1,0 +1,91 @@
+{
+ "persona": "saboteur",
+ "seed": 77,
+ "minutes": 6,
+ "wall": 360.1,
+ "counts": {
+  "probes": 3,
+  "wallStops": 3,
+  "trapped": 0,
+  "reloads": 0,
+  "crashes": 0,
+  "runs": 2,
+  "districts": {
+   "waterfront": 2069,
+   "monument": 122
+  },
+  "actions": 413
+ },
+ "shots": 0,
+ "findings": 0,
+ "bySev": {},
+ "byType": {},
+ "monitor": {
+  "samples": 3292,
+  "osc": 0,
+  "src": 338,
+  "oscPeak": 0,
+  "log": {
+   "unlock": 1,
+   "state": 8,
+   "music": 6,
+   "ui": 13,
+   "sfx": 325,
+   "gated": 46
+  },
+  "sounds": {
+   "cue:ui-start": 1,
+   "cue:ui-move": 6,
+   "cue:ui-ok": 6,
+   "cue:chassis.start": 2,
+   "cue:drop-in": 2,
+   "cue:dropped-in": 2,
+   "cue:punt": 35,
+   "cue:denied": 68,
+   "cue:cone-stop": 1,
+   "cue:knock": 63,
+   "cue:impact": 40,
+   "cue:combo": 9,
+   "cue:combo-end": 8,
+   "cue:touch-spent": 25,
+   "cue:drone-dispatch": 1,
+   "cue:honk": 1,
+   "cue:drone-pickup": 1,
+   "cue:drone-drop": 1,
+   "cue:near-miss": 24,
+   "cue:pickup": 2,
+   "cue:screen": 4,
+   "cue:drop": 1,
+   "cue:honk.body": 20,
+   "cue:learn-standoff": 6,
+   "cue:push": 4,
+   "cue:lunge": 3,
+   "cue:part-break": 1,
+   "cue:ending.fail": 1
+  },
+  "frames": 10726,
+  "gaps": 6,
+  "gapMax": 5816.400000000001,
+  "simT0": 29.999999999999577,
+  "real0": 2.9665999999999975,
+  "simAcc": 341.0333333333439,
+  "writeoffs": 0,
+  "endings": {
+   "Failed test": 1
+  },
+  "districts": {
+   "waterfront": 3055,
+   "monument": 206
+  },
+  "tiles": {
+   "waterfront:B2": 520,
+   "waterfront:B3": 306,
+   "waterfront:A2": 2229,
+   "monument:B2": 163,
+   "monument:C2": 43
+  },
+  "sims": 2,
+  "loadStallMax": 5816.400000000001
+ },
+ "monitorFindings": []
+}

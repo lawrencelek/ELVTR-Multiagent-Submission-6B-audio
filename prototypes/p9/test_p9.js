@@ -85,7 +85,7 @@ const get = (url) => new Promise((res) => http.get(url, (r) => { r.resume(); res
   // ---- 4. the game's hooks
   await pg.keyboard.press('Space'); await pg.waitForTimeout(600);
   ok('START plays ui-start and fades to Track ' + CUES.music.states.menu, await pg.evaluate((t) => window.__dummiesAudio.log.some((l) => l.id === 'ui-start') && window.__dummiesAudio.track === t, CUES.music.states.menu));
-  // the fades (row 609): the track dips to silence at the loop's seam and comes back, frame by frame
+  // the fades (row 633): no dip at the loop's seam, frame by frame (rows 609–632 faded out and back in there)
   const fade = await pg.evaluate(() => new Promise((done) => {
     const A = window.__dummiesAudio, p = A.music.players[A.music.cur], out = [];
     const go = () => { const mid = p.level; p.el.currentTime = p.el.duration - 0.4; const t0 = performance.now();
@@ -94,7 +94,7 @@ const get = (url) => new Promise((res) => http.get(url, (r) => { r.resume(); res
     ready(); // the track's length is known once it loads
   }));
   const fmin = fade && fade.out && Math.min(...fade.out.map((x) => x[1])), fend = fade && fade.out && fade.out[fade.out.length - 1][1], looped = fade && fade.out && fade.out.some((x) => x[0] < 0.2);
-  ok('music fades out before the loop\'s end and back in after it (' + CUES.params['audio.music.fadeOutSeconds'] + ' s, ' + CUES.params['audio.music.fadeInSeconds'] + ' s)', fade && fade.out && fade.mid > 0 && looped && fmin < 0.15 && fend > 0.9, fade && fade.out ? 'min ' + fmin + ', end ' + fend + ', looped ' + looped : JSON.stringify(fade));
+  ok('the music holds its level across the loop\'s seam: no fade there (row 633)', fade && fade.out && fade.mid > 0 && looped && fmin > 0.9 && fend > 0.9, fade && fade.out ? 'min ' + fmin + ', end ' + fend + ', looped ' + looped : JSON.stringify(fade));
   await pg.keyboard.press('ArrowRight'); await pg.waitForTimeout(200);
   ok('a cursor move plays ui-move', await pg.evaluate(() => window.__dummiesAudio.log.slice(-3).some((l) => l.id === 'ui-move')));
   // Arcade to play, then pause

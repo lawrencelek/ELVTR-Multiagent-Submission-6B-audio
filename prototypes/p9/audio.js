@@ -1,6 +1,6 @@
 // Prototype 9 (GDD Edit 100): the audio engine. WAV cues, generated tones and OGG music from content/audio/cues.json
 // (window.DUMMIES_CUES): three buses (music, sfx, ui) under a master, loudness trims per file, 0.3 s fades at every track's
-// start and end (the loop's seam too), the level card's track, the ducks (pause, the gift screen, report and workshop, a write-off),
+// start (once) and end (a stop or a switch, never the loop: row 633), the level card's track, the ducks (pause, the gift screen, report and workshop, a write-off),
 // cooldowns, a voice cap, saved volumes (dummies.p9.audio), and the Sound Lab's picks (dummies.p9.audio.lab, or
 // #audio=<base64 JSON> in the URL). game.js creates it only when window.DUMMIES_SIM['audio.enabled'] is 1, so builds without
 // it are unchanged. Files load by URL, beside the page (audio/sfx, audio/tones, audio/music). On http(s) the effects decode
@@ -234,12 +234,13 @@
       return p;
     }
     function bless(p) { try { p.el.muted = true; const pr = p.el.play(); if (pr && pr.then) pr.then(() => { if (!p.track) p.el.pause(); p.el.muted = false; }).catch(() => { p.el.muted = false; }); else { p.el.pause(); p.el.muted = false; } } catch (e) { /* no audio */ } }
-    // The track's own start and end (audio.music.fadeInSeconds, fadeOutSeconds): it fades in from each start, the loop's
-    // restart included, and out before the file ends. Before the file's length is known it waits at the start
+    // The track's start (audio.music.fadeInSeconds): it fades in once, from its first note. Lawrence, row 633: no fade at the
+    // loop; the fade out (audio.music.fadeOutSeconds) is the player's, when the track stops or gives way
     function seam(p) {
-      const el = p.el, dur = isFinite(el.duration) ? el.duration : p.seconds, t = el.currentTime || 0, fi = Math.max(0.01, P('audio.music.fadeInSeconds', 0.3)), fo = Math.max(0.01, P('audio.music.fadeOutSeconds', 0.3)); // a server that sends no length: the inventory's
-      if (!isFinite(dur) || !(dur > fi + fo)) return Math.min(1, t / fi);
-      return Math.max(0, Math.min(1, t / fi, (dur - t) / fo));
+      const t = p.el.currentTime || 0, fi = Math.max(0.01, P('audio.music.fadeInSeconds', 0.3));
+      if (p.lastT != null && t < p.lastT - 0.5) p.passed = true; // the loop came round
+      p.lastT = t;
+      return p.passed ? 1 : Math.min(1, t / fi);
     }
     function output(p) { // the player's fade × the seam × the duck; the bus level and the track's trim on top
       const lvl = Math.max(0, Math.min(1, p.vol * seam(p) * A.music.duck * busLevel('music') * db(p.trimDb || 0)));
@@ -258,7 +259,7 @@
       const p = M.players[i]; M.cur = i; p.want = 1;
       if (p.track !== n) { // a fresh start: the seam fades it in from 0 s, so the player itself opens at once
         const src = trackUrl(n);
-        p.track = n; p.trimDb = (CUES.music.tracks[n] || {}).trimDb || 0; p.seconds = (CUES.music.tracks[n] || {}).seconds || NaN; p.vol = 1;
+        p.track = n; p.trimDb = (CUES.music.tracks[n] || {}).trimDb || 0; p.seconds = (CUES.music.tracks[n] || {}).seconds || NaN; p.vol = 1; p.passed = false; p.lastT = null;
         if (p.el.getAttribute('data-src') !== src) { p.el.src = src; p.el.setAttribute('data-src', src); }
         try { p.el.currentTime = 0; } catch (e) { /* not loaded */ }
         output(p);

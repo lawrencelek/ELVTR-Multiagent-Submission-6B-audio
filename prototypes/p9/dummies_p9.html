@@ -295,7 +295,7 @@ document.getElementById('btn-full').addEventListener('click', () => {
     'story.traffic.parkland.C1': 1.75, 'story.traffic.parkland.C2': 1.75, 'story.traffic.parkland.C3': 1, 'story.traffic.parkland.B3': 1.25, 'story.traffic.parkland.A3': 2, 'story.traffic.parkland.A2': 1.5, 'story.traffic.parkland.A1': 1, 'story.traffic.parkland.B1': 2, 'story.traffic.parkland.B2': 1.25,
     'story.traffic.waterfront.A1': 1, 'story.traffic.waterfront.B1': 1.5, 'story.traffic.waterfront.C1': 1, 'story.traffic.waterfront.C2': 1.5, 'story.traffic.waterfront.C3': 1, 'story.traffic.waterfront.B3': 1, 'story.traffic.waterfront.A3': 1, 'story.traffic.waterfront.A2': 1.5, 'story.traffic.waterfront.B2': 1,
     'proto.bounce.maxThrow': 0, 'story.ferryDepth': 160, 'story.saveSlots': 3, 'story.saveNameMax': 12, 'story.level.firstPoints': 6500, 'story.level.stepPoints': 2000, 'story.level.max': 9, 'story.level.upgrades': 1,
-    'proto.batteryModel': 0, 'abilities.battery.dashCharges': 1, 'damage.bodyHealthOnFoot': 500, 'story.missFloor': 1, 'story.coneBaitSeconds': 0, 'story.floorHold': 0, 'proto.contactGraceSeconds': 0, 'world.dummyMonument': 0, 'world.storyArt': 0, // Edit 92 (P7.11): the story's tile art, cosmetic only // Edit 91 (P7.10): Battery 1 the dash, 2 a second charge, 3 a faster recharge; the chassis on foot; a miss holds at 1 // Edit 89 (P7.8): the dummy's level from points; an upgrade a level. Edit 88 (P7.7): save slots; a slot name's longest. Edit 83 (P7.2): the knock's longest slide (0: no cap; P7.2 sets it); how far in from the entry edge the drone sets the dummy down
+    'proto.batteryModel': 0, 'abilities.battery.dashCharges': 1, 'damage.bodyHealthOnFoot': 500, 'story.missFloor': 1, 'story.coneBaitSeconds': 0, 'story.floorHold': 0, 'proto.contactGraceSeconds': 0, 'proto.driver.dodgeFollowsCone': 0, 'world.dummyMonument': 0, 'world.storyArt': 0, // Edit 92 (P7.11): the story's tile art, cosmetic only // Edit 91 (P7.10): Battery 1 the dash, 2 a second charge, 3 a faster recharge; the chassis on foot; a miss holds at 1 // Edit 89 (P7.8): the dummy's level from points; an upgrade a level. Edit 88 (P7.7): save slots; a slot name's longest. Edit 83 (P7.2): the knock's longest slide (0: no cap; P7.2 sets it); how far in from the entry edge the drone sets the dummy down
     'economy.creditsPerWriteOff': 1, 'story.price.ability.level1': 3, 'story.price.ability.level2': 4, 'story.price.ability.level3': 5, 'story.giftCredits': 3,
     'story.writeOffs.monument.A1': 1, 'story.writeOffs.monument.B1': 1, 'story.writeOffs.monument.C1': 1, 'story.writeOffs.monument.C2': 1, 'story.writeOffs.monument.B2': 1, 'story.writeOffs.monument.A2': 1, 'story.writeOffs.monument.A3': 1, 'story.writeOffs.monument.B3': 1, 'story.writeOffs.monument.C3': 1,
     'story.writeOffs.parkland.C1': 1, 'story.writeOffs.parkland.C2': 2, 'story.writeOffs.parkland.C3': 1, 'story.writeOffs.parkland.B3': 1, 'story.writeOffs.parkland.A3': 1, 'story.writeOffs.parkland.A2': 2, 'story.writeOffs.parkland.A1': 1, 'story.writeOffs.parkland.B1': 1, 'story.writeOffs.parkland.B2': 2,
@@ -3024,8 +3024,13 @@ document.getElementById('btn-full').addEventListener('click', () => {
       m.until = this.t + this.remaining(c, m);
       c.man = m; c.state = 'committed'; c.cause = cause; c.intent = null; c.intentFor = null; c.signal = null;
       if (cause === 'cone') c.coneT = this.t; // Edit 100 (P9, row 620): when the car last reacted to a cone (story.coneBaitSeconds)
-      if (tg) c.dodge = { s: tg.s, id: tg.id };
+      if (tg) c.dodge = { s: tg.s, id: tg.id, kind: tg.kind, x: tg.x, y: tg.y }; // Edit 100 (row 632): where the cone stood
       this.emit('commit', { car: c.id, man: m.type, cause, d1: m.d1 != null ? +m.d1.toFixed(2) : null });
+    }
+    coneGone(dg) { // Edit 100 (P9, row 632): the cone a car swerved round is no longer where it stood: moved, carried, thrown or fetched
+      if (!dg || dg.kind !== 'cone' || dg.x == null) return false;
+      const r = this.P['props.cone.radius'];
+      return !this.cones.some((cn) => cn.id === dg.id && cn.state === 'free' && hyp(cn.x - dg.x, cn.y - dg.y) < 2 * r);
     }
     obstacleAhead(c) {
       const P = this.P, r = P['props.cone.radius'];
@@ -3212,7 +3217,7 @@ document.getElementById('btn-full').addEventListener('click', () => {
         const lw = P['world.laneWidth'];
         const inPath = !!(hz && hz.inPath);
         const urgent = Math.abs(c.d) > lw / 2 && this.oncomingAhead(c, 420);
-        const passed = !c.dodge || c.s - c.L / 2 > c.dodge.s + P['proto.returnClearance'];
+        const passed = !c.dodge || c.s - c.L / 2 > c.dodge.s + P['proto.returnClearance'] || (P['proto.driver.dodgeFollowsCone'] && this.coneGone(c.dodge)); // Edit 100 (row 632): a moved cone frees the lane
         const canReturn = !(c.orbit && c.orbit.lane === 'in') && Math.abs(c.d) > 0.5 && !this.bodyBeside(c, -c.d) && !this.carBeside(c, -c.d) &&
           (urgent || (!det.fwd && !inPath && passed && !this.corridorBlocked(c, -c.d)));
         let holdSpeed = false;
@@ -11468,7 +11473,7 @@ window.DUMMIES_LORE.build = 'P9'; // Edit 100: the build; the text is 8.3's (lor
 window.DUMMIES_CREDITS.lines = window.DUMMIES_CREDITS.lines.concat(["Music by ansimuz", "Sound effects by Chequered Ink"]); // Edit 100: the pack's credits
 </script>
 <script>
-window.DUMMIES_SIM = {"arcade.grades": 1, "ui.introScreen": 1, "ui.levelCard": 1, "world.droneDropIn": 1, "ui.storySplash": 1, "arcade.grade.healthStep": 0.25, "arcade.grade.densityStep": 0.2, "arcade.grade.max": 5, "highscore.tableSize": 10, "ui.intro.loopSeconds": 6.5, "ui.splash.cycleSeconds": 3.6, "proto.driver.coneSteepPass": 1, "proto.art.beamStraight": 1, "proto.art.brakeGlowStopped": 1, "proto.art.spentGrey": 1, "ui.cueKey.simple": 1, "ui.layerEdgeFix": 1, "proto.art.noticeFlashHz": 4, "proto.droneConeSeconds": 0, "proto.stopCue": 0, "audio.enabled": 1, "story.coneBaitSeconds": 6, "story.floorHold": 1, "ui.hud.bodyCeil": 1, "ui.spentTick": 1, "proto.contactGraceSeconds": 0.3}; // Edit 97–100 (P8.2–9): registry edit100-2026-10-30; the flags 1 here (registry default 0)
+window.DUMMIES_SIM = {"arcade.grades": 1, "ui.introScreen": 1, "ui.levelCard": 1, "world.droneDropIn": 1, "ui.storySplash": 1, "arcade.grade.healthStep": 0.25, "arcade.grade.densityStep": 0.2, "arcade.grade.max": 5, "highscore.tableSize": 10, "ui.intro.loopSeconds": 6.5, "ui.splash.cycleSeconds": 3.6, "proto.driver.coneSteepPass": 1, "proto.art.beamStraight": 1, "proto.art.brakeGlowStopped": 1, "proto.art.spentGrey": 1, "ui.cueKey.simple": 1, "ui.layerEdgeFix": 1, "proto.art.noticeFlashHz": 4, "proto.droneConeSeconds": 5, "proto.stopCue": 0, "audio.enabled": 1, "story.coneBaitSeconds": 6, "story.floorHold": 1, "ui.hud.bodyCeil": 1, "ui.spentTick": 1, "proto.contactGraceSeconds": 0.3, "proto.driver.dodgeFollowsCone": 1, "ui.lampsOnCar": 1, "ui.pause.quiet": 1, "ui.conesXray": 1}; // Edit 97–100 (P8.2–9): registry edit100-2026-10-30; the flags 1 here (registry default 0)
 </script>
 <script>
 /* DUMMIES P7.3 (GDD Edits 81–84): Story mode, and Arcade's verbs. The Test City, tile by tile: Monument, then Parkland, then Waterfront.
@@ -12042,7 +12047,7 @@ window.DUMMIES_CUES = {"generated_by": "audio/integrate.py", "registryVersion": 
 <script>
 // Prototype 9 (GDD Edit 100): the audio engine. WAV cues, generated tones and OGG music from content/audio/cues.json
 // (window.DUMMIES_CUES): three buses (music, sfx, ui) under a master, loudness trims per file, 0.3 s fades at every track's
-// start and end (the loop's seam too), the level card's track, the ducks (pause, the gift screen, report and workshop, a write-off),
+// start (once) and end (a stop or a switch, never the loop: row 633), the level card's track, the ducks (pause, the gift screen, report and workshop, a write-off),
 // cooldowns, a voice cap, saved volumes (dummies.p9.audio), and the Sound Lab's picks (dummies.p9.audio.lab, or
 // #audio=<base64 JSON> in the URL). game.js creates it only when window.DUMMIES_SIM['audio.enabled'] is 1, so builds without
 // it are unchanged. Files load by URL, beside the page (audio/sfx, audio/tones, audio/music). On http(s) the effects decode
@@ -12276,12 +12281,13 @@ window.DUMMIES_CUES = {"generated_by": "audio/integrate.py", "registryVersion": 
       return p;
     }
     function bless(p) { try { p.el.muted = true; const pr = p.el.play(); if (pr && pr.then) pr.then(() => { if (!p.track) p.el.pause(); p.el.muted = false; }).catch(() => { p.el.muted = false; }); else { p.el.pause(); p.el.muted = false; } } catch (e) { /* no audio */ } }
-    // The track's own start and end (audio.music.fadeInSeconds, fadeOutSeconds): it fades in from each start, the loop's
-    // restart included, and out before the file ends. Before the file's length is known it waits at the start
+    // The track's start (audio.music.fadeInSeconds): it fades in once, from its first note. Lawrence, row 633: no fade at the
+    // loop; the fade out (audio.music.fadeOutSeconds) is the player's, when the track stops or gives way
     function seam(p) {
-      const el = p.el, dur = isFinite(el.duration) ? el.duration : p.seconds, t = el.currentTime || 0, fi = Math.max(0.01, P('audio.music.fadeInSeconds', 0.3)), fo = Math.max(0.01, P('audio.music.fadeOutSeconds', 0.3)); // a server that sends no length: the inventory's
-      if (!isFinite(dur) || !(dur > fi + fo)) return Math.min(1, t / fi);
-      return Math.max(0, Math.min(1, t / fi, (dur - t) / fo));
+      const t = p.el.currentTime || 0, fi = Math.max(0.01, P('audio.music.fadeInSeconds', 0.3));
+      if (p.lastT != null && t < p.lastT - 0.5) p.passed = true; // the loop came round
+      p.lastT = t;
+      return p.passed ? 1 : Math.min(1, t / fi);
     }
     function output(p) { // the player's fade × the seam × the duck; the bus level and the track's trim on top
       const lvl = Math.max(0, Math.min(1, p.vol * seam(p) * A.music.duck * busLevel('music') * db(p.trimDb || 0)));
@@ -12300,7 +12306,7 @@ window.DUMMIES_CUES = {"generated_by": "audio/integrate.py", "registryVersion": 
       const p = M.players[i]; M.cur = i; p.want = 1;
       if (p.track !== n) { // a fresh start: the seam fades it in from 0 s, so the player itself opens at once
         const src = trackUrl(n);
-        p.track = n; p.trimDb = (CUES.music.tracks[n] || {}).trimDb || 0; p.seconds = (CUES.music.tracks[n] || {}).seconds || NaN; p.vol = 1;
+        p.track = n; p.trimDb = (CUES.music.tracks[n] || {}).trimDb || 0; p.seconds = (CUES.music.tracks[n] || {}).seconds || NaN; p.vol = 1; p.passed = false; p.lastT = null;
         if (p.el.getAttribute('data-src') !== src) { p.el.src = src; p.el.setAttribute('data-src', src); }
         try { p.el.currentTime = 0; } catch (e) { /* not loaded */ }
         output(p);
@@ -13971,7 +13977,8 @@ window.DUMMIES_CUES = {"generated_by": "audio/integrate.py", "registryVersion": 
     if (flashOn(s, c)) for (const sd of [-1, 1]) { // Edit 99: headlamps, just ahead of the bumper, with a glow on the road
       const u = c.L / 2 + 3, v = sd * (c.W / 2 - 4), x = Math.round((c.x + u * ca - v * sa) / U), y = Math.round((c.y + u * sa + v * ca) / U) - Math.round(hgt / 2);
       for (let j = -2; j <= 2; j++) for (let i = -2; i <= 2; i++) if (Math.abs(i) + Math.abs(j) <= 3) FB.mix(x + i, y + j, K.beam, 0.55);
-      FB.rect(x - 1, y - 1, x, y, K.white);
+      if (s.P['ui.lampsOnCar']) { const [lx, ly] = roof(c.L / 2 - 1, sd * (c.W / 2 - 3)); FB.rect(lx - 1, ly - 1, lx, ly, K.white); } // Edit 100 (row 634): the lamp on the art's own headlight
+      else FB.rect(x - 1, y - 1, x, y, K.white);
     }
   }
   // Edit 100 (P9, ui.spentTick; Lawrence, row 624): a spent car carries a tick on its roof, upright, white edged in ink
@@ -14343,6 +14350,7 @@ window.DUMMIES_CUES = {"generated_by": "audio/integrate.py", "registryVersion": 
     drawStoryFence(s); // Edit 81: a tile in test is fenced
     for (const c of cars) { ghost(carArt(s, c), c.x / U, c.y / U - (c._lift || 0)); relight(c); } // x-ray: a checker of each actor's own pixels, so an occluded car or dummy still reads
     if (b.alive && b._spr) ghost(b._spr, b._sx, b._sy);
+    if (s.P['ui.conesXray']) for (const cn of s.cones) if (cn.state === 'free' || cn.state === 'flight') ghost(PIX.CONE, cn.x / U, (cn.y - coneLift(cn) * 1.2) / U); // Edit 100 (row 637): a cone under a deck or an overpass reads, as the dummy does
     if (b.alive && b.held) { const p = s.releasePoint(), n = s.carriedCones().length; for (let i = 0; i < n; i++) PIX.blit(FB, PIX.CONE, p.x / U, p.y / U - 4 - 3 * i - bodyLift(s)); } // Edit 78: a stack
     for (const c of mine) drawCarMarks(s, c);
     if (b.mode !== 'rescue') drawNose(s);
@@ -15490,7 +15498,8 @@ window.DUMMIES_CUES = {"generated_by": "audio/integrate.py", "registryVersion": 
     }
     else if (cue === 'spent8') { const S = greyCar(PIX.car('sedan', 28, 14, EXT(22), 0, false)); PIX.blit(B, S, 16, 12); if (SIM8 && SIM8['ui.spentTick']) tickMark((x, y, k) => B.put(x, y, k), 16, 12 - EXT(22)); } // Edit 100: the tick
     else if (cue === 'notice' || cue === 'notice0') {
-      car(false); if (cue === 'notice') { for (const yy of [8, 14]) B.rect(29, yy, 30, yy + 1, K.white); for (let x = 31; x < 40; x++) for (let y = 6; y <= 16; y++) if (Math.abs(y - 11) <= 3 + (x - 31) * 0.5) B.mix(x, y, K.beam, 0.55); }
+      const r = car(false), dy = SIM8 && SIM8['ui.lampsOnCar'] ? r.cy - 12 : 0; // Edit 100 (row 634): the lamps on the car's own headlights, the beam level with them
+      if (cue === 'notice') { for (let x = 31; x < 40; x++) for (let y = 0; y < 20; y++) if (Math.abs(y - 11 - dy) <= 3 + (x - 31) * 0.5) B.mix(x, y, K.beam, 0.55); for (const yy of [8, 14]) B.rect(29, yy + dy, 30, yy + dy + 1, K.white); }
     }
     else if (cue === 'stoppoint') { car(false); PIX.polyline([[33, 4], [36, 4], [36, 18], [33, 18]], (x, y) => B.put(x, y, K.label)); }
     else if (cue === 'spent') { const r = car(false); PIX.line(r.cx - 4, r.cy + 3, r.cx + 4, r.cy - 3, (x, y) => { B.put(x, y, K.roofInk); B.put(x, y + 1, K.roofInk); }); }
@@ -15648,9 +15657,10 @@ window.DUMMIES_CUES = {"generated_by": "audio/integrate.py", "registryVersion": 
       if (app.confirmRefuse && !story) items[2] = 'Confirm refusal';
       menuList(items, app.pauseSel, x + 18, y + 62, w - 36, (i) => !story && i === 2 && s.run.writeOffs < 1, 0, (i) => { if (app.pauseSel !== i) app.confirmRefuse = false; app.pauseSel = i; });
       const ny = STORY ? y + 62 + items.length * 54 + 16 : y + 362;
-      wrapText(story ? 'The story map saves this tile\'s count. The body in play is lost.' : s.run.writeOffs < 1 ? 'Refusal opens after one completed body.' : 'Refusal is a deliberate ending.', x + 22, ny, w - 44, 26, STORY ? '400 17px ' + F_UI : fTxt, FT.dim, 3);
+      const quiet = !!s.P['ui.pause.quiet']; // Edit 100 (row 635): no Story save note, no gamepad line
+      if (!(quiet && story)) wrapText(story ? 'The story map saves this tile\'s count. The body in play is lost.' : s.run.writeOffs < 1 ? 'Refusal opens after one completed body.' : 'Refusal is a deliberate ending.', x + 22, ny, w - 44, 26, STORY ? '400 17px ' + F_UI : fTxt, FT.dim, 3);
     }
-    if (pad.info && pad.info.monitor) wrapText('GAMEPAD ' + pad.info.monitor + ' · hold START to set up', x + 22, y + h - 92, w - 44, 22, fTxt, FT.dim, 4); // Edit 75: what the pad sends
+    if (pad.info && pad.info.monitor && !s.P['ui.pause.quiet']) wrapText('GAMEPAD ' + pad.info.monitor + ' · hold START to set up', x + 22, y + h - 92, w - 44, 22, fTxt, FT.dim, 4); // Edit 75: what the pad sends. Edit 100 (row 635): not on the quiet page
     if (STORY) wrapText(appStatus(), x + 22, y + h - 18, w - 44, 18, '400 13px ' + F_MONO, FT.dim, 1); // Edit 86: the build line, off the page
     if (page === 'controls') drawControls(s, x + w + 16, y, FW - 36 - w - 16, h);
     else drawCueKey(x + w + 16, y, FW - 36 - w - 16, h);
