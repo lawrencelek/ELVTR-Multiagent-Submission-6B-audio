@@ -45,6 +45,17 @@
    "seconds": 38.4,
    "events": 701,
    "what": "A refusal. E minor with its flat second, 100 BPM. Hold music: off-beat electric piano, a cold chime, a pulsing bass"
+  },
+  {
+   "track": 11,
+   "file": "music/track11_dummies-generated_tile-cleared.ogg",
+   "mp3": "music/mp3/track11_dummies-generated_tile-cleared.mp3",
+   "title": "tile cleared",
+   "bpm": 132,
+   "bars": 12,
+   "seconds": 21.818,
+   "events": 517,
+   "what": "A Story tile cleared, until the next card. G major, 132 BPM. A jingle (a rising arpeggio, a snare roll, a ta-da), then a bouncing loop that climbs back into it"
   }
  ]
 }

@@ -1,9 +1,9 @@
 {
- "passed": 49,
- "total": 49,
+ "passed": 50,
+ "total": 50,
  "results": [
   {
-   "name": "every file in the cue map loads (159)",
+   "name": "every file in the cue map loads (161)",
    "pass": true,
    "detail": ""
   },
@@ -83,9 +83,14 @@
    "detail": "level, Track 3"
   },
   {
-   "name": "music on \"Story: the ferry to the next tile\": level, Track 3",
+   "name": "music on \"Story: counted, cleared\": cleared, Track 11",
    "pass": true,
-   "detail": "level, Track 3"
+   "detail": "cleared, Track 11"
+  },
+  {
+   "name": "music on \"Story: the ferry to the next tile\": cleared, Track 11",
+   "pass": true,
+   "detail": "cleared, Track 11"
   },
   {
    "name": "music on \"Story: the next card\": card, Track 4",
@@ -108,14 +113,14 @@
    "detail": "certified, Track 7"
   },
   {
-   "name": "the music ducks: write-off 0.5, report, workshop and gift screen 0.7, play 1",
+   "name": "the music ducks: write-off 0.5, report and workshop 0.7, play 1; the tile-cleared music never (row 631)",
    "pass": true,
-   "detail": "Arcade: play 1/1 · Arcade: a write-off 0.5/0.5 · Arcade: the report 0.7/0.7 · Arcade: the workshop 0.7/0.7 · Story: the gift screen (ferry) 0.7/0.7"
+   "detail": "Arcade: play 1/1 · Arcade: a write-off 0.5/0.5 · Arcade: the report 0.7/0.7 · Arcade: the workshop 0.7/0.7 · Story: the gift screen (ferry) 1/1"
   },
   {
    "name": "the tour heard 37 cues through the game's hooks",
    "pass": true,
-   "detail": "ui-start ui-move ui-ok ui-back chassis.start drop-in near-miss dropped-in lunge screen jump.dash jump-land impact combo pickup cone-hit drone-dispatch drone-dispatch.rescue writeoff credit shop-open chassis jump ui-pause ending.win ending.fail story-enter impact.big story-deliver story-count story-clear gift story-ferry story-gift story-ferried unveil unveil-lift"
+   "detail": "ui-start ui-move ui-ok ui-back chassis.start drop-in near-miss dropped-in lunge screen denied impact combo pickup cone-hit drone-dispatch drone-dispatch.rescue writeoff credit shop-open chassis jump jump-land ui-pause ending.win ending.fail story-enter impact.big story-deliver story-count story-clear gift story-ferry story-gift story-ferried unveil unveil-lift"
   },
   {
    "name": "the intro waits behind the gate",
@@ -238,7 +243,7 @@
    "detail": "[]"
   },
   {
-   "name": "Prototype 8.4 rebuilt from the shared code draws what the frozen build draws, barks and live counts aside (316 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 314 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)",
+   "name": "Prototype 8.4 rebuilt from the shared code draws what the frozen build draws, barks and live counts aside (315 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 314 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)",
    "pass": true,
    "detail": ""
   },

@@ -54,6 +54,7 @@ MUSIC_ROWS = {
     "licensed": ("A run ends Licensed", "phase `ending`, kind Licensed", "`audio.music.track.licensed`"),
     "failed": ("A run ends Failed test", "phase `ending`, kind Failed test", "`audio.music.track.failed`"),
     "noncompliant": ("A run ends Non-compliant (a refusal)", "phase `ending`, kind Non-compliant", "`audio.music.track.noncompliant`"),
+    "cleared": ("A Story tile cleared: the write-off, the report, the ferry, the gift screen, to the next card. Not ducked; pause ducks it", "event `story-clear`, until the next card", "`audio.music.track.cleared`"),
     "finale": ("The unveiling, the voyage", "phase `unveil`, `voyage`", "`audio.music.track.finale`"),
     "certified": ("At the ship: the set-down, CERTIFIED", "phase `ending`, kind Certified", "`audio.music.track.certified`"),
 }
@@ -101,7 +102,7 @@ def gdd():
     a("- **Buses:** music, SFX, UI under a master. Levels: `audio.music.volume`, `audio.sfx.volume`, `audio.ui.volume`.")
     a(f"- **Generated tones:** Prototype 8.4's procedural sounds, rendered to WAV by `audio/tones.py` ({INV.get('tones', 0)} files: 8.4's recipes, plus new tones for slip and for the eight events Lawrence asked for (row 606); a replaced 8.4 tone stays as `tone_<event>_p84.wav`). A `synth` entry plays its event's tone through the mix: gain class, cooldown, trim. An event with no entry or tone keeps the live synth, on the SFX bus at `audio.synth.gain`.")
     a("- **Lawrence's picks:** his Sound Lab exports over the agent's map, in order: `content/audio/picks_lawrence.json` (row 603), `picks_lawrence_2.json` and `picks_lawrence_2_tones.json` (row 607), `picks_lawrence_3.json` (his rulings: the chassis blip, the music states and values; rows 609–618). His fine gain becomes `audio.sfx.offset.<cue>`.")
-    a("- **Generated music** (row 619): Tracks 7–10, composed in code by `audio/music_gen.py` (`content/audio/music_gen.json`): 7 at the ship (CERTIFIED), 8 Licensed, 9 Failed test, 10 Non-compliant. Pulse, triangle, saw and FM voices, a plucked string, a pad, drums; a delay and a reverb. Whole bars, tails wrapped, so each loops on the bar.")
+    a("- **Generated music** (rows 619, 631): Tracks 7–11, composed in code by `audio/music_gen.py` (`content/audio/music_gen.json`): 11 a Story tile cleared; 7 at the ship (CERTIFIED), 8 Licensed, 9 Failed test, 10 Non-compliant. Pulse, triangle, saw and FM voices, a plucked string, a pad, drums; a delay and a reverb. Whole bars, tails wrapped, so each loops on the bar.")
     a("- **Hush:** a cue or a stated silence hushes the synth for its event. Hit juice still draws.")
     a("- **Loudness:** each file is trimmed toward `audio.sfx.targetLufs` or `audio.music.targetLufs`. Trims cap at `audio.trim.maxBoostDb` and `audio.trim.peakCeilingDb`.")
     a("- **Weight:** gain classes set it. `audio.sfx.gain.<class>`, in dB after the trim.")
@@ -253,7 +254,7 @@ def gdd():
     a("")
     a("## 11 Open")
     a("")
-    a("- **Generated music:** four tracks composed in code (`audio/music_gen.py`) to fill the pack's gaps. Heard here only as numbers: loudness, spectrum, structure. Lawrence's ear decides; the Sound Lab swaps any of them.")
+    a("- **Generated music:** five tracks composed in code (`audio/music_gen.py`) to fill the pack's gaps. Heard here only as numbers: loudness, spectrum, structure. Lawrence's ear decides; the Sound Lab swaps any of them.")
     a("- **Tone fidelity:** a generated tone is one rendering. Prototype 8.4 scaled some of its sounds with the hit's force; the tones take the middle of each range.")
     a(f"- **Silenced:** {n_sil} entries (§3). Switch any on in the Sound Lab.")
     a("- **Licence:** the pack's credit lines only. The licence texts were not supplied.")

@@ -44,7 +44,7 @@
 | **Evidence** | [`audio/runs/`](audio/runs/): every agent input and output, every map version, lint, a `trace.md` per run |
 | **The cue map** | [`content/audio/cues.json`](content/audio/cues.json): the agent's accepted map ([`design.json`](content/audio/design.json)) with Lawrence's picks over it ([`picks_lawrence.json`](content/audio/picks_lawrence.json), [`picks_lawrence_2.json`](content/audio/picks_lawrence_2.json), [`picks_lawrence_2_tones.json`](content/audio/picks_lawrence_2_tones.json), [`picks_lawrence_3.json`](content/audio/picks_lawrence_3.json), [`picks_lawrence_4.json`](content/audio/picks_lawrence_4.json)) |
 | **Generated tones** | [`audio/tones.py`](audio/tones.py) → `prototypes/p9/audio/tones/` (70 WAV: whoosh B and three darker takes, alternates for the dash, rows 626–628) and [`content/audio/tones.json`](content/audio/tones.json) |
-| **Generated music** | [`audio/music_gen.py`](audio/music_gen.py) → Tracks 7–10 in `prototypes/p9/audio/music/` (OGG and MP3) and [`content/audio/music_gen.json`](content/audio/music_gen.json) |
+| **Generated music** | [`audio/music_gen.py`](audio/music_gen.py) → Tracks 7–11 in `prototypes/p9/audio/music/` (11: tile cleared, row 631) (OGG and MP3) and [`content/audio/music_gen.json`](content/audio/music_gen.json) |
 | **Tests** | `prototypes/p9/test_p9.js`: 46/46 ([`shots/test_p9.json`](prototypes/p9/shots/test_p9.json)) |
 | **Decisions** | [`DECISIONS.md`](DECISIONS.md) rows 591–620; D86 closed |
 
@@ -241,7 +241,7 @@ Lawrence: "conduct an adversarial QA game agent who wants to break the game and 
 
 ## 6 Tests
 
-`cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84` → 49/49:
+`cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84` → 50/50:
 
 - every file in the cue map loads, tones included;
 - nothing plays before the first press;
@@ -273,7 +273,7 @@ Needs Python 3.9+, Node 18+, Playwright with Chromium, `ffmpeg`, and [Claude Cod
 
 ```
 python3 audio/tones.py                         # Prototype 8.4's synth → prototypes/p9/audio/tones/
-python3 audio/music_gen.py                     # Tracks 7–10 → prototypes/p9/audio/music/
+python3 audio/music_gen.py [N ...]             # Tracks 7–11 (or only N) → prototypes/p9/audio/music/
 python3 audio/inventory.py                     # the pack and the tones → content/audio/inventory.json
 python3 audio/events.py                        # the code → content/audio/events.json
 python3 audio/loop.py                          # the agent → audio/runs/<id>/, content/audio/design.json

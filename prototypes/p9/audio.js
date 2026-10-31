@@ -89,7 +89,7 @@
     const A = {
       ctx: null, unlocked: false, log: [], files: CUES.files, cues: CUES, settings, local,
       buffers: new Map(), pending: new Map(), failed: new Set(), last: new Map(), lastFile: new Map(), cyc: new Map(), voices: [], errors: [],
-      music: { players: [null, null, null], cur: -1, track: null, state: null, levelTrack: null, inCard: false, duck: 1, retryT: 0 },
+      music: { players: [null, null, null], cur: -1, track: null, state: null, levelTrack: null, inCard: false, cleared: false, duck: 1, retryT: 0 },
       bus: null, useElements: local,
     };
     function logIt(kind, id, file) { A.log.push({ t: +(app.realT || 0).toFixed(3), kind, id, file: file || null }); if (A.log.length > 800) A.log.splice(0, A.log.length - 800); }
@@ -207,6 +207,7 @@
     // An event from the sim, a derived case or a Prototype 9 hook. true: the map handled it (a cue, a generated tone or a
     // stated silence), so game.js hushes its own synth for it; false: no entry, or no tone to play
     function event(e) {
+      if (e && e.type === 'story-clear') A.music.cleared = !e.storyDone; // row 631: the tile-cleared music, until the next card (the finale has its own)
       const c = resolve(e.type, e);
       if (!c) return false;
       if (c.decision === 'silence') return true;
@@ -286,17 +287,19 @@
       if (v.credits) return 'credits';
       if (v.screen === 'intro') return 'intro';
       if (v.screen === 'loading') return null; // a district building: the music holds until its card
-      if (v.screen !== 'game') return 'menu';
+      if (v.screen !== 'game') { A.music.cleared = false; return 'menu'; }
       if (v.phase === 'ending' && v.ending === 'Certified') return 'certified'; // the ship (Lawrence, row 619)
       if (v.phase === 'unveil' || v.phase === 'voyage' || v.voyage) return 'finale';
       if (v.phase === 'ending') return ENDS[v.ending] || 'licensed'; // each run end its own track (row 619)
-      if (v.phase === 'brief') return 'card'; // Q2 (Lawrence): the level card starts the level's track
+      if (v.phase === 'brief') { A.music.cleared = false; return 'card'; } // Q2 (Lawrence): the level card starts the level's track
+      if (A.music.cleared) return 'cleared'; // row 631 (Lawrence): a Story tile cleared: its own music through the write-off, report, ferry and gift, to the next card
       return 'level';
     }
     // The ducks (Lawrence, Q4 and Q5): pause; the gift screen, the report and the workshop; a write-off. Pause wins
     function duckOf(v) {
       let d = 1;
-      if (v.phase === 'writeoff') d = P('audio.music.writeoffDuck', 0.5);
+      if (A.music.cleared && v.screen === 'game' && v.phase !== 'brief') { /* row 631: the cleared music plays out in full; only pause ducks it */ }
+      else if (v.phase === 'writeoff') d = P('audio.music.writeoffDuck', 0.5);
       else if (v.phase === 'gift' || v.phase === 'report' || v.phase === 'shop') d = P('audio.music.screenDuck', 0.7);
       if (v.paused) d = Math.min(d, P('audio.music.pauseDuck', 0.35));
       return d;

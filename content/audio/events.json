@@ -200,6 +200,15 @@
    "gdd": "Edit 97"
   },
   {
+   "id": "cleared",
+   "cue": "music.cleared",
+   "label": "Tile cleared",
+   "what": "A Story tile cleared: from its clear through the write-off, the report, the ferry and the gift screen, to the next card. Its own music, at full level; only pause ducks it (Lawrence).",
+   "detect": "event story-clear, until the next card",
+   "shot": "story",
+   "gdd": "Edit 100"
+  },
+  {
    "id": "finale",
    "cue": "music.finale",
    "label": "Finale",

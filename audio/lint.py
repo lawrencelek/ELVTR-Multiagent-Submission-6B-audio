@@ -124,7 +124,7 @@ def lint(m, events, inv):
         add("music.level", "M2", "major", f"rotation {rot} is not Tracks 3–6, each once")
     if mu.get("storyRule") not in ("tile", "card") or mu.get("arcadeRule") not in ("run", "level"):  # "card", "level": rows 611, 613
         add("music.level", "M2", "major", f"rules {mu.get('storyRule')}/{mu.get('arcadeRule')}")
-    for k in ("pause", "credits", "licensed", "failed", "noncompliant", "finale", "certified"):  # the endings apart (row 619)
+    for k in ("pause", "credits", "cleared", "licensed", "failed", "noncompliant", "finale", "certified"):  # the endings apart (row 619); a tile cleared (row 631)
         if k not in st:
             add("music." + k, "M3", "minor", "no state")
     return F

@@ -37,6 +37,7 @@ SEQUENCES = [
     ("Arcade ends: Licensed", "licensed", [[0, "ending.win"]], "ending", "The run ends licensed, on its own track."),
     ("Arcade ends: Failed test", "failed", [[0, "ending.fail"]], "failed", "The run ends failed, on its own track."),
     ("Arcade ends: Non-compliant", "noncompliant", [[0, "ending.fail"]], "refused", "A refusal, on its own track."),
+    ("Tile cleared", "cleared", [[0, "story-count"], [0.15, "story-clear"]], "story", "The tile's brief met: the jingle, then the loop to the next card."),
     ("Finale", "finale", [[0, "unveil"], [0.6, "unveil-lift"], [4.0, "ui-ok"], [4.2, "voyage"]], "plaque", "The cloth lifts, the plaque, the voyage."),
     ("At the ship", "certified", [[0, "voyage-end"], [0.3, "ending.win"]], "certified", "Set down at the ship: CERTIFIED, on its own track."),
 ]

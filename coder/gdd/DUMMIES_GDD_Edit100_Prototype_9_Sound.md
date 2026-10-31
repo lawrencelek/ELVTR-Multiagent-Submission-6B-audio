@@ -1,6 +1,6 @@
 # DUMMIES GDD — Edit 100 · Prototype 9 · Sound
 
-**30 October 2026 · Lawrence Lek** · Build `prototypes/p9/dummies_p9.html` · Registry `edit100-2026-10-30` · Cue map `content/audio/cues.json`, run `20261030-014423-cues` (10/10, confirmed) · Tests 49/49
+**30 October 2026 · Lawrence Lek** · Build `prototypes/p9/dummies_p9.html` · Registry `edit100-2026-10-30` · Cue map `content/audio/cues.json`, run `20261030-014423-cues` (10/10, confirmed) · Tests 50/50
 
 ## 0 Request
 
@@ -31,7 +31,7 @@
 - **Buses:** music, SFX, UI under a master. Levels: `audio.music.volume`, `audio.sfx.volume`, `audio.ui.volume`.
 - **Generated tones:** Prototype 8.4's procedural sounds, rendered to WAV by `audio/tones.py` (70 files: 8.4's recipes, plus new tones for slip and for the eight events Lawrence asked for (row 606); a replaced 8.4 tone stays as `tone_<event>_p84.wav`). A `synth` entry plays its event's tone through the mix: gain class, cooldown, trim. An event with no entry or tone keeps the live synth, on the SFX bus at `audio.synth.gain`.
 - **Lawrence's picks:** his Sound Lab exports over the agent's map, in order: `content/audio/picks_lawrence.json` (row 603), `picks_lawrence_2.json` and `picks_lawrence_2_tones.json` (row 607), `picks_lawrence_3.json` (his rulings: the chassis blip, the music states and values; rows 609–618). His fine gain becomes `audio.sfx.offset.<cue>`.
-- **Generated music** (row 619): Tracks 7–10, composed in code by `audio/music_gen.py` (`content/audio/music_gen.json`): 7 at the ship (CERTIFIED), 8 Licensed, 9 Failed test, 10 Non-compliant. Pulse, triangle, saw and FM voices, a plucked string, a pad, drums; a delay and a reverb. Whole bars, tails wrapped, so each loops on the bar.
+- **Generated music** (rows 619, 631): Tracks 7–11, composed in code by `audio/music_gen.py` (`content/audio/music_gen.json`): 11 a Story tile cleared; 7 at the ship (CERTIFIED), 8 Licensed, 9 Failed test, 10 Non-compliant. Pulse, triangle, saw and FM voices, a plucked string, a pad, drums; a delay and a reverb. Whole bars, tails wrapped, so each loops on the bar.
 - **Hush:** a cue or a stated silence hushes the synth for its event. Hit juice still draws.
 - **Loudness:** each file is trimmed toward `audio.sfx.targetLufs` or `audio.music.targetLufs`. Trims cap at `audio.trim.maxBoostDb` and `audio.trim.peakCeilingDb`.
 - **Weight:** gain classes set it. `audio.sfx.gain.<class>`, in dB after the trim.
@@ -64,6 +64,7 @@
 | `music.licensed` | A run ends Licensed | phase `ending`, kind Licensed | Track 8 (licensed) | yes | fade in `audio.music.fadeInSeconds`, out `audio.music.fadeOutSeconds` | `audio.music.track.licensed` |
 | `music.failed` | A run ends Failed test | phase `ending`, kind Failed test | Track 9 (failed test) | yes | fade in `audio.music.fadeInSeconds`, out `audio.music.fadeOutSeconds` | `audio.music.track.failed` |
 | `music.noncompliant` | A run ends Non-compliant (a refusal) | phase `ending`, kind Non-compliant | Track 10 (non-compliant) | yes | fade in `audio.music.fadeInSeconds`, out `audio.music.fadeOutSeconds` | `audio.music.track.noncompliant` |
+| `music.cleared` | A Story tile cleared: the write-off, the report, the ferry, the gift screen, to the next card. Not ducked; pause ducks it | event `story-clear`, until the next card | Track 11 (tile cleared) | yes | fade in `audio.music.fadeInSeconds`, out `audio.music.fadeOutSeconds` | `audio.music.track.cleared` |
 | `music.finale` | The unveiling, the voyage | phase `unveil`, `voyage` | Track 1 (megabot) | yes | fade in `audio.music.fadeInSeconds`, out `audio.music.fadeOutSeconds` | `audio.music.track.finale` |
 | `music.certified` | At the ship: the set-down, CERTIFIED | phase `ending`, kind Certified | Track 7 (certified) | yes | fade in `audio.music.fadeInSeconds`, out `audio.music.fadeOutSeconds` | `audio.music.track.certified` |
 
@@ -81,6 +82,7 @@
 | 8 · licensed | `music/track8_dummies-generated_licensed.ogg` | 0:30 | -10.6 LUFS | -5.4 dB | licensed |
 | 9 · failed test | `music/track9_dummies-generated_failed-test.ogg` | 0:43 | -10.4 LUFS | -5.6 dB | failed |
 | 10 · non-compliant | `music/track10_dummies-generated_non-compliant.ogg` | 0:38 | -11.0 LUFS | -5.0 dB | noncompliant |
+| 11 · tile cleared | `music/track11_dummies-generated_tile-cleared.ogg` | 0:21 | -10.5 LUFS | -5.5 dB | cleared |
 
 - **Story tiles:** tile *n* = Monument A1 … Waterfront B2 in story order, 1–27. A level card announces its tile; that tile's track starts with the card and holds until the next card.
 - **Arcade:** the session's level *n* plays slot ((*n* − 1) mod 4) + 1, from its card. A district's next road is the next level.
@@ -296,7 +298,7 @@ python3 audio/integrate.py && python3 prototypes/p9/build.py
 cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && python3 prototypes/p9/make_lab.py && python3 audio/make_gdd.py
 ```
 
-- PASS · every file in the cue map loads (159)
+- PASS · every file in the cue map loads (161)
 - PASS · the tour ran without page errors
 - PASS · nothing plays before the first press
 - PASS · music on "the first press": intro, Track 1
@@ -312,12 +314,13 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 - PASS · music on "Story: the map": menu, Track 2
 - PASS · music on "Story: the level card (A1)": card, Track 3
 - PASS · music on "Story: the drone drop": level, Track 3
-- PASS · music on "Story: the ferry to the next tile": level, Track 3
+- PASS · music on "Story: counted, cleared": cleared, Track 11
+- PASS · music on "Story: the ferry to the next tile": cleared, Track 11
 - PASS · music on "Story: the next card": card, Track 4
 - PASS · music on "Story: play on tile 2": level, Track 4
 - PASS · music on "the finale": finale, Track 1
 - PASS · music on "CERTIFIED": certified, Track 7
-- PASS · the music ducks: write-off 0.5, report, workshop and gift screen 0.7, play 1
+- PASS · the music ducks: write-off 0.5, report and workshop 0.7, play 1; the tile-cleared music never (row 631)
 - PASS · the tour heard 37 cues through the game's hooks
 - PASS · the intro waits behind the gate
 - PASS · an unmapped key unlocks audio and starts Track 1
@@ -343,14 +346,14 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 - PASS · malformed picks are dropped and the game starts; an emptied pool is silent
 - PASS · no page errors in the hook tests
 - PASS · no audio engine errors
-- PASS · Prototype 8.4 rebuilt from the shared code draws what the frozen build draws, barks and live counts aside (316 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 314 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)
+- PASS · Prototype 8.4 rebuilt from the shared code draws what the frozen build draws, barks and live counts aside (315 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 314 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)
 - PASS · the frozen dummies_p8_4.html is unchanged (md5 9f5549201d88891f9f0b22c461602909)
 
 ## 7 Measured
 
 - **SFX:** 100 mono WAV, 44.1 kHz. 0.10–3.29 s. Level -29.0 to -17.6 dB (LUFS, or RMS under 0.4 s).
-- **Music:** 10 stereo OGG: six from the pack (48 kHz, 66–123 s) and four generated (44.1 kHz, 31–63 s). -16.7 to -9.1 LUFS.
-- **Build:** `dummies_p9.html` 1,416,961 bytes. Audio beside it: 38.0 MB.
+- **Music:** 11 stereo OGG: six from the pack (48 kHz, 66–123 s) and four generated (44.1 kHz, 31–63 s). -16.7 to -9.1 LUFS.
+- **Build:** `dummies_p9.html` 1,417,948 bytes. Audio beside it: 38.8 MB.
 
 ## 8 Registry (edit100)
 
@@ -366,6 +369,7 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 | `audio.music.targetLufs` | -16 | LUFS | Integrated loudness each track is trimmed toward |
 | `audio.music.track.card` | -1 | track | Track on a level card. −1: the level's own track, from the tile the card announces; 0: the track playing continues; 1–6: that track |
 | `audio.music.track.certified` | 7 | track | Track from the set-down at the ship: CERTIFIED |
+| `audio.music.track.cleared` | 11 | track | Track from a Story tile's clear to the next card: the write-off, the report, the ferry, the gift screen. Not ducked by them; pause ducks it |
 | `audio.music.track.credits` | 1 | track | Track on the Credits card (0: the current track continues) |
 | `audio.music.track.failed` | 9 | track | Track when a run ends Failed test |
 | `audio.music.track.finale` | 1 | track | Track for the unveiling and the voyage |
@@ -442,7 +446,7 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 
 ## 11 Open
 
-- **Generated music:** four tracks composed in code (`audio/music_gen.py`) to fill the pack's gaps. Heard here only as numbers: loudness, spectrum, structure. Lawrence's ear decides; the Sound Lab swaps any of them.
+- **Generated music:** five tracks composed in code (`audio/music_gen.py`) to fill the pack's gaps. Heard here only as numbers: loudness, spectrum, structure. Lawrence's ear decides; the Sound Lab swaps any of them.
 - **Tone fidelity:** a generated tone is one rendering. Prototype 8.4 scaled some of its sounds with the hit's force; the tones take the middle of each range.
 - **Silenced:** 26 entries (§3). Switch any on in the Sound Lab.
 - **Licence:** the pack's credit lines only. The licence texts were not supplied.

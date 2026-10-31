@@ -12768,6 +12768,28 @@
     "max": 2
    },
    "purpose": "Leaning on a stopped car bounced the dummy ~16 times a second (QA-02, row 630)"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "source": "Edit 100 (P9): Lawrence's ruling, 30 October 11:30 (DECISIONS row 631)",
+   "status": "user-confirmed",
+   "applyAt": "next-run",
+   "id": "audio.music.track.cleared",
+   "group": "Audio",
+   "owner": "Audio",
+   "label": "Tile cleared track",
+   "unit": "track",
+   "type": "number",
+   "default": 11,
+   "validation": {
+    "min": 0,
+    "max": 11
+   },
+   "description": "Track from a Story tile's clear to the next card: the write-off, the report, the ferry, the gift screen. Not ducked by them; pause ducks it",
+   "purpose": "Lawrence: 'Tile Cleared' music once a tile is cleared (row 631)"
   }
  ],
  "tables": {

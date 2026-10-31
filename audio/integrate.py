@@ -28,6 +28,7 @@ PICKS = [ROOT / "content" / "audio" / f for f in (       # Lawrence's picks from
     "picks_lawrence_4.json",        # 30 October 12:06: the generated tracks on the ship and the three run ends (row 619)
     "picks_lawrence_5.json",        # 30 October 19:10: after the QA run, car-notice and barks silent (row 625)
     "picks_lawrence_6.json",        # 31 October 15:55: the dash by wear: whoosh B1, B2 damaged, B3 very damaged (row 629)
+    "picks_lawrence_7.json",        # 31 October 16:24: a Story tile cleared plays its own music, Track 11 (row 631)
 )]
 TONES = ROOT / "content" / "audio" / "tones.json"            # generated tones (audio/tones.py)
 OUT = ROOT / "content" / "audio" / "cues.json"
@@ -64,6 +65,7 @@ PARAMS = [  # id, label, unit, default, min, max, description, purpose
     ("audio.music.track.licensed", "Licensed track", "track", 2, 0, 10, "Track when a run ends Licensed", "Lawrence: its own track (row 619)"),
     ("audio.music.track.failed", "Failed test track", "track", 2, 0, 10, "Track when a run ends Failed test", "Lawrence: its own track (row 619)"),
     ("audio.music.track.noncompliant", "Non-compliant track", "track", 2, 0, 10, "Track when a run ends Non-compliant (a refusal)", "Lawrence: its own track (row 619)"),
+    ("audio.music.track.cleared", "Tile cleared track", "track", 11, 0, 11, "Track from a Story tile's clear to the next card: the write-off, the report, the ferry, the gift screen. Not ducked by them; pause ducks it", "Lawrence: 'Tile Cleared' music once a tile is cleared (row 631)"),
     ("audio.music.track.finale", "Finale track", "track", 1, 0, 10, "Track for the unveiling and the voyage", "Q4"),
     ("audio.music.track.certified", "At the ship track", "track", 1, 0, 10, "Track from the set-down at the ship: CERTIFIED", "Lawrence: one for the end at the ship (row 619)"),
     ("audio.music.levelRotation", "Level rotation", "digits", 3456, 0, 66666666, "Level tracks in order, one digit each. Story: the tile n a level card announces plays digit ((n − 1) mod count) + 1, until the next card. Arcade: the session's level n does", "Request: Tracks 3–6 alternate between levels and maps; Lawrence, Q3 (row 611)"),
@@ -89,7 +91,7 @@ RULED = {  # Lawrence's rulings, 30 October 11:30: the IDs they fix (status user
     "audio.music.track.intro": 617, "audio.music.fadeInSeconds": 609, "audio.music.fadeOutSeconds": 609, "audio.music.track.card": 610,
     "audio.music.levelRotation": 611, "audio.music.pauseDuck": 612, "audio.music.screenDuck": 612, "audio.music.track.credits": 612,
     "audio.music.track.finale": 612, "audio.music.writeoffDuck": 613, "audio.sfx.cooldown.bark": 614,
-    "audio.sfx.honkMaxPerCar": 623, "audio.sfx.dashDamagedAt": 629, "audio.sfx.dashWreckedAt": 629, "audio.sfx.spentRepeatMax": 624, "audio.sfx.spentRepeatSeconds": 624,
+    "audio.sfx.honkMaxPerCar": 623, "audio.sfx.dashDamagedAt": 629, "audio.sfx.dashWreckedAt": 629, "audio.music.track.cleared": 631, "audio.sfx.spentRepeatMax": 624, "audio.sfx.spentRepeatSeconds": 624,
     "audio.music.track.licensed": 619, "audio.music.track.failed": 619, "audio.music.track.noncompliant": 619, "audio.music.track.certified": 619,
 }
 
@@ -251,6 +253,7 @@ def main():
         "pause": "Lawrence (Q4): pause drops the level track to 35%.",
         "credits": "Lawrence (Q4): Credits play Track 1, as the finale does.",
         "finale": "Lawrence (Q4): Track 1 bookends the story, through the unveiling and the voyage.",
+        "cleared": "Lawrence: once a tile is cleared, satisfying music. Generated: a jingle, then a bright loop back into it.",
         "certified": "Lawrence: a track of its own for the end at the ship. Generated: horn, plucked strings, bells.",
         "licensed": "Lawrence: a track of its own. Generated: a chip lead over four on the floor.",
         "failed": "Lawrence: a track of its own. Generated: a slow minor line, a wobbling pad, a heartbeat.",
@@ -266,7 +269,7 @@ def main():
     st, rot = m["music"]["states"], m["music"]["rotation"]
     vals = {p[0]: p[3] for p in PARAMS}
     vals.update({k: v for k, v in prm_user.items() if k in vals})
-    for k in ("intro", "menu", "credits", "card", "licensed", "failed", "noncompliant", "finale", "certified"):
+    for k in ("intro", "menu", "credits", "card", "cleared", "licensed", "failed", "noncompliant", "finale", "certified"):
         v = st.get(k)
         vals["audio.music.track." + k] = v if isinstance(v, int) else -1 if v == "level" else 0
     vals["audio.music.levelRotation"] = int("".join(str(n) for n in rot))

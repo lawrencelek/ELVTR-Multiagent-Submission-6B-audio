@@ -1,8 +1,8 @@
 {
  "generated_by": "audio/inventory.py",
  "pack": "prototypes/p9/audio/",
- "count": 180,
- "music": 10,
+ "count": 181,
+ "music": 11,
  "sfx": 100,
  "tones": 70,
  "files": [
@@ -28,6 +28,29 @@
    "licence": "generated for this game",
    "track": 10,
    "title": "non-compliant"
+  },
+  {
+   "file": "music/track11_dummies-generated_tile-cleared.ogg",
+   "name": "track11_dummies-generated_tile-cleared",
+   "folder": "music",
+   "bytes": 403483,
+   "family": null,
+   "codec": "vorbis",
+   "channels": 2,
+   "sampleRate": 44100,
+   "bits": null,
+   "duration": 21.818,
+   "lufs": -10.5,
+   "rmsDb": -13.1,
+   "truePeak": -0.7,
+   "samplePeak": -0.739457,
+   "level": -10.5,
+   "levelSource": "lufs",
+   "credit": "Generated for DUMMIES (audio/music_gen.py)",
+   "source": "audio/music_gen.py",
+   "licence": "generated for this game",
+   "track": 11,
+   "title": "tile cleared"
   },
   {
    "file": "music/track1_ansimuz-itch-io_megabot.ogg",

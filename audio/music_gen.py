@@ -4,6 +4,7 @@
     Track 8  licensed       a run licensed (124 BPM, C major, 16 bars)
     Track 9  failed test    a run failed (66 BPM, A minor, 12 bars)
     Track 10 non-compliant  a refusal (100 BPM, E minor with its flat second, 16 bars)
+    Track 11 tile cleared   a Story tile cleared, until the next card (132 BPM, G major, 12 bars; row 631)
 
 Numpy and scipy only. Voices: pulse, square, triangle and saw (band-limited, additive), FM bells, an FM electric piano, a
 plucked string (Karplus–Strong), a filtered-saw pad, a ship's horn, a gong; drums from sines and filtered noise. A stereo
@@ -12,7 +13,8 @@ the bar (the engine adds its 0.3 s seam, row 609).
 
 Writes prototypes/p9/audio/music/track<N>_dummies-generated_<slug>.ogg, music/mp3/<same>.mp3, content/audio/music_gen.json.
 
-    python3 audio/music_gen.py
+    python3 audio/music_gen.py            every track
+    python3 audio/music_gen.py 11         only Track 11: the others' files and index entries stay as they are
 """
 import json
 import subprocess
@@ -420,11 +422,59 @@ def noncompliant():
     return s, dict(delay_beats=0.75, fb=0.3, rt60=1.4, rev_mix=0.22, dly_mix=0.2)
 
 
+# ---------- Track 11 · tile cleared (G major; a fanfare, then a bright loop) · Lawrence, 31 October 16:24 (row 631):
+# "after i clear a level, the music should change to 'Tile Cleared' music ... once the tile is cleared that should have some
+# satisfying music or jingle". Bars 1–2: the jingle, a rising G arpeggio over a snare roll, a ta-da on the chord. Bars 3–12: a
+# bouncing loop that climbs back (Am, D) into the jingle, so each pass opens on it.
+def cleared():
+    s = Score(132, 12)
+    s.line("pulse12", 1, [(0.5, 0.5, "G4"), (1, 0.5, "B4"), (1.5, 0.5, "D5"), (2, 0.5, "G5"), (2.5, 0.5, "B5"), (3, 1, "D6")], 0.34, -0.1, 0.25, 0.25)
+    s.line("bell", 1, [(0.5, 0.5, "G5"), (1, 0.5, "B5"), (1.5, 0.5, "D6"), (2, 0.5, "G6"), (2.5, 0.5, "B5"), (3, 1, "D6")], 0.22, 0.2, 0.3, 0.35)
+    for i, b in enumerate([2, 2.25, 2.5, 2.75, 3, 3.25, 3.5, 3.75]):
+        s.add("snare", b, 0.25, None, 0.08 + 0.03 * i, 0.05, 0, 0.2)
+    s.hit("tomh", 1, [3], 0.35); s.hit("toml", 1, [3.5], 0.4)
+    s.line("pulse12", 2, [(0, 0.5, "G5"), (0.5, 0.5, "G5"), (1, 0.5, "A5"), (1.5, 0.5, "B5"), (2, 2, "D6")], 0.36, -0.1, 0.3, 0.3)
+    s.line("bell", 2, [(0, 0.5, "G5"), (0.5, 0.5, "G5"), (1, 0.5, "A5"), (1.5, 0.5, "B5"), (2, 2, "G6")], 0.26, 0.2, 0.35, 0.45)
+    s.chord("pad", 2, [m(x) for x in ("G4", "B4", "D5", "G5")], beat=0, dur=4, vel=0.14, rev=0.4)
+    s.chord("square", 2, [m(x) for x in ("G4", "B4", "D5")], beat=0, dur=0.5, vel=0.1); s.chord("square", 2, [m(x) for x in ("G4", "B4", "D5")], beat=2, dur=1.5, vel=0.1)
+    s.add("sub", 4, 3.8, "G1", 0.5, 0, 0, 0.05)
+    s.hit("crash", 2, [0], 0.32); s.hit("kick", 2, [0, 2], 0.6); s.hit("clap", 2, [2], 0.3, 0.05, 0.3)
+    C = {"G": ("G1", ["G4", "B4", "D5", "G5"]), "Em": ("E2", ["E4", "G4", "B4", "E5"]), "C": ("C2", ["C5", "E5", "G5", "C6"]),
+         "D": ("D2", ["D4", "F#4", "A4", "D5"]), "Am": ("A1", ["A4", "C5", "E5", "A5"])}
+    prog = {3: "G", 4: "Em", 5: "C", 6: "D", 7: "G", 8: "Em", 9: "C", 10: "D", 11: "Am", 12: "D"}
+    for bar, ch in prog.items():
+        bass, arp = C[ch]
+        for i in range(8):
+            s.add("bass", (bar - 1) * 4 + i * 0.5, 0.4, m(bass) + (12 if i % 2 else 0) + 12, 0.3, 0, 0, 0.05)
+        for i in range(16):
+            s.add("square", (bar - 1) * 4 + i * 0.25, 0.2, m(arp[i % 4]) - 12, 0.05, 0.4, 0.2, 0.15)
+        s.chord("pad", bar, [m(n) - 12 for n in arp[:3]], vel=0.08, rev=0.3)
+        s.hit("kick", bar, [0, 1, 2, 3], 0.5)
+        s.hit("clap", bar, [1, 3], 0.26, 0.05, 0.25)
+        s.hit("hat", bar, [0.5, 1.5, 2.5, 3.5], 0.14, 0.3)
+    mel = {3: [(0, 0.5, "D5"), (0.5, 0.5, "G5"), (1, 1, "B5"), (2, 0.5, "A5"), (2.5, 0.5, "G5"), (3, 1, "D5")],
+           4: [(0, 1, "E5"), (1, 0.5, "G5"), (1.5, 0.5, "B5"), (2, 2, "B5")],
+           5: [(0, 0.5, "C6"), (0.5, 0.5, "B5"), (1, 1, "G5"), (2, 1, "E5"), (3, 1, "G5")],
+           6: [(0, 1.5, "A5"), (1.5, 0.5, "B5"), (2, 0.5, "A5"), (2.5, 0.5, "F#5"), (3, 1, "D5")],
+           7: [(0, 0.5, "D5"), (0.5, 0.5, "G5"), (1, 1, "B5"), (2, 0.5, "D6"), (2.5, 0.5, "B5"), (3, 1, "G5")],
+           8: [(0, 1, "G5"), (1, 1, "B5"), (2, 1, "E6"), (3, 1, "D6")],
+           9: [(0, 1.5, "E6"), (1.5, 0.5, "D6"), (2, 1, "C6"), (3, 1, "G5")],
+           10: [(0, 1, "F#5"), (1, 1, "A5"), (2, 2, "D6")],
+           11: [(0, 0.5, "C6"), (0.5, 0.5, "A5"), (1, 0.5, "E5"), (1.5, 0.5, "A5"), (2, 1, "C6"), (3, 1, "E6")],
+           12: [(0, 1, "D6"), (1, 0.5, "C6"), (1.5, 0.5, "A5"), (2, 0.5, "F#5"), (2.5, 0.5, "A5"), (3, 1, "D6")]}
+    for bar, it in mel.items():
+        s.line("bell", bar, it, 0.3, 0.15, 0.3, 0.3)
+        s.line("pulse", bar, it, 0.1, -0.2, 0.1, 0.2, -12)
+    s.hit("crash", 7, [0], 0.18); s.hit("ohat", 12, [3.5], 0.12, 0.3)
+    return s, dict(delay_beats=0.75, fb=0.28, rt60=1.4, rev_mix=0.22, dly_mix=0.16)
+
+
 TRACKS = [
     (7, "certified", "certified", certified, "The ship: the dummy set down, CERTIFIED. D major pentatonic, 76 BPM. A ship's horn, plucked strings, bells, a gong at the climax"),
     (8, "licensed", "licensed", licensed, "A run licensed. C major, 124 BPM. A chip lead over an arpeggio, four on the floor"),
     (9, "failed-test", "failed test", failed, "A run failed. A minor, 66 BPM. A wobbling pad, a slow triangle line, plucked chords, a heartbeat"),
     (10, "non-compliant", "non-compliant", noncompliant, "A refusal. E minor with its flat second, 100 BPM. Hold music: off-beat electric piano, a cold chime, a pulsing bass"),
+    (11, "tile-cleared", "tile cleared", cleared, "A Story tile cleared, until the next card. G major, 132 BPM. A jingle (a rising arpeggio, a snare roll, a ta-da), then a bouncing loop that climbs back into it"),
 ]
 
 
@@ -435,13 +485,17 @@ def write_wav(path, y):
         w.writeframes(pcm.tobytes())
 
 
-def main():
+def main(only=None):
     (OUT / "mp3").mkdir(parents=True, exist_ok=True)
+    keep = [e for e in json.loads(INDEX.read_text(encoding="utf-8"))["tracks"] if e["track"] not in only] if only and INDEX.exists() else []
     index = []
     for f in list(OUT.glob("track*_dummies-generated_*.ogg")) + list((OUT / "mp3").glob("track*_dummies-generated_*.mp3")):
-        f.unlink()
+        if not only or int(f.name[5:].split("_")[0]) in only:
+            f.unlink()
     with tempfile.TemporaryDirectory() as tmp:
         for n, slug, title, fn, what in TRACKS:
+            if only and n not in only:
+                continue
             sc, fx = fn()
             y = render(sc, **fx)
             stem = f"track{n}_dummies-generated_{slug}"
@@ -453,8 +507,10 @@ def main():
             index.append({"track": n, "file": f"music/{stem}.ogg", "mp3": f"music/mp3/{stem}.mp3", "title": title, "bpm": sc.bpm, "bars": sc.bars,
                           "seconds": round(secs, 3), "events": len(sc.ev), "what": what})
             print(f"Track {n} · {title}: {sc.bars} bars at {sc.bpm} BPM, {secs:.1f} s, {len(sc.ev)} notes and hits")
+    index = sorted(keep + index, key=lambda e: e["track"])
     INDEX.write_text(json.dumps({"generated_by": "audio/music_gen.py", "folder": "prototypes/p9/audio/music/", "tracks": index}, indent=1) + "\n", encoding="utf-8")
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+    main({int(a) for a in sys.argv[1:]} or None)

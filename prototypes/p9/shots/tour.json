@@ -343,7 +343,7 @@
     {
      "kind": "sfx",
      "id": "lunge",
-     "file": "wobble.wav"
+     "file": "tone_lunge_whoosh_b1.wav"
     },
     {
      "kind": "sfx",
@@ -366,8 +366,8 @@
    "cues": [
     {
      "kind": "sfx",
-     "id": "jump.dash",
-     "file": "jump_3.wav"
+     "id": "denied",
+     "file": "tone_denied.wav"
     }
    ]
   },
@@ -383,11 +383,6 @@
     "duck": 1
    },
    "cues": [
-    {
-     "kind": "sfx",
-     "id": "jump-land",
-     "file": "land.wav"
-    },
     {
      "kind": "sfx",
      "id": "impact",
@@ -943,7 +938,7 @@
     {
      "kind": "sfx",
      "id": "lunge",
-     "file": "wobble.wav"
+     "file": "tone_lunge_whoosh_b1.wav"
     },
     {
      "kind": "sfx",
@@ -966,13 +961,13 @@
    "cues": [
     {
      "kind": "sfx",
-     "id": "near-miss",
-     "file": "tone_near_miss.wav"
+     "id": "jump",
+     "file": "jump_1.wav"
     },
     {
      "kind": "sfx",
-     "id": "jump",
-     "file": "jump_1.wav"
+     "id": "near-miss",
+     "file": "tone_near_miss.wav"
     }
    ]
   },
@@ -992,6 +987,11 @@
      "kind": "sfx",
      "id": "jump-land",
      "file": "land.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "impact.big",
+     "file": "tone_impact_big.wav"
     }
    ]
   },
@@ -1002,16 +1002,11 @@
    "screen": "game",
    "phase": "play",
    "music": {
-    "state": "level",
-    "track": 3,
+    "state": "cleared",
+    "track": 11,
     "duck": 1
    },
    "cues": [
-    {
-     "kind": "sfx",
-     "id": "impact.big",
-     "file": "tone_impact_big.wav"
-    },
     {
      "kind": "sfx",
      "id": "story-deliver",
@@ -1026,6 +1021,21 @@
      "kind": "sfx",
      "id": "story-clear",
      "file": "powerup_5.wav"
+    },
+    {
+     "kind": "state",
+     "id": "cleared",
+     "file": null
+    },
+    {
+     "kind": "music",
+     "id": "track11",
+     "file": "music/track11_dummies-generated_tile-cleared.ogg"
+    },
+    {
+     "kind": "sfx",
+     "id": "near-miss",
+     "file": "tone_near_miss.wav"
     }
    ]
   },
@@ -1036,16 +1046,11 @@
    "screen": "game",
    "phase": "play",
    "music": {
-    "state": "level",
-    "track": 3,
+    "state": "cleared",
+    "track": 11,
     "duck": 1
    },
    "cues": [
-    {
-     "kind": "sfx",
-     "id": "near-miss",
-     "file": "tone_near_miss.wav"
-    },
     {
      "kind": "sfx",
      "id": "gift",
@@ -1060,11 +1065,16 @@
    "screen": "game",
    "phase": "report",
    "music": {
-    "state": "level",
-    "track": 3,
-    "duck": 0.7
+    "state": "cleared",
+    "track": 11,
+    "duck": 1
    },
    "cues": [
+    {
+     "kind": "sfx",
+     "id": "near-miss",
+     "file": "tone_near_miss.wav"
+    },
     {
      "kind": "sfx",
      "id": "near-miss",
@@ -1094,8 +1104,8 @@
    "screen": "game",
    "phase": "play",
    "music": {
-    "state": "level",
-    "track": 3,
+    "state": "cleared",
+    "track": 11,
     "duck": 1
    },
    "cues": [
@@ -1113,11 +1123,6 @@
      "kind": "sfx",
      "id": "story-ferry",
      "file": "ufo.wav"
-    },
-    {
-     "kind": "sfx",
-     "id": "near-miss",
-     "file": "tone_near_miss.wav"
     }
    ]
   },
@@ -1128,9 +1133,9 @@
    "screen": "game",
    "phase": "gift",
    "music": {
-    "state": "level",
-    "track": 3,
-    "duck": 0.7
+    "state": "cleared",
+    "track": 11,
+    "duck": 1
    },
    "cues": [
     {
@@ -1161,6 +1166,16 @@
      "kind": "ui",
      "id": "ui-ok",
      "file": "confirm_4.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "near-miss",
+     "file": "tone_near_miss.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "near-miss",
+     "file": "tone_near_miss.wav"
     },
     {
      "kind": "sfx",
@@ -1312,7 +1327,7 @@
  },
  "errors": [],
  "audio": {
-  "log": 124,
+  "log": 127,
   "settings": {
    "master": 9,
    "music": 8,

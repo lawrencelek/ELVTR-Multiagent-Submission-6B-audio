@@ -178,6 +178,7 @@ MUSIC = [
     ("licensed", "Licensed", "A run ends licensed: the quota met (Lawrence: its own track).", "phase 'ending', kind Licensed", "ending", "Edit 97"),
     ("failed", "Failed test", "A run ends failed: the cars ran out first (Lawrence: its own track).", "phase 'ending', kind Failed test", "failed", "Edit 97"),
     ("noncompliant", "Non-compliant", "A run ends in refusal (Lawrence: its own track).", "phase 'ending', kind Non-compliant", "refused", "Edit 97"),
+    ("cleared", "Tile cleared", "A Story tile cleared: from its clear through the write-off, the report, the ferry and the gift screen, to the next card. Its own music, at full level; only pause ducks it (Lawrence).", "event story-clear, until the next card", "story", "Edit 100"),
     ("finale", "Finale", "The unveiling and the voyage.", "phase unveil, voyage", "plaque", "Edit 94"),
     ("certified", "At the ship", "The dummy set down at the ship: CERTIFIED (Lawrence: its own track).", "phase 'ending', kind Certified", "certified", "Edit 94"),
 ]

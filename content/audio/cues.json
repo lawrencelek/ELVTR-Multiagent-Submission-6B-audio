@@ -64,7 +64,8 @@
   "audio.sfx.spentRepeatMax": 2,
   "audio.sfx.spentRepeatSeconds": 2,
   "audio.sfx.dashDamagedAt": 0.45,
-  "audio.sfx.dashWreckedAt": 0.7
+  "audio.sfx.dashWreckedAt": 0.7,
+  "audio.music.track.cleared": 11
  },
  "music": {
   "tracks": {
@@ -75,6 +76,14 @@
     "seconds": 38.4,
     "level": -11.0,
     "trimDb": -5.0
+   },
+   "11": {
+    "file": "music/track11_dummies-generated_tile-cleared.ogg",
+    "mp3": "music/mp3/track11_dummies-generated_tile-cleared.mp3",
+    "title": "tile cleared",
+    "seconds": 21.818,
+    "level": -10.5,
+    "trimDb": -5.5
    },
    "1": {
     "file": "music/track1_ansimuz-itch-io_megabot.ogg",
@@ -161,6 +170,7 @@
    "failed": 9,
    "noncompliant": 10,
    "certified": 7,
+   "cleared": 11,
    "screens": "duck",
    "writeoff": "duck"
   },
@@ -183,6 +193,7 @@
    "finale": "Lawrence (Q4): Track 1 bookends the story, through the unveiling and the voyage.",
    "screens": "Lawrence (Q4): the gift screen, report and workshop keep the level track at 70%.",
    "writeoff": "Lawrence (Q5): a write-off drops the level track to 50%.",
+   "cleared": "Lawrence: once a tile is cleared, satisfying music. Generated: a jingle, then a bright loop back into it.",
    "certified": "Lawrence: a track of its own for the end at the ship. Generated: horn, plucked strings, bells.",
    "licensed": "Lawrence: a track of its own. Generated: a chip lead over four on the floor.",
    "failed": "Lawrence: a track of its own. Generated: a slow minor line, a wobbling pad, a heartbeat.",
@@ -194,7 +205,8 @@
    "certified": "Lawrence",
    "licensed": "Lawrence",
    "failed": "Lawrence",
-   "noncompliant": "Lawrence"
+   "noncompliant": "Lawrence",
+   "cleared": "Lawrence"
   },
   "retired": {
    "audio.music.crossfadeSeconds": "superseded by audio.music.fadeInSeconds and fadeOutSeconds (row 609)",
@@ -4442,7 +4454,8 @@
    "content/audio/picks_lawrence_3.json",
    "content/audio/picks_lawrence_4.json",
    "content/audio/picks_lawrence_5.json",
-   "content/audio/picks_lawrence_6.json"
+   "content/audio/picks_lawrence_6.json",
+   "content/audio/picks_lawrence_7.json"
   ],
   "changed": {
    "ui-start": {
