@@ -29,7 +29,7 @@
 
 - **Engine:** `prototypes/p9/audio.js`. `game.js` creates it only when `audio.enabled` is 1. Prototype 9 sets 1; the registry default is 0.
 - **Buses:** music, SFX, UI under a master. Levels: `audio.music.volume`, `audio.sfx.volume`, `audio.ui.volume`.
-- **Generated tones:** Prototype 8.4's procedural sounds, rendered to WAV by `audio/tones.py` (69 files: 8.4's recipes, plus new tones for slip and for the eight events Lawrence asked for (row 606); a replaced 8.4 tone stays as `tone_<event>_p84.wav`). A `synth` entry plays its event's tone through the mix: gain class, cooldown, trim. An event with no entry or tone keeps the live synth, on the SFX bus at `audio.synth.gain`.
+- **Generated tones:** Prototype 8.4's procedural sounds, rendered to WAV by `audio/tones.py` (70 files: 8.4's recipes, plus new tones for slip and for the eight events Lawrence asked for (row 606); a replaced 8.4 tone stays as `tone_<event>_p84.wav`). A `synth` entry plays its event's tone through the mix: gain class, cooldown, trim. An event with no entry or tone keeps the live synth, on the SFX bus at `audio.synth.gain`.
 - **Lawrence's picks:** his Sound Lab exports over the agent's map, in order: `content/audio/picks_lawrence.json` (row 603), `picks_lawrence_2.json` and `picks_lawrence_2_tones.json` (row 607), `picks_lawrence_3.json` (his rulings: the chassis blip, the music states and values; rows 609–618). His fine gain becomes `audio.sfx.offset.<cue>`.
 - **Generated music** (row 619): Tracks 7–10, composed in code by `audio/music_gen.py` (`content/audio/music_gen.json`): 7 at the ship (CERTIFIED), 8 Licensed, 9 Failed test, 10 Non-compliant. Pulse, triangle, saw and FM voices, a plucked string, a pad, drums; a delay and a reverb. Whole bars, tails wrapped, so each loops on the bar.
 - **Hush:** a cue or a stated silence hushes the synth for its event. Hit juice still draws.
@@ -266,7 +266,7 @@ Columns: the cue; what triggers it, with its code site; the files (a pool), or t
 |---|---|---|---|---|---|
 | `sfx.intro-hit` | The intro loop: the car meets the dummy. | *silence*: Track 1 owns the intro; a looping hit would grate. | — | — | — |
 
-**Totals:** 107 entries: 50 cues, 26 silences, 31 generated tones, 0 on its base. 41 of 100 pack files used; 69 generated tones in `prototypes/p9/audio/tones/`. Lawrence's picks: 39 entries.
+**Totals:** 107 entries: 50 cues, 26 silences, 31 generated tones, 0 on its base. 41 of 100 pack files used; 70 generated tones in `prototypes/p9/audio/tones/`. Lawrence's picks: 39 entries.
 
 ## 4 Gameplay points
 
@@ -348,7 +348,7 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 
 - **SFX:** 100 mono WAV, 44.1 kHz. 0.10–3.29 s. Level -29.0 to -17.6 dB (LUFS, or RMS under 0.4 s).
 - **Music:** 10 stereo OGG: six from the pack (48 kHz, 66–123 s) and four generated (44.1 kHz, 31–63 s). -16.7 to -9.1 LUFS.
-- **Build:** `dummies_p9.html` 1,413,429 bytes. Audio beside it: 38.0 MB.
+- **Build:** `dummies_p9.html` 1,413,594 bytes. Audio beside it: 38.0 MB.
 
 ## 8 Registry (edit100)
 

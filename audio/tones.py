@@ -96,18 +96,61 @@ NEW = {
 #           "fm": [ratio, index from, index to], "duty": pulse width, "gain"}
 #   air    {"band": [from Hz, peak Hz, to Hz, Q], "gain"}: noise through a moving band-pass, its centre peaking at `peakAt`
 #   ping   {"hz", "at", "seconds", "gain"}: a soft sine note at the end, the melodic touch
-MECH = {
-    "lunge/mech-a": {"seconds": 0.18, "peakAt": 0.30, "note": "servo: a saw spins up a fifth (A2 → E3), a filter sweep, a gear ripple",
-                     "parts": [{"voice": {"wave": "saw", "notes": [[0, 110], [0.11, 164.8]], "glide": 0.11, "lp": [500, 1700, 3.5], "am": [55, 0.3], "gain": 1.0}},
-                               {"air": {"band": [350, 750, 500, 1.2], "gain": 0.22}}]},
-    "lunge/mech-b": {"seconds": 0.20, "peakAt": 0.25, "note": "actuator: a pulse steps G3 → D4, a short pneumatic breath",
-                     "parts": [{"voice": {"wave": "pulse", "duty": 0.3, "notes": [[0, 196], [0.07, 293.7]], "glide": 0.012, "lp": [900, 2000, 2.0], "am": [40, 0.15], "gain": 1.0}},
-                               {"air": {"band": [500, 1100, 600, 1.0], "gain": 0.28}}]},
-    "lunge/mech-c": {"seconds": 0.22, "peakAt": 0.35, "note": "turbine: an FM whine spins up an octave (G2 → G3), a low whir, a soft G4 to close",
-                     "parts": [{"voice": {"wave": "fm", "fm": [2.0, 3.0, 0.6], "notes": [[0, 98], [0.15, 196]], "glide": 0.15, "lp": [700, 2200, 1.5], "am": [33, 0.2], "gain": 1.0}},
-                               {"air": {"band": [250, 650, 350, 2.5], "gain": 0.28}},
-                               {"ping": {"hz": 392, "at": 0.14, "seconds": 0.08, "gain": 0.18}}]},
+MECH = {}  # row 627's servo, actuator and turbine, retired at row 628 (Lawrence: the first whoosh B was closest); mech() stays
+
+# Lawrence, 31 October 13:15 (DECISIONS row 628): "the previous whoosh b was actually closest. but let's make it have a little
+# less top end. give me 3 more options from tone lunge whoosh b". B as it was (row 626), and three from it with the same noise
+# (`seed`) and the same swell: the high band lowered and softened, and a steep low-pass (`top`, two 12 dB/oct stages) over all.
+WHOOSH = {
+    "lunge/whoosh-b": {"seconds": 0.20, "peakAt": 0.30, "layers": [[350, 800, 1100, 0.9, 1.0], [2200, 4800, 6500, 1.6, 0.5]],
+                       "body": [160, 80, 0.12], "note": "air dash, as heard (row 626)"},
+    "lunge/whoosh-b1": {"seconds": 0.20, "peakAt": 0.30, "seed": "lunge/whoosh-b", "top": 6000,
+                        "layers": [[350, 800, 1100, 0.9, 1.0], [2200, 4800, 6500, 1.6, 0.4]], "body": [160, 80, 0.12],
+                        "note": "B, a little less top: the high band at 80%, little above 6 kHz"},
+    "lunge/whoosh-b2": {"seconds": 0.20, "peakAt": 0.30, "seed": "lunge/whoosh-b", "top": 4500,
+                        "layers": [[350, 800, 1100, 0.9, 1.0], [1800, 3800, 5000, 1.6, 0.35]], "body": [160, 80, 0.12],
+                        "note": "B, softer: the high band lower and at 70%, little above 4.5 kHz"},
+    "lunge/whoosh-b3": {"seconds": 0.20, "peakAt": 0.30, "seed": "lunge/whoosh-b", "top": 2800,
+                        "layers": [[300, 700, 950, 0.9, 1.0], [1000, 2000, 2600, 1.6, 0.35]], "body": [160, 80, 0.16],
+                        "note": "B warm: both bands lower, a little more body, top 2.8 kHz"},
 }
+
+
+def whoosh(spec, seed):
+    n = int(spec["seconds"] * RATE)
+    t = np.arange(n) / RATE
+    u = t / spec["seconds"]
+    pk = spec["peakAt"]
+    rise = np.sin(0.5 * np.pi * np.clip(u / pk, 0, 1)) ** 2                    # a swell, not a hit
+    fall = np.cos(0.5 * np.pi * np.clip((u - pk) / (1 - pk), 0, 1)) ** 1.6
+    env = np.where(u < pk, rise, fall)
+    rng = np.random.default_rng(seed)
+    out = np.zeros(n)
+    for j, (f0, fp, f1, q, gain) in enumerate(spec["layers"]):
+        noise = rng.standard_normal(n)
+        k1, k2 = np.clip(u / pk, 0, 1), np.clip((u - pk) / (1 - pk), 0, 1)
+        fc = np.where(u < pk, f0 * (fp / f0) ** k1, fp * (f1 / fp) ** k2)       # the centre moves: the air goes past
+        qv = q * (0.8 + 0.4 * env)                                               # narrower at the peak: a touch of pitch
+        band = svf(noise, fc, qv)
+        out += gain * band / (np.std(band) or 1.0)
+    if spec.get("body"):
+        f0, f1, g = spec["body"]
+        f = f0 * (f1 / f0) ** u
+        out += g * 3 * np.sin(2 * np.pi * np.cumsum(f) / RATE)
+    out *= env
+    if spec.get("top"):                                                          # row 628: a steep top, 24 dB an octave
+        y = svf(svf(out, np.full(n, float(spec["top"])), np.full(n, 0.707), "low"), np.full(n, float(spec["top"])), np.full(n, 0.707), "low")
+    else:
+        a = math.exp(-2 * math.pi * 9000 / RATE)                                 # row 626: nothing gritty above ~9 kHz
+        y = np.zeros(n); prev = 0.0
+        for i in range(n):
+            prev = (1 - a) * out[i] + a * prev
+            y[i] = prev
+    y -= np.mean(y)
+    edge = int(0.003 * RATE)
+    y[:edge] *= np.linspace(0, 1, edge); y[-edge:] *= np.linspace(1, 0, edge)
+    peak = np.max(np.abs(y)) or 1.0
+    return y * (10 ** (PEAK_DB / 20) / peak)
 
 
 def svf(x, fc, q, out="band"):
@@ -258,13 +301,13 @@ def main():
                 w.setnchannels(1); w.setsampwidth(2); w.setframerate(RATE)
                 w.writeframes((np.clip(y, -1, 1) * 32767).astype("<i2").tobytes())
             index[eid] = {"file": f.name, "source": src, "voices": voices, "seconds": round(len(y) / RATE, 3)}
-    for eid, spec in MECH.items():  # alternates for an event, not its tone: tone_<event>_<name>.wav
-        y = mech(spec, seed=sum(map(ord, eid)))
+    for eid, spec, fn in [(k, v, whoosh) for k, v in WHOOSH.items()] + [(k, v, mech) for k, v in MECH.items()]:  # alternates for an event: tone_<event>_<name>.wav
+        y = fn(spec, seed=sum(map(ord, spec.get("seed", eid))))
         f = OUT / name(eid.replace("/", "_"))
         with wave.open(str(f), "wb") as w:
             w.setnchannels(1); w.setsampwidth(2); w.setframerate(RATE)
             w.writeframes((np.clip(y, -1, 1) * 32767).astype("<i2").tobytes())
-        index[eid] = {"file": f.name, "source": "Edit 100 (rows 626, 627)", "alternateFor": eid.split("/")[0], "mech": spec, "seconds": round(len(y) / RATE, 3)}
+        index[eid] = {"file": f.name, "source": "Edit 100 (rows 626–628)", "alternateFor": eid.split("/")[0], "spec": spec, "seconds": round(len(y) / RATE, 3)}
     INDEX.write_text(json.dumps({"generated_by": "audio/tones.py", "folder": "prototypes/p9/audio/tones/", "count": len(index), "tones": index},
                                 indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"{INDEX.relative_to(ROOT)}: {len(index)} tones ({sum(v['source'] == 'Edit 100' for v in index.values())} new)")

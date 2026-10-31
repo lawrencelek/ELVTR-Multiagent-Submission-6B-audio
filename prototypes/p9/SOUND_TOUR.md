@@ -80,7 +80,7 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 ## 12. Arcade: a dash
 
 - **Music:** level · Track 3 (chibi robot b)
-- **`sfx.lunge`** · Dash: `wobble.wav` · pool `wobble.wav` · alternates `tone_lunge_mech_a.wav`, `tone_lunge_mech_b.wav`, `tone_lunge_mech_c.wav`, `jump_4.wav`, `shrink.wav`
+- **`sfx.lunge`** · Dash: `wobble.wav` · pool `wobble.wav` · alternates `tone_lunge_whoosh_b.wav`, `tone_lunge_whoosh_b1.wav`, `tone_lunge_whoosh_b2.wav`, `tone_lunge_whoosh_b3.wav`, `jump_4.wav`, `shrink.wav`
 - **`sfx.screen`** · Screen flip: `tone_screen.wav` · pool — · alternates —
 
 ## 13. Arcade: a jump
@@ -250,7 +250,7 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 ![Story: a dash](shots/dash.jpg)
 
 - **Music:** level · Track 3 (chibi robot b)
-- **`sfx.lunge`** · Dash: `wobble.wav` · pool `wobble.wav` · alternates `tone_lunge_mech_a.wav`, `tone_lunge_mech_b.wav`, `tone_lunge_mech_c.wav`, `jump_4.wav`, `shrink.wav`
+- **`sfx.lunge`** · Dash: `wobble.wav` · pool `wobble.wav` · alternates `tone_lunge_whoosh_b.wav`, `tone_lunge_whoosh_b1.wav`, `tone_lunge_whoosh_b2.wav`, `tone_lunge_whoosh_b3.wav`, `jump_4.wav`, `shrink.wav`
 - **`sfx.near-miss`** · Near-miss: `tone_near_miss.wav` · pool — · alternates —
 
 ## 37. Story: a jump

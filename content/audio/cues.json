@@ -369,9 +369,10 @@
    "cooldown": "action",
    "cooldownId": "audio.sfx.cooldown.action",
    "alternates": [
-    "tone_lunge_mech_a.wav",
-    "tone_lunge_mech_b.wav",
-    "tone_lunge_mech_c.wav",
+    "tone_lunge_whoosh_b.wav",
+    "tone_lunge_whoosh_b1.wav",
+    "tone_lunge_whoosh_b2.wav",
+    "tone_lunge_whoosh_b3.wav",
     "jump_4.wav",
     "shrink.wav"
    ],
@@ -4080,26 +4081,34 @@
    "peak": -6.0,
    "dir": "tones"
   },
-  "tone_lunge_mech_a.wav": {
+  "tone_lunge_whoosh_b.wav": {
+   "trimDb": 2.1,
+   "seconds": 0.2,
+   "level": -20.1,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_lunge_whoosh_b1.wav": {
+   "trimDb": 1.7,
+   "seconds": 0.2,
+   "level": -19.7,
+   "family": "tone",
+   "peak": -6.0,
+   "dir": "tones"
+  },
+  "tone_lunge_whoosh_b2.wav": {
    "trimDb": 2.5,
-   "seconds": 0.18,
+   "seconds": 0.2,
    "level": -20.5,
    "family": "tone",
-   "peak": -6.0,
+   "peak": -5.9,
    "dir": "tones"
   },
-  "tone_lunge_mech_b.wav": {
-   "trimDb": -0.7,
+  "tone_lunge_whoosh_b3.wav": {
+   "trimDb": 1.6,
    "seconds": 0.2,
-   "level": -17.3,
-   "family": "tone",
-   "peak": -6.0,
-   "dir": "tones"
-  },
-  "tone_lunge_mech_c.wav": {
-   "trimDb": -3.1,
-   "seconds": 0.22,
-   "level": -14.9,
+   "level": -19.6,
    "family": "tone",
    "peak": -6.0,
    "dir": "tones"
