@@ -96,6 +96,8 @@ def gdd():
     a(f"| Endings | Each has a track of its own, generated (row 619): at the ship {tname(M['states']['certified'])}; Licensed {tname(M['states']['licensed'])}; Failed test {tname(M['states']['failed'])}; Non-compliant {tname(M['states']['noncompliant'])} | `audio.music.track.certified`, `.licensed`, `.failed`, `.noncompliant` |")
     a(f"| Fades | Every track fades in over {REG['audio.music.fadeInSeconds']['default']} s from each start and out over {REG['audio.music.fadeOutSeconds']['default']} s at each end, the loop's seam included. A switch is the two, overlapped | `audio.music.fadeInSeconds`, `audio.music.fadeOutSeconds` |")
     a("")
+    a("> **Frozen, 31 October 2026** (DECISIONS row 645): `audio/FREEZE.json` (210 items); `python3 audio/freeze.py --check`; tag `p9-sound-frozen`. A change needs Lawrence's ruling and a new freeze.")
+    a("")
     a("## 1 System")
     a("")
     a("- **Engine:** `prototypes/p9/audio.js`. `game.js` creates it only when `audio.enabled` is 1. Prototype 9 sets 1; the registry default is 0.")

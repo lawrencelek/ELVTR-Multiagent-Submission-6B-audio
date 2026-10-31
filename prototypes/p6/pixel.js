@@ -560,7 +560,13 @@
       blob(21, 58, 43, 63, 2.5, 2.5, MOD, 'mod');
       dots([[24, 60], [28, 60], [32, 60], [36, 60], [40, 60]], CHROME, 'mod', 2);
     }
-    if (has('fastCharge')) { // charge port on the pelvis, a plugged cable
+    if (has('fastCharge') && root.DUMMIES_SIM && root.DUMMIES_SIM['ui.coreOnChest']) { // Edit 100 (P9, row 644; Lawrence): the battery's core at the centre of the chest
+      blob(27, 37.5, 37, 47.5, 5, 5, CHROME, 'mod');                      // the rim
+      blob(28.5, 39, 35.5, 46, 3.5, 3.5, MOD, 'mod');                     // the housing
+      const glow = []; for (let y = 40; y <= 45; y++) for (let x = 30; x <= 35; x++) if ((x + 0.5 - 32) ** 2 + (y + 0.5 - 42.5) ** 2 <= 4.4) glow.push([x, y]);
+      dots(glow, FLAT, 'mod', 1, PAL.modGlow);                            // the lit cell
+      dots([[32, 38], [27, 42], [36, 42], [32, 47]], CHROME, 'mod', 2);   // four bolts on the rim
+    } else if (has('fastCharge')) { // charge port on the pelvis, a plugged cable
       blob(29, 62, 36, 69, 3.5, 3.5, MOD, 'mod');
       dots([[31, 65], [33, 65]], FLAT, 'mod', 1, PAL.joint);
       blob(31.5, 68, 33.5, 81, 1, 0.5, CHROME, 'mod');                  // the cable hangs between the legs

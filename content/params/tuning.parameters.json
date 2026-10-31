@@ -12988,6 +12988,28 @@
    },
    "description": "1: each part fitted (a purchase in the workshop, a part by drone) moves the level music to the rotation's next track, until the next card. 0: the track holds from card to card (row 611)",
    "purpose": "Lawrence: 'the music should change with each upgrade you get' (row 643)"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "status": "user-confirmed",
+   "type": "number",
+   "applyAt": "next-run",
+   "id": "ui.coreOnChest",
+   "group": "UI",
+   "owner": "Art",
+   "label": "Battery core on the chest",
+   "unit": "flag",
+   "default": 0,
+   "validation": {
+    "min": 0,
+    "max": 1
+   },
+   "source": "Edit 100 (P9): Lawrence, 31 October 20:58: 'the position of the battery is too close to crotch. it should be in the centre of the chest like Iron Man's power core' (DECISIONS row 644)",
+   "description": "1: Battery 1 (fastCharge) draws on the chassis as a round, lit core at the centre of the chest, a chrome rim with four bolts; Battery 3's chest pack sits around it. 0: Prototype 7.x–8.4's charge port on the pelvis, its cable between the legs. Prototype 9 sets 1",
+   "purpose": "The battery reads as the chassis's power, not its crotch (row 644)"
   }
  ],
  "tables": {

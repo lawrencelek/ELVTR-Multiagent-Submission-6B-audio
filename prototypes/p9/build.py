@@ -32,7 +32,7 @@ sim = dict({'arcade.grades': 1, 'ui.introScreen': 1, 'ui.levelCard': 1, 'world.d
 sim.update({'proto.driver.coneSteepPass': 1, 'proto.art.beamStraight': 1, 'proto.art.brakeGlowStopped': 1, 'proto.art.spentGrey': 1, 'ui.cueKey.simple': 1, 'ui.layerEdgeFix': 1,  # Edit 99 (P8.4)
             'proto.art.noticeFlashHz': 4, 'proto.droneConeSeconds': 0, 'proto.stopCue': 0})
 sim.update({'audio.enabled': 1, 'story.coneBaitSeconds': 6, 'story.floorHold': 1, 'ui.hud.bodyCeil': 1, 'ui.spentTick': 1, 'proto.contactGraceSeconds': 0.3, 'proto.driver.dodgeFollowsCone': 1, 'ui.lampsOnCar': 1, 'ui.pause.quiet': 1, 'proto.droneConeSeconds': 5, 'ui.conesXray': 1,
-            'arcade.modes': 1, 'arcade.trial.writeOffs': 10, 'arcade.endless.gradeWriteOffs': 3, 'ui.exploreArrows': 1,  # rows 639, 640, 642
+            'arcade.modes': 1, 'arcade.trial.writeOffs': 10, 'arcade.endless.gradeWriteOffs': 3, 'ui.exploreArrows': 1, 'ui.coreOnChest': 1,  # rows 639, 640, 642, 644
             'economy.price.ability.level1': 2, 'economy.price.ability.level2': 4, 'economy.price.ability.level3': 6, 'economy.price.ability.level4': 8})  # row 641: Lawrence's steeper prices  # Edit 100 (P9): the audio engine on; the cone brief and the floor (row 620); the spent tick (row 624); the contact grace (row 630); a moved cone frees the lane (row 632); the lamps on the car, a quiet pause page (rows 634, 635); a drone fetches a lane cone after 5 s (row 636). Registry defaults 0
 assert all(k in byid for k in sim), [k for k in sim if k not in byid]
 scripts += f'<script>\nwindow.DUMMIES_SIM = {json.dumps(sim)}; // Edit 97–100 (P8.2–9): registry {reg["registryVersion"]}; the flags 1 here (registry default 0)\n</script>\n'

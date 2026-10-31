@@ -4418,7 +4418,13 @@ document.getElementById('btn-full').addEventListener('click', () => {
       blob(21, 58, 43, 63, 2.5, 2.5, MOD, 'mod');
       dots([[24, 60], [28, 60], [32, 60], [36, 60], [40, 60]], CHROME, 'mod', 2);
     }
-    if (has('fastCharge')) { // charge port on the pelvis, a plugged cable
+    if (has('fastCharge') && root.DUMMIES_SIM && root.DUMMIES_SIM['ui.coreOnChest']) { // Edit 100 (P9, row 644; Lawrence): the battery's core at the centre of the chest
+      blob(27, 37.5, 37, 47.5, 5, 5, CHROME, 'mod');                      // the rim
+      blob(28.5, 39, 35.5, 46, 3.5, 3.5, MOD, 'mod');                     // the housing
+      const glow = []; for (let y = 40; y <= 45; y++) for (let x = 30; x <= 35; x++) if ((x + 0.5 - 32) ** 2 + (y + 0.5 - 42.5) ** 2 <= 4.4) glow.push([x, y]);
+      dots(glow, FLAT, 'mod', 1, PAL.modGlow);                            // the lit cell
+      dots([[32, 38], [27, 42], [36, 42], [32, 47]], CHROME, 'mod', 2);   // four bolts on the rim
+    } else if (has('fastCharge')) { // charge port on the pelvis, a plugged cable
       blob(29, 62, 36, 69, 3.5, 3.5, MOD, 'mod');
       dots([[31, 65], [33, 65]], FLAT, 'mod', 1, PAL.joint);
       blob(31.5, 68, 33.5, 81, 1, 0.5, CHROME, 'mod');                  // the cable hangs between the legs
@@ -11473,7 +11479,7 @@ window.DUMMIES_LORE.build = 'P9'; // Edit 100: the build; the text is 8.3's (lor
 window.DUMMIES_CREDITS.lines = window.DUMMIES_CREDITS.lines.concat(["Music by ansimuz", "Sound effects by Chequered Ink"]); // Edit 100: the pack's credits
 </script>
 <script>
-window.DUMMIES_SIM = {"arcade.grades": 1, "ui.introScreen": 1, "ui.levelCard": 1, "world.droneDropIn": 1, "ui.storySplash": 1, "arcade.grade.healthStep": 0.25, "arcade.grade.densityStep": 0.2, "arcade.grade.max": 5, "highscore.tableSize": 10, "ui.intro.loopSeconds": 6.5, "ui.splash.cycleSeconds": 3.6, "proto.driver.coneSteepPass": 1, "proto.art.beamStraight": 1, "proto.art.brakeGlowStopped": 1, "proto.art.spentGrey": 1, "ui.cueKey.simple": 1, "ui.layerEdgeFix": 1, "proto.art.noticeFlashHz": 4, "proto.droneConeSeconds": 5, "proto.stopCue": 0, "audio.enabled": 1, "story.coneBaitSeconds": 6, "story.floorHold": 1, "ui.hud.bodyCeil": 1, "ui.spentTick": 1, "proto.contactGraceSeconds": 0.3, "proto.driver.dodgeFollowsCone": 1, "ui.lampsOnCar": 1, "ui.pause.quiet": 1, "ui.conesXray": 1, "arcade.modes": 1, "arcade.trial.writeOffs": 10, "arcade.endless.gradeWriteOffs": 3, "ui.exploreArrows": 1, "economy.price.ability.level1": 2, "economy.price.ability.level2": 4, "economy.price.ability.level3": 6, "economy.price.ability.level4": 8}; // Edit 97–100 (P8.2–9): registry edit100-2026-10-30; the flags 1 here (registry default 0)
+window.DUMMIES_SIM = {"arcade.grades": 1, "ui.introScreen": 1, "ui.levelCard": 1, "world.droneDropIn": 1, "ui.storySplash": 1, "arcade.grade.healthStep": 0.25, "arcade.grade.densityStep": 0.2, "arcade.grade.max": 5, "highscore.tableSize": 10, "ui.intro.loopSeconds": 6.5, "ui.splash.cycleSeconds": 3.6, "proto.driver.coneSteepPass": 1, "proto.art.beamStraight": 1, "proto.art.brakeGlowStopped": 1, "proto.art.spentGrey": 1, "ui.cueKey.simple": 1, "ui.layerEdgeFix": 1, "proto.art.noticeFlashHz": 4, "proto.droneConeSeconds": 5, "proto.stopCue": 0, "audio.enabled": 1, "story.coneBaitSeconds": 6, "story.floorHold": 1, "ui.hud.bodyCeil": 1, "ui.spentTick": 1, "proto.contactGraceSeconds": 0.3, "proto.driver.dodgeFollowsCone": 1, "ui.lampsOnCar": 1, "ui.pause.quiet": 1, "ui.conesXray": 1, "arcade.modes": 1, "arcade.trial.writeOffs": 10, "arcade.endless.gradeWriteOffs": 3, "ui.exploreArrows": 1, "ui.coreOnChest": 1, "economy.price.ability.level1": 2, "economy.price.ability.level2": 4, "economy.price.ability.level3": 6, "economy.price.ability.level4": 8}; // Edit 97–100 (P8.2–9): registry edit100-2026-10-30; the flags 1 here (registry default 0)
 </script>
 <script>
 /* DUMMIES P7.3 (GDD Edits 81–84): Story mode, and Arcade's verbs. The Test City, tile by tile: Monument, then Parkland, then Waterfront.

@@ -1,6 +1,6 @@
 # DUMMIES GDD — Edit 100 · Prototype 9 · Sound
 
-**30 October 2026 · Lawrence Lek** · Build `prototypes/p9/dummies_p9.html` · Registry `edit100-2026-10-30` · Cue map `content/audio/cues.json`, run `20261030-014423-cues` (10/10, confirmed) · Tests 50/50
+**30 October 2026 · Lawrence Lek** · Build `prototypes/p9/dummies_p9.html` · Registry `edit100-2026-10-30` · Cue map `content/audio/cues.json`, run `20261030-014423-cues` (10/10, confirmed) · Tests 51/51
 
 ## 0 Request
 
@@ -24,6 +24,8 @@
 | Q6 | The new chassis no longer shares `bubble.wav`: it plays a generated blip. Barks kept a blip until row 625 silenced them (§10) | `sfx.chassis`; `sfx.bark`, `sfx.bark.shout` |
 | Endings | Each has a track of its own, generated (row 619): at the ship Track 7 (certified); Licensed Track 8 (licensed); Failed test Track 9 (failed test); Non-compliant Track 10 (non-compliant) | `audio.music.track.certified`, `.licensed`, `.failed`, `.noncompliant` |
 | Fades | Every track fades in over 0.3 s from each start and out over 0.3 s at each end, the loop's seam included. A switch is the two, overlapped | `audio.music.fadeInSeconds`, `audio.music.fadeOutSeconds` |
+
+> **Frozen, 31 October 2026** (DECISIONS row 645): `audio/FREEZE.json` (210 items); `python3 audio/freeze.py --check`; tag `p9-sound-frozen`. A change needs Lawrence's ruling and a new freeze.
 
 ## 1 System
 
@@ -321,7 +323,7 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 - PASS · music on "the finale": finale, Track 1
 - PASS · music on "CERTIFIED": certified, Track 7
 - PASS · the music ducks: write-off 0.5, report and workshop 0.7, play 1; the tile-cleared music never (row 631)
-- PASS · the tour heard 38 cues through the game's hooks
+- PASS · the tour heard 39 cues through the game's hooks
 - PASS · the intro waits behind the gate
 - PASS · an unmapped key unlocks audio and starts Track 1
 - PASS · every catalogued event and variant does what the map says (109: 52 cue, 26 silence, 31 synth)
@@ -346,6 +348,7 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 - PASS · malformed picks are dropped and the game starts; an emptied pool is silent
 - PASS · no page errors in the hook tests
 - PASS · no audio engine errors
+- PASS · the sound design matches its freeze (audio/FREEZE.json, row 645)
 - PASS · Prototype 8.4 rebuilt from the shared code draws what the frozen build draws, barks and live counts aside (314 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 314 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)
 - PASS · the frozen dummies_p8_4.html is unchanged (md5 9f5549201d88891f9f0b22c461602909)
 
@@ -353,7 +356,7 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 
 - **SFX:** 100 mono WAV, 44.1 kHz. 0.10–3.29 s. Level -29.0 to -17.6 dB (LUFS, or RMS under 0.4 s).
 - **Music:** 11 stereo OGG: six from the pack (48 kHz, 66–123 s) and four generated (44.1 kHz, 31–63 s). -16.7 to -9.1 LUFS.
-- **Build:** `dummies_p9.html` 1,429,886 bytes. Audio beside it: 38.8 MB.
+- **Build:** `dummies_p9.html` 1,430,607 bytes. Audio beside it: 38.8 MB.
 
 ## 8 Registry (edit100)
 

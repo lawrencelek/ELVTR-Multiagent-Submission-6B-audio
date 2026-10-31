@@ -1005,6 +1005,11 @@
    "cues": [
     {
      "kind": "sfx",
+     "id": "near-miss",
+     "file": "tone_near_miss.wav"
+    },
+    {
+     "kind": "sfx",
      "id": "jump-land",
      "file": "land.wav"
     },
@@ -1068,13 +1073,13 @@
    "cues": [
     {
      "kind": "sfx",
-     "id": "gift",
-     "file": "powerup_5.wav"
+     "id": "near-miss",
+     "file": "tone_near_miss.wav"
     },
     {
      "kind": "sfx",
-     "id": "near-miss",
-     "file": "tone_near_miss.wav"
+     "id": "gift",
+     "file": "powerup_5.wav"
     }
    ]
   },
@@ -1097,6 +1102,26 @@
     },
     {
      "kind": "sfx",
+     "id": "honk.body",
+     "file": "tone_honk_body.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "honk.body",
+     "file": "tone_honk_body.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "near-miss",
+     "file": "tone_near_miss.wav"
+    },
+    {
+     "kind": "gated",
+     "id": "honk",
+     "file": null
+    },
+    {
+     "kind": "sfx",
      "id": "writeoff",
      "file": "tone_writeoff.wav"
     },
@@ -1109,6 +1134,11 @@
      "kind": "sfx",
      "id": "story-clear",
      "file": "powerup_5.wav"
+    },
+    {
+     "kind": "gated",
+     "id": "honk",
+     "file": null
     }
    ]
   },
@@ -1181,6 +1211,11 @@
      "kind": "ui",
      "id": "ui-ok",
      "file": "confirm_4.wav"
+    },
+    {
+     "kind": "sfx",
+     "id": "near-miss",
+     "file": "tone_near_miss.wav"
     },
     {
      "kind": "sfx",
@@ -1337,7 +1372,7 @@
  },
  "errors": [],
  "audio": {
-  "log": 129,
+  "log": 136,
   "settings": {
    "master": 9,
    "music": 8,

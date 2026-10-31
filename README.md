@@ -192,11 +192,14 @@ Lawrence: "conduct an adversarial QA game agent who wants to break the game and 
 - **Fixed** (Lawrence, 19:10): `audio.sfx.honkMaxPerCar` 2; `audio.sfx.spentRepeatMax` 2 per `audio.sfx.spentRepeatSeconds` 2; a tick on a spent car (`ui.spentTick`); car-notice and barks silent. Each verified in play (`qa/repro.js`).
 - **Then:** the lean jitter (D88) closed by a 0.3 s contact grace (`proto.contactGraceSeconds`, row 630): 113 knocks in 40 s of leaning became 5.
 
-## 3.4 From Lawrence's play (rows 631–643)
+> **Sound design frozen, 31 October 2026** (DECISIONS row 645). `audio/FREEZE.json`; `python3 audio/freeze.py --check`; git tag `p9-sound-frozen`. A change needs Lawrence's ruling and a new freeze.
+
+## 3.4 From Lawrence's play (rows 631–644)
 
 - **Music:** Track 11 when a Story tile clears (631); no fade at the loop (633); the next track with each upgrade (643).
 - **Fixes:** a moved cone frees the lane (632); the notice flash on the lamps (634); a quiet pause page (635); a drone fetches a lane cone after 5 s (636); cones x-ray under decks (637). The jam: not reproduced (638).
 - **Arcade:** Time trial, 10 write-offs, fastest; Endless, 3 a grade everywhere (639). Fastest tables, Story included (640). Prices 2, 4, 6, 8 (641). Exploration arrows (642).
+- **Chassis:** Battery 1's core at the centre of the chest (644).
 
 ## 4 The engine
 
@@ -247,7 +250,7 @@ Lawrence: "conduct an adversarial QA game agent who wants to break the game and 
 
 ## 6 Tests
 
-`cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84` → 50/50:
+`cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84` → 51/51:
 
 - every file in the cue map loads, tones included;
 - nothing plays before the first press;

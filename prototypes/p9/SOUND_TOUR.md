@@ -265,6 +265,7 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 ![Story: a big hit](shots/impact.jpg)
 
 - **Music:** level · Track 4 (happywalking)
+- **`sfx.near-miss`** · Near-miss: `tone_near_miss.wav` · pool — · alternates —
 - **`sfx.jump-land`** · Jump lands: `land.wav` · pool `land.wav` · alternates `blocked.wav`, `door_close.wav`
 - **`sfx.impact.big`** · A big hit: `tone_impact_big.wav` · pool `explosion_1.wav` · alternates `harsh_destruction.wav`, `explosion_2.wav`, `soft_destruction.wav`
 
@@ -282,13 +283,14 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 ![Story: the gift screen](shots/gift.jpg)
 
 - **Music:** cleared · Track 11 (tile cleared)
-- **`sfx.gift`** · Gift screen: `powerup_5.wav` · pool `powerup_5.wav` · alternates `powerup_3.wav`, `level_up.wav`
 - **`sfx.near-miss`** · Near-miss: `tone_near_miss.wav` · pool — · alternates —
+- **`sfx.gift`** · Gift screen: `powerup_5.wav` · pool `powerup_5.wav` · alternates `powerup_3.wav`, `level_up.wav`
 
 ## 41. Story: the report
 
 - **Music:** cleared · Track 11 (tile cleared)
-- **`sfx.near-miss`** · Near-miss: `tone_near_miss.wav` · pool — · alternates —
+- **`sfx.near-miss`** · Near-miss: `tone_near_miss.wav` ×2 · pool — · alternates —
+- **`sfx.honk.body`** · At the dummy; repeats while it blocks: `tone_honk_body.wav` ×2 · pool — · alternates —
 - **`sfx.writeoff`** · Write-off: `tone_writeoff.wav` · pool `explosion_3.wav` · alternates `explosion_4.wav`, `harsh_destruction.wav`
 - **`sfx.story-count`** · Counted: `stat_increase.wav` · pool `stat_increase.wav` · alternates `collect_5.wav`, `confirm_2.wav`
 - **`sfx.story-clear`** · Tile cleared: `powerup_5.wav` · pool `powerup_5.wav` · alternates `level_up.wav`, `powerup_1.wav`
@@ -312,7 +314,7 @@ Every step of `tour_p9.js`: what shows, the music, and each cue the audio engine
 
 - **Music:** card · Track 4 (happywalking)
 - **`sfx.ui-ok`** · Confirm: `confirm_4.wav` · pool `confirm_4.wav` · alternates `confirm_1.wav`, `select_5.wav`
-- **`sfx.near-miss`** · Near-miss: `tone_near_miss.wav` · pool — · alternates —
+- **`sfx.near-miss`** · Near-miss: `tone_near_miss.wav` ×2 · pool — · alternates —
 - **`sfx.screen`** · Screen flip: `tone_screen.wav` · pool — · alternates —
 - **`sfx.story-enter`** · Tile in test: `computer_1.wav` · pool `computer_1.wav` · alternates `computer_2.wav`, `chime.wav`
 - **`sfx.story-ferried`** · Ferried: `laser_5.wav` · pool `laser_5.wav` · alternates —
