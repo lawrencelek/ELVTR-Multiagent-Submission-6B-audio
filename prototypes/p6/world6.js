@@ -2158,9 +2158,9 @@
       this.bodyControl(cmd, dt);
       const N = Math.max(1, Math.round(P['proto.substeps'])), h = dt / N, contacts = [];
       for (let k = 0; k < N; k++) { this.moveBody(h); this.floorStep(contacts, k); this.collideBody(contacts, k); this.moveCones(h); }
-      for (const c of this.cars) if (!c.touched) c.inEpisode = false;
+      for (const c of this.cars) if (!c.touched && !(this.t - (c.touchT == null ? -1e9 : c.touchT) < (P['proto.contactGraceSeconds'] || 0) - 1e-9)) c.inEpisode = false; // Edit 100 (row 630): a touch within proto.contactGraceSeconds continues the contact: no new bounce, hit or touch
       const own = Object.prototype.hasOwnProperty;
-      for (const g of this.cars) if (g.ghost) for (const k of ['touched', 'inEpisode', 'spent']) if (own.call(g, k)) g.real[k] = g[k]; // what the dummy did to a car next door happened to it
+      for (const g of this.cars) if (g.ghost) for (const k of ['touched', 'touchT', 'inEpisode', 'spent']) if (own.call(g, k)) g.real[k] = g[k]; // what the dummy did to a car next door happened to it
       const positive = this.account(contacts);
       this.retryPending();
       this.stepRescue(dt);
@@ -2329,7 +2329,7 @@
         if (air > 0 && air >= P['vehicles.' + c.cls + '.height']) continue; // Edit 75: over the roof
         const res = X.circleCar(b.x, b.y, r, c);
         if (!res) continue;
-        c.touched = true;
+        c.touched = true; c.touchT = this.t;
         const nx = -res.nx, ny = -res.ny, rel = (b.vx - c.vx) * nx + (b.vy - c.vy) * ny;
         let knock = null;
         if (!c.inEpisode) {

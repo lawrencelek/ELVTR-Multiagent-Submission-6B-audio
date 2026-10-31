@@ -63,7 +63,7 @@ Three browsers shared two CPUs. Game time was 65–80% of wall time: menus, load
 | ID | Severity | Finding | Status |
 |---|---|---|---|
 | QA-01 | Major | A blocked car honks every 1.4 s, without end | Fixed (row 623) |
-| QA-02 | Major | Leaning on a stopped spent car: knock and touch-spent ~16 a second | Sound fixed (row 624). Sim open (D88) |
+| QA-02 | Major | Leaning on a stopped spent car: knock and touch-spent ~16 a second | Fixed: sound (row 624), sim (row 630) |
 | QA-03 | Major | `car-notice` rings near-constantly in traffic | Fixed: silent (row 625) |
 | QA-04 | Major | Barks: 30 a minute in a jam | Fixed: silent (row 625) |
 | QA-05 | Info | Game-loop gaps of 1.5–3.2 s in play | Not reproduced alone: CPU load |
@@ -86,7 +86,7 @@ Three browsers shared two CPUs. Game time was 65–80% of wall time: menus, load
 - **Cause:** walking speed into a stopped car gives `impulseImpact` a knock (`un` > 0). The knock pushes the dummy off a few px. The held direction walks it back in. Each touch is a new contact episode.
 - **Fix (sound):** `audio.sfx.spentRepeatMax` (2) per `audio.sfx.spentRepeatSeconds` (2), per cue, per spent car. A live car is not capped.
 - **After:** one car: 4 reached the engine, 52 silenced. Pairs at most, 2 s apart.
-- **Open (D88):** the jitter itself. Hit juice still kicks the screen up to 4 times a second (its 0.25 s dedupe).
+- **Sim fix (row 630; D88 closed):** `proto.contactGraceSeconds` (0.3 s). A touch on the same car within it continues the contact. `qa/repro.js lean`, 40 s: 113 knocks and 145 touch-spent before; 5 and 10 after.
 - **Spent tick:** `ui.spentTick` (1). A spent car carries a tick on its roof, upright, white edged in ink. The cue key's "Already hit you" row shows it. Screenshot: `qa/runs/2026-10-30-solo/spent_tick.png`.
 
 ### QA-03 car-notice

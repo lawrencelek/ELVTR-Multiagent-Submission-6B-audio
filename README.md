@@ -190,7 +190,7 @@ Lawrence: "conduct an adversarial QA game agent who wants to break the game and 
 - **Found:** four sound loops. A blocked car honked every 1.4 s without end (QA-01). Leaning on a spent car knocked ~16 times a second (QA-02). car-notice and barks rang near-constantly (QA-03, QA-04).
 - **Clean:** no collision fault, trapped body, stuck mode, phase, car or menu; no music or engine fault.
 - **Fixed** (Lawrence, 19:10): `audio.sfx.honkMaxPerCar` 2; `audio.sfx.spentRepeatMax` 2 per `audio.sfx.spentRepeatSeconds` 2; a tick on a spent car (`ui.spentTick`); car-notice and barks silent. Each verified in play (`qa/repro.js`).
-- **Open:** D88, the lean jitter in the sim.
+- **Then:** the lean jitter (D88) closed by a 0.3 s contact grace (`proto.contactGraceSeconds`, row 630): 113 knocks in 40 s of leaning became 5.
 
 ## 4 The engine
 
@@ -263,7 +263,6 @@ Lawrence: "conduct an adversarial QA game agent who wants to break the game and 
 
 - **Licence:** only the pack's credit lines were supplied, not its licence texts.
 - **Devices:** Safari and iOS play Ogg Vorbis from 18.4; older ones get each track's MP3 (`canPlayType`). Effects are WAV everywhere. Untested on a device.
-- **The lean jitter** (D88): leaning on a stopped car knocks ~16 times a second in the sim; only its sound is capped.
 - **Silenced:** 26 entries, among them brake lights coming on, car-notice and barks. The Lab switches any on.
 - **Generated music:** checked by numbers (loudness, spectrum, structure), not by ear. Swap any of the four in the Lab.
 - **Tone fidelity:** each tone is one rendering. Prototype 8.4 scaled some sounds with the hit's force; the tones take the middle of each range.

@@ -122,7 +122,7 @@
     'story.traffic.parkland.C1': 1.75, 'story.traffic.parkland.C2': 1.75, 'story.traffic.parkland.C3': 1, 'story.traffic.parkland.B3': 1.25, 'story.traffic.parkland.A3': 2, 'story.traffic.parkland.A2': 1.5, 'story.traffic.parkland.A1': 1, 'story.traffic.parkland.B1': 2, 'story.traffic.parkland.B2': 1.25,
     'story.traffic.waterfront.A1': 1, 'story.traffic.waterfront.B1': 1.5, 'story.traffic.waterfront.C1': 1, 'story.traffic.waterfront.C2': 1.5, 'story.traffic.waterfront.C3': 1, 'story.traffic.waterfront.B3': 1, 'story.traffic.waterfront.A3': 1, 'story.traffic.waterfront.A2': 1.5, 'story.traffic.waterfront.B2': 1,
     'proto.bounce.maxThrow': 0, 'story.ferryDepth': 160, 'story.saveSlots': 3, 'story.saveNameMax': 12, 'story.level.firstPoints': 6500, 'story.level.stepPoints': 2000, 'story.level.max': 9, 'story.level.upgrades': 1,
-    'proto.batteryModel': 0, 'abilities.battery.dashCharges': 1, 'damage.bodyHealthOnFoot': 500, 'story.missFloor': 1, 'story.coneBaitSeconds': 0, 'story.floorHold': 0, 'world.dummyMonument': 0, 'world.storyArt': 0, // Edit 92 (P7.11): the story's tile art, cosmetic only // Edit 91 (P7.10): Battery 1 the dash, 2 a second charge, 3 a faster recharge; the chassis on foot; a miss holds at 1 // Edit 89 (P7.8): the dummy's level from points; an upgrade a level. Edit 88 (P7.7): save slots; a slot name's longest. Edit 83 (P7.2): the knock's longest slide (0: no cap; P7.2 sets it); how far in from the entry edge the drone sets the dummy down
+    'proto.batteryModel': 0, 'abilities.battery.dashCharges': 1, 'damage.bodyHealthOnFoot': 500, 'story.missFloor': 1, 'story.coneBaitSeconds': 0, 'story.floorHold': 0, 'proto.contactGraceSeconds': 0, 'world.dummyMonument': 0, 'world.storyArt': 0, // Edit 92 (P7.11): the story's tile art, cosmetic only // Edit 91 (P7.10): Battery 1 the dash, 2 a second charge, 3 a faster recharge; the chassis on foot; a miss holds at 1 // Edit 89 (P7.8): the dummy's level from points; an upgrade a level. Edit 88 (P7.7): save slots; a slot name's longest. Edit 83 (P7.2): the knock's longest slide (0: no cap; P7.2 sets it); how far in from the entry edge the drone sets the dummy down
     'economy.creditsPerWriteOff': 1, 'story.price.ability.level1': 3, 'story.price.ability.level2': 4, 'story.price.ability.level3': 5, 'story.giftCredits': 3,
     'story.writeOffs.monument.A1': 1, 'story.writeOffs.monument.B1': 1, 'story.writeOffs.monument.C1': 1, 'story.writeOffs.monument.C2': 1, 'story.writeOffs.monument.B2': 1, 'story.writeOffs.monument.A2': 1, 'story.writeOffs.monument.A3': 1, 'story.writeOffs.monument.B3': 1, 'story.writeOffs.monument.C3': 1,
     'story.writeOffs.parkland.C1': 1, 'story.writeOffs.parkland.C2': 2, 'story.writeOffs.parkland.C3': 1, 'story.writeOffs.parkland.B3': 1, 'story.writeOffs.parkland.A3': 1, 'story.writeOffs.parkland.A2': 2, 'story.writeOffs.parkland.A1': 1, 'story.writeOffs.parkland.B1': 1, 'story.writeOffs.parkland.B2': 2,
@@ -2089,7 +2089,7 @@
         if (!this.meets(c)) continue; // cars meet the dummy on their own level only
         const res = circleCar(b.x, b.y, r, c);
         if (!res) continue;
-        c.touched = true;
+        c.touched = true; c.touchT = this.t;
         const nx = -res.nx, ny = -res.ny; // from body into car
         const rel = (b.vx - c.vx) * nx + (b.vy - c.vy) * ny;
         let knock = null;
@@ -2235,7 +2235,7 @@
         if (!this.meets(c)) continue;
         const res = circleCar(b.x, b.y, r, c);
         if (!res) continue;
-        c.touched = true; c.inEpisode = true;
+        c.touched = true; c.touchT = this.t; c.inEpisode = true;
         const ph = dropImpact(P, d.vx, d.vy, c, res, v);
         contacts.push({ k, car: c, closing: ph.un, ph, px: b.x, py: b.y, zone: zoneOf(res.qx, res.qy, c), carState: this.carCue(c), cause: c.cause, coneT: c.coneT, lunging: false,
           bodySpeed: v, carSpeed: c.v, stopped: c.v < 5 || !!(c.man && c.man.standoff), drop: true, dropZ: d.fromZ, dropFrom: d.fromKind });
@@ -3354,7 +3354,7 @@
         this.collideBody(contacts, k);
         this.moveCones(h);
       }
-      for (const c of this.cars) if (!c.touched) c.inEpisode = false;
+      for (const c of this.cars) if (!c.touched && !(this.t - (c.touchT == null ? -1e9 : c.touchT) < (P['proto.contactGraceSeconds'] || 0) - 1e-9)) c.inEpisode = false; // Edit 100 (row 630): a touch within proto.contactGraceSeconds continues the contact
       const positive = this.account(contacts);
       this.retryPending();
       this.stepDrones(dt);
@@ -3533,7 +3533,7 @@
     }
     netEnd(dt) {
       const P = this.P, act = this.netCur, own = Object.prototype.hasOwnProperty;
-      for (const g of this.cars) if (g.ghost) for (const k of ['touched', 'inEpisode', 'spent']) if (own.call(g, k)) g.real[k] = g[k]; // what the dummy did to a ghost happened to its car
+      for (const g of this.cars) if (g.ghost) for (const k of ['touched', 'touchT', 'inEpisode', 'spent']) if (own.call(g, k)) g.real[k] = g[k]; // what the dummy did to a ghost happened to its car
       this.cars = this.cars.filter((c) => !c.ghost);
       this.saveCell(act);
       const N = Math.max(1, Math.round(P['proto.substeps'])), h = dt / N;

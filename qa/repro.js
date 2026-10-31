@@ -83,6 +83,8 @@ function serve() {
       return { cars: out, played: A.log.filter((l) => l.kind === 'sfx' && /^honk/.test(l.id)).length }; }, st0.log);
     console.log('== honks per car: reached the engine, silenced by the cap; honk cues played', g.played); for (const [k, v] of Object.entries(g.cars)) console.log(k, v.reached, v.gated, JSON.stringify(v.t));
   } else if (SCEN === 'lean') { // every car spent; the dummy walks into the nearest one, again and again
+    if (process.env.GRACE != null) await ev((g) => { window.__dummies.sim.P['proto.contactGraceSeconds'] = g; }, +process.env.GRACE);
+    const simT0 = await ev(() => window.__dummies.sim.t);
     const t1 = Date.now() + S, held = new Set(), K = { up: 'ArrowUp', down: 'ArrowDown', left: 'ArrowLeft', right: 'ArrowRight' };
     while (Date.now() < t1) {
       const d = await ev(() => { const s = window.__dummies.sim, b = s.body; for (const c of s.cars) c.spent = true; const cs = s.cars.filter((c) => !c.ghost && s.meets(c)).sort((p, q) => Math.hypot(p.x - b.x, p.y - b.y) - Math.hypot(q.x - b.x, q.y - b.y)); const c = cs[0]; return c ? [c.x - b.x, c.y - b.y] : null; });
@@ -94,6 +96,8 @@ function serve() {
     for (const k of held) await pg.keyboard.up(K[k]);
     const g = await ev((n0) => { const A = window.__dummiesAudio, out = {}; for (const e of window.__evlog.slice(n0)) if (/^(knock|touch-spent|honk)$/.test(e.type)) { const k = e.type + ' ' + e.car; (out[k] = out[k] || { events: 0, gated: 0, t: [] }).events++; out[k].t.push(e.t); }
       for (const l of A.log) if (l.kind === 'gated' && out[l.id + ' ' + l.car]) out[l.id + ' ' + l.car].gated++; return out; }, st0.log);
+    const simE = await ev((t0) => { const s = window.__dummies.sim, out = {}; for (const e of s.events) if (e.t > t0 && /^(knock|touch-spent|impact)$/.test(e.type)) { const k = e.type; out[k] = (out[k] || 0) + 1; } const per = {}; for (const e of s.events) if (e.t > t0 && e.type === 'knock') per[e.car] = (per[e.car] || 0) + 1; return { all: out, knockPerCar: per, simSeconds: +(s.t - t0).toFixed(1), grace: s.P['proto.contactGraceSeconds'] }; }, simT0);
+    console.log('== sim events (all emitted)', JSON.stringify(simE));
     console.log('== per car: events that reached the engine (cue or cooldown), events the cap silenced'); for (const [k, v] of Object.entries(g).sort((a, b) => b[1].events - a[1].events).slice(0, 10)) console.log(k, v.events, v.gated, JSON.stringify(v.t.slice(0, 12)));
     await report('lean on spent cars ' + SECS + ' s');
   } else if (SCEN === 'dashwear') { // row 629: the dash's take by the chassis's wear

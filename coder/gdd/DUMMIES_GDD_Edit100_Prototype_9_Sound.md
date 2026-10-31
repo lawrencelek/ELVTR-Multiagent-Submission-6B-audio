@@ -343,14 +343,14 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 - PASS · malformed picks are dropped and the game starts; an emptied pool is silent
 - PASS · no page errors in the hook tests
 - PASS · no audio engine errors
-- PASS · Prototype 8.4 rebuilt from the shared code draws what the frozen build draws, barks and live counts aside (315 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 316 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)
+- PASS · Prototype 8.4 rebuilt from the shared code draws what the frozen build draws, barks and live counts aside (316 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 314 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)
 - PASS · the frozen dummies_p8_4.html is unchanged (md5 9f5549201d88891f9f0b22c461602909)
 
 ## 7 Measured
 
 - **SFX:** 100 mono WAV, 44.1 kHz. 0.10–3.29 s. Level -29.0 to -17.6 dB (LUFS, or RMS under 0.4 s).
 - **Music:** 10 stereo OGG: six from the pack (48 kHz, 66–123 s) and four generated (44.1 kHz, 31–63 s). -16.7 to -9.1 LUFS.
-- **Build:** `dummies_p9.html` 1,416,419 bytes. Audio beside it: 38.0 MB.
+- **Build:** `dummies_p9.html` 1,416,961 bytes. Audio beside it: 38.0 MB.
 
 ## 8 Registry (edit100)
 
@@ -437,11 +437,11 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 - **Spent tick** (row 624): `ui.spentTick` (1). A spent car carries a tick on its roof, upright, white edged in ink. The cue key shows it beside "Already hit you".
 - **Silent** (QA-03, QA-04, row 625): `car-notice`, `bark`, `bark.shout`. The headlamp flash and the bubbles still show.
 - **Where:** `game.js` `audGate`, before the cue map. A capped event logs `gated` and hushes the synth.
+- **Contact grace** (QA-02, D88 closed, row 630): `proto.contactGraceSeconds` (0.3 s). A touch on the same car within it continues the contact: no new bounce, hit, knock or touch-spent. Leaning on a stopped car: 113 knocks in 40 s before, 5 after.
 - **The dash by wear** (row 629): `sfx.lunge` whoosh B1; `sfx.lunge.damaged` B2 from wear `audio.sfx.dashDamagedAt` (0.45); `sfx.lunge.wrecked` B3 from `audio.sfx.dashWreckedAt` (0.7). Wear: 1 − health ÷ maximum. The takes: generated, `audio/tones.py` (rows 626–628).
 
 ## 11 Open
 
-- **The lean jitter** (D88): leaning on a stopped car starts a new contact every few frames, ~16 knocks a second. Row 624 caps the sound only.
 - **Generated music:** four tracks composed in code (`audio/music_gen.py`) to fill the pack's gaps. Heard here only as numbers: loudness, spectrum, structure. Lawrence's ear decides; the Sound Lab swaps any of them.
 - **Tone fidelity:** a generated tone is one rendering. Prototype 8.4 scaled some of its sounds with the hit's force; the tones take the middle of each range.
 - **Silenced:** 26 entries (§3). Switch any on in the Sound Lab.

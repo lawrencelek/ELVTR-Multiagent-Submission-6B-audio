@@ -1,0 +1,188 @@
+{
+ "persona": "saboteur",
+ "seed": 202,
+ "minutes": 4,
+ "wall": 240.2,
+ "counts": {
+  "probes": 0,
+  "wallStops": 0,
+  "trapped": 0,
+  "reloads": 0,
+  "crashes": 0,
+  "runs": 2,
+  "districts": {
+   "waterfront": 1233,
+   "monument": 18
+  },
+  "actions": 248
+ },
+ "shots": 1,
+ "findings": 1,
+ "bySev": {
+  "major": 1
+ },
+ "byType": {
+  "sound-loop": 1
+ },
+ "monitor": {
+  "samples": 1806,
+  "osc": 0,
+  "src": 254,
+  "oscPeak": 0,
+  "log": {
+   "unlock": 1,
+   "state": 8,
+   "music": 6,
+   "ui": 13,
+   "sfx": 241,
+   "gated": 15
+  },
+  "sounds": {
+   "cue:ui-start": 1,
+   "cue:ui-move": 6,
+   "cue:ui-ok": 6,
+   "cue:chassis.start": 2,
+   "cue:drop-in": 2,
+   "cue:dropped-in": 2,
+   "cue:knock": 56,
+   "cue:impact": 34,
+   "cue:near-miss": 16,
+   "cue:punt": 8,
+   "cue:pickup": 2,
+   "cue:drop": 2,
+   "cue:denied": 30,
+   "cue:combo": 15,
+   "cue:learn-standoff": 7,
+   "cue:combo-end": 9,
+   "cue:touch-spent": 30,
+   "cue:honk.body": 3,
+   "cue:push": 6,
+   "cue:lunge": 10,
+   "cue:unstick.reverse": 4,
+   "cue:part-break": 1,
+   "cue:low-health": 1,
+   "cue:ending.fail": 1
+  },
+  "frames": 4741,
+  "gaps": 6,
+  "gapMax": 6633,
+  "simT0": 29.999999999999577,
+  "real0": 2.882999999999999,
+  "simAcc": 219.80000000008778,
+  "writeoffs": 0,
+  "endings": {
+   "Failed test": 1
+  },
+  "districts": {
+   "waterfront": 1737,
+   "monument": 41
+  },
+  "tiles": {
+   "waterfront:B2": 1737,
+   "monument:B2": 41
+  },
+  "sims": 2,
+  "loadStallMax": 6633
+ },
+ "monitorFindings": [
+  {
+   "id": 1,
+   "type": "sound-loop",
+   "sev": "major",
+   "detail": "cue:knock sounded in 20 of the last 30 seconds (34 times in 60 s)",
+   "key": "sound-loop|loop:cue:knock",
+   "t": 167.08,
+   "count": 2,
+   "state": {
+    "screen": "game",
+    "phase": "play",
+    "paused": false,
+    "district": "waterfront",
+    "tile": "B2",
+    "simT": 181.28,
+    "music": {
+     "state": "level",
+     "track": 3,
+     "duck": 1
+    },
+    "body": {
+     "x": 307.7,
+     "y": 379.3,
+     "level": 0,
+     "mode": "knock",
+     "alive": true,
+     "health": 392.73,
+     "vx": -23,
+     "vy": -27.9,
+     "held": false,
+     "z": 0,
+     "stair": false
+    }
+   },
+   "extra": {
+    "key": "cue:knock",
+    "perMin": 34,
+    "file": "tone_knock.wav",
+    "phase": "play",
+    "mode": "knock",
+    "alive": true,
+    "still": false,
+    "cars": [
+     {
+      "id": "waterfront·A2·car96",
+      "state": "interrupted",
+      "v": 67.8,
+      "spent": true,
+      "standoff": false,
+      "d": 166
+     },
+     {
+      "id": "waterfront·B1·car117",
+      "state": "cruise",
+      "v": 34.2,
+      "spent": true,
+      "standoff": false,
+      "d": 112
+     },
+     {
+      "id": "waterfront·B1·car153",
+      "state": "cruise",
+      "v": 27,
+      "spent": true,
+      "standoff": false,
+      "d": 186
+     },
+     {
+      "id": "waterfront·B1·car162",
+      "state": "cruise",
+      "v": 45.7,
+      "spent": true,
+      "standoff": false,
+      "d": 27
+     },
+     {
+      "id": "waterfront·C2·car181",
+      "state": "cruise",
+      "v": 28.7,
+      "spent": true,
+      "standoff": false,
+      "d": 181
+     },
+     {
+      "id": "waterfront·C2·car207",
+      "state": "cruise",
+      "v": 59,
+      "spent": true,
+      "standoff": false,
+      "d": 77
+     }
+    ]
+   },
+   "intent": {
+    "move": "right",
+    "since": 165.73399999999995
+   },
+   "lastT": 170.37
+  }
+ ]
+}

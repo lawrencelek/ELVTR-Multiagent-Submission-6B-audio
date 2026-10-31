@@ -12746,6 +12746,28 @@
    },
    "description": "Wear from which the dash plays sfx.lunge.wrecked; sparks and a cracked head from here",
    "purpose": "Lawrence: B3 when very damaged (row 629)"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "source": "Edit 100 (P9): Lawrence, 31 October 16:11: 'if the dummy touches the same car again within about 0.3 s, treat it as the same collision, with no new bounce or hit' (DECISIONS row 630; QA-02, D88)",
+   "status": "user-confirmed",
+   "type": "number",
+   "id": "proto.contactGraceSeconds",
+   "group": "Physics",
+   "owner": "Systems design",
+   "label": "Contact grace",
+   "description": "Seconds a dummy–car contact outlives its last touch. A touch on the same car within it continues the contact: no new bounce, hit, touch-spent or knock. 0: Prototype 8.4's rule (a contact ends the step it stops touching). Prototype 9 sets 0.3",
+   "unit": "s",
+   "default": 0,
+   "applyAt": "next-run",
+   "validation": {
+    "min": 0,
+    "max": 2
+   },
+   "purpose": "Leaning on a stopped car bounced the dummy ~16 times a second (QA-02, row 630)"
   }
  ],
  "tables": {
