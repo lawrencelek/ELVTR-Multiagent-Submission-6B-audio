@@ -46,7 +46,7 @@
 | **Generated tones** | [`audio/tones.py`](audio/tones.py) → `prototypes/p9/audio/tones/` (70 WAV: whoosh B and three darker takes, alternates for the dash, rows 626–628) and [`content/audio/tones.json`](content/audio/tones.json) |
 | **Generated music** | [`audio/music_gen.py`](audio/music_gen.py) → Tracks 7–11 in `prototypes/p9/audio/music/` (11: tile cleared, row 631) (OGG and MP3) and [`content/audio/music_gen.json`](content/audio/music_gen.json) |
 | **Tests** | `prototypes/p9/test_p9.js`: 51/51 ([`shots/test_p9.json`](prototypes/p9/shots/test_p9.json)) |
-| **Decisions** | [`DECISIONS.md`](DECISIONS.md) rows 591–645; D86, D88 closed |
+| **Decisions** | [`DECISIONS.md`](DECISIONS.md) rows 591–646; D86, D88 closed |
 | **Next: Prototype 10** | [`docs/DUMMIES_Handover_Vehicle_Intelligence.md`](docs/DUMMIES_Handover_Vehicle_Intelligence.md): vehicle intelligence and game fun |
 
 ## 1 The agent
@@ -194,6 +194,8 @@ Lawrence: "conduct an adversarial QA game agent who wants to break the game and 
 - **Then:** the lean jitter (D88) closed by a 0.3 s contact grace (`proto.contactGraceSeconds`, row 630): 113 knocks in 40 s of leaning became 5.
 
 > **Sound design frozen, 31 October 2026** (DECISIONS row 645). `audio/FREEZE.json`; `python3 audio/freeze.py --check`; git tag `p9-sound-frozen`. A change needs Lawrence's ruling and a new freeze.
+>
+> **Open for one last pick round, 31 October 21:14** (row 646). The Sound Lab sends Lawrence's picks to Claude; then a new freeze and a read-only final Lab.
 
 ## 3.4 From Lawrence's play (rows 631–644)
 

@@ -207,7 +207,7 @@ const get = (url) => new Promise((res) => http.get(url, (r) => { r.resume(); res
 
   // the sound design is frozen (row 645): every file, the cue map, the engine, the Lab, the registry's audio.* as frozen
   let fz = ''; try { fz = cp.execFileSync('python3', [path.join(ROOT, 'audio/freeze.py'), '--check'], { cwd: ROOT, encoding: 'utf8' }); } catch (e) { fz = String(e.stdout || e.message); }
-  ok('the sound design matches its freeze (audio/FREEZE.json, row 645)', / 0 changed/.test(fz), fz.trim().split('\n').slice(0, 6).join(' | '));
+  ok('the sound design matches its freeze, or the freeze is open by a ruling (audio/FREEZE.json, rows 645–646)', / 0 changed|; open: /.test(fz), fz.trim().split('\n').slice(0, 6).join(' | '));
   // ---- 5. Prototype 8.4 from the shared code, audio off
   if (process.argv.includes('--p84')) {
     const tmp = fs.mkdtempSync(path.join(require('os').tmpdir(), 'p84-'));

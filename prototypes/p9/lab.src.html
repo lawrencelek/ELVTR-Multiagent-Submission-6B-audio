@@ -61,6 +61,11 @@ h1, h2, h3, h4 { margin: 0; text-wrap: balance; }
 .now.live i { background: var(--ok); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 25%, transparent); }
 .badge { font: 700 11px/1 var(--f-mono); padding: 4px 8px; border-radius: 999px; background: var(--cone); color: #fff; }
 .badge[hidden] { display: none; }
+.round { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: baseline; padding: 8px 12px; margin: 0; border: 1px solid var(--dummy); border-left-width: 4px; border-radius: var(--r); background: var(--panel); font-size: 13px; }
+.round[hidden], #btn-send[hidden] { display: none; }
+.round b { font: 700 12px/1.2 var(--f-mono); letter-spacing: .04em; text-transform: uppercase; }
+.round .sent { margin-left: auto; font: 12px/1.2 var(--f-mono); color: var(--ink-2); }
+.round .sent[hidden] { display: none; }
 .tabs { display: flex; gap: 4px; overflow-x: auto; padding-block: 0 8px; scrollbar-width: thin; }
 .tabs a { font: 700 12px/1 var(--f-mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-2); text-decoration: none; padding: 9px 12px; border-radius: 8px; white-space: nowrap; }
 .tabs a[aria-current="page"] { background: var(--aqua-soft); color: var(--ink); }
@@ -241,12 +246,14 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
     <div style="display:flex;flex-wrap:wrap;gap:8px;margin-left:auto;align-items:center">
       <span class="badge" id="changes" hidden></span>
       <a class="btn primary" id="btn-game" href="dummies_p9.html" target="_blank" rel="noopener">▶ Play the game with these picks</a>
+      <button class="btn primary" id="btn-send" type="button" hidden>Send picks to Claude</button>
       <button class="btn" id="btn-export" type="button">Export picks</button>
       <button class="btn" id="btn-import" type="button">Import</button>
       <button class="btn danger" id="btn-reset" type="button">Reset to the game's map</button>
     </div>
   </div>
 </div>
+<div class="wrap" style="padding-top:12px"><div class="round" id="round" role="note" hidden><b id="round-h"></b><span id="round-t"></span><span class="sent" id="sent" hidden></span></div></div>
 
 <main class="wrap">
   <section class="room" id="room-effects" data-room="effects">
@@ -674,12 +681,16 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
 
   // ---------- export, import, reset
   const top = (() => { try { return window.top === window; } catch (e) { return false; } })(); // a framed page cannot start a download
-  function openExport() {
-    const o = exportable(), json = JSON.stringify(o, null, 1), lines = [];
+  function summaryLines(o) {
+    const lines = [];
     for (const [id, p] of Object.entries(o.sfx || {})) { const c = cue(id); lines.push(id + ': ' + (c.decision === 'cue' ? (c.files || []).join(', ') + ' · ' + c.gain + (c.userDb ? ' ' + sign(c.userDb) + ' dB' : '') : DEC_LABEL[c.decision])); }
     for (const [k, v] of Object.entries((o.music || {}).states || {})) lines.push('music.' + k + ': ' + v);
     if (o.music && o.music.rotation) lines.push('music.rotation: ' + o.music.rotation.join(', '));
     for (const [k, v] of Object.entries(o.params || {})) lines.push(k + ': ' + v);
+    return lines;
+  }
+  function openExport() {
+    const o = exportable(), json = JSON.stringify(o, null, 1), lines = summaryLines(o);
     $('#io-h').textContent = 'Export picks';
     $('#io-body').innerHTML = (empty() ? '<p class="note">No changes yet: the designed map plays as it is.</p>' : '<p class="note">' + changedCount() + ' changes. Copy the JSON to keep it, or the summary to send in a message. The game in this browser already uses them.</p>')
       + '<h3>Summary</h3><textarea id="io-sum" readonly spellcheck="false" style="min-height:120px">' + esc(lines.join('\n') || 'No changes.') + '</textarea>'
@@ -760,6 +771,27 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
   mb.addEventListener('click', () => { vs.mute = !vs.mute; saveVs(); muteUi(); });
   const bb = $('#btn-bed'); bb.addEventListener('click', () => { bed = !bed; bb.setAttribute('aria-pressed', bed); bb.classList.toggle('on', bed); if (bed) playTrack(rotation()[0]); else stopMusic(); });
   $('#btn-stop').addEventListener('click', () => { for (const t of seqTimers) clearTimeout(t); stopMusic(); if (AC) { AC.suspend().then(() => AC.resume()); } });
+  // ---------- the pick round: the banner, and Send picks to Claude (the artifact's database; Export where it is not served)
+  if (L.round) { $('#round-h').textContent = L.round.title; $('#round-t').textContent = L.round.text + (L.round.noSend ? ' ' + L.round.noSend : ''); $('#round').hidden = false; }
+  let dbRef = null;
+  const stamp = (iso) => { try { return new Date(iso).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }); } catch (e) { return iso; } };
+  const sentNote = (d) => { const el = $('#sent'); el.textContent = 'Sent to Claude ' + stamp(d.sentAt) + ' · ' + (d.changes ? d.changes + ' change' + (d.changes === 1 ? '' : 's') : 'no changes'); el.hidden = false; };
+  if (L.round && window.claude && typeof window.claude.use === 'function') (async () => {
+    try { const db = await window.claude.use('db'); if (!db) return; dbRef = db; $('#btn-send').hidden = false; $('#round-t').textContent = L.round.text;
+      const s0 = await db.doc('picks/latest').get(); if (s0.exists) sentNote(s0.data()); } catch (e) { /* no database in this view: Export picks */ }
+  })();
+  async function sendPicks() {
+    const btn = $('#btn-send'); if (!dbRef || btn.disabled) return; btn.disabled = true;
+    const o = exportable(), n = changedCount(), at = new Date().toISOString();
+    const body = { sentAt: at, round: L.round.id, changes: n, picks: o, summary: summaryLines(o) };
+    try {
+      await dbRef.doc('picks/latest').set(body);
+      await dbRef.doc('picks/r' + at.replace(/[^0-9]/g, '').slice(0, 14)).set(body);
+      sentNote(body); toast(n ? 'Sent ' + n + ' change' + (n === 1 ? '' : 's') + ' to Claude' : 'Sent: no changes, the map stays');
+    } catch (e) { toast(e && e.code === 'invalid_argument' ? 'This view cannot send. Use Export picks.' : 'Not sent (' + ((e && e.code) || 'error') + '). Try again, or Export picks.'); }
+    finally { btn.disabled = false; }
+  }
+  $('#btn-send').addEventListener('click', sendPicks);
   $('#btn-export').addEventListener('click', openExport);
   $('#btn-import').addEventListener('click', openImport);
   $('#btn-reset').addEventListener('click', reset);
