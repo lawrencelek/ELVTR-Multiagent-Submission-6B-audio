@@ -45,8 +45,9 @@
 | **The cue map** | [`content/audio/cues.json`](content/audio/cues.json): the agent's accepted map ([`design.json`](content/audio/design.json)) with Lawrence's picks over it ([`picks_lawrence.json`](content/audio/picks_lawrence.json), [`picks_lawrence_2.json`](content/audio/picks_lawrence_2.json), [`picks_lawrence_2_tones.json`](content/audio/picks_lawrence_2_tones.json), [`picks_lawrence_3.json`](content/audio/picks_lawrence_3.json), [`picks_lawrence_4.json`](content/audio/picks_lawrence_4.json)) |
 | **Generated tones** | [`audio/tones.py`](audio/tones.py) → `prototypes/p9/audio/tones/` (70 WAV: whoosh B and three darker takes, alternates for the dash, rows 626–628) and [`content/audio/tones.json`](content/audio/tones.json) |
 | **Generated music** | [`audio/music_gen.py`](audio/music_gen.py) → Tracks 7–11 in `prototypes/p9/audio/music/` (11: tile cleared, row 631) (OGG and MP3) and [`content/audio/music_gen.json`](content/audio/music_gen.json) |
-| **Tests** | `prototypes/p9/test_p9.js`: 46/46 ([`shots/test_p9.json`](prototypes/p9/shots/test_p9.json)) |
-| **Decisions** | [`DECISIONS.md`](DECISIONS.md) rows 591–620; D86 closed |
+| **Tests** | `prototypes/p9/test_p9.js`: 51/51 ([`shots/test_p9.json`](prototypes/p9/shots/test_p9.json)) |
+| **Decisions** | [`DECISIONS.md`](DECISIONS.md) rows 591–645; D86, D88 closed |
+| **Next: Prototype 10** | [`docs/DUMMIES_Handover_Vehicle_Intelligence.md`](docs/DUMMIES_Handover_Vehicle_Intelligence.md): vehicle intelligence and game fun |
 
 ## 1 The agent
 
