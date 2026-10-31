@@ -62,7 +62,9 @@ h1, h2, h3, h4 { margin: 0; text-wrap: balance; }
 .badge { font: 700 11px/1 var(--f-mono); padding: 4px 8px; border-radius: 999px; background: var(--cone); color: #fff; }
 .badge[hidden] { display: none; }
 .round { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: baseline; padding: 8px 12px; margin: 0; border: 1px solid var(--dummy); border-left-width: 4px; border-radius: var(--r); background: var(--panel); font-size: 13px; }
-.round[hidden], #btn-send[hidden] { display: none; }
+.round[hidden], .console .btn[hidden], .chip[hidden] { display: none; }
+.decision { margin: 6px 0; }
+.decision .pill.on { background: var(--aqua-soft); color: var(--ink); }
 .round b { font: 700 12px/1.2 var(--f-mono); letter-spacing: .04em; text-transform: uppercase; }
 .round .sent { margin-left: auto; font: 12px/1.2 var(--f-mono); color: var(--ink-2); }
 .round .sent[hidden] { display: none; }
@@ -274,9 +276,9 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
   <section class="room" id="room-music" data-room="music" hidden>
     <div class="lede">
       <h2>Music</h2>
-      <p>Track 1 on the intro, Track 2 from the menus until a level starts, Tracks 3 to 6 alternating between levels and maps. Change any screen's track, reorder the rotation, and hear it with the game's fades: 0.3 s in at every start, 0.3 s out at every end, the loop's seam included.</p>
+      <p id="mu-lede">Track 1 on the intro, Track 2 from the menus until a level starts, Tracks 3 to 6 rotating through levels and maps. Tracks 7 to 11, generated, play the finale, the three endings and a cleared tile. A track fades in at its first note and out when it stops, never at the loop. Change any screen's track or reorder the rotation here.</p>
     </div>
-    <h3>The six tracks</h3>
+    <h3 id="mu-count">The tracks</h3>
     <div class="tracks" id="mu-tracks"></div>
     <h3>By screen</h3>
     <div class="states" id="mu-states"></div>
@@ -289,7 +291,7 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
   <section class="room" id="room-sequences" data-room="sequences" hidden>
     <div class="lede">
       <h2>Sequences</h2>
-      <p>Moments from play, timed as the game fires them, over the music that plays there. Each uses your current picks, so a swap on the Effects page is heard here at once.</p>
+      <p id="seq-lede">Moments from play, timed as the game fires them, over the music that plays there. Each uses your current picks, so a swap on the Effects page is heard here at once.</p>
     </div>
     <div class="seqs" id="seq-list"></div>
   </section>
@@ -381,7 +383,8 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
     if (dec !== 'cue' && dec !== 'synth') { delete p.gain; delete p.cooldown; delete p.bus; delete p.gainDb; }
     if (!Object.keys(p).length) delete into[id];
   }
-  const stored = store.get(KEY);
+  const FINAL = !!L.final; // row 647: the read-only final Lab plays the frozen map, nothing else
+  const stored = FINAL ? null : store.get(KEY); if (FINAL) store.set(KEY, null);
   let picks = norm(stored);
   const vs = Object.assign({ master: L.params['audio.settings.master'] ? L.params['audio.settings.master'].value : 10, music: L.params['audio.settings.music'] ? L.params['audio.settings.music'].value : 8, sound: L.params['audio.settings.sound'] ? L.params['audio.settings.sound'].value : 8, mute: false }, store.get(VKEY) || {});
   function clean() {
@@ -543,16 +546,16 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
   function cueCard(id) {
     const d = D[id], c = cue(id), vb = base(id), e = EV[vb || id] || {};
     const decs = vb ? ['base', 'cue', 'silence', 'synth'] : ['cue', 'silence', 'synth'];
-    const seg = '<div class="seg" role="group" aria-label="Decision">' + decs.map((k) => '<button type="button" data-act="dec" data-id="' + id + '" data-v="' + k + '" aria-pressed="' + (c.decision === k) + '">' + DEC_LABEL[k] + '</button>').join('') + '</div>';
+    const seg = FINAL ? '<p class="decision"><span class="pill on">' + DEC_LABEL[c.decision] + '</span></p>' : '<div class="seg" role="group" aria-label="Decision">' + decs.map((k) => '<button type="button" data-act="dec" data-id="' + id + '" data-v="' + k + '" aria-pressed="' + (c.decision === k) + '">' + DEC_LABEL[k] + '</button>').join('') + '</div>';
     let body = '';
     if (c.decision === 'cue') {
-      body += '<div class="files">' + (c.files || []).map((f) => fileChip(f, id, true)).join('') + '<button class="btn" type="button" data-act="add" data-id="' + id + '">+ Add file</button></div>';
+      body += '<div class="files">' + (c.files || []).map((f) => fileChip(f, id, !FINAL)).join('') + (FINAL ? '' : '<button class="btn" type="button" data-act="add" data-id="' + id + '">+ Add file</button>') + '</div>';
       body += knobs(id, c);
     } else if (c.decision === 'synth') body += c.tone ? '<div class="files"><span class="note">Its generated tone (Prototype 8.4\'s synth, rendered):</span>' + fileChip(c.tone, id, false) + '</div>' + knobs(id, c) : '<p class="note">No generated tone for this event: silent in the game.</p>';
     else if (c.decision === 'silence') body += '<p class="note">Silent in the game.</p>';
     else if (c.decision === 'base') { const bc = cue(vb); body += '<p class="note">Plays its base cue, ' + esc(D[vb].label) + (bc.decision === 'cue' ? ': ' + esc((bc.files || []).join(', ')) : ' (' + DEC_LABEL[bc.decision] + ')') + '.</p>'; }
     const alts = (d.alternates || []).filter((f) => !(c.files || []).includes(f));
-    if (c.decision === 'cue' && alts.length) body += '<div class="files"><span class="note">Alternates:</span>' + alts.map((f) => fileChip(f, id, false) + '<button class="btn quiet" type="button" data-act="use" data-id="' + id + '" data-f="' + esc(f) + '">Use</button>').join('') + '</div>';
+    if (!FINAL && c.decision === 'cue' && alts.length) body += '<div class="files"><span class="note">Alternates:</span>' + alts.map((f) => fileChip(f, id, false) + '<button class="btn quiet" type="button" data-act="use" data-id="' + id + '" data-f="' + esc(f) + '">Use</button>').join('') + '</div>';
     const synthBtn = d.tone && c.decision !== 'synth' ? '<button class="btn quiet" type="button" data-act="file" data-f="' + esc(d.tone) + '" data-id="' + id + '">▶ Its generated tone</button>' : '';
     const ag = d.agent ? (d.agent.decision === 'cue' ? (d.agent.files || []).join(', ') : DEC_LABEL[d.agent.decision] || d.agent.decision) : '';
     const heard = L.heard[id] ? '<span class="note">Heard on the tour: ' + esc(L.heard[id]) + '</span>' : '';
@@ -565,6 +568,7 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
       + '<footer><button class="btn primary" type="button" data-act="cue" data-id="' + id + '">▶ Play as in the game</button>' + synthBtn + (changed(id) ? '<button class="btn quiet" type="button" data-act="revert" data-id="' + id + '">Revert</button>' : '') + heard + '</footer></div></article>';
   }
   function knobs(id, c) {
+    if (FINAL) return '<p class="note knobs">Weight ' + esc(c.gain) + ' (' + sign(param('audio.sfx.gain.' + c.gain)) + ' dB)' + (c.userDb ? ' ' + sign(c.userDb) + ' dB' : '') + (c.offsetId ? ' · ' + esc(c.offsetId) + ' ' + sign(param(c.offsetId)) + ' dB' : '') + ' · cooldown ' + esc(c.cooldown) + ' (' + param('audio.sfx.cooldown.' + c.cooldown) + ' s)' + (c.decision === 'cue' && c.files && c.files.length > 1 ? ' · ' + c.files.length + ' files, ' + (c.pick === 'cycle' ? 'in turn' : 'at random') : '') + '</p>';
     return '<div class="knobs"><label class="knob">Weight <select data-act="gain" data-id="' + id + '" aria-label="Gain class">' + GAINS.map((g) => '<option value="' + g + '"' + (g === c.gain ? ' selected' : '') + '>' + g + ' (' + sign(param('audio.sfx.gain.' + g)) + ' dB)</option>').join('') + '</select></label>'
       + '<label class="knob">Fine <input type="range" min="-12" max="12" step="0.5" value="' + (c.userDb || 0) + '" data-act="db" data-id="' + id + '" aria-label="Fine gain in dB"><output>' + sign(c.userDb || 0) + ' dB</output></label>'
       + (c.offsetId ? '<span class="note">+ ' + esc(c.offsetId) + ' ' + sign(param(c.offsetId)) + ' dB</span>' : '')
@@ -610,12 +614,12 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
       const v = stateOf(m.id), ch = picks.music.states[m.id] != null || (m.id === 'level' && picks.music.rotation);
       const why = (L.music.why || {})[m.id];
       return '<article class="state panel">' + shotHtml(m.shot, m.label) + '<div class="in"><h4>' + esc(m.label) + (ch ? ' <span class="pill changed">changed</span>' : '') + '</h4><p>' + esc(m.what) + '</p>'
-        + '<div class="ctl"><select data-act="state" data-k="' + m.id + '" aria-label="Track for ' + esc(m.label) + '"' + (m.id === 'level' || DUCKS[m.id] ? ' disabled' : '') + '>' + trackOptions(v, m.id) + '</select><button class="btn play" type="button" data-act="statePlay" data-k="' + m.id + '" aria-label="Play ' + esc(m.label) + '">' + PLAY + '</button></div>'
+        + '<div class="ctl"><select data-act="state" data-k="' + m.id + '" aria-label="Track for ' + esc(m.label) + '"' + (FINAL || m.id === 'level' || DUCKS[m.id] ? ' disabled' : '') + '>' + trackOptions(v, m.id) + '</select><button class="btn play" type="button" data-act="statePlay" data-k="' + m.id + '" aria-label="Play ' + esc(m.label) + '">' + PLAY + '</button></div>'
         + (why ? (/^Lawrence \(/.test(why) ? '<p class="why"><b>' + esc(why.slice(0, why.indexOf(':') + 1)) + '</b> ' + esc(why.slice(why.indexOf(':') + 2)) + '</p>' : '<p class="why"><b>Designer:</b> ' + esc(why) + '</p>') : '') + '</div></article>';
     }).join('');
     const R = rotation();
-    let tm = '<div class="rot-slots"><span class="note">Rotation:</span>' + R.map((t, i) => '<label for="rot-' + i + '">' + (i + 1) + ' <select id="rot-' + i + '" data-act="rot" data-i="' + i + '">' + Object.keys(L.music.tracks).map(Number).map((n) => '<option value="' + n + '"' + (n === t ? ' selected' : '') + '>Track ' + n + '</option>').join('') + '</select></label>').join('')
-      + (R.length < 6 ? '<button class="btn" type="button" data-act="rotAdd">+ Slot</button>' : '') + (R.length > 1 ? '<button class="btn quiet" type="button" data-act="rotDel">− Slot</button>' : '') + '</div>';
+    let tm = '<div class="rot-slots"><span class="note">Rotation:</span>' + R.map((t, i) => '<label for="rot-' + i + '">' + (i + 1) + ' <select id="rot-' + i + '" data-act="rot" data-i="' + i + '"' + (FINAL ? ' disabled' : '') + '>' + Object.keys(L.music.tracks).map(Number).map((n) => '<option value="' + n + '"' + (n === t ? ' selected' : '') + '>Track ' + n + '</option>').join('') + '</select></label>').join('')
+      + (!FINAL && R.length < 6 ? '<button class="btn" type="button" data-act="rotAdd">+ Slot</button>' : '') + (!FINAL && R.length > 1 ? '<button class="btn quiet" type="button" data-act="rotDel">− Slot</button>' : '') + '</div>';
     let n = 0;
     tm += '<div class="tilemap" aria-label="Story tiles and their tracks">' + L.tiles.map((d) => '<div class="district"><div><b>' + esc(d.name) + '</b><small>' + esc(d.act || '') + '</small></div><div class="tiles">' + d.order.map((t) => { n++; const tr = R[(n - 1) % R.length]; return '<button class="tile" type="button" data-act="track" data-track="' + tr + '" style="background:' + TRACK_VAR(tr) + '" title="Tile ' + n + ' · ' + esc(d.name + ' ' + t + (d.titles[t] ? ' · ' + d.titles[t] : '')) + ': Track ' + tr + '">' + t + '<small>T' + tr + '</small></button>'; }).join('') + '</div></div>').join('') + '</div>';
     tm += '<div class="runs"><span class="note" style="padding:0;color:var(--ink-2)">Arcade, level by level:</span>' + [1, 2, 3, 4, 5, 6].map((r) => { const tr = R[(r - 1) % R.length]; return '<span style="background:' + TRACK_VAR(tr) + '">Level ' + r + ' · T' + tr + '</span>'; }).join('') + '</div>';
@@ -623,7 +627,7 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
     $('#mu-rot').innerHTML = tm;
     const P = ['audio.music.volume', 'audio.sfx.volume', 'audio.ui.volume', 'audio.music.fadeInSeconds', 'audio.music.fadeOutSeconds', 'audio.music.pauseDuck', 'audio.music.screenDuck', 'audio.music.writeoffDuck', 'audio.music.duckSeconds', 'audio.sfx.pitchJitter', 'audio.synth.gain', 'audio.sfx.maxVoices'].concat(GAINS.map((g) => 'audio.sfx.gain.' + g));
     $('#mu-mix').innerHTML = P.filter((id) => L.params[id]).map((id) => { const p = L.params[id], v = param(id), st = p.unit === 'dB' ? 0.5 : p.unit === 'count' ? 1 : p.unit === 's' ? 0.05 : 0.01; const lo = p.unit === 'dB' ? -24 : p.min, hi = p.unit === 'dB' ? 6 : p.unit === 'count' ? 32 : p.unit === 's' ? 4 : p.max;
-      return '<div class="param"><label for="p-' + id + '">' + esc(p.label) + (picks.params[id] != null ? ' <span class="pill changed">changed</span>' : '') + '</label><output id="o-' + id + '">' + v + ' ' + esc(p.unit === 'ratio' ? '' : p.unit) + '</output><input id="p-' + id + '" type="range" min="' + lo + '" max="' + hi + '" step="' + st + '" value="' + v + '" data-act="param" data-pid="' + id + '"><code>' + esc(id) + '</code></div>'; }).join('');
+      return '<div class="param"><label for="p-' + id + '">' + esc(p.label) + (picks.params[id] != null ? ' <span class="pill changed">changed</span>' : '') + '</label><output id="o-' + id + '">' + v + ' ' + esc(p.unit === 'ratio' ? '' : p.unit) + '</output><input id="p-' + id + '" type="range" min="' + lo + '" max="' + hi + '" step="' + st + '" value="' + v + '" data-act="param" data-pid="' + id + '"' + (FINAL ? ' disabled' : '') + '><code>' + esc(id) + '</code></div>'; }).join('');
   }
 
   // ---------- Sequences
@@ -772,11 +776,21 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
   const bb = $('#btn-bed'); bb.addEventListener('click', () => { bed = !bed; bb.setAttribute('aria-pressed', bed); bb.classList.toggle('on', bed); if (bed) playTrack(rotation()[0]); else stopMusic(); });
   $('#btn-stop').addEventListener('click', () => { for (const t of seqTimers) clearTimeout(t); stopMusic(); if (AC) { AC.suspend().then(() => AC.resume()); } });
   // ---------- the pick round: the banner, and Send picks to Claude (the artifact's database; Export where it is not served)
-  if (L.round) { $('#round-h').textContent = L.round.title; $('#round-t').textContent = L.round.text + (L.round.noSend ? ' ' + L.round.noSend : ''); $('#round').hidden = false; }
+  $('#mu-count').textContent = 'The ' + Object.keys(L.music.tracks).length + ' tracks';
+  if (FINAL) {
+    for (const k of ['#btn-send', '#btn-export', '#btn-import', '#btn-reset', '#fx-changed']) $(k).hidden = true;
+    $('#btn-game').textContent = '▶ Play the game';
+    $('#round-h').textContent = L.final.title; $('#round-t').textContent = L.final.text; $('#round').hidden = false;
+    $('#fx-lede').textContent = 'Every point in the game where a sound can play, with a screenshot of the moment, as the game plays it.';
+    $('#mu-lede').textContent = $('#mu-lede').textContent.replace(/ Change any screen's track or reorder the rotation here\.$/, '');
+    $('#seq-lede').textContent = 'Moments from play, timed as the game fires them, over the music that plays there.';
+    $('#tour-lede').textContent = $('#tour-lede').textContent.replace('plays your current pick for it', 'plays it');
+  }
+  if (L.round && !FINAL) { $('#round-h').textContent = L.round.title; $('#round-t').textContent = L.round.text + (L.round.noSend ? ' ' + L.round.noSend : ''); $('#round').hidden = false; }
   let dbRef = null;
   const stamp = (iso) => { try { return new Date(iso).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }); } catch (e) { return iso; } };
   const sentNote = (d) => { const el = $('#sent'); el.textContent = 'Sent to Claude ' + stamp(d.sentAt) + ' · ' + (d.changes ? d.changes + ' change' + (d.changes === 1 ? '' : 's') : 'no changes'); el.hidden = false; };
-  if (L.round && window.claude && typeof window.claude.use === 'function') (async () => {
+  if (L.round && !FINAL && window.claude && typeof window.claude.use === 'function') (async () => {
     try { const db = await window.claude.use('db'); if (!db) return; dbRef = db; $('#btn-send').hidden = false; $('#round-t').textContent = L.round.text;
       const s0 = await db.doc('picks/latest').get(); if (s0.exists) sentNote(s0.data()); } catch (e) { /* no database in this view: Export picks */ }
   })();
@@ -796,7 +810,7 @@ dialog textarea { width: 100%; min-height: 220px; border: 1px solid var(--line);
   $('#btn-import').addEventListener('click', openImport);
   $('#btn-reset').addEventListener('click', reset);
   $('#fx-lede').textContent += ' The map: ' + Object.keys(D).length + ' entries from the sound designer agent' + (L.run ? ' (run ' + L.run + (L.accepted ? ', 10/10, confirmed' : '') + ')' : '') + (L.picks && L.picks.changed ? ', with ' + Object.keys(L.picks.changed).length + ' of Lawrence\'s picks built in' : '') + '. A generated tone is Prototype 8.4\'s synth sound, rendered to a file.';
-  if (stored && JSON.stringify(stored) !== JSON.stringify(empty() ? null : exportable())) save(); // keep only what still differs
+  if (!FINAL && stored && JSON.stringify(stored) !== JSON.stringify(empty() ? null : exportable())) save(); // keep only what still differs
   drawAll(); route();
 })();
 </script>

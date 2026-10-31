@@ -29,6 +29,14 @@ ROUND = {"id": "final-2026-10-31", "title": "Last pick round · 31 October",
                  "Then press Send picks to Claude. Your picks go into the build, and the sound freezes again.",
          "noSend": "This copy cannot send: Export picks, then paste the JSON in the chat."}
 
+# The final Lab (row 647): read-only, the frozen map. python3 prototypes/p9/make_lab.py --final "<frozen date>" "<row>"
+def final_cfg():
+    import sys
+    if "--final" not in sys.argv:
+        return None
+    i = sys.argv.index("--final"); date, row = (sys.argv[i + 1:i + 3] + ["31 October", "row 647"])[:2]
+    return {"title": "Final · frozen " + date, "text": "The sound of Prototype 9, as the game plays it. Read-only: the map is frozen (DECISIONS " + row + ")."}
+
 # Scripted moments to hear cues together, over the music the game plays there: [label, music state, [[seconds, cue], ...], shot]
 SEQUENCES = [
     ("Menu walk", "menu", [[0, "ui-move"], [0.28, "ui-move"], [0.56, "ui-move"], [1.0, "ui-ok"], [1.8, "ui-back"]], "title", "Cursor, confirm, back on the mode select."),
@@ -73,7 +81,7 @@ def main():
         "cues": cues["sfx"], "music": cues["music"], "params": params, "files": files, "shots": shots, "heard": heard,
         "steps": [{"step": s["step"], "name": s["name"], "shot": s["shot"], "music": s["music"], "cues": [c for c in s["cues"] if c["kind"] in ("sfx", "ui", "music")]} for s in tour["steps"]],
         "tiles": tiles, "tones": {k: v["file"] for k, v in tones["tones"].items()}, "sequences": [{"label": a, "state": b, "steps": c, "shot": d, "what": e} for a, b, c, d, e in SEQUENCES],
-        "credits": cues.get("credits"), "picks": cues.get("picks"), "round": ROUND,
+        "credits": cues.get("credits"), "picks": cues.get("picks"), "round": None if final_cfg() else ROUND, "final": final_cfg(),
     }
     missing = [c for s in SEQUENCES for _, c in s[2] if c not in cues["sfx"]]
     assert not missing, missing
