@@ -348,7 +348,7 @@ cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../.. && pyth
 
 - **SFX:** 100 mono WAV, 44.1 kHz. 0.10–3.29 s. Level -29.0 to -17.6 dB (LUFS, or RMS under 0.4 s).
 - **Music:** 10 stereo OGG: six from the pack (48 kHz, 66–123 s) and four generated (44.1 kHz, 31–63 s). -16.7 to -9.1 LUFS.
-- **Build:** `dummies_p9.html` 1,413,439 bytes. Audio beside it: 38.0 MB.
+- **Build:** `dummies_p9.html` 1,413,429 bytes. Audio beside it: 38.0 MB.
 
 ## 8 Registry (edit100)
 

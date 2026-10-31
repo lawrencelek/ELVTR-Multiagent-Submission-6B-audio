@@ -43,7 +43,7 @@
 | **The agent** | [`audio/`](audio/): `inventory.py`, `events.py`, `loop.py`, `lint.py`, `llm.py`, `integrate.py`, `agents/`, [`SOUND_GUIDE.md`](audio/SOUND_GUIDE.md) |
 | **Evidence** | [`audio/runs/`](audio/runs/): every agent input and output, every map version, lint, a `trace.md` per run |
 | **The cue map** | [`content/audio/cues.json`](content/audio/cues.json): the agent's accepted map ([`design.json`](content/audio/design.json)) with Lawrence's picks over it ([`picks_lawrence.json`](content/audio/picks_lawrence.json), [`picks_lawrence_2.json`](content/audio/picks_lawrence_2.json), [`picks_lawrence_2_tones.json`](content/audio/picks_lawrence_2_tones.json), [`picks_lawrence_3.json`](content/audio/picks_lawrence_3.json), [`picks_lawrence_4.json`](content/audio/picks_lawrence_4.json)) |
-| **Generated tones** | [`audio/tones.py`](audio/tones.py) → `prototypes/p9/audio/tones/` (69 WAV: three whoosh alternates for the dash, row 626) and [`content/audio/tones.json`](content/audio/tones.json) |
+| **Generated tones** | [`audio/tones.py`](audio/tones.py) → `prototypes/p9/audio/tones/` (69 WAV: three machinic alternates for the dash, rows 626–627) and [`content/audio/tones.json`](content/audio/tones.json) |
 | **Generated music** | [`audio/music_gen.py`](audio/music_gen.py) → Tracks 7–10 in `prototypes/p9/audio/music/` (OGG and MP3) and [`content/audio/music_gen.json`](content/audio/music_gen.json) |
 | **Tests** | `prototypes/p9/test_p9.js`: 46/46 ([`shots/test_p9.json`](prototypes/p9/shots/test_p9.json)) |
 | **Decisions** | [`DECISIONS.md`](DECISIONS.md) rows 591–620; D86 closed |

@@ -87,21 +87,31 @@ NEW = {
     "chassis": [[T, 987.77, 1318.5, 0.07, 0.06, "sine", 0], [T, 1975.5, 2637, 0.045, 0.012, "sine", 0]],  # one soft rising blip
 }
 
-# Lawrence, 31 October 00:20 (DECISIONS row 626): "it sounds crunchy but it should sound 'whooshy' but quite short". Three
-# alternates for the dash, offered in the Sound Lab beside his pick. Air, not grit: noise through a band-pass whose centre
-# moves, with a swell rather than a hit (no transient), and nothing above ~9 kHz. Layers: [from Hz, peak Hz, to Hz, Q, gain];
-# the centre glides from → peak by `peakAt` of the length, then peak → to. `body`: a soft sine [from Hz, to Hz, gain] under it.
-WHOOSH = {
-    "lunge/whoosh-a": {"seconds": 0.16, "peakAt": 0.32, "layers": [[900, 2600, 3600, 1.4, 1.0]], "note": "swish: bright and quick"},
-    "lunge/whoosh-b": {"seconds": 0.20, "peakAt": 0.30, "layers": [[350, 800, 1100, 0.9, 1.0], [2200, 4800, 6500, 1.6, 0.5]],
-                       "body": [160, 80, 0.12], "note": "air dash: a fuller push with a little weight"},
-    "lunge/whoosh-c": {"seconds": 0.24, "peakAt": 0.40, "layers": [[500, 2600, 800, 2.2, 1.0]], "flutter": [28, 0.25],
-                       "note": "pass-by: up and away, a cloth flutter"},
+# Lawrence, 31 October 00:20 and 00:38 (DECISIONS rows 626, 627): the dash "sounds crunchy but it should sound 'whooshy' but
+# quite short"; then the first three were "a bit too swooshy and high pitch but they should be machinic and a tiny bit melodic
+# too". Three alternates for the dash, offered in the Sound Lab beside his pick. Machinic: a band-limited saw, pulse or FM voice
+# through a resonant low-pass, a gear ripple, a low air band; melodic: the voice glides or steps a musical interval. No
+# transient (a 10 ms rise), little above ~3 kHz. Parts:
+#   voice  {"wave": saw|pulse|fm, "notes": [[sec, Hz], ...] (glided, `glide` s), "lp": [from Hz, to Hz, Q], "am": [Hz, depth],
+#           "fm": [ratio, index from, index to], "duty": pulse width, "gain"}
+#   air    {"band": [from Hz, peak Hz, to Hz, Q], "gain"}: noise through a moving band-pass, its centre peaking at `peakAt`
+#   ping   {"hz", "at", "seconds", "gain"}: a soft sine note at the end, the melodic touch
+MECH = {
+    "lunge/mech-a": {"seconds": 0.18, "peakAt": 0.30, "note": "servo: a saw spins up a fifth (A2 → E3), a filter sweep, a gear ripple",
+                     "parts": [{"voice": {"wave": "saw", "notes": [[0, 110], [0.11, 164.8]], "glide": 0.11, "lp": [500, 1700, 3.5], "am": [55, 0.3], "gain": 1.0}},
+                               {"air": {"band": [350, 750, 500, 1.2], "gain": 0.22}}]},
+    "lunge/mech-b": {"seconds": 0.20, "peakAt": 0.25, "note": "actuator: a pulse steps G3 → D4, a short pneumatic breath",
+                     "parts": [{"voice": {"wave": "pulse", "duty": 0.3, "notes": [[0, 196], [0.07, 293.7]], "glide": 0.012, "lp": [900, 2000, 2.0], "am": [40, 0.15], "gain": 1.0}},
+                               {"air": {"band": [500, 1100, 600, 1.0], "gain": 0.28}}]},
+    "lunge/mech-c": {"seconds": 0.22, "peakAt": 0.35, "note": "turbine: an FM whine spins up an octave (G2 → G3), a low whir, a soft G4 to close",
+                     "parts": [{"voice": {"wave": "fm", "fm": [2.0, 3.0, 0.6], "notes": [[0, 98], [0.15, 196]], "glide": 0.15, "lp": [700, 2200, 1.5], "am": [33, 0.2], "gain": 1.0}},
+                               {"air": {"band": [250, 650, 350, 2.5], "gain": 0.28}},
+                               {"ping": {"hz": 392, "at": 0.14, "seconds": 0.08, "gain": 0.18}}]},
 }
 
 
-def svf_band(x, fc, q):
-    """A band-pass (TPT state-variable filter) whose centre fc[i] and Q move per sample: smooth under modulation."""
+def svf(x, fc, q, out="band"):
+    """A state-variable filter (TPT) whose cutoff fc[i] and Q move per sample: smooth under modulation. out: band or low."""
     y = np.zeros(len(x))
     ic1 = ic2 = 0.0
     for i in range(len(x)):
@@ -112,36 +122,68 @@ def svf_band(x, fc, q):
         v1 = a1 * ic1 + g * a1 * v3
         v2 = ic2 + g * v1
         ic1, ic2 = 2 * v1 - ic1, 2 * v2 - ic2
-        y[i] = v1
+        y[i] = v1 if out == "band" else v2
     return y
 
 
-def whoosh(spec, seed):
+def glide(notes, g, t):
+    """The pitch over time: each later note [arrival s, Hz] is reached by a glide of g seconds ending on its time (exponential in pitch)."""
+    f = np.full(len(t), float(notes[0][1]))
+    for (t1, hz), (_, prev) in zip(notes[1:], notes[:-1]):
+        k = np.clip((t - (t1 - g)) / g, 0, 1)
+        f = np.where(t >= t1 - g, prev * (hz / prev) ** k, f)
+    return f
+
+
+def voice(v, t, u, pk):
+    f = glide(v["notes"], v.get("glide", 0.01), t)
+    ph = 2 * np.pi * np.cumsum(f) / RATE
+    top = 3200.0
+    if v["wave"] == "fm":
+        ratio, i0, i1 = v["fm"]
+        idx = i0 * (i1 / i0) ** u
+        x = np.sin(ph + idx * np.sin(ratio * ph))
+    else:
+        x = np.zeros(len(t))
+        for k in range(1, int(top / max(f.min(), 20)) + 1):          # band-limited: no harmonic above `top`, no alias grit
+            w = np.clip((top - k * f) / 400, 0, 1)
+            if v["wave"] == "saw":
+                x += w * np.sin(k * ph) / k
+            else:
+                x += w * (2 / (k * np.pi)) * np.sin(k * np.pi * v.get("duty", 0.5)) * np.cos(k * ph)
+    lo, hi, q = v["lp"]
+    fc = lo * (hi / lo) ** np.clip(u / pk, 0, 1)
+    x = svf(x, fc, np.full(len(t), q), "low")
+    if v.get("am"):
+        hz, d = v["am"]
+        x *= 1 - d * (0.5 - 0.5 * np.tanh(3 * np.sin(2 * np.pi * hz * t)))  # a gear's teeth: a rounded square ripple
+    return x / (np.std(x) or 1.0)
+
+
+def mech(spec, seed):
     n = int(spec["seconds"] * RATE)
     t = np.arange(n) / RATE
     u = t / spec["seconds"]
     pk = spec["peakAt"]
-    rise = np.sin(0.5 * np.pi * np.clip(u / pk, 0, 1)) ** 2                    # a swell, not a hit
-    fall = np.cos(0.5 * np.pi * np.clip((u - pk) / (1 - pk), 0, 1)) ** 1.6
-    env = np.where(u < pk, rise, fall)
+    att = min(0.010 / spec["seconds"], pk)
+    env = np.where(u < att, np.sin(0.5 * np.pi * u / att) ** 2, 1.0)                       # a 10 ms rise: no click
+    env *= np.where(u < pk, 1.0, np.cos(0.5 * np.pi * np.clip((u - pk) / (1 - pk), 0, 1)) ** 1.3)
     rng = np.random.default_rng(seed)
     out = np.zeros(n)
-    for j, (f0, fp, f1, q, gain) in enumerate(spec["layers"]):
-        noise = rng.standard_normal(n)
-        k1, k2 = np.clip(u / pk, 0, 1), np.clip((u - pk) / (1 - pk), 0, 1)
-        fc = np.where(u < pk, f0 * (fp / f0) ** k1, fp * (f1 / fp) ** k2)       # the centre moves: the air goes past
-        qv = q * (0.8 + 0.4 * env)                                               # narrower at the peak: a touch of pitch
-        band = svf_band(noise, fc, qv)
-        out += gain * band / (np.std(band) or 1.0)
-    if spec.get("body"):
-        f0, f1, g = spec["body"]
-        f = f0 * (f1 / f0) ** u
-        out += g * 3 * np.sin(2 * np.pi * np.cumsum(f) / RATE)
-    if spec.get("flutter"):
-        hz, depth = spec["flutter"]
-        out *= 1 - depth + depth * (0.5 + 0.5 * np.sin(2 * np.pi * hz * t))
-    out *= env
-    a = math.exp(-2 * math.pi * 9000 / RATE)                                     # nothing gritty above ~9 kHz
+    for part in spec["parts"]:
+        if "voice" in part:
+            out += part["voice"]["gain"] * voice(part["voice"], t, u, pk) * env
+        elif "air" in part:
+            f0, fp, f1, q = part["air"]["band"]
+            k1, k2 = np.clip(u / pk, 0, 1), np.clip((u - pk) / (1 - pk), 0, 1)
+            fc = np.where(u < pk, f0 * (fp / f0) ** k1, fp * (f1 / fp) ** k2)
+            b = svf(rng.standard_normal(n), fc, np.full(n, q))
+            out += part["air"]["gain"] * b / (np.std(b) or 1.0) * env
+        elif "ping" in part:
+            pg = part["ping"]; tt = t - pg["at"]
+            e = np.where(tt < 0, 0, np.sin(0.5 * np.pi * np.clip(tt / 0.006, 0, 1)) ** 2 * np.exp(-np.clip(tt, 0, None) / (pg["seconds"] / 3)))
+            out += pg["gain"] * 3 * np.sin(2 * np.pi * pg["hz"] * t) * e
+    a = math.exp(-2 * math.pi * 6000 / RATE)                                                 # a gentle top: no fizz
     y = np.zeros(n); prev = 0.0
     for i in range(n):
         prev = (1 - a) * out[i] + a * prev
@@ -216,13 +258,13 @@ def main():
                 w.setnchannels(1); w.setsampwidth(2); w.setframerate(RATE)
                 w.writeframes((np.clip(y, -1, 1) * 32767).astype("<i2").tobytes())
             index[eid] = {"file": f.name, "source": src, "voices": voices, "seconds": round(len(y) / RATE, 3)}
-    for eid, spec in WHOOSH.items():  # alternates for an event, not its tone: tone_<event>_<name>.wav
-        y = whoosh(spec, seed=sum(map(ord, eid)))
+    for eid, spec in MECH.items():  # alternates for an event, not its tone: tone_<event>_<name>.wav
+        y = mech(spec, seed=sum(map(ord, eid)))
         f = OUT / name(eid.replace("/", "_"))
         with wave.open(str(f), "wb") as w:
             w.setnchannels(1); w.setsampwidth(2); w.setframerate(RATE)
             w.writeframes((np.clip(y, -1, 1) * 32767).astype("<i2").tobytes())
-        index[eid] = {"file": f.name, "source": "Edit 100 (row 626)", "alternateFor": eid.split("/")[0], "whoosh": spec, "seconds": round(len(y) / RATE, 3)}
+        index[eid] = {"file": f.name, "source": "Edit 100 (rows 626, 627)", "alternateFor": eid.split("/")[0], "mech": spec, "seconds": round(len(y) / RATE, 3)}
     INDEX.write_text(json.dumps({"generated_by": "audio/tones.py", "folder": "prototypes/p9/audio/tones/", "count": len(index), "tones": index},
                                 indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"{INDEX.relative_to(ROOT)}: {len(index)} tones ({sum(v['source'] == 'Edit 100' for v in index.values())} new)")
