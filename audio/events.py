@@ -49,7 +49,9 @@ E = {
     "ui-start": ("ui", "START", "START on the intro screen opens the mode select.", "once", "high", [], "Edit 98", "intro", "ui", []),
     "ui-gate": ("ui", "Press any key", "The first press on the intro screen unlocks audio; Track 1 starts.", "once", "low", [], "Edit 100", "intro", "ui", []),
     # ---- dummy moves
-    "lunge": ("moves", "Dash", "The dummy dashes (A). Spends a battery charge.", "action", "high", ["impact", "combo", "jump"], "Edit 75, 90", "dash", "sim", []),
+    "lunge": ("moves", "Dash", "The dummy dashes (A). Spends a battery charge.", "action", "high", ["impact", "combo", "jump"], "Edit 75, 90", "dash", "sim",
+              [("lunge.wrecked", {"wear": {"min": "audio.sfx.dashWreckedAt"}}, "Dash, very damaged"),  # Lawrence, row 629: the chassis's wear picks the take
+               ("lunge.damaged", {"wear": {"min": "audio.sfx.dashDamagedAt", "max": "audio.sfx.dashWreckedAt"}}, "Dash, damaged")]),
     "jump": ("moves", "Jump", "The dummy jumps (B). A jump out of a dash is a long jump.", "action", "high", ["lunge"], "Edit 75, 76, 90", "jump", "sim",
              [("jump.dash", {"kind": "dash"}, "Long jump, out of a dash")]),
     "jump-land": ("moves", "Jump lands", "A jump lands on the ground.", "action", "medium", ["impact"], "Edit 76", "jump", "sim", []),

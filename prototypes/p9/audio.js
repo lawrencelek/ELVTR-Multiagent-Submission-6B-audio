@@ -151,7 +151,11 @@
         if (want === '*') { if (!v) return false; }
         else if (want === null) { if (v != null) return false; }
         else if (Array.isArray(want)) { if (!want.includes(v)) return false; }
-        else if (want && typeof want === 'object') { const lo = typeof want.min === 'string' ? pvHost(want.min) : want.min; if (!(+v >= +lo)) return false; }
+        else if (want && typeof want === 'object') { // a range: [min, max). An end may name a parameter: the cue map's first, else the game's
+          const end = (x) => (typeof x === 'string' ? P(x, pvHost(x)) : x);
+          if (want.min != null && !(+v >= +end(want.min))) return false;
+          if (want.max != null && !(+v < +end(want.max))) return false;
+        }
         else if (want === true) { if (!v) return false; }
         else if (v !== want) return false;
       }

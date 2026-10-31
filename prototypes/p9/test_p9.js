@@ -61,7 +61,8 @@ const get = (url) => new Promise((res) => http.get(url, (r) => { r.resume(); res
   const cat = []; for (const e of EVENTS.events) { cat.push({ id: e.id, when: {} }); for (const v of e.variants) cat.push({ id: v.id, base: e.id, when: v.when }); }
   const cov = await pg.evaluate((cat) => {
     const A = window.__dummiesAudio, out = [];
-    const sample = (w) => { const x = {}; for (const [k, v] of Object.entries(w || {})) x[k] = v === '*' ? 'car1' : Array.isArray(v) ? v[0] : v && typeof v === 'object' ? 1e9 : v; return x; };
+    const end = (x) => (typeof x === 'string' ? A.param(x, null) : x), mid = (v) => (v.max != null ? (end(v.min) + end(v.max)) / 2 : 1e9); // a range: its middle
+    const sample = (w) => { const x = {}; for (const [k, v] of Object.entries(w || {})) x[k] = v === '*' ? 'car1' : Array.isArray(v) ? v[0] : v && typeof v === 'object' ? mid(v) : v; return x; };
     for (const it of cat) {
       const type = it.base || it.id, e = Object.assign({ type }, sample(it.when));
       A.last.clear(); A.voices = []; const n0 = A.log.length, handled = A.event(e), got = A.log.slice(n0).filter((l) => l.kind === 'sfx' || l.kind === 'ui' || l.kind === 'loading');

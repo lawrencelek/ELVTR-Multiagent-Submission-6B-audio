@@ -342,7 +342,29 @@
    ],
    "synthNow": true,
    "juiceLayersWithSound": 1,
-   "variants": []
+   "variants": [
+    {
+     "id": "lunge.wrecked",
+     "cue": "sfx.lunge.wrecked",
+     "when": {
+      "wear": {
+       "min": "audio.sfx.dashWreckedAt"
+      }
+     },
+     "label": "Dash, very damaged"
+    },
+    {
+     "id": "lunge.damaged",
+     "cue": "sfx.lunge.damaged",
+     "when": {
+      "wear": {
+       "min": "audio.sfx.dashDamagedAt",
+       "max": "audio.sfx.dashWreckedAt"
+      }
+     },
+     "label": "Dash, damaged"
+    }
+   ]
   },
   {
    "id": "jump",
@@ -640,7 +662,7 @@
    "shot": "impact",
    "kind": "sim",
    "where": [
-    "S:3268"
+    "S:3275"
    ],
    "synthNow": true,
    "juiceLayersWithSound": 7,
@@ -678,7 +700,7 @@
    "shot": "impact",
    "kind": "sim",
    "where": [
-    "S:3269"
+    "S:3276"
    ],
    "synthNow": true,
    "juiceLayersWithSound": 0,
@@ -717,7 +739,7 @@
    "shot": "play",
    "kind": "sim",
    "where": [
-    "S:3233"
+    "S:3234"
    ],
    "synthNow": true,
    "juiceLayersWithSound": 1,
@@ -741,7 +763,7 @@
    "shot": "writeoff",
    "kind": "sim",
    "where": [
-    "S:3284"
+    "S:3291"
    ],
    "synthNow": true,
    "juiceLayersWithSound": 2,
@@ -826,7 +848,7 @@
    "shot": "play",
    "kind": "derived",
    "where": [
-    "G:693"
+    "G:712"
    ],
    "synthNow": true,
    "juiceLayersWithSound": 1,
@@ -847,7 +869,7 @@
    "shot": "dash",
    "kind": "derived",
    "where": [
-    "G:703"
+    "G:722"
    ],
    "synthNow": true,
    "juiceLayersWithSound": 1,
@@ -1046,7 +1068,7 @@
    "shot": "combo",
    "kind": "sim",
    "where": [
-    "S:3249"
+    "S:3256"
    ],
    "synthNow": true,
    "juiceLayersWithSound": 0,
@@ -1133,7 +1155,7 @@
    "shot": "play",
    "kind": "sim",
    "where": [
-    "S:3397",
+    "S:3404",
     "W:2407"
    ],
    "synthNow": true,
@@ -1153,7 +1175,7 @@
    "shot": "play",
    "kind": "sim",
    "where": [
-    "S:2971"
+    "S:2972"
    ],
    "synthNow": true,
    "juiceLayersWithSound": 0,
@@ -1181,7 +1203,7 @@
    "shot": "play",
    "kind": "sim",
    "where": [
-    "S:3141"
+    "S:3142"
    ],
    "synthNow": true,
    "juiceLayersWithSound": 0,
@@ -1200,9 +1222,9 @@
    "shot": "play",
    "kind": "sim",
    "where": [
-    "S:2989",
-    "S:3026",
-    "S:3034"
+    "S:2990",
+    "S:3027",
+    "S:3035"
    ],
    "synthNow": true,
    "juiceLayersWithSound": 0,
@@ -1232,7 +1254,7 @@
    "shot": "play",
    "kind": "sim",
    "where": [
-    "S:3259"
+    "S:3266"
    ],
    "synthNow": true,
    "juiceLayersWithSound": 0,
@@ -1285,7 +1307,7 @@
    "shot": "play",
    "kind": "sim",
    "where": [
-    "S:2854"
+    "S:2855"
    ],
    "synthNow": false,
    "juiceLayersWithSound": 0,
@@ -1304,7 +1326,7 @@
    "shot": "play",
    "kind": "sim",
    "where": [
-    "S:3007"
+    "S:3008"
    ],
    "synthNow": false,
    "juiceLayersWithSound": 0,
@@ -1323,7 +1345,7 @@
    "shot": "play",
    "kind": "sim",
    "where": [
-    "S:3017"
+    "S:3018"
    ],
    "synthNow": false,
    "juiceLayersWithSound": 0,
@@ -1342,8 +1364,8 @@
    "shot": "play",
    "kind": "sim",
    "where": [
-    "S:2979",
-    "S:2998"
+    "S:2980",
+    "S:2999"
    ],
    "synthNow": false,
    "juiceLayersWithSound": 0,
@@ -1421,7 +1443,7 @@
    "kind": "sim",
    "where": [
     "S:2301",
-    "S:3600"
+    "S:3607"
    ],
    "synthNow": false,
    "juiceLayersWithSound": 0,
@@ -1440,7 +1462,7 @@
    "shot": "play",
    "kind": "sim",
    "where": [
-    "S:3220"
+    "S:3221"
    ],
    "synthNow": false,
    "juiceLayersWithSound": 0,
@@ -1459,7 +1481,7 @@
    "shot": "play",
    "kind": "sim",
    "where": [
-    "S:3232"
+    "S:3233"
    ],
    "synthNow": false,
    "juiceLayersWithSound": 0,
@@ -1478,7 +1500,7 @@
    "shot": "play",
    "kind": "sim",
    "where": [
-    "S:3235"
+    "S:3236"
    ],
    "synthNow": false,
    "juiceLayersWithSound": 0,
@@ -1499,7 +1521,7 @@
    "shot": "drone",
    "kind": "sim",
    "where": [
-    "S:2896",
+    "S:2897",
     "W:2289"
    ],
    "synthNow": true,
@@ -1528,7 +1550,7 @@
    "shot": "drone",
    "kind": "sim",
    "where": [
-    "S:2927"
+    "S:2928"
    ],
    "synthNow": true,
    "juiceLayersWithSound": 0,
@@ -1547,7 +1569,7 @@
    "shot": "drone",
    "kind": "sim",
    "where": [
-    "S:2938"
+    "S:2939"
    ],
    "synthNow": true,
    "juiceLayersWithSound": 0,
@@ -1625,7 +1647,7 @@
    "shot": "story",
    "kind": "sim",
    "where": [
-    "T:362"
+    "T:368"
    ],
    "synthNow": true,
    "juiceLayersWithSound": 0,
@@ -1646,7 +1668,7 @@
    "shot": "story",
    "kind": "sim",
    "where": [
-    "T:362"
+    "T:368"
    ],
    "synthNow": true,
    "juiceLayersWithSound": 0,
@@ -1668,7 +1690,7 @@
    "shot": "story",
    "kind": "sim",
    "where": [
-    "T:380"
+    "T:386"
    ],
    "synthNow": true,
    "juiceLayersWithSound": 0,
@@ -1825,7 +1847,7 @@
    "shot": "plaque",
    "kind": "sim",
    "where": [
-    "T:390"
+    "T:396"
    ],
    "synthNow": false,
    "juiceLayersWithSound": 0,
@@ -1903,7 +1925,7 @@
    "shot": "workshop",
    "kind": "sim",
    "where": [
-    "S:3621"
+    "S:3628"
    ],
    "synthNow": false,
    "juiceLayersWithSound": 0,
@@ -1922,7 +1944,7 @@
    "shot": "workshop",
    "kind": "sim",
    "where": [
-    "S:3643"
+    "S:3650"
    ],
    "synthNow": true,
    "juiceLayersWithSound": 0,
@@ -1941,8 +1963,8 @@
    "shot": "workshop",
    "kind": "sim",
    "where": [
-    "S:3641",
-    "T:397"
+    "S:3648",
+    "T:403"
    ],
    "synthNow": true,
    "juiceLayersWithSound": 0,
@@ -1961,7 +1983,7 @@
    "shot": "workshop",
    "kind": "sim",
    "where": [
-    "T:399"
+    "T:405"
    ],
    "synthNow": false,
    "juiceLayersWithSound": 0,
@@ -1982,8 +2004,8 @@
    "shot": "report",
    "kind": "sim",
    "where": [
-    "S:3309",
-    "T:448"
+    "S:3316",
+    "T:454"
    ],
    "synthNow": false,
    "juiceLayersWithSound": 0,
@@ -2002,7 +2024,7 @@
    "shot": "report",
    "kind": "sim",
    "where": [
-    "S:3308"
+    "S:3315"
    ],
    "synthNow": false,
    "juiceLayersWithSound": 0,
@@ -2023,7 +2045,7 @@
    "shot": "report",
    "kind": "sim",
    "where": [
-    "T:446"
+    "T:452"
    ],
    "synthNow": true,
    "juiceLayersWithSound": 0,
@@ -2044,7 +2066,7 @@
    "shot": "ending",
    "kind": "sim",
    "where": [
-    "S:3291"
+    "S:3298"
    ],
    "synthNow": true,
    "juiceLayersWithSound": 0,
@@ -2150,7 +2172,7 @@
    "shot": "play",
    "kind": "derived",
    "where": [
-    "G:862"
+    "G:881"
    ],
    "synthNow": false,
    "juiceLayersWithSound": 0,
@@ -2171,7 +2193,7 @@
    "shot": "play",
    "kind": "derived",
    "where": [
-    "G:884"
+    "G:903"
    ],
    "synthNow": false,
    "juiceLayersWithSound": 0,
@@ -2192,7 +2214,7 @@
    "shot": "play",
    "kind": "derived",
    "where": [
-    "G:888"
+    "G:907"
    ],
    "synthNow": false,
    "juiceLayersWithSound": 0,

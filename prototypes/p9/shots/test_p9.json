@@ -3,7 +3,7 @@
  "total": 49,
  "results": [
   {
-   "name": "every file in the cue map loads (155)",
+   "name": "every file in the cue map loads (159)",
    "pass": true,
    "detail": ""
   },
@@ -128,12 +128,12 @@
    "detail": ""
   },
   {
-   "name": "every catalogued event and variant does what the map says (107: 50 cue, 26 silence, 31 synth)",
+   "name": "every catalogued event and variant does what the map says (109: 52 cue, 26 silence, 31 synth)",
    "pass": true,
    "detail": ""
   },
   {
-   "name": "the catalogue and the cue map hold the same 107 entries",
+   "name": "the catalogue and the cue map hold the same 109 entries",
    "pass": true,
    "detail": ""
   },
@@ -238,7 +238,7 @@
    "detail": "[]"
   },
   {
-   "name": "Prototype 8.4 rebuilt from the shared code draws what the frozen build draws, barks and live counts aside (316 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 316 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)",
+   "name": "Prototype 8.4 rebuilt from the shared code draws what the frozen build draws, barks and live counts aside (315 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 316 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)",
    "pass": true,
    "detail": ""
   },

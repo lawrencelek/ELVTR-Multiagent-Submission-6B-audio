@@ -96,6 +96,14 @@ function serve() {
       for (const l of A.log) if (l.kind === 'gated' && out[l.id + ' ' + l.car]) out[l.id + ' ' + l.car].gated++; return out; }, st0.log);
     console.log('== per car: events that reached the engine (cue or cooldown), events the cap silenced'); for (const [k, v] of Object.entries(g).sort((a, b) => b[1].events - a[1].events).slice(0, 10)) console.log(k, v.events, v.gated, JSON.stringify(v.t.slice(0, 12)));
     await report('lean on spent cars ' + SECS + ' s');
+  } else if (SCEN === 'dashwear') { // row 629: the dash's take by the chassis's wear
+    for (const share of [1, 0.6, 0.5, 0.31, 0.2]) {
+      await ev((k) => { const s = window.__dummies.sim, b = s.body; b.health = k * (s.maxHealth ? s.maxHealth() : s.P['damage.bodyHealth']); b.charge = 9; window.__dummiesAudio.last.clear(); }, share);
+      const n0 = await ev(() => window.__dummiesAudio.log.length);
+      await wait(900); await pg.keyboard.press('Space'); await wait(900);
+      const got = await ev((n) => window.__dummiesAudio.log.slice(n).filter((l) => /^lunge/.test(l.id)).map((l) => l.id + ' ' + l.file), n0);
+      console.log('health ' + share + ' (wear ' + (1 - share).toFixed(2) + '):', JSON.stringify(got));
+    }
   } else if (SCEN === 'tick') { // every car on screen spent: the roof tick (ui.spentTick)
     await ev(() => { for (const c of window.__dummies.sim.cars) c.spent = true; }); await wait(400);
     await pg.locator('#game').screenshot({ path: path.join(__dirname, 'runs', 'spent_tick.png') });

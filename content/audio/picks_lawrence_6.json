@@ -1,0 +1,23 @@
+{
+ "note": "Lawrence, 31 October 15:55: 'use whoosh b1 for full whoosh (pre-damage), and when damaged b2, and when very damaged v3' (DECISIONS row 629). Wear from audio.sfx.dashDamagedAt and audio.sfx.dashWreckedAt. Placed over the map by audio/integrate.py",
+ "sfx": {
+  "lunge": {
+   "decision": "cue",
+   "files": [
+    "tone_lunge_whoosh_b1.wav"
+   ]
+  },
+  "lunge.damaged": {
+   "decision": "cue",
+   "files": [
+    "tone_lunge_whoosh_b2.wav"
+   ]
+  },
+  "lunge.wrecked": {
+   "decision": "cue",
+   "files": [
+    "tone_lunge_whoosh_b3.wav"
+   ]
+  }
+ }
+}

@@ -62,7 +62,9 @@
   "audio.music.track.certified": 7,
   "audio.sfx.honkMaxPerCar": 2,
   "audio.sfx.spentRepeatMax": 2,
-  "audio.sfx.spentRepeatSeconds": 2
+  "audio.sfx.spentRepeatSeconds": 2,
+  "audio.sfx.dashDamagedAt": 0.45,
+  "audio.sfx.dashWreckedAt": 0.7
  },
  "music": {
   "tracks": {
@@ -370,16 +372,20 @@
    "cooldownId": "audio.sfx.cooldown.action",
    "alternates": [
     "tone_lunge_whoosh_b.wav",
-    "tone_lunge_whoosh_b1.wav",
     "tone_lunge_whoosh_b2.wav",
     "tone_lunge_whoosh_b3.wav",
+    "wobble.wav",
     "jump_4.wav",
     "shrink.wav"
    ],
    "files": [
-    "wobble.wav"
+    "tone_lunge_whoosh_b1.wav"
    ],
-   "pick": "cycle"
+   "pick": "cycle",
+   "variants": [
+    "lunge.wrecked",
+    "lunge.damaged"
+   ]
   },
   "jump": {
    "decision": "cue",
@@ -2990,6 +2996,79 @@
    "alternates": [],
    "files": [],
    "pick": "random"
+  },
+  "lunge.wrecked": {
+   "decision": "cue",
+   "label": "Dash, very damaged",
+   "what": "The dummy dashes (A). Spends a battery charge.",
+   "group": "moves",
+   "freq": "action",
+   "priority": "high",
+   "shot": "dash",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: Catalogued after the agent's run: plays its event's entry.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "base",
+    "why": "Catalogued after the agent's run: plays its event's entry."
+   },
+   "tone": "tone_lunge.wav",
+   "variantOf": "lunge",
+   "when": {
+    "wear": {
+     "min": "audio.sfx.dashWreckedAt"
+    }
+   },
+   "bus": "sfx",
+   "gain": "move",
+   "gainId": "audio.sfx.gain.move",
+   "cooldown": "action",
+   "cooldownId": "audio.sfx.cooldown.action",
+   "alternates": [
+    "tone_lunge_whoosh_b.wav",
+    "tone_lunge_whoosh_b1.wav",
+    "tone_lunge_whoosh_b2.wav"
+   ],
+   "files": [
+    "tone_lunge_whoosh_b3.wav"
+   ],
+   "pick": "random"
+  },
+  "lunge.damaged": {
+   "decision": "cue",
+   "label": "Dash, damaged",
+   "what": "The dummy dashes (A). Spends a battery charge.",
+   "group": "moves",
+   "freq": "action",
+   "priority": "high",
+   "shot": "dash",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: Catalogued after the agent's run: plays its event's entry.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "base",
+    "why": "Catalogued after the agent's run: plays its event's entry."
+   },
+   "tone": "tone_lunge.wav",
+   "variantOf": "lunge",
+   "when": {
+    "wear": {
+     "min": "audio.sfx.dashDamagedAt",
+     "max": "audio.sfx.dashWreckedAt"
+    }
+   },
+   "bus": "sfx",
+   "gain": "move",
+   "gainId": "audio.sfx.gain.move",
+   "cooldown": "action",
+   "cooldownId": "audio.sfx.cooldown.action",
+   "alternates": [
+    "tone_lunge_whoosh_b.wav",
+    "tone_lunge_whoosh_b1.wav",
+    "tone_lunge_whoosh_b3.wav"
+   ],
+   "files": [
+    "tone_lunge_whoosh_b2.wav"
+   ],
+   "pick": "random"
   }
  },
  "files": {
@@ -4362,7 +4441,8 @@
    "content/audio/picks_lawrence_2_tones.json",
    "content/audio/picks_lawrence_3.json",
    "content/audio/picks_lawrence_4.json",
-   "content/audio/picks_lawrence_5.json"
+   "content/audio/picks_lawrence_5.json",
+   "content/audio/picks_lawrence_6.json"
   ],
   "changed": {
    "ui-start": {
@@ -4385,7 +4465,7 @@
     },
     "now": {
      "files": [
-      "wobble.wav"
+      "tone_lunge_whoosh_b1.wav"
      ]
     }
    },
@@ -4768,6 +4848,38 @@
     "now": {
      "decision": "silence"
     }
+   },
+   "lunge.damaged": {
+    "was": {
+     "decision": "base",
+     "files": null,
+     "gain": null,
+     "cooldown": null
+    },
+    "now": {
+     "decision": "cue",
+     "files": [
+      "tone_lunge_whoosh_b2.wav"
+     ],
+     "gain": "move",
+     "cooldown": "action"
+    }
+   },
+   "lunge.wrecked": {
+    "was": {
+     "decision": "base",
+     "files": null,
+     "gain": null,
+     "cooldown": null
+    },
+    "now": {
+     "decision": "cue",
+     "files": [
+      "tone_lunge_whoosh_b3.wav"
+     ],
+     "gain": "move",
+     "cooldown": "action"
+    }
    }
   },
   "raw": {
@@ -4778,8 +4890,9 @@
      ]
     },
     "lunge": {
+     "decision": "cue",
      "files": [
-      "wobble.wav"
+      "tone_lunge_whoosh_b1.wav"
      ]
     },
     "rail-jump": {
@@ -4914,6 +5027,18 @@
     },
     "bark.shout": {
      "decision": "silence"
+    },
+    "lunge.damaged": {
+     "decision": "cue",
+     "files": [
+      "tone_lunge_whoosh_b2.wav"
+     ]
+    },
+    "lunge.wrecked": {
+     "decision": "cue",
+     "files": [
+      "tone_lunge_whoosh_b3.wav"
+     ]
     }
    }
   }

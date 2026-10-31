@@ -12702,6 +12702,50 @@
    },
    "description": "The window audio.sfx.spentRepeatMax counts in, sim seconds",
    "purpose": "Lawrence: 2 max within a 2 second window (row 624)"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "source": "Edit 100 (P9): Lawrence's ruling, 30 October 11:30 (DECISIONS row 629)",
+   "status": "user-confirmed",
+   "applyAt": "next-run",
+   "id": "audio.sfx.dashDamagedAt",
+   "group": "Audio",
+   "owner": "Audio",
+   "label": "Dash: damaged",
+   "unit": "ratio",
+   "type": "number",
+   "default": 0.45,
+   "validation": {
+    "min": 0,
+    "max": 1
+   },
+   "description": "Wear (1 − health ÷ maximum) from which the dash plays sfx.lunge.damaged; the dummy smokes from here",
+   "purpose": "Lawrence: B2 when damaged (row 629)"
+  },
+  {
+   "editable": true,
+   "protectedReason": null,
+   "integrationStatus": "prototype-p9",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "source": "Edit 100 (P9): Lawrence's ruling, 30 October 11:30 (DECISIONS row 629)",
+   "status": "user-confirmed",
+   "applyAt": "next-run",
+   "id": "audio.sfx.dashWreckedAt",
+   "group": "Audio",
+   "owner": "Audio",
+   "label": "Dash: very damaged",
+   "unit": "ratio",
+   "type": "number",
+   "default": 0.7,
+   "validation": {
+    "min": 0,
+    "max": 1
+   },
+   "description": "Wear from which the dash plays sfx.lunge.wrecked; sparks and a cracked head from here",
+   "purpose": "Lawrence: B3 when very damaged (row 629)"
   }
  ],
  "tables": {

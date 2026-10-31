@@ -613,6 +613,7 @@
     const x = Object.assign({}, e0);
     if (e0.type === 'impact') x.big = (e0.assessed || 0) >= (pv('proto.hits.big.assessedMin') || 200);
     if (e0.type === 'combo') x.max = (e0.mult || 0) >= (pv('scoring.comboMax') || 5) - 1e-9;
+    const sb = app.sim && app.sim.body; if (sb) x.wear = clamp(1 - sb.health / maxHP(app.sim), 0, 1); // Edit 100 (row 629): the dash's take by wear
     if (e0.type === 'chassis') { x.start = !!app.sim && fx.audChassisSim !== app.sim; fx.audChassisSim = app.sim; } // the level's first chassis, under its card. The sim's clock is no guide: traffic warms up 30 s first
     return x;
   }
