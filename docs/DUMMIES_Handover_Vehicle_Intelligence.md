@@ -2,10 +2,13 @@
 
 **31 October 2026 · Lawrence Lek** · From the Prototype 9 / sound design session ([session](https://claude.ai/code/session_0178chfCgkW112HS5Gts98Yd)). Read this first in the new chat.
 
+**Updated 1 November 2026:** the first outside playtest (§3.2) and research (§14) reorder the work. Prototype 10 is 1 vs 1: one red car, one dummy.
+
 ## 0 Start the new chat
 
 - **Where:** inside the Project "ELVTR Course - GDD". Its docs and instructions come with it.
-- **First message:** "Read `claude/DUMMIES_Handover_Vehicle_Intelligence.md` first. Then build Prototype 10: vehicle intelligence and game fun, in `ELVTR-Multiagent-Submission-6B-audio`."
+- **First message:** "Read `claude/DUMMIES_Handover_Vehicle_Intelligence.md` first. Then build Prototype 10: 1 vs 1, the red car, in `ELVTR-Multiagent-Submission-6B-audio`."
+- **Read §3.2 and §14 before §5.** The playtest replaces readings Q1–Q8.
 - **For code:** use a session with GitHub access. Attach `lawrencelek/ELVTR-Multiagent-Submission-6B-audio` (push).
 - **Repo choice (Q0, §3.1):** Prototype 10 continues in the same repo by default (`prototypes/p10/`).
   - If this is a new course submission, create a new empty repo first. Seed it from this one (§9.1).
@@ -56,16 +59,207 @@
 | # | Question | Proposed reading |
 |---|---|---|
 | Q0 | Same repo, or a new submission repo? | Same repo; `prototypes/p10/`, GDD Edit 101 |
-| Q1 | "Vehicle intelligence": learning, personality, or both? | Both, in order: identity (W1), per-approach learning (W2), visible learning (W3), moods (W4), profiles (W5) |
-| Q2 | Who learns: each car, each numbered model, or the fleet? | Each numbered model (Edit 25 §6.4). Recurring model IDs make learning readable. Fleet sharing stays off |
-| Q3 | Which approaches learn first? | Direct interception and post-commit bait (Edit 26's first version), then cone diversion (cones are a core verb now) |
-| Q4 | When does learning reset? | A new run resets it. A tile or road keeps it. Second Market (D77) would keep it |
-| Q5 | "Game fun": which measure counts? | Bot metrics (§7, W0) plus Lawrence's play. Targets set from the P9 baseline, then confirmed |
-| Q6 | Harder or more hittable? | More hittable openings, fewer dead waits. Learning shifts *which* trick works; it never closes all (pillar 1) |
-| Q7 | New car behaviours need new sounds (an Emergency siren). The sound is frozen | New events stay silent or reuse a frozen cue. Any new file needs Lawrence to lift the freeze |
-| Q8 | Which driver profiles? | Courier (more hittable) and Rattled (learning made visible) first. Learner and Emergency later |
+| Q1 | "Vehicle intelligence": learning, personality, or both? | Learning first: one red car's sensor tiers (PT4). Personality waits for traffic |
+| Q2 | Who learns? | The red car only. White cars never learn (`traffic.white.learns` 0). Numbered models later (W1) |
+| Q3 | Which approaches close first? | Front (tier 1), flank (tier 2), above (tier 3). Then cover and cones (3), the feint (4) |
+| Q4 | When does learning reset? | A new run resets it. Each duel level sets its tier (`duel.level.<n>.tier`) |
+| Q5 | "Game fun": which measure counts? | Duel bots per tier (V0) plus outside playtests. Stand-in-lane scores 0 red hits from tier 1 |
+| Q6 | Harder or more hittable? | Red: harder each level. White: easy hazards. Each tier closes one opening; one stays (pillar 1) |
+| Q7 | New car behaviours need new sounds. The sound is frozen | New events stay silent or reuse a frozen cue. Any new file needs Lawrence to lift the freeze |
+| Q8 | Which driver profiles? | Deferred. The red car's tiers replace profiles in Prototype 10 |
+| Q9 | Red is the reserved warning hue (Edit 38 §4.1.6) | Keep red; add shape: roof sensor dome, `VUT` tag (D89) |
+| Q10 | White cars: hazard, fodder or both? | Both: front hit costs chassis; graze pays (D90) |
+| Q11 | Tier order fixed or adaptive? | Fixed L1–L5; then the boss counters your last winning approach (D91) |
+| Q12 | May cars hit cars? | Not in the duel (row 84). `traffic.carContact` later (D92) |
+| Q13 | Flank hits pay `damage.zone.side` 0.3 | Opening hits by the red car pay full (`duel.openingFullDamage`, D93) |
+| Q14 | Duel venue? | Proving Ground: open tarmac, no lanes (D94) |
+| Q15 | One boss or two families? | Vision first; Fusion (lidar) later (D96) |
+| Q16 | A law clause per level? | Yes, under the goal on the level card (D95) |
+| Q17 | Parts as keys vs pillar 1? | A part-free opening stays at every tier, slower (D97) |
 
 - Every proposal above is the assistant's. Record each answer as a DECISIONS row, user-decided or proposed.
+
+### 3.2 Playtest, 1 November: the first outside player (Prototype 9)
+
+**Goal, revised.** Was: get hit by any car until written off. Now: make the car under test hit you; avoid the fleet.
+
+#### PT0 Battery position (design change)
+
+> "the position of the battery is too close to crotch. it should be in the centre of the chest like Iron Man's power core."
+
+- **Done in Prototype 9.** Row 644: a round lit core, centre chest (`ui.coreOnChest` 1).
+- The pelvis port survives only in frozen builds ≤ 8.4 (registry default 0).
+- `index.html` still links Prototype 8.4. Confirm which build the tester played.
+- `prototypes/p10/build.py` keeps `ui.coreOnChest` 1.
+
+#### PT1 Insufficient challenge
+
+> "There is insufficient challenge, if I just stand in the centre of the road I can get hit."
+
+- Standing is a dominant policy. It breaks pillar 1 (row 79): a hit must be earned.
+- V29 governance: a dominant opening triggers a balance review.
+- **Rule (proposed):** from tier 1 the red car never hits a standing dummy.
+  - It stops `proto.standoffDistance` short, then reroutes (`driver.avoid.reroute`).
+- **Test:** stand-in-lane policy scores 0 red hits at tier ≥ 1 (V0).
+
+#### PT2 Car AI and emergent behaviour come first
+
+> "Car AI and emergent behaviour is very important, like in the original brief."
+
+- Pillar 3 (row 79): cars visibly learn; individual and group behaviour emerges.
+- Emergence comes from avoidance acting on the world.
+  - A red swerve, brake or reverse changes the space around it.
+  - Later, white traffic reacts to the red car (V6).
+- **Measure:** distinct avoidance manoeuvres per minute (§14.1 ladder).
+
+#### PT3 Start with 1 vs 1
+
+> "Let's start by having prototypes of 1 vs 1 - just car vs you."
+
+- **Prototype 10 is the duel.** One red car, one dummy. No traffic, no story map.
+- Flag `duel.enabled` (registry 0; `prototypes/p10/build.py` 1).
+- Traffic returns once tiers 0–4 pass their tests (§7).
+
+#### PT4 Clear level progression: front, then side, then above
+
+> "In level one, you can just walk into it. Level two, it learns to avoid what's in front. You have to approach from the side. Then Level three you have to hit it from above."
+
+| Level | Red tier | Senses | Avoids by | Lethal opening | Part by drone |
+|---|---|---|---|---|---|
+| L1 | 0 · Prototype | Nothing | Nothing | Walk into its path | None (on foot, `damage.bodyHealthOnFoot`) |
+| L2 | 1 · Forward camera | Ahead: `perception.forwardLength`, `proto.driver.cautionZone` | Brake; stop `proto.standoffDistance` short | The flank: no side sensor | Battery 1, the dash (`movement.lungeDistance`) |
+| L3 | 2 · Surround | + sides: `perception.sideRadius`, `perception.sideHalfAngle` | Brake; swerve (`proto.swerveLength`) | Above: jump or deck drop. `meets` ignores the air | Legs 1, jump (`abilities.legs.airtimeBase`) |
+| L4 | 3 · Occupancy | + height (`perception.seesAirborne`) | Brake; swerve; reverse (`proto.unstick.reverseSpeed`) | Cover (`occluded`); a cone forces its swerve into you | Hands 1, cones (`abilities.hands.conesPerLevel`) |
+| L5 | 4 · Prediction | + your path ahead (`perception.predictSeconds`) | Full ladder (§14.1) | The feint: turn after its commit locks (`traffic.commitHorizon`) | Arms 1, the push (`abilities.arms.pushWindow`) |
+
+- L1–L3 are the tester's ladder. L4–L5 extend it from §14.2.
+- Each tier arrives with a visible sensor cue (`ui.sensorCue`).
+- Tier per level: `duel.level.<n>.tier` (proposed).
+
+#### PT5 Two car types: white and red
+
+> "white cars you want to avoid getting hit by, because they don't learn, and 'red' cars that are smart and getting smarter, these are like the 'bosses'."
+
+- **White:** the fleet. Never learns (`traffic.white.learns` 0). A front hit costs chassis.
+- **Red:** the vehicle under test (Euro NCAP's term, §14.2). Learns each level. Its hit completes the test.
+- Duel first; white traffic later (V6).
+- **Clash:** red is the reserved warning hue (Edit 38 §4.1.6). D89.
+
+#### PT6 Powerups are how you learn to get hit
+
+> "And your powerups are crucial to learning how to get hit."
+
+- Each tier's opening pairs with the part delivered that level (PT4 table).
+- Edit 93's rule holds: introduce, then test.
+- **Tension:** pillar 1 says an unupgraded dummy always has an opening.
+  - Proposal: a part-free opening stays, slow and risky. The part makes it reliable. D97.
+
+#### PT7 Easy cars and hard cars
+
+> "you could vary between easy cars (drones, easy), and hard cars (who are hard to catch, like bosses)"
+
+- **Normal enemies:** drones and white cars. Predictable. Pay credits (`economy.creditsPerWriteOff`).
+- **Bosses:** red cars. Adaptive. Pay progress.
+- **Graze:** a white near-miss pays (`scoring.grazeRadius`, `scoring.grazePoints`). Shmup graze, §14.3.
+- **Cost:** white encounters train the next red car (shadow mode, §14.2). Farming teaches the boss. D90.
+
+#### PT8 Research 1: every way a car avoids you
+
+> "Write out a list of all the ways cars can avoid hitting you IRL."
+
+- §14.1.
+
+#### PT9 Research 2: how Tesla, lidar and machine learning see
+
+> "do real-world research how Tesla does calculation with computer vision, and do a gamified version"
+
+- §14.2.
+
+#### PT10 Research 3: chasing and being chased
+
+> "Research games where you are chasing something, and games where you are being chased."
+
+- §14.3.
+
+#### PT11 Avoid the white cars, chase the red car
+
+> "You are trying to avoid getting hit by some of the cars (white cars) but targeting the red car."
+
+- The arcade loop: dodge the fleet, hunt one car. Battery is the third channel.
+- White cars run fixed patterns. Read at a glance by shape and motion.
+- The red car needs focal reading: sensor cue, envelope, commit.
+- White and red differ on two channels (Edit 26 §4.2.2, rule 2).
+
+#### PT12 Swerving has a cost
+
+> "The cars would Swerve around you, and hit other cars. What is the cost of this?"
+
+- Today cars never hit cars (row 84). Swerves need a clear route (§5.3).
+- Real systems prefer braking; evasion risks a second crash (§14.1).
+- **Duel:** no contact. A blocked escape forces a brake. That brake is an opening.
+- **Traffic phase:** flag `traffic.carContact`.
+  - A red swerve into a white car is an Incident (`scoring.incidentPoints`).
+  - The red car then prefers braking.
+- Lore fit: the dummy's job is to cause accidents (Edit 14 §3.1). D92.
+
+#### PT13 Progressive intelligence and set pieces
+
+> "There could be two two lane roads. Or expand into things like the trolley problem"
+
+- **Roads:** two-way, two lanes each way (row 84, not built). Oncoming traffic prices a swerve.
+- **Trolley set pieces:** the red car must choose between two obstacles.
+  - Decoys (`props.decoy.<kind>`): a cat, a delivery robot, a client's custom dummy.
+  - The car spares the higher-ranked body. It swerves into you.
+  - Rank table `driver.valueRank`. The law sets it (PT15).
+- **Persuaded dummies:** fellow trainees led into lanes. Needs NPC dummies; later.
+
+#### PT14 Other zones
+
+> "What other zones are possible? Like a free-for-all test centre with no specific roads?"
+
+- **Proving Ground:** open tarmac, no lanes. The duel venue. Reinstates row 83's test centre. D94.
+- **Car park:** slow cars, reversing, cover between bays.
+- **Skid pan:** a wet circle; the boss drifts (`driver.avoid.drift`).
+- **Two-way arterial:** oncoming lanes; swerve cost.
+- **School crossing:** trolley set pieces.
+- **Tunnel:** dark; the Vision boss weakens, the Fusion boss does not (§14.2).
+- **Flyover stack:** attacks from above (`world.deckDropGaps`).
+
+#### PT15 Story: every level teaches a sinister corporate law
+
+> "For Story mode, more interesting story. Every level you need to learn about the sinister corporate law."
+
+- Each level card adds one clause under the goal. The law escalates.
+- Voice: Dummy Corporation. `style.v2.text.maxSentences` 2; `style.v2.text.maxWords` 20.
+- Text in `content/story/story_v2.json`, key `law`. Style Guide V2 run before shipping. D95.
+- **Draft clauses (proposed):**
+  1. Clause 1. The vehicle under test must avoid you. You must not let it.
+  2. Clause 2. Every collision is data. Data belongs to the Corporation.
+  3. Clause 3. A dummy is not a pedestrian. Pedestrians cannot be replaced.
+  4. Clause 4. When a vehicle must choose, it spares the costlier body.
+  5. Clause 5. Certification is permanent. So is your contribution.
+
+#### Rows and open decisions to record
+
+| Row | Decision | Status |
+|---|---|---|
+| 648 | Prototype 10 is 1 vs 1: one red car, one dummy. Traffic returns after | user-directed (1 Nov) |
+| 649 | From tier 1, standing in lane earns no hit from the red car | finding user-observed; rule proposed |
+| 650 | Red ladder: L1 walk in, L2 flank, L3 above. L4–L5 proposed | user-proposed |
+| 651 | White cars never learn; red cars learn, as bosses. After the duel | user-proposed |
+| 652 | The battery note repeats row 644. No change | proposed |
+
+| D | Question | Proposal |
+|---|---|---|
+| D89 | Red is the reserved warning hue | Keep red. Add shape: a roof sensor dome, a `VUT` tag. Warning keeps its icon shape |
+| D90 | White cars: hazard, fodder or both | Both. Front hit costs chassis; graze pays; graze trains the boss |
+| D91 | Tier order fixed or adaptive | Fixed L1–L5. After L5 the boss counters your last winning approach |
+| D92 | Car-to-car contact (row 84) | None in the duel. `traffic.carContact` for the traffic phase |
+| D93 | Flank hits pay `damage.zone.side` 0.3 | Red-car hits on the tier's opening use `damage.zone.front` (`duel.openingFullDamage` 1) |
+| D94 | Duel venue | Proving Ground |
+| D95 | A law clause per level | Yes; drafts above |
+| D96 | Boss families | Vision (camera) first; Fusion (lidar) second |
+| D97 | Parts as keys vs pillar 1 | A part-free opening stays at every tier, slower |
 
 ## 4 Constraints
 
@@ -183,28 +377,36 @@ Each tick, for each car, in order:
 
 - The jam (row 638): ask Lawrence for a trace. Add a watchdog (W7).
 
-## 7 Proposed workstreams (suggested; the new chat decides)
+### 6.5 First outside playtest (1 November)
 
-Measure first. Each change lands behind a flag, with a bot comparison before and after.
+- Standing in lane earns hits. No reading needed. Pillar 1 fails (PT1).
+- The QA personas (§6.1) never tested standing. The duel harness must (V0).
+- Wanted: one smart car to beat, not many polite ones (PT3–PT5).
+
+## 7 Proposed workstreams (revised 1 November; the new chat decides)
+
+V = versus (1 vs 1). Measure first. Each change lands behind a flag, with a bot comparison before and after. Registry first (§4) precedes all tuning.
 
 | # | Workstream | Delivers | Registry IDs (proposed) |
 |---|---|---|---|
-| W0 | **Fun harness** | A skilled bot (§8.2 policies: read and lunge, bait, ambush, cone diversion) on StorySim and ArcadeSim, headless. P9 baseline table | `qa.fun.*` targets, once agreed |
-| W1 | **Identity** | Each spawn draws a numbered model of its class from `fleet.json` (seeded, tier by district). Models recur. All 32 get `simIds`. Carry fixed for every class | `fleet.recurShare`, `fleet.tierBy` |
-| W2 | **Per-approach learning** | Tag each write-off with one approach (Edit 25 predicates). Step and cap per approach per model. Direct interception and post-commit bait first | `learning.approach.<id>.step`, `.cap`, `.enabled` |
-| W3 | **Visible learning** | Seniority pips on. A learned mark on the tag. A toast and a bark per approach learned. Fleet learning on the report card | `ui.seniorityPips`, `ui.learnedMark` |
-| W4 | **Moods** | Seeded per appearance: Standard 55%, Rush 20%, Cautious 15%, Unreliable 10%, with Edit 25 §6.5 effects. A readable tell | `traffic.mood.<name>.share`, `.speed`, `.timeGap`, `.hesitation` |
-| W5 | **Profiles** | Courier (vans behind schedule: passes sooner, smaller standoff) and Rattled (a model just hit: wider zone, longer standoff). DB6 values | `driver.profile.<name>.*` |
-| W6 | **Pacing** | Tune patience, standoff, caution and grade steps against W0 targets. Decide D81 | existing IDs |
-| W7 | **Jam watchdog** | A car stopped > N s with no `reasonToWait` logs a trace and unsticks | `traffic.watchdogSeconds` |
+| V0 | **Duel harness** | Headless 1 vs 1. Policies: stand in lane, blind lunge, read and lunge, flank, jump or drop, cone, feint. A win table per tier | `qa.fun.*` |
+| V1 | **Proving Ground** | Open tarmac, no lanes. The red car drives a seeded loop. Drone drop-in | `duel.enabled`, `duel.loop` |
+| V2 | **Sensor tiers 0–4** | One sensor per level (PT4). Each closes one approach; one stays open | `duel.level.<n>.tier`, `perception.seesAirborne`, `perception.predictSeconds`; existing `perception.*` |
+| V3 | **Avoidance ladder** | Brake, swerve, reverse, combined, accelerate, by time-to-collision band (§14.1) | `driver.ttc.*`, `driver.avoid.<manoeuvre>` |
+| V4 | **Visible intelligence** | A cue per sensor; the safe envelope; tier notches on the tag; a retraining card between levels | `ui.sensorCue`, `ui.safeEnvelope`, `ui.seniorityPips` |
+| V5 | **Duel levels L1–L5** | Level card: goal, new sensor, law clause. A part by drone per level | `duel.level.<n>.*`; `law` in `story_v2.json` |
+| V6 | **White traffic** (after V0–V5 pass) | Non-learning hazards. Graze pays. Shadow mode trains the boss | `traffic.white.learns`, `scoring.grazeRadius`, `scoring.grazePoints` |
+| V7 | **Swerve cost** | Car-to-car contact flag. Incident score. The boss then prefers braking | `traffic.carContact`, `scoring.incidentPoints` |
+| W7 | **Jam watchdog** | Unchanged | `traffic.watchdogSeconds` |
 
-- **Acceptance (Edit 25 §12.7):** a model at every cap is still beaten by an unupgraded dummy at minimum reach. Make it a test.
-- **Proposed fun metrics for W0:**
-  - Reading beats repetition: read-and-lunge outscores blind lunge over a run (V29 D2.1).
-  - Write-offs per minute; time to first hit; time to first write-off.
-  - Hits per approach; near-misses per minute; dead time (no car within reach) per minute.
-  - Time-trial clear rate and time; Endless grade reached.
-  - Per-model learning curve: hits needed per write-off as seniority rises.
+- **Deferred until traffic returns:** W1 identity, W4 moods, W5 profiles.
+- **Folded in:** W2 per-approach learning → V2 and D91. W3 visible learning → V4. W6 pacing reruns on the duel.
+- **Acceptance:**
+  - Stand in lane: 0 red hits at tier ≥ 1.
+  - Each tier: its closed approach scores 0; its opening scores above 0.
+  - Pillar 1: every tier keeps an opening an unupgraded dummy can use (D97).
+  - Tier 4: no single policy dominates (V29 governance).
+  - Reading beats repetition: read-and-lunge outscores blind lunge (V29 D2.1).
 
 ### 7.1 The agent pattern (as in Assignments 4–6)
 
@@ -261,7 +463,7 @@ console.log([...new Set(ids)].filter(i=>!reg.has(i)))"
 ## 10 Current state
 
 - **Registry:** `content/params/tuning.parameters.json`, `edit100-2026-10-30`, 600 entries.
-- **Decisions:** `DECISIONS.md` rows 1–647. Next row 648; next open decision D89.
+- **Decisions:** `DECISIONS.md` rows 1–647. Rows 648–652 and D89–D97 are proposed in §3.2; record them first. Next open decision D98.
   - Open and near this work: D40 (cue crowding), D44 (circus capacity), D77 (Second Market keeps learning), D81 (faster cars per grade), D84 (scanner hatch).
   - Waiting on Lawrence: D87 (Style Guide V2.10); row 638 (the jam trace).
 - **GDD:** Edit 100 (Sound) is the newest. Prototype 10 writes Edit 101.
@@ -308,3 +510,127 @@ bash qa/run_all.sh qa/runs/<stamp> 30 && python3 qa/report.py qa/runs/<stamp>
 8. `claude/DUMMIES_QA_Adversarial_Arcade.md`: the QA run, its harness and findings.
 9. `claude/DUMMIES_GDD_Edit100_Prototype_9_Sound.md`: what sounds, and the freeze.
 10. `claude/db/fleet.json` (project copy, 20 October; the repo's is newer): models, tiers, barks.
+11. This handover, §3.2 and §14: the playtest and the research.
+
+## 14 Research (1 November; PT8–PT10)
+
+### 14.1 Every way a car avoids you (R1)
+
+| # | Manoeuvre | Real use | DUMMIES ID | Red tier |
+|---|---|---|---|---|
+| 1 | Cover the brake | Reaction shortens | `proto.driver.coveredReaction` | 1 |
+| 2 | Slow down | Caution near a person | `proto.driver.cautionSpeed` | 1 |
+| 3 | Comfort brake | Planned stop | `traffic.comfortBraking` | 1 |
+| 4 | Emergency brake (AEB) | Full deceleration | `traffic.hardBraking` | 1 |
+| 5 | Stop and hold back | Gap before the person | `proto.standoffDistance`, `proto.learn.standoffStep` | 1 |
+| 6 | Warn | Horn, headlight flash | `proto.honkSeconds`, `proto.art.noticeFlashHz` | 1 |
+| 7 | Swerve | Evasive steering | `proto.swerveLength`, `proto.swerveOuter` | 2 |
+| 8 | Brake and steer | Last resort | `driver.avoid.combined` (proposed) | 3 |
+| 9 | Reverse | Back out of the conflict | `proto.unstick.reverseSpeed` | 3 |
+| 10 | Creep past cover | Slow beside occluders | `driver.avoid.creep` (proposed) | 3 |
+| 11 | Speed up through | Clear the crossing point first | `driver.avoid.accelerate` (proposed) | 4 |
+| 12 | Reroute | Another road | `driver.avoid.reroute` (proposed) | 4 |
+| 13 | Leave the lane | Kerb or shoulder, to avoid a crash | `driver.avoid.kerb` (proposed) | 4 |
+| 14 | Give way | Wait for a gap | `traffic.giveWayGap` | all |
+| 15 | Minimal-risk stop | Pull over, wait | `proto.driver.patienceSeconds` | all |
+| 16 | Drift | Stunt only; no assistance system does it | `driver.avoid.drift` (proposed; boss flourish) | boss |
+
+- **Real rules:**
+  - Systems prefer braking. Evasion risks a second crash.
+  - Steering alone works until about 0.6–0.67 s to collision. Brake and steer, about 0.5 s.
+  - One driver study: 68% braked fully; 26% steered while braking; 6% did nothing.
+  - Steering needs a free escape path.
+- **Game rules:**
+  - The red car climbs the same ladder: brake, swerve into free space, combined last.
+  - Bands by time to collision: `driver.ttc.brake`, `driver.ttc.swerve`, `driver.ttc.combined` (proposed).
+  - Block its escape path, and it must brake. That is a dummy tactic.
+
+### 14.2 How cars see: vision, lidar, rules (R2)
+
+- **Tesla (vision only).**
+  - Cameras only. No radar, lidar or HD maps. One end-to-end network.
+  - Occupancy network: eight cameras build one 3D grid. Each voxel is occupied or free, static or moving.
+  - Patent published 12 March 2026: sub-voxels near edges; past frames fused; occupancy flow gives each voxel a velocity.
+  - FSD v12: one network trained on millions of clips replaced 300k+ lines of C++.
+  - Radar removed 2021, ultrasonics 2022. FSD v14.2 (April 2026) sharpened the vision encoder.
+- **Waymo (sensor fusion).**
+  - 6th generation: 13 cameras, 4 lidars, 6 radars, external microphones.
+  - Lidar: its own laser pulses paint a 3D point cloud.
+  - Imaging radar: distance, speed and size in any light or weather.
+  - Microphones hear a siren's direction before cameras see it.
+  - Machine-learned models fuse the sensors. The fleet's experience trains every car.
+- **Mobileye RSS (rules, not learning).**
+  - Safe gap: the follower stops even if the leader brakes fully.
+  - Five rules: no rear-ending; no reckless cut-ins; right of way is given, not taken.
+  - Evasion may break a road rule if it causes no other crash.
+- **Euro NCAP (the test the game parodies).**
+  - Articulated adult and child dummy targets cross the car's path.
+  - One scenario: a child steps out from behind a parked car.
+  - The tested car is the "vehicle under test" (VUT).
+
+#### Gamified sensor stack
+
+| Sensor | Real basis | On-screen cue | Opening | IDs |
+|---|---|---|---|---|
+| Forward camera | Tesla front cameras | Beam rectangle | Flanks; cover | `perception.forwardLength`, `proto.driver.cautionZone` |
+| Surround | Side cameras, corner radar | Arcs at the nose | Above | `perception.sideRadius`, `perception.sideHalfAngle` |
+| Occupancy grid | Tesla voxels | Lit pixel cells where the car thinks you are | Grid lag; what cover hides | `perception.seesAirborne`, `perception.voxelSize`, `perception.voxelUpdateSeconds` (proposed) |
+| Prediction | Occupancy flow; end-to-end imitation | A ghost path ahead of you | The feint after commit | `perception.predictSeconds`, `traffic.commitHorizon` |
+| Lidar | Waymo point cloud | A sweeping scan line | The gap between sweeps | `perception.lidarSweepSeconds` (proposed) |
+| Radar | Speed and distance | Pulses on movers | A still dummy reads faint | `perception.radarMinSpeed` (proposed) |
+| Microphones | Siren direction | A ring when you run | Walk, don't run | `perception.hearRadius` vs `movement.runSpeed`, `movement.walkSpeed` |
+| Safe envelope | RSS safe gap | A bubble ahead of the car | Enter faster than it can stop | `ui.safeEnvelope` (proposed) |
+
+- **Envelope** = speed × `perception.reactionDelay` + speed² ÷ (2 × `traffic.hardBraking`).
+  - Sedan at `vehicles.sedan.cruiseSpeed` 138: 41 + 121 = 162 units (P1.7 overrides: 0.3 s, 79).
+  - `movement.lungeDistance` is 164. A dash from the bubble's edge just lands.
+- **Two boss families (D96):**
+  - **Vision** (Tesla-like): camera, occupancy, prediction. Weak in the dark and behind cover.
+  - **Fusion** (Waymo-like): lidar, radar, microphones. Sees in the dark. Obeys RSS strictly.
+    - It never causes a second crash. Box it in with white cars.
+- **Learning made visible:**
+  - A retraining card between levels replays your winning hit. Then the new sensor installs.
+  - Shadow mode: white cars log your hits as the boss's training data (D90).
+
+### 14.3 Chasing and being chased (R3)
+
+| Game | Loop | Take for DUMMIES |
+|---|---|---|
+| Frogger, Crossy Road | Cross patterned traffic | White cars as readable hazards |
+| Pac-Man | Four chasers, four rules; a pellet flips the hunt | Each enemy type has one legible rule |
+| GTA (wanted stars) | Pursuit escalates with your crimes | Tiers announced as stars |
+| Metal Gear Solid | Vision cones; alert states | Sensor cues; noticed, alert, committed |
+| Chase H.Q. | Ram one target car through traffic, on a timer | One red car among white |
+| Burnout (Takedowns, Crash) | Reward for causing crashes | Incident scoring (PT12) |
+| Shadow of the Colossus | One boss; climb it | Attack from above (L3) |
+| Touhou, bullet hell | Dodge patterns, shoot the boss; graze pays | White = bullets, red = boss, graze |
+| Robotron 2084 | Dodge a swarm, reach targets | Two attention channels |
+| Shadow of Mordor (Nemesis) | Enemies remember how you beat them | Recurring red models with scars |
+| Metal Gear Solid V | Enemy gear adapts to your tactics | One visible counter per learned approach |
+| Alien: Isolation | The hunter gains behaviours as you repeat tricks | Counters unlock from your play (D91) |
+| Super Mario | Stomp works; spiked enemies refuse it | A tier refuses one approach |
+| Zelda dungeons | The dungeon's item beats its boss | The level's part opens its tier (PT6) |
+
+- **Rules for DUMMIES:**
+  - One target, many hazards. Never two targets.
+  - Hazards never learn. The target always does, visibly.
+  - Announce each adaptation in a cue before it bites.
+  - Near-misses pay: grazing makes avoiding active.
+  - The verb gates the boss. The boss never gates all verbs.
+
+### 14.4 Sources
+
+- Tesla occupancy patent (2026): https://www.notateslaapp.com/news/3864/how-tesla-fsd-works-part-5-modeling-a-physical-world-without-lidar
+- Tesla FSD v12 end-to-end: https://www.notateslaapp.com/news/1842/first-look-at-teslas-fsd-beta-v12-1-video
+- Elluswamy on end-to-end, occupancy: https://ceointerviews.ai/interview/721772/
+- Tesla vision-only timeline: https://www.basenor.com/blogs/news/teslas-vision-only-fsd-why-cameras-beat-lidar
+- Waymo 6th generation (2024): https://waymo.com/blog/2024/08/meet-the-6th-generation-waymo-driver/
+- Waymo 6th generation sensors (2026): https://waymo.com/blog/2026/02/ro-on-6th-gen-waymo-driver
+- Waymo microphones: https://cleantechnica.com/2026/02/13/6th-generation-waymo-driver-launches-into-life/
+- Mobileye RSS: https://www.mobileye.com/responsibility-sensitive-safety/ · https://www.mobileye.com/blog/rss-explained-the-five-rules-for-autonomous-vehicle-safety/ · https://static.mobileye.com/website/corporate/rss/rss_on_nhtsa.pdf
+- Euro NCAP AEB VRU protocol: https://cdn.euroncap.com/media/53153/euro-ncap-aeb-vru-test-protocol-v302.pdf · scenarios: https://www.businesscar.co.uk/?p=13488
+- Braking preferred over evasion: https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/8918255
+- Time-to-collision thresholds: https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/9514647
+- Driver evasion study (TUM/Bosch): https://mediatum.ub.tum.de/doc/1142232/951441.pdf
+- Escape paths and evasion: https://export.arxiv.org/pdf/2505.14842
+- §14.3 games: design knowledge, not web sources.
