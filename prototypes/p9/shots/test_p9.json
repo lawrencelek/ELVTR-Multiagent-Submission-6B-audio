@@ -3,7 +3,7 @@
  "total": 51,
  "results": [
   {
-   "name": "every file in the cue map loads (161)",
+   "name": "every file in the cue map loads (162)",
    "pass": true,
    "detail": ""
   },
@@ -118,9 +118,9 @@
    "detail": "Arcade: play 1/1 · Arcade: a write-off 0.5/0.5 · Arcade: the report 0.7/0.7 · Arcade: the workshop 0.7/0.7 · Story: the gift screen (ferry) 1/1"
   },
   {
-   "name": "the tour heard 37 cues through the game's hooks",
+   "name": "the tour heard 38 cues through the game's hooks",
    "pass": true,
-   "detail": "ui-start ui-move ui-ok ui-back chassis.start drop-in near-miss dropped-in lunge screen denied impact combo pickup cone-hit drone-dispatch drone-dispatch.rescue writeoff credit shop-open chassis jump jump-land ui-pause ending.win ending.fail story-enter impact.big story-deliver story-count story-clear gift story-ferry story-gift story-ferried unveil unveil-lift"
+   "detail": "ui-start ui-move ui-ok ui-back chassis.start drop-in near-miss dropped-in lunge screen denied impact combo pickup cone-hit drone-dispatch drone-dispatch.rescue writeoff credit shop-open chassis jump jump-land ui-pause ending.win ending.fail story-enter knock impact.big story-deliver story-count story-clear gift story-ferry story-gift story-ferried unveil unveil-lift"
   },
   {
    "name": "the intro waits behind the gate",
@@ -133,7 +133,7 @@
    "detail": ""
   },
   {
-   "name": "every catalogued event and variant does what the map says (109: 52 cue, 26 silence, 31 synth)",
+   "name": "every catalogued event and variant does what the map says (109: 66 cue, 26 silence, 17 synth)",
    "pass": true,
    "detail": ""
   },
@@ -198,9 +198,9 @@
    "detail": "[[false,false,true,true,false],[false,false,true,false],[false,false,false]]"
   },
   {
-   "name": "car-notice and barks are silent (row 625)",
+   "name": "car-notice and plain barks are silent (row 625); a shouted bark sounds, once (row 647)",
    "pass": true,
-   "detail": "{\"honk\":[false,false,true,true],\"spent\":[false,false,true,true,false],\"knock\":[false,false,true,false],\"live\":[false,false,false],\"silent\":[true,true,true],\"played\":[],\"decisions\":[\"silence\",\"silence\",\"silence\"],\"P\":[2,2,2]}"
+   "detail": "{\"honk\":[false,false,true,true],\"spent\":[false,false,true,true,false],\"knock\":[false,false,true,false],\"live\":[false,false,false],\"silent\":[true,true,true],\"played\":[\"bark.shout\"],\"decisions\":[\"silence\",\"silence\",\"cue\"],\"P\":[2,2,2]}"
   },
   {
    "name": "the pause page's sound control mutes, and its slider sets the volume and unmutes",
@@ -245,10 +245,10 @@
   {
    "name": "the sound design matches its freeze, or the freeze is open by a ruling (audio/FREEZE.json, rows 645–646)",
    "pass": true,
-   "detail": "sound freeze: 210 items, 2 changed; open: row 646: the last pick round (Lawrence, 31 October 21:14) |   prototypes/p9/lab.src.html |   prototypes/p9/make_lab.py"
+   "detail": "sound freeze: 211 items, 4 changed; open: row 646: the last pick round (Lawrence, 31 October 21:14) |   content/audio/cues.json |   content/audio/picks_lawrence_8.json (new) |   prototypes/p9/lab.src.html |   prototypes/p9/make_lab.py"
   },
   {
-   "name": "Prototype 8.4 rebuilt from the shared code draws what the frozen build draws, barks and live counts aside (314 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 316 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)",
+   "name": "Prototype 8.4 rebuilt from the shared code draws what the frozen build draws, barks and live counts aside (316 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors / 315 strings drawn over 32 steps · 1 name Farsight · 0 over two sentences or 20 words · 0 page errors)",
    "pass": true,
    "detail": ""
   },

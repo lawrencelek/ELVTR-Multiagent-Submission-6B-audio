@@ -1,0 +1,99 @@
+{
+ "note": "Lawrence, 1 November 19:02: 'I have made these final selections for sound' (the last pick round, DECISIONS rows 646-647). Pasted from the Sound Lab's export, verbatim. A decision with no files keeps the map's pool. Placed over the map by audio/integrate.py",
+ "sfx": {
+  "lunge": {
+   "files": [
+    "tone_lunge_whoosh_b.wav"
+   ]
+  },
+  "lunge.wrecked": {
+   "files": [
+    "tone_lunge_whoosh_b2.wav"
+   ]
+  },
+  "lunge.damaged": {
+   "files": [
+    "tone_lunge_whoosh_b1.wav"
+   ]
+  },
+  "writeoff": {
+   "decision": "cue",
+   "files": [
+    "harsh_destruction.wav"
+   ]
+  },
+  "chassis": {
+   "decision": "cue",
+   "files": [
+    "teleport.wav"
+   ]
+  },
+  "touch-spent": {
+   "decision": "silence"
+  },
+  "held": {
+   "decision": "cue",
+   "files": [
+    "equip_2.wav"
+   ]
+  },
+  "impact.drop": {
+   "decision": "cue",
+   "files": [
+    "soft_destruction.wav"
+   ]
+  },
+  "impact.big": {
+   "decision": "cue",
+   "files": [
+    "explosion_2.wav"
+   ]
+  },
+  "impact": {
+   "decision": "cue"
+  },
+  "denied": {
+   "decision": "cue"
+  },
+  "sling": {
+   "decision": "cue",
+   "files": [
+    "shrink.wav"
+   ]
+  },
+  "hitch": {
+   "decision": "cue"
+  },
+  "push": {
+   "decision": "cue",
+   "files": [
+    "door_close.wav"
+   ]
+  },
+  "slip": {
+   "decision": "cue"
+  },
+  "rail-jump": {
+   "decision": "cue"
+  },
+  "drone-drop": {
+   "decision": "cue",
+   "files": [
+    "laser_5.wav"
+   ]
+  },
+  "voyage-end": {
+   "files": [
+    "laser_6.wav"
+   ]
+  },
+  "story-ferried": {
+   "files": [
+    "laser_6.wav"
+   ]
+  },
+  "bark.shout": {
+   "decision": "cue"
+  }
+ }
+}

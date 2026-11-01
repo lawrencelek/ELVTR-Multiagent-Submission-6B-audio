@@ -29,6 +29,7 @@ PICKS = [ROOT / "content" / "audio" / f for f in (       # Lawrence's picks from
     "picks_lawrence_5.json",        # 30 October 19:10: after the QA run, car-notice and barks silent (row 625)
     "picks_lawrence_6.json",        # 31 October 15:55: the dash by wear: whoosh B1, B2 damaged, B3 very damaged (row 629)
     "picks_lawrence_7.json",        # 31 October 16:24: a Story tile cleared plays its own music, Track 11 (row 631)
+    "picks_lawrence_8.json",        # 1 November 19:02: the last pick round; the final selections (rows 646-647)
 )]
 TONES = ROOT / "content" / "audio" / "tones.json"            # generated tones (audio/tones.py)
 OUT = ROOT / "content" / "audio" / "cues.json"

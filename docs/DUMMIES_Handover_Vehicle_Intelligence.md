@@ -20,7 +20,7 @@
 | Project docs: GDD edits to 100, prototype docs, decisions, registry, style guides, QA report | Yes, searchable | `claude/…` |
 | Project instructions (house style) | Yes | Project settings |
 | Code, builds, tests, QA harness, runs, audio | Yes, by cloning | This repo (all pushed) |
-| The tag `p9-sound-frozen` | No. Local only; the push was refused (proxy 403) | Lawrence pushes it, or the new chat tags `df5956c` |
+| The tags `p9-sound-frozen`, `p9-sound-final` | No. Local only; tag pushes are refused (proxy 403) | Lawrence pushes them, or the new chat tags the final-freeze commit |
 | This conversation | No; past-chat search only, if enabled | — |
 
 - **Project knowledge:** about 1.57 of 2.0 MB used. Keep run logs and audio out of the project.
@@ -30,7 +30,7 @@
 - **DUMMIES:** a top-down game. You are a crash-test dummy in training in SHENZHEN SMART CITY.
   - Dummy Corporation makes custom dummies. Self-driving cars must avoid you; you must get hit.
 - **Build:** `prototypes/p9/dummies_p9.html` (1.43 MB) with `prototypes/p9/audio/` (38 MB, loaded by URL).
-  - md5 `e27f4f4539d49fee99c37c68e1985554`. Live on GitHub Pages: <https://lawrencelek.github.io/ELVTR-Multiagent-Submission-6B-audio/>.
+  - md5 `be163e7d014344e062965986b3da5786`. Live on GitHub Pages: <https://lawrencelek.github.io/ELVTR-Multiagent-Submission-6B-audio/>.
 - **Flow:** intro → mode select (STORY, ARCADE, HIGH SCORES, CREDITS).
   - **Story:** 27 tiles in three acts; parts by drone; finale to CERTIFIED. Best points and fastest run kept (row 640).
   - **Arcade (row 639, `arcade.modes` 1):**
@@ -38,9 +38,9 @@
     - Endless: a grade every `arcade.endless.gradeWriteOffs` (3) write-offs.
     - Exploration arrows mark open screen edges (`ui.exploreArrows`, row 642).
     - Prices 2, 4, 6, 8 write-offs a level (`economy.price.ability.level1`–`level4`, row 641).
-- **Sound: frozen** (row 645).
+- **Sound: final and frozen** (rows 645–647). Lawrence's last pick round closed it (row 647).
   - `audio/FREEZE.json` holds 210 MD5s. `python3 audio/freeze.py --check` must pass; `test_p9.js` runs it.
-  - Car-notice and bark cues are silent by Lawrence's pick (row 623). Honks cap at `audio.sfx.honkMaxPerCar` (2).
+  - Car-notice and plain barks are silent (row 625); shouted barks sound (row 647). Honks cap at `audio.sfx.honkMaxPerCar` (2).
 - **Latest fixes:** contact grace `proto.contactGraceSeconds` 0.3 (row 630); a moved cone frees the lane (`proto.driver.dodgeFollowsCone`, row 632); a drone fetches a lane cone after `proto.droneConeSeconds` 5 s (row 636).
 - **Current state in one page:** `claude/DUMMIES_GDD_Current_State.md` (Edit 99). Sound: `claude/DUMMIES_GDD_Edit100_Prototype_9_Sound.md`.
 
@@ -78,7 +78,7 @@
   - Check: `node` script in §8.3.
 - **Frozen builds stay byte-identical.**
   - Prototype 8.4: md5 `9f5549201d88891f9f0b22c461602909`.
-  - Prototype 9: md5 `e27f4f4539d49fee99c37c68e1985554`. Rebuild it after each shared-code change; it must not move.
+  - Prototype 9: md5 `be163e7d014344e062965986b3da5786`. Rebuild it after each shared-code change; it must not move.
   - New behaviour goes behind flags: registry default 0; `prototypes/p10/build.py` sets 1.
 - **Sound stays frozen.** `freeze.py --check` passes on every commit.
   - `game.js` sound hooks (`audGate`, `audEv`, `processEvents`) sit outside the freeze. They still decide what plays. Leave them.
@@ -96,7 +96,7 @@
 
 ## 5 Vehicle intelligence now (code survey, Prototype 9)
 
-Survey at `df5956c`. Line numbers move; search by name. **S** = `prototypes/p6/sim.js` · **G** = `p6/game.js` · **T** = `p7/story.js`.
+Survey at `df5956c` (sim and game code unchanged since). Line numbers move; search by name. **S** = `prototypes/p6/sim.js` · **G** = `p6/game.js` · **T** = `p7/story.js`.
 
 ### 5.1 The per-car loop: `carAI(dt)` (S:2953)
 
@@ -169,7 +169,7 @@ Each tick, for each car, in order:
 - **Learning is invisible.** General learning is off; seniority pips are hidden. Standoff learning shows only as a toast.
 - **Identity is thin.** One model per class. 30 of 32 authored models never appear. Pillar 3 ("cars visibly learn as individuals and a fleet") has no stage.
 - **No variety per encounter.** No moods, no profiles. Every sedan drives the same.
-- **Silent cars.** Car-notice and barks are mute by pick (row 623). The car's voice is the bubble alone.
+- **Quiet cars.** Car-notice and plain barks are mute (row 625); only shouts sound (row 647). The car's voice is mostly the bubble.
 
 ### 6.3 Pacing
 
@@ -246,7 +246,7 @@ console.log([...new Set(ids)].filter(i=>!reg.has(i)))"
 
 | Repo | Branch | Role |
 |---|---|---|
-| `lawrencelek/ELVTR-Multiagent-Submission-6B-audio` | `main` = `gh-pages` (`df5956c`) | **Target.** Prototype 9 and the sound design. Prototype 10 goes here (Q0) |
+| `lawrencelek/ELVTR-Multiagent-Submission-6B-audio` | `main` = `gh-pages` | **Target.** Prototype 9 and the sound design. Prototype 10 goes here (Q0) |
 | `lawrencelek/ELVTR-dummies-agent-crew` | `assignment4/content-pipeline` | **Source, read only.** P1–P8, bots, `style/`, `coder/` |
 | `lawrencelek/ELVTR-Multiagent-Submission-6` | `main` = `gh-pages` | Assignment #6, done. Pages hosts Prototype 8.4 |
 
@@ -258,17 +258,17 @@ console.log([...new Set(ids)].filter(i=>!reg.has(i)))"
 ## 10 Current state
 
 - **Registry:** `content/params/tuning.parameters.json`, `edit100-2026-10-30`, 600 entries.
-- **Decisions:** `DECISIONS.md` rows 1–645. Next row 646; next open decision D89.
+- **Decisions:** `DECISIONS.md` rows 1–647. Next row 648; next open decision D89.
   - Open and near this work: D40 (cue crowding), D44 (circus capacity), D77 (Second Market keeps learning), D81 (faster cars per grade), D84 (scanner hatch).
   - Waiting on Lawrence: D87 (Style Guide V2.10); row 638 (the jam trace).
 - **GDD:** Edit 100 (Sound) is the newest. Prototype 10 writes Edit 101.
-- **Sound:** frozen at `df5956c` (row 645). Tag `p9-sound-frozen` local only.
+- **Sound:** final, frozen again after the last pick round (row 647). Tags `p9-sound-frozen`, `p9-sound-final` local only.
 
 ## 11 Run and test
 
 ```
 python3 prototypes/p8/build.py                       # md5 9f5549201d88891f9f0b22c461602909; do not commit a changed 8.4
-python3 prototypes/p9/build.py                       # md5 e27f4f4539d49fee99c37c68e1985554; must not move
+python3 prototypes/p9/build.py                       # md5 be163e7d014344e062965986b3da5786; must not move
 cd prototypes/p9 && node tour_p9.js && node test_p9.js --p84 && cd ../..   # 51/51
 python3 audio/freeze.py --check                      # the sound freeze
 node qa/jam.js A2 300                                # the jam hunt

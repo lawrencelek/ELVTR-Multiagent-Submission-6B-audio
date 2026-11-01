@@ -384,15 +384,14 @@
    "cooldown": "action",
    "cooldownId": "audio.sfx.cooldown.action",
    "alternates": [
-    "tone_lunge_whoosh_b.wav",
+    "tone_lunge_whoosh_b1.wav",
     "tone_lunge_whoosh_b2.wav",
     "tone_lunge_whoosh_b3.wav",
     "wobble.wav",
-    "jump_4.wav",
-    "shrink.wav"
+    "jump_4.wav"
    ],
    "files": [
-    "tone_lunge_whoosh_b1.wav"
+    "tone_lunge_whoosh_b.wav"
    ],
    "pick": "cycle",
    "variants": [
@@ -571,7 +570,7 @@
    "offsetId": "audio.sfx.offset.deck-drop"
   },
   "rail-jump": {
-   "decision": "synth",
+   "decision": "cue",
    "label": "Over the rail",
    "what": "The dummy jumps a walkway rail.",
    "group": "moves",
@@ -649,7 +648,7 @@
    "pick": "random"
   },
   "slip": {
-   "decision": "synth",
+   "decision": "cue",
    "label": "Slip on water",
    "what": "A dash is refused on a puddle.",
    "group": "moves",
@@ -683,7 +682,7 @@
    "pick": "cycle"
   },
   "push": {
-   "decision": "synth",
+   "decision": "cue",
    "label": "Push off a car",
    "what": "Arms: the dummy pushes off a car (Y).",
    "group": "abilities",
@@ -708,17 +707,17 @@
    "cooldown": "action",
    "cooldownId": "audio.sfx.cooldown.action",
    "alternates": [
-    "door_close.wav",
+    "hurt_3.wav",
     "blocked.wav",
     "soft_destruction.wav"
    ],
    "files": [
-    "hurt_3.wav"
+    "door_close.wav"
    ],
    "pick": "cycle"
   },
   "hitch": {
-   "decision": "synth",
+   "decision": "cue",
    "label": "Hitch a car",
    "what": "The dummy grabs a passing car (X).",
    "group": "abilities",
@@ -752,7 +751,7 @@
    "pick": "cycle"
   },
   "sling": {
-   "decision": "synth",
+   "decision": "cue",
    "label": "Sling off",
    "what": "The dummy lets go of a hitched car with speed.",
    "group": "abilities",
@@ -777,17 +776,17 @@
    "cooldown": "action",
    "cooldownId": "audio.sfx.cooldown.action",
    "alternates": [
-    "shrink.wav",
+    "equip_2.wav",
     "jump_4.wav",
     "jump_2.wav"
    ],
    "files": [
-    "equip_2.wav"
+    "shrink.wav"
    ],
    "pick": "cycle"
   },
   "denied": {
-   "decision": "synth",
+   "decision": "cue",
    "label": "Denied",
    "what": "A move is refused: no charge, or not fitted yet.",
    "group": "abilities",
@@ -853,7 +852,7 @@
    "pick": "cycle"
   },
   "impact": {
-   "decision": "synth",
+   "decision": "cue",
    "label": "Hit",
    "what": "A car hits the dummy. Damage, points, the burst.",
    "group": "hits",
@@ -897,7 +896,7 @@
    ]
   },
   "impact.big": {
-   "decision": "synth",
+   "decision": "cue",
    "label": "A big hit",
    "what": "A car hits the dummy. Damage, points, the burst.",
    "group": "hits",
@@ -927,17 +926,17 @@
    "cooldown": "burst",
    "cooldownId": "audio.sfx.cooldown.burst",
    "alternates": [
+    "explosion_1.wav",
     "harsh_destruction.wav",
-    "explosion_2.wav",
     "soft_destruction.wav"
    ],
    "files": [
-    "explosion_1.wav"
+    "explosion_2.wav"
    ],
    "pick": "random"
   },
   "impact.drop": {
-   "decision": "synth",
+   "decision": "cue",
    "label": "A drop onto a car",
    "what": "A car hits the dummy. Damage, points, the burst.",
    "group": "hits",
@@ -967,17 +966,17 @@
    "cooldown": "burst",
    "cooldownId": "audio.sfx.cooldown.burst",
    "alternates": [
+    "hurt_3.wav",
     "land.wav",
     "hurt_1.wav"
    ],
    "files": [
-    "soft_destruction.wav",
-    "hurt_3.wav"
+    "soft_destruction.wav"
    ],
    "pick": "random"
   },
   "held": {
-   "decision": "synth",
+   "decision": "cue",
    "label": "Chassis held",
    "what": "Story: a hit that misses the brief; the chassis holds at the floor.",
    "group": "hits",
@@ -1002,12 +1001,12 @@
    "cooldown": "once",
    "cooldownId": "audio.sfx.cooldown.once",
    "alternates": [
-    "equip_2.wav",
+    "cancel_1.wav",
     "equip_1.wav",
     "blocked.wav"
    ],
    "files": [
-    "cancel_1.wav"
+    "equip_2.wav"
    ],
    "pick": "cycle"
   },
@@ -1031,7 +1030,7 @@
    "pick": "random"
   },
   "touch-spent": {
-   "decision": "synth",
+   "decision": "silence",
    "label": "Spent car",
    "what": "The dummy touches a spent car: no reward.",
    "group": "hits",
@@ -1055,7 +1054,7 @@
    "pick": "random"
   },
   "writeoff": {
-   "decision": "synth",
+   "decision": "cue",
    "label": "Write-off",
    "what": "The chassis is written off: health reaches zero.",
    "group": "hits",
@@ -1080,16 +1079,16 @@
    "cooldown": "once",
    "cooldownId": "audio.sfx.cooldown.once",
    "alternates": [
-    "explosion_4.wav",
-    "harsh_destruction.wav"
+    "explosion_3.wav",
+    "explosion_4.wav"
    ],
    "files": [
-    "explosion_3.wav"
+    "harsh_destruction.wav"
    ],
    "pick": "cycle"
   },
   "chassis": {
-   "decision": "synth",
+   "decision": "cue",
    "label": "New chassis",
    "what": "A chassis is issued: at a level's start, under the card, and after each write-off.",
    "group": "hits",
@@ -1114,12 +1113,12 @@
    "cooldown": "once",
    "cooldownId": "audio.sfx.cooldown.once",
    "alternates": [
-    "teleport.wav",
+    "bubble.wav",
     "powerup_3.wav",
     "equip_2.wav"
    ],
    "files": [
-    "bubble.wav"
+    "teleport.wav"
    ],
    "pick": "cycle",
    "variants": [
@@ -2168,14 +2167,19 @@
    "pick": "cycle"
   },
   "drone-drop": {
-   "decision": "synth",
+   "decision": "cue",
    "label": "Drone sets a cone down",
    "what": "The drone sets the cone down.",
    "group": "drones",
    "freq": "once",
    "priority": "low",
    "shot": "drone",
-   "why": "The pickup frames the trip; the 8.4 tap closes it.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: The pickup frames the trip; the 8.4 tap closes it.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "synth",
+    "why": "The pickup frames the trip; the 8.4 tap closes it."
+   },
    "tone": "tone_drone_drop.wav",
    "bus": "sfx",
    "gain": "story",
@@ -2183,7 +2187,9 @@
    "cooldown": "once",
    "cooldownId": "audio.sfx.cooldown.once",
    "alternates": [],
-   "files": [],
+   "files": [
+    "laser_5.wav"
+   ],
    "pick": "random"
   },
   "drop-in": {
@@ -2419,9 +2425,11 @@
    "gainId": "audio.sfx.gain.story",
    "cooldown": "once",
    "cooldownId": "audio.sfx.cooldown.once",
-   "alternates": [],
-   "files": [
+   "alternates": [
     "laser_5.wav"
+   ],
+   "files": [
+    "laser_6.wav"
    ],
    "pick": "random"
   },
@@ -2581,18 +2589,29 @@
    "freq": "once",
    "priority": "medium",
    "shot": "certified",
-   "why": "One clean high note: CERTIFIED.",
+   "why": "Lawrence's pick in the Sound Lab (DECISIONS rows 603, 607). Agent: One clean high note: CERTIFIED.",
+   "by": "Lawrence",
+   "agent": {
+    "decision": "cue",
+    "files": [
+     "note_high_C.wav"
+    ],
+    "gain": "reward",
+    "cooldown": "once",
+    "why": "One clean high note: CERTIFIED."
+   },
    "bus": "sfx",
    "gain": "reward",
    "gainId": "audio.sfx.gain.reward",
    "cooldown": "once",
    "cooldownId": "audio.sfx.cooldown.once",
    "alternates": [
+    "note_high_C.wav",
     "chime.wav",
     "confirm_2.wav"
    ],
    "files": [
-    "note_high_C.wav"
+    "laser_6.wav"
    ],
    "pick": "cycle"
   },
@@ -2900,7 +2919,7 @@
    ]
   },
   "bark.shout": {
-   "decision": "silence",
+   "decision": "cue",
    "label": "A shouted line",
    "what": "A car's line appears in the message strip.",
    "group": "barks",
@@ -3039,10 +3058,10 @@
    "alternates": [
     "tone_lunge_whoosh_b.wav",
     "tone_lunge_whoosh_b1.wav",
-    "tone_lunge_whoosh_b2.wav"
+    "tone_lunge_whoosh_b3.wav"
    ],
    "files": [
-    "tone_lunge_whoosh_b3.wav"
+    "tone_lunge_whoosh_b2.wav"
    ],
    "pick": "random"
   },
@@ -3075,11 +3094,11 @@
    "cooldownId": "audio.sfx.cooldown.action",
    "alternates": [
     "tone_lunge_whoosh_b.wav",
-    "tone_lunge_whoosh_b1.wav",
+    "tone_lunge_whoosh_b2.wav",
     "tone_lunge_whoosh_b3.wav"
    ],
    "files": [
-    "tone_lunge_whoosh_b2.wav"
+    "tone_lunge_whoosh_b1.wav"
    ],
    "pick": "random"
   }
@@ -4456,7 +4475,8 @@
    "content/audio/picks_lawrence_4.json",
    "content/audio/picks_lawrence_5.json",
    "content/audio/picks_lawrence_6.json",
-   "content/audio/picks_lawrence_7.json"
+   "content/audio/picks_lawrence_7.json",
+   "content/audio/picks_lawrence_8.json"
   ],
   "changed": {
    "ui-start": {
@@ -4479,7 +4499,7 @@
     },
     "now": {
      "files": [
-      "tone_lunge_whoosh_b1.wav"
+      "tone_lunge_whoosh_b.wav"
      ]
     }
    },
@@ -4488,7 +4508,7 @@
      "decision": "cue"
     },
     "now": {
-     "decision": "synth"
+     "decision": "cue"
     }
    },
    "level": {
@@ -4515,9 +4535,9 @@
     },
     "now": {
      "files": [
-      "hurt_3.wav"
+      "door_close.wav"
      ],
-     "decision": "synth"
+     "decision": "cue"
     }
    },
    "slip": {
@@ -4525,7 +4545,7 @@
      "decision": "cue"
     },
     "now": {
-     "decision": "synth"
+     "decision": "cue"
     }
    },
    "sling": {
@@ -4536,16 +4556,16 @@
     },
     "now": {
      "files": [
-      "equip_2.wav"
+      "shrink.wav"
      ],
-     "decision": "synth"
+     "decision": "cue"
     }
    },
    "denied": {
     "was": {},
     "now": {
      "gainDb": 3.5,
-     "decision": "synth"
+     "decision": "cue"
     }
    },
    "impact.big": {
@@ -4557,9 +4577,9 @@
     },
     "now": {
      "files": [
-      "explosion_1.wav"
+      "explosion_2.wav"
      ],
-     "decision": "synth"
+     "decision": "cue"
     }
    },
    "held": {
@@ -4570,9 +4590,9 @@
     },
     "now": {
      "files": [
-      "cancel_1.wav"
+      "equip_2.wav"
      ],
-     "decision": "synth"
+     "decision": "cue"
     }
    },
    "touch-spent": {
@@ -4580,7 +4600,7 @@
      "decision": "silence"
     },
     "now": {
-     "decision": "synth"
+     "decision": "silence"
     }
    },
    "writeoff": {
@@ -4591,9 +4611,9 @@
     },
     "now": {
      "files": [
-      "explosion_3.wav"
+      "harsh_destruction.wav"
      ],
-     "decision": "synth"
+     "decision": "cue"
     }
    },
    "part-break": {
@@ -4719,7 +4739,7 @@
      "decision": "cue"
     },
     "now": {
-     "decision": "synth"
+     "decision": "cue"
     }
    },
    "impact": {
@@ -4727,7 +4747,7 @@
      "decision": "cue"
     },
     "now": {
-     "decision": "synth"
+     "decision": "cue"
     }
    },
    "impact.drop": {
@@ -4735,7 +4755,10 @@
      "decision": "cue"
     },
     "now": {
-     "decision": "synth"
+     "decision": "cue",
+     "files": [
+      "soft_destruction.wav"
+     ]
     }
    },
    "chassis.start": {
@@ -4762,9 +4785,9 @@
     },
     "now": {
      "files": [
-      "bubble.wav"
+      "teleport.wav"
      ],
-     "decision": "synth"
+     "decision": "cue"
     }
    },
    "combo.max": {
@@ -4816,7 +4839,7 @@
     "now": {
      "decision": "cue",
      "files": [
-      "laser_5.wav"
+      "laser_6.wav"
      ],
      "gain": "story",
      "cooldown": "once"
@@ -4860,7 +4883,7 @@
      "decision": "cue"
     },
     "now": {
-     "decision": "silence"
+     "decision": "cue"
     }
    },
    "lunge.damaged": {
@@ -4873,7 +4896,7 @@
     "now": {
      "decision": "cue",
      "files": [
-      "tone_lunge_whoosh_b2.wav"
+      "tone_lunge_whoosh_b1.wav"
      ],
      "gain": "move",
      "cooldown": "action"
@@ -4889,10 +4912,38 @@
     "now": {
      "decision": "cue",
      "files": [
-      "tone_lunge_whoosh_b3.wav"
+      "tone_lunge_whoosh_b2.wav"
      ],
      "gain": "move",
      "cooldown": "action"
+    }
+   },
+   "drone-drop": {
+    "was": {
+     "decision": "synth",
+     "files": null,
+     "gain": null,
+     "cooldown": null
+    },
+    "now": {
+     "decision": "cue",
+     "files": [
+      "laser_5.wav"
+     ],
+     "gain": "story",
+     "cooldown": "once"
+    }
+   },
+   "voyage-end": {
+    "was": {
+     "files": [
+      "note_high_C.wav"
+     ]
+    },
+    "now": {
+     "files": [
+      "laser_6.wav"
+     ]
     }
    }
   },
@@ -4904,40 +4955,54 @@
      ]
     },
     "lunge": {
-     "decision": "cue",
      "files": [
-      "tone_lunge_whoosh_b1.wav"
+      "tone_lunge_whoosh_b.wav"
      ]
     },
     "rail-jump": {
-     "decision": "synth"
+     "decision": "cue"
     },
     "level": {
      "decision": "silence"
     },
     "push": {
-     "decision": "synth"
+     "decision": "cue",
+     "files": [
+      "door_close.wav"
+     ]
     },
     "slip": {
-     "decision": "synth"
+     "decision": "cue"
     },
     "sling": {
-     "decision": "synth"
+     "decision": "cue",
+     "files": [
+      "shrink.wav"
+     ]
     },
     "denied": {
-     "decision": "synth"
+     "decision": "cue"
     },
     "impact.big": {
-     "decision": "synth"
+     "decision": "cue",
+     "files": [
+      "explosion_2.wav"
+     ]
     },
     "held": {
-     "decision": "synth"
+     "decision": "cue",
+     "files": [
+      "equip_2.wav"
+     ]
     },
     "touch-spent": {
-     "decision": "synth"
+     "decision": "silence"
     },
     "writeoff": {
-     "decision": "synth"
+     "decision": "cue",
+     "files": [
+      "harsh_destruction.wav"
+     ]
     },
     "part-break": {
      "decision": "synth"
@@ -4992,13 +5057,16 @@
      "gainDb": -2.5
     },
     "hitch": {
-     "decision": "synth"
+     "decision": "cue"
     },
     "impact": {
-     "decision": "synth"
+     "decision": "cue"
     },
     "impact.drop": {
-     "decision": "synth"
+     "decision": "cue",
+     "files": [
+      "soft_destruction.wav"
+     ]
     },
     "chassis.start": {
      "decision": "cue",
@@ -5007,7 +5075,10 @@
      ]
     },
     "chassis": {
-     "decision": "synth"
+     "decision": "cue",
+     "files": [
+      "teleport.wav"
+     ]
     },
     "combo.max": {
      "files": [
@@ -5027,9 +5098,8 @@
      "gainDb": -3
     },
     "story-ferried": {
-     "decision": "cue",
      "files": [
-      "laser_5.wav"
+      "laser_6.wav"
      ]
     },
     "unveil-lift": {
@@ -5040,18 +5110,27 @@
      "decision": "silence"
     },
     "bark.shout": {
-     "decision": "silence"
+     "decision": "cue"
     },
     "lunge.damaged": {
-     "decision": "cue",
+     "files": [
+      "tone_lunge_whoosh_b1.wav"
+     ]
+    },
+    "lunge.wrecked": {
      "files": [
       "tone_lunge_whoosh_b2.wav"
      ]
     },
-    "lunge.wrecked": {
+    "drone-drop": {
      "decision": "cue",
      "files": [
-      "tone_lunge_whoosh_b3.wav"
+      "laser_5.wav"
+     ]
+    },
+    "voyage-end": {
+     "files": [
+      "laser_6.wav"
      ]
     }
    }

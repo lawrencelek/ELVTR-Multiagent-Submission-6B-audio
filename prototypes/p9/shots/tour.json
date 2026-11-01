@@ -343,7 +343,7 @@
     {
      "kind": "sfx",
      "id": "lunge",
-     "file": "tone_lunge_whoosh_b1.wav"
+     "file": "tone_lunge_whoosh_b.wav"
     },
     {
      "kind": "sfx",
@@ -377,7 +377,7 @@
     {
      "kind": "sfx",
      "id": "denied",
-     "file": "tone_denied.wav"
+     "file": "blocked.wav"
     }
    ]
   },
@@ -396,7 +396,7 @@
     {
      "kind": "sfx",
      "id": "impact",
-     "file": "tone_impact.wav"
+     "file": "hurt_4.wav"
     }
    ]
   },
@@ -482,7 +482,7 @@
     {
      "kind": "sfx",
      "id": "writeoff",
-     "file": "tone_writeoff.wav"
+     "file": "harsh_destruction.wav"
     },
     {
      "kind": "sfx",
@@ -548,7 +548,7 @@
     {
      "kind": "sfx",
      "id": "chassis",
-     "file": "tone_chassis.wav"
+     "file": "teleport.wav"
     }
    ]
   },
@@ -958,7 +958,7 @@
     {
      "kind": "sfx",
      "id": "lunge",
-     "file": "tone_lunge_whoosh_b1.wav"
+     "file": "tone_lunge_whoosh_b.wav"
     },
     {
      "kind": "sfx",
@@ -968,7 +968,7 @@
     {
      "kind": "sfx",
      "id": "impact",
-     "file": "tone_impact.wav"
+     "file": "hurt_2.wav"
     }
    ]
   },
@@ -1005,18 +1005,13 @@
    "cues": [
     {
      "kind": "sfx",
-     "id": "near-miss",
-     "file": "tone_near_miss.wav"
-    },
-    {
-     "kind": "sfx",
      "id": "jump-land",
      "file": "land.wav"
     },
     {
      "kind": "sfx",
      "id": "impact.big",
-     "file": "tone_impact_big.wav"
+     "file": "explosion_2.wav"
     }
    ]
   },
@@ -1073,11 +1068,6 @@
    "cues": [
     {
      "kind": "sfx",
-     "id": "near-miss",
-     "file": "tone_near_miss.wav"
-    },
-    {
-     "kind": "sfx",
      "id": "gift",
      "file": "powerup_5.wav"
     }
@@ -1102,28 +1092,8 @@
     },
     {
      "kind": "sfx",
-     "id": "honk.body",
-     "file": "tone_honk_body.wav"
-    },
-    {
-     "kind": "sfx",
-     "id": "honk.body",
-     "file": "tone_honk_body.wav"
-    },
-    {
-     "kind": "sfx",
-     "id": "near-miss",
-     "file": "tone_near_miss.wav"
-    },
-    {
-     "kind": "gated",
-     "id": "honk",
-     "file": null
-    },
-    {
-     "kind": "sfx",
      "id": "writeoff",
-     "file": "tone_writeoff.wav"
+     "file": "harsh_destruction.wav"
     },
     {
      "kind": "sfx",
@@ -1134,11 +1104,6 @@
      "kind": "sfx",
      "id": "story-clear",
      "file": "powerup_5.wav"
-    },
-    {
-     "kind": "gated",
-     "id": "honk",
-     "file": null
     }
    ]
   },
@@ -1162,7 +1127,7 @@
     {
      "kind": "sfx",
      "id": "chassis",
-     "file": "tone_chassis.wav"
+     "file": "teleport.wav"
     },
     {
      "kind": "sfx",
@@ -1214,16 +1179,6 @@
     },
     {
      "kind": "sfx",
-     "id": "near-miss",
-     "file": "tone_near_miss.wav"
-    },
-    {
-     "kind": "sfx",
-     "id": "near-miss",
-     "file": "tone_near_miss.wav"
-    },
-    {
-     "kind": "sfx",
      "id": "screen",
      "file": "tone_screen.wav"
     },
@@ -1235,7 +1190,7 @@
     {
      "kind": "sfx",
      "id": "story-ferried",
-     "file": "laser_5.wav"
+     "file": "laser_6.wav"
     },
     {
      "kind": "state",
@@ -1372,7 +1327,7 @@
  },
  "errors": [],
  "audio": {
-  "log": 136,
+  "log": 127,
   "settings": {
    "master": 9,
    "music": 8,

@@ -141,7 +141,7 @@ const get = (url) => new Promise((res) => http.get(url, (r) => { r.resume(); res
   ok('the cone brief counts the chain the cone starts; a miss holds at 1, small hits included; at 1 a hit to the brief writes off (row 620)',
     brief.oldCone.tile === 'A2' && brief.oldCone.alive && brief.oldCone.health === 1 && !brief.oldCone.coned && brief.smallMiss.alive && brief.smallMiss.health === 1
     && !brief.chain.alive && brief.chain.coned && brief.chain.counted && !brief.floorBrief.alive && brief.floorBrief.counted, JSON.stringify(brief));
-  // the QA caps (rows 623–625): a car honks twice at most; knock and touch-spent off one spent car twice in any 2 s; car-notice and barks silent
+  // the QA caps (rows 623–625): a car honks twice at most; knock and touch-spent off one spent car twice in any 2 s; car-notice and barks silent (row 647: a shout sounds; touch-spent silent)
   const caps = await pg.evaluate(() => {
     const s = window.__dummies.sim, A = window.__dummiesAudio, G = window.__dummiesUI.audGate, c = s.cars.find((q) => !q.ghost), was = c.spent, t = s.t;
     const honk = [0, 1, 2, 3].map((i) => G({ type: 'honk', car: 'qa-car', at: 'body', t: t + i * 5 }));
@@ -155,7 +155,7 @@ const get = (url) => new Promise((res) => http.get(url, (r) => { r.resume(); res
   ok('a car honks ' + caps.P[0] + ' times at most (audio.sfx.honkMaxPerCar; row 623)', caps.honk.join() === 'false,false,true,true', JSON.stringify(caps.honk));
   ok('knock and touch-spent off one spent car: ' + caps.P[1] + ' in any ' + caps.P[2] + ' s, each (audio.sfx.spentRepeatMax, spentRepeatSeconds; row 624); a live car is not capped',
     caps.spent.join() === 'false,false,true,true,false' && caps.knock.join() === 'false,false,true,false' && caps.live.join() === 'false,false,false', JSON.stringify([caps.spent, caps.knock, caps.live]));
-  ok('car-notice and barks are silent (row 625)', caps.decisions.every((d) => d === 'silence') && caps.silent.every(Boolean) && !caps.played.length, JSON.stringify(caps));
+  ok('car-notice and plain barks are silent (row 625); a shouted bark sounds, once (row 647)', caps.decisions.join() === 'silence,silence,cue' && caps.silent.every(Boolean) && caps.played.join() === 'bark.shout', JSON.stringify(caps));
   const ctl = () => pg.evaluate(() => { const c = window.__dummies.sndCtl, S = window.__dummiesScale(), r = document.getElementById('game').getBoundingClientRect(), d = window.devicePixelRatio || 1; if (!c) return null; const f = (x, y) => [r.left + (x * S.scale + S.ox) / d, r.top + (y * S.scale + S.oy) / d]; return { ref: [c.x, c.y, c.w, c.h], icon: f(c.x + 20, c.y + c.h / 2), mid: f((c.sx0 + c.sx1) / 2, c.y + c.h / 2) }; });
   const onPause = await ctl();
   await pg.mouse.click(onPause.icon[0], onPause.icon[1]); await pg.waitForTimeout(150);

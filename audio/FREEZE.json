@@ -1,7 +1,14 @@
 {
- "frozen": "2026-10-31",
- "by": "Lawrence, 31 October 20:58 (DECISIONS row 645)",
- "count": 210,
+ "frozen": "2026-11-01",
+ "by": "Lawrence, 1 November 19:02: the final selections (DECISIONS row 647)",
+ "count": 211,
+ "history": [
+  {
+   "frozen": "2026-10-31",
+   "by": "Lawrence, 31 October 20:58 (DECISIONS row 645)",
+   "count": 210
+  }
+ ],
  "files": {
   "prototypes/p9/audio/music/mp3/track10_dummies-generated_non-compliant.mp3": "5e3ddc6db7bfed9af3a5ca358659189b",
   "prototypes/p9/audio/music/mp3/track11_dummies-generated_tile-cleared.mp3": "80c261dc54fcd7fa9a59224403599b81",
@@ -195,7 +202,7 @@
   "prototypes/p9/audio/tones/tone_unstick_reverse.wav": "111ab3085f1f5d57f73937b78d746d2e",
   "prototypes/p9/audio/tones/tone_unveil_lift.wav": "368d8049db9c9f5459d62cd7f4174a3b",
   "prototypes/p9/audio/tones/tone_writeoff.wav": "acf7cc0b0f0824c8ea6bb7d533c8b17c",
-  "content/audio/cues.json": "7d0c4149ab807f3b79fc088ebd61ad9b",
+  "content/audio/cues.json": "d923baa2f0f23900a6e1c90037c3f481",
   "content/audio/design.json": "b24a3d98084a5255f0e8ca027fde421a",
   "content/audio/events.json": "2fa5f8fbe783b4c5b38e9817bd5f3062",
   "content/audio/inventory.json": "64155a207d9333a596c394afdeb6f949",
@@ -208,11 +215,11 @@
   "content/audio/picks_lawrence_5.json": "d9d4d8c6b490b8836d17c92f65091e25",
   "content/audio/picks_lawrence_6.json": "8a550817bb4a9427e887e93deea129b2",
   "content/audio/picks_lawrence_7.json": "b7161c2798439d574d792042b5e462bc",
+  "content/audio/picks_lawrence_8.json": "bcdc336ee48397f2cad03a281d9b7c1a",
   "content/audio/tones.json": "44a95dd8e2a6a9fc53c14214612d0a92",
   "prototypes/p9/audio.js": "7c6667d46515761897fbbd8ae9e8e27f",
-  "prototypes/p9/lab.src.html": "1e51f3dd02b3a234a6c8ae616875741b",
-  "prototypes/p9/make_lab.py": "32a335c0d4e905c442110ec4a46d441e",
+  "prototypes/p9/lab.src.html": "424fdea38fb81be60904f79ad190e246",
+  "prototypes/p9/make_lab.py": "52ac670b47356c0ddafc37de3bcfc6ab",
   "registry:audio.*": "f50aed2671785e233c605decf8dfee4e"
- },
- "open": "row 646: the last pick round (Lawrence, 31 October 21:14)"
+ }
 }
