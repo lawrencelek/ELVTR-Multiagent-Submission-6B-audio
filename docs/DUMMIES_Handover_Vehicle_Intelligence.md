@@ -4,6 +4,8 @@
 
 **Updated 1 November 2026:** the first outside playtest (§3.2) and research (§14) reorder the work. Prototype 10 is 1 vs 1: one red car, one dummy.
 
+**Read v2 first:** `claude/DUMMIES_Handover_Vehicle_Intelligence_v2.md`. It regroups §3.2 into five categories, replaces §7 and withdraws §14.3's untested rules. §4–§12 here still hold.
+
 ## 0 Start the new chat
 
 - **Where:** inside the Project "ELVTR Course - GDD". Its docs and instructions come with it.
