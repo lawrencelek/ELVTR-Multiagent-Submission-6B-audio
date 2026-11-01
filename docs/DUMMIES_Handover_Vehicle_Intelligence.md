@@ -465,7 +465,7 @@ console.log([...new Set(ids)].filter(i=>!reg.has(i)))"
 ## 10 Current state
 
 - **Registry:** `content/params/tuning.parameters.json`, `edit100-2026-10-30`, 600 entries.
-- **Decisions:** `DECISIONS.md` rows 1–647. Rows 648–652 and D89–D97 are proposed in §3.2; record them first. Next open decision D98.
+- **Decisions:** `DECISIONS.md` rows 1–656. Rows 648–656 and D89–D99 recorded 1 November (v2 §8). Next row 657; next open decision D100.
   - Open and near this work: D40 (cue crowding), D44 (circus capacity), D77 (Second Market keeps learning), D81 (faster cars per grade), D84 (scanner hatch).
   - Waiting on Lawrence: D87 (Style Guide V2.10); row 638 (the jam trace).
 - **GDD:** Edit 100 (Sound) is the newest. Prototype 10 writes Edit 101.

@@ -1,6 +1,8 @@
 # DUMMIES — Handover v2: vehicle intelligence, finding the fun (Prototype 10)
 
-**1 November 2026 · Lawrence Lek** · Regroups the first outside playtest into five categories. Read this before v1.
+**1 November 2026 · Lawrence Lek** · Regroups the first outside playtest (Sasha) into five categories. Read this before v1.
+
+**Updated 1 November, 21:19:** §9 the crux and the ten tests (user-decided); §10 the 10.0 spec. Rows 648–656 recorded.
 
 ## 0 How to use this with v1
 
@@ -11,7 +13,7 @@
   - **Evidence:** measured in a build or said by a player.
   - **Research:** from a cited source.
   - **Hypothesis:** a design claim. Nothing ships as a rule until its test passes.
-- **First message for the next chat:** "Read `claude/DUMMIES_Handover_Vehicle_Intelligence_v2.md`, then v1 §4–§12. Start Prototype 10.0 (§7)."
+- **First message for the next chat:** "Read `claude/DUMMIES_Handover_Vehicle_Intelligence_v2.md`, then v1 §4–§12. Build Prototype 10.0 (§10)."
 
 ## 1 Back to the original pillars
 
@@ -209,37 +211,206 @@ Each hypothesis names its basis, its test and its pass mark. Thresholds marked *
 
 ## 7 Path to prototypes
 
-One question per prototype. Build only what the question needs. Bot first, then people: the tester plus a friend (Edit 9's player). Record unprompted play before asking questions (V29 Evaluation).
+- **Superseded by §9.3,** the ten tests 10.0–10.9 (row 653).
 
-| Build | Question | Builds | Bot test | Human test | Flag (proposed) |
-|---|---|---|---|---|---|
-| **10.0 Baseline** | Where do free hits come from? (H0) | Nothing new. Probe and port P1–P3 policies (stand, blind lunge, read and lunge) to Prototype 9 | `qa/stand.js`; policy table | — | — |
-| **10.1 The toy** | Is one car fun with no goal? (H3) | Proving Ground: open tarmac. One red car on a loop. The dummy. No score | Car never stalls; stand 0 hits | 5-minute free play | `duel.enabled` |
-| **10.2 Earned hit** | Which assertiveness is most fun to bait? (H1, H2) | Three settings of `driver.assertiveness` | Stand 0 hits at all three; read beats blind | Blind A/B of the three | `driver.assertiveness` |
-| **10.3 The ladder** | Does one sensor per level read as learning? (H4, H6, H7) | L1 front-blind, L2 forward camera, L3 surround. Parts by drone: dash, jump. Sensor cue | Each level: its closed approach 0, its opening above 0 | Tester names each change | `duel.level.<n>.tier`, `ui.sensorCue` |
-| **10.4 The counter** | Should the car counter your habit? (H5) | After L3, the car closes your most-used opening; capped; failures ignored | Habit bot loses; varied bot wins | Fixed vs counter A/B | `duel.habitCounter` |
-| **Gate** | 10.1–10.4 pass, or Lawrence's play says go | — | — | — | — |
-| **10.5 The cast** | Do white hazards add fun? (H8) | White traffic that never learns; graze | Reading still beats repetition | Duel vs duel-plus-traffic | `traffic.white.learns` |
-| **10.6 The cost** | Is car-on-car oddity funny? (H9) | Cone freeze; red swerve into white | No jams (v1 W7 watchdog) | Observe reactions | `traffic.carContact` |
-| **Later** | C4 places, C5 law | Roads, set pieces, law clauses on level cards | — | — | — |
+## 8 Decisions recorded (1 November)
 
-- **Each build:** a flag (registry default 0), a bot table, a short human session, a DECISIONS row with the result.
-- **Frozen builds stay frozen** (v1 §4). Prototype 9's md5 must not move.
-- **Registry first** (v1 §4): register the 29 sim-only IDs before 10.2.
-
-## 8 Decisions to record
-
-Replaces the rows v1 §3.2 proposed (648–652). None is recorded yet.
+Recorded in `DECISIONS.md`. Replaces the rows v1 §3.2 proposed.
 
 | Row | Decision | Status |
 |---|---|---|
-| 648 | Prototype 10 is 1 vs 1: one red car, one dummy | user-directed (1 November) |
-| 649 | Pillar 1 fails its own test in Prototype 9: standing earns hits (§2.2) | evidence |
-| 650 | v1 §14.3's five rules are withdrawn; §6's hypotheses replace them | user-directed (1 November) |
-| 651 | Feedback grouped into five categories, C1–C5 | proposed |
-| 652 | The vital three: PT1, PT4, PT6 | proposed |
-| 653 | Build order 10.0–10.4, then a gate | proposed |
-| 654 | The battery note repeats row 644; no change | proposed |
+| 648 | Prototype 10 is 1 vs 1: one red car, one dummy. Traffic returns at 10.8 | user-decided |
+| 649 | Pillar 1 fails its own test in Prototype 9: standing earns hits (§2.2) | tested |
+| 650 | v1 §14.3's five rules are withdrawn; hypotheses H0–H9 replace them | user-decided |
+| 651 | Sasha's notes grouped in five categories, C1–C5 | proposed |
+| 652 | The vital three: PT1, PT4, PT6 | proposed; built into row 653 |
+| 653 | Prototype 10 runs as ten one-change tests, 10.0–10.9 (§9.3) | user-decided |
+| 654 | Story is the curriculum; Arcade is the exam. One duel car (§9.2) | user-decided, with row 653 |
+| 655 | The Nintendo check's two changes: 10.4 hides the goal text; 10.2 and 10.4 run variants | user-decided, with row 653 |
+| 656 | PT0 repeats row 644; no change | tested (built in Prototype 9) |
 
-- **Open, from v1 §3.2:** D89 red hue; D90 white role; D91 fixed or adaptive ladder; D92 car contact; D93 flank damage; D94 venue; D95 law clauses; D96 boss families; D97 parts as keys.
-- **Next open decision:** D98.
+- **Open:** D89 red hue; D90 white role; D91 fixed or adaptive ladder; D92 car contact; D93 flank damage; D94 venue; D95 law clauses; D96 boss families; D97 parts as keys; D98 lessons, not damage; D99 learning carries across Story levels.
+- **Next row 657. Next open decision D100.**
+
+## 9 The crux and the ten tests (user-decided 1 November, row 653)
+
+### 9.1 The crux: learning must read as progress
+
+| Force | Pillar | Fails if | Protection |
+|---|---|---|---|
+| The car learns from you | 3 | The change looks like chance or mood (V29 D2.2) | One cause, one visible change, a quick return |
+| Fun | 2 | Learning reads as punishment for success | Your hit is the lesson; the lesson clears the level |
+| You can destroy yourself | 1 | Learning closes every way in | One opening at every stage; failure never feeds the car |
+
+- **Player understanding: unknown.** No outside player has seen car learning. Prototype 9 has `proto.learningEnabled` 0.
+- **A lesson has four beats:**
+  1. **Cause:** your hit, replayed as the car's training clip.
+  2. **Update:** a sensor fitted on screen, mirroring the drone's part drop.
+  3. **Return:** the same car and tag, back within `duel.redReturnSeconds` (proposed).
+  4. **New behaviour:** it brakes for what is ahead; the flank still works.
+- **Learned equals scripted in L1–L3.** Each level has one opening, so the car learns what you did.
+- **Adaptive learning starts with two openings** (10.7).
+- **Later levels:** sensors and parts carry over. Every cap leaves an opening. Failure trains nothing (Alien: Isolation, §4.3). D99.
+- **Goal reframe:** the car's learning is your score. Its certification is your write-off (PT15's law).
+- **Will other cars destroy you first?**
+  - `story.missFloor` with `story.floorHold` (row 620) already stops off-brief write-offs.
+  - **Exploit:** white cars chip you to the floor; then any red tap finishes you. PT1 again.
+  - **To test in 10.8:** a level clears on lessons (`duel.lessonsPerLevel`, proposed), not damage. White hits cost parts (row 100). D98.
+  - **Reach:** the red car must return often enough to train (`duel.redReturnSeconds`).
+
+### 9.2 Story and Arcade (row 654)
+
+| | Story: the curriculum | Arcade: the exam |
+|---|---|---|
+| Learning | Authored ladder; one opening per level, so "it learned from you" is true | Adaptive: the car counters your habit (`duel.habitCounter`, proposed) |
+| The red car | One character you train across the acts | A fresh boss each run |
+| Traffic | Little, introduced late | White hazards from the start |
+| Progress | Lessons landed (`duel.lessonsPerLevel`); a law clause per level | Score; grades (`arcade.endless.gradeWriteOffs`) |
+| Later | Trolley set pieces as lessons: the car learns a priority; you find the next lever | Trolley pieces as remixed challenges |
+
+- **Order:** Story's lessons first. Mastery can't be tested before it is taught.
+- 10.1–10.6 are Story-shaped. 10.7–10.9 are Arcade-shaped.
+
+### 9.3 Ten tests, one change each
+
+Each test has a bot pass and a human pass: Sasha plus one new player. Thresholds are proposed. Each test ends with a DECISIONS row.
+
+| Build | The one change | Sasha's issue | Bot pass | Human pass | Nintendo practice |
+|---|---|---|---|---|---|
+| **10.0 Baseline** | None. Measure Prototype 9 (§10) | All | Policy table and pillar 1 check recorded | Sasha replays P9 for 5 minutes, recorded | — |
+| **10.1 Earned hit** | The duel car never clips a standing dummy (`proto.driver.passClearance`; expiring manoeuvres re-check) | PT1 | Stand 0 hits; read-and-lunge above 0 | — | Core verb before content (Mario 64) |
+| **10.2 The toy** | Proving Ground: one red car, no score (`duel.enabled`). **Three variants:** a loop; free wander; a destination it must reach | PT3, PT2 | Car never stalls | Plays 3 minutes unprompted; names a trick. One variant preferred | Toy space first; one simple goal (Mario 64, BotW 2D); many ideas, keep the survivor (Splatoon) |
+| **10.3 Personality** | `driver.assertiveness` (proposed): three settings, blind A/B | PT1 | Read beats blind at all three | One setting preferred | Feel by iteration (Mario 64) |
+| **10.4 One lesson** | First hit → L2 forward camera. **No goal text.** **Three variants:** all four beats; sensor fitted only; silent change | PT4, PT2 | Front-only bot fails L2; flank bot clears | Explains why it brakes within 2 minutes. Variant ranked by explanation rate | Teach by play, not text (World 1-1); **introduce** |
+| **10.5 The answer** | Battery 1, the dash, by drone at L2. With vs without | PT6 | Flank-and-dash clears faster | Uses the part within the level | Put the tool where the problem is (World 1-1 mushroom); **develop** |
+| **10.6 The twist** | L3 surround sensor; Legs 1, jump (`abilities.legs.airtimeBase`) | PT4, PT6 | Ground bots fail; jump bot clears | Names the L3 change; clears from above | **Twist:** most design care (Hayashida) |
+| **10.7 The counter** | A level with two openings; the car closes your most-used one (`duel.habitCounter`) | PT2, PT7 | Habit bot loses; varied bot wins | Switches tactic unprompted | **Conclude:** show mastery. Counter from Alien and MGS V, not Nintendo |
+| **10.8 The cast** | White cars that never learn (`traffic.white.learns` 0); their hits cost parts; red clears on lessons | PT5, PT7, PT11 | Lessons still reachable; red returns in time | Duel-plus-traffic preferred over the duel alone | One new element at a time |
+| **10.9 The cost** | Car-on-car contact: a red swerve into white is an Incident (`traffic.carContact`, `scoring.incidentPoints`) | PT12, PT2 | No jams (v1 W7 watchdog) | Laughs or retries; no frustration | Objects reacting to objects (BotW multiplicative) |
+
+- **After 10.9:** trolley set pieces (PT13) as Story lessons. Same four beats; the car learns a priority.
+- **Each build:** one flag (registry default 0), a bot table, a short human session, a DECISIONS row.
+
+### 9.4 Coverage of Sasha's core issues
+
+| Issue | Tests |
+|---|---|
+| PT1 insufficient challenge | 10.0, 10.1, 10.3 |
+| PT2 car AI, emergence | 10.2, 10.4, 10.7, 10.9 |
+| PT3 1 vs 1 first | 10.2; the format of 10.1–10.7 |
+| PT4 clear progression | 10.4, 10.6 |
+| PT5 white and red | 10.8 |
+| PT6 powerups crucial | 10.5, 10.6 |
+| PT7 easy and hard cars | 10.7, 10.8 |
+| PT11 dodge and chase | 10.8 |
+| PT12 swerve cost | 10.9 |
+
+- **The vital three get the most tests:** PT1 three; PT4 two plus the crux; PT6 two.
+- **Out of scope for 10.x:** PT13–PT15. PT0 is done.
+
+### 9.5 Nintendo check (row 655)
+
+| Practice | Source | In the plan | Verdict |
+|---|---|---|---|
+| Movement and physics first; courses and enemies last | Mario 64 interviews | 10.1–10.3 before any level | Follows |
+| Try the character in a small toy space | Mario 64 diorama; BotW's 2D prototype: one goal, no puzzles | 10.2 Proving Ground | Follows |
+| Mechanic before character and art | Splatoon began as tofu blocks shooting ink | Placeholder sensors until 10.6 | Follows, if no new art is drawn |
+| Teach by layout, not text | World 1-1: blocks steer new players into the first mushroom | 10.4–10.5: visual lessons; the part arrives at the problem | Follows: 10.4 hides the goal text |
+| Four beats: introduce, develop, twist, conclude | Hayashida | 10.4 → 10.5 → 10.6 → 10.7 | Follows |
+| Many ideas, keep the survivor | Splatoon: about seventy ideas in six months | 10.2, 10.3, 10.4 each compare variants | Follows |
+| Systems that react to each other make emergence | BotW multiplicative design | 10.9 | Follows, late |
+| Enemies that learn | Not a Nintendo practice | 10.7 | Nintendo can't validate it. Alien: Isolation and MGS V inform it |
+
+### 9.6 Sources (adds to §4.4)
+
+- World 1-1 (SoraNews24): https://soranews24.com/2015/09/09/super-mario-bros-creator-explains-how-and-why-he-designed-world-1-1-of-the-8-bit-classic-%e3%80%90video%e3%80%91/amp/
+- World 1-1 (Game Developer): https://www.gamedeveloper.com/design/how-miyamoto-built-i-super-mario-bros-i-legendary-world-1-1
+- BotW 2D prototype (GDC 2017): https://www.thumbsticks.com/gdc-17-breaking-conventions-breath-of-the-wild
+- Splatoon's tofu prototype (Iwata Asks): https://iwataasks.nintendo.com/interviews/wiiu/splatoon/0/0/
+
+## 10 Spec: Prototype 10.0, the baseline
+
+**Question:** how does Prototype 9 score on Sasha's core issues, before any change?
+
+### Scope
+
+- **No build change.** No edit to `prototypes/p6/sim.js`, `game.js` or `p7/story.js`.
+- Prototype 9 md5 `be163e7d014344e062965986b3da5786` and 8.4 md5 `9f5549201d88891f9f0b22c461602909` must not move.
+- New files only, in `qa/` and `qa/baseline/`.
+- Headless, seeded (`proto.district.seed`). Fixed seeds, reused by 10.1–10.9.
+
+### Deliverables
+
+| File | Does |
+|---|---|
+| `qa/stand.js` (exists) | Stand-in-lane probe. Rerun at fixed seeds; save the output |
+| `qa/policy.js` (new) | Port of the P3 `policy_check.js` to Prototype 9's `StorySim` and `ArcadeSim` |
+| `qa/carmetrics.js` (new) | Port of the P3 `car_metrics.js`: car predictability under a scripted dummy |
+| `qa/baseline/p9.json` | Every number below, per policy, district and seed |
+| `qa/baseline/p9.md` | The tables, and the pillar 1 check |
+| `qa/baseline/sasha_p9.md` | Sasha's session notes |
+
+- **Source:** `lawrencelek/ELVTR-dummies-agent-crew`, branch `assignment4/content-pipeline`, `prototypes/p3/`. Read only.
+
+### Policies (`qa/policy.js`)
+
+| Policy | From | Behaviour |
+|---|---|---|
+| Stand in lane | P3 | Walks to a lane point; no button |
+| Blind lunge every 1 s | P3 | Holds a lane-side point; dashes each second |
+| Read and lunge | P3 | Picks the nearest unspent car within 150 units; leads it 0.12 s; dashes when facing within 12° |
+| Wander | P3 `car_metrics.js` | Lissajous walk; dashes every 2.5 s |
+
+- **Sims:**
+  - Arcade, Endless: `monument`, `parkland`, `waterfront`.
+  - Story: Monument A1–A3, with that tile's parts owned.
+- **Duration:** 300 sim-seconds per run. Three seeds per sim.
+- **The bot plays the run:** continue gift, report and brief screens as `qa/jam.js` does.
+
+### Measures
+
+Metric IDs are proposed for a `qa.fun.*` group in the registry. No targets yet: 10.0 records values only.
+
+| Metric (proposed ID) | Definition |
+|---|---|
+| `qa.fun.hitsPerMin` | Damaging impacts (`impact` with `lost` > 0) per sim-minute |
+| `qa.fun.writeOffsPerMin` | `writeoff` events per sim-minute |
+| `qa.fun.firstHitSeconds` | Time to the first damaging impact |
+| `qa.fun.firstWriteOffSeconds` | Time to the first write-off |
+| `qa.fun.pointsPerMin` | `run.points` gained per sim-minute |
+| `qa.fun.baitShare` | Share of impacts with `bait` true |
+| `qa.fun.zoneMix` | Impacts by `zone`: front, frontDiagonal, side, rearDiagonal, rear |
+| `qa.fun.carStateMix` | Impacts by `carState`: caution, intention, committed, expiring, interrupted |
+| `qa.fun.readOverBlind` | Read-and-lunge points ÷ blind-lunge points (V29 D2.1) |
+| `qa.fun.shiftsPerCar`, `qa.fun.headingSnaps` | From `qa/carmetrics.js` |
+
+### Pillar 1's written test (Edit 19)
+
+- **Fails if** standing earns more than 45% of a full head-on lunge (`qa.fun.standShareMax` 0.45, proposed).
+- **Fails if** baiting earns less than 1.5× standing (`qa.fun.baitOverStandMin` 1.5, proposed).
+- Points come from the impact events. Compute both per sim; report PASS or FAIL.
+- **Expected:** FAIL in Prototype 9 (§2.2).
+
+### Sasha's session
+
+- **Build:** Prototype 9, live on GitHub Pages. Arcade, Endless; then Story from a new save.
+- **Length:** 5 minutes each mode. Screen and voice recorded.
+- **Observer:** says nothing during play (V29 Evaluation). Logs time stamps:
+  - First deliberate hit.
+  - First trick tried.
+  - First complaint or laugh.
+  - Any stand-in-lane play.
+- **After play, three questions:**
+  1. What were you trying to do?
+  2. Why did that car hit you, or miss you?
+  3. What would make you play again?
+- **Also ask:** which build did you play on 1 November? (PT0: 8.4 or 9.)
+
+### Done when
+
+- `qa/baseline/p9.json` and `p9.md` are committed, three seeds per sim.
+- The pillar 1 check reports PASS or FAIL per sim.
+- `qa/baseline/sasha_p9.md` holds Sasha's notes.
+- `test_p9.js --p84` still passes 51/51; `python3 audio/freeze.py --check` passes.
+- A DECISIONS row records the baseline numbers.
+- **Next:** 10.1 changes one thing and reruns this suite.
