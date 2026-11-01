@@ -20,6 +20,9 @@
 | Project docs: GDD edits to 100, prototype docs, decisions, registry, style guides, QA report | Yes, searchable | `claude/…` |
 | Project instructions (house style) | Yes | Project settings |
 | Code, builds, tests, QA harness, runs, audio | Yes, by cloning | This repo (all pushed) |
+| The Sound Lab, final and read-only (row 647) | Yes: the page in the repo, and the artifact by its link (Artifact `read`) | `prototypes/p9/sound_lab.html` (`make_lab.py --final`); artifact <https://claude.ai/artifact/QhX32kEywUKkawo5fyjBG1>, private to Lawrence |
+| The Text Lab, the sound tour | Yes, by cloning | `prototypes/p9/text_lab.html`, `prototypes/p9/SOUND_TOUR.md` |
+| The audio: pack, generated tones, music | Yes, by cloning (192 files, 38 MB) | `prototypes/p9/audio/`; picks `content/audio/picks_lawrence*.json` |
 | The tags `p9-sound-frozen`, `p9-sound-final` | No. Local only; tag pushes are refused (proxy 403) | Lawrence pushes them, or the new chat tags the final-freeze commit |
 | This conversation | No; past-chat search only, if enabled | — |
 
