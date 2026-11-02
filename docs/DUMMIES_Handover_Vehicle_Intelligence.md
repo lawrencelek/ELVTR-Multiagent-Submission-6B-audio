@@ -91,7 +91,7 @@
 
 - **Done in Prototype 9.** Row 644: a round lit core, centre chest (`ui.coreOnChest` 1).
 - The pelvis port survives only in frozen builds ≤ 8.4 (registry default 0).
-- `index.html` still links Prototype 8.4. Confirm which build the tester played.
+- Sasha played Prototype 9 (Lawrence, 2 November). The live build draws the core on the chest.
 - `prototypes/p10/build.py` keeps `ui.coreOnChest` 1.
 
 #### PT1 Insufficient challenge

@@ -32,7 +32,9 @@ Three generations of the same five pillars. The playtest tests the oldest wordin
 
 ## 2 Evidence
 
-### 2.1 The tester's notes (verbatim, numbered as v1 §3.2)
+### 2.1 Sasha's notes (numbered as v1 §3.2)
+
+- **Source:** Sasha's oral notes after a Prototype 9 session, as relayed by Lawrence (1 November). No playthrough footage.
 
 | PT | Note |
 |---|---|
@@ -227,7 +229,7 @@ Recorded in `DECISIONS.md`. Replaces the rows v1 §3.2 proposed.
 | 653 | Prototype 10 runs as ten one-change tests, 10.0–10.9 (§9.3) | user-decided |
 | 654 | Story is the curriculum; Arcade is the exam. One duel car (§9.2) | user-decided, with row 653 |
 | 655 | The Nintendo check's two changes: 10.4 hides the goal text; 10.2 and 10.4 run variants | user-decided, with row 653 |
-| 656 | PT0 repeats row 644; no change | tested (built in Prototype 9) |
+| 656 | PT0 repeats row 644; no change. Sasha played Prototype 9; the live build draws the core on the chest | tested (built in Prototype 9) |
 
 - **Open:** D89 red hue; D90 white role; D91 fixed or adaptive ladder; D92 car contact; D93 flank damage; D94 venue; D95 law clauses; D96 boss families; D97 parts as keys; D98 lessons, not damage; D99 learning carries across Story levels.
 - **Next row 657. Next open decision D100.**
@@ -277,7 +279,7 @@ Each test has a bot pass and a human pass: Sasha plus one new player. Thresholds
 
 | Build | The one change | Sasha's issue | Bot pass | Human pass | Nintendo practice |
 |---|---|---|---|---|---|
-| **10.0 Baseline** | None. Measure Prototype 9 (§10) | All | Policy table and pillar 1 check recorded | Sasha replays P9 for 5 minutes, recorded | — |
+| **10.0 Baseline** | None. Measure Prototype 9 (§10) | All | Policy table and pillar 1 check recorded | Sasha's oral notes (§2.1). A recorded replay is optional | — |
 | **10.1 Earned hit** | The duel car never clips a standing dummy (`proto.driver.passClearance`; expiring manoeuvres re-check) | PT1 | Stand 0 hits; read-and-lunge above 0 | — | Core verb before content (Mario 64) |
 | **10.2 The toy** | Proving Ground: one red car, no score (`duel.enabled`). **Three variants:** a loop; free wander; a destination it must reach | PT3, PT2 | Car never stalls | Plays 3 minutes unprompted; names a trick. One variant preferred | Toy space first; one simple goal (Mario 64, BotW 2D); many ideas, keep the survivor (Splatoon) |
 | **10.3 Personality** | `driver.assertiveness` (proposed): three settings, blind A/B | PT1 | Read beats blind at all three | One setting preferred | Feel by iteration (Mario 64) |
@@ -348,7 +350,7 @@ Each test has a bot pass and a human pass: Sasha plus one new player. Thresholds
 | `qa/carmetrics.js` (new) | Port of the P3 `car_metrics.js`: car predictability under a scripted dummy |
 | `qa/baseline/p9.json` | Every number below, per policy, district and seed |
 | `qa/baseline/p9.md` | The tables, and the pillar 1 check |
-| `qa/baseline/sasha_p9.md` | Sasha's session notes |
+| `qa/baseline/sasha_p9.md` | Sasha's oral notes, PT0–PT15, marked: no footage |
 
 - **Source:** `lawrencelek/ELVTR-dummies-agent-crew`, branch `assignment4/content-pipeline`, `prototypes/p3/`. Read only.
 
@@ -391,10 +393,16 @@ Metric IDs are proposed for a `qa.fun.*` group in the registry. No targets yet: 
 - Points come from the impact events. Compute both per sim; report PASS or FAIL.
 - **Expected:** FAIL in Prototype 9 (§2.2).
 
-### Sasha's session
+### Sasha's evidence (no replay needed)
 
-- **Build:** Prototype 9, live on GitHub Pages. Arcade, Endless; then Story from a new save.
-- **Length:** 5 minutes each mode. Screen and voice recorded.
+- **The baseline human evidence is Sasha's oral notes** (§2.1). She gave them after a Prototype 9 session. No playthrough footage exists.
+- `qa/baseline/sasha_p9.md` copies PT0–PT15 and marks them: oral, after play, no footage.
+- A recorded Prototype 9 replay is optional, not a gate.
+
+### Human sessions from 10.2 on
+
+- **Record every session:** screen and voice. Oral notes alone are logged as oral notes.
+- **Players:** Sasha plus one new player.
 - **Observer:** says nothing during play (V29 Evaluation). Logs time stamps:
   - First deliberate hit.
   - First trick tried.
@@ -404,13 +412,12 @@ Metric IDs are proposed for a `qa.fun.*` group in the registry. No targets yet: 
   1. What were you trying to do?
   2. Why did that car hit you, or miss you?
   3. What would make you play again?
-- **Also ask:** which build did you play on 1 November? (PT0: 8.4 or 9.)
 
 ### Done when
 
 - `qa/baseline/p9.json` and `p9.md` are committed, three seeds per sim.
 - The pillar 1 check reports PASS or FAIL per sim.
-- `qa/baseline/sasha_p9.md` holds Sasha's notes.
+- `qa/baseline/sasha_p9.md` holds Sasha's oral notes.
 - `test_p9.js --p84` still passes 51/51; `python3 audio/freeze.py --check` passes.
 - A DECISIONS row records the baseline numbers.
 - **Next:** 10.1 changes one thing and reruns this suite.

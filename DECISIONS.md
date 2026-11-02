@@ -669,7 +669,7 @@ All entries dated 6 October 2026 unless stated. Times are not recorded.
 | 653 | Prototype 10 runs as ten one-change tests, 10.0–10.9: baseline, earned hit, the toy, personality, one lesson, the answer, the twist, the counter, the cast, the cost. Each has a bot pass and a human pass (Sasha plus one new player) | user-decided (Lawrence, 1 November 21:19): "yes, let's go with this" | One variable a test; covers every C1–C3 note | Slower than building it all at once | Handover v2 §9.3; spec for 10.0 in §10 |
 | 654 | Story is the curriculum (authored ladder, one opening per level, one red car trained across the acts); Arcade is the exam (habit counter, white hazards, score). One duel car serves both | user-decided, with row 653 | Mastery can't be tested before it is taught | — | Handover v2 §9.2 |
 | 655 | The Nintendo check adds two changes: test 10.4 hides the goal text; tests 10.2 and 10.4 run two or three variants | user-decided, with row 653 | Teach by play, not text (World 1-1); many ideas, keep the survivor (Splatoon) | More builds per test | Handover v2 §9.5 |
-| 656 | Sasha's battery note repeats row 644. No change | tested (built in Prototype 9, `ui.coreOnChest` 1) | — | — | Confirm which build Sasha played (8.4 or 9) |
+| 656 | Sasha's battery note repeats row 644. No change | tested (built in Prototype 9, `ui.coreOnChest` 1) | — | — | Sasha played Prototype 9 (Lawrence, 2 November). Her notes are oral, given after the session; no playthrough footage. The live build draws the core on the chest |
 
 ## Open decisions (to make)
 
