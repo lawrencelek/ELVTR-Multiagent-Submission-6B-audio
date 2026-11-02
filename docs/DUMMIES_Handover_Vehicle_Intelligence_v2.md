@@ -18,6 +18,8 @@
 
 **Updated 2 November, 10.4 built:** §18. The roof lidar plays at `prototypes/p10/dummies_p10_4.html`; GDD Edit 104. Rung 3 sees height: the plinth closes. Cover is the last opening. 10.3's page is frozen.
 
+**Updated 2 November, 10.5 built:** §19. The street cameras play at `prototypes/p10/dummies_p10_5.html`; GDD Edit 105. Rung 4 sees behind cover; the cones arrive and their swerve is the way in. Only a hit where height hid the dummy now teaches rung 3; 10.4's page was rebuilt with it, then frozen. A sprint from past the field, found on the way, lands at rungs 2–4.
+
 ## 0 How to use this with v1
 
 - **v1** (`claude/DUMMIES_Handover_Vehicle_Intelligence.md`) still holds: constraints (§4), code survey (§5), tools (§8), repos (§9), run and test (§11), conventions (§12).
@@ -273,9 +275,18 @@ Recorded in `DECISIONS.md`. Replaces the rows v1 §3.2 proposed.
 | 682 | 10.4 measured: the plinth 0.07 a minute, decay 0; cover open: the gap 2.21, a jump from behind the barrier 2.70 | tested (2 November) |
 | 683 | Cover is the last opening; the next rung slows past what it cannot see (revises §14.2's rung 4, D104) | proposed |
 | 684 | 10.3's page frozen (md5 `5aed8e43…`); `index.html` lists 10.4 | tested (2 November) |
+| 685 | Only a hit where height hid the dummy teaches rung 3: from above, in sight past cover for the whole clip (resolves D113) | tested (2 November) |
+| 686 | 10.4's page frozen (md5 `b12b48d8…`), built with row 685 | tested (2 November) |
+| 687 | Prototype 10.5 built: from rung 3, a hit out of cover teaches rung 4, the street cameras; Hands 1 by drone at the first stop behind cover (§19; GDD Edit 105) | tested (2 November) |
+| 688 | A waiting car stays stopped when the dummy steps from its field into its path | tested (2 November) |
+| 689 | The cone's swerve holds: no stop for a dummy in its field until it has passed the cone | proposed |
+| 690 | Slowing past a blind spot cannot close cover; rung 4 sees behind it instead (replaces row 683's rung 4) | proposed (D114) |
+| 691 | The sprint from past the field lands at rungs 2–4: 0.8 a minute at 52 | tested (2 November) |
+| 692 | 10.5 measured: cover 0; the cone bait 2.0 a minute; the sprint from past the field 0.8 | tested (2 November) |
+| 693 | Probes: bots `conebait` and `lurk`; the page's cameras, cones and edge marker; `duel.conesArrives`, 648 entries | tested (2 November) |
 
-- **Open:** D89 red hue; D90 white role; D91 fixed or adaptive ladder; D92 car contact; D93 flank damage; D94 venue; D95 law clauses; D96 boss families; D97 parts as keys; D98 lessons, not damage; D99 learning carries across Story levels; D100 10.1's target (overtaken by row 661: rung 1 is 10.2); D101 what "something new" means; D102 pass every driver value to traffic; D103 draw the side zone that acts; D104 the nine tests' rung order; D105 a sighted car's endless wait (in part resolved by row 670); D106 the standstill rule; D107 rung 1's envelope and beam; D108 when the dash arrives; D109 the return against the drive-in; D110 rung 2 waits for any dummy in its field; D111 cover open at rung 2; D112 the plinth needs a dash-jump; D113 a jump from cover teaches "see height".
-- **Next row 685. Next open decision D114.**
+- **Open:** D89 red hue; D90 white role; D91 fixed or adaptive ladder; D92 car contact; D93 flank damage; D94 venue; D95 law clauses; D96 boss families; D97 parts as keys; D98 lessons, not damage; D99 learning carries across Story levels; D100 10.1's target (overtaken by row 661: rung 1 is 10.2); D101 what "something new" means; D102 pass every driver value to traffic; D103 draw the side zone that acts; D104 the nine tests' rung order; D105 a sighted car's endless wait (in part resolved by row 670); D106 the standstill rule; D107 rung 1's envelope and beam; D108 when the dash arrives; D109 the return against the drive-in; D110 rung 2 waits for any dummy in its field; D111 cover open at rung 2; D112 the plinth needs a dash-jump; D114 rung 4: the street cameras or slowing past blind spots; D115 the sprint from past the field. D113 resolved (row 685).
+- **Next row 694. Next open decision D116.**
 
 ## 9 The crux and the ten tests (user-decided 1 November, row 653)
 
@@ -847,6 +858,72 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
 ### 18.4 Open
 
 - **Human pass (H3):** does the player see that it now stops for the plinth, and turn to cover?
-- **D113:** a jump from behind cover counts as "from above" and teaches rung 3, though cover let it land.
+- **D113:** resolved 2 November (row 685, §19.1).
 - **D110–D112** stand as built.
-- **Next:** 10.5, rung 4: slow past blind spots. It closes cover; Hands 1, the cones, arrive.
+- **Next:** 10.5 (§19). Rung 4 became the street cameras (row 690).
+
+## 19 Result: Prototype 10.5, the street cameras (2 November, rows 685–693; GDD Edit 105)
+
+- **Build:** `prototypes/p10/dummies_p10_5.html`. 10.4's page is frozen.
+- **The one change:** rung 4, taught by one lesson. The car starts at rung 3; the dummy starts with the dash and the jump. Hands 1, the cones, arrive by drone.
+- **Checks:** `node prototypes/p10/test_p10.js --page` 35/35. Probes `qa/baseline/p10_5.md` 13/13. 10.3 and 10.4's probes 12/12 each on today's code. Prototype 9 51/51; frozen md5s hold; sound freeze holds.
+
+### 19.1 D113 first: what hid the dummy (row 685)
+
+- **Lawrence:** "only count hits where height was what hid you."
+- **Rule:** a hit teaches rung 3 when it comes from above and the car had the dummy in sight past cover for the whole training clip (`duel.lessonClipSeconds` 3).
+- **The plinth is height; the building and the barrier are cover.**
+- **Measured:** jumps from behind the barrier were in sight 0.48–2.7 s before each hit, and no longer teach. The plinth's hits: 4.6–6.8 s; lessons in 3 of 3.
+- **The bar:** `perception.sideNoticeSeconds` (0.6) was tried first. Half the jumps from cover (in sight 0.75 s) still taught.
+- **10.4's page was rebuilt with the rule, then frozen** (md5 `b12b48d8…`).
+
+### 19.2 Why rung 4 is not "slow past what it cannot see" (row 690)
+
+- **A dash out of the barrier's gap covers road A's near lane in under 0.1 s.** The car reacts after 0.3 s.
+- **Only a car already at a standstill is safe** (row 668). Crossing the gap's reach at that speed takes over a minute.
+- **So rung 4 sees behind cover instead: the junction's street cameras.** Shenzhen is one of 20 pilot cities for vehicle-road-cloud integration, where roadside sensors share what they see with cars.
+- **Open (D114):** keep the cameras; or memory of where it lost the dummy; or slowing anyway, as a tell.
+
+### 19.3 What changed
+
+| | Before (rung 3) | After (rung 4) |
+|---|---|---|
+| A dummy behind the barrier or the building | Unseen | Seen through the cameras: it stops short and waits |
+| What teaches it | A hit where height hid the dummy | A hit where cover hid it |
+| The dummy's parts | Battery 1, Legs 1 | Hands 1 arrives at the first stop behind cover: E carries and lays cones |
+| A swerve round a cone (every rung from 2) | Broken off for a dummy in its field | Held until it has passed the cone (row 689) |
+
+### 19.4 Measured (rung 4 alone; `trained` mode)
+
+| Way in | Hits a minute | Verdict |
+|---|---|---|
+| Through the barrier's gap; the aimed dash from behind it | 0 | Closed |
+| The jump, the dash-jump, the flank from behind the barrier | 0.07 each | Closed: one hit each in 15 minutes, the sprint from past the field |
+| The plinth, the kerb, the corner, the lane, standing, charging | 0 | Closed |
+| The cone bait (Hands 1) | 2.00 (31) | Open: the new part's way in |
+| The sprint from past the field | 0.80 (52) | Open, no part (D115) |
+
+- **The lesson:** in 18 of 18 runs with a hit out of cover; in 0 of 5 with only hits from the open. Hands 1 2.3–2.4 s after the first stop behind cover.
+- **Escalation (`lesson` mode, 10 minutes):** the gap and the jump decay to 0; the cone bait holds at 0.75.
+
+### 19.5 Found on the way
+
+- **The lurch (row 688).** A car waiting for a dummy beside it lurched forward when the dummy stepped into its path. It now stays stopped.
+- **The sprint from past the field (row 691).** It lands at rungs 2–4: 0.8 a minute at 52, at 10.3, 10.4 and 10.5 alike.
+  - The field reaches 202 from the lane; a sprint during the 0.6 s notice plus a dash reaches about 274.
+  - Every earlier bot waited inside the field, so the earlier tables missed it.
+  - Each hit lands on a leg. The dash shortens with leg damage (164 to 116 after four hits); then it no longer reaches.
+- **A car waiting off screen** now shows a marker at the screen's edge on the 10.5 page.
+
+### 19.6 The ladder from here
+
+| Rung | It learns | Closes | Leaves open | Status |
+|---|---|---|---|---|
+| 5 | Reads road items: stops at a cone, never swerves | The cone bait | The feint after it commits; the sprint from past the field (D115) | As §14.2 |
+| 6 | Counters your habit | Your favourite opening | Any other | As §14.2 |
+
+### 19.7 Open
+
+- **Human pass (H4):** does the player read the camera link, and find the cone without being told?
+- **D114, D115.** D110: standing anywhere near the road now holds the car, behind cover too.
+- **Next:** 10.6, rung 5.

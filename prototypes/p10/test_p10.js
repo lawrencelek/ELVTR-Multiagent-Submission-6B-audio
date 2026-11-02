@@ -6,7 +6,7 @@ const fs = require('fs'), path = require('path'), cp = require('child_process'),
 const ROOT = path.resolve(__dirname, '..', '..');
 const X = require(path.join(ROOT, 'prototypes/p6/sim.js'));
 const { TestRoadSim, junctionLevel } = require(path.join(__dirname, 'testroad.js'));
-const SF = JSON.parse(fs.readFileSync(path.join(__dirname, 'sim_flags.json'), 'utf8')), F1 = SF.stages['10.1'].flags, F2 = SF.stages['10.2'].flags, F3 = SF.stages['10.3'].flags, F4 = SF.stages['10.4'].flags;
+const SF = JSON.parse(fs.readFileSync(path.join(__dirname, 'sim_flags.json'), 'utf8')), F1 = SF.stages['10.1'].flags, F2 = SF.stages['10.2'].flags, F3 = SF.stages['10.3'].flags, F4 = SF.stages['10.4'].flags, F5 = SF.stages['10.5'].flags;
 const results = [];
 const check = (name, fn) => { try { const r = fn(); results.push([r.ok, name, r.detail]); } catch (e) { results.push([false, name, String(e.stack || e).slice(0, 300)]); } };
 const md5 = (p) => crypto.createHash('md5').update(fs.readFileSync(p)).digest('hex');
@@ -210,6 +210,52 @@ check('10.4 rung 3: it sees the dummy up on the plinth and in the air; it stops 
   return { ok: raisedAt != null && seenUp > 0 && stopped > 0 && gap >= 177 && Number.isFinite(ugap) && ugap >= 177 && hits(s).length + hits(u).length === 0 && airTicks > 0 && airSeen > 0, detail: `climbed at ${raisedAt && raisedAt.toFixed(1)} s; noticed up there on ${seenUp} car-ticks; stopped ${(stopped / 60).toFixed(0)} car-seconds; up before the car came: it stopped ${ugap.toFixed(0)} away (dash reach 177); ${hits(s).length + hits(u).length} hits; in the air ${airTicks} ticks, seen on ${airSeen}` };
 });
 
+// ---------- 10.5
+const gapBot = (q) => { const b = q.body; if (!b.alive) return {}; const c = q.onRoad().find((x) => !x.spent && x.path.road === 'A' && x.x + (x.vx || 0) * 0.15 > 140 && x.x + (x.vx || 0) * 0.15 < 236); if (!c) return to(b, 188, 414);
+  const ang = Math.atan2(c.y - b.y, c.x + (c.vx || 0) * 0.15 - b.x); return { mx: Math.cos(ang) * 0.35, my: Math.sin(ang) * 0.35, aPress: q.dashFitted() && Math.abs(Math.atan2(Math.sin(ang - b.facing), Math.cos(ang - b.facing))) < 15 * X.DEG && b.mode !== 'lunge' && b.mode !== 'recover' }; };
+const lurkBot = () => { let cur = null; return (q) => { const b = q.body; if (!b.alive) return {}; const c = q.onRoad().find((x) => !x.spent && x.path.road === 'A' && x.lane === 0 && x.v > 15); // qa/testroad.js's lurk bot
+  if (cur && (!c || c.id !== cur || b.mode === 'recover')) cur = null; if (!cur && c && Math.abs(c.x + c.vx * 0.45 - b.x) < 14 && Math.hypot(660 - b.x, 576 - b.y) < 10) cur = c.id; if (!cur) return to(b, 660, 576);
+  const tx = c.x + c.vx * 0.15, ty = c.y, d = Math.hypot(tx - b.x, ty - b.y), ang = Math.atan2(ty - b.y, tx - b.x);
+  return { mx: Math.cos(ang), my: Math.sin(ang), aPress: q.dashFitted() && b.mode !== 'lunge' && b.mode !== 'recover' && Math.abs(Math.atan2(Math.sin(ang - b.facing), Math.cos(ang - b.facing))) < 20 * X.DEG && d < q.reach() + 6 }; }; };
+check('10.5: starts at rung 3 with the dash and the jump; a dash out of cover teaches rung 4; a sprint from past the field lands but teaches nothing', () => {
+  const s = sim(F5), start = { rung: s.rung, dash: s.dashFitted(), jump: s.has('jump'), cones: s.has('carry') }; drive(s, 120, gapBot);
+  const due = s.events.find((e) => e.type === 'lesson-due'), hit = s.events.find((e) => e.type === 'impact' && e.lost > 0);
+  const l = sim(F5); drive(l, 240, lurkBot()); const lh = hits(l);
+  return { ok: start.rung === 3 && start.dash && start.jump && !start.cones && !!due && due.to === 4 && s.rung === 4 && !!hit && hit.cover && lh.length > 0 && lh.every((e) => !e.cover) && l.rung === 3,
+    detail: `start: rung ${start.rung}, dash ${start.dash}, jump ${start.jump}, cones ${start.cones}; out of cover: lesson ${due ? 'at ' + due.t.toFixed(1) + ' s (' + due.zone + ')' : 'none'}, rung ${s.rung}; from past the field: ${lh.length} hits, none from cover, rung ${l.rung}` };
+});
+check('10.5 rung 4: its cameras see the dummy behind the barrier; it stops beyond dash reach and waits; Hands 1 arrives at that first stop', () => {
+  const s = sim(F5, { 'duel.startRung': 4 }); let first = null, gift = null, gap = Infinity, stopped = 0;
+  for (let i = 0; i < 90 * 60; i++) { Object.assign(s.body, { x: 300, y: 412, vx: 0, vy: 0 }); const e0 = s.events.length; s.step({});
+    for (const e of s.events.slice(e0)) { if (e.type === 'first-cover') first = e.t; if (e.type === 'gift' && e.node === 'hands1') gift = e.t; }
+    for (const c of s.onRoad()) if (c.v < 1 && c.noticed && c.hidden) { stopped++; gap = Math.min(gap, Math.hypot(s.body.x - (c.x + Math.cos(c.h) * c.L / 2), s.body.y - (c.y + Math.sin(c.h) * c.L / 2))); } }
+  const r3 = sim(F5); let seen3 = 0; for (let i = 0; i < 60 * 60; i++) { Object.assign(r3.body, { x: 300, y: 412, vx: 0, vy: 0 }); r3.step({}); for (const c of r3.onRoad()) if (c.noticed && c.hidden) seen3++; } // rung 3 sees it only through the gap
+  return { ok: first != null && gift != null && gift - first < 5 && s.has('carry') && stopped > 0 && gap >= 177 && hits(s).length === 0 && seen3 === 0,
+    detail: `first stop behind cover ${first && first.toFixed(1)} s, Hands 1 fitted ${gift && gift.toFixed(1)} s; stopped ${(stopped / 60).toFixed(0)} car-seconds, closest ${gap.toFixed(0)} (dash reach 177); ${hits(s).length} hits. At rung 3, ticks a car noticed it while cover hid it: ${seen3}` };
+});
+check('10.5: a swerve round a cone holds until it has passed it; a dummy in its field meanwhile is not stopped for (the cone\'s opening)', () => {
+  const s = sim(F5, { 'duel.startRung': 4 }, { owned: { battery1: true, legs1: true, hands1: true } }); let dodging = 0, sideStops = 0, passed = false, swerved = false;
+  Object.assign(s.body, { x: 600, y: 600 }); // out of every field until the car commits
+  for (let i = 0; i < 40 * 60 && !passed; i++) {
+    const c = s.onRoad().find((q) => q.red && q.path.road === 'A');
+    if (c && !swerved && c.x > -400 && c.x < -300) { const cn = s.cones[0]; Object.assign(cn, { x: 300, y: c.y, state: 'free', vx: 0, vy: 0 }); swerved = true; }
+    const e0 = s.events.length; const dodge = !!(c && c.dodge && c.dodge.kind === 'cone' && c.cause === 'cone');
+    if (dodge) { dodging++; Object.assign(s.body, { x: 300, y: c.y > 320 ? 430 : 210, vx: 0, vy: 0 }); } // beside the cone, in its field
+    s.step({}); for (const e of s.events.slice(e0)) if (e.type === 'commit' && e.cause === 'side') sideStops++;
+    if (c && swerved && c.x - c.L / 2 > 330) passed = true;
+  }
+  return { ok: swerved && dodging > 60 && passed && sideStops === 0, detail: `cone laid ${swerved}; ${(dodging / 60).toFixed(1)} s swerving with the dummy beside the cone; passed it ${passed}; side stops meanwhile ${sideStops}` };
+});
+check('10.5 (row 688): a dummy that steps from a waiting car\'s field into its path keeps it stopped', () => {
+  const s = sim(F5, { 'duel.startRung': 4 }); let held = 0, moved = 0, phase = 0, c = null;
+  for (let i = 0; i < 60 * 60; i++) {
+    if (phase === 0) { Object.assign(s.body, { x: 300, y: 412, vx: 0, vy: 0 }); c = s.onRoad().find((q) => q.red && q.path.road === 'A' && q.v < 1 && q.noticed && q.x > -60); if (c) { phase = 1; held = 0; } }
+    else if (phase === 1) { const nose = c.x + Math.cos(c.h) * c.L / 2; Object.assign(s.body, { x: Math.max(40, nose + 200), y: c.y, vx: 0, vy: 0 }); held++; if (c.v > 1) moved++; if (held > 3 * 60) break; }
+    s.step({});
+  }
+  return { ok: phase === 1 && held > 3 * 60 && moved === 0, detail: `a car waiting for the dummy behind the barrier: ${!!c}; the dummy then 200 ahead in its lane for ${(held / 60).toFixed(1)} s; ticks it moved: ${moved}` };
+});
+
 // ---------- registry and frozen builds
 check('Prototype 10 values are registered (registry first)', () => {
   const reg = new Set(JSON.parse(fs.readFileSync(path.join(ROOT, 'content/params/tuning.parameters.json'), 'utf8')).entries.map((e) => e.id));
@@ -238,7 +284,7 @@ if (process.argv.includes('--page')) {
     const srv = http.createServer((q, r) => { const p = path.join(ROOT, decodeURIComponent(q.url.split('?')[0])); if (!fs.existsSync(p) || fs.statSync(p).isDirectory()) { r.writeHead(404); return r.end(); } r.writeHead(200); fs.createReadStream(p).pipe(r); });
     srv.listen(0, async () => {
       const { chromium } = require('playwright'); const br = await chromium.launch();
-      for (const page of ['dummies_p10.html', 'dummies_p10_2.html', 'dummies_p10_3.html', 'dummies_p10_4.html']) {
+      for (const page of ['dummies_p10.html', 'dummies_p10_2.html', 'dummies_p10_3.html', 'dummies_p10_4.html', 'dummies_p10_5.html']) {
         const pg = await br.newPage(); const errs = [];
         pg.on('pageerror', (e) => errs.push(e.message));
         await pg.goto(`http://127.0.0.1:${srv.address().port}/prototypes/p10/${page}`); await pg.waitForTimeout(600);
@@ -284,6 +330,23 @@ if (process.argv.includes('--page')) {
           });
           let fit = false, rung = 2; for (let i = 0; i < 720; i++) { await pg.waitForTimeout(125); const q = await pg.evaluate(() => ({ ph: window.__p10.sim.phase, lt: window.__p10.lessonT, rung: window.__p10.sim.rung })); rung = q.rung; if (q.ph === 'lesson' && q.lt > F4['duel.lessonClipSeconds'] + F4['duel.lessonHoldSeconds'] + 0.2) fit = true; if (q.rung === 3 && q.ph === 'play') break; }
           results.push([fit && rung === 3 && errs.length === 0, '10.4 page: a dash from the plinth teaches rung 3; the lidar is fitted', `fitting ${fit}, rung ${rung}, errors ${errs.length}`]);
+        }
+        if (page === 'dummies_p10_5.html') { // rung 3 → 4: dash through the barrier's gap at a road A car; the cameras linked; then E picks up a cone and puts it down
+          await pg.evaluate(() => { // a fresh run with the bot from its first tick, as qa/testroad.js's gap bot (offset 0): its timing decides whether the car first sees the dummy through the gap and waits
+            window.__p10.newSim(); const s = window.__p10.sim, step = s.step.bind(s), D = Math.PI / 180, wr = (a) => Math.atan2(Math.sin(a), Math.cos(a));
+            const to = (b, x, y) => { const dx = x - b.x, dy = y - b.y, d = Math.hypot(dx, dy); return d > 6 ? { mx: dx / d, my: dy / d } : {}; };
+            const bot = () => { const b = s.body; if (!b.alive || s.lesson || s.rung !== 3) return null; const can = s.dashFitted() && b.mode !== 'lunge' && b.mode !== 'recover';
+              const c = s.onRoad().find((q) => !q.spent && q.path.road === 'A' && q.x + (q.vx || 0) * 0.15 > 140 && q.x + (q.vx || 0) * 0.15 < 236); if (!c) return to(b, 188, 414);
+              const ang = Math.atan2(c.y - b.y, c.x + (c.vx || 0) * 0.15 - b.x); return { mx: Math.cos(ang) * 0.35, my: Math.sin(ang) * 0.35, aPress: can && Math.abs(wr(ang - b.facing)) < 15 * D }; };
+            s.step = (cmd) => { const c = bot(); return step(c || cmd); };
+          });
+          let fit = false, rung = 3; for (let i = 0; i < 1920; i++) { await pg.waitForTimeout(125); const q = await pg.evaluate(() => ({ ph: window.__p10.sim.phase, lt: window.__p10.lessonT, rung: window.__p10.sim.rung })); rung = q.rung; if (q.ph === 'lesson' && q.lt > F5['duel.lessonClipSeconds'] + F5['duel.lessonHoldSeconds'] + 0.2) fit = true; if (q.rung === 4 && q.ph === 'play') break; }
+          await pg.evaluate(() => { const s = window.__p10.sim; s.run.owned.hands1 = true; const cn = s.cones[0]; Object.assign(s.body, { x: cn.x - 18, y: cn.y, vx: 0, vy: 0, facing: 0 }); });
+          await pg.keyboard.press('e'); await pg.waitForTimeout(300);
+          const held = await pg.evaluate(() => !!window.__p10.sim.body.held);
+          await pg.evaluate(() => Object.assign(window.__p10.sim.body, { vx: 0, vy: 0 })); await pg.keyboard.press('e'); await pg.waitForTimeout(300);
+          const down = await pg.evaluate(() => !window.__p10.sim.body.held && window.__p10.sim.events.some((e) => e.type === 'drop'));
+          results.push([fit && rung === 4 && held && down && errs.length === 0, '10.5 page: a dash out of cover teaches rung 4; the link is fitted; E picks up a cone and puts it down', `fitting ${fit}, rung ${rung}, E picked up ${held}, E put down ${down}, errors ${errs.length}`]);
         }
         await pg.close();
       }

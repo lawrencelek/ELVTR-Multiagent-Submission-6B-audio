@@ -3,8 +3,11 @@
 // the forward beam and the driver's field. 10.2 adds the lesson (handover v2 §9.1): the hit replayed as the car's training
 // clip, the sensor fitted, the car's return. No goal text.
 // 10.3 adds rung 2's field, its notice meter, the jump and the plinth's raised edge. 10.4: rung 3's roof lidar.
-// Keys: arrows or WASD move; Space or J dash, K or Shift jump (once fitted); Z zones; P pause; R restart; L saves this
-// session's log (JSON). Touch: drag on the left half to move; tap the right half's lower part to dash, its upper part to jump.
+// 10.5: rung 4's street cameras and their link to the car; the cones (Hands 1) carried, put down and fetched by drone; a
+// marker at the screen's edge for a car waiting off screen.
+// Keys: arrows or WASD move; Space or J dash, K or Shift jump, E picks up or puts down a cone (once fitted); Z zones;
+// P pause; R restart; L saves this session's log (JSON). Pad: A dash, B jump, X cone. Touch: drag on the left half to
+// move; tap the right half's lower part to dash, its upper part to jump; with Hands 1, its middle third for a cone.
 (function () {
   'use strict';
   const X = window.DUMMIES, T = window.DUMMIES_P10, F = window.DUMMIES_SIM;
@@ -15,12 +18,12 @@
     red: '#ff3d3d', redDark: '#9e1f1f', glass: '#1b2a38', dummy: '#ffd400', joint: '#2a2a2a', beam: 'rgba(244,248,250,0.10)',
     beamHot: 'rgba(255,61,61,0.22)', field: 'rgba(127,168,188,0.10)', fieldHot: 'rgba(255,212,0,0.14)', text: '#f4f8fa', dim: '#7fa8bc', hud: '#12151c',
     cam: '#9ff2c8', camDim: 'rgba(159,242,200,0.55)', drone: '#20242e', rotor: 'rgba(200,214,230,0.5)', part: '#ffd400' };
-  const PARTS = { battery1: 'BATTERY 1 · DASH', legs1: 'LEGS 1 · JUMP' }, ZONES = { front: 'FRONT', frontDiagonal: 'FRONT CORNER', side: 'SIDE', rearDiagonal: 'REAR CORNER', rear: 'REAR' };
+  const PARTS = { battery1: 'BATTERY 1 · DASH', legs1: 'LEGS 1 · JUMP', hands1: 'HANDS 1 · CONES' }, LOAD = { battery1: 'B1', legs1: 'L1', hands1: 'H1' }, ZONES = { front: 'FRONT', frontDiagonal: 'FRONT CORNER', side: 'SIDE', rearDiagonal: 'REAR CORNER', rear: 'REAR' };
   const CLIP = F['duel.lessonClipSeconds'], HOLD = F['duel.lessonHoldSeconds'], FIT = F['duel.lessonFitSeconds']; // the clip, its last frame held, the fitting
   const cv = document.getElementById('game'), ctx = cv.getContext('2d');
   let s, paused = false, started = false, showZones = true, log = [], session = {}, prevV = new Map(), flash = [];
   let ring = [], clip = null, lessonT = null; // the recording, the hit's clip, the lesson's clock
-  const keys = new Set(); let aEdge = false, bEdge = false, touchMove = null, touchA = false, touchB = false;
+  const keys = new Set(); let aEdge = false, bEdge = false, xEdge = false, touchMove = null, touchA = false, touchB = false, touchX = null;
 
   function newSim() {
     s = new T.TestRoadSim(Object.assign({}, F)); log = []; session = { start: Date.now(), build: 'P' + ST.id };
@@ -34,6 +37,7 @@
     const k = e.key.toLowerCase();
     if (k === ' ' || k === 'j') { if (!keys.has(k)) aEdge = true; }
     if (k === 'k' || k === 'shift') { if (!keys.has(k)) bEdge = true; }
+    if (k === 'e' || k === 'x') { if (!keys.has(k)) xEdge = true; }
     if (k === 'p' || k === 'escape') paused = !paused;
     if (k === 'r') newSim();
     if (k === 'z') showZones = !showZones;
@@ -41,19 +45,19 @@
     keys.add(k); if ([' ', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(k)) e.preventDefault();
   });
   addEventListener('keyup', (e) => keys.delete(e.key.toLowerCase()));
-  cv.addEventListener('touchstart', (e) => { started = true; for (const t of e.changedTouches) { const r = cv.getBoundingClientRect(); if (t.clientX - r.left < r.width / 2) touchMove = { id: t.identifier, x0: t.clientX, y0: t.clientY, dx: 0, dy: 0 }; else if (t.clientY - r.top < r.height / 2) touchB = true; else touchA = true; } e.preventDefault(); }, { passive: false });
+  cv.addEventListener('touchstart', (e) => { started = true; for (const t of e.changedTouches) { const r = cv.getBoundingClientRect(); if (t.clientX - r.left < r.width / 2) touchMove = { id: t.identifier, x0: t.clientX, y0: t.clientY, dx: 0, dy: 0 }; else { const v = (t.clientY - r.top) / r.height, cones = s.has('carry'); if (cones && v >= 1 / 3 && v < 2 / 3) { touchX = { id: t.identifier, press: true }; } else if (v < (cones ? 1 / 3 : 1 / 2)) touchB = true; else touchA = true; } } e.preventDefault(); }, { passive: false });
   cv.addEventListener('touchmove', (e) => { for (const t of e.changedTouches) if (touchMove && t.identifier === touchMove.id) { touchMove.dx = t.clientX - touchMove.x0; touchMove.dy = t.clientY - touchMove.y0; } e.preventDefault(); }, { passive: false });
-  cv.addEventListener('touchend', (e) => { for (const t of e.changedTouches) if (touchMove && t.identifier === touchMove.id) touchMove = null; }, { passive: false });
+  cv.addEventListener('touchend', (e) => { for (const t of e.changedTouches) { if (touchMove && t.identifier === touchMove.id) touchMove = null; if (touchX && t.identifier === touchX.id) touchX = null; } }, { passive: false });
   function command() {
     let mx = 0, my = 0;
     if (keys.has('arrowleft') || keys.has('a')) mx -= 1; if (keys.has('arrowright') || keys.has('d')) mx += 1;
     if (keys.has('arrowup') || keys.has('w')) my -= 1; if (keys.has('arrowdown') || keys.has('s')) my += 1;
-    let a = aEdge || touchA, bb = bEdge || touchB; aEdge = false; touchA = false; bEdge = false; touchB = false;
+    let a = aEdge || touchA, bb = bEdge || touchB, xp = xEdge || !!(touchX && touchX.press), xh = keys.has('e') || keys.has('x') || !!touchX; aEdge = false; touchA = false; bEdge = false; touchB = false; xEdge = false; if (touchX) touchX.press = false;
     const pads = navigator.getGamepads ? navigator.getGamepads() : [];
-    for (const g of pads) { if (!g) continue; if (Math.hypot(g.axes[0], g.axes[1]) > 0.2) { mx = g.axes[0]; my = g.axes[1]; } if (g.buttons[0] && g.buttons[0].pressed && !g._a) a = true; g._a = g.buttons[0] && g.buttons[0].pressed; if (g.buttons[1] && g.buttons[1].pressed && !g._b) bb = true; g._b = g.buttons[1] && g.buttons[1].pressed; }
+    for (const g of pads) { if (!g) continue; if (Math.hypot(g.axes[0], g.axes[1]) > 0.2) { mx = g.axes[0]; my = g.axes[1]; } if (g.buttons[0] && g.buttons[0].pressed && !g._a) a = true; g._a = g.buttons[0] && g.buttons[0].pressed; if (g.buttons[1] && g.buttons[1].pressed && !g._b) bb = true; g._b = g.buttons[1] && g.buttons[1].pressed; const gx = !!(g.buttons[2] && g.buttons[2].pressed); if (gx && !g._x) xp = true; if (gx) xh = true; g._x = gx; }
     if (touchMove) { const d = Math.hypot(touchMove.dx, touchMove.dy); if (d > 8) { mx = touchMove.dx / Math.max(d, 60); my = touchMove.dy / Math.max(d, 60); } }
     const m = Math.hypot(mx, my); if (m > 1) { mx /= m; my /= m; }
-    return { mx, my, aPress: a, bPress: bb };
+    return { mx, my, aPress: a, bPress: bb, xPress: xp, xHeld: xh };
   }
 
   // ---------- the loop: the sim at its own tick rate
@@ -74,7 +78,7 @@
     const e0 = s.events.length; s.step(command());
     record();
     for (const e of s.events.slice(e0)) {
-      if (['impact', 'writeoff', 'admit', 'lunge', 'honk', 'lesson-due', 'lesson', 'learned', 'first-brake', 'first-side', 'part-dispatch', 'gift', 'left', 'jump', 'raised', 'step-down'].includes(e.type) || (e.type === 'touch' && e.standstill)) log.push(e);
+      if (['impact', 'writeoff', 'admit', 'lunge', 'honk', 'lesson-due', 'lesson', 'learned', 'first-brake', 'first-side', 'first-cover', 'part-dispatch', 'gift', 'left', 'jump', 'raised', 'step-down', 'pickup', 'drop', 'drone-dispatch', 'drone-pickup'].includes(e.type) || (e.type === 'touch' && e.standstill)) log.push(e);
       if (e.type === 'impact' && Math.round(e.lost) > 0) flash.push({ x: s.body.x, y: s.body.y, t: 0.5, n: Math.round(e.lost) });
       if (e.type === 'writeoff') flash.push({ x: s.body.x, y: s.body.y, t: 1.2, n: 'WRITE-OFF' });
       if (e.type === 'gift') flash.push({ x: s.body.x, y: s.body.y, t: 1.6, n: PARTS[e.node] || e.node });
@@ -131,7 +135,18 @@
       if (st.plinth) { rect(st.x, st.y, st.w, st.h, C.plinth); rect(st.x + 6, st.y + 6, st.w - 12, st.h - 12, C.plinthTop); text('MONUMENT', st.x + st.w / 2, st.y + st.h / 2 + 4, 10, C.joint, 'center'); continue; }
       rect(st.x, st.y, st.w, st.h, C.block); ctx.strokeStyle = C.blockEdge; ctx.lineWidth = 2; ctx.strokeRect(st.x + 1, st.y + 1, st.w - 2, st.h - 2);
     }
-    for (const cn of s.cones) { ctx.fillStyle = C.cone; ctx.beginPath(); ctx.arc(cn.x, cn.y, 7, 0, TAU); ctx.fill(); ctx.fillStyle = C.zebra; ctx.fillRect(cn.x - 4, cn.y - 1, 8, 2); }
+    for (const cn of s.cones) if (cn.state === 'free' || cn.state === 'flight') drawCone(cn.x, cn.y);
+  }
+  function drawCone(x, y) { ctx.fillStyle = C.cone; ctx.beginPath(); ctx.arc(x, y, 7, 0, TAU); ctx.fill(); ctx.fillStyle = C.zebra; ctx.fillRect(x - 4, y - 1, 8, 2); }
+  function drawCameras() { // rung 4: the junction's street cameras. A link draws from a camera to the dummy behind cover, and on to the car
+    const L = s.level; if (s.rung < 4 || !L.cameras) return;
+    const b = s.body, cars = s.onRoad().filter((c) => c.red), seen = cars.filter((c) => c.hidden && (c.noticed || (c.hz && c.hz.inPath)));
+    for (const [x, y] of L.cameras) { rect(x - 1.5, y - 14, 3, 14, C.joint); rect(x - 5, y - 19, 10, 6, C.joint); ctx.fillStyle = seen.length ? C.cam : C.camDim; ctx.beginPath(); ctx.arc(x + 3, y - 16, 2, 0, TAU); ctx.fill(); }
+    if (!seen.length || !b || !b.alive) return;
+    const cam = L.cameras.slice().sort((p, q) => Math.hypot(p[0] - b.x, p[1] - b.y) - Math.hypot(q[0] - b.x, q[1] - b.y))[0];
+    ctx.strokeStyle = C.cam; ctx.lineWidth = 1.5; ctx.setLineDash([5, 5]);
+    for (const c of seen) { ctx.beginPath(); ctx.moveTo(b.x, b.y); ctx.lineTo(cam[0], cam[1] - 16); ctx.lineTo(c.x, c.y); ctx.stroke(); }
+    ctx.setLineDash([]); ctx.strokeRect(b.x - 16, b.y - 16, 32, 32);
   }
   function drawZones(c) { // the zones that act (D103): the driver's field, then the forward beam, both from the nose
     const P = s.P, br = P['body.radius'], ca = Math.cos(c.h), sa = Math.sin(c.h), nx = c.x + ca * c.L / 2, ny = c.y + sa * c.L / 2;
@@ -153,6 +168,7 @@
       const a = (s ? s.t : 0) * 6; ctx.strokeStyle = C.cam; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(-2 + Math.cos(a) * 3.5, Math.sin(a) * 3.5); ctx.lineTo(-2 + Math.cos(a) * 8, Math.sin(a) * 8); ctx.stroke();
     }
     if (rung >= 2) for (const sg of [-1, 1]) { rect(-5, sg * c.W / 2 - 3, 8, 6, C.joint); ctx.fillStyle = C.cam; ctx.beginPath(); ctx.arc(-1, sg * (c.W / 2 + 1), 1.6, 0, TAU); ctx.fill(); }
+    if (rung >= 4) { ctx.strokeStyle = C.joint; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(-c.L / 2 + 8, 0); ctx.lineTo(-c.L / 2 + 8, -c.W / 2 - 5); ctx.stroke(); ctx.fillStyle = C.cam; ctx.beginPath(); ctx.arc(-c.L / 2 + 8, -c.W / 2 - 6, 2, 0, TAU); ctx.fill(); } // rung 4: the link's aerial
   }
   function drawCar(c) {
     const pv = prevV.get(c.id), braking = pv != null && c.v < pv - 0.05; prevV.set(c.id, c.v);
@@ -178,6 +194,14 @@
     ctx.beginPath(); ctx.moveTo(b.x, y); ctx.lineTo(b.x + Math.cos(f) * 20 * k, y + Math.sin(f) * 20 * k); ctx.stroke();
     if (s.dashFitted() && b === s.body) { rect(b.x - 4, y - 4, 8, 8, C.joint); rect(b.x - 2, y - 2, 4, 4, C.part); } // Battery 1 on the chest
     if (b === s.body && s.has('jump')) for (const sg of [-1, 1]) rect(b.x + sg * 7 - 2, y + 8, 4, 5, C.part); // Legs 1
+    if (b === s.body && s.has('carry')) for (const sg of [-1, 1]) rect(b.x + sg * 11 - 2, y - 2, 4, 4, C.part); // Hands 1
+    if (b === s.body && b.held) drawCone(b.x + Math.cos(f) * 12 * k, y + Math.sin(f) * 12 * k); // the cone it carries
+  }
+  function drawOffscreen(c) { // a car off screen: a marker at the edge, so a car that waits out of sight still reads
+    const m = 14, x = Math.max(m, Math.min(FW - m, c.x)), y = Math.max(m, Math.min(FH - m, c.y));
+    if (x === c.x && y === c.y) return;
+    const ang = Math.atan2(c.y - y, c.x - x); ctx.save(); ctx.translate(x, y); ctx.rotate(ang); ctx.fillStyle = C.red; ctx.beginPath(); ctx.moveTo(10, 0); ctx.lineTo(-6, -8); ctx.lineTo(-6, 8); ctx.closePath(); ctx.fill(); ctx.restore();
+    const lab = c.honking || c.sideHonk ? 'HONK' : c.v < 1 ? 'WAITING' : ''; if (lab) text(lab, Math.max(40, Math.min(FW - 40, x)), y + (y > FH / 2 ? -14 : 24), 10, C.text, 'center');
   }
   function drawDrone(x, y, load) { // a FARSIGHT drone: body, four rotors, and the part it carries
     for (const [dx, dy] of [[-9, -9], [9, -9], [-9, 9], [9, 9]]) { ctx.fillStyle = C.rotor; ctx.beginPath(); ctx.arc(x + dx, y + dy, 6, 0, TAU); ctx.fill(); }
@@ -191,7 +215,7 @@
     text((s.models.sedan.id) + ' · RUNG ' + s.rung + ' · ' + (ri ? ri.name.toUpperCase() : ''), 14, FH + 42, 11, C.dim);
     text('BODY', 430, FH + 22, 11, C.dim); rect(470, FH + 12, 140, 12, '#2c3447'); rect(470, FH + 12, 140 * hp, 12, C.dummy);
     text('WRITE-OFFS ' + s.run.writeOffs, 470, FH + 42, 11, C.text);
-    text(s.dashFitted() ? 'SPACE DASH' + (s.has('jump') ? ' · K JUMP' : '') : 'ON FOOT', 786, FH + 22, 11, C.dim, 'right');
+    text(s.dashFitted() ? 'SPACE DASH' + (s.has('jump') ? ' · K JUMP' : '') + (s.has('carry') ? ' · E CONE' : '') : 'ON FOOT', 786, FH + 22, 11, C.dim, 'right');
     text(Math.floor(s.t / 60) + ':' + String(Math.floor(s.t % 60)).padStart(2, '0'), 786, FH + 42, 11, C.text, 'right');
   }
   // ---------- the lesson. Beat 1: the hit, replayed as the car's training clip. Beat 2: the sensor fitted.
@@ -221,12 +245,17 @@
     const reach = Math.max(0, (u - 0.45) / 0.55), to = info ? info.rung : 1, from = to - 1;
     if (from >= 1 || (to === 1 && reach > 0)) { ctx.save(); ctx.translate(cx + car.L / 2 * k, cy); rect(0, -(car.W / 2 + 4) * k, (to === 1 ? reach : 1) * (FW - cx - car.L / 2 * k), (car.W + 8) * k, C.beam); ctx.restore(); }
     if (from >= 2 || (to === 2 && reach > 0)) for (const sg of [-1, 1]) { const h = (to === 2 ? reach : 1) * 150; rect(cx - car.L / 2 * k, sg > 0 ? cy + (car.W / 2 + 4) * k : cy - (car.W / 2 + 4) * k - h, FW - cx + car.L / 2 * k, h, C.field); }
+    if (to === 4 && reach > 0) { // the street cameras: three posts round the junction link to the car
+      ctx.strokeStyle = C.cam; ctx.lineWidth = 2; ctx.setLineDash([6, 6]); ctx.globalAlpha = reach;
+      for (const [x, y] of [[620, 170], [690, 330], [620, 490]]) { ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(cx - car.L / 2 * k + 8 * k, cy - (car.W / 2 + 6) * k); ctx.stroke(); rect(x - 3, y, 6, 30, C.joint); rect(x - 10, y - 10, 20, 12, C.joint); ctx.fillStyle = C.cam; ctx.beginPath(); ctx.arc(x + 6, y - 4, 3, 0, TAU); ctx.fill(); }
+      ctx.setLineDash([]); ctx.globalAlpha = 1;
+    }
     if (to === 3 && reach > 0) { ctx.strokeStyle = C.cam; ctx.lineWidth = 2; for (let i = 1; i <= 3; i++) { ctx.globalAlpha = Math.max(0, 1 - i / 3.5) * reach; ctx.beginPath(); ctx.arc(cx - 2 * k, cy, reach * 60 * i, 0, TAU); ctx.stroke(); } ctx.globalAlpha = 1; } // the lidar's sweep
     ctx.save(); ctx.translate(cx, cy); ctx.scale(k, k); carShape(car, u >= 0.45 ? to : from); ctx.restore();
-    const px = to >= 2 ? cx - (to === 3 ? 2 : 1) * k : cx + (car.L / 2 - 17) * k; // where the new sensor goes: the nose (1), the flanks (2), the roof (3)
-    if (u < 0.45) drawDrone(px, cy - 160 + 160 * (u / 0.45), to === 3 ? 'L3' : to === 2 ? 'S2' : true);
+    const px = to === 4 ? cx + (-car.L / 2 + 8) * k : to >= 2 ? cx - (to === 3 ? 2 : 1) * k : cx + (car.L / 2 - 17) * k; // where the new sensor goes: the nose (1), the flanks (2), the roof (3), the link's aerial (4)
+    if (u < 0.45) drawDrone(px, cy - 160 + 160 * (u / 0.45), to === 4 ? 'C4' : to === 3 ? 'L3' : to === 2 ? 'S2' : true);
     else if (u < 0.7) drawDrone(px, cy - 160 * ((u - 0.45) / 0.25), false);
-    text('SENSOR FITTED · ' + (info && info.sensor ? info.sensor : ''), 40, 90, 22, C.text);
+    text((info && info.fit ? info.fit : 'SENSOR') + ' FITTED · ' + (info && info.sensor ? info.sensor : ''), 40, 90, 22, C.text);
     text((clip ? clip.model : s.models.sedan.id) + ' · RUNG ' + (info ? info.rung : ''), 40, 120, 14, C.dim);
   }
   function draw() {
@@ -238,15 +267,18 @@
     const cars = s.cars.filter((c) => !c.ghost);
     if (showZones) for (const c of cars) drawZones(c);
     for (const c of cars) drawCar(c);
+    drawCameras();
     drawDummy(s.body);
-    const d = s.delivery; if (d) drawDrone(d.x, d.y, d.state !== 'outbound' && (d.node === 'legs1' ? 'L1' : 'B1'));
+    for (const c of s.onRoad()) if (c.red) drawOffscreen(c);
+    for (const dr of s.drones) { const cn = s.cones.find((q) => q.id === dr.cone); if (cn && cn.state === 'drone') drawCone(dr.x, dr.y + 12); drawDrone(dr.x, dr.y, false); } // FARSIGHT fetches a cone left in a lane (proto.droneConeSeconds)
+    const d = s.delivery; if (d) drawDrone(d.x, d.y, d.state !== 'outbound' && (LOAD[d.node] || 'B1'));
     for (let i = flash.length - 1; i >= 0; i--) { const f = flash[i]; f.t -= 1 / 60; if (f.t <= 0) { flash.splice(i, 1); continue; } const big = typeof f.n !== 'number'; text(big ? f.n : '−' + f.n, f.x, f.y - 24 - (1 - f.t) * 20, big ? 16 : 13, f.n === 'WRITE-OFF' ? C.red : C.dummy, 'center'); }
     drawHud();
     if (!started || paused) {
       rect(0, 0, FW, FH, 'rgba(10,12,18,0.72)');
       text(paused ? 'PAUSED' : 'PROTOTYPE ' + ST.id + ' · ' + ST.title, FW / 2, 250, 24, C.text, 'center');
       text('Two one-way roads cross at the Monument. One red car drives through.', FW / 2, 292, 14, C.dim, 'center');
-      text('Arrows or WASD move · Space dash · K jump, once fitted · Z zones · P pause · R restart · L save log', FW / 2, 330, 13, C.dim, 'center');
+      text('Arrows or WASD move · Space dash · K jump, E cone, once fitted · Z zones · P pause · R restart · L save log', FW / 2, 330, 13, C.dim, 'center');
       text(paused ? 'P to resume' : 'Press any key', FW / 2, 380, 16, C.dummy, 'center');
     }
   }

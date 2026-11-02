@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Prototype 10 test-road report (GDD Edits 101–102): qa/baseline/p10_<n>.json -> qa/baseline/p10_<n>.md.
+"""Prototype 10 test-road report (GDD Edits 101–105): qa/baseline/p10_<n>.json -> qa/baseline/p10_<n>.md.
     python3 qa/testroad_report.py qa/baseline/p10_2.json qa/baseline/p10_2.md "Prototype 10.2: the first lesson"
 10.1's report (p10_1.md) was written by this script's first version; its JSON has no 'mode' and reads as 'lesson'.
 """
@@ -23,12 +23,19 @@ DESC = {'stand': "Stands on the north lane's line, road A", 'standSouth': "Stand
         'jump': 'With Legs 1: runs at a passing car, jumps into it from close', 'dashjump': 'With Legs 1: dashes at a passing car, jumps out of the dash',
         'corner': "On foot: waits behind the building's corner; steps out at a road B car", 'kerb': 'Waits at the open kerb; dashes at a road A car in reach',
         'flankOpen': 'The flank bot from open pavement (no cover)', 'gap': "Waits behind the barrier at its gap; dashes through it",
-        'plinth': "With Legs 1: jumps up on the plinth; dashes down from its edge"}
+        'plinth': "With Legs 1: jumps up on the plinth; dashes down from its edge",
+        'conebait': "The gap until Hands 1; then lays a cone ahead of the car waiting for it, steps out of its field, strikes as it swerves round the cone",
+        'lurk': "Waits past every field's edge, south-east; sprints in as a car passes in road A's south lane, dashes before the field notices"}
 HOME_COVER = "aim, flank, jump and dashjump wait at (300, 410), behind the barrier: cover"
-MODE_DESC = {'lesson': "from the build's start (10.2: rung 0, on foot; 10.3: rung 1, Battery 1 fitted); the lesson and the part as the build delivers them",
-             'trained': "at the top rung from the start, Battery 1 fitted: the rung's own table"}
+MODE_DESC = {'lesson': "from the build's start (10.2: rung 0, on foot; 10.3: rung 1, Battery 1 fitted; 10.5: rung 3, Battery 1 and Legs 1 fitted); the lesson and the part as the build delivers them",
+             'trained': "at the top rung from the start, every part its rungs bring fitted: the rung's own table"}
 STAGE = str(d.get('stage', '10.1'))
-if STAGE >= '10.4':  # rung 3: the plinth and the jump close; cover stays
+if STAGE >= '10.5':  # rung 4: cover closes; the cone's swerve and the sprint from beyond the field stay
+    CLOSED, OPEN_FOOT, OPEN_DASH = ['stand', 'standSouth', 'standOff', 'charge', 'kerb', 'flankOpen', 'walkin', 'corner', 'gap', 'plinth', 'aim'], ['lurk'], ['conebait']
+    COVER = ['gap', 'aim', 'flank', 'jump', 'dashjump']  # every bot that waits behind the barrier
+    ESC_CLOSED, ESC_OPEN = ['gap', 'jump'], ['conebait']  # lurk decays by the dummy's own leg damage (its dash shortens), not the car: noted under the escalation table
+    HOME_COVER += "; conebait starts at the gap (188, 414); lurk waits at (660, 576), past every field's edge"
+elif STAGE >= '10.4':  # rung 3: the plinth and the jump close; cover stays
     CLOSED, OPEN_FOOT, OPEN_DASH = ['stand', 'standSouth', 'standOff', 'charge', 'kerb', 'flankOpen', 'walkin', 'corner'], ['gap'], []  # the plinth and the jump: by decay, below
     ESC_CLOSED, ESC_OPEN = ['plinth', 'dashjump'], ['gap', 'jump']  # the jump bot waits behind the barrier: cover
 elif STAGE >= '10.3':  # rung 2: the open flank closes; cover and the raised edge stay
@@ -54,7 +61,8 @@ w(f"- **Build:** `{d['build']}`, level `{d['level']}`, stage {d.get('stage', '10
 w(f"- **Runs:** {len(POL)} bots × {len(MODES)} mode(s) × offsets {d['offsets']} s × {d['secs']} sim-seconds; escalation {d['esc']} s.")
 for mo in MODES: w(f'- **Mode `{mo}`:** {MODE_DESC.get(mo, "")}.')
 if STAGE >= '10.3': w(f'- **Cover:** {HOME_COVER}.')
-if STAGE >= '10.4': w('- **No new part:** Battery 1 and Legs 1 are fitted from the start.')
+if STAGE >= '10.5': w('- **Parts:** Battery 1 and Legs 1 fitted from the start; Hands 1, the cones, by drone at the first stop for a dummy behind cover.')
+elif STAGE >= '10.4': w('- **No new part:** Battery 1 and Legs 1 are fitted from the start.')
 w('- **The build\'s values:** ' + ', '.join(f'`{k}` {v}' for k, v in d['p10'].items()) + '.')
 w('')
 n = 1
@@ -77,13 +85,13 @@ for mo in MODES:
 if 'lesson' in MODES and any(r.get('lesson') is not None or r.get('dashAt') is not None for r in runs):
     w(f'## {n} The lesson (mode `lesson`)'); n += 1
     w('')
-    w('| Bot | Offset | Lesson: hit at (s) | Zone | Rung at end | First brake (s) | First side stop (s) | Part fitted (s) | Hits a minute after the lesson | Damage after |')
-    w('|---|---|---|---|---|---|---|---|---|---|')
+    w('| Bot | Offset | Lesson: hit at (s) | Zone | Rung at end | First brake (s) | First side stop (s) | ' + ('First stop behind cover (s) | ' if STAGE >= '10.5' else '') + 'Part fitted (s) | Hits a minute after the lesson | Damage after |')
+    w('|---|---|---|---|---|---|---|---|---|---|' + ('---|' if STAGE >= '10.5' else ''))
     for r in runs:
         if r['mode'] != 'lesson': continue
         L, A = r.get('lesson'), r.get('afterLesson')
         parts = ', '.join(f"{q['node']} {q['t']}" for q in r.get('parts', [])) or (str(r['dashAt']) if r.get('dashAt') is not None else '—')
-        w(f"| {r['policy']} | +{r['offset']} | {L['hitAt'] if L else '—'} | {L['zone'] if L else '—'} | {r.get('rungEnd', '—')} | {r.get('firstBrakeAt') if r.get('firstBrakeAt') is not None else '—'} | {r.get('firstSideAt') if r.get('firstSideAt') is not None else '—'} | {parts} | {f(A['hitsPerMin']) if A else '—'} | {A['lost'] if A else '—'} |")
+        w(f"| {r['policy']} | +{r['offset']} | {L['hitAt'] if L else '—'} | {L['zone'] if L else '—'} | {r.get('rungEnd', '—')} | {r.get('firstBrakeAt') if r.get('firstBrakeAt') is not None else '—'} | {r.get('firstSideAt') if r.get('firstSideAt') is not None else '—'} | {(str(r['firstCoverAt']) if r.get('firstCoverAt') is not None else '—') + ' | ' if STAGE >= '10.5' else ''}{parts} | {f(A['hitsPerMin']) if A else '—'} | {A['lost'] if A else '—'} |")
     w('')
 w(f'## {n} Behaviours (commits by cause; honks)'); n += 1
 w('')
@@ -99,12 +107,14 @@ for mo in MODES:
         w(f"| {mo} | {p} | {b.get('body', 0)} | {b.get('side', 0)} | {b.get('pass', 0)} | {b.get('return', 0)} | {sum(r['cars']['honks'] for r in rs)} |")
 w('')
 w(f'## {n} Escalation (the same trick for longer, mode `lesson`)'); n += 1
+esc_pol = [r['policy'] for r in d['escalation']]
 w('')
 w('| Bot | Hits by minute | Decay (`qa.esc.decay`) | Learning events |')
 w('|---|---|---|---|')
 for r in d['escalation']:
     w(f"| {r['policy']} | {' '.join(str(x) for x in r['windows'])} | {f(r.get('decay'))} | {r['learnEvents']} |")
 w('')
+if STAGE >= '10.5' and 'lurk' in esc_pol: w("- **lurk decays by the dummy's own damage, not the car.** Each hit lands on a leg; the dash shortens with leg damage (164 to 116 after four hits), below what the sprint from past the field needs. The car stays at rung 3 throughout.\n")
 w(f'## {n} Checks'); n += 1
 w('')
 allr = runs + d['escalation']
@@ -148,6 +158,18 @@ if top == 3:
     checks += [
                ('Rung 3 closes the plinth: one hit at most in 5 minutes (a landing inside the notice window)', all(r['hits'] <= 1 for r in tr if r['policy'] == 'plinth'), 'plinth ' + ', '.join(str(r['hits']) for r in tr if r['policy'] == 'plinth') + ' hits in 300 s'),
                ('A new behaviour: it stops for a dummy up on the plinth (none at rung 2)', sum((r.get('behaviours') or {}).get('side', 0) for r in tr if r['policy'] == 'plinth') > 0, f"side stops in trained plinth runs: {sum((r.get('behaviours') or {}).get('side', 0) for r in tr if r['policy'] == 'plinth')}")]
+if top == 4:
+    les = [r for r in runs if r['mode'] == 'lesson']
+    hid = [r for r in les if r.get('coverHits', 0) > 0]
+    other = [r for r in les if r['hits'] > 0 and not r.get('coverHits', 0)]
+    hands = lambda r: next((q['t'] for q in r.get('parts', []) if q['node'] == 'hands1'), None)
+    stops = [r for r in les if r.get('firstCoverAt') is not None]
+    checks += [
+        ('Only a hit where cover hid the dummy teaches rung 4 (out of cover within the clip)', all(r.get('lesson') for r in hid) and not any(r.get('lesson') for r in other), f"lessons: {sum(1 for r in hid if r.get('lesson'))} of {len(hid)} runs with such a hit; {sum(1 for r in other if r.get('lesson'))} of {len(other)} runs with only hits from the open"),
+        ('Rung 4 closes cover: ' + ', '.join(COVER) + ': at most one hit in 15 minutes each', all(sum(r['hits'] for r in tr if r['policy'] == p) <= 1 for p in COVER), ', '.join(f"{p} {sum(r['hits'] for r in tr if r['policy'] == p)}" for p in COVER)),
+        ('Hands 1 arrives at the first stop for a dummy behind cover', bool(stops) and all(hands(r) is not None and hands(r) - r['firstCoverAt'] < 5 for r in stops), f"stop to Hands 1: {', '.join(sorted(set(str(round(hands(r) - r['firstCoverAt'], 1)) for r in stops if hands(r) is not None)))} s in {len(stops)} runs"),
+        ('A new behaviour: it stops for a dummy only its cameras see (none at rung 3)', sum(1 for r in tr if r.get('firstCoverAt') is not None) > 0, f"trained runs with such a stop: {sum(1 for r in tr if r.get('firstCoverAt') is not None)} of {len(tr)}"),
+    ]
 if top == 2 and d['p10'].get('duel.jumpArrives') == 2:
     leg = [r for r in runs if r['mode'] == 'lesson' and r.get('firstSideAt') is not None]
     gap = lambda r: next((q['t'] for q in r.get('parts', []) if q['node'] == 'legs1'), None)
@@ -158,7 +180,7 @@ if top == 2 and d['p10'].get('duel.jumpArrives') == 2:
 if top >= 1:
     checks += [
         ('Escalation: the closed trick decays below 0.5', all(esc[p]['decay'] is not None and esc[p]['decay'] < 0.5 for p in ESC_CLOSED if p in esc), ', '.join(f"{p} {esc[p]['decay']}" for p in ESC_CLOSED if p in esc)),
-        ('Escalation: the opening holds (no stalemate)', all(esc[p]['decay'] is not None and esc[p]['decay'] >= 0.5 for p in ESC_OPEN if p in esc), ', '.join(f"{p} {esc[p]['decay']}" for p in ESC_OPEN + [q for q in ('plinth', 'aim') if q not in ESC_CLOSED] if p in esc)),
+        ('Escalation: the opening holds (no stalemate)', all(esc[p]['decay'] is not None and esc[p]['decay'] >= 0.5 for p in ESC_OPEN if p in esc), ', '.join(f"{p} {esc[p]['decay']}" for p in ESC_OPEN + [q for q in ('plinth', 'aim') if q not in ESC_CLOSED and q not in ESC_OPEN] if p in esc)),
     ]
 w('| Check | Result | Evidence |')
 w('|---|---|---|')

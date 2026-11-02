@@ -4,6 +4,7 @@
 // 10.1: rung 0, the red car learns nothing. 10.2: one lesson. A hit on its nose teaches rung 1, the forward camera.
 // 10.3: from rung 1, a hit from the side teaches rung 2, the side sensors. Battery 1 from the start; Legs 1, the jump, arrives.
 // 10.4: from rung 2, a hit from above teaches rung 3, the roof lidar: it sees height. Both parts from the start.
+// 10.5: from rung 3, a hit out of cover teaches rung 4, the street cameras: it sees behind cover. Hands 1, the cones, arrive.
 // Extends the base Sim from prototypes/p6/sim.js. Shared files are untouched, so Prototype 9's build keeps its md5.
 // Runs in the browser (window.DUMMIES) and in node (require), so the probes run headless without a page.
 (function (root) {
@@ -53,6 +54,7 @@
       spawns: [{ x: 600, y: 520, f: -90 }, { x: 200, y: 520, f: -90 }, { x: 640, y: 120, f: 90 }],
       crossings: [{ road: 'A', x: 620 }], // a zebra on road A, east of the junction (drawn; cars do not stop for it yet)
       barrierGap: { x: 160, y: ROAD_A + W + 12, w: 56 }, canal: true, gates: {}, theme: 'start', patches: [],
+      cameras: [[24, ROAD_A + W + 4], [352, ROAD_A + W + 4], [476, 228]], // rung 4's street cameras (drawn): the barrier's two ends, the building's corner
     };
   }
 
@@ -71,6 +73,11 @@
   // beam and field now see a dummy in the air or up on the plinth. It answers it as it answers one on the ground. Only a
   // hit where height hid the dummy teaches it (high; row 685): a jump or a dash from the plinth, by a dummy in its sight
   // for the whole training clip. A strike out of cover, a jump included, teaches nothing it can use.
+  // Rung 4, the street cameras (Shenzhen's vehicle-road-cloud pilot: roadside sensors share what they see with cars): the
+  // junction's cameras see behind the barrier and the building, and the car sees what they see. A dummy behind cover is
+  // answered as one in the open: the safe envelope, a stop short, a wait. Only a hit where cover hid the dummy teaches it
+  // (cover): the training clip shows the dummy coming out of cover. Its swerve round a cone is held until it has passed the
+  // cone: meanwhile it does not stop for a dummy in its field (every rung from 2). That is the opening the cones make.
   // Each rung brings the dummy a part by drone (part, partKey): when that value is 1, as the lesson ends; 2, the first
   // time the car uses the new rung against the dummy (trigger); 3, fitted from the start.
   const RUNGS = [
@@ -78,6 +85,7 @@
     { rung: 1, name: 'Forward camera', sensor: 'FORWARD CAMERA', learnsFrom: ['front', 'frontDiagonal'], part: 'battery1', partKey: 'duel.dashArrives', trigger: 'first-brake' },
     { rung: 2, name: 'Side sensors', sensor: 'SIDE SENSORS', learnsFrom: ['front', 'frontDiagonal', 'side', 'rearDiagonal'], part: 'legs1', partKey: 'duel.jumpArrives', trigger: 'first-side' },
     { rung: 3, name: 'Roof lidar', sensor: 'ROOF LIDAR', learnsFrom: ['front', 'frontDiagonal', 'side', 'rearDiagonal'], high: true },
+    { rung: 4, name: 'Street cameras', sensor: 'STREET CAMERAS', fit: 'LINK', learnsFrom: ['front', 'frontDiagonal', 'side', 'rearDiagonal'], cover: true, part: 'hands1', partKey: 'duel.conesArrives', trigger: 'first-cover' },
   ];
 
   // ---------- The test road: one red sedan, alone on the road
@@ -103,7 +111,7 @@
       this.schedule = Array.from({ length: P['run.appearances.road'] }, (_, i) => ({ i, cls: 'sedan', lane: Math.floor(g(i, 0.31) * n), mult: 1 }));
       this.leftAt = 0; // when the red car last left the screen
       this.rung = Math.max(0, Math.min(RUNGS.length - 1, Math.round(P['duel.startRung'] || 0))); // the red car's rung
-      this.lesson = null; this.lessons = []; this.delivery = null; this.firstBrakeT = null; this.firstSideT = null;
+      this.lesson = null; this.lessons = []; this.delivery = null; this.firstBrakeT = null; this.firstSideT = null; this.firstCoverT = null;
       let fitted = false; // parts fitted from the start (partKey 3)
       for (const r of RUNGS) if (r.part && Math.round(P[r.partKey] || 0) === 3) { this.run.owned[r.part] = true; fitted = true; }
       if (fitted && this.body) this.body.health = this.maxHealth();
@@ -175,7 +183,8 @@
       const side = !!(hz && !hz.inPath && b.alive), wasHolding = c.cause === 'side' && !!c.man;
       c.fieldT = side ? (c.fieldT || 0) + dt : 0;
       c.noticed = side && c.fieldT >= P['perception.sideNoticeSeconds'] - 1e-9;
-      if (!c.noticed) { c.sideHonk = false; c.sideHoldT = 0; if (wasHolding && c.v < 1) { c.man = null; c.state = 'cruise'; } return false; }
+      if (c.dodge && c.dodge.kind === 'cone' && c.cause === 'cone') { c.sideHonk = false; c.sideHoldT = 0; return false; } // its swerve round a cone holds until it has passed it
+      if (!c.noticed) { c.sideHonk = false; c.sideHoldT = 0; if (wasHolding && c.v < 1 && !(hz && hz.inPath)) { c.man = null; c.state = 'cruise'; } return false; } // a dummy that steps from its field into its path keeps it stopped (row 688)
       // the stop point: where its nose stays envelope(0) from the dummy, measured straight, not along the road
       const E0 = this.envelope(0), lat = Math.max(0, Math.abs(hz.ly) - c.W / 2), sBody = hz.s - Math.sqrt(Math.max(0, E0 * E0 - lat * lat)) + E0;
       const q = X.pathAt(c.path, hz.s), dx = b.x - c.x, dy = b.y - c.y, dd = Math.hypot(dx, dy) || 1;
@@ -233,6 +242,10 @@
     // A dummy standing on the plinth stands above it: the plinth does not hide it from a car that sees height (rung 3).
     occluded(self, x0, y0, x1, y1) {
       const b = this.body;
+      if (this.testRoad && b && x1 === b.x && y1 === b.y && this.rung >= 4 && self && self.red) { // the street cameras see behind every static
+        const keep = this.level.statics; this.level.statics = [];
+        try { return super.occluded(self, x0, y0, x1, y1); } finally { this.level.statics = keep; }
+      }
       if (!this.testRoad || !b || !b.raised || x1 !== b.x || y1 !== b.y) return super.occluded(self, x0, y0, x1, y1);
       const keep = this.level.statics, st = this.plinth(); this.level.statics = keep.filter((q) => q !== st);
       try { return super.occluded(self, x0, y0, x1, y1); } finally { this.level.statics = keep; }
@@ -245,7 +258,10 @@
       this.level.statics = keep.filter((q) => q !== st);
       try { cover = super.occluded(c, nx, ny, b.x, b.y); } finally { this.level.statics = keep; }
       c.sightT = b.alive && !cover ? (c.sightT || 0) + dt : 0;
+      c.hidden = !!(b.alive && cover); if (c.hidden) c.coverT = this.t; // behind cover now; when last
     }
+    // Cover hid the dummy: the car lost it behind cover within the training clip (duel.lessonClipSeconds).
+    coverHid(c) { return c.coverT != null && this.t - c.coverT <= this.P['duel.lessonClipSeconds'] + 1e-9; }
     // Height hid the dummy: a hit from above, by a dummy in the car's sight for the whole training clip (duel.lessonClipSeconds).
     // A clip that shows the dummy coming out of cover teaches cover, not height (row 685).
     heightHid(e, c) { return this.fromAbove(e) && (c.sightT || 0) >= this.P['duel.lessonClipSeconds'] - 1e-9; }
@@ -302,7 +318,7 @@
       }
       const e0 = this.events.length, positive = super.account(keep);
       for (const e of this.events.slice(e0)) if (e.type === 'impact') {
-        const c = this.carById(e.car); if (c && c.red) { e.sight = +(c.sightT || 0).toFixed(2); e.above = this.fromAbove(e); } // in sight past cover (s); from above (D113)
+        const c = this.carById(e.car); if (c && c.red) { e.sight = +(c.sightT || 0).toFixed(2); e.above = this.fromAbove(e); e.cover = this.coverHid(c); } // in sight past cover (s); from above (D113); out of cover (row 687)
         if (e.lost > 0) this.learnFrom(e);
       }
       return positive;
@@ -312,6 +328,7 @@
       const c = this.carById(e.car), next = RUNGS[this.rung + 1];
       if (!c || !c.red || this.lesson || !next || this.rung >= Math.round(this.P['duel.topRung'] || 0) || !next.learnsFrom.includes(e.zone)) return;
       if (next.high && !this.heightHid(e, c)) return; // rung 3 learns only from a hit where height hid the dummy (row 685)
+      if (next.cover && !this.coverHid(c)) return; // rung 4, only from a hit where cover hid it
       this.lesson = { state: 'due', from: this.rung, to: next.rung, name: next.name, sensor: next.sensor, model: c.model, car: c.id, zone: e.zone, kind: e.kind, hitT: e.t, lost: e.lost };
       this.emit('lesson-due', { model: c.model, from: this.rung, to: next.rung, zone: e.zone, car: c.id });
     }
@@ -340,6 +357,7 @@
       if (!this.testRoad || !c.red) return;
       if (cause === 'body' && this.rung >= 1 && this.firstBrakeT == null) { this.firstBrakeT = this.t; this.emit('first-brake', { car: c.id, model: c.model }); this.partFor(1, 2); }
       if (cause === 'side' && this.rung >= 2 && this.firstSideT == null) { this.firstSideT = this.t; this.emit('first-side', { car: c.id, model: c.model }); this.partFor(2, 2); }
+      if ((cause === 'side' || cause === 'body') && this.rung >= 4 && c.hidden && this.firstCoverT == null) { this.firstCoverT = this.t; this.emit('first-cover', { car: c.id, model: c.model }); this.partFor(4, 2); } // it stops for a dummy only its cameras see
     }
     partFor(rung, when) { // rung's part, if its partKey says it comes now (1: the lesson's end; 2: the first use)
       const r = RUNGS[rung];

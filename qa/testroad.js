@@ -4,16 +4,18 @@
 // the flank, escalation. Two modes: 'lesson' starts where the build starts (10.2: rung 0, on foot); 'trained' starts at
 // the build's top rung with Battery 1 fitted, to measure that rung alone.
 //   node qa/testroad.js [--stage 10.2] [--secs 300] [--esc 600] [--offsets 0,7,13] [--out qa/baseline/p10_2.json]
+//   Experiments: [--only gap,jump] runs only those bots (and their escalation); [--set id=value,...] overrides registry values;
+//   [--trace 1] prints each run's events and, every second, the dummy, the cones and the red car.
 'use strict';
 const fs = require('fs'), path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const X = require(path.join(ROOT, 'prototypes/p6/sim.js'));
 const { TestRoadSim } = require(path.join(ROOT, 'prototypes/p10/testroad.js'));
 const SF = JSON.parse(fs.readFileSync(path.join(ROOT, 'prototypes/p10/sim_flags.json'), 'utf8'));
-const o = { stage: SF.current, secs: 300, esc: 600, offsets: [0, 7, 13], out: null };
+const o = { stage: SF.current, secs: 300, esc: 600, offsets: [0, 7, 13], out: null, only: null, set: null };
 const av = process.argv.slice(2);
-for (let i = 0; i < av.length; i += 2) { const k = av[i].replace(/^--/, ''), v = av[i + 1]; if (k === 'offsets') o.offsets = v.split(',').map(Number); else if (k === 'out' || k === 'stage') o[k] = v; else o[k] = +v; }
-const ST = SF.stages[o.stage], FLAGS = ST.flags;
+for (let i = 0; i < av.length; i += 2) { const k = av[i].replace(/^--/, ''), v = av[i + 1]; if (k === 'offsets') o.offsets = v.split(',').map(Number); else if (k === 'only') o.only = v.split(','); else if (k === 'set') o.set = Object.fromEntries(v.split(',').map((q) => q.split('=')).map(([a, b]) => [a, +b])); else if (k === 'out' || k === 'stage') o[k] = v; else o[k] = +v; }
+const ST = SF.stages[o.stage], FLAGS = Object.assign({}, ST.flags, o.set || {});
 const DEG = Math.PI / 180, wrap = (a) => { while (a > Math.PI) a -= 2 * Math.PI; while (a < -Math.PI) a += 2 * Math.PI; return a; };
 
 // Policies. Closed (rung 1): stand*, charge. Open: walkin (on foot), aim and flank (the dash).
@@ -33,18 +35,47 @@ const POLICIES = {
   flankOpen: { home: { x: 600, y: 440 }, from: 10.3 },// the flank bot, from open pavement (no cover)
   gap: { home: { x: 188, y: 414 }, from: 10.3 },      // waits behind the barrier at its gap; dashes through it at a road A car
   plinth: { home: { x: 275, y: 226 }, from: 10.3 },   // jumps up on the plinth; dashes down from its edge at a road A car
+  conebait: { home: { x: 188, y: 414 }, from: 10.5 }, // the gap until Hands 1; then lays a cone ahead of the car waiting for it, steps out of its field, strikes as it swerves round the cone
+  lurk: { home: { x: 660, y: 576 }, from: 10.3 },     // waits past every field's edge, south-east; sprints in as a car passes in road A's south lane, dashes before the field notices
 };
 
 function run(policy, offset, secs, mode) {
   const pol = POLICIES[policy], trained = mode === 'trained';
-  const parts = { battery1: true }; if (FLAGS['duel.topRung'] >= 2) parts.legs1 = true; // trained: every part its rungs bring
+  const parts = { battery1: true }; if (FLAGS['duel.topRung'] >= 2) parts.legs1 = true; if (FLAGS['duel.topRung'] >= 4) parts.hands1 = true; // trained: every part its rungs bring
   const s = new TestRoadSim(Object.assign({}, FLAGS, trained ? { 'duel.startRung': FLAGS['duel.topRung'] } : {}), trained ? { owned: parts } : null);
   const service = () => { if (s.phase === 'report') s.continueReport(); else if (s.phase === 'shop') s.leaveShop(); else if (s.phase === 'lesson') s.continueLesson(); };
   for (let k = 0; k < offset * 60; k++) { service(); s.step({}); }
   const b = () => s.body, home = pol.home, can = () => s.dashFitted() && b().mode !== 'lunge' && b().mode !== 'recover';
   const goTo = (tx, ty, k) => { const dx = tx - b().x, dy = ty - b().y, d = Math.hypot(dx, dy); return d > 6 ? { mx: dx / d * (k || 1), my: dy / d * (k || 1) } : {}; };
   const live = () => s.onRoad().filter((c) => !c.spent);
-  const done = new Set(); let cur = null, tries = 0, climb = null;
+  const NAVG = (() => { // the statics' corners, pushed out past the dummy's radius, and which see each other
+    const E = 12, F = E + 6, W = s.P['world.width'], H = s.P['world.height'], st = s.level.statics;
+    const inBox = (x, y, q) => x > q.x - E && x < q.x + q.w + E && y > q.y - E && y < q.y + q.h + E;
+    const clear = (x0, y0, x1, y1, skip) => { for (const q of st) { if (q === skip) continue; for (let k = 0; k <= 32; k++) { const u = k / 32; if (inBox(x0 + (x1 - x0) * u, y0 + (y1 - y0) * u, q)) return false; } } return true; };
+    const pts = []; for (const q of st) for (const [x, y] of [[q.x - F, q.y - F], [q.x + q.w + F, q.y - F], [q.x - F, q.y + q.h + F], [q.x + q.w + F, q.y + q.h + F]]) if (x > 4 && x < W - 4 && y > 4 && y < H - 4 && !st.some((r) => inBox(x, y, r))) pts.push([x, y]);
+    const see = pts.map((p) => pts.map((q) => p !== q && clear(p[0], p[1], q[0], q[1])));
+    return { pts, see, clear, inBox, st, passed: new Map() };
+  })();
+  const nav = (tx, ty) => { // goTo, round the statics (the barrier through its gap or past an end, the building, the plinth): the first corner on the shortest way
+    const { pts, see, clear, inBox, st } = NAVG, bx = b().x, by = b().y, from = st.find((q) => inBox(bx, by, q)), to = st.find((q) => inBox(tx, ty, q));
+    const ok = (x0, y0, x1, y1) => clear(x0, y0, x1, y1, from) && (!to || clear(x0, y0, x1, y1, to) || true);
+    if (clear(bx, by, tx, ty, from === to ? from : null) || (from && from === to)) return goTo(tx, ty);
+    const n = pts.length, dist = new Array(n).fill(Infinity), prev = new Array(n).fill(-1), done = new Array(n).fill(false);
+    for (let i = 0; i < n; i++) if (Math.hypot(pts[i][0] - bx, pts[i][1] - by) > 4 && ok(bx, by, pts[i][0], pts[i][1])) dist[i] = Math.hypot(pts[i][0] - bx, pts[i][1] - by);
+    let best = -1, bestD = Infinity;
+    for (;;) {
+      let u = -1; for (let i = 0; i < n; i++) if (!done[i] && dist[i] < Infinity && (u < 0 || dist[i] < dist[u])) u = i;
+      if (u < 0) break; done[u] = true;
+      if (clear(pts[u][0], pts[u][1], tx, ty, to)) { const d = dist[u] + Math.hypot(tx - pts[u][0], ty - pts[u][1]); if (d < bestD) { bestD = d; best = u; } }
+      for (let v = 0; v < n; v++) if (see[u][v] && dist[u] + Math.hypot(pts[v][0] - pts[u][0], pts[v][1] - pts[u][1]) < dist[v]) { dist[v] = dist[u] + Math.hypot(pts[v][0] - pts[u][0], pts[v][1] - pts[u][1]); prev[v] = u; }
+    }
+    if (best < 0) return goTo(tx, ty);
+    const way = []; for (let k = best; k >= 0; k = prev[k]) way.unshift(k);
+    for (const k of way) if (Math.hypot(pts[k][0] - bx, pts[k][1] - by) < 9) NAVG.passed.set(k, s.t); // reached: passed for a while, so the dummy never turns back to it
+    while (way.length && NAVG.passed.has(way[0]) && s.t - NAVG.passed.get(way[0]) < 1.5) way.shift();
+    return way.length ? goTo(pts[way[0]][0], pts[way[0]][1]) : goTo(tx, ty);
+  };
+  const done = new Set(); let cur = null, tries = 0, climb = null, layStage = 0;
   if (policy === 'charge') { b().x = home.x; b().y = home.y; for (const c of s.cars) done.add(c.id); } // it starts in its lane, and charges only cars that arrive after it
   const act = {
     stand: () => goTo(home.x, home.y), standSouth: () => goTo(home.x, home.y), standOff: () => goTo(home.x, home.y),
@@ -109,6 +140,52 @@ function run(policy, offset, secs, mode) {
       const tx = c.x + (c.vx || 0) * 0.15, ty = c.y, ang = Math.atan2(ty - b().y, tx - b().x), off = Math.abs(wrap(ang - b().facing));
       return { mx: Math.cos(ang) * 0.35, my: Math.sin(ang) * 0.35, aPress: can() && off < 15 * DEG };
     },
+    conebait: () => {
+      if (!b().alive) return {};
+      if (!s.has('carry')) return act.gap();
+      const P = s.P, W = P['world.width'], H = P['world.height'], c = live()[0], LURK = P['proto.driver.cautionZone'] + 40; // the red car; past its field's edge
+      const frame = (x, y) => { const ca = Math.cos(c.h), sa = Math.sin(c.h), dx = x - c.x, dy = y - c.y; return { fx: dx * ca + dy * sa, fy: -dx * sa + dy * ca }; };
+      const ahead = (cn) => { if (cn.state !== 'free') return false; const q = frame(cn.x, cn.y); return q.fx > c.L / 2 && Math.abs(q.fy) < c.W / 2 + P['props.cone.radius']; };
+      const placed = c ? s.cones.find((cn) => cn.state === 'free' && ((c.dodge && c.dodge.id === cn.id) || ahead(cn))) : null; // in its lane ahead, or the one it swerves round
+      if (b().held) {
+        if (c && c.v < 1 && (c.noticed || (c.hz && c.hz.inPath))) { // it waits for the dummy: lay the cone in its lane, ahead of its nose, on screen
+          const ca = Math.cos(c.h), sa = Math.sin(c.h); let k = c.L / 2 + 70, tx, ty;
+          const on = (x, y) => x > 14 && x < W - 14 && y > 14 && y < H - 14;
+          do { tx = c.x + ca * k; ty = c.y + sa * k; k += 10; } while (!(on(tx, ty) && on(tx - ca * 44, ty - sa * 44)) && k < 700); // the spot, and the run-up to it, on screen
+          const p1x = tx - ca * 44, p1y = ty - sa * 44, p2x = tx - ca * 16, p2y = ty - sa * 16; // come at the spot along its lane, so the dummy faces along it
+          if (layStage === 0) { if (Math.hypot(p1x - b().x, p1y - b().y) < 8) layStage = 1; else return nav(p1x, p1y); }
+          if (Math.hypot(p2x - b().x, p2y - b().y) >= 7) return goTo(p2x, p2y);
+          const rp = s.releasePoint(), q = frame(rp.x, rp.y);
+          if (!(q.fx > c.L / 2 + 20 && Math.abs(q.fy) < c.W / 2 + 4)) { layStage = 0; return {}; } // facing wrong: come round again
+          return Math.hypot(b().vx, b().vy) < 12 ? { xPress: true } : {}; // stopped first: a moving dummy punts the cone it puts down
+        }
+        layStage = 0; return nav(home.x, home.y); // behind the barrier: its cameras see the dummy, so it stops and waits
+      }
+      if (placed) {
+        if (c.cause === 'cone' && c.dodge) { // it swerves round the cone and holds its line: strike
+          const tx = c.x + (c.vx || 0) * 0.2, ty = c.y + (c.vy || 0) * 0.2, d = Math.hypot(tx - b().x, ty - b().y), ang = Math.atan2(ty - b().y, tx - b().x), off = Math.abs(wrap(ang - b().facing));
+          return { mx: Math.cos(ang), my: Math.sin(ang), aPress: can() && off < 15 * DEG && d < s.reach() + 8 };
+        }
+        const dc = Math.hypot(b().x - placed.x, b().y - placed.y);
+        if (dc < 30) { const k = 1 / (dc || 1); return { mx: (b().x - placed.x) * k, my: (b().y - placed.y) * k }; } // step back off the cone: never punt it
+        const nx = -Math.sin(c.h), ny = Math.cos(c.h), lat = (b().x - c.x) * nx + (b().y - c.y) * ny; // out of its field, straight off its lane
+        let sd = lat >= 0 ? 1 : -1, px = b().x - nx * lat + nx * sd * LURK, py = b().y - ny * lat + ny * sd * LURK;
+        if (px < 10 || px > W - 10 || py < 10 || py > H - 10) { sd = -sd; px = b().x - nx * lat + nx * sd * LURK; py = b().y - ny * lat + ny * sd * LURK; }
+        return nav(px, py);
+      }
+      const cn = s.cones.filter((q) => q.state === 'free' && q !== placed).sort((p, q) => Math.hypot(p.x - b().x, p.y - b().y) - Math.hypot(q.x - b().x, q.y - b().y))[0];
+      if (!cn) return nav(home.x, home.y);
+      return Math.hypot(cn.x - b().x, cn.y - b().y) < P['body.radius'] + P['props.cone.radius'] + 8 ? { xPress: true } : nav(cn.x, cn.y);
+    },
+    lurk: () => { // past the field's edge, it sprints in as the car passes and dashes before the field notices (perception.sideNoticeSeconds)
+      if (!b().alive) return {};
+      const c = live().find((q) => q.path.road === 'A' && q.lane === 0 && q.v > 15);
+      if (cur && (!c || c.id !== cur.id || b().mode === 'recover')) cur = null;
+      if (!cur && c && Math.abs(c.x + c.vx * 0.45 - b().x) < 14 && Math.hypot(home.x - b().x, home.y - b().y) < 10) cur = { id: c.id };
+      if (!cur) return goTo(home.x, home.y);
+      const tx = c.x + c.vx * 0.15, ty = c.y, d = Math.hypot(tx - b().x, ty - b().y), ang = Math.atan2(ty - b().y, tx - b().x), off = Math.abs(wrap(ang - b().facing));
+      return { mx: Math.cos(ang), my: Math.sin(ang), aPress: can() && off < 20 * DEG && d < s.reach() + 6 };
+    },
     plinth: () => {
       if (!b().alive) return {};
       if (!b().raised) { // climb: from north of the plinth, a dash at it and a jump out of the dash (Legs 1's airtime is short)
@@ -153,6 +230,8 @@ function run(policy, offset, secs, mode) {
     service();
     const before = s.run.points, eB = s.events.length, play = s.phase === 'play';
     s.step(play ? actFn(i) : {});
+    if (o.trace) { for (const e of s.events.slice(eB)) if (!['commit', 'release', 'lunge-end'].includes(e.type)) console.log('   ', e.t.toFixed(2), e.type, JSON.stringify(e).slice(0, 140));
+      if (i % 60 === 0) { const c = s.onRoad()[0]; console.log('  t', s.t.toFixed(1), 'cmd', JSON.stringify(actFn(i)), 'b', b().x.toFixed(1), b().y.toFixed(1), b().mode, 'v', b().vx.toFixed(1), b().vy.toFixed(1), 'f', (b().facing * 180 / Math.PI).toFixed(0), 'held', !!b().held, 'cones', s.cones.map((q) => q.state[0] + (q.x | 0) + ',' + (q.y | 0)).join(' '), c ? `car ${c.path.road}${c.lane} ${c.x | 0},${c.y | 0} v${c.v.toFixed(0)} ${c.cause} dodge ${c.dodge ? c.dodge.kind : '-'} noticed ${!!c.noticed}` : 'no car'); } }
     points += s.run.points - before;
     for (const e of s.events.slice(eB)) if (e.type === 'impact' && e.lost > 0) wins[W(e.t)]++;
     const on = s.onRoad(); maxOn = Math.max(maxOn, on.length);
@@ -168,7 +247,7 @@ function run(policy, offset, secs, mode) {
   while (wins.length < Math.ceil(secs / 60)) wins.push(0);
   const ev = s.events.slice(e0), imp = ev.filter((e) => e.type === 'impact' && e.lost > 0), mins = (s.t - t0) / 60, n = (t) => ev.filter((e) => e.type === t);
   const tally = (k) => imp.reduce((a, e) => (a[e[k]] = (a[e[k]] || 0) + 1, a), {});
-  const lessonAt = n('lesson-due')[0], learned = n('learned')[0], firstBrake = n('first-brake')[0], firstSide = n('first-side')[0], gift = n('gift')[0];
+  const lessonAt = n('lesson-due')[0], learned = n('learned')[0], firstBrake = n('first-brake')[0], firstSide = n('first-side')[0], firstCover = n('first-cover')[0], gift = n('gift')[0];
   const after = learned ? imp.filter((e) => e.t > learned.t) : null;
   const commits = n('commit').reduce((a, e) => (a[e.cause] = (a[e.cause] || 0) + 1, a), {});
   return { policy, mode, offset, simSeconds: +(s.t - t0).toFixed(1), rungEnd: s.rung,
@@ -176,11 +255,11 @@ function run(policy, offset, secs, mode) {
     firstHit: imp.length ? +(imp[0].t - t0).toFixed(1) : null, points: Math.round(points), lost: Math.round(imp.reduce((a, e) => a + e.lost, 0)),
     zones: tally('zone'), carStates: tally('carState'), kinds: tally('kind'), dashes: n('lunge').length,
     above: imp.filter((e) => e.above).length, heightHid: imp.filter((e) => e.above && e.sight >= s.P['duel.lessonClipSeconds'] - 1e-9).length, // D113: hits from above; of those, in sight past cover for the whole clip
-    sights: imp.filter((e) => e.above).map((e) => e.sight),
+    sights: imp.filter((e) => e.above).map((e) => e.sight), coverHits: imp.filter((e) => e.cover).length, // row 687: hits where cover hid the dummy
     standstillTouches: n('touch').filter((e) => e.standstill).length, tries: policy === 'charge' ? tries : null,
     lesson: lessonAt ? { hitAt: +(lessonAt.t - t0).toFixed(1), zone: lessonAt.zone, learnedAt: learned ? +(learned.t - t0).toFixed(1) : null } : null,
     afterLesson: after ? { hits: after.length, hitsPerMin: +(after.length / Math.max(1e-9, (s.t - learned.t) / 60)).toFixed(2), lost: Math.round(after.reduce((a, e) => a + e.lost, 0)) } : null,
-    firstBrakeAt: firstBrake ? +(firstBrake.t - t0).toFixed(1) : null, firstSideAt: firstSide ? +(firstSide.t - t0).toFixed(1) : null,
+    firstBrakeAt: firstBrake ? +(firstBrake.t - t0).toFixed(1) : null, firstSideAt: firstSide ? +(firstSide.t - t0).toFixed(1) : null, firstCoverAt: firstCover ? +(firstCover.t - t0).toFixed(1) : null,
     dashAt: gift ? +(gift.t - t0).toFixed(1) : null, parts: n('gift').map((e) => ({ node: e.node, t: +(e.t - t0).toFixed(1) })),
     behaviours: commits, learnEvents: n('learn-standoff').length + imp.filter((e) => e.learned != null).length + n('lesson-due').length,
     cars: { appearances: seen.size, maxOnRoad: maxOn, stalls20s: stall, blocked20s: blockedStall, honks: n('honk').length, minStopGap: Number.isFinite(minStopGap) ? Math.round(minStopGap) : null, minSideGap: Number.isFinite(minSideGap) ? Math.round(minSideGap) : null, reach },
@@ -189,11 +268,14 @@ function run(policy, offset, secs, mode) {
 
 const out = { build: 'prototypes/p10/' + ST.page, stage: o.stage, level: 'junction', secs: o.secs, esc: o.esc, offsets: o.offsets, p10: ST.p10, runs: [], escalation: [] };
 const modes = FLAGS['duel.topRung'] > (FLAGS['duel.startRung'] || 0) ? ['lesson', 'trained'] : ['lesson'];
-for (const mode of modes) for (const p of Object.keys(POLICIES).filter((q) => !POLICIES[q].from || +o.stage >= POLICIES[q].from)) for (const off of o.offsets) {
+const want = (p) => !o.only || o.only.includes(p);
+if (o.set) out.set = o.set;
+for (const mode of modes) for (const p of Object.keys(POLICIES).filter((q) => (!POLICIES[q].from || +o.stage >= POLICIES[q].from) && want(q))) for (const off of o.offsets) {
   const r = run(p, off, o.secs, mode); out.runs.push(r);
   console.log(`${mode.padEnd(7)} ${p.padEnd(10)} +${String(off).padEnd(3)} hits ${r.hits} (${r.hitsPerMin}/min) wo ${r.writeOffs} lesson ${r.lesson ? r.lesson.hitAt : '-'} after ${r.afterLesson ? r.afterLesson.hits : '-'} part ${r.parts.map((q) => q.node + '@' + q.t).join(',')} stills ${r.standstillTouches} tries ${r.tries} stalls ${r.cars.stalls20s}/${r.cars.blocked20s} gap ${r.cars.minStopGap}`);
 }
-for (const p of FLAGS['duel.topRung'] >= 3 ? ['plinth', 'jump', 'dashjump', 'gap', 'kerb'] : FLAGS['duel.topRung'] >= 2 ? ['kerb', 'flankOpen', 'walkin', 'plinth', 'gap', 'corner'] : ['stand', 'charge', 'walkin', 'aim']) {
+for (const p of FLAGS['duel.topRung'] >= 4 ? ['gap', 'jump', 'conebait', 'lurk'] : FLAGS['duel.topRung'] >= 3 ? ['plinth', 'jump', 'dashjump', 'gap', 'kerb'] : FLAGS['duel.topRung'] >= 2 ? ['kerb', 'flankOpen', 'walkin', 'plinth', 'gap', 'corner'] : ['stand', 'charge', 'walkin', 'aim']) {
+  if (!want(p)) continue;
   const r = run(p, 0, o.esc, 'lesson'), w = r.windows, f = (w[0] + w[1]) / 2, l = (w[w.length - 1] + w[w.length - 2]) / 2;
   r.decay = f ? +(l / f).toFixed(2) : null; out.escalation.push(r);
   console.log(`escalation ${p}: hits by minute ${w.join(' ')} decay ${r.decay}`);

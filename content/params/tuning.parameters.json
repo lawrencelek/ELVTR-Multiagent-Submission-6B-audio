@@ -13848,11 +13848,33 @@
    "purpose": "When Legs 1, the jump, arrives by drone on the test road. 0: never. 1: as the rung-2 lesson ends. 2: the first time the learning car swerves away from the dummy (the tool where the problem is). 3: fitted from the start. 10.3 sets 2"
   },
   {
+   "id": "duel.conesArrives",
+   "group": "Prototype P10",
+   "owner": "Design",
+   "label": "Cones arrive",
+   "description": "When Hands 1, the cones, arrive by drone on the test road. 0: never. 1: as the rung-4 lesson ends. 2: the first time the learning car stops for a dummy only its street cameras see, behind cover (the tool where the problem is). 3: fitted from the start. 10.5 sets 2",
+   "unit": "enum",
+   "type": "number",
+   "default": 0,
+   "status": "proposed",
+   "source": "GDD Edit 105 (Prototype 10.5): handover v2 §19; DECISIONS rows 687–692",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-run",
+   "validation": {
+    "min": 0,
+    "max": 3
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "When Hands 1, the cones, arrive by drone on the test road. 0: never. 1: as the rung-4 lesson ends. 2: the first time the learning car stops for a dummy only its street cameras see, behind cover (the tool where the problem is). 3: fitted from the start. 10.5 sets 2"
+  },
+  {
    "id": "duel.lessonClipSeconds",
    "group": "Prototype P10",
    "owner": "Design",
    "label": "Lesson clip",
-   "description": "Beat 1 of a lesson: the seconds before the hit, replayed as the car's training clip. The sim waits meanwhile",
+   "description": "Beat 1 of a lesson: the seconds before the hit, replayed as the car's training clip. The sim waits meanwhile. Also what the clip must show (rows 685, 687): rung 3 learns from a dummy in sight past cover for all of it; rung 4, from one that came out of cover within it",
    "unit": "s",
    "type": "number",
    "default": 3,
@@ -13867,7 +13889,7 @@
    },
    "integrationStatus": "prototype-p10",
    "boundaryStatus": "proposed-adapter-contract-not-implemented",
-   "purpose": "Beat 1 of a lesson: the seconds before the hit, replayed as the car's training clip. The sim waits meanwhile"
+   "purpose": "Beat 1 of a lesson: the seconds before the hit, replayed as the car's training clip. The sim waits meanwhile. Also what the clip must show (rows 685, 687): rung 3 learns from a dummy in sight past cover for all of it; rung 4, from one that came out of cover within it"
   },
   {
    "id": "duel.lessonHoldSeconds",

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Prototype 10 build (GDD Edits 101–102): the Monument test road, one page per test.
+"""Prototype 10 build (GDD Edits 101–105): the Monument test road, one page per test.
 
     python3 prototypes/p10/build.py          # writes sim_flags.json and every page not frozen
 
@@ -64,13 +64,20 @@ T104 = dict(T103, **{
     'duel.startRung': 2, 'duel.topRung': 3,  # one lesson: rung 2 to rung 3 (row 679)
     'duel.jumpArrives': 3,                   # Legs 1 fitted from the start: 10.3's part
 })
+# Prototype 10.5: from rung 3, a hit out of cover teaches rung 4, the street cameras: it sees behind cover. Hands 1, the
+# cones, arrive at its first stop for a dummy only its cameras see
+T105 = dict(T104, **{
+    'duel.startRung': 3, 'duel.topRung': 4,  # one lesson: rung 3 to rung 4 (row 687)
+    'duel.conesArrives': 2,                  # Hands 1 by drone at the car's first stop for a dummy behind cover (row 687)
+})
 STAGES = {
     '10.1': {'title': 'THE TEST ROAD', 'page': 'dummies_p10.html', 'frozen': '82ab5e55d243ee500d6dfcaa60af74e6', 'edit': 101, 'values': T101},
     '10.2': {'title': 'THE FIRST LESSON', 'page': 'dummies_p10_2.html', 'frozen': '9dd14c5877128390fbad2595e86edce7', 'edit': 102, 'values': T102},
     '10.3': {'title': 'THE SIDE SENSORS', 'page': 'dummies_p10_3.html', 'frozen': '5aed8e43a39631596233903de95ca5d7', 'edit': 103, 'values': T103},
     '10.4': {'title': 'THE ROOF LIDAR', 'page': 'dummies_p10_4.html', 'frozen': 'b12b48d8dee90294829366f07ef7d1b6', 'edit': 104, 'values': T104},
+    '10.5': {'title': 'THE STREET CAMERAS', 'page': 'dummies_p10_5.html', 'frozen': None, 'edit': 105, 'values': T105},
 }
-CURRENT = '10.4'
+CURRENT = '10.5'
 
 out = {'registry': reg['registryVersion'], 'current': CURRENT, 'stages': {}}
 for sid, st in STAGES.items():
