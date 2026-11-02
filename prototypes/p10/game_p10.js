@@ -2,7 +2,7 @@
 // Placeholder art by design (Nintendo check, row 655: mechanic before art). It draws the zones that act on the car (D103):
 // the forward beam and the driver's field. 10.2 adds the lesson (handover v2 §9.1): the hit replayed as the car's training
 // clip, the sensor fitted, the car's return. No goal text.
-// 10.3 adds rung 2's field, its notice meter, the jump and the plinth's raised edge.
+// 10.3 adds rung 2's field, its notice meter, the jump and the plinth's raised edge. 10.4: rung 3's roof lidar.
 // Keys: arrows or WASD move; Space or J dash, K or Shift jump (once fitted); Z zones; P pause; R restart; L saves this
 // session's log (JSON). Touch: drag on the left half to move; tap the right half's lower part to dash, its upper part to jump.
 (function () {
@@ -147,6 +147,11 @@
     rect(c.L / 2 - 16, -c.W / 2 + 3, 8, c.W - 6, C.glass);
     ctx.fillStyle = '#f4f8fa'; ctx.beginPath(); ctx.arc(-2, 0, 5, 0, TAU); ctx.fill();
     if (rung >= 1) { rect(c.L / 2 - 20, -3, 6, 6, C.joint); ctx.fillStyle = C.cam; ctx.beginPath(); ctx.arc(c.L / 2 - 15, 0, 1.6, 0, TAU); ctx.fill(); }
+    if (rung >= 3) { // the roof lidar: a puck on the roof, its sweep turning
+      ctx.fillStyle = C.joint; ctx.beginPath(); ctx.arc(-2, 0, 8, 0, TAU); ctx.fill();
+      ctx.fillStyle = '#f4f8fa'; ctx.beginPath(); ctx.arc(-2, 0, 3.5, 0, TAU); ctx.fill(); // the learning car's dome (D89), on the puck
+      const a = (s ? s.t : 0) * 6; ctx.strokeStyle = C.cam; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(-2 + Math.cos(a) * 3.5, Math.sin(a) * 3.5); ctx.lineTo(-2 + Math.cos(a) * 8, Math.sin(a) * 8); ctx.stroke();
+    }
     if (rung >= 2) for (const sg of [-1, 1]) { rect(-5, sg * c.W / 2 - 3, 8, 6, C.joint); ctx.fillStyle = C.cam; ctx.beginPath(); ctx.arc(-1, sg * (c.W / 2 + 1), 1.6, 0, TAU); ctx.fill(); }
   }
   function drawCar(c) {
@@ -215,10 +220,11 @@
     const k = 4, car = { L: s.P['vehicles.sedan.length'], W: s.P['vehicles.sedan.width'], red: true }, cx = 300, cy = 330;
     const reach = Math.max(0, (u - 0.45) / 0.55), to = info ? info.rung : 1, from = to - 1;
     if (from >= 1 || (to === 1 && reach > 0)) { ctx.save(); ctx.translate(cx + car.L / 2 * k, cy); rect(0, -(car.W / 2 + 4) * k, (to === 1 ? reach : 1) * (FW - cx - car.L / 2 * k), (car.W + 8) * k, C.beam); ctx.restore(); }
-    if (to === 2 && reach > 0) for (const sg of [-1, 1]) rect(cx - car.L / 2 * k, sg > 0 ? cy + (car.W / 2 + 4) * k : cy - (car.W / 2 + 4) * k - reach * 150, FW - cx + car.L / 2 * k, reach * 150, C.field);
+    if (from >= 2 || (to === 2 && reach > 0)) for (const sg of [-1, 1]) { const h = (to === 2 ? reach : 1) * 150; rect(cx - car.L / 2 * k, sg > 0 ? cy + (car.W / 2 + 4) * k : cy - (car.W / 2 + 4) * k - h, FW - cx + car.L / 2 * k, h, C.field); }
+    if (to === 3 && reach > 0) { ctx.strokeStyle = C.cam; ctx.lineWidth = 2; for (let i = 1; i <= 3; i++) { ctx.globalAlpha = Math.max(0, 1 - i / 3.5) * reach; ctx.beginPath(); ctx.arc(cx - 2 * k, cy, reach * 60 * i, 0, TAU); ctx.stroke(); } ctx.globalAlpha = 1; } // the lidar's sweep
     ctx.save(); ctx.translate(cx, cy); ctx.scale(k, k); carShape(car, u >= 0.45 ? to : from); ctx.restore();
-    const px = to === 2 ? cx - 1 * k : cx + (car.L / 2 - 17) * k; // where the new sensor goes: the nose (rung 1), the flanks (rung 2)
-    if (u < 0.45) drawDrone(px, cy - 160 + 160 * (u / 0.45), to === 2 ? 'S2' : true);
+    const px = to >= 2 ? cx - (to === 3 ? 2 : 1) * k : cx + (car.L / 2 - 17) * k; // where the new sensor goes: the nose (1), the flanks (2), the roof (3)
+    if (u < 0.45) drawDrone(px, cy - 160 + 160 * (u / 0.45), to === 3 ? 'L3' : to === 2 ? 'S2' : true);
     else if (u < 0.7) drawDrone(px, cy - 160 * ((u - 0.45) / 0.25), false);
     text('SENSOR FITTED · ' + (info && info.sensor ? info.sensor : ''), 40, 90, 22, C.text);
     text((clip ? clip.model : s.models.sedan.id) + ' · RUNG ' + (info ? info.rung : ''), 40, 120, 14, C.dim);

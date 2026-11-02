@@ -3,6 +3,7 @@
 // only car on the road, and it returns soon after it leaves (duel.redReturnSeconds).
 // 10.1: rung 0, the red car learns nothing. 10.2: one lesson. A hit on its nose teaches rung 1, the forward camera.
 // 10.3: from rung 1, a hit from the side teaches rung 2, the side sensors. Battery 1 from the start; Legs 1, the jump, arrives.
+// 10.4: from rung 2, a hit from above teaches rung 3, the roof lidar: it sees height. Both parts from the start.
 // Extends the base Sim from prototypes/p6/sim.js. Shared files are untouched, so Prototype 9's build keeps its md5.
 // Runs in the browser (window.DUMMIES) and in node (require), so the probes run headless without a page.
 (function (root) {
@@ -66,12 +67,16 @@
   // envelope from it as from a dummy ahead: it stops short, and waits while the dummy stays in its field. It no longer
   // passes a dummy in its lane. Every hit at rung 1 came from the side, so any hit but a bump on its tail teaches it.
   // Its sensors see the ground: a dummy in the air, or up on the plinth, is unseen until rung 3. So is one behind a static.
+  // Rung 3, the roof lidar (v1 PT4 tier 3; handover v2 §12: "see height"; v1 §14.2: lidar and the occupancy network): its
+  // beam and field now see a dummy in the air or up on the plinth. It answers it as it answers one on the ground. Only a
+  // hit from above teaches it (high): a jump, or a dash from the plinth. A hit from cover teaches nothing it can use.
   // Each rung brings the dummy a part by drone (part, partKey): when that value is 1, as the lesson ends; 2, the first
   // time the car uses the new rung against the dummy (trigger); 3, fitted from the start.
   const RUNGS = [
     { rung: 0, name: 'Prototype', sensor: null, learnsFrom: [] },
     { rung: 1, name: 'Forward camera', sensor: 'FORWARD CAMERA', learnsFrom: ['front', 'frontDiagonal'], part: 'battery1', partKey: 'duel.dashArrives', trigger: 'first-brake' },
     { rung: 2, name: 'Side sensors', sensor: 'SIDE SENSORS', learnsFrom: ['front', 'frontDiagonal', 'side', 'rearDiagonal'], part: 'legs1', partKey: 'duel.jumpArrives', trigger: 'first-side' },
+    { rung: 3, name: 'Roof lidar', sensor: 'ROOF LIDAR', learnsFrom: ['front', 'frontDiagonal', 'side', 'rearDiagonal'], high: true },
   ];
 
   // ---------- The test road: one red sedan, alone on the road
@@ -136,6 +141,7 @@
     }
     assessBody(c) {
       if (!this.testRoad) return super.assessBody(c);
+      if (c.spent) return null; // the car that hit you drives off to its lesson: it no longer stops for you (row 681)
       if (this.rung < 3 && (this.airborne() || this.body.raised)) return null; // it sees the ground: not the air, not the plinth's top
       const P = this.P, keep = P['proto.driver.cautionZone'];
       P['proto.driver.cautionZone'] = this.fieldFor();
@@ -222,6 +228,16 @@
     // steps down. Standing on it, the dummy is above the ground the sensors watch.
     plinth() { return this.level.statics.find((st) => st.plinth) || null; }
     onPlinth(x, y) { const st = this.plinth(); return !!st && x >= st.x && x <= st.x + st.w && y >= st.y && y <= st.y + st.h; }
+    // A dummy standing on the plinth stands above it: the plinth does not hide it from a car that sees height (rung 3).
+    occluded(self, x0, y0, x1, y1) {
+      const b = this.body;
+      if (!this.testRoad || !b || !b.raised || x1 !== b.x || y1 !== b.y) return super.occluded(self, x0, y0, x1, y1);
+      const keep = this.level.statics, st = this.plinth(); this.level.statics = keep.filter((q) => q !== st);
+      try { return super.occluded(self, x0, y0, x1, y1); } finally { this.level.statics = keep; }
+    }
+    // A hit from above: a jump's strike, or a dash launched from the plinth (or a jump out of one).
+    fromAbove(e) { const b = this.body; return e.kind === 'jump' || !!(b && ((b.lunge && b.lunge.fromRaised) || (b.jump && b.jump.fromRaised))); }
+    startLunge(facing0, k) { const b = this.body, up = !!b.raised; super.startLunge(facing0, k); if (this.testRoad && b.lunge) b.lunge.fromRaised = up; }
     tryJump() { const b = this.body, up = !!b.raised; super.tryJump(); if (this.testRoad && b.mode === 'jump' && b.jump) { b.jump.fromRaised = up; b.raised = false; } }
     landJump() { const b = this.body; super.landJump(); if (this.testRoad) { b.raised = this.onPlinth(b.x, b.y); if (b.raised) this.emit('raised', { x: +b.x.toFixed(1), y: +b.y.toFixed(1) }); } }
     collideBody(contacts, k) {
@@ -278,6 +294,7 @@
     learnFrom(e) {
       const c = this.carById(e.car), next = RUNGS[this.rung + 1];
       if (!c || !c.red || this.lesson || !next || this.rung >= Math.round(this.P['duel.topRung'] || 0) || !next.learnsFrom.includes(e.zone)) return;
+      if (next.high && !this.fromAbove(e)) return; // rung 3 learns only from a hit from above
       this.lesson = { state: 'due', from: this.rung, to: next.rung, name: next.name, sensor: next.sensor, model: c.model, car: c.id, zone: e.zone, kind: e.kind, hitT: e.t, lost: e.lost };
       this.emit('lesson-due', { model: c.model, from: this.rung, to: next.rung, zone: e.zone, car: c.id });
     }

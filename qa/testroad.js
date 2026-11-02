@@ -191,7 +191,7 @@ for (const mode of modes) for (const p of Object.keys(POLICIES).filter((q) => !P
   const r = run(p, off, o.secs, mode); out.runs.push(r);
   console.log(`${mode.padEnd(7)} ${p.padEnd(10)} +${String(off).padEnd(3)} hits ${r.hits} (${r.hitsPerMin}/min) wo ${r.writeOffs} lesson ${r.lesson ? r.lesson.hitAt : '-'} after ${r.afterLesson ? r.afterLesson.hits : '-'} part ${r.parts.map((q) => q.node + '@' + q.t).join(',')} stills ${r.standstillTouches} tries ${r.tries} stalls ${r.cars.stalls20s}/${r.cars.blocked20s} gap ${r.cars.minStopGap}`);
 }
-for (const p of FLAGS['duel.topRung'] >= 2 ? ['kerb', 'flankOpen', 'walkin', 'plinth', 'gap', 'corner'] : ['stand', 'charge', 'walkin', 'aim']) {
+for (const p of FLAGS['duel.topRung'] >= 3 ? ['plinth', 'jump', 'dashjump', 'gap', 'kerb'] : FLAGS['duel.topRung'] >= 2 ? ['kerb', 'flankOpen', 'walkin', 'plinth', 'gap', 'corner'] : ['stand', 'charge', 'walkin', 'aim']) {
   const r = run(p, 0, o.esc, 'lesson'), w = r.windows, f = (w[0] + w[1]) / 2, l = (w[w.length - 1] + w[w.length - 2]) / 2;
   r.decay = f ? +(l / f).toFixed(2) : null; out.escalation.push(r);
   console.log(`escalation ${p}: hits by minute ${w.join(' ')} decay ${r.decay}`);

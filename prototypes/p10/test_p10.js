@@ -6,7 +6,7 @@ const fs = require('fs'), path = require('path'), cp = require('child_process'),
 const ROOT = path.resolve(__dirname, '..', '..');
 const X = require(path.join(ROOT, 'prototypes/p6/sim.js'));
 const { TestRoadSim, junctionLevel } = require(path.join(__dirname, 'testroad.js'));
-const SF = JSON.parse(fs.readFileSync(path.join(__dirname, 'sim_flags.json'), 'utf8')), F1 = SF.stages['10.1'].flags, F2 = SF.stages['10.2'].flags, F3 = SF.stages['10.3'].flags;
+const SF = JSON.parse(fs.readFileSync(path.join(__dirname, 'sim_flags.json'), 'utf8')), F1 = SF.stages['10.1'].flags, F2 = SF.stages['10.2'].flags, F3 = SF.stages['10.3'].flags, F4 = SF.stages['10.4'].flags;
 const results = [];
 const check = (name, fn) => { try { const r = fn(); results.push([r.ok, name, r.detail]); } catch (e) { results.push([false, name, String(e.stack || e).slice(0, 300)]); } };
 const md5 = (p) => crypto.createHash('md5').update(fs.readFileSync(p)).digest('hex');
@@ -170,6 +170,35 @@ check('10.3: one lesson only (rung 1 to 2); the openings hold for 300 s', () => 
   return { ok: lessons === 1 && s.rung === 2, detail: `lessons ${lessons}, rung ${s.rung}` };
 });
 
+// ---------- 10.4
+const climb = (s) => { const B = s.body; if (B.mode === 'lunge') return { bPress: B.lunge && B.lunge.t > 0.03 }; if (B.mode === 'jump') return {}; if (B.y > 75 && Math.abs(B.x - 360) > 10) return to(B, 360, B.y > 260 ? B.y : 70);
+  if (Math.hypot(275 - B.x, 70 - B.y) > 16) return to(B, 275, 70); return { mx: 0, my: 0.12, aPress: Math.abs(Math.atan2(Math.sin(Math.PI / 2 - B.facing), Math.cos(Math.PI / 2 - B.facing))) < 8 * X.DEG }; };
+check('10.4: starts at rung 2 with the dash and the jump; a dash from the plinth teaches rung 3; a dash through the barrier gap does not', () => {
+  const s = sim(F4); const start = { rung: s.rung, dash: s.dashFitted(), jump: s.has('jump') };
+  drive(s, 240, (q) => { if (q.rung >= 3 || q.lesson) return {}; const b = q.body; if (!b.alive) return {}; if (!b.raised) return climb(q); // as qa/testroad.js's plinth bot
+    const c = q.onRoad().find((x) => !x.spent && x.path.road === 'A' && x.x < b.x + 30); if (!c) return to(b, 275, 226);
+    const tx = c.x + (c.vx || 0) * 0.1, ty = c.y, d = Math.hypot(tx - b.x, ty - b.y), ang = Math.atan2(ty - b.y, tx - b.x), off = Math.abs(Math.atan2(Math.sin(ang - b.facing), Math.cos(ang - b.facing)));
+    if (d > 160) return Object.assign(to(b, 275, 226), Math.hypot(275 - b.x, 226 - b.y) < 7 ? { mx: Math.cos(ang) * 0.05, my: Math.sin(ang) * 0.05 } : {});
+    return { mx: Math.cos(ang) * 0.35, my: Math.sin(ang) * 0.35, aPress: q.dashFitted() && b.mode !== 'lunge' && b.mode !== 'recover' && off < 15 * X.DEG }; });
+  const due = s.events.find((e) => e.type === 'lesson-due');
+  const g = sim(F4); drive(g, 180, (q) => { const b = q.body; if (!b.alive) return {}; const c = q.onRoad().find((x) => !x.spent && x.path.road === 'A' && x.x + (x.vx || 0) * 0.15 > 140 && x.x + (x.vx || 0) * 0.15 < 236); if (!c) return to(b, 188, 414);
+    const ang = Math.atan2(c.y - b.y, c.x + (c.vx || 0) * 0.15 - b.x); return { mx: Math.cos(ang) * 0.35, my: Math.sin(ang) * 0.35, aPress: q.dashFitted() && Math.abs(Math.atan2(Math.sin(ang - b.facing), Math.cos(ang - b.facing))) < 15 * X.DEG && b.mode !== 'lunge' && b.mode !== 'recover' }; });
+  return { ok: start.rung === 2 && start.dash && start.jump && !!due && due.to === 3 && s.rung === 3 && hits(g).length > 0 && g.rung === 2 && !g.events.some((e) => e.type === 'lesson-due'),
+    detail: `start: rung ${start.rung}, dash ${start.dash}, jump ${start.jump}; from the plinth: lesson ${due ? 'at ' + due.t.toFixed(1) + ' s (' + due.zone + ')' : 'none'}, rung ${s.rung}; through the gap: ${hits(g).length} hits, rung ${g.rung}` };
+});
+check('10.4 rung 3: it sees the dummy up on the plinth and in the air; it stops short of the plinth and waits', () => {
+  const s = sim(F4, { 'duel.startRung': 3 }, { owned: { battery1: true, legs1: true } }); let raisedAt = null;
+  for (let i = 0; i < 40 * 60 && raisedAt == null; i++) { s.step(climb(s)); if (s.body.raised) raisedAt = s.t; }
+  let seenUp = 0, stopped = 0, gap = Infinity; const before = new Set(s.cars.map((c) => c.id)); // cars already near when it climbed may notice it late
+  for (let i = 0; i < 90 * 60; i++) { s.step(s.body.raised ? to(s.body, 275, 226) : {}); for (const c of s.onRoad()) { if (c.noticed && s.body.raised) seenUp++; if (c.v < 1 && c.noticed) { stopped++; if (!before.has(c.id)) gap = Math.min(gap, Math.hypot(s.body.x - (c.x + Math.cos(c.h) * c.L / 2), s.body.y - (c.y + Math.sin(c.h) * c.L / 2))); } } }
+  const a = sim(F4, { 'duel.startRung': 3 }, { owned: { battery1: true, legs1: true } }); let airSeen = 0, airTicks = 0;
+  for (let i = 0; i < 30 * 60; i++) { const c = a.onRoad().find((x) => x.path.road === 'A' && x.lane === 1); const b = a.body; let cmd = to(b, 640, 292); if (c && c.x > 0 && Math.abs(b.y - 292) < 8) cmd = { mx: -1, my: 0, bPress: Math.hypot(b.vx, b.vy) > 90 && b.mode !== 'jump' };
+    a.step(cmd); if (b.mode === 'jump') { airTicks++; if (a.onRoad().some((x) => x.hz)) airSeen++; } }
+  const u = sim(F4, { 'duel.startRung': 3 }, { owned: { battery1: true, legs1: true } }); Object.assign(u.body, { x: 275, y: 226, raised: true }); let ugap = Infinity; // up before any car comes
+  for (let i = 0; i < 60 * 60; i++) { u.step({}); for (const c of u.onRoad()) if (c.v < 1 && c.noticed) ugap = Math.min(ugap, Math.hypot(u.body.x - (c.x + Math.cos(c.h) * c.L / 2), u.body.y - (c.y + Math.sin(c.h) * c.L / 2))); }
+  return { ok: raisedAt != null && seenUp > 0 && stopped > 0 && gap >= 177 && Number.isFinite(ugap) && ugap >= 177 && hits(s).length + hits(u).length === 0 && airTicks > 0 && airSeen > 0, detail: `climbed at ${raisedAt && raisedAt.toFixed(1)} s; noticed up there on ${seenUp} car-ticks; stopped ${(stopped / 60).toFixed(0)} car-seconds; up before the car came: it stopped ${ugap.toFixed(0)} away (dash reach 177); ${hits(s).length + hits(u).length} hits; in the air ${airTicks} ticks, seen on ${airSeen}` };
+});
+
 // ---------- registry and frozen builds
 check('Prototype 10 values are registered (registry first)', () => {
   const reg = new Set(JSON.parse(fs.readFileSync(path.join(ROOT, 'content/params/tuning.parameters.json'), 'utf8')).entries.map((e) => e.id));
@@ -181,13 +210,13 @@ check('Prototype 10 values are registered (registry first)', () => {
   const missing = [...new Set(ids.concat(used, stage))].filter((i) => !reg.has(i));
   return { ok: missing.length === 0, detail: missing.length ? 'missing ' + missing.join(', ') : `the 29 sim-only IDs, ${new Set(used).size} IDs the test road reads, and every stage value are registered` };
 });
-check('Shared code untouched; frozen builds hold (Prototype 9, 8.4, 10.1, 10.2)', () => {
+check('Shared code untouched; frozen builds hold (Prototype 9, 8.4, 10.1, 10.2, 10.3)', () => {
   const diff = cp.execSync('git diff --name-only HEAD -- prototypes/p6 prototypes/p7 prototypes/p8 prototypes/jump prototypes/controls', { cwd: ROOT }).toString().trim();
   const p9 = path.join(ROOT, 'prototypes/p9/dummies_p9.html'), keep = fs.readFileSync(p9);
   cp.execSync('python3 prototypes/p9/build.py', { cwd: ROOT, stdio: 'ignore' });
   const rebuilt = md5(p9); fs.writeFileSync(p9, keep);
-  const p84 = md5(path.join(ROOT, 'prototypes/p8/dummies_p8_4.html')), p101 = md5(path.join(__dirname, 'dummies_p10.html')), p102 = md5(path.join(__dirname, 'dummies_p10_2.html'));
-  return { ok: !diff && rebuilt === 'be163e7d014344e062965986b3da5786' && p84 === '9f5549201d88891f9f0b22c461602909' && p101 === '82ab5e55d243ee500d6dfcaa60af74e6' && p102 === '9dd14c5877128390fbad2595e86edce7', detail: `shared diff: ${diff || 'none'}; Prototype 9 rebuilt ${rebuilt}; 8.4 ${p84}; 10.1 page ${p101}; 10.2 page ${p102}` };
+  const p84 = md5(path.join(ROOT, 'prototypes/p8/dummies_p8_4.html')), p101 = md5(path.join(__dirname, 'dummies_p10.html')), p102 = md5(path.join(__dirname, 'dummies_p10_2.html')), p103 = md5(path.join(__dirname, 'dummies_p10_3.html'));
+  return { ok: !diff && rebuilt === 'be163e7d014344e062965986b3da5786' && p84 === '9f5549201d88891f9f0b22c461602909' && p101 === '82ab5e55d243ee500d6dfcaa60af74e6' && p102 === '9dd14c5877128390fbad2595e86edce7' && p103 === '5aed8e43a39631596233903de95ca5d7', detail: `shared diff: ${diff || 'none'}; Prototype 9 rebuilt ${rebuilt}; 8.4 ${p84}; 10.1 ${p101}; 10.2 ${p102}; 10.3 ${p103}` };
 });
 
 if (process.argv.includes('--page')) {
@@ -196,7 +225,7 @@ if (process.argv.includes('--page')) {
     const srv = http.createServer((q, r) => { const p = path.join(ROOT, decodeURIComponent(q.url.split('?')[0])); if (!fs.existsSync(p) || fs.statSync(p).isDirectory()) { r.writeHead(404); return r.end(); } r.writeHead(200); fs.createReadStream(p).pipe(r); });
     srv.listen(0, async () => {
       const { chromium } = require('playwright'); const br = await chromium.launch();
-      for (const page of ['dummies_p10.html', 'dummies_p10_2.html', 'dummies_p10_3.html']) {
+      for (const page of ['dummies_p10.html', 'dummies_p10_2.html', 'dummies_p10_3.html', 'dummies_p10_4.html']) {
         const pg = await br.newPage(); const errs = [];
         pg.on('pageerror', (e) => errs.push(e.message));
         await pg.goto(`http://127.0.0.1:${srv.address().port}/prototypes/p10/${page}`); await pg.waitForTimeout(600);
@@ -226,6 +255,22 @@ if (process.argv.includes('--page')) {
           const jumped = await pg.evaluate(() => window.__p10.sim.events.some((e) => e.type === 'jump')); await pg.keyboard.up('ArrowDown');
           const end = await pg.evaluate(() => ({ rung: window.__p10.sim.rung, jump: window.__p10.sim.has('jump') }));
           results.push([fit && end.rung === 2 && end.jump && jumped && errs.length === 0, '10.3 page: the side-sensor lesson shows; Legs 1 arrives; K jumps', `fitting ${fit}, rung ${end.rung}, Legs 1 ${end.jump}, jumped ${jumped}, errors ${errs.length}`]);
+        }
+        if (page === 'dummies_p10_4.html') { // rung 2 → 3: put the dummy on the plinth; dash down at a road A car; the lidar fitted
+          await pg.evaluate(() => { // the probe's plinth bot, driving the page's sim: climb with a dash-jump, dash down at a road A car
+            const s = window.__p10.sim, step = s.step.bind(s), D = Math.PI / 180, wr = (a) => Math.atan2(Math.sin(a), Math.cos(a));
+            const to = (b, x, y) => { const dx = x - b.x, dy = y - b.y, d = Math.hypot(dx, dy); return d > 6 ? { mx: dx / d, my: dy / d } : {}; };
+            const bot = () => { const b = s.body; if (!b.alive || s.lesson || s.rung !== 2) return null; const can = s.dashFitted() && b.mode !== 'lunge' && b.mode !== 'recover';
+              if (!b.raised) { if (b.mode === 'lunge') return { bPress: b.lunge && b.lunge.t > 0.03 }; if (b.mode === 'jump') return {}; if (b.y > 75 && Math.abs(b.x - 360) > 10) return to(b, 360, b.y > 260 ? b.y : 70);
+                if (Math.hypot(275 - b.x, 70 - b.y) > 16) return to(b, 275, 70); return { mx: 0, my: 0.12, aPress: can && Math.abs(wr(Math.PI / 2 - b.facing)) < 8 * D }; }
+              const c = s.onRoad().find((q) => !q.spent && q.path.road === 'A' && q.x < b.x + 30); if (!c) return to(b, 275, 226);
+              const tx = c.x + (c.vx || 0) * 0.1, ty = c.y, d = Math.hypot(tx - b.x, ty - b.y), ang = Math.atan2(ty - b.y, tx - b.x);
+              if (d > 160) return Object.assign(to(b, 275, 226), Math.hypot(275 - b.x, 226 - b.y) < 7 ? { mx: Math.cos(ang) * 0.05, my: Math.sin(ang) * 0.05 } : {});
+              return { mx: Math.cos(ang) * 0.35, my: Math.sin(ang) * 0.35, aPress: can && Math.abs(wr(ang - b.facing)) < 15 * D }; };
+            s.step = (cmd) => { const c = bot(); if (s.lesson && !window.__moved && s.body.alive) { window.__moved = 1; Object.assign(s.body, { x: 600, y: 520, vx: 0, vy: 0, raised: false }); } return step(c || cmd); };
+          });
+          let fit = false, rung = 2; for (let i = 0; i < 720; i++) { await pg.waitForTimeout(125); const q = await pg.evaluate(() => ({ ph: window.__p10.sim.phase, lt: window.__p10.lessonT, rung: window.__p10.sim.rung })); rung = q.rung; if (q.ph === 'lesson' && q.lt > F4['duel.lessonClipSeconds'] + F4['duel.lessonHoldSeconds'] + 0.2) fit = true; if (q.rung === 3 && q.ph === 'play') break; }
+          results.push([fit && rung === 3 && errs.length === 0, '10.4 page: a dash from the plinth teaches rung 3; the lidar is fitted', `fitting ${fit}, rung ${rung}, errors ${errs.length}`]);
         }
         await pg.close();
       }

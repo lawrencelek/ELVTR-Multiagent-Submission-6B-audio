@@ -16,6 +16,8 @@
 
 **Updated 2 November, 10.3 built:** §17. The side sensors play at `prototypes/p10/dummies_p10_3.html`; GDD Edit 103. Rung 2 closes the open flank; cover and the plinth stay open. 10.2's page is frozen; `index.html` lists one page per test for the playtest.
 
+**Updated 2 November, 10.4 built:** §18. The roof lidar plays at `prototypes/p10/dummies_p10_4.html`; GDD Edit 104. Rung 3 sees height: the plinth closes. Cover is the last opening. 10.3's page is frozen.
+
 ## 0 How to use this with v1
 
 - **v1** (`claude/DUMMIES_Handover_Vehicle_Intelligence.md`) still holds: constraints (§4), code survey (§5), tools (§8), repos (§9), run and test (§11), conventions (§12).
@@ -265,9 +267,15 @@ Recorded in `DECISIONS.md`. Replaces the rows v1 §3.2 proposed.
 | 676 | Its sensors see the ground: unseen in the air, on the plinth, behind statics. The plinth is a raised edge; jumps follow Edit 75 on the test road | tested (2 November) |
 | 677 | 10.3 measured: the open flank, the kerb, the late step-in and the corner score 0; cover 2.07 a minute; the plinth 2.68; the car waits for a dummy in the open | tested (2 November) |
 | 678 | 10.2's page frozen (md5 `9dd14c58…`); one page per test on `index.html`, 10.0 being Prototype 9; registry 647 entries | tested (2 November) |
+| 679 | Prototype 10.4 built: from rung 2, only a hit from above teaches rung 3, the roof lidar; both parts from the start; no new part (§18; GDD Edit 104) | tested (2 November) |
+| 680 | Rung 3 sees height: a dummy in the air or on the plinth; the plinth no longer hides a dummy standing on it | proposed |
+| 681 | A spent car (it has hit the dummy) no longer stops for it: it drives off to its lesson | tested (2 November) |
+| 682 | 10.4 measured: the plinth 0.07 a minute, decay 0; cover open: the gap 2.21, a jump from behind the barrier 2.70 | tested (2 November) |
+| 683 | Cover is the last opening; the next rung slows past what it cannot see (revises §14.2's rung 4, D104) | proposed |
+| 684 | 10.3's page frozen (md5 `5aed8e43…`); `index.html` lists 10.4 | tested (2 November) |
 
-- **Open:** D89 red hue; D90 white role; D91 fixed or adaptive ladder; D92 car contact; D93 flank damage; D94 venue; D95 law clauses; D96 boss families; D97 parts as keys; D98 lessons, not damage; D99 learning carries across Story levels; D100 10.1's target (overtaken by row 661: rung 1 is 10.2); D101 what "something new" means; D102 pass every driver value to traffic; D103 draw the side zone that acts; D104 the nine tests' rung order; D105 a sighted car's endless wait (in part resolved by row 670); D106 the standstill rule; D107 rung 1's envelope and beam; D108 when the dash arrives; D109 the return against the drive-in; D110 rung 2 waits for any dummy in its field; D111 cover open at rung 2; D112 the plinth needs a dash-jump.
-- **Next row 679. Next open decision D113.**
+- **Open:** D89 red hue; D90 white role; D91 fixed or adaptive ladder; D92 car contact; D93 flank damage; D94 venue; D95 law clauses; D96 boss families; D97 parts as keys; D98 lessons, not damage; D99 learning carries across Story levels; D100 10.1's target (overtaken by row 661: rung 1 is 10.2); D101 what "something new" means; D102 pass every driver value to traffic; D103 draw the side zone that acts; D104 the nine tests' rung order; D105 a sighted car's endless wait (in part resolved by row 670); D106 the standstill rule; D107 rung 1's envelope and beam; D108 when the dash arrives; D109 the return against the drive-in; D110 rung 2 waits for any dummy in its field; D111 cover open at rung 2; D112 the plinth needs a dash-jump; D113 a jump from cover teaches "see height".
+- **Next row 685. Next open decision D114.**
 
 ## 9 The crux and the ten tests (user-decided 1 November, row 653)
 
@@ -796,4 +804,49 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
 - **Human pass (H3):** does the player read the meter and the wait, find cover or the plinth unprompted, and use the jump?
 - **D110–D112:** the wait; cover open beside the plinth; the plinth needs a dash-jump.
 - **D105:** a dummy at a stopped car's bumper still holds it.
-- **Next:** 10.4, rung 3: see height. It closes the plinth and the jump; the blind corner is meant to stay open.
+- **Next:** 10.4, rung 3: see height. It closes the plinth and the jump; the blind corner is meant to stay open. Built: §18.
+
+## 18 Result: Prototype 10.4, the roof lidar (2 November, rows 679–684; GDD Edit 104)
+
+- **Build:** `prototypes/p10/dummies_p10_4.html`. 10.3's page is frozen.
+- **The one change:** rung 3, taught by one lesson. The car starts at rung 2; the dummy starts with the dash and the jump.
+- **Checks:** `node prototypes/p10/test_p10.js --page` 28/28. Probes `qa/baseline/p10_4.md` 12/12. Prototype 9 51/51; frozen md5s hold; sound freeze holds.
+
+### 18.1 What changed
+
+| | Before (rung 2) | After (rung 3) |
+|---|---|---|
+| A dummy on the plinth | Unseen: the plinth hid it, and its sensors saw only the ground | Seen: it stops short and waits |
+| A dummy in the air | Unseen | Seen |
+| What teaches it | Any hit but a tail bump | Only a hit from above: a jump's strike, or a dash off the plinth |
+| A spent car | Stopped for the dummy like any other | Drives off to its lesson (row 681) |
+
+- **Row 681 was found by the 10.4 page check.** A dummy in a spent car's field held it, so the lesson never began. It also made 10.4's first probe overstate the closure: the jump from cover looked closed at 0.2–0.4 a minute. With spent cars driving off, it lands 2.70 a minute.
+
+### 18.2 Measured (rung 3 alone; `trained` mode)
+
+| Way in | Hits a minute | Verdict |
+|---|---|---|
+| Down from the plinth | 0.07 (one hit in 15 minutes) | Closed |
+| The open kerb, the open flank, the late step-in, the corner, the lane | 0 | Closed |
+| Through the barrier's gap | 2.21 (52) | Open: cover |
+| A jump from behind the barrier | 2.70 (124) | Open: cover |
+
+- **Escalation (`lesson` mode, 10 minutes):** the plinth decays to 0 after the lesson; the gap holds at 0.6; the jump from behind the barrier holds at 1.2.
+
+### 18.3 The ladder from here (row 683; revises §14.2's rungs 4–6, D104)
+
+| Rung | It learns | Closes | Leaves open | Status |
+|---|---|---|---|---|
+| 4 | Slows past what it cannot see: a blind spot near its path may hide a dummy | Cover: the barrier and its gap | Items in the road: a cone forces a swerve | Proposed |
+| 5 | Reads road items: stops at a cone, never swerves | The cone diversion | The feint after it commits | As §14.2 |
+| 6 | Counters your habit | Your favourite opening | Any other | As §14.2 |
+
+- **§14.2's rung 4 was "creep at the junction" against the blind corner.** Rung 2's field already closed the corner, because the building hides too little.
+
+### 18.4 Open
+
+- **Human pass (H3):** does the player see that it now stops for the plinth, and turn to cover?
+- **D113:** a jump from behind cover counts as "from above" and teaches rung 3, though cover let it land.
+- **D110–D112** stand as built.
+- **Next:** 10.5, rung 4: slow past blind spots. It closes cover; Hands 1, the cones, arrive.

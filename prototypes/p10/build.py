@@ -9,7 +9,7 @@ build flags (window.DUMMIES_SIM in dummies_p9.html), every Prototype P10 registr
 Shared files are not touched. sim_flags.json holds every test's values for the headless probes (qa/testroad.js).
 
 A test's page freezes once its human pass may use it, and is never rewritten (md5 below): 10.1 (dummies_p10.html, built
-at 4b3d668) and 10.2 (dummies_p10_2.html, built at eab988b). Their values still live here, so the probes rerun them on
+at 4b3d668), 10.2 (dummies_p10_2.html, built at eab988b) and 10.3 (dummies_p10_3.html, built at c3b0177). Their values still live here, so the probes rerun them on
 today's code. 10.0 has no page: it measured Prototype 9 as built.
 """
 import hashlib, json, re, subprocess
@@ -59,12 +59,18 @@ T103 = dict(T102, **{
     'proto.driver.cautionZone': 180,         # rung 2's field either side of its path: Prototype 9's driver's field, now the zone that acts (row 674)
     'perception.sideNoticeSeconds': 0.6,     # strong front, weak edges: twice the front's perception.reactionDelay (row 674)
 })
+# Prototype 10.4: from rung 2, a hit from above teaches rung 3, the roof lidar: it sees height. No new part
+T104 = dict(T103, **{
+    'duel.startRung': 2, 'duel.topRung': 3,  # one lesson: rung 2 to rung 3 (row 679)
+    'duel.jumpArrives': 3,                   # Legs 1 fitted from the start: 10.3's part
+})
 STAGES = {
     '10.1': {'title': 'THE TEST ROAD', 'page': 'dummies_p10.html', 'frozen': '82ab5e55d243ee500d6dfcaa60af74e6', 'edit': 101, 'values': T101},
     '10.2': {'title': 'THE FIRST LESSON', 'page': 'dummies_p10_2.html', 'frozen': '9dd14c5877128390fbad2595e86edce7', 'edit': 102, 'values': T102},
-    '10.3': {'title': 'THE SIDE SENSORS', 'page': 'dummies_p10_3.html', 'frozen': None, 'edit': 103, 'values': T103},
+    '10.3': {'title': 'THE SIDE SENSORS', 'page': 'dummies_p10_3.html', 'frozen': '5aed8e43a39631596233903de95ca5d7', 'edit': 103, 'values': T103},
+    '10.4': {'title': 'THE ROOF LIDAR', 'page': 'dummies_p10_4.html', 'frozen': None, 'edit': 104, 'values': T104},
 }
-CURRENT = '10.3'
+CURRENT = '10.4'
 
 out = {'registry': reg['registryVersion'], 'current': CURRENT, 'stages': {}}
 for sid, st in STAGES.items():
