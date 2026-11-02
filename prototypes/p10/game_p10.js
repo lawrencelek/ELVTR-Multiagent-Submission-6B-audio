@@ -1,20 +1,29 @@
-// Prototype 10.1 (GDD Edit 101): the test road, greybox. One screen: the Monument junction, one red sedan, the dummy on foot.
-// Placeholder art by design (Nintendo check, row 655: mechanic before art). It draws the zones that act on the car
-// (D103): the forward beam and the driver's field. Keys: arrows or WASD move; Space or J dash (once fitted); Z zones;
-// P pause; R restart; L saves this session's log (JSON). Touch: drag on the left half to move, tap the right half to dash.
+// Prototype 10 (GDD Edits 101–102): the test road, greybox. One screen: the Monument junction, one red sedan, the dummy.
+// Placeholder art by design (Nintendo check, row 655: mechanic before art). It draws the zones that act on the car (D103):
+// the forward beam and the driver's field. 10.2 adds the lesson (handover v2 §9.1): the hit replayed as the car's training
+// clip, the sensor fitted, the car's return. No goal text.
+// Keys: arrows or WASD move; Space or J dash (once fitted); Z zones; P pause; R restart; L saves this session's log (JSON).
+// Touch: drag on the left half to move, tap the right half to dash.
 (function () {
   'use strict';
   const X = window.DUMMIES, T = window.DUMMIES_P10, F = window.DUMMIES_SIM;
+  const ST = window.DUMMIES_P10_STAGE || { id: '10.1', title: 'THE TEST ROAD' };
   const FW = 800, FH = 640, HUD = 56, TAU = Math.PI * 2;
   const C = { pave: '#3a3f4b', paveLine: '#454b59', road: '#1e222c', lane: '#c9d1d9', kerb: '#8c95a6', zebra: '#e8edf2',
     plinth: '#a89f8c', plinthTop: '#c2b9a5', block: '#262a35', blockEdge: '#5b6e9c', jersey: '#8494b8', cone: '#f2a65a',
     red: '#ff3d3d', redDark: '#9e1f1f', glass: '#1b2a38', dummy: '#ffd400', joint: '#2a2a2a', beam: 'rgba(244,248,250,0.10)',
-    beamHot: 'rgba(255,61,61,0.22)', field: 'rgba(127,168,188,0.10)', fieldHot: 'rgba(255,212,0,0.14)', text: '#f4f8fa', dim: '#7fa8bc', hud: '#12151c' };
+    beamHot: 'rgba(255,61,61,0.22)', field: 'rgba(127,168,188,0.10)', fieldHot: 'rgba(255,212,0,0.14)', text: '#f4f8fa', dim: '#7fa8bc', hud: '#12151c',
+    cam: '#9ff2c8', camDim: 'rgba(159,242,200,0.55)', drone: '#20242e', rotor: 'rgba(200,214,230,0.5)', part: '#ffd400' };
+  const CLIP = F['duel.lessonClipSeconds'], HOLD = F['duel.lessonHoldSeconds'], FIT = F['duel.lessonFitSeconds']; // the clip, its last frame held, the fitting
   const cv = document.getElementById('game'), ctx = cv.getContext('2d');
-  let s, paused = false, started = false, showZones = true, log = [], session = { start: Date.now() }, prevV = new Map(), flash = [];
+  let s, paused = false, started = false, showZones = true, log = [], session = {}, prevV = new Map(), flash = [];
+  let ring = [], clip = null, lessonT = null; // the recording, the hit's clip, the lesson's clock
   const keys = new Set(); let aEdge = false, touchMove = null, touchA = false;
 
-  function newSim() { s = new T.TestRoadSim(Object.assign({}, F)); log = []; session = { start: Date.now(), build: 'P10.1' }; prevV.clear(); }
+  function newSim() {
+    s = new T.TestRoadSim(Object.assign({}, F)); log = []; session = { start: Date.now(), build: 'P' + ST.id };
+    prevV.clear(); flash = []; ring = []; clip = null; lessonT = null;
+  }
   newSim();
 
   // ---------- input
@@ -53,17 +62,30 @@
   }
   function tick() {
     if (s.phase === 'report') s.continueReport(); else if (s.phase === 'shop') s.leaveShop();
+    if (s.phase === 'lesson') { // beats 1–2: the clip, then the sensor fitted; the sim waits
+      if (lessonT == null) lessonT = 0;
+      lessonT += dt;
+      if (lessonT >= CLIP + HOLD + FIT) { lessonT = null; clip = null; s.continueLesson(); }
+      return;
+    }
     const e0 = s.events.length; s.step(command());
+    record();
     for (const e of s.events.slice(e0)) {
-      if (['impact', 'writeoff', 'admit', 'lunge', 'honk'].includes(e.type)) log.push(e);
-      if (e.type === 'impact' && e.lost > 0) flash.push({ x: s.body.x, y: s.body.y, t: 0.5, n: Math.round(e.lost) });
+      if (['impact', 'writeoff', 'admit', 'lunge', 'honk', 'lesson-due', 'lesson', 'learned', 'first-brake', 'part-dispatch', 'gift', 'left'].includes(e.type) || (e.type === 'touch' && e.standstill)) log.push(e);
+      if (e.type === 'impact' && Math.round(e.lost) > 0) flash.push({ x: s.body.x, y: s.body.y, t: 0.5, n: Math.round(e.lost) });
       if (e.type === 'writeoff') flash.push({ x: s.body.x, y: s.body.y, t: 1.2, n: 'WRITE-OFF' });
+      if (e.type === 'gift') flash.push({ x: s.body.x, y: s.body.y, t: 1.6, n: 'BATTERY 1 · DASH' });
+      if (e.type === 'lesson-due') clip = { frames: ring.slice(), hitT: e.t, model: e.model, zone: e.zone, to: e.to, info: T.RUNGS[e.to] };
     }
   }
+  function record() { // the last CLIP seconds of the road, kept for a hit's training clip
+    const f = { t: s.t, cars: s.cars.filter((c) => !c.ghost).map((c) => ({ x: c.x, y: c.y, h: c.h, L: c.L, W: c.W, red: c.red, rung: c.rung })), b: s.body ? { x: s.body.x, y: s.body.y, f: s.body.facing, alive: s.body.alive } : null };
+    ring.push(f); while (ring.length && f.t - ring[0].t > CLIP + 0.1) ring.shift();
+  }
   function saveLog() {
-    const out = { session, seconds: +s.t.toFixed(1), writeOffs: s.run.writeOffs, events: log, params: { p10: Object.fromEntries(Object.entries(F).filter(([k]) => k.startsWith('duel.') || k.startsWith('proto.learn'))) } };
+    const out = { session, stage: ST, seconds: +s.t.toFixed(1), writeOffs: s.run.writeOffs, rung: s.rung, lessons: s.lessons, events: log, params: { p10: Object.fromEntries(Object.entries(F).filter(([k]) => k.startsWith('duel.') || k.startsWith('proto.learn') || k.startsWith('perception.'))) } };
     const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(out, null, 1)], { type: 'application/json' }));
-    a.download = 'p10_1_session_' + new Date().toISOString().replace(/[:.]/g, '-') + '.json'; a.click();
+    a.download = 'p' + ST.id.replace('.', '_') + '_session_' + new Date().toISOString().replace(/[:.]/g, '-') + '.json'; a.click();
   }
 
   // ---------- drawing
@@ -116,52 +138,101 @@
     rect(0, -(c.W / 2 + br), c.fwdLen, c.W + 2 * br, (c.hz && c.hz.inPath) || (c.det && c.det.fwd) ? C.beamHot : C.beam);
     ctx.restore();
   }
-  function drawCar(c) {
-    const pv = prevV.get(c.id), braking = pv != null && c.v < pv - 0.05; prevV.set(c.id, c.v);
-    ctx.save(); ctx.translate(c.x, c.y); ctx.rotate(c.h);
+  function carShape(c, rung) { // in the car's frame: body, stripe, glass, the roof dome (D89); from rung 1 the camera pod
     rect(-c.L / 2, -c.W / 2, c.L, c.W, c.red ? C.red : '#e8edf2');
     rect(-c.L / 2 + 2, -c.W / 2 + 2, 4, c.W - 4, C.redDark);
     rect(c.L / 2 - 16, -c.W / 2 + 3, 8, c.W - 6, C.glass);
-    const noticed = c.state === 'caution' || c.state === 'intention', on = !noticed || Math.floor(s.t * (F['proto.art.noticeFlashHz'] || 4) * 2) % 2 === 0;
+    ctx.fillStyle = '#f4f8fa'; ctx.beginPath(); ctx.arc(-2, 0, 5, 0, TAU); ctx.fill();
+    if (rung >= 1) { rect(c.L / 2 - 20, -3, 6, 6, C.joint); ctx.fillStyle = C.cam; ctx.beginPath(); ctx.arc(c.L / 2 - 15, 0, 1.6, 0, TAU); ctx.fill(); }
+  }
+  function drawCar(c) {
+    const pv = prevV.get(c.id), braking = pv != null && c.v < pv - 0.05; prevV.set(c.id, c.v);
+    ctx.save(); ctx.translate(c.x, c.y); ctx.rotate(c.h);
+    carShape(c, c.rung || 0);
+    const noticed = c.state === 'caution' || c.state === 'intention' || c.cause === 'body', on = !noticed || Math.floor(s.t * (F['proto.art.noticeFlashHz'] || 4) * 2) % 2 === 0;
     if (on) { rect(c.L / 2 - 3, -c.W / 2 + 2, 3, 5, '#fffbe0'); rect(c.L / 2 - 3, c.W / 2 - 7, 3, 5, '#fffbe0'); }
     if (braking || c.v < 2) { rect(-c.L / 2, -c.W / 2 + 2, 3, 5, '#ff2020'); rect(-c.L / 2, c.W / 2 - 7, 3, 5, '#ff2020'); }
-    ctx.fillStyle = '#f4f8fa'; ctx.beginPath(); ctx.arc(-2, 0, 5, 0, TAU); ctx.fill(); // the roof dome: the learning car's second channel (D89)
     ctx.restore();
-    text(c.model + (c.state !== 'cruise' ? ' · ' + c.state.toUpperCase() : ''), c.x, c.y - 26, 10, C.text, 'center');
+    text(c.model + ' · R' + (c.rung || 0) + (c.state !== 'cruise' ? ' · ' + c.state.toUpperCase() : ''), c.x, c.y - 26, 10, C.text, 'center');
+    if (c.honking) { rect(c.x - 24, c.y - 52, 48, 16, C.text); text('HONK', c.x, c.y - 40, 11, C.joint, 'center'); }
   }
-  function drawDummy() {
-    const b = s.body; if (!b || !b.alive) return;
+  function drawDummy(b) {
+    if (!b || !b.alive) return;
     ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.beginPath(); ctx.ellipse(b.x + 3, b.y + 4, 13, 9, 0, 0, TAU); ctx.fill();
     ctx.fillStyle = C.dummy; ctx.beginPath(); ctx.arc(b.x, b.y, s.P['body.radius'], 0, TAU); ctx.fill();
     ctx.strokeStyle = C.joint; ctx.lineWidth = 2; ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(b.x, b.y); ctx.lineTo(b.x + Math.cos(b.facing) * 20, b.y + Math.sin(b.facing) * 20); ctx.stroke();
+    const f = b.facing != null ? b.facing : b.f;
+    ctx.beginPath(); ctx.moveTo(b.x, b.y); ctx.lineTo(b.x + Math.cos(f) * 20, b.y + Math.sin(f) * 20); ctx.stroke();
+    if (s.dashFitted() && b === s.body) { rect(b.x - 4, b.y - 4, 8, 8, C.joint); rect(b.x - 2, b.y - 2, 4, 4, C.part); } // Battery 1 on the chest
+  }
+  function drawDrone(x, y, load) { // a FARSIGHT drone: body, four rotors, and the part it carries
+    for (const [dx, dy] of [[-9, -9], [9, -9], [-9, 9], [9, 9]]) { ctx.fillStyle = C.rotor; ctx.beginPath(); ctx.arc(x + dx, y + dy, 6, 0, TAU); ctx.fill(); }
+    rect(x - 7, y - 5, 14, 10, C.drone);
+    if (load) { rect(x - 5, y + 7, 10, 8, C.part); text('B1', x, y + 14, 7, C.joint, 'center'); }
   }
   function drawHud() {
     rect(0, FH, FW, HUD, C.hud);
-    const b = s.body, hp = b ? Math.max(0, b.health) / s.maxHealth() : 0;
-    text('10.1 · THE TEST ROAD', 14, FH + 22, 14, C.text);
-    text('Rung 0 · the red car learns nothing', 14, FH + 42, 11, C.dim);
+    const b = s.body, hp = b ? Math.max(0, b.health) / s.maxHealth() : 0, ri = s.rungInfo();
+    text(ST.id + ' · ' + ST.title, 14, FH + 22, 14, C.text);
+    text((s.models.sedan.id) + ' · RUNG ' + s.rung + ' · ' + (ri ? ri.name.toUpperCase() : ''), 14, FH + 42, 11, C.dim);
     text('BODY', 430, FH + 22, 11, C.dim); rect(470, FH + 12, 140, 12, '#2c3447'); rect(470, FH + 12, 140 * hp, 12, C.dummy);
     text('WRITE-OFFS ' + s.run.writeOffs, 470, FH + 42, 11, C.text);
     text(s.dashFitted() ? 'SPACE DASH' : 'ON FOOT', 786, FH + 22, 11, C.dim, 'right');
     text(Math.floor(s.t / 60) + ':' + String(Math.floor(s.t % 60)).padStart(2, '0'), 786, FH + 42, 11, C.text, 'right');
   }
+  // ---------- the lesson. Beat 1: the hit, replayed as the car's training clip. Beat 2: the sensor fitted.
+  function drawClip(t) {
+    const fr = clip.frames, t0 = clip.hitT - CLIP, tt = t0 + Math.min(t, CLIP); // then the hit's frame holds
+    let f = fr[0]; for (const q of fr) { if (q.t <= tt) f = q; else break; }
+    drawRoads(s.level); drawStatics(s.level);
+    rect(0, 0, FW, FH, 'rgba(8,24,18,0.55)'); // the camera's tint
+    if (f) {
+      for (const c of f.cars) { ctx.save(); ctx.translate(c.x, c.y); ctx.rotate(c.h); carShape(c, c.rung || 0); ctx.restore(); }
+      drawDummy(f.b);
+      if (f.b && t >= CLIP) { // the frame of the hit, held: a detection box, as the car's vision would draw it
+        ctx.strokeStyle = C.cam; ctx.lineWidth = 2; ctx.strokeRect(f.b.x - 22, f.b.y - 22, 44, 44);
+        text('IMPACT · ' + (clip.zone === 'front' ? 'FRONT' : 'FRONT CORNER'), f.b.x, f.b.y - 28, 11, C.cam, 'center');
+      }
+    }
+    for (let y = 0; y < FH; y += 4) rect(0, y, FW, 1, 'rgba(0,0,0,0.18)'); // scan lines
+    text('TRAINING CLIP · ' + clip.model, 18, 30, 15, C.cam);
+    if (Math.floor(t * 2) % 2 === 0) { ctx.fillStyle = C.red; ctx.beginPath(); ctx.arc(FW - 60, 25, 6, 0, TAU); ctx.fill(); }
+    text('REC', FW - 18, 30, 13, C.cam, 'right');
+    const dtHit = tt - clip.hitT; text((dtHit < 0 ? '−' : '+') + Math.abs(dtHit).toFixed(1) + ' s', 18, FH - 18, 13, C.camDim);
+  }
+  function drawFit(t) { // the car, large; a drone lowers the sensor onto its nose; the new zone draws out from it
+    const info = clip ? clip.info : s.rungInfo(s.rung + 1), u = Math.min(1, t / FIT);
+    rect(0, 0, FW, FH, '#0c0e14');
+    const k = 4, car = { L: s.P['vehicles.sedan.length'], W: s.P['vehicles.sedan.width'], red: true }, cx = 300, cy = 330;
+    const reach = Math.max(0, (u - 0.45) / 0.55);
+    if (reach > 0) { ctx.save(); ctx.translate(cx + car.L / 2 * k, cy); rect(0, -(car.W / 2 + 4) * k, reach * (FW - cx - car.L / 2 * k), (car.W + 8) * k, C.beam); ctx.restore(); }
+    ctx.save(); ctx.translate(cx, cy); ctx.scale(k, k); carShape(car, u >= 0.45 ? 1 : 0); ctx.restore();
+    if (u < 0.45) drawDrone(cx + (car.L / 2 - 17) * k, cy - 160 + 160 * (u / 0.45), true);
+    else if (u < 0.7) drawDrone(cx + (car.L / 2 - 17) * k, cy - 160 * ((u - 0.45) / 0.25), false);
+    text('SENSOR FITTED · ' + (info && info.sensor ? info.sensor : ''), 40, 90, 22, C.text);
+    text((clip ? clip.model : s.models.sedan.id) + ' · RUNG ' + (info ? info.rung : ''), 40, 120, 14, C.dim);
+  }
   function draw() {
+    if (s.phase === 'lesson' && lessonT != null) {
+      if (clip && lessonT < CLIP + HOLD) drawClip(lessonT); else drawFit(lessonT - (clip ? CLIP + HOLD : 0));
+      drawHud(); return;
+    }
     const L = s.level; drawRoads(L); drawStatics(L);
     const cars = s.cars.filter((c) => !c.ghost);
     if (showZones) for (const c of cars) drawZones(c);
     for (const c of cars) drawCar(c);
-    drawDummy();
-    for (let i = flash.length - 1; i >= 0; i--) { const f = flash[i]; f.t -= 1 / 60; if (f.t <= 0) { flash.splice(i, 1); continue; } text(typeof f.n === 'number' ? '−' + f.n : f.n, f.x, f.y - 24 - (1 - f.t) * 20, f.n === 'WRITE-OFF' ? 18 : 13, f.n === 'WRITE-OFF' ? C.red : C.dummy, 'center'); }
+    drawDummy(s.body);
+    const d = s.delivery; if (d) drawDrone(d.x, d.y, d.state !== 'outbound');
+    for (let i = flash.length - 1; i >= 0; i--) { const f = flash[i]; f.t -= 1 / 60; if (f.t <= 0) { flash.splice(i, 1); continue; } const big = typeof f.n !== 'number'; text(big ? f.n : '−' + f.n, f.x, f.y - 24 - (1 - f.t) * 20, big ? 16 : 13, f.n === 'WRITE-OFF' ? C.red : C.dummy, 'center'); }
     drawHud();
     if (!started || paused) {
       rect(0, 0, FW, FH, 'rgba(10,12,18,0.72)');
-      text(paused ? 'PAUSED' : 'PROTOTYPE 10.1 · THE TEST ROAD', FW / 2, 250, 24, C.text, 'center');
+      text(paused ? 'PAUSED' : 'PROTOTYPE ' + ST.id + ' · ' + ST.title, FW / 2, 250, 24, C.text, 'center');
       text('Two one-way roads cross at the Monument. One red car drives through.', FW / 2, 292, 14, C.dim, 'center');
-      text('Arrows or WASD move · Z zones · P pause · R restart · L save log', FW / 2, 330, 13, C.dim, 'center');
+      text('Arrows or WASD move · Space dash, once fitted · Z zones · P pause · R restart · L save log', FW / 2, 330, 13, C.dim, 'center');
       text(paused ? 'P to resume' : 'Press any key', FW / 2, 380, 16, C.dummy, 'center');
     }
   }
-  window.__p10 = { get sim() { return s; }, newSim, start() { started = true; } };
+  window.__p10 = { get sim() { return s; }, get clip() { return clip; }, get lessonT() { return lessonT; }, stage: ST, newSim, start() { started = true; } };
   requestAnimationFrame(frame);
 })();

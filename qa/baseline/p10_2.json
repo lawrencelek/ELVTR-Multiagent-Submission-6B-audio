@@ -1,0 +1,2741 @@
+{
+ "build": "prototypes/p10/dummies_p10_2.html",
+ "stage": "10.2",
+ "level": "junction",
+ "secs": 300,
+ "esc": 600,
+ "offsets": [
+  0,
+  7,
+  13
+ ],
+ "p10": {
+  "duel.enabled": 1,
+  "duel.carsOnRoad": 1,
+  "duel.redReturnSeconds": 4,
+  "proto.learningEnabled": 0,
+  "proto.learn.standoffEnabled": 0,
+  "perception.forwardLength": 720,
+  "proto.driver.cautionZone": 0,
+  "run.appearances.road": 1000,
+  "run.quota.road": 1000000,
+  "duel.topRung": 1,
+  "duel.standstillSpeed": 5,
+  "duel.dashArrives": 2
+ },
+ "runs": [
+  {
+   "policy": "stand",
+   "mode": "lesson",
+   "offset": 0,
+   "simSeconds": 299.9,
+   "rungEnd": 1,
+   "hits": 1,
+   "hitsPerMin": 0.2,
+   "writeOffs": 0,
+   "firstHit": 6.6,
+   "points": 100,
+   "lost": 100,
+   "zones": {
+    "front": 1
+   },
+   "carStates": {
+    "cruise": 1
+   },
+   "kinds": {
+    "struck": 1
+   },
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": {
+    "hitAt": 6.6,
+    "zone": "front",
+    "learnedAt": 11.6
+   },
+   "afterLesson": {
+    "hits": 0,
+    "hitsPerMin": 0,
+    "lost": 0
+   },
+   "firstBrakeAt": 14.1,
+   "dashAt": 16.3,
+   "behaviours": {
+    "body": 139,
+    "pass": 4,
+    "return": 4
+   },
+   "learnEvents": 1,
+   "cars": {
+    "appearances": 19,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 4,
+    "minStopGap": 226,
+    "reach": 177
+   },
+   "windows": [
+    1,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "policy": "stand",
+   "mode": "lesson",
+   "offset": 7,
+   "simSeconds": 299.9,
+   "rungEnd": 1,
+   "hits": 1,
+   "hitsPerMin": 0.2,
+   "writeOffs": 0,
+   "firstHit": 54,
+   "points": 100,
+   "lost": 100,
+   "zones": {
+    "front": 1
+   },
+   "carStates": {
+    "cruise": 1
+   },
+   "kinds": {
+    "struck": 1
+   },
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": {
+    "hitAt": 54,
+    "zone": "front",
+    "learnedAt": 59
+   },
+   "afterLesson": {
+    "hits": 0,
+    "hitsPerMin": 0,
+    "lost": 0
+   },
+   "firstBrakeAt": 82.7,
+   "dashAt": 84.6,
+   "behaviours": {
+    "body": 116,
+    "pass": 4,
+    "return": 4
+   },
+   "learnEvents": 1,
+   "cars": {
+    "appearances": 21,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 4,
+    "minStopGap": 226,
+    "reach": 177
+   },
+   "windows": [
+    1,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "policy": "stand",
+   "mode": "lesson",
+   "offset": 13,
+   "simSeconds": 299.9,
+   "rungEnd": 1,
+   "hits": 1,
+   "hitsPerMin": 0.2,
+   "writeOffs": 0,
+   "firstHit": 48,
+   "points": 100,
+   "lost": 100,
+   "zones": {
+    "front": 1
+   },
+   "carStates": {
+    "cruise": 1
+   },
+   "kinds": {
+    "struck": 1
+   },
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": {
+    "hitAt": 48,
+    "zone": "front",
+    "learnedAt": 52.9
+   },
+   "afterLesson": {
+    "hits": 0,
+    "hitsPerMin": 0,
+    "lost": 0
+   },
+   "firstBrakeAt": 76.7,
+   "dashAt": 78.6,
+   "behaviours": {
+    "body": 116,
+    "pass": 4,
+    "return": 4
+   },
+   "learnEvents": 1,
+   "cars": {
+    "appearances": 20,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 4,
+    "minStopGap": 226,
+    "reach": 177
+   },
+   "windows": [
+    1,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "policy": "standSouth",
+   "mode": "lesson",
+   "offset": 0,
+   "simSeconds": 299.9,
+   "rungEnd": 1,
+   "hits": 1,
+   "hitsPerMin": 0.2,
+   "writeOffs": 0,
+   "firstHit": 39,
+   "points": 100,
+   "lost": 100,
+   "zones": {
+    "front": 1
+   },
+   "carStates": {
+    "cruise": 1
+   },
+   "kinds": {
+    "struck": 1
+   },
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": {
+    "hitAt": 39,
+    "zone": "front",
+    "learnedAt": 44
+   },
+   "afterLesson": {
+    "hits": 0,
+    "hitsPerMin": 0,
+    "lost": 0
+   },
+   "firstBrakeAt": 67.7,
+   "dashAt": 69.8,
+   "behaviours": {
+    "body": 116,
+    "pass": 4,
+    "return": 3
+   },
+   "learnEvents": 1,
+   "cars": {
+    "appearances": 20,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 4,
+    "minStopGap": 226,
+    "reach": 177
+   },
+   "windows": [
+    1,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "policy": "standSouth",
+   "mode": "lesson",
+   "offset": 7,
+   "simSeconds": 299.9,
+   "rungEnd": 1,
+   "hits": 1,
+   "hitsPerMin": 0.2,
+   "writeOffs": 0,
+   "firstHit": 32,
+   "points": 100,
+   "lost": 100,
+   "zones": {
+    "front": 1
+   },
+   "carStates": {
+    "cruise": 1
+   },
+   "kinds": {
+    "struck": 1
+   },
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": {
+    "hitAt": 32,
+    "zone": "front",
+    "learnedAt": 37
+   },
+   "afterLesson": {
+    "hits": 0,
+    "hitsPerMin": 0,
+    "lost": 0
+   },
+   "firstBrakeAt": 60.7,
+   "dashAt": 62.9,
+   "behaviours": {
+    "body": 116,
+    "pass": 4,
+    "return": 4
+   },
+   "learnEvents": 1,
+   "cars": {
+    "appearances": 21,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 4,
+    "minStopGap": 226,
+    "reach": 177
+   },
+   "windows": [
+    1,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "policy": "standSouth",
+   "mode": "lesson",
+   "offset": 13,
+   "simSeconds": 299.9,
+   "rungEnd": 1,
+   "hits": 1,
+   "hitsPerMin": 0.2,
+   "writeOffs": 0,
+   "firstHit": 26,
+   "points": 100,
+   "lost": 100,
+   "zones": {
+    "front": 1
+   },
+   "carStates": {
+    "cruise": 1
+   },
+   "kinds": {
+    "struck": 1
+   },
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": {
+    "hitAt": 26,
+    "zone": "front",
+    "learnedAt": 31
+   },
+   "afterLesson": {
+    "hits": 0,
+    "hitsPerMin": 0,
+    "lost": 0
+   },
+   "firstBrakeAt": 54.7,
+   "dashAt": 56.8,
+   "behaviours": {
+    "body": 116,
+    "pass": 4,
+    "return": 4
+   },
+   "learnEvents": 1,
+   "cars": {
+    "appearances": 20,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 4,
+    "minStopGap": 226,
+    "reach": 177
+   },
+   "windows": [
+    1,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "policy": "standOff",
+   "mode": "lesson",
+   "offset": 0,
+   "simSeconds": 299.9,
+   "rungEnd": 1,
+   "hits": 1,
+   "hitsPerMin": 0.2,
+   "writeOffs": 0,
+   "firstHit": 6.6,
+   "points": 100,
+   "lost": 100,
+   "zones": {
+    "frontDiagonal": 1
+   },
+   "carStates": {
+    "cruise": 1
+   },
+   "kinds": {
+    "struck": 1
+   },
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": {
+    "hitAt": 6.6,
+    "zone": "frontDiagonal",
+    "learnedAt": 11.6
+   },
+   "afterLesson": {
+    "hits": 0,
+    "hitsPerMin": 0,
+    "lost": 0
+   },
+   "firstBrakeAt": 56.2,
+   "dashAt": 58.1,
+   "behaviours": {
+    "body": 138,
+    "pass": 4,
+    "return": 4
+   },
+   "learnEvents": 1,
+   "cars": {
+    "appearances": 19,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 4,
+    "minStopGap": 226,
+    "reach": 177
+   },
+   "windows": [
+    1,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "policy": "standOff",
+   "mode": "lesson",
+   "offset": 7,
+   "simSeconds": 299.9,
+   "rungEnd": 1,
+   "hits": 1,
+   "hitsPerMin": 0.2,
+   "writeOffs": 0,
+   "firstHit": 54,
+   "points": 100,
+   "lost": 100,
+   "zones": {
+    "frontDiagonal": 1
+   },
+   "carStates": {
+    "cruise": 1
+   },
+   "kinds": {
+    "struck": 1
+   },
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": {
+    "hitAt": 54,
+    "zone": "frontDiagonal",
+    "learnedAt": 59
+   },
+   "afterLesson": {
+    "hits": 0,
+    "hitsPerMin": 0,
+    "lost": 0
+   },
+   "firstBrakeAt": 82.7,
+   "dashAt": 84.7,
+   "behaviours": {
+    "body": 116,
+    "pass": 4,
+    "return": 4
+   },
+   "learnEvents": 1,
+   "cars": {
+    "appearances": 21,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 4,
+    "minStopGap": 226,
+    "reach": 177
+   },
+   "windows": [
+    1,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "policy": "standOff",
+   "mode": "lesson",
+   "offset": 13,
+   "simSeconds": 299.9,
+   "rungEnd": 1,
+   "hits": 1,
+   "hitsPerMin": 0.2,
+   "writeOffs": 0,
+   "firstHit": 48,
+   "points": 100,
+   "lost": 100,
+   "zones": {
+    "frontDiagonal": 1
+   },
+   "carStates": {
+    "cruise": 1
+   },
+   "kinds": {
+    "struck": 1
+   },
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": {
+    "hitAt": 48,
+    "zone": "frontDiagonal",
+    "learnedAt": 52.9
+   },
+   "afterLesson": {
+    "hits": 0,
+    "hitsPerMin": 0,
+    "lost": 0
+   },
+   "firstBrakeAt": 76.7,
+   "dashAt": 78.6,
+   "behaviours": {
+    "body": 116,
+    "pass": 4,
+    "return": 4
+   },
+   "learnEvents": 1,
+   "cars": {
+    "appearances": 20,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 4,
+    "minStopGap": 226,
+    "reach": 177
+   },
+   "windows": [
+    1,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "policy": "charge",
+   "mode": "lesson",
+   "offset": 0,
+   "simSeconds": 299.9,
+   "rungEnd": 1,
+   "hits": 1,
+   "hitsPerMin": 0.2,
+   "writeOffs": 0,
+   "firstHit": 7.1,
+   "points": 167,
+   "lost": 167,
+   "zones": {
+    "front": 1
+   },
+   "carStates": {
+    "cruise": 1
+   },
+   "kinds": {
+    "struck": 1
+   },
+   "dashes": 6,
+   "standstillTouches": 6,
+   "tries": 7,
+   "lesson": {
+    "hitAt": 7.1,
+    "zone": "front",
+    "learnedAt": 11.6
+   },
+   "afterLesson": {
+    "hits": 0,
+    "hitsPerMin": 0,
+    "lost": 0
+   },
+   "firstBrakeAt": 59.1,
+   "dashAt": 61.7,
+   "behaviours": {
+    "body": 36
+   },
+   "learnEvents": 1,
+   "cars": {
+    "appearances": 25,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 0,
+    "minStopGap": 13,
+    "reach": 177
+   },
+   "windows": [
+    1,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "policy": "charge",
+   "mode": "lesson",
+   "offset": 7,
+   "simSeconds": 299.9,
+   "rungEnd": 1,
+   "hits": 1,
+   "hitsPerMin": 0.2,
+   "writeOffs": 0,
+   "firstHit": 54.5,
+   "points": 167,
+   "lost": 167,
+   "zones": {
+    "front": 1
+   },
+   "carStates": {
+    "cruise": 1
+   },
+   "kinds": {
+    "struck": 1
+   },
+   "dashes": 5,
+   "standstillTouches": 5,
+   "tries": 6,
+   "lesson": {
+    "hitAt": 54.5,
+    "zone": "front",
+    "learnedAt": 59
+   },
+   "afterLesson": {
+    "hits": 0,
+    "hitsPerMin": 0,
+    "lost": 0
+   },
+   "firstBrakeAt": 85.6,
+   "dashAt": 88.2,
+   "behaviours": {
+    "body": 30
+   },
+   "learnEvents": 1,
+   "cars": {
+    "appearances": 26,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 0,
+    "minStopGap": 13,
+    "reach": 177
+   },
+   "windows": [
+    1,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "policy": "charge",
+   "mode": "lesson",
+   "offset": 13,
+   "simSeconds": 299.9,
+   "rungEnd": 1,
+   "hits": 1,
+   "hitsPerMin": 0.2,
+   "writeOffs": 0,
+   "firstHit": 48.5,
+   "points": 167,
+   "lost": 167,
+   "zones": {
+    "front": 1
+   },
+   "carStates": {
+    "cruise": 1
+   },
+   "kinds": {
+    "struck": 1
+   },
+   "dashes": 5,
+   "standstillTouches": 5,
+   "tries": 6,
+   "lesson": {
+    "hitAt": 48.5,
+    "zone": "front",
+    "learnedAt": 52.9
+   },
+   "afterLesson": {
+    "hits": 0,
+    "hitsPerMin": 0,
+    "lost": 0
+   },
+   "firstBrakeAt": 79.6,
+   "dashAt": 82.2,
+   "behaviours": {
+    "body": 30
+   },
+   "learnEvents": 1,
+   "cars": {
+    "appearances": 26,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 0,
+    "minStopGap": 13,
+    "reach": 177
+   },
+   "windows": [
+    1,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "policy": "walkin",
+   "mode": "lesson",
+   "offset": 0,
+   "simSeconds": 298.3,
+   "rungEnd": 1,
+   "hits": 10,
+   "hitsPerMin": 2.01,
+   "writeOffs": 1,
+   "firstHit": 10.3,
+   "points": 3521,
+   "lost": 1021,
+   "zones": {
+    "frontDiagonal": 6,
+    "front": 4
+   },
+   "carStates": {
+    "cruise": 1,
+    "intention": 3,
+    "expiring": 6
+   },
+   "kinds": {
+    "struck": 10
+   },
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": {
+    "hitAt": 10.3,
+    "zone": "frontDiagonal",
+    "learnedAt": 11.6
+   },
+   "afterLesson": {
+    "hits": 9,
+    "hitsPerMin": 1.88,
+    "lost": 856
+   },
+   "firstBrakeAt": 18.2,
+   "dashAt": 20.7,
+   "behaviours": {
+    "body": 183,
+    "pass": 12,
+    "return": 11
+   },
+   "learnEvents": 1,
+   "cars": {
+    "appearances": 13,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 12,
+    "minStopGap": 2,
+    "reach": 177
+   },
+   "windows": [
+    2,
+    2,
+    2,
+    2,
+    2
+   ]
+  },
+  {
+   "policy": "walkin",
+   "mode": "lesson",
+   "offset": 7,
+   "simSeconds": 299.4,
+   "rungEnd": 1,
+   "hits": 9,
+   "hitsPerMin": 1.8,
+   "writeOffs": 0,
+   "firstHit": 3.5,
+   "points": 683,
+   "lost": 683,
+   "zones": {
+    "frontDiagonal": 7,
+    "front": 2
+   },
+   "carStates": {
+    "cruise": 1,
+    "intention": 4,
+    "expiring": 4
+   },
+   "kinds": {
+    "struck": 9
+   },
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": {
+    "hitAt": 3.5,
+    "zone": "frontDiagonal",
+    "learnedAt": 4.6
+   },
+   "afterLesson": {
+    "hits": 8,
+    "hitsPerMin": 1.63,
+    "lost": 539
+   },
+   "firstBrakeAt": 11.2,
+   "dashAt": 13.7,
+   "behaviours": {
+    "body": 166,
+    "pass": 11,
+    "return": 10
+   },
+   "learnEvents": 1,
+   "cars": {
+    "appearances": 15,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 11,
+    "minStopGap": 2,
+    "reach": 177
+   },
+   "windows": [
+    2,
+    2,
+    2,
+    1,
+    2
+   ]
+  },
+  {
+   "policy": "walkin",
+   "mode": "lesson",
+   "offset": 13,
+   "simSeconds": 299.5,
+   "rungEnd": 1,
+   "hits": 8,
+   "hitsPerMin": 1.6,
+   "writeOffs": 0,
+   "firstHit": 18.2,
+   "points": 694,
+   "lost": 694,
+   "zones": {
+    "frontDiagonal": 5,
+    "front": 3
+   },
+   "carStates": {
+    "cruise": 1,
+    "expiring": 4,
+    "intention": 3
+   },
+   "kinds": {
+    "struck": 8
+   },
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": {
+    "hitAt": 18.2,
+    "zone": "frontDiagonal",
+    "learnedAt": 19.4
+   },
+   "afterLesson": {
+    "hits": 7,
+    "hitsPerMin": 1.5,
+    "lost": 545
+   },
+   "firstBrakeAt": 25.4,
+   "dashAt": 27.6,
+   "behaviours": {
+    "body": 153,
+    "pass": 10,
+    "return": 10
+   },
+   "learnEvents": 1,
+   "cars": {
+    "appearances": 16,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 10,
+    "minStopGap": 2,
+    "reach": 177
+   },
+   "windows": [
+    2,
+    3,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "policy": "wander",
+   "mode": "lesson",
+   "offset": 0,
+   "simSeconds": 299.7,
+   "rungEnd": 1,
+   "hits": 4,
+   "hitsPerMin": 0.8,
+   "writeOffs": 0,
+   "firstHit": 10.2,
+   "points": 139,
+   "lost": 139,
+   "zones": {
+    "frontDiagonal": 2,
+    "rearDiagonal": 1,
+    "side": 1
+   },
+   "carStates": {
+    "cruise": 3,
+    "expiring": 1
+   },
+   "kinds": {
+    "struck": 4
+   },
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": {
+    "hitAt": 10.2,
+    "zone": "frontDiagonal",
+    "learnedAt": 11.6
+   },
+   "afterLesson": {
+    "hits": 3,
+    "hitsPerMin": 0.62,
+    "lost": 44
+   },
+   "firstBrakeAt": 36,
+   "dashAt": 38.3,
+   "behaviours": {
+    "body": 23
+   },
+   "learnEvents": 1,
+   "cars": {
+    "appearances": 26,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 0,
+    "minStopGap": null,
+    "reach": 177
+   },
+   "windows": [
+    3,
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "policy": "wander",
+   "mode": "lesson",
+   "offset": 7,
+   "simSeconds": 299.9,
+   "rungEnd": 1,
+   "hits": 2,
+   "hitsPerMin": 0.4,
+   "writeOffs": 0,
+   "firstHit": 120.9,
+   "points": 61,
+   "lost": 61,
+   "zones": {
+    "frontDiagonal": 1,
+    "side": 1
+   },
+   "carStates": {
+    "cruise": 2
+   },
+   "kinds": {
+    "struck": 2
+   },
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": {
+    "hitAt": 120.9,
+    "zone": "frontDiagonal",
+    "learnedAt": 126.1
+   },
+   "afterLesson": {
+    "hits": 1,
+    "hitsPerMin": 0.35,
+    "lost": 0
+   },
+   "firstBrakeAt": 141.3,
+   "dashAt": 143.4,
+   "behaviours": {
+    "body": 15
+   },
+   "learnEvents": 1,
+   "cars": {
+    "appearances": 27,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 0,
+    "minStopGap": null,
+    "reach": 177
+   },
+   "windows": [
+    0,
+    0,
+    1,
+    0,
+    1
+   ]
+  },
+  {
+   "policy": "wander",
+   "mode": "lesson",
+   "offset": 13,
+   "simSeconds": 299.7,
+   "rungEnd": 1,
+   "hits": 4,
+   "hitsPerMin": 0.8,
+   "writeOffs": 0,
+   "firstHit": 26,
+   "points": 170,
+   "lost": 170,
+   "zones": {
+    "frontDiagonal": 3,
+    "front": 1
+   },
+   "carStates": {
+    "cruise": 1,
+    "intention": 1,
+    "expiring": 2
+   },
+   "kinds": {
+    "struck": 4
+   },
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": {
+    "hitAt": 26,
+    "zone": "frontDiagonal",
+    "learnedAt": 31
+   },
+   "afterLesson": {
+    "hits": 3,
+    "hitsPerMin": 0.67,
+    "lost": 110
+   },
+   "firstBrakeAt": 45.6,
+   "dashAt": 47.4,
+   "behaviours": {
+    "body": 25
+   },
+   "learnEvents": 1,
+   "cars": {
+    "appearances": 26,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 0,
+    "minStopGap": null,
+    "reach": 177
+   },
+   "windows": [
+    2,
+    2,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "policy": "aim",
+   "mode": "lesson",
+   "offset": 0,
+   "simSeconds": 299.6,
+   "rungEnd": 0,
+   "hits": 6,
+   "hitsPerMin": 1.2,
+   "writeOffs": 0,
+   "firstHit": 30.5,
+   "points": 3,
+   "lost": 3,
+   "zones": {
+    "rearDiagonal": 6
+   },
+   "carStates": {
+    "cruise": 6
+   },
+   "kinds": {
+    "struck": 6
+   },
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": null,
+   "afterLesson": null,
+   "firstBrakeAt": null,
+   "dashAt": null,
+   "behaviours": {},
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 28,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 0,
+    "minStopGap": null,
+    "reach": 177
+   },
+   "windows": [
+    1,
+    1,
+    2,
+    1,
+    1
+   ]
+  },
+  {
+   "policy": "aim",
+   "mode": "lesson",
+   "offset": 7,
+   "simSeconds": 299.6,
+   "rungEnd": 0,
+   "hits": 6,
+   "hitsPerMin": 1.2,
+   "writeOffs": 0,
+   "firstHit": 23.5,
+   "points": 3,
+   "lost": 3,
+   "zones": {
+    "rearDiagonal": 6
+   },
+   "carStates": {
+    "cruise": 6
+   },
+   "kinds": {
+    "struck": 6
+   },
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": null,
+   "afterLesson": null,
+   "firstBrakeAt": null,
+   "dashAt": null,
+   "behaviours": {},
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 28,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 0,
+    "minStopGap": null,
+    "reach": 177
+   },
+   "windows": [
+    1,
+    1,
+    2,
+    1,
+    1
+   ]
+  },
+  {
+   "policy": "aim",
+   "mode": "lesson",
+   "offset": 13,
+   "simSeconds": 299.6,
+   "rungEnd": 0,
+   "hits": 6,
+   "hitsPerMin": 1.2,
+   "writeOffs": 0,
+   "firstHit": 17.5,
+   "points": 3,
+   "lost": 3,
+   "zones": {
+    "rearDiagonal": 6
+   },
+   "carStates": {
+    "cruise": 6
+   },
+   "kinds": {
+    "struck": 6
+   },
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": null,
+   "afterLesson": null,
+   "firstBrakeAt": null,
+   "dashAt": null,
+   "behaviours": {},
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 28,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 0,
+    "minStopGap": null,
+    "reach": 177
+   },
+   "windows": [
+    1,
+    1,
+    2,
+    1,
+    1
+   ]
+  },
+  {
+   "policy": "flank",
+   "mode": "lesson",
+   "offset": 0,
+   "simSeconds": 300,
+   "rungEnd": 0,
+   "hits": 0,
+   "hitsPerMin": 0,
+   "writeOffs": 0,
+   "firstHit": null,
+   "points": 0,
+   "lost": 0,
+   "zones": {},
+   "carStates": {},
+   "kinds": {},
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": null,
+   "afterLesson": null,
+   "firstBrakeAt": null,
+   "dashAt": null,
+   "behaviours": {},
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 28,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 0,
+    "minStopGap": null,
+    "reach": 177
+   },
+   "windows": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "policy": "flank",
+   "mode": "lesson",
+   "offset": 7,
+   "simSeconds": 300,
+   "rungEnd": 0,
+   "hits": 0,
+   "hitsPerMin": 0,
+   "writeOffs": 0,
+   "firstHit": null,
+   "points": 0,
+   "lost": 0,
+   "zones": {},
+   "carStates": {},
+   "kinds": {},
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": null,
+   "afterLesson": null,
+   "firstBrakeAt": null,
+   "dashAt": null,
+   "behaviours": {},
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 28,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 0,
+    "minStopGap": null,
+    "reach": 177
+   },
+   "windows": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "policy": "flank",
+   "mode": "lesson",
+   "offset": 13,
+   "simSeconds": 300,
+   "rungEnd": 0,
+   "hits": 0,
+   "hitsPerMin": 0,
+   "writeOffs": 0,
+   "firstHit": null,
+   "points": 0,
+   "lost": 0,
+   "zones": {},
+   "carStates": {},
+   "kinds": {},
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": null,
+   "afterLesson": null,
+   "firstBrakeAt": null,
+   "dashAt": null,
+   "behaviours": {},
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 28,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 0,
+    "minStopGap": null,
+    "reach": 177
+   },
+   "windows": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "policy": "stand",
+   "mode": "trained",
+   "offset": 0,
+   "simSeconds": 300,
+   "rungEnd": 1,
+   "hits": 0,
+   "hitsPerMin": 0,
+   "writeOffs": 0,
+   "firstHit": null,
+   "points": 0,
+   "lost": 0,
+   "zones": {},
+   "carStates": {},
+   "kinds": {},
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": null,
+   "afterLesson": null,
+   "firstBrakeAt": 3.1,
+   "dashAt": null,
+   "behaviours": {
+    "body": 143,
+    "pass": 5,
+    "return": 5
+   },
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 18,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 5,
+    "minStopGap": 226,
+    "reach": 177
+   },
+   "windows": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "policy": "stand",
+   "mode": "trained",
+   "offset": 7,
+   "simSeconds": 300,
+   "rungEnd": 1,
+   "hits": 0,
+   "hitsPerMin": 0,
+   "writeOffs": 0,
+   "firstHit": null,
+   "points": 0,
+   "lost": 0,
+   "zones": {},
+   "carStates": {},
+   "kinds": {},
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": null,
+   "afterLesson": null,
+   "firstBrakeAt": 49.2,
+   "dashAt": null,
+   "behaviours": {
+    "body": 145,
+    "pass": 5,
+    "return": 4
+   },
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 19,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 5,
+    "minStopGap": 226,
+    "reach": 177
+   },
+   "windows": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "policy": "stand",
+   "mode": "trained",
+   "offset": 13,
+   "simSeconds": 300,
+   "rungEnd": 1,
+   "hits": 0,
+   "hitsPerMin": 0,
+   "writeOffs": 0,
+   "firstHit": null,
+   "points": 0,
+   "lost": 0,
+   "zones": {},
+   "carStates": {},
+   "kinds": {},
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": null,
+   "afterLesson": null,
+   "firstBrakeAt": 43.2,
+   "dashAt": null,
+   "behaviours": {
+    "body": 145,
+    "pass": 5,
+    "return": 5
+   },
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 18,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 5,
+    "minStopGap": 226,
+    "reach": 177
+   },
+   "windows": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "policy": "standSouth",
+   "mode": "trained",
+   "offset": 0,
+   "simSeconds": 300,
+   "rungEnd": 1,
+   "hits": 0,
+   "hitsPerMin": 0,
+   "writeOffs": 0,
+   "firstHit": null,
+   "points": 0,
+   "lost": 0,
+   "zones": {},
+   "carStates": {},
+   "kinds": {},
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": null,
+   "afterLesson": null,
+   "firstBrakeAt": 34.2,
+   "dashAt": null,
+   "behaviours": {
+    "body": 123,
+    "pass": 4,
+    "return": 4
+   },
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 20,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 4,
+    "minStopGap": 226,
+    "reach": 177
+   },
+   "windows": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "policy": "standSouth",
+   "mode": "trained",
+   "offset": 7,
+   "simSeconds": 300,
+   "rungEnd": 1,
+   "hits": 0,
+   "hitsPerMin": 0,
+   "writeOffs": 0,
+   "firstHit": null,
+   "points": 0,
+   "lost": 0,
+   "zones": {},
+   "carStates": {},
+   "kinds": {},
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": null,
+   "afterLesson": null,
+   "firstBrakeAt": 27.2,
+   "dashAt": null,
+   "behaviours": {
+    "body": 132,
+    "pass": 4,
+    "return": 4
+   },
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 20,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 4,
+    "minStopGap": 226,
+    "reach": 177
+   },
+   "windows": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "policy": "standSouth",
+   "mode": "trained",
+   "offset": 13,
+   "simSeconds": 300,
+   "rungEnd": 1,
+   "hits": 0,
+   "hitsPerMin": 0,
+   "writeOffs": 0,
+   "firstHit": null,
+   "points": 0,
+   "lost": 0,
+   "zones": {},
+   "carStates": {},
+   "kinds": {},
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": null,
+   "afterLesson": null,
+   "firstBrakeAt": 21.2,
+   "dashAt": null,
+   "behaviours": {
+    "body": 140,
+    "pass": 4,
+    "return": 4
+   },
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 19,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 5,
+    "minStopGap": 226,
+    "reach": 177
+   },
+   "windows": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "policy": "standOff",
+   "mode": "trained",
+   "offset": 0,
+   "simSeconds": 300,
+   "rungEnd": 1,
+   "hits": 0,
+   "hitsPerMin": 0,
+   "writeOffs": 0,
+   "firstHit": null,
+   "points": 0,
+   "lost": 0,
+   "zones": {},
+   "carStates": {},
+   "kinds": {},
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": null,
+   "afterLesson": null,
+   "firstBrakeAt": 3.1,
+   "dashAt": null,
+   "behaviours": {
+    "body": 142,
+    "pass": 5,
+    "return": 5
+   },
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 18,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 5,
+    "minStopGap": 226,
+    "reach": 177
+   },
+   "windows": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "policy": "standOff",
+   "mode": "trained",
+   "offset": 7,
+   "simSeconds": 300,
+   "rungEnd": 1,
+   "hits": 0,
+   "hitsPerMin": 0,
+   "writeOffs": 0,
+   "firstHit": null,
+   "points": 0,
+   "lost": 0,
+   "zones": {},
+   "carStates": {},
+   "kinds": {},
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": null,
+   "afterLesson": null,
+   "firstBrakeAt": 49.2,
+   "dashAt": null,
+   "behaviours": {
+    "body": 145,
+    "pass": 5,
+    "return": 4
+   },
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 19,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 5,
+    "minStopGap": 226,
+    "reach": 177
+   },
+   "windows": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "policy": "standOff",
+   "mode": "trained",
+   "offset": 13,
+   "simSeconds": 300,
+   "rungEnd": 1,
+   "hits": 0,
+   "hitsPerMin": 0,
+   "writeOffs": 0,
+   "firstHit": null,
+   "points": 0,
+   "lost": 0,
+   "zones": {},
+   "carStates": {},
+   "kinds": {},
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": null,
+   "afterLesson": null,
+   "firstBrakeAt": 43.2,
+   "dashAt": null,
+   "behaviours": {
+    "body": 145,
+    "pass": 5,
+    "return": 5
+   },
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 18,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 5,
+    "minStopGap": 226,
+    "reach": 177
+   },
+   "windows": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "policy": "charge",
+   "mode": "trained",
+   "offset": 0,
+   "simSeconds": 300,
+   "rungEnd": 1,
+   "hits": 0,
+   "hitsPerMin": 0,
+   "writeOffs": 0,
+   "firstHit": null,
+   "points": 0,
+   "lost": 0,
+   "zones": {},
+   "carStates": {},
+   "kinds": {},
+   "dashes": 7,
+   "standstillTouches": 7,
+   "tries": 7,
+   "lesson": null,
+   "afterLesson": null,
+   "firstBrakeAt": 4.7,
+   "dashAt": null,
+   "behaviours": {
+    "body": 42
+   },
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 25,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 0,
+    "minStopGap": 13,
+    "reach": 177
+   },
+   "windows": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "policy": "charge",
+   "mode": "trained",
+   "offset": 7,
+   "simSeconds": 300,
+   "rungEnd": 1,
+   "hits": 0,
+   "hitsPerMin": 0,
+   "writeOffs": 0,
+   "firstHit": null,
+   "points": 0,
+   "lost": 0,
+   "zones": {},
+   "carStates": {},
+   "kinds": {},
+   "dashes": 6,
+   "standstillTouches": 6,
+   "tries": 6,
+   "lesson": null,
+   "afterLesson": null,
+   "firstBrakeAt": 52.1,
+   "dashAt": null,
+   "behaviours": {
+    "body": 36
+   },
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 26,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 0,
+    "minStopGap": 13,
+    "reach": 177
+   },
+   "windows": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "policy": "charge",
+   "mode": "trained",
+   "offset": 13,
+   "simSeconds": 300,
+   "rungEnd": 1,
+   "hits": 0,
+   "hitsPerMin": 0,
+   "writeOffs": 0,
+   "firstHit": null,
+   "points": 0,
+   "lost": 0,
+   "zones": {},
+   "carStates": {},
+   "kinds": {},
+   "dashes": 6,
+   "standstillTouches": 6,
+   "tries": 6,
+   "lesson": null,
+   "afterLesson": null,
+   "firstBrakeAt": 46,
+   "dashAt": null,
+   "behaviours": {
+    "body": 36
+   },
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 25,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 0,
+    "minStopGap": 13,
+    "reach": 177
+   },
+   "windows": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "policy": "walkin",
+   "mode": "trained",
+   "offset": 0,
+   "simSeconds": 298.3,
+   "rungEnd": 1,
+   "hits": 10,
+   "hitsPerMin": 2.01,
+   "writeOffs": 1,
+   "firstHit": 22.5,
+   "points": 3492,
+   "lost": 882,
+   "zones": {
+    "frontDiagonal": 7,
+    "front": 3
+   },
+   "carStates": {
+    "expiring": 7,
+    "intention": 3
+   },
+   "kinds": {
+    "struck": 10
+   },
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": null,
+   "afterLesson": null,
+   "firstBrakeAt": 6.5,
+   "dashAt": null,
+   "behaviours": {
+    "body": 189,
+    "pass": 12,
+    "return": 12
+   },
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 13,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 12,
+    "minStopGap": 1,
+    "reach": 177
+   },
+   "windows": [
+    2,
+    2,
+    2,
+    2,
+    2
+   ]
+  },
+  {
+   "policy": "walkin",
+   "mode": "trained",
+   "offset": 7,
+   "simSeconds": 298.3,
+   "rungEnd": 1,
+   "hits": 10,
+   "hitsPerMin": 2.01,
+   "writeOffs": 1,
+   "firstHit": 14.3,
+   "points": 3393,
+   "lost": 882,
+   "zones": {
+    "frontDiagonal": 7,
+    "front": 3
+   },
+   "carStates": {
+    "committed": 1,
+    "intention": 3,
+    "expiring": 6
+   },
+   "kinds": {
+    "struck": 10
+   },
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": null,
+   "afterLesson": null,
+   "firstBrakeAt": 2,
+   "dashAt": null,
+   "behaviours": {
+    "body": 196,
+    "pass": 13,
+    "return": 12
+   },
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 13,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 13,
+    "minStopGap": 1,
+    "reach": 177
+   },
+   "windows": [
+    2,
+    2,
+    2,
+    2,
+    2
+   ]
+  },
+  {
+   "policy": "walkin",
+   "mode": "trained",
+   "offset": 13,
+   "simSeconds": 298.4,
+   "rungEnd": 1,
+   "hits": 9,
+   "hitsPerMin": 1.81,
+   "writeOffs": 1,
+   "firstHit": 20,
+   "points": 3376,
+   "lost": 800,
+   "zones": {
+    "frontDiagonal": 6,
+    "front": 3
+   },
+   "carStates": {
+    "intention": 3,
+    "expiring": 6
+   },
+   "kinds": {
+    "struck": 9
+   },
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": null,
+   "afterLesson": null,
+   "firstBrakeAt": 5.2,
+   "dashAt": null,
+   "behaviours": {
+    "body": 194,
+    "pass": 12,
+    "return": 12
+   },
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 13,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 13,
+    "minStopGap": 4,
+    "reach": 177
+   },
+   "windows": [
+    1,
+    3,
+    1,
+    3,
+    1
+   ]
+  },
+  {
+   "policy": "wander",
+   "mode": "trained",
+   "offset": 0,
+   "simSeconds": 299.9,
+   "rungEnd": 1,
+   "hits": 2,
+   "hitsPerMin": 0.4,
+   "writeOffs": 0,
+   "firstHit": 10.7,
+   "points": 7,
+   "lost": 7,
+   "zones": {
+    "frontDiagonal": 1,
+    "side": 1
+   },
+   "carStates": {
+    "expiring": 1,
+    "cruise": 1
+   },
+   "kinds": {
+    "struck": 2
+   },
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": null,
+   "afterLesson": null,
+   "firstBrakeAt": 9.4,
+   "dashAt": null,
+   "behaviours": {
+    "body": 25
+   },
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 26,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 0,
+    "minStopGap": null,
+    "reach": 177
+   },
+   "windows": [
+    1,
+    0,
+    0,
+    1,
+    0
+   ]
+  },
+  {
+   "policy": "wander",
+   "mode": "trained",
+   "offset": 7,
+   "simSeconds": 299.9,
+   "rungEnd": 1,
+   "hits": 1,
+   "hitsPerMin": 0.2,
+   "writeOffs": 0,
+   "firstHit": 294.9,
+   "points": 22,
+   "lost": 22,
+   "zones": {
+    "front": 1
+   },
+   "carStates": {
+    "expiring": 1
+   },
+   "kinds": {
+    "struck": 1
+   },
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": null,
+   "afterLesson": null,
+   "firstBrakeAt": 21.5,
+   "dashAt": null,
+   "behaviours": {
+    "body": 14
+   },
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 28,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 0,
+    "minStopGap": null,
+    "reach": 177
+   },
+   "windows": [
+    0,
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "policy": "wander",
+   "mode": "trained",
+   "offset": 13,
+   "simSeconds": 299.7,
+   "rungEnd": 1,
+   "hits": 5,
+   "hitsPerMin": 1,
+   "writeOffs": 0,
+   "firstHit": 26,
+   "points": 146,
+   "lost": 146,
+   "zones": {
+    "frontDiagonal": 4,
+    "front": 1
+   },
+   "carStates": {
+    "intention": 2,
+    "expiring": 3
+   },
+   "kinds": {
+    "struck": 5
+   },
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": null,
+   "afterLesson": null,
+   "firstBrakeAt": 45.6,
+   "dashAt": null,
+   "behaviours": {
+    "body": 25
+   },
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 26,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 0,
+    "minStopGap": null,
+    "reach": 177
+   },
+   "windows": [
+    2,
+    2,
+    0,
+    0,
+    1
+   ]
+  },
+  {
+   "policy": "aim",
+   "mode": "trained",
+   "offset": 0,
+   "simSeconds": 299.5,
+   "rungEnd": 1,
+   "hits": 8,
+   "hitsPerMin": 1.6,
+   "writeOffs": 0,
+   "firstHit": 20.7,
+   "points": 420,
+   "lost": 420,
+   "zones": {
+    "rearDiagonal": 5,
+    "side": 3
+   },
+   "carStates": {
+    "cruise": 8
+   },
+   "kinds": {
+    "dash": 8
+   },
+   "dashes": 54,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": null,
+   "afterLesson": null,
+   "firstBrakeAt": null,
+   "dashAt": null,
+   "behaviours": {},
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 28,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 0,
+    "minStopGap": null,
+    "reach": 177
+   },
+   "windows": [
+    3,
+    1,
+    2,
+    1,
+    1
+   ]
+  },
+  {
+   "policy": "aim",
+   "mode": "trained",
+   "offset": 7,
+   "simSeconds": 299.5,
+   "rungEnd": 1,
+   "hits": 8,
+   "hitsPerMin": 1.6,
+   "writeOffs": 0,
+   "firstHit": 13.7,
+   "points": 420,
+   "lost": 420,
+   "zones": {
+    "rearDiagonal": 5,
+    "side": 3
+   },
+   "carStates": {
+    "cruise": 8
+   },
+   "kinds": {
+    "dash": 8
+   },
+   "dashes": 54,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": null,
+   "afterLesson": null,
+   "firstBrakeAt": null,
+   "dashAt": null,
+   "behaviours": {},
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 28,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 0,
+    "minStopGap": null,
+    "reach": 177
+   },
+   "windows": [
+    3,
+    1,
+    2,
+    1,
+    1
+   ]
+  },
+  {
+   "policy": "aim",
+   "mode": "trained",
+   "offset": 13,
+   "simSeconds": 299.5,
+   "rungEnd": 1,
+   "hits": 8,
+   "hitsPerMin": 1.6,
+   "writeOffs": 0,
+   "firstHit": 7.7,
+   "points": 420,
+   "lost": 420,
+   "zones": {
+    "rearDiagonal": 5,
+    "side": 3
+   },
+   "carStates": {
+    "cruise": 8
+   },
+   "kinds": {
+    "dash": 8
+   },
+   "dashes": 54,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": null,
+   "afterLesson": null,
+   "firstBrakeAt": null,
+   "dashAt": null,
+   "behaviours": {},
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 28,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 0,
+    "minStopGap": null,
+    "reach": 177
+   },
+   "windows": [
+    3,
+    1,
+    2,
+    1,
+    1
+   ]
+  },
+  {
+   "policy": "flank",
+   "mode": "trained",
+   "offset": 0,
+   "simSeconds": 299.1,
+   "rungEnd": 1,
+   "hits": 13,
+   "hitsPerMin": 2.61,
+   "writeOffs": 0,
+   "firstHit": 19.9,
+   "points": 683,
+   "lost": 683,
+   "zones": {
+    "side": 13
+   },
+   "carStates": {
+    "cruise": 13
+   },
+   "kinds": {
+    "dash": 13
+   },
+   "dashes": 27,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": null,
+   "afterLesson": null,
+   "firstBrakeAt": null,
+   "dashAt": null,
+   "behaviours": {},
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 28,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 0,
+    "minStopGap": null,
+    "reach": 177
+   },
+   "windows": [
+    3,
+    2,
+    3,
+    2,
+    3
+   ]
+  },
+  {
+   "policy": "flank",
+   "mode": "trained",
+   "offset": 7,
+   "simSeconds": 299,
+   "rungEnd": 1,
+   "hits": 15,
+   "hitsPerMin": 3.01,
+   "writeOffs": 0,
+   "firstHit": 2.7,
+   "points": 788,
+   "lost": 788,
+   "zones": {
+    "side": 15
+   },
+   "carStates": {
+    "cruise": 15
+   },
+   "kinds": {
+    "dash": 15
+   },
+   "dashes": 28,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": null,
+   "afterLesson": null,
+   "firstBrakeAt": null,
+   "dashAt": null,
+   "behaviours": {},
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 28,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 0,
+    "minStopGap": null,
+    "reach": 177
+   },
+   "windows": [
+    4,
+    2,
+    3,
+    2,
+    4
+   ]
+  },
+  {
+   "policy": "flank",
+   "mode": "trained",
+   "offset": 13,
+   "simSeconds": 299.1,
+   "rungEnd": 1,
+   "hits": 14,
+   "hitsPerMin": 2.81,
+   "writeOffs": 0,
+   "firstHit": 7,
+   "points": 735,
+   "lost": 735,
+   "zones": {
+    "side": 14
+   },
+   "carStates": {
+    "cruise": 14
+   },
+   "kinds": {
+    "dash": 14
+   },
+   "dashes": 27,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": null,
+   "afterLesson": null,
+   "firstBrakeAt": null,
+   "dashAt": null,
+   "behaviours": {},
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 28,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 0,
+    "minStopGap": null,
+    "reach": 177
+   },
+   "windows": [
+    3,
+    2,
+    3,
+    3,
+    3
+   ]
+  }
+ ],
+ "escalation": [
+  {
+   "policy": "stand",
+   "mode": "lesson",
+   "offset": 0,
+   "simSeconds": 599.9,
+   "rungEnd": 1,
+   "hits": 1,
+   "hitsPerMin": 0.1,
+   "writeOffs": 0,
+   "firstHit": 6.6,
+   "points": 100,
+   "lost": 100,
+   "zones": {
+    "front": 1
+   },
+   "carStates": {
+    "cruise": 1
+   },
+   "kinds": {
+    "struck": 1
+   },
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": {
+    "hitAt": 6.6,
+    "zone": "front",
+    "learnedAt": 11.6
+   },
+   "afterLesson": {
+    "hits": 0,
+    "hitsPerMin": 0,
+    "lost": 0
+   },
+   "firstBrakeAt": 14.1,
+   "dashAt": 16.3,
+   "behaviours": {
+    "body": 262,
+    "pass": 9,
+    "return": 9
+   },
+   "learnEvents": 1,
+   "cars": {
+    "appearances": 38,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 9,
+    "minStopGap": 226,
+    "reach": 177
+   },
+   "windows": [
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "decay": 0
+  },
+  {
+   "policy": "charge",
+   "mode": "lesson",
+   "offset": 0,
+   "simSeconds": 599.9,
+   "rungEnd": 1,
+   "hits": 1,
+   "hitsPerMin": 0.1,
+   "writeOffs": 0,
+   "firstHit": 7.1,
+   "points": 167,
+   "lost": 167,
+   "zones": {
+    "front": 1
+   },
+   "carStates": {
+    "cruise": 1
+   },
+   "kinds": {
+    "struck": 1
+   },
+   "dashes": 12,
+   "standstillTouches": 12,
+   "tries": 13,
+   "lesson": {
+    "hitAt": 7.1,
+    "zone": "front",
+    "learnedAt": 11.6
+   },
+   "afterLesson": {
+    "hits": 0,
+    "hitsPerMin": 0,
+    "lost": 0
+   },
+   "firstBrakeAt": 59.1,
+   "dashAt": 61.7,
+   "behaviours": {
+    "body": 72
+   },
+   "learnEvents": 1,
+   "cars": {
+    "appearances": 50,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 0,
+    "minStopGap": 13,
+    "reach": 177
+   },
+   "windows": [
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "decay": 0
+  },
+  {
+   "policy": "walkin",
+   "mode": "lesson",
+   "offset": 0,
+   "simSeconds": 596.7,
+   "rungEnd": 1,
+   "hits": 18,
+   "hitsPerMin": 1.81,
+   "writeOffs": 2,
+   "firstHit": 10.3,
+   "points": 6668,
+   "lost": 1640,
+   "zones": {
+    "frontDiagonal": 11,
+    "front": 7
+   },
+   "carStates": {
+    "cruise": 1,
+    "intention": 7,
+    "expiring": 8,
+    "committed": 2
+   },
+   "kinds": {
+    "struck": 18
+   },
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": {
+    "hitAt": 10.3,
+    "zone": "frontDiagonal",
+    "learnedAt": 11.6
+   },
+   "afterLesson": {
+    "hits": 17,
+    "hitsPerMin": 1.74,
+    "lost": 1475
+   },
+   "firstBrakeAt": 18.2,
+   "dashAt": 20.7,
+   "behaviours": {
+    "body": 359,
+    "pass": 23,
+    "return": 23
+   },
+   "learnEvents": 1,
+   "cars": {
+    "appearances": 27,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 24,
+    "minStopGap": 1,
+    "reach": 177
+   },
+   "windows": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    1,
+    1,
+    2
+   ],
+   "decay": 0.75
+  },
+  {
+   "policy": "aim",
+   "mode": "lesson",
+   "offset": 0,
+   "simSeconds": 599.1,
+   "rungEnd": 0,
+   "hits": 13,
+   "hitsPerMin": 1.3,
+   "writeOffs": 0,
+   "firstHit": 30.5,
+   "points": 6,
+   "lost": 6,
+   "zones": {
+    "rearDiagonal": 11,
+    "side": 2
+   },
+   "carStates": {
+    "cruise": 13
+   },
+   "kinds": {
+    "struck": 13
+   },
+   "dashes": 0,
+   "standstillTouches": 0,
+   "tries": null,
+   "lesson": null,
+   "afterLesson": null,
+   "firstBrakeAt": null,
+   "dashAt": null,
+   "behaviours": {},
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 55,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "blocked20s": 0,
+    "honks": 0,
+    "minStopGap": null,
+    "reach": 177
+   },
+   "windows": [
+    1,
+    1,
+    2,
+    1,
+    1,
+    1,
+    2,
+    1,
+    2,
+    1
+   ],
+   "decay": 1.5
+  }
+ ]
+}

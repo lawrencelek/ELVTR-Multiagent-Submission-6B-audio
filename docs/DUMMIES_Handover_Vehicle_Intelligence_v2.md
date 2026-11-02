@@ -12,6 +12,8 @@
 
 **Updated 2 November, 10.1 built:** §15. The Monument test road plays at `prototypes/p10/dummies_p10.html`; GDD Edit 101.
 
+**Updated 2 November, 10.2 built:** §16. The first lesson plays at `prototypes/p10/dummies_p10_2.html`; GDD Edit 102. Rung 1 closes the front; the flank and the late step-in stay open. 10.1's page is frozen.
+
 ## 0 How to use this with v1
 
 - **v1** (`claude/DUMMIES_Handover_Vehicle_Intelligence.md`) still holds: constraints (§4), code survey (§5), tools (§8), repos (§9), run and test (§11), conventions (§12).
@@ -249,9 +251,15 @@ Recorded in `DECISIONS.md`. Replaces the rows v1 §3.2 proposed.
 | 664 | Rung 0 senses nothing: `perception.forwardLength` 0, `proto.driver.cautionZone` 0 | proposed; follows row 650 (L1: walk into it) |
 | 665 | The 29 sim-only IDs registered; `duel.*` added; `registryVersion` unchanged so Prototype 9's rebuild keeps its md5 | tested (2 November) |
 | 666 | On a one-way road of two lanes, the second lane's car may pass by the first (`TestRoadSim.choose`) | tested (2 November) |
+| 667 | Prototype 10.2 built: one lesson, rung 0 to rung 1, in four beats; Battery 1 by drone at the first brake (§16; GDD Edit 102) | tested (2 November) |
+| 668 | Standstill: a car slower than `duel.standstillSpeed` (5) takes no damage and teaches nothing | proposed (D106) |
+| 669 | Rung 1 keeps the safe envelope from a dummy ahead: beam 720, stop line 226, a hard stop for a charge; no side field until rung 2 | proposed (D107) |
+| 670 | Test road: run-in of a beam plus a car length; return timed from leaving the screen; the kerbs bound every swerve and pass (D105 in part) | tested (2 November) |
+| 671 | 10.2 measured: standing and charging 0 at rung 1; the late step-in 1.94 a minute on foot; the flank 2.81 with the dash; decay 0 against 0.75 (§16) | tested (2 November) |
+| 672 | One page per test: 10.1's page frozen (md5 `82ab5e55…`); +12 registry IDs, 644 entries, version unchanged | tested (2 November) |
 
-- **Open:** D89 red hue; D90 white role; D91 fixed or adaptive ladder; D92 car contact; D93 flank damage; D94 venue; D95 law clauses; D96 boss families; D97 parts as keys; D98 lessons, not damage; D99 learning carries across Story levels; D100 10.1's target (overtaken by row 661: rung 1 is 10.2); D101 what "something new" means; D102 pass every driver value to traffic; D103 draw the side zone that acts; D104 the nine tests' rung order; D105 a sighted car's endless wait.
-- **Next row 667. Next open decision D106.**
+- **Open:** D89 red hue; D90 white role; D91 fixed or adaptive ladder; D92 car contact; D93 flank damage; D94 venue; D95 law clauses; D96 boss families; D97 parts as keys; D98 lessons, not damage; D99 learning carries across Story levels; D100 10.1's target (overtaken by row 661: rung 1 is 10.2); D101 what "something new" means; D102 pass every driver value to traffic; D103 draw the side zone that acts; D104 the nine tests' rung order; D105 a sighted car's endless wait (in part resolved by row 670); D106 the standstill rule; D107 rung 1's envelope and beam; D108 when the dash arrives; D109 the return against the drive-in.
+- **Next row 673. Next open decision D110.**
 
 ## 9 The crux and the ten tests (user-decided 1 November, row 653)
 
@@ -675,4 +683,60 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
 - **Open:**
   - The human pass (H3): Sasha plus one new player, 5 minutes free play each, recorded.
   - D105: a sighted car waited for ever for a dummy standing just off its lane line.
-- **Next:** 10.2, rung 1.
+- **Next:** 10.2, rung 1. Built: §16.
+
+## 16 Result: Prototype 10.2, the first lesson (2 November, rows 667–672; GDD Edit 102)
+
+- **Build:** `prototypes/p10/dummies_p10_2.html`, first card on `index.html`. 10.1's page is frozen (row 672).
+- **The one change:** rung 1, taught by one lesson. The car starts at rung 0; a hit on its nose teaches it.
+- **Checks:** `node prototypes/p10/test_p10.js --page` 16/16. Probes `qa/baseline/p10_2.md` 12/12. Prototype 9 51/51; frozen md5s hold; sound freeze holds.
+
+### 16.1 The lesson, as built (§9.1's four beats)
+
+| Beat | On screen | Values |
+|---|---|---|
+| Cause | A hit on the nose at rung 0. A side bump teaches nothing | `front`, `frontDiagonal` |
+| Clip | Once the car has left: the hit replayed as its training clip; the impact frame boxed | `duel.lessonClipSeconds` 3, `duel.lessonHoldSeconds` 0.8 |
+| Update | A drone fits the camera on the nose; the beam draws out | `duel.lessonFitSeconds` 2 |
+| Return | The same tag, SEDAN-01, at rung 1 | `duel.redReturnSeconds` 4; drive-in 5.2 s |
+| New behaviour | It slows when it sees you; stops 226 short; honks; passes | §16.2 |
+
+- **No goal text.** Labels name the car and the part only.
+- **The dash** arrives by drone at the car's first brake for the dummy (`duel.dashArrives` 2): the tool where the problem is.
+
+### 16.2 Rung 1: why the front needed more than a brake
+
+| Tried | Result | Fix |
+|---|---|---|
+| Prototype 9's stop: late, as comfort allows, 50 short | A dash still reaches the braking car | Stop beyond dash reach |
+| Stop 190 short (`proto.learn.standoffMax`) | Walk up and dash the stopped car: 52 damage, as much as the flank (53) | Standstill: no damage, no lesson (row 668) |
+| Hard stop when the dummy closes | A sprint from the far side still lands: the 560 beam is shorter than the stop needs | Beam 720; slow from first sight within the safe envelope (row 669) |
+| Car appears near a dummy at the screen's edge | It spawns inside the envelope | Run-in of a beam plus a car length (row 670) |
+
+- **The safe envelope** (Mobileye RSS, §4.2): the gap a dummy needs to dash into the nose if it ran at the car while the car reacted and stopped.
+  - It uses `movement.runSpeed`, `perception.reactionDelay`, `traffic.hardBraking`, `movement.lungeDistance` and `body.radius`.
+  - At cruise it is 670; at a standstill, 226.
+- **Real basis:** AEB brakes for what is ahead. It cannot undo a late step from the kerb (v1 §14.1; Euro NCAP's obstructed-pedestrian case).
+
+### 16.3 Measured (rung 1 alone; `trained` mode)
+
+| Way in | Hits a minute | Verdict |
+|---|---|---|
+| Stand in the lane, on a line or 8 off it | 0 | Closed |
+| Sprint at it down its lane, dash in reach | 0 (19 charges, 19 standstill touches) | Closed |
+| Step in late from the kerb, on foot | 1.94 (88 a hit) | Open: pillar 1, D97 |
+| Dash into its side | 2.81 (53 a hit) | Open: the flank |
+
+- **Escalation (`lesson` mode, 10 minutes):** standing and charging decay to 0 after the lesson; the late step-in holds at 0.75.
+- **New behaviours (`qa.esc.newBehaviours`):** the brake for the dummy, the pass, the honk. None at rung 0.
+- **Pass (§14.2):** a new behaviour appears; the closed trick's decay is below 0.5; an unupgraded way stays; no stalls.
+
+### 16.4 Open
+
+- **Human pass (H3):** Sasha plus one new player, recorded.
+  - Explains why it brakes within 2 minutes (old 10.4's pass).
+  - Finds the late step-in or the flank unprompted.
+  - Uses the dash within the level (old 10.5's pass).
+- **D105 remainder:** a dummy at a stopped car's bumper holds it until it steps away.
+- **D106–D109:** standstill; envelope and beam; dash timing; return against drive-in.
+- **Next:** 10.3, rung 2: the side sensor wired and drawn true. It closes the flank; the jump arrives.
