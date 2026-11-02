@@ -1,0 +1,19 @@
+{"kind":"arcade","id":"monument","off":0,"lead":300,"secs":150,"hits":1,"writeOffs":0,"lost":15,"carStates":{"expiring":1},"zones":{"frontDiagonal":1}}
+{"kind":"arcade","id":"monument","off":0,"lead":560,"skipped":"no on-screen lane point at this lead"}
+{"kind":"arcade","id":"monument","off":0,"lead":700,"skipped":"no on-screen lane point at this lead"}
+{"kind":"arcade","id":"monument","off":20,"lead":300,"secs":150,"hits":1,"writeOffs":0,"lost":17,"carStates":{"expiring":1},"zones":{"frontDiagonal":1}}
+{"kind":"arcade","id":"monument","off":20,"lead":560,"skipped":"no on-screen lane point at this lead"}
+{"kind":"arcade","id":"monument","off":20,"lead":700,"skipped":"no on-screen lane point at this lead"}
+{"kind":"arcade","id":"parkland","off":0,"lead":300,"secs":150,"hits":0,"writeOffs":0,"lost":0,"carStates":{},"zones":{}}
+{"kind":"arcade","id":"parkland","off":0,"lead":560,"skipped":"no on-screen lane point at this lead"}
+{"kind":"arcade","id":"parkland","off":0,"lead":700,"skipped":"no on-screen lane point at this lead"}
+{"kind":"arcade","id":"parkland","off":20,"lead":300,"secs":150,"hits":1,"writeOffs":0,"lost":70,"carStates":{"expiring":1},"zones":{"frontDiagonal":1}}
+{"kind":"arcade","id":"parkland","off":20,"lead":560,"skipped":"no on-screen lane point at this lead"}
+{"kind":"arcade","id":"parkland","off":20,"lead":700,"skipped":"no on-screen lane point at this lead"}
+{"kind":"arcade","id":"waterfront","off":0,"lead":300,"secs":150,"hits":1,"writeOffs":0,"lost":40,"carStates":{"interrupted":1},"zones":{"front":1}}
+{"kind":"arcade","id":"waterfront","off":0,"lead":560,"secs":149,"hits":8,"writeOffs":0,"lost":81,"carStates":{"expiring":2,"caution":4,"interrupted":1,"committed":1},"zones":{"front":2,"frontDiagonal":6}}
+{"kind":"arcade","id":"waterfront","off":0,"lead":700,"secs":150,"hits":0,"writeOffs":0,"lost":0,"carStates":{},"zones":{}}
+{"kind":"arcade","id":"waterfront","off":20,"lead":300,"secs":150,"hits":0,"writeOffs":0,"lost":0,"carStates":{},"zones":{}}
+{"kind":"arcade","id":"waterfront","off":20,"lead":560,"secs":150,"hits":3,"writeOffs":0,"lost":4,"carStates":{"committed":1,"caution":1,"intention":1},"zones":{"frontDiagonal":3}}
+{"kind":"arcade","id":"waterfront","off":20,"lead":700,"secs":150,"hits":1,"writeOffs":0,"lost":9,"carStates":{"caution":1},"zones":{"frontDiagonal":1}}
+{"placements":10,"withHits":7,"hits":16,"writeOffs":0}

@@ -98,7 +98,7 @@
 
 > "There is insufficient challenge, if I just stand in the centre of the road I can get hit."
 
-- Standing is a dominant policy. It breaks pillar 1 (row 79): a hit must be earned.
+- Standing gets hit but pays almost nothing; pillar 1's written test passes (10.0, v2 §11). The aimed dash dominates.
 - V29 governance: a dominant opening triggers a balance review.
 - **Rule (proposed):** from tier 1 the red car never hits a standing dummy.
   - It stops `proto.standoffDistance` short, then reroutes (`driver.avoid.reroute`).
@@ -381,7 +381,7 @@ Each tick, for each car, in order:
 
 ### 6.5 First outside playtest (1 November)
 
-- Standing in lane earns hits. No reading needed. Pillar 1 fails (PT1).
+- Standing in lane gets hit, cheaply (PT1). An aimed dash wins without reading cues (10.0, v2 §11).
 - The QA personas (§6.1) never tested standing. The duel harness must (V0).
 - Wanted: one smart car to beat, not many polite ones (PT3–PT5).
 
@@ -465,7 +465,7 @@ console.log([...new Set(ids)].filter(i=>!reg.has(i)))"
 ## 10 Current state
 
 - **Registry:** `content/params/tuning.parameters.json`, `edit100-2026-10-30`, 600 entries.
-- **Decisions:** `DECISIONS.md` rows 1–656. Rows 648–656 and D89–D99 recorded 1 November (v2 §8). Next row 657; next open decision D100.
+- **Decisions:** `DECISIONS.md` rows 1–657. Rows 648–657 and D89–D100 recorded (v2 §8). Next row 658; next open decision D101.
   - Open and near this work: D40 (cue crowding), D44 (circus capacity), D77 (Second Market keeps learning), D81 (faster cars per grade), D84 (scanner hatch).
   - Waiting on Lawrence: D87 (Style Guide V2.10); row 638 (the jam trace).
 - **GDD:** Edit 100 (Sound) is the newest. Prototype 10 writes Edit 101.

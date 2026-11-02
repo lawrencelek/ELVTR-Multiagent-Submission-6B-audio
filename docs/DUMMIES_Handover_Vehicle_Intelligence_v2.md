@@ -4,6 +4,8 @@
 
 **Updated 1 November, 21:19:** §9 the crux and the ten tests (user-decided); §10 the 10.0 spec. Rows 648–656 recorded.
 
+**Updated 2 November:** §11 the 10.0 result. Pillar 1's written test passes; the aimed dash is the gap. Row 649 superseded by row 657.
+
 ## 0 How to use this with v1
 
 - **v1** (`claude/DUMMIES_Handover_Vehicle_Intelligence.md`) still holds: constraints (§4), code survey (§5), tools (§8), repos (§9), run and test (§11), conventions (§12).
@@ -21,14 +23,14 @@ Three generations of the same five pillars. The playtest tests the oldest wordin
 
 | # | Edit 9 (1 October, original) | Edits 11–23 (row 79) | V29 D2 | Playtest, 1 November |
 |---|---|---|---|---|
-| 1 | There is always a way to destroy yourself | There is always a way to outsmart the car. *Fails if standing in a lane pays as well as baiting* (Edit 19) | D2.1 Reading and fooling a car is the rewarding strategy | **Fails.** Standing earns hits (PT1, §2.2) |
+| 1 | There is always a way to destroy yourself | There is always a way to outsmart the car. *Fails if standing in a lane pays as well as baiting* (Edit 19) | D2.1 Reading and fooling a car is the rewarding strategy | **Passes its written test** (§11). Standing gets hit but pays almost nothing. The aimed dash dominates (PT1) |
 | 2 | Every encounter feels good. A failed lunge makes you want another | Juiced to 11: you feel like the dummy | D2.4 A beautiful, readable encounter leads to closure and replay | **At risk.** Free hits feel like nothing (PT1) |
 | 3 | The cars visibly learn | The cars visibly learn, as individuals and a fleet; emergent behaviour | D2.2 Recurring cars visibly adapt | **No stage.** The tester wants one car that learns (PT2–PT4) |
 | 4 | The signals make timing readable | Machine to human: you buy degrees of freedom | D2.3 The first upgrade changes how you play | **Asked for.** Parts must be the way in (PT6) |
 | 5 | Stellar Art Direction | Unchanged | (art and voice) | Battery done (PT0); story wanted (PT15) |
 
 - **Intended player (Edit 9):** a fifteen-year-old at an exhibition, a friend shouting suggestions. Test with that pair.
-- **Reading:** the pillars already hold the answer. Pillar 1 fails its own written test. Pillar 3 has no stage.
+- **Reading:** the pillars already hold the answer. Pillar 1 passes on paper but play feels too easy (§11). Pillar 3 has no stage.
 
 ## 2 Evidence
 
@@ -75,7 +77,8 @@ Three generations of the same five pillars. The playtest tests the oldest wordin
 - **Reading (hypothesis H0):** hits are free chips, not kills.
   - Cars that noticed the dummy still clip it while passing (`proto.driver.passClearance` 24, `proto.driver.cautionSpeed` 82).
   - Cars ending a manoeuvre (expiring, committed) clip it too.
-  - Free hits, slow kills: no challenge and no payoff. Pillars 1 and 2 both fail.
+  - Free hits, slow kills: no challenge and no payoff.
+- **Revised by 10.0 (§11):** standing pays 6–14% of a head-on lunge; pillar 1's written test passes. The aimed dash is the challenge gap.
 
 ## 3 The five categories
 
@@ -83,7 +86,7 @@ Every note sits in one category. Maximum five.
 
 | Cat | Name | Notes | Pillars | Status |
 |---|---|---|---|---|
-| **C1** | **Earned hits** — challenge and the core verb | PT1, PT6 | 1, 2, 4 | Broken (§2.2). Fix first |
+| **C1** | **Earned hits** — challenge and the core verb | PT1, PT6 | 1, 2, 4 Too easy: the aimed dash dominates (§11). Fix first |
 | **C2** | **One car's mind** — behaviour, learning, progression | PT2, PT3, PT4, PT8, PT9 | 3 | Absent. Build the stage |
 | **C3** | **Cast and attention** — white and red, avoid and chase, swerve cost | PT5, PT7, PT10, PT11, PT12 | 2, 3 | Needs C1 and C2 first |
 | **C4** | **Places and set pieces** — roads, trolley problems, zones | PT13, PT14 | 3, 5 | Later |
@@ -91,7 +94,7 @@ Every note sits in one category. Maximum five.
 
 ### C1 Earned hits
 
-- **Problem (evidence):** standing earns hits (§2.2). Pillar 1's written test fails.
+- **Problem (evidence):** standing gets hit, cheaply (§2.2). An aimed dash at the nearest car wins 10–20 hits a minute, mostly on cars that saw it coming (§11).
 - **Problem (note):** parts must matter to getting hit (PT6).
 - **Research:** an always-yielding car hands the crossing to the pedestrian (Millard-Ball, §4.2). Never-yielding hands the hit to the dummy. Fun sits between.
 - **Hypotheses:** H0, H1, H2, H7 (§6).
@@ -176,7 +179,7 @@ Every note sits in one category. Maximum five.
 
 - **Fifteen open notes** (PT1–PT15; PT0 is done). **The vital 20% is three:** PT1, PT4, PT6.
 - **Why these three:**
-  - **PT1, earned hits (C1).** The core verb is broken. Every other note decorates it.
+  - **PT1, earned hits (C1).** Hits come too easily: the aimed dash needs no reading (§11). Every other note decorates it.
   - **PT4, the learning ladder (C2).** Pillar 3's stage and the progression in one. PT3's 1 vs 1 is its format.
   - **PT6, parts as the way in (C1).** Each level's sensor needs a verb to beat it. Pillar 4.
 - **What they unlock:**
@@ -222,7 +225,7 @@ Recorded in `DECISIONS.md`. Replaces the rows v1 §3.2 proposed.
 | Row | Decision | Status |
 |---|---|---|
 | 648 | Prototype 10 is 1 vs 1: one red car, one dummy. Traffic returns at 10.8 | user-decided |
-| 649 | Pillar 1 fails its own test in Prototype 9: standing earns hits (§2.2) | tested |
+| 649 | Pillar 1 fails its own test in Prototype 9: standing earns hits (§2.2) | superseded by row 657 |
 | 650 | v1 §14.3's five rules are withdrawn; hypotheses H0–H9 replace them | user-decided |
 | 651 | Sasha's notes grouped in five categories, C1–C5 | proposed |
 | 652 | The vital three: PT1, PT4, PT6 | proposed; built into row 653 |
@@ -230,9 +233,10 @@ Recorded in `DECISIONS.md`. Replaces the rows v1 §3.2 proposed.
 | 654 | Story is the curriculum; Arcade is the exam. One duel car (§9.2) | user-decided, with row 653 |
 | 655 | The Nintendo check's two changes: 10.4 hides the goal text; 10.2 and 10.4 run variants | user-decided, with row 653 |
 | 656 | PT0 repeats row 644; no change. Sasha played Prototype 9; the live build draws the core on the chest | tested (built in Prototype 9) |
+| 657 | 10.0 baseline: standing gets hit but pays 6–14% of a head-on lunge; pillar 1's written test passes; the aimed dash dominates (§11) | tested (2 November) |
 
-- **Open:** D89 red hue; D90 white role; D91 fixed or adaptive ladder; D92 car contact; D93 flank damage; D94 venue; D95 law clauses; D96 boss families; D97 parts as keys; D98 lessons, not damage; D99 learning carries across Story levels.
-- **Next row 657. Next open decision D100.**
+- **Open:** D89 red hue; D90 white role; D91 fixed or adaptive ladder; D92 car contact; D93 flank damage; D94 venue; D95 law clauses; D96 boss families; D97 parts as keys; D98 lessons, not damage; D99 learning carries across Story levels; D100 10.1's target: standing, or the aimed dash.
+- **Next row 658. Next open decision D101.**
 
 ## 9 The crux and the ten tests (user-decided 1 November, row 653)
 
@@ -332,6 +336,8 @@ Each test has a bot pass and a human pass: Sasha plus one new player. Thresholds
 
 ## 10 Spec: Prototype 10.0, the baseline
 
+- **Status:** done, 2 November. Result in §11.
+
 **Question:** how does Prototype 9 score on Sasha's core issues, before any change?
 
 ### Scope
@@ -421,3 +427,42 @@ Metric IDs are proposed for a `qa.fun.*` group in the registry. No targets yet: 
 - `test_p9.js --p84` still passes 51/51; `python3 audio/freeze.py --check` passes.
 - A DECISIONS row records the baseline numbers.
 - **Next:** 10.1 changes one thing and reruns this suite.
+
+## 11 Result: Prototype 10.0, the baseline (2 November, row 657)
+
+- **Report:** `qa/baseline/p9.md`. Data: `qa/baseline/p9.json`, `qa/baseline/stand_p9.jsonl`.
+- **Grid:** 6 sims × 4 policies × 3 start offsets, 300 sim-seconds each: 72 runs.
+- **Build unchanged:**
+  - Prototype 9 md5 `be163e7d014344e062965986b3da5786`; 8.4 md5 `9f5549201d88891f9f0b22c461602909`.
+  - `test_p9.js --p84` 51/51; sound freeze 211 items, 0 changed.
+
+### What the numbers say
+
+| Finding | Evidence |
+|---|---|
+| Standing gets hit, as Sasha said | Stand policy: 18 damaging hits in 90 sim-minutes. Held in place: 16 hits in 7 of 10 placements. 0 write-offs |
+| Standing pays almost nothing | 9–21 points a standing hit; 147–172 a head-on lunge. Stand share 0.06–0.14, under 0.45 |
+| **Pillar 1's written test passes in all six sims** | Bait ÷ stand 1.8–8.1, over 1.5 (Edit 19) |
+| **The aimed dash dominates** | The "read and lunge" bot reads no cue: nearest car, 0.12 s lead, dash. Arcade: 10–20 hits a minute; first hit under 1 s; first write-off 29–121 s |
+| It finishes Arcade runs fast | Monument and Waterfront reached their ending in 2.3–3.9 minutes |
+| Cars see it coming and still lose | 65% of its 809 hits landed on cars that had noticed the dummy (caution 305, intention 220) |
+| Baiting is unnecessary | Bait share of its hits: 4–28% |
+| Reading beats repetition, trivially | Read ÷ blind 44–653 (V29 D2.1 passes). Aiming counts as reading |
+| Story gates it | A1: no dash before Battery 1. A2: 0 write-offs in 300 s (brief-gated). A3: one a run |
+| Cars drive predictably | 0–0.38 shifts per car; 0 interrupts; 0–4 heading snaps a run |
+
+### Corrections
+
+- **Row 649's reading was wrong.** Pillar 1's written test passes. Row 657 supersedes it.
+- §1, §2.2 and §3 C1 now say so. The challenge gap is the aimed dash, not standing.
+- **PT1 stands as Sasha's experience:** standing does get hit, and each bump still looks like a hit.
+
+### What it changes in the plan (D100)
+
+- 10.1 as planned removes 16 cheap bumps. Low value.
+- **Proposed:** re-aim 10.1 at the aimed dash.
+  - One change: the duel car answers a dash it sees coming, within `perception.reactionDelay`.
+  - Pass: the aimed-dash bot's hits a minute fall; a flank bot still clears; standing still earns nothing.
+- That is tier 1's mechanic. 10.4 then tests only whether the lesson reads.
+- **H0 stays, for feel:** unearned bumps look like hits.
+- **H1 reframed:** hits feel earned once the aimed dash stops working.
