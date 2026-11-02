@@ -4,9 +4,10 @@
 
 - **Build:** `prototypes/p10/dummies_p10_4.html` (`python3 prototypes/p10/build.py`).
 - **Playtest pages:** `index.html`, one per test. 10.1, 10.2 and 10.3 (md5 `5aed8e43…`) are frozen.
-- **Tests:** `node prototypes/p10/test_p10.js --page` 28/28. Prototype 9 `test_p9.js --p84` 51/51; md5 `be163e7d014344e062965986b3da5786` on rebuild. 8.4 md5 `9f5549201d88891f9f0b22c461602909`. Sound freeze: 211 items, 0 changed.
+- **Tests:** `node prototypes/p10/test_p10.js --page` 29/29. Prototype 9 `test_p9.js --p84` 51/51; md5 `be163e7d014344e062965986b3da5786` on rebuild. 8.4 md5 `9f5549201d88891f9f0b22c461602909`. Sound freeze: 211 items, 0 changed.
 - **Probes:** `node qa/testroad.js --stage 10.4 --out qa/baseline/p10_4.json`; report `qa/baseline/p10_4.md`, 12/12 checks.
-- **Decision log:** rows 679–684; open D113.
+- **Decision log:** rows 679–686. D113 resolved (row 685).
+- **Amended 2 November (row 685):** only a hit where height hid the dummy teaches rung 3. The page was rebuilt with it, then frozen (md5 `b12b48d8…`).
 
 ## Request
 
@@ -17,7 +18,7 @@
 | Reading | Basis | Status |
 |---|---|---|
 | 10.4 starts where 10.3 ends: rung 2, the dash and the jump fitted | One change a test (row 653) | Proposed (row 679) |
-| Only a hit from above teaches rung 3 | A rung learns from a hit on what it then guards (§10.2.1) | Proposed (row 679) |
+| Only a hit where height hid the dummy teaches rung 3 | A rung learns from a hit on what it then guards (§10.2.1) | Decided (row 685) |
 | Rung 3 is a roof lidar | v1 §14.2: lidar against vision; v2 §12: occupancy, "see height" | Proposed (row 680) |
 | D110–D112 stand as built: it waits; cover stays open; the plinth needs a dash-jump | No answer yet; the defaults keep the ladder testable | Open |
 
@@ -26,8 +27,11 @@
 ### 10.4.1 The lesson
 
 - **Start:** rung 2 (`duel.startRung` 2). Battery 1 and Legs 1 fitted (`duel.dashArrives` 3, `duel.jumpArrives` 3). No new part.
-- **Cause: a hit from above.** That is a jump's strike, or a dash launched from the plinth.
-  - A dash or a strike from cover teaches nothing.
+- **Cause: a hit where height hid the dummy** (row 685).
+  - **From above:** a jump's strike, or a dash launched from the plinth.
+  - **In sight:** the car had the dummy in sight past cover for the whole training clip (`duel.lessonClipSeconds` 3).
+  - **The plinth is height.** The building and the barrier are cover.
+  - A clip that shows the dummy coming out of cover teaches nothing, a jump's strike included.
 - **Beats:** as 10.2. The fitting shows "SENSOR FITTED · ROOF LIDAR": a puck on the roof, its sweep turning.
 - **One lesson:** rung 2 to `duel.topRung` 3.
 
@@ -46,7 +50,7 @@
 
 ## Build
 
-- `testroad.js`: rung 3 in the rungs table (high: true); `fromAbove`; the plinth no longer hides a dummy standing on it; spent cars do not stop.
+- `testroad.js`: rung 3 in the rungs table (high: true); `fromAbove`; `trackSight` and `heightHid` (row 685); the plinth no longer hides a dummy standing on it; spent cars do not stop.
 - `game_p10.js`: the roof puck; the lidar's fitting beat.
 - `build.py`: 10.4's stage; 10.3's page frozen.
 
@@ -64,11 +68,12 @@
 
 **The lesson** (mode `lesson`, 10 minutes):
 
-- **Lessons:** in 6 of 6 runs with a jump's hit; in 0 of 12 runs with only hits from cover.
+- **Lessons:** in 3 of 3 runs where height hid the dummy (the plinth: in sight 4.6–6.8 s); in 0 of 18 others.
+  - Jumps from behind the barrier: 41 hits from above, in sight 0.48–2.7 s before each. No lesson.
 - **The plinth:** one hit, then none. Decay 0.
 - **The gap:** 1–3 hits every minute. Decay 0.6.
-- **The jump from behind the barrier:** 2–3 hits every minute, before and after the lesson.
-  - It is a cover trick. The jump is only the strike (D113).
+- **The jump from behind the barrier:** 2–3 hits every minute, throughout.
+  - It is a cover trick. The jump is only the strike. It no longer teaches (row 685).
 
 ## Registry
 
@@ -77,5 +82,4 @@
 ## Open
 
 - **Human pass (H3):** does the player see that it now stops for the plinth, and turn to cover?
-- **D113:** a jump from behind cover teaches "see height", though cover let it land.
 - **Next, 10.5:** cover is the last opening (row 683). The proposed rung 4 slows past what it cannot see.

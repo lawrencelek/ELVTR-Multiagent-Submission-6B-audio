@@ -186,6 +186,17 @@ check('10.4: starts at rung 2 with the dash and the jump; a dash from the plinth
   return { ok: start.rung === 2 && start.dash && start.jump && !!due && due.to === 3 && s.rung === 3 && hits(g).length > 0 && g.rung === 2 && !g.events.some((e) => e.type === 'lesson-due'),
     detail: `start: rung ${start.rung}, dash ${start.dash}, jump ${start.jump}; from the plinth: lesson ${due ? 'at ' + due.t.toFixed(1) + ' s (' + due.zone + ')' : 'none'}, rung ${s.rung}; through the gap: ${hits(g).length} hits, rung ${g.rung}` };
 });
+check('10.4 (row 685): a jump out of cover strikes from above but teaches nothing: the clip shows cover', () => {
+  const s = sim(F4); // qa/testroad.js's jump bot: from behind the barrier, runs at a passing car and jumps into it from close
+  drive(s, 180, (q) => { const b = q.body; if (!b.alive) return {}; let best = null;
+    for (const c of q.onRoad()) if (!c.spent) { const d = Math.hypot(c.x - b.x, c.y - b.y); if (d < 260 && c.v > 15 && (!best || d < best.d)) best = { c, d }; }
+    if (!best) return to(b, 300, 410);
+    const c = best.c, tx = c.x + (c.vx || 0) * 0.25, ty = c.y + (c.vy || 0) * 0.25, ang = Math.atan2(ty - b.y, tx - b.x), d = Math.hypot(tx - b.x, ty - b.y);
+    return { mx: Math.cos(ang), my: Math.sin(ang), bPress: Math.hypot(b.vx, b.vy) > q.P['movement.walkSpeed'] * 1.06 && d < 70 && b.mode !== 'jump' }; });
+  const up = hits(s).filter((e) => e.above), clip = s.P['duel.lessonClipSeconds'];
+  return { ok: up.length > 0 && up.every((e) => e.sight < clip) && s.rung === 2 && !s.events.some((e) => e.type === 'lesson-due'),
+    detail: `${up.length} hits from above; in sight past cover ${Math.min(...up.map((e) => e.sight))}–${Math.max(...up.map((e) => e.sight))} s before each (clip ${clip} s); lessons ${s.events.filter((e) => e.type === 'lesson-due').length}, rung ${s.rung}` };
+});
 check('10.4 rung 3: it sees the dummy up on the plinth and in the air; it stops short of the plinth and waits', () => {
   const s = sim(F4, { 'duel.startRung': 3 }, { owned: { battery1: true, legs1: true } }); let raisedAt = null;
   for (let i = 0; i < 40 * 60 && raisedAt == null; i++) { s.step(climb(s)); if (s.body.raised) raisedAt = s.t; }
@@ -210,13 +221,15 @@ check('Prototype 10 values are registered (registry first)', () => {
   const missing = [...new Set(ids.concat(used, stage))].filter((i) => !reg.has(i));
   return { ok: missing.length === 0, detail: missing.length ? 'missing ' + missing.join(', ') : `the 29 sim-only IDs, ${new Set(used).size} IDs the test road reads, and every stage value are registered` };
 });
-check('Shared code untouched; frozen builds hold (Prototype 9, 8.4, 10.1, 10.2, 10.3)', () => {
+check('Shared code untouched; frozen builds hold (Prototype 9, 8.4, and each frozen test page in build.py)', () => {
   const diff = cp.execSync('git diff --name-only HEAD -- prototypes/p6 prototypes/p7 prototypes/p8 prototypes/jump prototypes/controls', { cwd: ROOT }).toString().trim();
   const p9 = path.join(ROOT, 'prototypes/p9/dummies_p9.html'), keep = fs.readFileSync(p9);
   cp.execSync('python3 prototypes/p9/build.py', { cwd: ROOT, stdio: 'ignore' });
   const rebuilt = md5(p9); fs.writeFileSync(p9, keep);
-  const p84 = md5(path.join(ROOT, 'prototypes/p8/dummies_p8_4.html')), p101 = md5(path.join(__dirname, 'dummies_p10.html')), p102 = md5(path.join(__dirname, 'dummies_p10_2.html')), p103 = md5(path.join(__dirname, 'dummies_p10_3.html'));
-  return { ok: !diff && rebuilt === 'be163e7d014344e062965986b3da5786' && p84 === '9f5549201d88891f9f0b22c461602909' && p101 === '82ab5e55d243ee500d6dfcaa60af74e6' && p102 === '9dd14c5877128390fbad2595e86edce7' && p103 === '5aed8e43a39631596233903de95ca5d7', detail: `shared diff: ${diff || 'none'}; Prototype 9 rebuilt ${rebuilt}; 8.4 ${p84}; 10.1 ${p101}; 10.2 ${p102}; 10.3 ${p103}` };
+  const p84 = md5(path.join(ROOT, 'prototypes/p8/dummies_p8_4.html'));
+  const frozen = [...fs.readFileSync(path.join(__dirname, 'build.py'), 'utf8').matchAll(/'(10\.\d)': \{[^}]*'page': '([^']+)', 'frozen': '([0-9a-f]{32})'/g)].map((m) => ({ id: m[1], want: m[3], got: md5(path.join(__dirname, m[2])) }));
+  return { ok: !diff && rebuilt === 'be163e7d014344e062965986b3da5786' && p84 === '9f5549201d88891f9f0b22c461602909' && frozen.length >= 3 && frozen.every((f) => f.got === f.want),
+    detail: `shared diff: ${diff || 'none'}; Prototype 9 rebuilt ${rebuilt}; 8.4 ${p84}; ${frozen.map((f) => `${f.id} ${f.got === f.want ? 'holds' : 'CHANGED ' + f.got}`).join('; ')}` };
 });
 
 if (process.argv.includes('--page')) {

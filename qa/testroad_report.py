@@ -136,9 +136,16 @@ if top == 1:
         ('A new behaviour: it brakes for the dummy (none at rung 0)', all((r.get('behaviours') or {}).get('body', 0) > 0 for r in tr if r['policy'] in CLOSED), f"brakes in trained closed runs: {sum((r.get('behaviours') or {}).get('body', 0) for r in tr if r['policy'] in CLOSED)}"),
     ]
 if top == 3:
-    above = [r for r in runs if r['mode'] == 'lesson' and r['kinds'].get('jump', 0) > 0]
-    cover = [r for r in runs if r['mode'] == 'lesson' and r['hits'] > 0 and not r['kinds'].get('jump', 0) and r['policy'] in ('gap', 'dashjump', 'aim', 'flank')]
-    checks += [('Only a hit from above teaches rung 3 (a jump, or a dash from the plinth)', all(r.get('lesson') for r in above) and not any(r.get('lesson') for r in cover), f"lessons: {sum(1 for r in above if r.get('lesson'))} of {len(above)} runs with a jump's hit; {sum(1 for r in cover if r.get('lesson'))} of {len(cover)} runs with only dashes or strikes from cover"),
+    les = [r for r in runs if r['mode'] == 'lesson']
+    if all('heightHid' in r for r in les):  # row 685 (D113): height hid the dummy, not cover
+        hid = [r for r in les if r['heightHid'] > 0]
+        cover = [r for r in les if r['hits'] > 0 and not r['heightHid']]
+        checks += [('Only a hit where height hid the dummy teaches rung 3 (from above, in sight past cover for the whole clip)', all(r.get('lesson') for r in hid) and not any(r.get('lesson') for r in cover), f"lessons: {sum(1 for r in hid if r.get('lesson'))} of {len(hid)} runs with such a hit; {sum(1 for r in cover if r.get('lesson'))} of {len(cover)} runs with only hits from cover or on the ground (jumps from cover: {sum(r['above'] for r in cover)})")]
+    else:  # 10.4 as first built (row 679): any hit from above
+        above = [r for r in les if r['kinds'].get('jump', 0) > 0]
+        cover = [r for r in les if r['hits'] > 0 and not r['kinds'].get('jump', 0) and r['policy'] in ('gap', 'dashjump', 'aim', 'flank')]
+        checks += [('Only a hit from above teaches rung 3 (a jump, or a dash from the plinth)', all(r.get('lesson') for r in above) and not any(r.get('lesson') for r in cover), f"lessons: {sum(1 for r in above if r.get('lesson'))} of {len(above)} runs with a jump's hit; {sum(1 for r in cover if r.get('lesson'))} of {len(cover)} runs with only dashes or strikes from cover")]
+    checks += [
                ('Rung 3 closes the plinth: one hit at most in 5 minutes (a landing inside the notice window)', all(r['hits'] <= 1 for r in tr if r['policy'] == 'plinth'), 'plinth ' + ', '.join(str(r['hits']) for r in tr if r['policy'] == 'plinth') + ' hits in 300 s'),
                ('A new behaviour: it stops for a dummy up on the plinth (none at rung 2)', sum((r.get('behaviours') or {}).get('side', 0) for r in tr if r['policy'] == 'plinth') > 0, f"side stops in trained plinth runs: {sum((r.get('behaviours') or {}).get('side', 0) for r in tr if r['policy'] == 'plinth')}")]
 if top == 2 and d['p10'].get('duel.jumpArrives') == 2:

@@ -69,7 +69,8 @@
   // Its sensors see the ground: a dummy in the air, or up on the plinth, is unseen until rung 3. So is one behind a static.
   // Rung 3, the roof lidar (v1 PT4 tier 3; handover v2 §12: "see height"; v1 §14.2: lidar and the occupancy network): its
   // beam and field now see a dummy in the air or up on the plinth. It answers it as it answers one on the ground. Only a
-  // hit from above teaches it (high): a jump, or a dash from the plinth. A hit from cover teaches nothing it can use.
+  // hit where height hid the dummy teaches it (high; row 685): a jump or a dash from the plinth, by a dummy in its sight
+  // for the whole training clip. A strike out of cover, a jump included, teaches nothing it can use.
   // Each rung brings the dummy a part by drone (part, partKey): when that value is 1, as the lesson ends; 2, the first
   // time the car uses the new rung against the dummy (trigger); 3, fitted from the start.
   const RUNGS = [
@@ -158,6 +159,7 @@
       if (this.testRoad && this.rung >= 1) for (const c of this.cars) {
         const m = c.man, hz = c.hz, b = this.body;
         if (!c.red || c.ghost) continue;
+        this.trackSight(c, dt);
         if (this.rung >= 2 && this.watchField(c, dt)) continue;
         if (!m || m.type !== 'brake' || m.emergency || c.cause !== 'body' || !hz || !hz.inPath || c.v < 1) continue;
         const q = X.pathAt(c.path, hz.s);
@@ -235,6 +237,18 @@
       const keep = this.level.statics, st = this.plinth(); this.level.statics = keep.filter((q) => q !== st);
       try { return super.occluded(self, x0, y0, x1, y1); } finally { this.level.statics = keep; }
     }
+    // D113: what hid the dummy, height or cover? sightT is how long the car has had it in sight past every static but the
+    // plinth, up to now. The building and the barrier are cover; the plinth is height.
+    trackSight(c, dt) {
+      const b = this.body, ca = Math.cos(c.h), sa = Math.sin(c.h), nx = c.x + ca * c.L / 2, ny = c.y + sa * c.L / 2;
+      const keep = this.level.statics, st = this.plinth(); let cover;
+      this.level.statics = keep.filter((q) => q !== st);
+      try { cover = super.occluded(c, nx, ny, b.x, b.y); } finally { this.level.statics = keep; }
+      c.sightT = b.alive && !cover ? (c.sightT || 0) + dt : 0;
+    }
+    // Height hid the dummy: a hit from above, by a dummy in the car's sight for the whole training clip (duel.lessonClipSeconds).
+    // A clip that shows the dummy coming out of cover teaches cover, not height (row 685).
+    heightHid(e, c) { return this.fromAbove(e) && (c.sightT || 0) >= this.P['duel.lessonClipSeconds'] - 1e-9; }
     // A hit from above: a jump's strike, or a dash launched from the plinth (or a jump out of one).
     fromAbove(e) { const b = this.body; return e.kind === 'jump' || !!(b && ((b.lunge && b.lunge.fromRaised) || (b.jump && b.jump.fromRaised))); }
     startLunge(facing0, k) { const b = this.body, up = !!b.raised; super.startLunge(facing0, k); if (this.testRoad && b.lunge) b.lunge.fromRaised = up; }
@@ -287,14 +301,17 @@
         keep.push(ct);
       }
       const e0 = this.events.length, positive = super.account(keep);
-      for (const e of this.events.slice(e0)) if (e.type === 'impact' && e.lost > 0) this.learnFrom(e);
+      for (const e of this.events.slice(e0)) if (e.type === 'impact') {
+        const c = this.carById(e.car); if (c && c.red) { e.sight = +(c.sightT || 0).toFixed(2); e.above = this.fromAbove(e); } // in sight past cover (s); from above (D113)
+        if (e.lost > 0) this.learnFrom(e);
+      }
       return positive;
     }
     // Beat 1, the cause: a damaging hit on the part the next rung guards. The lesson shows once the car has left the screen.
     learnFrom(e) {
       const c = this.carById(e.car), next = RUNGS[this.rung + 1];
       if (!c || !c.red || this.lesson || !next || this.rung >= Math.round(this.P['duel.topRung'] || 0) || !next.learnsFrom.includes(e.zone)) return;
-      if (next.high && !this.fromAbove(e)) return; // rung 3 learns only from a hit from above
+      if (next.high && !this.heightHid(e, c)) return; // rung 3 learns only from a hit where height hid the dummy (row 685)
       this.lesson = { state: 'due', from: this.rung, to: next.rung, name: next.name, sensor: next.sensor, model: c.model, car: c.id, zone: e.zone, kind: e.kind, hitT: e.t, lost: e.lost };
       this.emit('lesson-due', { model: c.model, from: this.rung, to: next.rung, zone: e.zone, car: c.id });
     }

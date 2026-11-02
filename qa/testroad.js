@@ -175,6 +175,8 @@ function run(policy, offset, secs, mode) {
     hits: imp.length, hitsPerMin: +(imp.length / mins).toFixed(2), writeOffs: n('writeoff').length,
     firstHit: imp.length ? +(imp[0].t - t0).toFixed(1) : null, points: Math.round(points), lost: Math.round(imp.reduce((a, e) => a + e.lost, 0)),
     zones: tally('zone'), carStates: tally('carState'), kinds: tally('kind'), dashes: n('lunge').length,
+    above: imp.filter((e) => e.above).length, heightHid: imp.filter((e) => e.above && e.sight >= s.P['duel.lessonClipSeconds'] - 1e-9).length, // D113: hits from above; of those, in sight past cover for the whole clip
+    sights: imp.filter((e) => e.above).map((e) => e.sight),
     standstillTouches: n('touch').filter((e) => e.standstill).length, tries: policy === 'charge' ? tries : null,
     lesson: lessonAt ? { hitAt: +(lessonAt.t - t0).toFixed(1), zone: lessonAt.zone, learnedAt: learned ? +(learned.t - t0).toFixed(1) : null } : null,
     afterLesson: after ? { hits: after.length, hitsPerMin: +(after.length / Math.max(1e-9, (s.t - learned.t) / 60)).toFixed(2), lost: Math.round(after.reduce((a, e) => a + e.lost, 0)) } : null,

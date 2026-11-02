@@ -9,8 +9,8 @@ build flags (window.DUMMIES_SIM in dummies_p9.html), every Prototype P10 registr
 Shared files are not touched. sim_flags.json holds every test's values for the headless probes (qa/testroad.js).
 
 A test's page freezes once its human pass may use it, and is never rewritten (md5 below): 10.1 (dummies_p10.html, built
-at 4b3d668), 10.2 (dummies_p10_2.html, built at eab988b) and 10.3 (dummies_p10_3.html, built at c3b0177). Their values still live here, so the probes rerun them on
-today's code. 10.0 has no page: it measured Prototype 9 as built.
+at 4b3d668), 10.2 (dummies_p10_2.html, built at eab988b), 10.3 (dummies_p10_3.html, built at c3b0177) and 10.4 (dummies_p10_4.html, built with
+row 685's rule). Their values still live here, so the probes rerun them on today's code. 10.0 has no page: it measured Prototype 9 as built.
 """
 import hashlib, json, re, subprocess
 from pathlib import Path
@@ -68,7 +68,7 @@ STAGES = {
     '10.1': {'title': 'THE TEST ROAD', 'page': 'dummies_p10.html', 'frozen': '82ab5e55d243ee500d6dfcaa60af74e6', 'edit': 101, 'values': T101},
     '10.2': {'title': 'THE FIRST LESSON', 'page': 'dummies_p10_2.html', 'frozen': '9dd14c5877128390fbad2595e86edce7', 'edit': 102, 'values': T102},
     '10.3': {'title': 'THE SIDE SENSORS', 'page': 'dummies_p10_3.html', 'frozen': '5aed8e43a39631596233903de95ca5d7', 'edit': 103, 'values': T103},
-    '10.4': {'title': 'THE ROOF LIDAR', 'page': 'dummies_p10_4.html', 'frozen': None, 'edit': 104, 'values': T104},
+    '10.4': {'title': 'THE ROOF LIDAR', 'page': 'dummies_p10_4.html', 'frozen': 'b12b48d8dee90294829366f07ef7d1b6', 'edit': 104, 'values': T104},
 }
 CURRENT = '10.4'
 
