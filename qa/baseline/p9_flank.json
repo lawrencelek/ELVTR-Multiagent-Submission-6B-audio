@@ -1,0 +1,2221 @@
+{
+ "build": "prototypes/p9/dummies_p9.html",
+ "secs": 300,
+ "offsets": [
+  4,
+  40
+ ],
+ "variants": {
+  "built": {},
+  "rowFortyFive": {
+   "proto.driver.cautionZone": 100
+  },
+  "blind": {
+   "proto.driver.cautionZone": 0
+  },
+  "wary": {
+   "proto.driver.cautionSpeed": 41
+  }
+ },
+ "runs": [
+  {
+   "sim": "arcade:monument",
+   "variant": "built",
+   "policy": "aim",
+   "offset": 4,
+   "flags": {},
+   "simSeconds": 286.3,
+   "endedAs": null,
+   "dashes": 65,
+   "landed": 63,
+   "hits": 64,
+   "hitsPerMin": 13.41,
+   "firstHit": 1.45,
+   "points": 32999,
+   "cautionEntries": 274,
+   "bySector": {
+    "diagonal": {
+     "dashes": 1,
+     "landed": 0
+    },
+    "side": {
+     "dashes": 1,
+     "landed": 1
+    },
+    "front": {
+     "dashes": 63,
+     "landed": 62
+    }
+   },
+   "zones": {
+    "rearDiagonal": 1,
+    "front": 59,
+    "frontDiagonal": 4
+   },
+   "carStates": {
+    "cruise": 1,
+    "intention": 63
+   }
+  },
+  {
+   "sim": "arcade:monument",
+   "variant": "built",
+   "policy": "aim",
+   "offset": 40,
+   "flags": {},
+   "simSeconds": 288.4,
+   "endedAs": null,
+   "dashes": 91,
+   "landed": 68,
+   "hits": 90,
+   "hitsPerMin": 18.73,
+   "firstHit": 0.2,
+   "points": 19520,
+   "cautionEntries": 262,
+   "bySector": {
+    "diagonal": {
+     "dashes": 24,
+     "landed": 18
+    },
+    "front": {
+     "dashes": 26,
+     "landed": 23
+    },
+    "side": {
+     "dashes": 22,
+     "landed": 12
+    },
+    "rear": {
+     "dashes": 19,
+     "landed": 15
+    }
+   },
+   "zones": {
+    "frontDiagonal": 33,
+    "side": 24,
+    "rearDiagonal": 18,
+    "front": 12,
+    "rear": 3
+   },
+   "carStates": {
+    "caution": 37,
+    "intention": 24,
+    "cruise": 20,
+    "expiring": 6,
+    "committed": 3
+   }
+  },
+  {
+   "sim": "arcade:monument",
+   "variant": "built",
+   "policy": "flank",
+   "offset": 4,
+   "flags": {},
+   "simSeconds": 294.8,
+   "endedAs": null,
+   "dashes": 117,
+   "landed": 44,
+   "hits": 46,
+   "hitsPerMin": 9.36,
+   "firstHit": 5.92,
+   "points": 7697,
+   "cautionEntries": 133,
+   "bySector": {
+    "side": {
+     "dashes": 111,
+     "landed": 38
+    },
+    "rear": {
+     "dashes": 4,
+     "landed": 4
+    },
+    "diagonal": {
+     "dashes": 2,
+     "landed": 2
+    }
+   },
+   "zones": {
+    "frontDiagonal": 4,
+    "side": 39,
+    "rearDiagonal": 3
+   },
+   "carStates": {
+    "expiring": 2,
+    "caution": 36,
+    "cruise": 7,
+    "interrupted": 1
+   }
+  },
+  {
+   "sim": "arcade:monument",
+   "variant": "built",
+   "policy": "flank",
+   "offset": 40,
+   "flags": {},
+   "simSeconds": 291,
+   "endedAs": null,
+   "dashes": 126,
+   "landed": 69,
+   "hits": 72,
+   "hitsPerMin": 14.85,
+   "firstHit": 0.3,
+   "points": 13963,
+   "cautionEntries": 205,
+   "bySector": {
+    "side": {
+     "dashes": 121,
+     "landed": 64
+    },
+    "diagonal": {
+     "dashes": 4,
+     "landed": 4
+    },
+    "rear": {
+     "dashes": 1,
+     "landed": 1
+    }
+   },
+   "zones": {
+    "side": 61,
+    "frontDiagonal": 7,
+    "rearDiagonal": 4
+   },
+   "carStates": {
+    "caution": 58,
+    "expiring": 4,
+    "cruise": 9,
+    "intention": 1
+   }
+  },
+  {
+   "sim": "arcade:monument",
+   "variant": "rowFortyFive",
+   "policy": "aim",
+   "offset": 4,
+   "flags": {
+    "proto.driver.cautionZone": 100
+   },
+   "simSeconds": 286.3,
+   "endedAs": null,
+   "dashes": 66,
+   "landed": 63,
+   "hits": 64,
+   "hitsPerMin": 13.41,
+   "firstHit": 1.45,
+   "points": 33008,
+   "cautionEntries": 214,
+   "bySector": {
+    "diagonal": {
+     "dashes": 1,
+     "landed": 0
+    },
+    "side": {
+     "dashes": 2,
+     "landed": 2
+    },
+    "front": {
+     "dashes": 63,
+     "landed": 61
+    }
+   },
+   "zones": {
+    "rearDiagonal": 1,
+    "front": 61,
+    "side": 2
+   },
+   "carStates": {
+    "cruise": 1,
+    "intention": 61,
+    "caution": 2
+   }
+  },
+  {
+   "sim": "arcade:monument",
+   "variant": "rowFortyFive",
+   "policy": "aim",
+   "offset": 40,
+   "flags": {
+    "proto.driver.cautionZone": 100
+   },
+   "simSeconds": 288,
+   "endedAs": null,
+   "dashes": 137,
+   "landed": 78,
+   "hits": 85,
+   "hitsPerMin": 17.71,
+   "firstHit": 0.2,
+   "points": 22561,
+   "cautionEntries": 287,
+   "bySector": {
+    "side": {
+     "dashes": 15,
+     "landed": 12
+    },
+    "diagonal": {
+     "dashes": 32,
+     "landed": 18
+    },
+    "front": {
+     "dashes": 71,
+     "landed": 34
+    },
+    "rear": {
+     "dashes": 19,
+     "landed": 14
+    }
+   },
+   "zones": {
+    "side": 18,
+    "frontDiagonal": 19,
+    "front": 28,
+    "rearDiagonal": 15,
+    "rear": 5
+   },
+   "carStates": {
+    "caution": 32,
+    "intention": 23,
+    "expiring": 10,
+    "committed": 4,
+    "cruise": 16
+   }
+  },
+  {
+   "sim": "arcade:monument",
+   "variant": "rowFortyFive",
+   "policy": "flank",
+   "offset": 4,
+   "flags": {
+    "proto.driver.cautionZone": 100
+   },
+   "simSeconds": 297.4,
+   "endedAs": null,
+   "dashes": 132,
+   "landed": 23,
+   "hits": 23,
+   "hitsPerMin": 4.64,
+   "firstHit": 5.85,
+   "points": 3817,
+   "cautionEntries": 62,
+   "bySector": {
+    "side": {
+     "dashes": 126,
+     "landed": 18
+    },
+    "rear": {
+     "dashes": 2,
+     "landed": 1
+    },
+    "diagonal": {
+     "dashes": 3,
+     "landed": 3
+    },
+    "front": {
+     "dashes": 1,
+     "landed": 1
+    }
+   },
+   "zones": {
+    "frontDiagonal": 4,
+    "side": 17,
+    "rearDiagonal": 2
+   },
+   "carStates": {
+    "expiring": 3,
+    "cruise": 3,
+    "caution": 17
+   }
+  },
+  {
+   "sim": "arcade:monument",
+   "variant": "rowFortyFive",
+   "policy": "flank",
+   "offset": 40,
+   "flags": {
+    "proto.driver.cautionZone": 100
+   },
+   "simSeconds": 295,
+   "endedAs": null,
+   "dashes": 131,
+   "landed": 44,
+   "hits": 44,
+   "hitsPerMin": 8.95,
+   "firstHit": 0.23,
+   "points": 7533,
+   "cautionEntries": 129,
+   "bySector": {
+    "side": {
+     "dashes": 124,
+     "landed": 38
+    },
+    "diagonal": {
+     "dashes": 2,
+     "landed": 2
+    },
+    "rear": {
+     "dashes": 5,
+     "landed": 4
+    }
+   },
+   "zones": {
+    "side": 36,
+    "rearDiagonal": 6,
+    "frontDiagonal": 2
+   },
+   "carStates": {
+    "caution": 28,
+    "cruise": 13,
+    "expiring": 3
+   }
+  },
+  {
+   "sim": "arcade:monument",
+   "variant": "blind",
+   "policy": "aim",
+   "offset": 4,
+   "flags": {
+    "proto.driver.cautionZone": 0
+   },
+   "simSeconds": 285.6,
+   "endedAs": null,
+   "dashes": 129,
+   "landed": 91,
+   "hits": 106,
+   "hitsPerMin": 22.27,
+   "firstHit": 0.18,
+   "points": 27277,
+   "cautionEntries": 1,
+   "bySector": {
+    "diagonal": {
+     "dashes": 33,
+     "landed": 21
+    },
+    "side": {
+     "dashes": 25,
+     "landed": 9
+    },
+    "front": {
+     "dashes": 37,
+     "landed": 33
+    },
+    "rear": {
+     "dashes": 34,
+     "landed": 28
+    }
+   },
+   "zones": {
+    "frontDiagonal": 39,
+    "side": 17,
+    "front": 24,
+    "rearDiagonal": 23,
+    "rear": 3
+   },
+   "carStates": {
+    "cruise": 62,
+    "intention": 36,
+    "committed": 3,
+    "expiring": 5
+   }
+  },
+  {
+   "sim": "arcade:monument",
+   "variant": "blind",
+   "policy": "aim",
+   "offset": 40,
+   "flags": {
+    "proto.driver.cautionZone": 0
+   },
+   "simSeconds": 285.5,
+   "endedAs": null,
+   "dashes": 109,
+   "landed": 88,
+   "hits": 102,
+   "hitsPerMin": 21.44,
+   "firstHit": 0.2,
+   "points": 28447,
+   "cautionEntries": 0,
+   "bySector": {
+    "side": {
+     "dashes": 37,
+     "landed": 24
+    },
+    "diagonal": {
+     "dashes": 26,
+     "landed": 21
+    },
+    "front": {
+     "dashes": 36,
+     "landed": 34
+    },
+    "rear": {
+     "dashes": 9,
+     "landed": 8
+    },
+    "none": {
+     "dashes": 1,
+     "landed": 1
+    }
+   },
+   "zones": {
+    "side": 31,
+    "frontDiagonal": 40,
+    "front": 20,
+    "rearDiagonal": 9,
+    "rear": 2
+   },
+   "carStates": {
+    "cruise": 55,
+    "intention": 42,
+    "expiring": 3,
+    "committed": 2
+   }
+  },
+  {
+   "sim": "arcade:monument",
+   "variant": "blind",
+   "policy": "flank",
+   "offset": 4,
+   "flags": {
+    "proto.driver.cautionZone": 0
+   },
+   "simSeconds": 290.9,
+   "endedAs": null,
+   "dashes": 124,
+   "landed": 73,
+   "hits": 74,
+   "hitsPerMin": 15.26,
+   "firstHit": 0.45,
+   "points": 14234,
+   "cautionEntries": 1,
+   "bySector": {
+    "side": {
+     "dashes": 119,
+     "landed": 68
+    },
+    "diagonal": {
+     "dashes": 4,
+     "landed": 4
+    },
+    "rear": {
+     "dashes": 1,
+     "landed": 1
+    }
+   },
+   "zones": {
+    "side": 64,
+    "frontDiagonal": 5,
+    "rearDiagonal": 5
+   },
+   "carStates": {
+    "cruise": 72,
+    "expiring": 2
+   }
+  },
+  {
+   "sim": "arcade:monument",
+   "variant": "blind",
+   "policy": "flank",
+   "offset": 40,
+   "flags": {
+    "proto.driver.cautionZone": 0
+   },
+   "simSeconds": 291.2,
+   "endedAs": null,
+   "dashes": 119,
+   "landed": 69,
+   "hits": 69,
+   "hitsPerMin": 14.22,
+   "firstHit": 0.2,
+   "points": 13950,
+   "cautionEntries": 0,
+   "bySector": {
+    "side": {
+     "dashes": 115,
+     "landed": 65
+    },
+    "diagonal": {
+     "dashes": 3,
+     "landed": 3
+    },
+    "rear": {
+     "dashes": 1,
+     "landed": 1
+    }
+   },
+   "zones": {
+    "side": 62,
+    "rearDiagonal": 6,
+    "frontDiagonal": 1
+   },
+   "carStates": {
+    "cruise": 66,
+    "expiring": 2,
+    "released": 1
+   }
+  },
+  {
+   "sim": "arcade:monument",
+   "variant": "wary",
+   "policy": "aim",
+   "offset": 4,
+   "flags": {
+    "proto.driver.cautionSpeed": 41
+   },
+   "simSeconds": 289.6,
+   "endedAs": null,
+   "dashes": 72,
+   "landed": 61,
+   "hits": 62,
+   "hitsPerMin": 12.85,
+   "firstHit": 3.9,
+   "points": 20863,
+   "cautionEntries": 281,
+   "bySector": {
+    "front": {
+     "dashes": 55,
+     "landed": 55
+    },
+    "side": {
+     "dashes": 9,
+     "landed": 3
+    },
+    "rear": {
+     "dashes": 4,
+     "landed": 1
+    },
+    "diagonal": {
+     "dashes": 4,
+     "landed": 2
+    }
+   },
+   "zones": {
+    "frontDiagonal": 57,
+    "side": 4,
+    "rearDiagonal": 1
+   },
+   "carStates": {
+    "intention": 47,
+    "expiring": 4,
+    "caution": 5,
+    "committed": 5,
+    "cruise": 1
+   }
+  },
+  {
+   "sim": "arcade:monument",
+   "variant": "wary",
+   "policy": "aim",
+   "offset": 40,
+   "flags": {
+    "proto.driver.cautionSpeed": 41
+   },
+   "simSeconds": 299.3,
+   "endedAs": null,
+   "dashes": 163,
+   "landed": 9,
+   "hits": 10,
+   "hitsPerMin": 2,
+   "firstHit": 0.22,
+   "points": 663,
+   "cautionEntries": 98,
+   "bySector": {
+    "side": {
+     "dashes": 2,
+     "landed": 2
+    },
+    "front": {
+     "dashes": 155,
+     "landed": 4
+    },
+    "diagonal": {
+     "dashes": 6,
+     "landed": 3
+    }
+   },
+   "zones": {
+    "side": 2,
+    "front": 3,
+    "frontDiagonal": 5
+   },
+   "carStates": {
+    "caution": 4,
+    "intention": 3,
+    "expiring": 1,
+    "committed": 2
+   }
+  },
+  {
+   "sim": "arcade:monument",
+   "variant": "wary",
+   "policy": "flank",
+   "offset": 4,
+   "flags": {
+    "proto.driver.cautionSpeed": 41
+   },
+   "simSeconds": 292.5,
+   "endedAs": null,
+   "dashes": 144,
+   "landed": 62,
+   "hits": 65,
+   "hitsPerMin": 13.33,
+   "firstHit": 7.83,
+   "points": 11079,
+   "cautionEntries": 198,
+   "bySector": {
+    "side": {
+     "dashes": 134,
+     "landed": 54
+    },
+    "diagonal": {
+     "dashes": 4,
+     "landed": 4
+    },
+    "front": {
+     "dashes": 3,
+     "landed": 3
+    },
+    "rear": {
+     "dashes": 3,
+     "landed": 1
+    }
+   },
+   "zones": {
+    "side": 51,
+    "rearDiagonal": 9,
+    "frontDiagonal": 5
+   },
+   "carStates": {
+    "cruise": 14,
+    "caution": 49,
+    "intention": 1,
+    "expiring": 1
+   }
+  },
+  {
+   "sim": "arcade:monument",
+   "variant": "wary",
+   "policy": "flank",
+   "offset": 40,
+   "flags": {
+    "proto.driver.cautionSpeed": 41
+   },
+   "simSeconds": 290.2,
+   "endedAs": null,
+   "dashes": 139,
+   "landed": 78,
+   "hits": 84,
+   "hitsPerMin": 17.37,
+   "firstHit": 0.22,
+   "points": 14949,
+   "cautionEntries": 251,
+   "bySector": {
+    "side": {
+     "dashes": 128,
+     "landed": 68
+    },
+    "diagonal": {
+     "dashes": 4,
+     "landed": 4
+    },
+    "rear": {
+     "dashes": 4,
+     "landed": 3
+    },
+    "front": {
+     "dashes": 3,
+     "landed": 3
+    }
+   },
+   "zones": {
+    "side": 70,
+    "frontDiagonal": 9,
+    "rearDiagonal": 5
+   },
+   "carStates": {
+    "caution": 71,
+    "intention": 4,
+    "cruise": 9
+   }
+  },
+  {
+   "sim": "arcade:parkland",
+   "variant": "built",
+   "policy": "aim",
+   "offset": 4,
+   "flags": {},
+   "simSeconds": 291.7,
+   "endedAs": null,
+   "dashes": 75,
+   "landed": 44,
+   "hits": 55,
+   "hitsPerMin": 11.31,
+   "firstHit": 0.33,
+   "points": 13957,
+   "cautionEntries": 135,
+   "bySector": {
+    "rear": {
+     "dashes": 14,
+     "landed": 3
+    },
+    "side": {
+     "dashes": 3,
+     "landed": 2
+    },
+    "front": {
+     "dashes": 14,
+     "landed": 14
+    },
+    "diagonal": {
+     "dashes": 44,
+     "landed": 25
+    }
+   },
+   "zones": {
+    "side": 13,
+    "frontDiagonal": 33,
+    "rearDiagonal": 8,
+    "front": 1
+   },
+   "carStates": {
+    "cruise": 3,
+    "expiring": 5,
+    "intention": 12,
+    "caution": 33,
+    "committed": 2
+   }
+  },
+  {
+   "sim": "arcade:parkland",
+   "variant": "built",
+   "policy": "aim",
+   "offset": 40,
+   "flags": {},
+   "simSeconds": 293.4,
+   "endedAs": null,
+   "dashes": 85,
+   "landed": 36,
+   "hits": 45,
+   "hitsPerMin": 9.2,
+   "firstHit": 0.17,
+   "points": 10802,
+   "cautionEntries": 138,
+   "bySector": {
+    "side": {
+     "dashes": 25,
+     "landed": 7
+    },
+    "front": {
+     "dashes": 18,
+     "landed": 16
+    },
+    "rear": {
+     "dashes": 19,
+     "landed": 2
+    },
+    "diagonal": {
+     "dashes": 23,
+     "landed": 11
+    }
+   },
+   "zones": {
+    "side": 15,
+    "front": 6,
+    "rearDiagonal": 4,
+    "frontDiagonal": 20
+   },
+   "carStates": {
+    "cruise": 4,
+    "expiring": 6,
+    "caution": 22,
+    "intention": 10,
+    "committed": 3
+   }
+  },
+  {
+   "sim": "arcade:parkland",
+   "variant": "built",
+   "policy": "flank",
+   "offset": 4,
+   "flags": {},
+   "simSeconds": 297.2,
+   "endedAs": null,
+   "dashes": 69,
+   "landed": 20,
+   "hits": 21,
+   "hitsPerMin": 4.24,
+   "firstHit": 45.78,
+   "points": 3641,
+   "cautionEntries": 82,
+   "bySector": {
+    "side": {
+     "dashes": 57,
+     "landed": 20
+    },
+    "diagonal": {
+     "dashes": 4,
+     "landed": 0
+    },
+    "rear": {
+     "dashes": 7,
+     "landed": 0
+    },
+    "front": {
+     "dashes": 1,
+     "landed": 0
+    }
+   },
+   "zones": {
+    "side": 20,
+    "frontDiagonal": 1
+   },
+   "carStates": {
+    "caution": 19,
+    "expiring": 2
+   }
+  },
+  {
+   "sim": "arcade:parkland",
+   "variant": "built",
+   "policy": "flank",
+   "offset": 40,
+   "flags": {},
+   "simSeconds": 299.5,
+   "endedAs": null,
+   "dashes": 2,
+   "landed": 1,
+   "hits": 1,
+   "hitsPerMin": 0.2,
+   "firstHit": 0.17,
+   "points": 53,
+   "cautionEntries": 3,
+   "bySector": {
+    "side": {
+     "dashes": 2,
+     "landed": 1
+    }
+   },
+   "zones": {
+    "side": 1
+   },
+   "carStates": {
+    "cruise": 1
+   }
+  },
+  {
+   "sim": "arcade:parkland",
+   "variant": "rowFortyFive",
+   "policy": "aim",
+   "offset": 4,
+   "flags": {
+    "proto.driver.cautionZone": 100
+   },
+   "simSeconds": 290.2,
+   "endedAs": null,
+   "dashes": 93,
+   "landed": 51,
+   "hits": 63,
+   "hitsPerMin": 13.03,
+   "firstHit": 6.7,
+   "points": 18445,
+   "cautionEntries": 153,
+   "bySector": {
+    "rear": {
+     "dashes": 20,
+     "landed": 2
+    },
+    "front": {
+     "dashes": 28,
+     "landed": 25
+    },
+    "side": {
+     "dashes": 10,
+     "landed": 2
+    },
+    "diagonal": {
+     "dashes": 35,
+     "landed": 22
+    }
+   },
+   "zones": {
+    "frontDiagonal": 44,
+    "front": 5,
+    "side": 9,
+    "rearDiagonal": 4,
+    "rear": 1
+   },
+   "carStates": {
+    "committed": 4,
+    "caution": 29,
+    "expiring": 7,
+    "intention": 21,
+    "cruise": 2
+   }
+  },
+  {
+   "sim": "arcade:parkland",
+   "variant": "rowFortyFive",
+   "policy": "aim",
+   "offset": 40,
+   "flags": {
+    "proto.driver.cautionZone": 100
+   },
+   "simSeconds": 286.6,
+   "endedAs": null,
+   "dashes": 83,
+   "landed": 63,
+   "hits": 69,
+   "hitsPerMin": 14.45,
+   "firstHit": 0.27,
+   "points": 29502,
+   "cautionEntries": 188,
+   "bySector": {
+    "diagonal": {
+     "dashes": 3,
+     "landed": 1
+    },
+    "side": {
+     "dashes": 20,
+     "landed": 14
+    },
+    "rear": {
+     "dashes": 9,
+     "landed": 2
+    },
+    "front": {
+     "dashes": 51,
+     "landed": 46
+    }
+   },
+   "zones": {
+    "frontDiagonal": 49,
+    "rearDiagonal": 2,
+    "front": 3,
+    "side": 15
+   },
+   "carStates": {
+    "caution": 7,
+    "intention": 42,
+    "expiring": 4,
+    "cruise": 15,
+    "committed": 1
+   }
+  },
+  {
+   "sim": "arcade:parkland",
+   "variant": "rowFortyFive",
+   "policy": "flank",
+   "offset": 4,
+   "flags": {
+    "proto.driver.cautionZone": 100
+   },
+   "simSeconds": 299.4,
+   "endedAs": null,
+   "dashes": 29,
+   "landed": 3,
+   "hits": 3,
+   "hitsPerMin": 0.6,
+   "firstHit": 7.35,
+   "points": 156,
+   "cautionEntries": 20,
+   "bySector": {
+    "side": {
+     "dashes": 22,
+     "landed": 3
+    },
+    "diagonal": {
+     "dashes": 2,
+     "landed": 0
+    },
+    "rear": {
+     "dashes": 4,
+     "landed": 0
+    },
+    "front": {
+     "dashes": 1,
+     "landed": 0
+    }
+   },
+   "zones": {
+    "side": 3
+   },
+   "carStates": {
+    "caution": 1,
+    "cruise": 2
+   }
+  },
+  {
+   "sim": "arcade:parkland",
+   "variant": "rowFortyFive",
+   "policy": "flank",
+   "offset": 40,
+   "flags": {
+    "proto.driver.cautionZone": 100
+   },
+   "simSeconds": 293,
+   "endedAs": null,
+   "dashes": 88,
+   "landed": 51,
+   "hits": 51,
+   "hitsPerMin": 10.44,
+   "firstHit": 0.7,
+   "points": 10357,
+   "cautionEntries": 97,
+   "bySector": {
+    "side": {
+     "dashes": 74,
+     "landed": 51
+    },
+    "rear": {
+     "dashes": 11,
+     "landed": 0
+    },
+    "diagonal": {
+     "dashes": 1,
+     "landed": 0
+    },
+    "front": {
+     "dashes": 2,
+     "landed": 0
+    }
+   },
+   "zones": {
+    "side": 51
+   },
+   "carStates": {
+    "caution": 51
+   }
+  },
+  {
+   "sim": "arcade:parkland",
+   "variant": "blind",
+   "policy": "aim",
+   "offset": 4,
+   "flags": {
+    "proto.driver.cautionZone": 0
+   },
+   "simSeconds": 286.7,
+   "endedAs": null,
+   "dashes": 93,
+   "landed": 62,
+   "hits": 67,
+   "hitsPerMin": 14.02,
+   "firstHit": 0.25,
+   "points": 30525,
+   "cautionEntries": 0,
+   "bySector": {
+    "rear": {
+     "dashes": 14,
+     "landed": 4
+    },
+    "front": {
+     "dashes": 27,
+     "landed": 26
+    },
+    "side": {
+     "dashes": 4,
+     "landed": 2
+    },
+    "diagonal": {
+     "dashes": 47,
+     "landed": 29
+    },
+    "none": {
+     "dashes": 1,
+     "landed": 1
+    }
+   },
+   "zones": {
+    "frontDiagonal": 53,
+    "rearDiagonal": 3,
+    "side": 7,
+    "front": 4
+   },
+   "carStates": {
+    "cruise": 34,
+    "intention": 24,
+    "committed": 2,
+    "expiring": 7
+   }
+  },
+  {
+   "sim": "arcade:parkland",
+   "variant": "blind",
+   "policy": "aim",
+   "offset": 40,
+   "flags": {
+    "proto.driver.cautionZone": 0
+   },
+   "simSeconds": 299.6,
+   "endedAs": null,
+   "dashes": 2,
+   "landed": 0,
+   "hits": 0,
+   "hitsPerMin": 0,
+   "firstHit": null,
+   "points": 0,
+   "cautionEntries": 0,
+   "bySector": {
+    "diagonal": {
+     "dashes": 1,
+     "landed": 0
+    },
+    "side": {
+     "dashes": 1,
+     "landed": 0
+    }
+   },
+   "zones": {},
+   "carStates": {}
+  },
+  {
+   "sim": "arcade:parkland",
+   "variant": "blind",
+   "policy": "flank",
+   "offset": 4,
+   "flags": {
+    "proto.driver.cautionZone": 0
+   },
+   "simSeconds": 299.1,
+   "endedAs": null,
+   "dashes": 52,
+   "landed": 8,
+   "hits": 8,
+   "hitsPerMin": 1.6,
+   "firstHit": 0.78,
+   "points": 476,
+   "cautionEntries": 0,
+   "bySector": {
+    "side": {
+     "dashes": 38,
+     "landed": 5
+    },
+    "rear": {
+     "dashes": 8,
+     "landed": 3
+    },
+    "front": {
+     "dashes": 2,
+     "landed": 0
+    },
+    "diagonal": {
+     "dashes": 4,
+     "landed": 0
+    }
+   },
+   "zones": {
+    "side": 6,
+    "rearDiagonal": 2
+   },
+   "carStates": {
+    "cruise": 8
+   }
+  },
+  {
+   "sim": "arcade:parkland",
+   "variant": "blind",
+   "policy": "flank",
+   "offset": 40,
+   "flags": {
+    "proto.driver.cautionZone": 0
+   },
+   "simSeconds": 296.9,
+   "endedAs": null,
+   "dashes": 63,
+   "landed": 24,
+   "hits": 25,
+   "hitsPerMin": 5.05,
+   "firstHit": 28.62,
+   "points": 3943,
+   "cautionEntries": 0,
+   "bySector": {
+    "side": {
+     "dashes": 59,
+     "landed": 24
+    },
+    "diagonal": {
+     "dashes": 2,
+     "landed": 0
+    },
+    "rear": {
+     "dashes": 2,
+     "landed": 0
+    }
+   },
+   "zones": {
+    "side": 21,
+    "rearDiagonal": 3,
+    "front": 1
+   },
+   "carStates": {
+    "cruise": 24,
+    "expiring": 1
+   }
+  },
+  {
+   "sim": "arcade:parkland",
+   "variant": "wary",
+   "policy": "aim",
+   "offset": 4,
+   "flags": {
+    "proto.driver.cautionSpeed": 41
+   },
+   "simSeconds": 291.8,
+   "endedAs": null,
+   "dashes": 84,
+   "landed": 48,
+   "hits": 54,
+   "hitsPerMin": 11.1,
+   "firstHit": 0.2,
+   "points": 14435,
+   "cautionEntries": 204,
+   "bySector": {
+    "side": {
+     "dashes": 9,
+     "landed": 7
+    },
+    "front": {
+     "dashes": 46,
+     "landed": 33
+    },
+    "diagonal": {
+     "dashes": 14,
+     "landed": 7
+    },
+    "rear": {
+     "dashes": 15,
+     "landed": 1
+    }
+   },
+   "zones": {
+    "side": 9,
+    "frontDiagonal": 44,
+    "front": 1
+   },
+   "carStates": {
+    "caution": 18,
+    "intention": 27,
+    "committed": 3,
+    "expiring": 6
+   }
+  },
+  {
+   "sim": "arcade:parkland",
+   "variant": "wary",
+   "policy": "aim",
+   "offset": 40,
+   "flags": {
+    "proto.driver.cautionSpeed": 41
+   },
+   "simSeconds": 294.5,
+   "endedAs": null,
+   "dashes": 67,
+   "landed": 26,
+   "hits": 60,
+   "hitsPerMin": 12.22,
+   "firstHit": 4.97,
+   "points": 4353,
+   "cautionEntries": 206,
+   "bySector": {
+    "front": {
+     "dashes": 41,
+     "landed": 15
+    },
+    "rear": {
+     "dashes": 4,
+     "landed": 2
+    },
+    "diagonal": {
+     "dashes": 21,
+     "landed": 9
+    },
+    "side": {
+     "dashes": 1,
+     "landed": 0
+    }
+   },
+   "zones": {
+    "frontDiagonal": 45,
+    "rearDiagonal": 2,
+    "side": 11,
+    "front": 2
+   },
+   "carStates": {
+    "caution": 19,
+    "intention": 7,
+    "committed": 8,
+    "cruise": 2,
+    "expiring": 24
+   }
+  },
+  {
+   "sim": "arcade:parkland",
+   "variant": "wary",
+   "policy": "flank",
+   "offset": 4,
+   "flags": {
+    "proto.driver.cautionSpeed": 41
+   },
+   "simSeconds": 296.6,
+   "endedAs": null,
+   "dashes": 121,
+   "landed": 28,
+   "hits": 29,
+   "hitsPerMin": 5.87,
+   "firstHit": 0.2,
+   "points": 4202,
+   "cautionEntries": 159,
+   "bySector": {
+    "side": {
+     "dashes": 80,
+     "landed": 22
+    },
+    "diagonal": {
+     "dashes": 12,
+     "landed": 4
+    },
+    "rear": {
+     "dashes": 25,
+     "landed": 2
+    },
+    "front": {
+     "dashes": 4,
+     "landed": 0
+    }
+   },
+   "zones": {
+    "side": 23,
+    "frontDiagonal": 5,
+    "rearDiagonal": 1
+   },
+   "carStates": {
+    "caution": 27,
+    "expiring": 1,
+    "intention": 1
+   }
+  },
+  {
+   "sim": "arcade:parkland",
+   "variant": "wary",
+   "policy": "flank",
+   "offset": 40,
+   "flags": {
+    "proto.driver.cautionSpeed": 41
+   },
+   "simSeconds": 292.3,
+   "endedAs": null,
+   "dashes": 65,
+   "landed": 61,
+   "hits": 62,
+   "hitsPerMin": 12.73,
+   "firstHit": 11.3,
+   "points": 11106,
+   "cautionEntries": 155,
+   "bySector": {
+    "side": {
+     "dashes": 60,
+     "landed": 57
+    },
+    "front": {
+     "dashes": 1,
+     "landed": 0
+    },
+    "diagonal": {
+     "dashes": 4,
+     "landed": 4
+    }
+   },
+   "zones": {
+    "side": 56,
+    "frontDiagonal": 5,
+    "rearDiagonal": 1
+   },
+   "carStates": {
+    "caution": 60,
+    "intention": 1,
+    "cruise": 1
+   }
+  },
+  {
+   "sim": "arcade:waterfront",
+   "variant": "built",
+   "policy": "aim",
+   "offset": 4,
+   "flags": {},
+   "simSeconds": 289.2,
+   "endedAs": null,
+   "dashes": 140,
+   "landed": 77,
+   "hits": 99,
+   "hitsPerMin": 20.54,
+   "firstHit": 0.1,
+   "points": 16199,
+   "cautionEntries": 451,
+   "bySector": {
+    "side": {
+     "dashes": 29,
+     "landed": 18
+    },
+    "diagonal": {
+     "dashes": 43,
+     "landed": 18
+    },
+    "rear": {
+     "dashes": 15,
+     "landed": 10
+    },
+    "front": {
+     "dashes": 53,
+     "landed": 31
+    }
+   },
+   "zones": {
+    "side": 34,
+    "frontDiagonal": 36,
+    "rearDiagonal": 10,
+    "front": 18,
+    "rear": 1
+   },
+   "carStates": {
+    "cruise": 13,
+    "caution": 48,
+    "expiring": 21,
+    "intention": 9,
+    "committed": 8
+   }
+  },
+  {
+   "sim": "arcade:waterfront",
+   "variant": "built",
+   "policy": "aim",
+   "offset": 40,
+   "flags": {},
+   "simSeconds": 286,
+   "endedAs": null,
+   "dashes": 166,
+   "landed": 88,
+   "hits": 115,
+   "hitsPerMin": 24.12,
+   "firstHit": 0.17,
+   "points": 25826,
+   "cautionEntries": 580,
+   "bySector": {
+    "side": {
+     "dashes": 20,
+     "landed": 12
+    },
+    "front": {
+     "dashes": 101,
+     "landed": 46
+    },
+    "rear": {
+     "dashes": 15,
+     "landed": 8
+    },
+    "diagonal": {
+     "dashes": 30,
+     "landed": 22
+    }
+   },
+   "zones": {
+    "side": 15,
+    "frontDiagonal": 71,
+    "rear": 2,
+    "front": 22,
+    "rearDiagonal": 5
+   },
+   "carStates": {
+    "caution": 35,
+    "committed": 7,
+    "cruise": 11,
+    "intention": 38,
+    "expiring": 20,
+    "interrupted": 4
+   }
+  },
+  {
+   "sim": "arcade:waterfront",
+   "variant": "built",
+   "policy": "flank",
+   "offset": 4,
+   "flags": {},
+   "simSeconds": 287.4,
+   "endedAs": null,
+   "dashes": 149,
+   "landed": 103,
+   "hits": 111,
+   "hitsPerMin": 23.18,
+   "firstHit": 1.2,
+   "points": 22341,
+   "cautionEntries": 565,
+   "bySector": {
+    "side": {
+     "dashes": 122,
+     "landed": 77
+    },
+    "diagonal": {
+     "dashes": 18,
+     "landed": 18
+    },
+    "rear": {
+     "dashes": 4,
+     "landed": 3
+    },
+    "front": {
+     "dashes": 5,
+     "landed": 5
+    }
+   },
+   "zones": {
+    "side": 74,
+    "frontDiagonal": 30,
+    "rearDiagonal": 7
+   },
+   "carStates": {
+    "caution": 73,
+    "cruise": 19,
+    "committed": 6,
+    "expiring": 8,
+    "interrupted": 4,
+    "intention": 1
+   }
+  },
+  {
+   "sim": "arcade:waterfront",
+   "variant": "built",
+   "policy": "flank",
+   "offset": 40,
+   "flags": {},
+   "simSeconds": 288.2,
+   "endedAs": null,
+   "dashes": 137,
+   "landed": 90,
+   "hits": 99,
+   "hitsPerMin": 20.61,
+   "firstHit": 0.17,
+   "points": 19053,
+   "cautionEntries": 578,
+   "bySector": {
+    "side": {
+     "dashes": 111,
+     "landed": 66
+    },
+    "front": {
+     "dashes": 3,
+     "landed": 3
+    },
+    "diagonal": {
+     "dashes": 17,
+     "landed": 16
+    },
+    "rear": {
+     "dashes": 6,
+     "landed": 5
+    }
+   },
+   "zones": {
+    "side": 70,
+    "frontDiagonal": 21,
+    "rearDiagonal": 7,
+    "rear": 1
+   },
+   "carStates": {
+    "caution": 72,
+    "committed": 1,
+    "expiring": 2,
+    "intention": 1,
+    "cruise": 22,
+    "interrupted": 1
+   }
+  },
+  {
+   "sim": "arcade:waterfront",
+   "variant": "rowFortyFive",
+   "policy": "aim",
+   "offset": 4,
+   "flags": {
+    "proto.driver.cautionZone": 100
+   },
+   "simSeconds": 287.6,
+   "endedAs": null,
+   "dashes": 164,
+   "landed": 79,
+   "hits": 108,
+   "hitsPerMin": 22.54,
+   "firstHit": 0.1,
+   "points": 20101,
+   "cautionEntries": 453,
+   "bySector": {
+    "side": {
+     "dashes": 20,
+     "landed": 10
+    },
+    "diagonal": {
+     "dashes": 46,
+     "landed": 24
+    },
+    "rear": {
+     "dashes": 14,
+     "landed": 7
+    },
+    "front": {
+     "dashes": 84,
+     "landed": 38
+    }
+   },
+   "zones": {
+    "side": 20,
+    "frontDiagonal": 61,
+    "rearDiagonal": 6,
+    "front": 20,
+    "rear": 1
+   },
+   "carStates": {
+    "cruise": 10,
+    "caution": 36,
+    "expiring": 21,
+    "intention": 21,
+    "interrupted": 5,
+    "committed": 15
+   }
+  },
+  {
+   "sim": "arcade:waterfront",
+   "variant": "rowFortyFive",
+   "policy": "aim",
+   "offset": 40,
+   "flags": {
+    "proto.driver.cautionZone": 100
+   },
+   "simSeconds": 287.7,
+   "endedAs": null,
+   "dashes": 154,
+   "landed": 76,
+   "hits": 106,
+   "hitsPerMin": 22.11,
+   "firstHit": 0.18,
+   "points": 20898,
+   "cautionEntries": 483,
+   "bySector": {
+    "side": {
+     "dashes": 22,
+     "landed": 14
+    },
+    "front": {
+     "dashes": 85,
+     "landed": 41
+    },
+    "diagonal": {
+     "dashes": 41,
+     "landed": 17
+    },
+    "rear": {
+     "dashes": 6,
+     "landed": 4
+    }
+   },
+   "zones": {
+    "side": 22,
+    "frontDiagonal": 64,
+    "front": 16,
+    "rearDiagonal": 4
+   },
+   "carStates": {
+    "caution": 34,
+    "expiring": 22,
+    "intention": 27,
+    "cruise": 10,
+    "interrupted": 4,
+    "committed": 9
+   }
+  },
+  {
+   "sim": "arcade:waterfront",
+   "variant": "rowFortyFive",
+   "policy": "flank",
+   "offset": 4,
+   "flags": {
+    "proto.driver.cautionZone": 100
+   },
+   "simSeconds": 287.8,
+   "endedAs": null,
+   "dashes": 138,
+   "landed": 87,
+   "hits": 99,
+   "hitsPerMin": 20.64,
+   "firstHit": 1.2,
+   "points": 18997,
+   "cautionEntries": 493,
+   "bySector": {
+    "side": {
+     "dashes": 106,
+     "landed": 58
+    },
+    "diagonal": {
+     "dashes": 20,
+     "landed": 18
+    },
+    "rear": {
+     "dashes": 4,
+     "landed": 4
+    },
+    "front": {
+     "dashes": 8,
+     "landed": 7
+    }
+   },
+   "zones": {
+    "side": 68,
+    "frontDiagonal": 24,
+    "rearDiagonal": 7
+   },
+   "carStates": {
+    "cruise": 17,
+    "caution": 66,
+    "committed": 5,
+    "expiring": 7,
+    "interrupted": 3,
+    "released": 1
+   }
+  },
+  {
+   "sim": "arcade:waterfront",
+   "variant": "rowFortyFive",
+   "policy": "flank",
+   "offset": 40,
+   "flags": {
+    "proto.driver.cautionZone": 100
+   },
+   "simSeconds": 287.3,
+   "endedAs": null,
+   "dashes": 116,
+   "landed": 96,
+   "hits": 112,
+   "hitsPerMin": 23.39,
+   "firstHit": 0.57,
+   "points": 20408,
+   "cautionEntries": 451,
+   "bySector": {
+    "side": {
+     "dashes": 89,
+     "landed": 70
+    },
+    "diagonal": {
+     "dashes": 18,
+     "landed": 18
+    },
+    "front": {
+     "dashes": 6,
+     "landed": 5
+    },
+    "rear": {
+     "dashes": 3,
+     "landed": 3
+    }
+   },
+   "zones": {
+    "side": 76,
+    "frontDiagonal": 35,
+    "rearDiagonal": 1
+   },
+   "carStates": {
+    "caution": 89,
+    "cruise": 8,
+    "interrupted": 3,
+    "committed": 2,
+    "expiring": 8,
+    "intention": 2
+   }
+  },
+  {
+   "sim": "arcade:waterfront",
+   "variant": "blind",
+   "policy": "aim",
+   "offset": 4,
+   "flags": {
+    "proto.driver.cautionZone": 0
+   },
+   "simSeconds": 287.4,
+   "endedAs": null,
+   "dashes": 151,
+   "landed": 75,
+   "hits": 111,
+   "hitsPerMin": 23.18,
+   "firstHit": 0.1,
+   "points": 20976,
+   "cautionEntries": 0,
+   "bySector": {
+    "side": {
+     "dashes": 25,
+     "landed": 14
+    },
+    "diagonal": {
+     "dashes": 34,
+     "landed": 16
+    },
+    "rear": {
+     "dashes": 25,
+     "landed": 13
+    },
+    "front": {
+     "dashes": 67,
+     "landed": 32
+    }
+   },
+   "zones": {
+    "side": 29,
+    "frontDiagonal": 51,
+    "rearDiagonal": 13,
+    "front": 15,
+    "rear": 3
+   },
+   "carStates": {
+    "cruise": 59,
+    "interrupted": 2,
+    "intention": 28,
+    "expiring": 13,
+    "committed": 8,
+    "released": 1
+   }
+  },
+  {
+   "sim": "arcade:waterfront",
+   "variant": "blind",
+   "policy": "aim",
+   "offset": 40,
+   "flags": {
+    "proto.driver.cautionZone": 0
+   },
+   "simSeconds": 288.7,
+   "endedAs": null,
+   "dashes": 152,
+   "landed": 55,
+   "hits": 91,
+   "hitsPerMin": 18.91,
+   "firstHit": 0.1,
+   "points": 19923,
+   "cautionEntries": 0,
+   "bySector": {
+    "rear": {
+     "dashes": 16,
+     "landed": 9
+    },
+    "front": {
+     "dashes": 115,
+     "landed": 32
+    },
+    "diagonal": {
+     "dashes": 12,
+     "landed": 8
+    },
+    "side": {
+     "dashes": 9,
+     "landed": 6
+    }
+   },
+   "zones": {
+    "rearDiagonal": 8,
+    "front": 18,
+    "side": 12,
+    "frontDiagonal": 52,
+    "rear": 1
+   },
+   "carStates": {
+    "cruise": 33,
+    "intention": 33,
+    "expiring": 21,
+    "committed": 4
+   }
+  },
+  {
+   "sim": "arcade:waterfront",
+   "variant": "blind",
+   "policy": "flank",
+   "offset": 4,
+   "flags": {
+    "proto.driver.cautionZone": 0
+   },
+   "simSeconds": 287.9,
+   "endedAs": null,
+   "dashes": 137,
+   "landed": 94,
+   "hits": 103,
+   "hitsPerMin": 21.47,
+   "firstHit": 1.17,
+   "points": 20709,
+   "cautionEntries": 0,
+   "bySector": {
+    "side": {
+     "dashes": 112,
+     "landed": 71
+    },
+    "diagonal": {
+     "dashes": 19,
+     "landed": 19
+    },
+    "front": {
+     "dashes": 5,
+     "landed": 4
+    },
+    "rear": {
+     "dashes": 1,
+     "landed": 0
+    }
+   },
+   "zones": {
+    "side": 76,
+    "frontDiagonal": 22,
+    "rearDiagonal": 5
+   },
+   "carStates": {
+    "cruise": 89,
+    "committed": 7,
+    "expiring": 3,
+    "interrupted": 2,
+    "intention": 2
+   }
+  },
+  {
+   "sim": "arcade:waterfront",
+   "variant": "blind",
+   "policy": "flank",
+   "offset": 40,
+   "flags": {
+    "proto.driver.cautionZone": 0
+   },
+   "simSeconds": 287.8,
+   "endedAs": null,
+   "dashes": 129,
+   "landed": 91,
+   "hits": 99,
+   "hitsPerMin": 20.64,
+   "firstHit": 1.12,
+   "points": 18518,
+   "cautionEntries": 0,
+   "bySector": {
+    "side": {
+     "dashes": 110,
+     "landed": 72
+    },
+    "rear": {
+     "dashes": 9,
+     "landed": 9
+    },
+    "diagonal": {
+     "dashes": 7,
+     "landed": 7
+    },
+    "front": {
+     "dashes": 3,
+     "landed": 3
+    }
+   },
+   "zones": {
+    "side": 66,
+    "frontDiagonal": 21,
+    "rearDiagonal": 12
+   },
+   "carStates": {
+    "cruise": 92,
+    "released": 2,
+    "expiring": 5
+   }
+  },
+  {
+   "sim": "arcade:waterfront",
+   "variant": "wary",
+   "policy": "aim",
+   "offset": 4,
+   "flags": {
+    "proto.driver.cautionSpeed": 41
+   },
+   "simSeconds": 287.6,
+   "endedAs": null,
+   "dashes": 171,
+   "landed": 86,
+   "hits": 108,
+   "hitsPerMin": 22.54,
+   "firstHit": 0.17,
+   "points": 19473,
+   "cautionEntries": 541,
+   "bySector": {
+    "side": {
+     "dashes": 35,
+     "landed": 20
+    },
+    "rear": {
+     "dashes": 18,
+     "landed": 12
+    },
+    "front": {
+     "dashes": 53,
+     "landed": 25
+    },
+    "diagonal": {
+     "dashes": 65,
+     "landed": 29
+    }
+   },
+   "zones": {
+    "side": 30,
+    "front": 13,
+    "rearDiagonal": 11,
+    "frontDiagonal": 54
+   },
+   "carStates": {
+    "caution": 44,
+    "expiring": 17,
+    "cruise": 16,
+    "intention": 19,
+    "committed": 9,
+    "interrupted": 2,
+    "released": 1
+   }
+  },
+  {
+   "sim": "arcade:waterfront",
+   "variant": "wary",
+   "policy": "aim",
+   "offset": 40,
+   "flags": {
+    "proto.driver.cautionSpeed": 41
+   },
+   "simSeconds": 289.4,
+   "endedAs": null,
+   "dashes": 188,
+   "landed": 69,
+   "hits": 96,
+   "hitsPerMin": 19.9,
+   "firstHit": 0.15,
+   "points": 16383,
+   "cautionEntries": 538,
+   "bySector": {
+    "side": {
+     "dashes": 26,
+     "landed": 12
+    },
+    "front": {
+     "dashes": 114,
+     "landed": 28
+    },
+    "diagonal": {
+     "dashes": 27,
+     "landed": 18
+    },
+    "rear": {
+     "dashes": 21,
+     "landed": 11
+    }
+   },
+   "zones": {
+    "side": 18,
+    "frontDiagonal": 51,
+    "front": 18,
+    "rearDiagonal": 9
+   },
+   "carStates": {
+    "caution": 32,
+    "expiring": 21,
+    "intention": 19,
+    "committed": 9,
+    "cruise": 11,
+    "interrupted": 4
+   }
+  },
+  {
+   "sim": "arcade:waterfront",
+   "variant": "wary",
+   "policy": "flank",
+   "offset": 4,
+   "flags": {
+    "proto.driver.cautionSpeed": 41
+   },
+   "simSeconds": 287.8,
+   "endedAs": null,
+   "dashes": 135,
+   "landed": 90,
+   "hits": 99,
+   "hitsPerMin": 20.64,
+   "firstHit": 0.17,
+   "points": 18911,
+   "cautionEntries": 545,
+   "bySector": {
+    "side": {
+     "dashes": 118,
+     "landed": 74
+    },
+    "diagonal": {
+     "dashes": 8,
+     "landed": 7
+    },
+    "rear": {
+     "dashes": 5,
+     "landed": 5
+    },
+    "front": {
+     "dashes": 4,
+     "landed": 4
+    }
+   },
+   "zones": {
+    "side": 81,
+    "frontDiagonal": 13,
+    "rearDiagonal": 5
+   },
+   "carStates": {
+    "caution": 75,
+    "committed": 6,
+    "cruise": 15,
+    "interrupted": 3
+   }
+  },
+  {
+   "sim": "arcade:waterfront",
+   "variant": "wary",
+   "policy": "flank",
+   "offset": 40,
+   "flags": {
+    "proto.driver.cautionSpeed": 41
+   },
+   "simSeconds": 287.8,
+   "endedAs": null,
+   "dashes": 138,
+   "landed": 94,
+   "hits": 105,
+   "hitsPerMin": 21.89,
+   "firstHit": 0.15,
+   "points": 20147,
+   "cautionEntries": 664,
+   "bySector": {
+    "side": {
+     "dashes": 110,
+     "landed": 70
+    },
+    "front": {
+     "dashes": 10,
+     "landed": 10
+    },
+    "diagonal": {
+     "dashes": 15,
+     "landed": 11
+    },
+    "rear": {
+     "dashes": 3,
+     "landed": 3
+    }
+   },
+   "zones": {
+    "side": 80,
+    "frontDiagonal": 21,
+    "rearDiagonal": 4
+   },
+   "carStates": {
+    "caution": 86,
+    "cruise": 12,
+    "intention": 1,
+    "committed": 1,
+    "interrupted": 2,
+    "expiring": 3
+   }
+  }
+ ],
+ "pageErrors": []
+}

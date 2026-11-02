@@ -8,6 +8,8 @@
 
 **Updated 2 November, later:** §12 the 10.0-v2 result. PT1 means avoidance never escalates (row 658). Prototype 9 cars learn two numbers and no behaviours.
 
+**Updated 2 November, 03:00:** §13 the 10.0-v3 result (the side sensor's response is missing; a traffic-values bug). §14 Prototype 10's revised scope: one Monument junction, one car type, nine escalating tests (row 661). §14 supersedes §9.3's 10.1–10.9 rows.
+
 ## 0 How to use this with v1
 
 - **v1** (`claude/DUMMIES_Handover_Vehicle_Intelligence.md`) still holds: constraints (§4), code survey (§5), tools (§8), repos (§9), run and test (§11), conventions (§12).
@@ -238,9 +240,12 @@ Recorded in `DECISIONS.md`. Replaces the rows v1 §3.2 proposed.
 | 657 | 10.0 baseline: standing gets hit but pays 6–14% of a head-on lunge; pillar 1's written test passes; the aimed dash dominates (§11) | tested (2 November) |
 | 658 | PT1 clarified: Sasha meant avoidance never escalates. The learning car learns something new each time; white cars need not | user-decided (2 November) |
 | 659 | 10.0-v2: Prototype 9 cars learn two numbers and no behaviours; the aimed dash keeps working or ends in a stalemate (§12) | tested (2 November) |
+| 660 | 10.0-v3: side awareness exists but only slows the car; blind and built cars lose the flank alike; the drawn side arcs drive nothing (§13) | tested (2 November) |
+| 661 | Prototype 10's scope: one Monument junction (two one-way roads, then two two-lane roads), one car type, nine tests that escalate the car's learning (§14) | user-decided (2 November) |
+| 662 | Bug: district traffic gets only two of the build's driver values; `proto.driver.dodgeFollowsCone` (row 632) never reaches Story or Arcade traffic (§13) | tested (2 November) |
 
-- **Open:** D89 red hue; D90 white role; D91 fixed or adaptive ladder; D92 car contact; D93 flank damage; D94 venue; D95 law clauses; D96 boss families; D97 parts as keys; D98 lessons, not damage; D99 learning carries across Story levels; D100 10.1's target: standing, or the aimed dash; D101 what "something new" means.
-- **Next row 660. Next open decision D102.**
+- **Open:** D89 red hue; D90 white role; D91 fixed or adaptive ladder; D92 car contact; D93 flank damage; D94 venue; D95 law clauses; D96 boss families; D97 parts as keys; D98 lessons, not damage; D99 learning carries across Story levels; D100 10.1's target (overtaken by row 661: rung 1 is 10.2); D101 what "something new" means; D102 pass every driver value to traffic; D103 draw the side zone that acts; D104 the nine tests' rung order.
+- **Next row 663. Next open decision D105.**
 
 ## 9 The crux and the ten tests (user-decided 1 November, row 653)
 
@@ -299,6 +304,8 @@ Each test has a bot pass and a human pass: Sasha plus one new player. Thresholds
 | **10.9 The cost** | Car-on-car contact: a red swerve into white is an Incident (`traffic.carContact`, `scoring.incidentPoints`) | PT12, PT2 | No jams (v1 W7 watchdog) | Laughs or retries; no frustration | Objects reacting to objects (BotW multiplicative) |
 
 - **10.0-v2 (2 November):** the escalation baseline (§12). Every later test reruns it.
+- **10.0-v3 (2 November):** side sensing and the flank (§13).
+- **Revised (row 661):** §14.2 replaces the 10.1–10.9 rows above. One Monument junction, one car type, one rung a test.
 - **After 10.9:** trolley set pieces (PT13) as Story lessons. Same four beats; the car learns a priority.
 - **Each build:** one flag (registry default 0), a bot table, a short human session, a DECISIONS row.
 
@@ -529,3 +536,120 @@ Metric IDs are proposed for a `qa.fun.*` group in the registry. No targets yet: 
   - Each lesson adds one response type.
   - The closed trick's decay falls below 0.5.
   - No stalemate windows.
+
+## 13 Result: Prototype 10.0-v3, side sensing and the flank (2 November, rows 660, 662)
+
+- **Question (Lawrence):** the early side sensor may be missing. Is the flank too easy, or too hard to approach?
+- **Method:** `qa/flank.js`, Arcade Endless.
+  - Grid: 3 districts × 4 variants × 2 bots × 2 offsets, 300 s each: 48 runs.
+  - Bots: `aim` dashes at the nearest car; `flank` comes alongside a moving car and dashes into its side.
+- **Report:** `qa/baseline/p9_flank.md`. Data: `qa/baseline/p9_flank.json`. Build unchanged.
+
+### The side sensor, then and now
+
+| When | Side sensing | Driving response | Source |
+|---|---|---|---|
+| Vertical slice (CR-005) | Arcs 100 from the nose, 80° each side | The car slows to its wary speed; never swerves | Row 45: "so it's not like the car is totally blind from the side" |
+| P1 | The same arcs (`perception.sideRadius`, `perception.sideHalfAngle`) | Slows only (`proto.sideSlowFraction`) | P1 brief, P1.13 |
+| P1.7–P1.9 | The driver's field: a box alongside and ahead, `proto.driver.cautionZone` wide | Slows to `proto.driver.cautionSpeed` | DB3a |
+| Prototype 9 | The arcs are computed and drawn but drive nothing. The driver's field (180) slows the car | Slow only | `sim.js` `perceive`; `game.js` draw |
+
+- **No record of a request to remove it.** The arcs survived as a drawing; the field took over the slowing.
+- **P1.13 (14 October) already flagged the flank:** lunging from the shoulder completed the contract without baiting. A human playtest was to decide. Sasha's notes are that playtest.
+- **The cue lies.** The drawn arcs (100, 80°) are not the zone that acts (a 180 box).
+
+### Findings
+
+| Variant | Flank dashes that land | Flank hits a minute | Aimed-dash hits a minute |
+|---|---|---|---|
+| `built` (field 180, slows to 82) | 0.51 | 12.1 | 16.2 |
+| `rowFortyFive` (field 100) | 0.44 | 11.4 | 17.2 |
+| `blind` (field 0: no side awareness) | 0.52 | 13.0 | 16.6 |
+| `wary` (slows to 41) | 0.58 | 15.3 | 13.4 |
+
+- **Side awareness exists but does not defend.** Blind and built cars lose the flank equally.
+- **Slowing helps the dummy.** A slower car is easier to hit from the side.
+- **The flank is too easy, not too hard.** First flank hit in 3–9 s; 44–55% of side dashes land.
+- **Cars notice and still lose.** Of 350 flank hits on built cars, 258 landed on cars in caution.
+- **Flank hits pay less:** about 164 points a hit against 269 for the aimed dash (`damage.zone.side` 0.3).
+
+### A bug found on the way (row 662)
+
+- In Story and Arcade, each screen's traffic runs in its own sim.
+- From the build's values, only two reach it (`TRAFFIC_KEYS`: `proto.droneConeSeconds`, `proto.driver.coneSteepPass`).
+- **So `proto.driver.dodgeFollowsCone` (1 in Prototype 9, row 632) never reaches district traffic.** Its screen sims hold 0.
+- **Unproven lead for the jam (row 638):** cars round a moved cone keep the other lane.
+- Prototype 9 stays frozen. Prototype 10 passes every driver value (D102).
+- From 10.0-v3 on, probes set driver values on every screen's sim. 10.0 and 10.0-v2 changed no driver value, so they stand.
+
+### How games make vehicles and guards see you
+
+| Game | Detection | Escalation |
+|---|---|---|
+| Stealth games (School of Stealth survey) | A strong central cone and a weaker peripheral zone. Awareness meters fill slower far off, at the edge of view, in low light, crouched or still | Suspicion states read through posture and barks |
+| Shadow Tactics | Near zone: near-instant detection. Darker zone: safe crouched, not standing. Rules drawn on screen | — |
+| Splinter Cell: Blacklist | A small zone behind the guard: a sense that someone is near | — |
+| Thief | Guards learn second-hand from other guards | — |
+| GTA V | Police see you; out of sight, search cones show on the radar | Each star adds units and tactics: rams, roadblocks, spike strips, helicopters, SWAT, then saturation |
+| Need for Speed: Most Wanted (2005) | Pursuit bar; hiding spots speed the cooldown | Each heat condition adds a unit or tactic: undercover cars and roadblocks; Rhino SUVs that charge head-on; spike strips and a helicopter; federal units |
+
+- **What they share (research, not yet a DUMMIES rule):**
+  - Strong front, weak edges: detection builds slower at the periphery.
+  - Escalation adds a new unit or tactic, not just more of the same.
+  - The rules are drawn, so a miss can be explained.
+
+### What it means
+
+- **The side sensor isn't missing; its response is.** Slowing never avoids.
+- **Rung 2 (§12) becomes the missing side sensor:**
+  - Sense the flank slowly: a notice time at the side (`perception.sideNoticeSeconds`, proposed), against `perception.reactionDelay` ahead.
+  - Answer with a real move: swerve away or speed past (v1 §14.1).
+  - Draw the zone that acts, not the old arcs (D103).
+
+## 14 Prototype 10, revised scope (2 November, row 661)
+
+> "Don't try to rebuild all maps at once. For p10 build a reduced scenario where a two one way roads pass, then two two lane roads. probably the complexity of the road junction and the items in the road and how to get onto the road matter more than the urban landscape. for the purposes of gameplay escalation keep the road scenario the same to start with. in fact we can start with just ONE car type, to simplify testing. we focus on one map (say, monument) and the nine test scenarios can give escalating learning too." (Lawrence)
+
+### 14.1 Scope
+
+- **One map:** Monument. One screen, its palette. No district, no other maps.
+- **Road scenario A (10.1–10.7):** two one-way roads crossing at a junction. It stays the same while the car escalates.
+- **Road scenario B (10.8–10.9):** the same junction as two two-lane, two-way roads.
+- **What the scenario must hold** (the parts that matter more than the city):
+  - **The junction:** right of way, a blind corner, a turn.
+  - **Items in the road:** cones, a barrier gap.
+  - **Ways onto the road:** a kerb, a crossing, a gap in the barrier, a raised edge to jump from.
+- **One car type:** the sedan (`vehicles.sedan.*`). Red is the learning car. In 10.8–10.9, white sedans that never learn.
+- **One sim:** the base `Sim`, not a district. Every value reaches the cars; no `TRAFFIC_KEYS` gap (row 662).
+- **Supersedes** the Proving Ground (D94) and the 10.1–10.9 rows of §9.3. The ten-test method (row 653) holds.
+
+### 14.2 The nine tests: one rung each (proposed order, D104)
+
+Each test changes one thing. From 10.2, that change is one new behaviour for the red car: the trick that just won is closed and one opening is left.
+
+| Test | Road | The one change | The red car learns | Closes | Leaves open | Part by drone |
+|---|---|---|---|---|---|---|
+| **10.1** | A | The test road: Monument junction, one red sedan, no score | Nothing (rung 0) | — | Walk into its path | None (on foot) |
+| **10.2** | A | Rung 1, shown as a lesson (clip, sensor fitted, return); no goal text | Brake for what is ahead | Front: walking or dashing | The flank | Battery 1, the dash |
+| **10.3** | A | Rung 2: the missing side sensor, wired and drawn true | Watch the flanks; swerve away or speed past | The flank dash | Above: jump from a raised edge | Legs 1, jump |
+| **10.4** | A | Rung 3 | See height | The jump | The junction's blind corner | — |
+| **10.5** | A | Rung 4 | Creep at the junction | The corner ambush | Items in the road: a cone forces a swerve | Hands 1, cones |
+| **10.6** | A | Rung 5 | Read road items: stop at a cone, don't swerve | Cone diversion | The feint after it commits | — |
+| **10.7** | A | Rung 6 | Counter your habit | Your favourite opening | Any other | — |
+| **10.8** | B | The road upgrade: two-way, with white sedans that never learn | — | Its swerve into an empty lane | Oncoming traffic blocks its escape | — |
+| **10.9** | B | Swerve cost: a red swerve into a white sedan is an Incident (`traffic.carContact`) | Prefer braking | The swerve escape | Box it in | — |
+
+- **Every test reruns the probes** on its build: `qa/stand.js`, `qa/policy.js`, `qa/escalation.js`, `qa/flank.js`.
+- **Pass (proposed):**
+  - The new behaviour appears (`qa.esc.newBehaviours`).
+  - The closed trick's decay is below 0.5 (`qa.esc.decay`).
+  - The opening still lands; an unupgraded way stays (pillar 1, D97).
+  - No stalemate windows.
+- **Human pass:** Sasha plus one new player, recorded (§10).
+- **Parts:** this order (dash, jump, cones) differs from Story's Monument order (Edit 93). The duel delivers its own.
+
+### 14.3 Next: the 10.1 spec
+
+- `prototypes/p10/`: `build.py` from Prototype 9's, and its own files that extend the base `Sim`: the `junction` level, the red car, the rungs.
+- **Shared files stay untouched,** so a Prototype 9 rebuild keeps its md5 (v1 §4). Story extends `Sim6` the same way (`p7/story.js`).
+- Probes gain a `--level junction` target before 10.1's run.
