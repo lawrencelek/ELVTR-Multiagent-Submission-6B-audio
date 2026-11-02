@@ -14,6 +14,8 @@
 
 **Updated 2 November, 10.2 built:** §16. The first lesson plays at `prototypes/p10/dummies_p10_2.html`; GDD Edit 102. Rung 1 closes the front; the flank and the late step-in stay open. 10.1's page is frozen.
 
+**Updated 2 November, 10.3 built:** §17. The side sensors play at `prototypes/p10/dummies_p10_3.html`; GDD Edit 103. Rung 2 closes the open flank; cover and the plinth stay open. 10.2's page is frozen; `index.html` lists one page per test for the playtest.
+
 ## 0 How to use this with v1
 
 - **v1** (`claude/DUMMIES_Handover_Vehicle_Intelligence.md`) still holds: constraints (§4), code survey (§5), tools (§8), repos (§9), run and test (§11), conventions (§12).
@@ -257,9 +259,15 @@ Recorded in `DECISIONS.md`. Replaces the rows v1 §3.2 proposed.
 | 670 | Test road: run-in of a beam plus a car length; return timed from leaving the screen; the kerbs bound every swerve and pass (D105 in part) | tested (2 November) |
 | 671 | 10.2 measured: standing and charging 0 at rung 1; the late step-in 1.94 a minute on foot; the flank 2.81 with the dash; decay 0 against 0.75 (§16) | tested (2 November) |
 | 672 | One page per test: 10.1's page frozen (md5 `82ab5e55…`); +12 registry IDs, 644 entries, version unchanged | tested (2 November) |
+| 673 | Prototype 10.3 built: from rung 1, any hit but a tail bump teaches rung 2; Battery 1 from the start; Legs 1 by drone at the first side stop (§17; GDD Edit 103) | tested (2 November) |
+| 674 | Rung 2 is the driver's field made the zone that acts: noticed after 0.6 s, it keeps the envelope measured straight, stops short and waits; no pass | proposed (D110) |
+| 675 | A swerve away cannot close the flank: tried first, the flank still landed 2.8 a minute at 53 | tested (2 November) |
+| 676 | Its sensors see the ground: unseen in the air, on the plinth, behind statics. The plinth is a raised edge; jumps follow Edit 75 on the test road | tested (2 November) |
+| 677 | 10.3 measured: the open flank, the kerb, the late step-in and the corner score 0; cover 2.07 a minute; the plinth 2.68; the car waits for a dummy in the open | tested (2 November) |
+| 678 | 10.2's page frozen (md5 `9dd14c58…`); one page per test on `index.html`, 10.0 being Prototype 9; registry 647 entries | tested (2 November) |
 
-- **Open:** D89 red hue; D90 white role; D91 fixed or adaptive ladder; D92 car contact; D93 flank damage; D94 venue; D95 law clauses; D96 boss families; D97 parts as keys; D98 lessons, not damage; D99 learning carries across Story levels; D100 10.1's target (overtaken by row 661: rung 1 is 10.2); D101 what "something new" means; D102 pass every driver value to traffic; D103 draw the side zone that acts; D104 the nine tests' rung order; D105 a sighted car's endless wait (in part resolved by row 670); D106 the standstill rule; D107 rung 1's envelope and beam; D108 when the dash arrives; D109 the return against the drive-in.
-- **Next row 673. Next open decision D110.**
+- **Open:** D89 red hue; D90 white role; D91 fixed or adaptive ladder; D92 car contact; D93 flank damage; D94 venue; D95 law clauses; D96 boss families; D97 parts as keys; D98 lessons, not damage; D99 learning carries across Story levels; D100 10.1's target (overtaken by row 661: rung 1 is 10.2); D101 what "something new" means; D102 pass every driver value to traffic; D103 draw the side zone that acts; D104 the nine tests' rung order; D105 a sighted car's endless wait (in part resolved by row 670); D106 the standstill rule; D107 rung 1's envelope and beam; D108 when the dash arrives; D109 the return against the drive-in; D110 rung 2 waits for any dummy in its field; D111 cover open at rung 2; D112 the plinth needs a dash-jump.
+- **Next row 679. Next open decision D113.**
 
 ## 9 The crux and the ten tests (user-decided 1 November, row 653)
 
@@ -739,4 +747,53 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
   - Uses the dash within the level (old 10.5's pass).
 - **D105 remainder:** a dummy at a stopped car's bumper holds it until it steps away.
 - **D106–D109:** standstill; envelope and beam; dash timing; return against drive-in.
-- **Next:** 10.3, rung 2: the side sensor wired and drawn true. It closes the flank; the jump arrives.
+- **Next:** 10.3, rung 2: the side sensor wired and drawn true. It closes the flank; the jump arrives. Built: §17.
+
+## 17 Result: Prototype 10.3, the side sensors (2 November, rows 673–678; GDD Edit 103)
+
+- **Build:** `prototypes/p10/dummies_p10_3.html`. 10.2's page is frozen.
+- **The one change:** rung 2, taught by one lesson. The car starts at rung 1; the dummy starts with the dash.
+- **Checks:** `node prototypes/p10/test_p10.js --page` 24/24. Probes `qa/baseline/p10_3.md` 12/12. Prototype 9 51/51; frozen md5s hold; sound freeze holds.
+
+### 17.1 One page per test (Lawrence's question)
+
+| Test | Page | State | The one change |
+|---|---|---|---|
+| 10.0 | `prototypes/p9/dummies_p9.html` | Prototype 9 as built | None: the baseline Sasha played |
+| 10.1 | `prototypes/p10/dummies_p10.html` | Frozen, md5 `82ab5e55…` | The test road; rung 0 |
+| 10.2 | `prototypes/p10/dummies_p10_2.html` | Frozen, md5 `9dd14c58…` | Rung 1, the forward camera; the dash |
+| 10.3 | `prototypes/p10/dummies_p10_3.html` | Current | Rung 2, the side sensors; the jump |
+
+- `index.html` lists them in order, each with what to look for.
+- A page freezes when the next test is built. Its values stay in `sim_flags.json`, so the probes rerun it on today's code.
+
+### 17.2 Rung 2: why it stops instead of swerving
+
+| Tried | Result | Why |
+|---|---|---|
+| The side arcs (`perception.sideRadius` 200) and a swerve to the far kerb | Flank 2.8 a minute at 53: unchanged | The road is 112 wide; a dash reaches 177 |
+| The same, with a flinch when the dummy dashes | Unchanged | A side hit's damage is the dummy's own strike; the car's speed adds nothing |
+| The driver's field, and the envelope measured straight | The open flank, kerb, late step-in and corner score 0 | A stopped car is a wall (row 668) |
+
+- **Weak edges** (§13, stealth games): it notices a dummy in its field after `perception.sideNoticeSeconds` (0.6); ahead, after `perception.reactionDelay` (0.3). A meter shows the notice.
+- **It waits while you stay in its field,** honking. It no longer passes a dummy in its lane.
+
+### 17.3 Measured (rung 2 alone; `trained` mode)
+
+| Way in | Hits a minute | Verdict |
+|---|---|---|
+| The open kerb, the open flank, the late step-in, the corner, the lane | 0 | Closed |
+| Behind the barrier, through its gap | 2.07 (52 a hit) | Open: cover, no Legs (pillar 1, D97) |
+| Down from the plinth | 2.68 (53) | Open: the raised edge, with Legs 1 |
+| A jump from behind the barrier | 2.70 (124) | Open: cover and the jump |
+
+- **Escalation (`lesson` mode, 10 minutes):** the closed tricks decay to 0; the gap holds at 0.8; the plinth starts once Legs 1 arrives.
+- **Legs 1** arrives 1.0–3.3 s after the car first stops for a dummy beside its path.
+- **The cost (D110):** a dummy in the open near the road holds the car; bots that stay there see 0.2–0.5 cars a minute.
+
+### 17.4 Open
+
+- **Human pass (H3):** does the player read the meter and the wait, find cover or the plinth unprompted, and use the jump?
+- **D110–D112:** the wait; cover open beside the plinth; the plinth needs a dash-jump.
+- **D105:** a dummy at a stopped car's bumper still holds it.
+- **Next:** 10.4, rung 3: see height. It closes the plinth and the jump; the blind corner is meant to stay open.

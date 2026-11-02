@@ -2,12 +2,20 @@
 // One screen. Scenario A: two one-way roads cross at a junction, two lanes each. One car type, the sedan; the red car is the
 // only car on the road, and it returns soon after it leaves (duel.redReturnSeconds).
 // 10.1: rung 0, the red car learns nothing. 10.2: one lesson. A hit on its nose teaches rung 1, the forward camera.
+// 10.3: from rung 1, a hit from the side teaches rung 2, the side sensors. Battery 1 from the start; Legs 1, the jump, arrives.
 // Extends the base Sim from prototypes/p6/sim.js. Shared files are untouched, so Prototype 9's build keeps its md5.
 // Runs in the browser (window.DUMMIES) and in node (require), so the probes run headless without a page.
 (function (root) {
   'use strict';
   const X = typeof module !== 'undefined' && module.exports ? require('../p6/sim.js') : root.DUMMIES;
-  const hyp = Math.hypot;
+  const hyp = Math.hypot, clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  function circleRect(px, py, r, s) { // as sim.js (not exported): the push-out of a circle from a rectangle
+    const qx = clamp(px, s.x, s.x + s.w), qy = clamp(py, s.y, s.y + s.h), dx = px - qx, dy = py - qy, d = hyp(dx, dy);
+    if (d >= r) return null;
+    if (d > 1e-9) return { nx: dx / d, ny: dy / d, pen: r - d };
+    const l = px - s.x, rt = s.x + s.w - px, t = py - s.y, bt = s.y + s.h - py, m = Math.min(l, rt, t, bt);
+    return m === l ? { nx: -1, ny: 0, pen: l + r } : m === rt ? { nx: 1, ny: 0, pen: rt + r } : m === t ? { nx: 0, ny: -1, pen: t + r } : { nx: 0, ny: 1, pen: bt + r };
+  }
 
   // ---------- Scenario A: the Monument junction (field 800 × 640, ui.playWidth × ui.playHeight)
   // Road A runs west to east along y = ROAD_A; road B runs north to south along x = ROAD_B. Each is one-way, two lanes.
@@ -52,9 +60,18 @@
   // Rung 1, the forward camera (v1 PT4, L2): the forward beam (perception.forwardLength) sees the dummy in its lane. The car
   // keeps the safe envelope from it (envelope, below) and stops hard if it comes at the car. No side field
   // (proto.driver.cautionZone) until rung 2.
+  // Rung 2, the side sensors (v1 PT4, L3 "surround"; handover v2 §13): the driver's field, proto.driver.cautionZone either
+  // side of its path, perception.forwardLength ahead. It only ever slowed a car (row 660). Now it is the zone that acts
+  // (D103): weaker than the front, it notices a dummy there after perception.sideNoticeSeconds. Then it keeps the safe
+  // envelope from it as from a dummy ahead: it stops short, and waits while the dummy stays in its field. It no longer
+  // passes a dummy in its lane. Every hit at rung 1 came from the side, so any hit but a bump on its tail teaches it.
+  // Its sensors see the ground: a dummy in the air, or up on the plinth, is unseen until rung 3. So is one behind a static.
+  // Each rung brings the dummy a part by drone (part, partKey): when that value is 1, as the lesson ends; 2, the first
+  // time the car uses the new rung against the dummy (trigger); 3, fitted from the start.
   const RUNGS = [
     { rung: 0, name: 'Prototype', sensor: null, learnsFrom: [] },
-    { rung: 1, name: 'Forward camera', sensor: 'FORWARD CAMERA', learnsFrom: ['front', 'frontDiagonal'] },
+    { rung: 1, name: 'Forward camera', sensor: 'FORWARD CAMERA', learnsFrom: ['front', 'frontDiagonal'], part: 'battery1', partKey: 'duel.dashArrives', trigger: 'first-brake' },
+    { rung: 2, name: 'Side sensors', sensor: 'SIDE SENSORS', learnsFrom: ['front', 'frontDiagonal', 'side', 'rearDiagonal'], part: 'legs1', partKey: 'duel.jumpArrives', trigger: 'first-side' },
   ];
 
   // ---------- The test road: one red sedan, alone on the road
@@ -80,8 +97,12 @@
       this.schedule = Array.from({ length: P['run.appearances.road'] }, (_, i) => ({ i, cls: 'sedan', lane: Math.floor(g(i, 0.31) * n), mult: 1 }));
       this.leftAt = 0; // when the red car last left the screen
       this.rung = Math.max(0, Math.min(RUNGS.length - 1, Math.round(P['duel.startRung'] || 0))); // the red car's rung
-      this.lesson = null; this.lessons = []; this.delivery = null; this.firstBrakeT = null;
+      this.lesson = null; this.lessons = []; this.delivery = null; this.firstBrakeT = null; this.firstSideT = null;
+      let fitted = false; // parts fitted from the start (partKey 3)
+      for (const r of RUNGS) if (r.part && Math.round(P[r.partKey] || 0) === 3) { this.run.owned[r.part] = true; fitted = true; }
+      if (fitted && this.body) this.body.health = this.maxHealth();
     }
+    airborne() { const b = this.body; return !!(b && b.mode === 'jump' && b.jump); } // rungs 0–2 see the ground only
     rungInfo(n) { return RUNGS[n == null ? this.rung : n] || null; }
 
     // ----- rung 1: the safe envelope (Mobileye RSS, handover v2 §4.2). The gap a dummy needs to dash into the car's nose if it
@@ -103,6 +124,7 @@
     // proto.swerveOuter to the other: a district road's hard shoulder. Here both bounds are the road's kerbs.
     choose(c, tg, opts) {
       if (!this.testRoad || !c.path.edges) return super.choose(c, tg, opts);
+      if (tg.kind === 'body' && opts && opts.pass && !this.choosePass()) return { type: 'brake', v0: 0, a: this.P['traffic.comfortBraking'], vTarget: 0, sStop: c.s, standoff: true }; // rung 2 waits
       if (tg.kind === 'body' && !(opts && opts.pass) && this.rung >= 1 && c.v >= 1) {
         const b = this.body, q = X.pathAt(c.path, tg.s), vb = -(b.vx * q.tx + b.vy * q.ty), hard = this.P['traffic.hardBraking'];
         if (vb > 1) return { type: 'brake', v0: c.v, a: hard, vTarget: 0, emergency: true, closing: +vb.toFixed(1) };
@@ -111,6 +133,13 @@
       const P = this.P, kl = P['world.laneWidth'], ko = P['proto.swerveOuter'], [lo, hi] = c.path.edges;
       P['world.laneWidth'] = -(lo + c.W / 2); P['proto.swerveOuter'] = hi - c.W / 2;
       try { return super.choose(c, tg, opts); } finally { P['world.laneWidth'] = kl; P['proto.swerveOuter'] = ko; }
+    }
+    assessBody(c) {
+      if (!this.testRoad) return super.assessBody(c);
+      if (this.rung < 3 && (this.airborne() || this.body.raised)) return null; // it sees the ground: not the air, not the plinth's top
+      const P = this.P, keep = P['proto.driver.cautionZone'];
+      P['proto.driver.cautionZone'] = this.fieldFor();
+      try { return super.assessBody(c); } finally { P['proto.driver.cautionZone'] = keep; }
     }
     manSpeed(c, man, tau, sAt) {
       if (!man || !man.env) return super.manSpeed(c, man, tau, sAt);
@@ -122,12 +151,40 @@
     carAI(dt) {
       if (this.testRoad && this.rung >= 1) for (const c of this.cars) {
         const m = c.man, hz = c.hz, b = this.body;
-        if (!c.red || c.ghost || !m || m.type !== 'brake' || m.emergency || c.cause !== 'body' || !hz || !hz.inPath || c.v < 1) continue;
+        if (!c.red || c.ghost) continue;
+        if (this.rung >= 2 && this.watchField(c, dt)) continue;
+        if (!m || m.type !== 'brake' || m.emergency || c.cause !== 'body' || !hz || !hz.inPath || c.v < 1) continue;
         const q = X.pathAt(c.path, hz.s);
         if (-(b.vx * q.tx + b.vy * q.ty) > 1) { c.man = null; c.state = 'cruise'; }
       }
       return super.carAI(dt);
     }
+    // The field's width: rung 2 and up. Below, the car has no field (10.1, 10.2: proto.driver.cautionZone 0 by rung).
+    fieldFor() { return this.rung >= 2 ? this.P['proto.driver.cautionZone'] : 0; }
+    // ----- rung 2: the dummy in its field, beside its path (in its path is the beam's: rung 1's brake)
+    watchField(c, dt) {
+      const P = this.P, b = this.body, hz = c.hz;
+      const side = !!(hz && !hz.inPath && b.alive), wasHolding = c.cause === 'side' && !!c.man;
+      c.fieldT = side ? (c.fieldT || 0) + dt : 0;
+      c.noticed = side && c.fieldT >= P['perception.sideNoticeSeconds'] - 1e-9;
+      if (!c.noticed) { c.sideHonk = false; c.sideHoldT = 0; if (wasHolding && c.v < 1) { c.man = null; c.state = 'cruise'; } return false; }
+      // the stop point: where its nose stays envelope(0) from the dummy, measured straight, not along the road
+      const E0 = this.envelope(0), lat = Math.max(0, Math.abs(hz.ly) - c.W / 2), sBody = hz.s - Math.sqrt(Math.max(0, E0 * E0 - lat * lat)) + E0;
+      const q = X.pathAt(c.path, hz.s), dx = b.x - c.x, dy = b.y - c.y, dd = Math.hypot(dx, dy) || 1;
+      const closing = -((b.vx * dx + b.vy * dy) / dd) + 0; // the dummy's speed toward the car
+      c.sideHoldT = c.v < 1 ? (c.sideHoldT || 0) + dt : 0;
+      if (c.sideHoldT >= P['proto.honkSeconds'] - 1e-9 && !c.sideHonk) { c.sideHonk = true; this.emit('honk', { car: c.id, at: 'body', side: true }); }
+      if (c.man && c.cause === 'side' && !(closing > 1 && !c.man.emergency && c.v >= 1)) return true; // holding its plan
+      if (c.man && c.cause === 'body') return false; // the beam's brake comes first
+      void q;
+      const plan = c.v < 1 ? { type: 'brake', v0: 0, a: P['traffic.comfortBraking'], vTarget: 0, sStop: c.s, standoff: true }
+        : closing > 1 || lat <= 0 ? { type: 'brake', v0: c.v, a: P['traffic.hardBraking'], vTarget: 0, emergency: true }
+        : { type: 'brake', v0: c.v, a: P['traffic.hardBraking'], vTarget: 0, standoff: true, env: true, sBody };
+      c.man = null; this.commit(c, plan, 'side', null);
+      return true;
+    }
+    // A pass takes the car alongside the dummy. From rung 2 it waits for the dummy to leave its lane instead.
+    choosePass() { return this.rung < 2; }
 
     // ----- the red car on the road: one at a time; back duel.redReturnSeconds after it leaves the screen (row 670)
     onRoad() { return this.cars.filter((c) => !c.ghost && !c.gone && (c.layer == null || c.layer === 0)); }
@@ -156,6 +213,50 @@
         if (c.gone || c.ghost || c.s < c.path.enterS) continue;
         const m = c.L / 2 + c.W;
         if (c.x < -m || c.x > W + m || c.y < -m || c.y > H + m) { c.gone = true; this.leftAt = this.t; this.emit('left', { car: c.id, model: c.model }); }
+      }
+    }
+
+    // ----- the jump on the test road (10.3): Prototype 6.5's rules (world6.js, Edit 75), on the base sim. A running or dash
+    // jump passes over a car while the dummy is above its roof (vehicles.<cls>.height); below it, it strikes as a dash does.
+    // The monument's plinth is a raised edge (world.jumpableHeight): a jump that tops it lands on it; walking off its edge
+    // steps down. Standing on it, the dummy is above the ground the sensors watch.
+    plinth() { return this.level.statics.find((st) => st.plinth) || null; }
+    onPlinth(x, y) { const st = this.plinth(); return !!st && x >= st.x && x <= st.x + st.w && y >= st.y && y <= st.y + st.h; }
+    tryJump() { const b = this.body, up = !!b.raised; super.tryJump(); if (this.testRoad && b.mode === 'jump' && b.jump) { b.jump.fromRaised = up; b.raised = false; } }
+    landJump() { const b = this.body; super.landJump(); if (this.testRoad) { b.raised = this.onPlinth(b.x, b.y); if (b.raised) this.emit('raised', { x: +b.x.toFixed(1), y: +b.y.toFixed(1) }); } }
+    collideBody(contacts, k) {
+      const b = this.body;
+      if (this.testRoad && b.alive && b.raised && b.mode !== 'jump') { // on the plinth: it does not push the dummy off
+        const keep = this.level.statics, st = this.plinth(); this.level.statics = keep.filter((q) => q !== st);
+        try { super.collideBody(contacts, k); } finally { this.level.statics = keep; }
+        if (!this.onPlinth(b.x, b.y)) { b.raised = false; this.emit('step-down', { x: +b.x.toFixed(1), y: +b.y.toFixed(1) }); }
+        return;
+      }
+      if (!this.testRoad || !b.alive || b.mode !== 'jump' || !b.jump) return super.collideBody(contacts, k);
+      const P = this.P, r = P['body.radius'], air = b.jump.clear !== false ? b.z : 0;
+      const push = (nx, ny, pen) => { b.x += nx * pen; b.y += ny * pen; const vn = b.vx * nx + b.vy * ny; if (vn < 0) { b.vx -= vn * nx; b.vy -= vn * ny; } X.JUMP.slide(b.jump, nx, ny); };
+      for (const st of this.level.statics) {
+        if (st.plinth && (b.jump.fromRaised || air >= st.height || this.onPlinth(b.x, b.y))) continue; // over the raised edge (its centre above the top lands on it), or leaving it
+        const res = circleRect(b.x, b.y, r, st); if (res) push(res.nx, res.ny, res.pen);
+      }
+      for (const c of this.cars) {
+        if (!this.meets(c) || c.ghost) continue;
+        if (air > 0 && air >= P['vehicles.' + c.cls + '.height']) continue; // over the roof
+        const res = X.circleCar(b.x, b.y, r, c);
+        if (!res) continue;
+        c.touched = true; c.touchT = this.t;
+        const nx = -res.nx, ny = -res.ny, rel = (b.vx - c.vx) * nx + (b.vy - c.vy) * ny;
+        let knock = null;
+        if (!c.inEpisode) {
+          c.inEpisode = true;
+          const ph = X.impulseImpact(P, b.vx, b.vy, c.vx, c.vy, nx, ny, c.cls, true); // a jump strikes as a dash does
+          contacts.push({ k, car: c, closing: Math.max(0, rel), ph, px: res.cx, py: res.cy, zone: X.zoneOf(res.qx, res.qy, c), carState: this.carCue(c), cause: c.cause, coneT: c.coneT,
+            lunging: false, jump: true, kind: 'jump', bodySpeed: hyp(b.vx, b.vy), carSpeed: c.v, stopped: c.v < 5 || !!(c.man && c.man.standoff) });
+          if (P['proto.damageModel'] && ph.un > 1e-6) knock = ph.knock;
+        }
+        b.x += res.nx * res.pen; b.y += res.ny * res.pen;
+        if (knock) { b.mode = 'knock'; b.lunge = null; b.jump = null; b.z = 0; b.knockT = 0; b.knockVx = knock.x; b.knockVy = knock.y; b.vx = knock.x; b.vy = knock.y; this.emit('knock', { car: c.id, speed: +hyp(knock.x, knock.y).toFixed(2) }); }
+        else if (rel > 0) { b.vx -= rel * nx; b.vy -= rel * ny; }
       }
     }
 
@@ -196,15 +297,19 @@
       this.rung = L.to; this.lessons.push({ from: L.from, to: L.to, model: L.model, zone: L.zone, kind: L.kind, hitT: L.hitT, shownT: L.shownT });
       this.lesson = null; this.phase = 'play';
       this.emit('learned', { model: L.model, rung: L.to, name: L.name });
-      if (Math.round(this.P['duel.dashArrives'] || 0) === 1 && !this.dashFitted()) this.sendPart('battery1');
+      this.partFor(L.to, 1);
     }
     // Rung 1's answer to a dummy ahead is a brake for the body. The first one calls the dash by drone (duel.dashArrives 2):
     // the tool arrives where the problem is (World 1-1; handover v2 §9.5).
     commit(c, man, cause, tg) {
       super.commit(c, man, cause, tg);
-      if (!this.testRoad || cause !== 'body' || !c.red || this.rung < 1 || this.firstBrakeT != null) return;
-      this.firstBrakeT = this.t; this.emit('first-brake', { car: c.id, model: c.model });
-      if (Math.round(this.P['duel.dashArrives'] || 0) === 2 && !this.dashFitted()) this.sendPart('battery1');
+      if (!this.testRoad || !c.red) return;
+      if (cause === 'body' && this.rung >= 1 && this.firstBrakeT == null) { this.firstBrakeT = this.t; this.emit('first-brake', { car: c.id, model: c.model }); this.partFor(1, 2); }
+      if (cause === 'side' && this.rung >= 2 && this.firstSideT == null) { this.firstSideT = this.t; this.emit('first-side', { car: c.id, model: c.model }); this.partFor(2, 2); }
+    }
+    partFor(rung, when) { // rung's part, if its partKey says it comes now (1: the lesson's end; 2: the first use)
+      const r = RUNGS[rung];
+      if (r && r.part && Math.round(this.P[r.partKey] || 0) === when && !this.run.owned[r.part]) this.sendPart(r.part);
     }
     // A FARSIGHT drone brings a part: it flies in from the top edge at proto.droneSpeed, lowers it onto the dummy over
     // proto.droneLiftSeconds and leaves. Play goes on. Damage carries over, as Story's gift does (installGift, Edit 91).

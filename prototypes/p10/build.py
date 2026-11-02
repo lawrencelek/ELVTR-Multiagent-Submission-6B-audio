@@ -8,8 +8,9 @@ Its values, in order: the P6–P7 prototype values the district builds inherit (
 build flags (window.DUMMIES_SIM in dummies_p9.html), every Prototype P10 registry entry at its default, then the test's own.
 Shared files are not touched. sim_flags.json holds every test's values for the headless probes (qa/testroad.js).
 
-A test's page freezes once its human pass may use it. 10.1's page (dummies_p10.html) is frozen: it was built at commit
-4b3d668 and is never rewritten (md5 below). Its values still live here, so the probes rerun rung 0 on today's code.
+A test's page freezes once its human pass may use it, and is never rewritten (md5 below): 10.1 (dummies_p10.html, built
+at 4b3d668) and 10.2 (dummies_p10_2.html, built at eab988b). Their values still live here, so the probes rerun them on
+today's code. 10.0 has no page: it measured Prototype 9 as built.
 """
 import hashlib, json, re, subprocess
 from pathlib import Path
@@ -50,11 +51,20 @@ T102 = dict(T101, **{
     'duel.standstillSpeed': 5,               # a stopped car passed its test: no damage, no lesson (row 668)
     'duel.dashArrives': 2,                   # Battery 1 by drone at the car's first brake for the dummy (row 667)
 })
+# Prototype 10.3: from rung 1, a hit from the side teaches rung 2, the side sensors; the jump arrives at its first swerve
+T103 = dict(T102, **{
+    'duel.startRung': 1, 'duel.topRung': 2,  # one lesson: rung 1 to rung 2 (row 673)
+    'duel.dashArrives': 3,                   # Battery 1 fitted from the start: 10.2's part
+    'duel.jumpArrives': 2,                   # Legs 1 by drone at the car's first swerve away from the dummy (row 673)
+    'proto.driver.cautionZone': 180,         # rung 2's field either side of its path: Prototype 9's driver's field, now the zone that acts (row 674)
+    'perception.sideNoticeSeconds': 0.6,     # strong front, weak edges: twice the front's perception.reactionDelay (row 674)
+})
 STAGES = {
     '10.1': {'title': 'THE TEST ROAD', 'page': 'dummies_p10.html', 'frozen': '82ab5e55d243ee500d6dfcaa60af74e6', 'edit': 101, 'values': T101},
-    '10.2': {'title': 'THE FIRST LESSON', 'page': 'dummies_p10_2.html', 'frozen': None, 'edit': 102, 'values': T102},
+    '10.2': {'title': 'THE FIRST LESSON', 'page': 'dummies_p10_2.html', 'frozen': '9dd14c5877128390fbad2595e86edce7', 'edit': 102, 'values': T102},
+    '10.3': {'title': 'THE SIDE SENSORS', 'page': 'dummies_p10_3.html', 'frozen': None, 'edit': 103, 'values': T103},
 }
-CURRENT = '10.2'
+CURRENT = '10.3'
 
 out = {'registry': reg['registryVersion'], 'current': CURRENT, 'stages': {}}
 for sid, st in STAGES.items():
@@ -73,7 +83,8 @@ for sid, st in STAGES.items():
         continue
     flags = out['stages'][sid]['flags']
     stage = {'id': sid, 'title': st['title'], 'edit': st['edit']}
-    scripts = f'<script>\n{(p6 / "sim.js").read_text(encoding="utf-8")}\n</script>\n'
+    scripts = f'<script>\n{(root / "prototypes" / "jump" / "jump.js").read_text(encoding="utf-8")}\n</script>\n' if st['edit'] >= 103 else ''  # the jump's rules (sim.js reads window.JUMP)
+    scripts += f'<script>\n{(p6 / "sim.js").read_text(encoding="utf-8")}\n</script>\n'
     scripts += f'<script>\n{(here / "testroad.js").read_text(encoding="utf-8")}\n</script>\n'
     scripts += f'<script>\nwindow.DUMMIES_SIM = {json.dumps(flags)}; // Edit {st["edit"]} (P{sid}): registry {reg["registryVersion"]}; P6SIM, P7SIM, Prototype 9 flags, P10 defaults, then {sid}\n'
     scripts += f'window.DUMMIES_P10_STAGE = {json.dumps(stage)};\n</script>\n'

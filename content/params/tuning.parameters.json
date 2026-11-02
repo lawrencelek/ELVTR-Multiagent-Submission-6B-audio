@@ -2420,6 +2420,28 @@
    "purpose": "Short enough that passing close is safe; long enough to make a car hesitate"
   },
   {
+   "id": "perception.sideNoticeSeconds",
+   "group": "Vehicles and traffic",
+   "owner": "Vehicles / Traffic",
+   "label": "Side notice time",
+   "description": "Rung 2's side sensors notice a dummy in the driver's field (proto.driver.cautionZone either side of its path) after it has stayed there this long. Weaker than the front (perception.reactionDelay): strong front, weak edges (handover v2 §13, §17)",
+   "unit": "s",
+   "type": "number",
+   "default": 0.6,
+   "status": "proposed",
+   "source": "GDD Edit 103 (Prototype 10.3): handover v2 §17; DECISIONS rows 673–678",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-tick",
+   "validation": {
+    "min": 0,
+    "max": 5
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "Rung 2's side sensors notice a dummy in the driver's field (proto.driver.cautionZone either side of its path) after it has stayed there this long. Weaker than the front (perception.reactionDelay): strong front, weak edges (handover v2 §13, §17)"
+  },
+  {
    "id": "traffic.timeGap",
    "group": "Vehicles and traffic",
    "owner": "Vehicles / Traffic",
@@ -13544,7 +13566,7 @@
    "group": "Vehicles and traffic",
    "owner": "Fleet",
    "label": "Driver's field width",
-   "description": "How far beside the car's route a dummy is noticed; a noticed dummy slows the car to proto.driver.cautionSpeed. The flank's only response (row 660)",
+   "description": "How far beside the car's route a dummy is noticed; a noticed dummy slows the car to proto.driver.cautionSpeed. The flank's only response (row 660). On the test road it is rung 2's field: from 10.3 it stops the car (row 674)",
    "unit": "world units",
    "type": "number",
    "default": 180,
@@ -13559,7 +13581,7 @@
    },
    "integrationStatus": "prototype-p6-to-p10",
    "boundaryStatus": "proposed-adapter-contract-not-implemented",
-   "purpose": "How far beside the car's route a dummy is noticed; a noticed dummy slows the car to proto.driver.cautionSpeed. The flank's only response (row 660)"
+   "purpose": "How far beside the car's route a dummy is noticed; a noticed dummy slows the car to proto.driver.cautionSpeed. The flank's only response (row 660). On the test road it is rung 2's field: from 10.3 it stops the car (row 674)"
   },
   {
    "id": "proto.driver.cautionSpeed",
@@ -13786,7 +13808,7 @@
    "group": "Prototype P10",
    "owner": "Design",
    "label": "Dash arrives",
-   "description": "When Battery 1, the dash, arrives by drone on the test road. 0: never; on foot (10.1). 1: as the first lesson ends. 2: the first time the learning car brakes for the dummy (World 1-1: the tool where the problem is). 10.2 sets 2",
+   "description": "When Battery 1, the dash, arrives by drone on the test road. 0: never; on foot (10.1). 1: as the rung-1 lesson ends. 2: the first time the learning car brakes for the dummy (World 1-1: the tool where the problem is; 10.2). 3: fitted from the start (10.3)",
    "unit": "enum",
    "type": "number",
    "default": 0,
@@ -13797,11 +13819,33 @@
    "applyAt": "next-run",
    "validation": {
     "min": 0,
-    "max": 2
+    "max": 3
    },
    "integrationStatus": "prototype-p10",
    "boundaryStatus": "proposed-adapter-contract-not-implemented",
-   "purpose": "When Battery 1, the dash, arrives by drone on the test road. 0: never; on foot (10.1). 1: as the first lesson ends. 2: the first time the learning car brakes for the dummy (World 1-1: the tool where the problem is). 10.2 sets 2"
+   "purpose": "When Battery 1, the dash, arrives by drone on the test road. 0: never; on foot (10.1). 1: as the rung-1 lesson ends. 2: the first time the learning car brakes for the dummy (World 1-1: the tool where the problem is; 10.2). 3: fitted from the start (10.3)"
+  },
+  {
+   "id": "duel.jumpArrives",
+   "group": "Prototype P10",
+   "owner": "Design",
+   "label": "Jump arrives",
+   "description": "When Legs 1, the jump, arrives by drone on the test road. 0: never. 1: as the rung-2 lesson ends. 2: the first time the learning car swerves away from the dummy (the tool where the problem is). 3: fitted from the start. 10.3 sets 2",
+   "unit": "enum",
+   "type": "number",
+   "default": 0,
+   "status": "proposed",
+   "source": "GDD Edit 103 (Prototype 10.3): handover v2 §17; DECISIONS rows 673–678",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-run",
+   "validation": {
+    "min": 0,
+    "max": 3
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "When Legs 1, the jump, arrives by drone on the test road. 0: never. 1: as the rung-2 lesson ends. 2: the first time the learning car swerves away from the dummy (the tool where the problem is). 3: fitted from the start. 10.3 sets 2"
   },
   {
    "id": "duel.lessonClipSeconds",
@@ -13978,6 +14022,28 @@
    "integrationStatus": "prototype-p6-to-p10",
    "boundaryStatus": "proposed-adapter-contract-not-implemented",
    "purpose": "Simulation steps a second. Every timer and speed is per second, so it sets precision, not pace"
+  },
+  {
+   "id": "proto.damageModel",
+   "group": "Damage and rewards",
+   "owner": "Design",
+   "label": "Damage model",
+   "description": "1: damage from the impulse of the impact (P1.3 impulseImpact: the dummy's strike, capped at proto.dummyStrikeSpeed, against the car's speed along the normal). 0: the closing-speed model (assess, with damage.zone.*)",
+   "unit": "enum",
+   "type": "number",
+   "default": 1,
+   "status": "reported-built",
+   "source": "Registered in GDD Edit 103 (Prototype 10.3) at the value in prototypes/p6/sim.js (REG or PROTO). It had lived only in sim.js (handover v1 §4)",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-run",
+   "validation": {
+    "min": 0,
+    "max": 1
+   },
+   "integrationStatus": "prototype-p6-to-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "1: damage from the impulse of the impact (P1.3 impulseImpact: the dummy's strike, capped at proto.dummyStrikeSpeed, against the car's speed along the normal). 0: the closing-speed model (assess, with damage.zone.*)"
   }
  ],
  "tables": {
