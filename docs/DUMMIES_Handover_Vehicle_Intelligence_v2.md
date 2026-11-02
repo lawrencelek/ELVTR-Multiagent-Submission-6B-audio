@@ -6,6 +6,8 @@
 
 **Updated 2 November:** §11 the 10.0 result. Pillar 1's written test passes; the aimed dash is the gap. Row 649 superseded by row 657.
 
+**Updated 2 November, later:** §12 the 10.0-v2 result. PT1 means avoidance never escalates (row 658). Prototype 9 cars learn two numbers and no behaviours.
+
 ## 0 How to use this with v1
 
 - **v1** (`claude/DUMMIES_Handover_Vehicle_Intelligence.md`) still holds: constraints (§4), code survey (§5), tools (§8), repos (§9), run and test (§11), conventions (§12).
@@ -234,9 +236,11 @@ Recorded in `DECISIONS.md`. Replaces the rows v1 §3.2 proposed.
 | 655 | The Nintendo check's two changes: 10.4 hides the goal text; 10.2 and 10.4 run variants | user-decided, with row 653 |
 | 656 | PT0 repeats row 644; no change. Sasha played Prototype 9; the live build draws the core on the chest | tested (built in Prototype 9) |
 | 657 | 10.0 baseline: standing gets hit but pays 6–14% of a head-on lunge; pillar 1's written test passes; the aimed dash dominates (§11) | tested (2 November) |
+| 658 | PT1 clarified: Sasha meant avoidance never escalates. The learning car learns something new each time; white cars need not | user-decided (2 November) |
+| 659 | 10.0-v2: Prototype 9 cars learn two numbers and no behaviours; the aimed dash keeps working or ends in a stalemate (§12) | tested (2 November) |
 
-- **Open:** D89 red hue; D90 white role; D91 fixed or adaptive ladder; D92 car contact; D93 flank damage; D94 venue; D95 law clauses; D96 boss families; D97 parts as keys; D98 lessons, not damage; D99 learning carries across Story levels; D100 10.1's target: standing, or the aimed dash.
-- **Next row 658. Next open decision D101.**
+- **Open:** D89 red hue; D90 white role; D91 fixed or adaptive ladder; D92 car contact; D93 flank damage; D94 venue; D95 law clauses; D96 boss families; D97 parts as keys; D98 lessons, not damage; D99 learning carries across Story levels; D100 10.1's target: standing, or the aimed dash; D101 what "something new" means.
+- **Next row 660. Next open decision D102.**
 
 ## 9 The crux and the ten tests (user-decided 1 November, row 653)
 
@@ -294,6 +298,7 @@ Each test has a bot pass and a human pass: Sasha plus one new player. Thresholds
 | **10.8 The cast** | White cars that never learn (`traffic.white.learns` 0); their hits cost parts; red clears on lessons | PT5, PT7, PT11 | Lessons still reachable; red returns in time | Duel-plus-traffic preferred over the duel alone | One new element at a time |
 | **10.9 The cost** | Car-on-car contact: a red swerve into white is an Incident (`traffic.carContact`, `scoring.incidentPoints`) | PT12, PT2 | No jams (v1 W7 watchdog) | Laughs or retries; no frustration | Objects reacting to objects (BotW multiplicative) |
 
+- **10.0-v2 (2 November):** the escalation baseline (§12). Every later test reruns it.
 - **After 10.9:** trolley set pieces (PT13) as Story lessons. Same four beats; the car learns a priority.
 - **Each build:** one flag (registry default 0), a bot table, a short human session, a DECISIONS row.
 
@@ -466,3 +471,61 @@ Metric IDs are proposed for a `qa.fun.*` group in the registry. No targets yet: 
 - That is tier 1's mechanic. 10.4 then tests only whether the lesson reads.
 - **H0 stays, for feel:** unearned bumps look like hits.
 - **H1 reframed:** hits feel earned once the aimed dash stops working.
+
+## 12 Result: Prototype 10.0-v2, does avoidance escalate? (2 November, rows 658–659)
+
+- **Question:** Lawrence clarified PT1 (row 658): Sasha meant it was too easy because avoidance never escalates.
+  - "the car should learn something new each time. Or at least the 'learning' car."
+- **Method:** `qa/escalation.js`. The aimed dash, repeated for 600 sim-seconds.
+  - Grid: 4 sims × 2 variants × 2 start offsets = 16 runs.
+  - Variants: as built, and `proto.learningEnabled` 1 (the dormant learning).
+- **Report:** `qa/baseline/p9_escalation.md`. Data: `qa/baseline/p9_escalation.json`. Build unchanged.
+
+### What Prototype 9 cars can learn
+
+| Mechanism | IDs | On | Learns |
+|---|---|---|---|
+| Stop line | `proto.learn.standoffStep` 35 to `proto.learn.standoffMax` 190 | Yes, after a hit on a stopped car | A number |
+| Forward beam | `learning.playerHitStep` 0.08 to `learning.playerHitCap` 0.4 | No (`proto.learningEnabled` 0) | A number |
+| Approach registry (Edits 25–26) | — | Not built | — |
+| **New behaviours** | — | — | **None** |
+
+- One model per class: every sedan learns as one.
+
+### Findings
+
+| Finding | Evidence |
+|---|---|
+| As built, the same dash keeps working | Hits per dash, last two minutes ÷ first two: Monument 0.98, Parkland 1.10 |
+| Where it wears out, it ends in a stalemate | Waterfront 0.46: one sedan's stop line reached 190, past `movement.lungeDistance` 164 (DB4a). Dashes at it never land |
+| The dormant beam learning resists a little | Hits per dash: fresh cars 0.76; fully trained cars 0.42 |
+| It too ends in stalemates | Monument 0.51 and Waterfront 0.47: one car dashed at 150–220 times, never hit |
+| Nothing new is learned | Every learning event changes a number. Brake, shift, reverse, honk and unstick belong to the fixed driver |
+| Story hides it | A3: dashes stop landing after minute 2 in both variants. The floor hold (`story.floorHold`), not learning |
+
+- **Sasha is right.** Prototype 9 has no escalating sophistication.
+- Its learning makes cars wait farther away until a dash can't reach. A wall, not a new trick.
+
+### The escalation the plan needs
+
+- **Rule (user-decided, row 658):** the learning car learns something new each time. White cars need not.
+- **Reading (proposed, D101):** "new" means a behaviour, never only a bigger number. No lesson ends in a stalemate.
+
+| Rung | It learns (a behaviour) | Real basis | Closes | Leaves open | Test |
+|---|---|---|---|---|---|
+| 0 | Nothing: drives its route | — | — | Walk in | 10.2 |
+| 1 | Brake for a dash it sees coming | AEB (v1 §14.1) | The aimed frontal dash | The flank | 10.1 (D100), 10.4 |
+| 2 | Watch the flanks; swerve away | Side sensors; evasive steering | The flank dash | Above | 10.6 |
+| 3 | See height; hold back near jump points | Occupancy grid (v1 §14.2) | The jump | Cover; a cone | After 10.7 |
+| 4 | Predict your path | Occupancy flow | Cover and cones | The feint after commit | After 10.7 |
+| 5 | Counter your habit | Alien: Isolation, MGS V (§4.3) | Your favourite trick | Any other | 10.7 |
+
+### What it changes
+
+- **10.1 (D100):** the evidence points to rung 1, the car answering an aimed dash. Recommended.
+- **The duel car runs without stop-line learning** (`proto.learn.standoffEnabled` 0). It only builds stalemates. Proposed (D101).
+- **New measures (proposed IDs):** `qa.esc.decay`, `qa.esc.learnEvents`, `qa.esc.newBehaviours`.
+- **Every later test reruns `qa/escalation.js`** on its build. Pass (proposed):
+  - Each lesson adds one response type.
+  - The closed trick's decay falls below 0.5.
+  - No stalemate windows.

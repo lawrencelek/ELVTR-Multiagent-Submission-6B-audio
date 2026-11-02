@@ -26,3 +26,11 @@
 | PT15 | "For Story mode, more interesting story. Every level you need to learn about the sinister corporate law." | C5 |
 
 - **From 10.2 on:** every human session is recorded, screen and voice (handover v2 §10).
+
+## PT1, clarified (Lawrence, 2 November)
+
+> "actually 10.0-v2 sasha really meant to test - it is too easy what is the ESCALATING behaviour sophistication whereby they avoid you? the car should learn something new each time. Or at least the 'learning' car."
+
+- **PT1 means:** avoidance never escalates. Standing in the road was her example of "too easy".
+- **The rule asked for:** the learning car learns something new each time. White cars need not.
+- **Test:** 10.0-v2, `qa/escalation.js` (handover v2 §12).
