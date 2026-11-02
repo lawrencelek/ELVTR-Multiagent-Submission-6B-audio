@@ -10,6 +10,8 @@
 
 **Updated 2 November, 03:00:** §13 the 10.0-v3 result (the side sensor's response is missing; a traffic-values bug). §14 Prototype 10's revised scope: one Monument junction, one car type, nine escalating tests (row 661). §14 supersedes §9.3's 10.1–10.9 rows.
 
+**Updated 2 November, 10.1 built:** §15. The Monument test road plays at `prototypes/p10/dummies_p10.html`; GDD Edit 101.
+
 ## 0 How to use this with v1
 
 - **v1** (`claude/DUMMIES_Handover_Vehicle_Intelligence.md`) still holds: constraints (§4), code survey (§5), tools (§8), repos (§9), run and test (§11), conventions (§12).
@@ -243,9 +245,13 @@ Recorded in `DECISIONS.md`. Replaces the rows v1 §3.2 proposed.
 | 660 | 10.0-v3: side awareness exists but only slows the car; blind and built cars lose the flank alike; the drawn side arcs drive nothing (§13) | tested (2 November) |
 | 661 | Prototype 10's scope: one Monument junction (two one-way roads, then two two-lane roads), one car type, nine tests that escalate the car's learning (§14) | user-decided (2 November) |
 | 662 | Bug: district traffic gets only two of the build's driver values; `proto.driver.dodgeFollowsCone` (row 632) never reaches Story or Arcade traffic (§13) | tested (2 November) |
+| 663 | Prototype 10.1 built: the Monument test road, rung 0 (§15; GDD Edit 101) | tested (2 November) |
+| 664 | Rung 0 senses nothing: `perception.forwardLength` 0, `proto.driver.cautionZone` 0 | proposed; follows row 650 (L1: walk into it) |
+| 665 | The 29 sim-only IDs registered; `duel.*` added; `registryVersion` unchanged so Prototype 9's rebuild keeps its md5 | tested (2 November) |
+| 666 | On a one-way road of two lanes, the second lane's car may pass by the first (`TestRoadSim.choose`) | tested (2 November) |
 
-- **Open:** D89 red hue; D90 white role; D91 fixed or adaptive ladder; D92 car contact; D93 flank damage; D94 venue; D95 law clauses; D96 boss families; D97 parts as keys; D98 lessons, not damage; D99 learning carries across Story levels; D100 10.1's target (overtaken by row 661: rung 1 is 10.2); D101 what "something new" means; D102 pass every driver value to traffic; D103 draw the side zone that acts; D104 the nine tests' rung order.
-- **Next row 663. Next open decision D105.**
+- **Open:** D89 red hue; D90 white role; D91 fixed or adaptive ladder; D92 car contact; D93 flank damage; D94 venue; D95 law clauses; D96 boss families; D97 parts as keys; D98 lessons, not damage; D99 learning carries across Story levels; D100 10.1's target (overtaken by row 661: rung 1 is 10.2); D101 what "something new" means; D102 pass every driver value to traffic; D103 draw the side zone that acts; D104 the nine tests' rung order; D105 a sighted car's endless wait.
+- **Next row 667. Next open decision D106.**
 
 ## 9 The crux and the ten tests (user-decided 1 November, row 653)
 
@@ -653,3 +659,20 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
 - `prototypes/p10/`: `build.py` from Prototype 9's, and its own files that extend the base `Sim`: the `junction` level, the red car, the rungs.
 - **Shared files stay untouched,** so a Prototype 9 rebuild keeps its md5 (v1 §4). Story extends `Sim6` the same way (`p7/story.js`).
 - Probes gain a `--level junction` target before 10.1's run.
+
+## 15 Result: Prototype 10.1, the test road (2 November, rows 663–666; GDD Edit 101)
+
+- **Build:** `prototypes/p10/dummies_p10.html`, linked first from `index.html`. Greybox; on foot.
+- **Scenario A:** one Monument screen; two one-way roads cross; kerbs, a zebra, a barrier with a gap, a blind corner, the plinth.
+- **The red car, rung 0:** one sedan, alone on the road, back 4 s after it leaves (`duel.redReturnSeconds`). It senses and learns nothing.
+- **Checks:** `node prototypes/p10/test_p10.js --page` 9/9. Prototype 9 51/51; both frozen md5s hold; sound freeze holds.
+- **Measured** (`qa/baseline/p10_1.md`):
+  - Walking into its path: 3.7 hits a minute; a write-off every 74 s.
+  - Standing on a lane's line: 1.2–1.3 hits a minute at 100 damage, head-on. By design at rung 0.
+  - Ten minutes of walking in: no decay (1.14), no learning events.
+- **Registry first:** the 29 sim-only IDs are registered; three `duel.*` IDs added. Version unchanged, so Prototype 9's rebuild holds.
+- **Probes on the test road:** `node qa/testroad.js` covers standing, walking in, wandering, dashing, the flank and escalation.
+- **Open:**
+  - The human pass (H3): Sasha plus one new player, 5 minutes free play each, recorded.
+  - D105: a sighted car waited for ever for a dummy standing just off its lane line.
+- **Next:** 10.2, rung 1.

@@ -1,0 +1,852 @@
+{
+ "build": "prototypes/p10/dummies_p10.html",
+ "level": "junction",
+ "secs": 300,
+ "esc": 600,
+ "offsets": [
+  0,
+  7,
+  13
+ ],
+ "p10": {
+  "duel.enabled": 1,
+  "duel.carsOnRoad": 1,
+  "duel.redReturnSeconds": 4,
+  "proto.learningEnabled": 0,
+  "proto.learn.standoffEnabled": 0,
+  "perception.forwardLength": 0,
+  "proto.driver.cautionZone": 0,
+  "run.appearances.road": 1000,
+  "run.quota.road": 1000000
+ },
+ "runs": [
+  {
+   "policy": "stand",
+   "offset": 0,
+   "dash": false,
+   "simSeconds": 298.5,
+   "hits": 7,
+   "hitsPerMin": 1.41,
+   "writeOffs": 1,
+   "firstHit": 6.5,
+   "points": 3200,
+   "lost": 700,
+   "bait": 0,
+   "zones": {
+    "front": 7
+   },
+   "carStates": {
+    "cruise": 7
+   },
+   "dashes": 0,
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 25,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "honks": 0,
+    "unsticks": 0
+   },
+   "windows": [
+    1,
+    2,
+    2,
+    1,
+    1
+   ]
+  },
+  {
+   "policy": "stand",
+   "offset": 7,
+   "dash": false,
+   "simSeconds": 298.6,
+   "hits": 6,
+   "hitsPerMin": 1.21,
+   "writeOffs": 1,
+   "firstHit": 59.5,
+   "points": 3100,
+   "lost": 600,
+   "bait": 0,
+   "zones": {
+    "front": 6
+   },
+   "carStates": {
+    "cruise": 6
+   },
+   "dashes": 0,
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 25,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "honks": 0,
+    "unsticks": 0
+   },
+   "windows": [
+    1,
+    1,
+    2,
+    1,
+    1
+   ]
+  },
+  {
+   "policy": "stand",
+   "offset": 13,
+   "dash": false,
+   "simSeconds": 298.6,
+   "hits": 6,
+   "hitsPerMin": 1.21,
+   "writeOffs": 1,
+   "firstHit": 53.5,
+   "points": 3100,
+   "lost": 600,
+   "bait": 0,
+   "zones": {
+    "front": 6
+   },
+   "carStates": {
+    "cruise": 6
+   },
+   "dashes": 0,
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 25,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "honks": 0,
+    "unsticks": 0
+   },
+   "windows": [
+    1,
+    2,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "policy": "standSouth",
+   "offset": 0,
+   "dash": false,
+   "simSeconds": 298.6,
+   "hits": 6,
+   "hitsPerMin": 1.21,
+   "writeOffs": 1,
+   "firstHit": 42.2,
+   "points": 3100,
+   "lost": 600,
+   "bait": 0,
+   "zones": {
+    "front": 6
+   },
+   "carStates": {
+    "cruise": 6
+   },
+   "dashes": 0,
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 25,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "honks": 0,
+    "unsticks": 0
+   },
+   "windows": [
+    1,
+    1,
+    1,
+    2,
+    1
+   ]
+  },
+  {
+   "policy": "standSouth",
+   "offset": 7,
+   "dash": false,
+   "simSeconds": 298.6,
+   "hits": 6,
+   "hitsPerMin": 1.21,
+   "writeOffs": 1,
+   "firstHit": 35.2,
+   "points": 3100,
+   "lost": 600,
+   "bait": 0,
+   "zones": {
+    "front": 6
+   },
+   "carStates": {
+    "cruise": 6
+   },
+   "dashes": 0,
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 25,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "honks": 0,
+    "unsticks": 0
+   },
+   "windows": [
+    1,
+    1,
+    1,
+    2,
+    1
+   ]
+  },
+  {
+   "policy": "standSouth",
+   "offset": 13,
+   "dash": false,
+   "simSeconds": 298.6,
+   "hits": 6,
+   "hitsPerMin": 1.21,
+   "writeOffs": 1,
+   "firstHit": 29.2,
+   "points": 3100,
+   "lost": 600,
+   "bait": 0,
+   "zones": {
+    "front": 6
+   },
+   "carStates": {
+    "cruise": 6
+   },
+   "dashes": 0,
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 25,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "honks": 0,
+    "unsticks": 0
+   },
+   "windows": [
+    1,
+    1,
+    1,
+    2,
+    1
+   ]
+  },
+  {
+   "policy": "standOff",
+   "offset": 0,
+   "dash": false,
+   "simSeconds": 298.5,
+   "hits": 7,
+   "hitsPerMin": 1.41,
+   "writeOffs": 1,
+   "firstHit": 6.5,
+   "points": 3200,
+   "lost": 700,
+   "bait": 0,
+   "zones": {
+    "frontDiagonal": 7
+   },
+   "carStates": {
+    "cruise": 7
+   },
+   "dashes": 0,
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 25,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "honks": 0,
+    "unsticks": 0
+   },
+   "windows": [
+    1,
+    2,
+    2,
+    1,
+    1
+   ]
+  },
+  {
+   "policy": "standOff",
+   "offset": 7,
+   "dash": false,
+   "simSeconds": 298.6,
+   "hits": 6,
+   "hitsPerMin": 1.21,
+   "writeOffs": 1,
+   "firstHit": 59.5,
+   "points": 3100,
+   "lost": 600,
+   "bait": 0,
+   "zones": {
+    "frontDiagonal": 6
+   },
+   "carStates": {
+    "cruise": 6
+   },
+   "dashes": 0,
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 25,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "honks": 0,
+    "unsticks": 0
+   },
+   "windows": [
+    1,
+    1,
+    2,
+    1,
+    1
+   ]
+  },
+  {
+   "policy": "standOff",
+   "offset": 13,
+   "dash": false,
+   "simSeconds": 298.6,
+   "hits": 6,
+   "hitsPerMin": 1.21,
+   "writeOffs": 1,
+   "firstHit": 53.5,
+   "points": 3100,
+   "lost": 600,
+   "bait": 0,
+   "zones": {
+    "frontDiagonal": 6
+   },
+   "carStates": {
+    "cruise": 6
+   },
+   "dashes": 0,
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 25,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "honks": 0,
+    "unsticks": 0
+   },
+   "windows": [
+    1,
+    2,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "policy": "walkin",
+   "offset": 0,
+   "dash": false,
+   "simSeconds": 294.6,
+   "hits": 18,
+   "hitsPerMin": 3.67,
+   "writeOffs": 4,
+   "firstHit": 10.2,
+   "points": 12855,
+   "lost": 2316,
+   "bait": 0,
+   "zones": {
+    "frontDiagonal": 13,
+    "front": 5
+   },
+   "carStates": {
+    "cruise": 18
+   },
+   "dashes": 0,
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 24,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "honks": 0,
+    "unsticks": 0
+   },
+   "windows": [
+    3,
+    4,
+    4,
+    3,
+    4
+   ]
+  },
+  {
+   "policy": "walkin",
+   "offset": 7,
+   "dash": false,
+   "simSeconds": 294.5,
+   "hits": 19,
+   "hitsPerMin": 3.87,
+   "writeOffs": 4,
+   "firstHit": 3.2,
+   "points": 13018,
+   "lost": 2479,
+   "bait": 0,
+   "zones": {
+    "frontDiagonal": 13,
+    "front": 6
+   },
+   "carStates": {
+    "cruise": 19
+   },
+   "dashes": 0,
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 25,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "honks": 0,
+    "unsticks": 0
+   },
+   "windows": [
+    3,
+    4,
+    4,
+    4,
+    4
+   ]
+  },
+  {
+   "policy": "walkin",
+   "offset": 13,
+   "dash": false,
+   "simSeconds": 294.6,
+   "hits": 18,
+   "hitsPerMin": 3.67,
+   "writeOffs": 4,
+   "firstHit": 20.3,
+   "points": 12859,
+   "lost": 2313,
+   "bait": 0,
+   "zones": {
+    "frontDiagonal": 12,
+    "front": 6
+   },
+   "carStates": {
+    "cruise": 18
+   },
+   "dashes": 0,
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 24,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "honks": 0,
+    "unsticks": 0
+   },
+   "windows": [
+    3,
+    4,
+    4,
+    4,
+    3
+   ]
+  },
+  {
+   "policy": "wander",
+   "offset": 0,
+   "dash": false,
+   "simSeconds": 299.5,
+   "hits": 7,
+   "hitsPerMin": 1.4,
+   "writeOffs": 0,
+   "firstHit": 10.1,
+   "points": 446,
+   "lost": 446,
+   "bait": 0,
+   "zones": {
+    "front": 3,
+    "side": 1,
+    "frontDiagonal": 3
+   },
+   "carStates": {
+    "cruise": 7
+   },
+   "dashes": 0,
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 25,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "honks": 0,
+    "unsticks": 0
+   },
+   "windows": [
+    2,
+    2,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "policy": "wander",
+   "offset": 7,
+   "dash": false,
+   "simSeconds": 299.7,
+   "hits": 5,
+   "hitsPerMin": 1,
+   "writeOffs": 0,
+   "firstHit": 71.6,
+   "points": 288,
+   "lost": 288,
+   "bait": 0,
+   "zones": {
+    "frontDiagonal": 4,
+    "side": 1
+   },
+   "carStates": {
+    "cruise": 5
+   },
+   "dashes": 0,
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 25,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "honks": 0,
+    "unsticks": 0
+   },
+   "windows": [
+    0,
+    2,
+    1,
+    1,
+    1
+   ]
+  },
+  {
+   "policy": "wander",
+   "offset": 13,
+   "dash": false,
+   "simSeconds": 299.9,
+   "hits": 2,
+   "hitsPerMin": 0.4,
+   "writeOffs": 0,
+   "firstHit": 43.2,
+   "points": 30,
+   "lost": 30,
+   "bait": 0,
+   "zones": {
+    "frontDiagonal": 1,
+    "side": 1
+   },
+   "carStates": {
+    "cruise": 2
+   },
+   "dashes": 0,
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 25,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "honks": 0,
+    "unsticks": 0
+   },
+   "windows": [
+    1,
+    1
+   ]
+  },
+  {
+   "policy": "aim",
+   "offset": 0,
+   "dash": true,
+   "simSeconds": 299.4,
+   "hits": 9,
+   "hitsPerMin": 1.8,
+   "writeOffs": 0,
+   "firstHit": 21.7,
+   "points": 369,
+   "lost": 369,
+   "bait": 0,
+   "zones": {
+    "rearDiagonal": 6,
+    "side": 3
+   },
+   "carStates": {
+    "cruise": 9
+   },
+   "dashes": 50,
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 25,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "honks": 0,
+    "unsticks": 0
+   },
+   "windows": [
+    3,
+    2,
+    1,
+    1,
+    2
+   ]
+  },
+  {
+   "policy": "aim",
+   "offset": 7,
+   "dash": true,
+   "simSeconds": 299.4,
+   "hits": 9,
+   "hitsPerMin": 1.8,
+   "writeOffs": 0,
+   "firstHit": 14.7,
+   "points": 369,
+   "lost": 369,
+   "bait": 0,
+   "zones": {
+    "rearDiagonal": 6,
+    "side": 3
+   },
+   "carStates": {
+    "cruise": 9
+   },
+   "dashes": 48,
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 25,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "honks": 0,
+    "unsticks": 0
+   },
+   "windows": [
+    3,
+    2,
+    1,
+    1,
+    2
+   ]
+  },
+  {
+   "policy": "aim",
+   "offset": 13,
+   "dash": true,
+   "simSeconds": 299.4,
+   "hits": 9,
+   "hitsPerMin": 1.8,
+   "writeOffs": 0,
+   "firstHit": 8.7,
+   "points": 369,
+   "lost": 369,
+   "bait": 0,
+   "zones": {
+    "rearDiagonal": 6,
+    "side": 3
+   },
+   "carStates": {
+    "cruise": 9
+   },
+   "dashes": 49,
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 25,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "honks": 0,
+    "unsticks": 0
+   },
+   "windows": [
+    3,
+    2,
+    2,
+    1,
+    1
+   ]
+  },
+  {
+   "policy": "flank",
+   "offset": 0,
+   "dash": true,
+   "simSeconds": 299.2,
+   "hits": 12,
+   "hitsPerMin": 2.41,
+   "writeOffs": 0,
+   "firstHit": 20.9,
+   "points": 630,
+   "lost": 630,
+   "bait": 0,
+   "zones": {
+    "side": 12
+   },
+   "carStates": {
+    "cruise": 12
+   },
+   "dashes": 25,
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 25,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "honks": 0,
+    "unsticks": 0
+   },
+   "windows": [
+    3,
+    2,
+    2,
+    2,
+    3
+   ]
+  },
+  {
+   "policy": "flank",
+   "offset": 7,
+   "dash": true,
+   "simSeconds": 299.1,
+   "hits": 13,
+   "hitsPerMin": 2.61,
+   "writeOffs": 0,
+   "firstHit": 2.7,
+   "points": 683,
+   "lost": 683,
+   "bait": 0,
+   "zones": {
+    "side": 13
+   },
+   "carStates": {
+    "cruise": 13
+   },
+   "dashes": 25,
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 25,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "honks": 0,
+    "unsticks": 0
+   },
+   "windows": [
+    4,
+    2,
+    2,
+    2,
+    3
+   ]
+  },
+  {
+   "policy": "flank",
+   "offset": 13,
+   "dash": true,
+   "simSeconds": 299.1,
+   "hits": 13,
+   "hitsPerMin": 2.61,
+   "writeOffs": 0,
+   "firstHit": 7.9,
+   "points": 683,
+   "lost": 683,
+   "bait": 0,
+   "zones": {
+    "side": 13
+   },
+   "carStates": {
+    "cruise": 13
+   },
+   "dashes": 25,
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 25,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "honks": 0,
+    "unsticks": 0
+   },
+   "windows": [
+    3,
+    2,
+    3,
+    2,
+    3
+   ]
+  }
+ ],
+ "escalation": [
+  {
+   "policy": "walkin",
+   "offset": 0,
+   "dash": false,
+   "simSeconds": 588.1,
+   "hits": 36,
+   "hitsPerMin": 3.67,
+   "writeOffs": 9,
+   "firstHit": 10.2,
+   "points": 28214,
+   "lost": 4500,
+   "bait": 0,
+   "zones": {
+    "frontDiagonal": 25,
+    "front": 11
+   },
+   "carStates": {
+    "cruise": 36
+   },
+   "dashes": 0,
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 49,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "honks": 0,
+    "unsticks": 0
+   },
+   "windows": [
+    3,
+    4,
+    4,
+    3,
+    4,
+    3,
+    4,
+    3,
+    4,
+    4
+   ],
+   "decay": 1.14
+  },
+  {
+   "policy": "aim",
+   "offset": 0,
+   "dash": true,
+   "simSeconds": 599,
+   "hits": 15,
+   "hitsPerMin": 1.5,
+   "writeOffs": 0,
+   "firstHit": 21.7,
+   "points": 684,
+   "lost": 684,
+   "bait": 0,
+   "zones": {
+    "rearDiagonal": 12,
+    "side": 3
+   },
+   "carStates": {
+    "cruise": 15
+   },
+   "dashes": 98,
+   "learnEvents": 0,
+   "cars": {
+    "appearances": 50,
+    "maxOnRoad": 1,
+    "stalls20s": 0,
+    "honks": 0,
+    "unsticks": 0
+   },
+   "windows": [
+    3,
+    2,
+    1,
+    1,
+    2,
+    1,
+    1,
+    1,
+    1,
+    2
+   ],
+   "decay": 0.6
+  }
+ ]
+}
