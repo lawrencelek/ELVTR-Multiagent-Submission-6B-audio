@@ -20,6 +20,8 @@
 
 **Updated 2 November, 10.5 built:** §19. The street cameras play at `prototypes/p10/dummies_p10_5.html`; GDD Edit 105. Rung 4 sees behind cover; the cones arrive and their swerve is the way in. Only a hit where height hid the dummy now teaches rung 3; 10.4's page was rebuilt with it, then frozen. A sprint from past the field, found on the way, lands at rungs 2–4.
 
+**Updated 2 November, 22:58:** §20. Major learning (row 694): the duel is a stealth game, played from the other side. DUCK becomes an ability.
+
 ## 0 How to use this with v1
 
 - **v1** (`claude/DUMMIES_Handover_Vehicle_Intelligence.md`) still holds: constraints (§4), code survey (§5), tools (§8), repos (§9), run and test (§11), conventions (§12).
@@ -284,9 +286,10 @@ Recorded in `DECISIONS.md`. Replaces the rows v1 §3.2 proposed.
 | 691 | The sprint from past the field lands at rungs 2–4: 0.8 a minute at 52 | tested (2 November) |
 | 692 | 10.5 measured: cover 0; the cone bait 2.0 a minute; the sprint from past the field 0.8 | tested (2 November) |
 | 693 | Probes: bots `conebait` and `lurk`; the page's cameras, cones and edge marker; `duel.conesArrives`, 648 entries | tested (2 November) |
+| 694 | Major learning: the duel is a stealth game, played from the other side; DUCK becomes an ability (§20) | user-decided (2 November) |
 
-- **Open:** D89 red hue; D90 white role; D91 fixed or adaptive ladder; D92 car contact; D93 flank damage; D94 venue; D95 law clauses; D96 boss families; D97 parts as keys; D98 lessons, not damage; D99 learning carries across Story levels; D100 10.1's target (overtaken by row 661: rung 1 is 10.2); D101 what "something new" means; D102 pass every driver value to traffic; D103 draw the side zone that acts; D104 the nine tests' rung order; D105 a sighted car's endless wait (in part resolved by row 670); D106 the standstill rule; D107 rung 1's envelope and beam; D108 when the dash arrives; D109 the return against the drive-in; D110 rung 2 waits for any dummy in its field; D111 cover open at rung 2; D112 the plinth needs a dash-jump; D114 rung 4: the street cameras or slowing past blind spots; D115 the sprint from past the field. D113 resolved (row 685).
-- **Next row 694. Next open decision D116.**
+- **Open:** D89 red hue; D90 white role; D91 fixed or adaptive ladder; D92 car contact; D93 flank damage; D94 venue; D95 law clauses; D96 boss families; D97 parts as keys; D98 lessons, not damage; D99 learning carries across Story levels; D100 10.1's target (overtaken by row 661: rung 1 is 10.2); D101 what "something new" means; D102 pass every driver value to traffic; D103 draw the side zone that acts; D104 the nine tests' rung order; D105 a sighted car's endless wait (in part resolved by row 670); D106 the standstill rule; D107 rung 1's envelope and beam; D108 when the dash arrives; D109 the return against the drive-in; D110 rung 2 waits for any dummy in its field; D111 cover open at rung 2; D112 the plinth needs a dash-jump; D114 rung 4: the street cameras or slowing past blind spots; D115 the sprint from past the field; D116 DUCK's rules and where it lands. D113 resolved (row 685).
+- **Next row 695. Next open decision D117.**
 
 ## 9 The crux and the ten tests (user-decided 1 November, row 653)
 
@@ -927,3 +930,35 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
 - **Human pass (H4):** does the player read the camera link, and find the cone without being told?
 - **D114, D115.** D110: standing anywhere near the road now holds the car, behind cover too.
 - **Next:** 10.6, rung 5.
+
+## 20 Major learning: a stealth game, played from the other side (2 November, row 694)
+
+> "Maybe DUCK becomes an ability - so it's a bit more like a stealth game? (This is a major learning)" (Lawrence, 2 November, 22:58)
+
+### 20.1 The reading
+
+| Stealth game | The duel, as built |
+|---|---|
+| Guard's vision cone | The forward beam (`perception.forwardLength`) |
+| Peripheral vision, slower to notice | The driver's field (`proto.driver.cautionZone`; `perception.sideNoticeSeconds`) |
+| Alert meter | The notice meter drawn over the car |
+| Alert | It stops at the safe envelope and honks |
+| Guard upgrades | Rungs 1–4: camera, side sensors, roof lidar, street cameras |
+| Stealth tools | Dash, jump, cones; next, DUCK |
+
+- **The goal inverts the genre.** The dummy hides to be hit, not to escape.
+- **Seen, it stops short.** Unseen, it drives on into reach.
+- **Every later rung is a sense; every part, a stealth tool.** D104's ladder is reread this way (D116).
+
+### 20.2 DUCK, proposed (D116)
+
+- **Hold to duck.** Lower and slower. Releasing stands; a dash from a duck springs at once.
+- **In the open:** the field notices a crouched dummy slower (§13: awareness fills slower crouched).
+- **Behind cover taller than it:** hidden from a sensor whose sightline clears the cover only past the dummy. A high sensor sees in sooner as it nears.
+- **Cover to duck behind:** low planters, as in the districts (`world.gardenPlanter`). Movable with Arms later.
+- **New IDs, registry first:** `body.duckHeight`, `movement.duckSpeed`, `perception.duckNoticeFactor`, `perception.sensorHeight`, `props.planter.height`, `duel.duckArrives`.
+
+### 20.3 What it changes next
+
+- **10.6:** rung 5 stops at a cone and never swerves (§14.2), which closes the cone bait. DUCK arrives; low planters stand by the road.
+- **A later rung:** the car remembers where it lost you and stops short of that spot. It leaves open what true stealth needs: get into hiding before it sees you.
