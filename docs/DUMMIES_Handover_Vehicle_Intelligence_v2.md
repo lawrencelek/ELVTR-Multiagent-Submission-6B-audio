@@ -22,6 +22,8 @@
 
 **Updated 2 November, 22:58:** §20. Major learning (row 694): the duel is a stealth game, played from the other side. DUCK becomes an ability.
 
+**Updated 3 November, 18:25:** §22. A car that has learned shows it (row 701). D115 and D118 kept. Pace measured against the GDD's target (row 702).
+
 **Updated 3 November, 10.6 built:** §21. DUCK plays at `prototypes/p10/dummies_p10_6.html`; GDD Edit 106. Rung 5 stops at cones; DUCK behind a planter row is the way in. Sightlines run by height. 10.5's page is frozen.
 
 ## 0 How to use this with v1
@@ -295,9 +297,11 @@ Recorded in `DECISIONS.md`. Replaces the rows v1 §3.2 proposed.
 | 698 | 10.6 measured: the cone bait 0; DUCK behind the planter 3.03 a minute at 114; standing there 0 | tested (3 November) |
 | 699 | Probes: bots `planter`, `standplanter`; 10 IDs added, 659 entries | tested (3 November) |
 | 700 | 10.5's page frozen (md5 `25278535…`) | tested (3 November) |
+| 701 | A car that has learned shows what it learned; D115 and D118 kept | user-decided (3 November) |
+| 702 | Pace: the ambush writes off a body every 140 s, against the GDD's 80–100 s | tested (3 November) |
 
-- **Open:** D89 red hue; D90 white role; D91 fixed or adaptive ladder; D92 car contact; D93 flank damage; D94 venue; D95 law clauses; D96 boss families; D97 parts as keys; D98 lessons, not damage; D99 learning carries across Story levels; D100 10.1's target (overtaken by row 661: rung 1 is 10.2); D101 what "something new" means; D102 pass every driver value to traffic; D103 draw the side zone that acts; D104 the nine tests' rung order; D105 a sighted car's endless wait (in part resolved by row 670); D106 the standstill rule; D107 rung 1's envelope and beam; D108 when the dash arrives; D109 the return against the drive-in; D110 rung 2 waits for any dummy in its field; D111 cover open at rung 2; D112 the plinth needs a dash-jump; D114 rung 4: the street cameras or slowing past blind spots; D115 the sprint from past the field; D116 DUCK's numbers (built, rows 695–697); D117 the planter ambush's strength; D118 the street cameras' range. D113 resolved (row 685).
-- **Next row 701. Next open decision D119.**
+- **Open:** D89 red hue; D90 white role; D91 fixed or adaptive ladder; D92 car contact; D93 flank damage; D94 venue; D95 law clauses; D96 boss families; D97 parts as keys; D98 lessons, not damage; D99 learning carries across Story levels; D100 10.1's target (overtaken by row 661: rung 1 is 10.2); D101 what "something new" means; D102 pass every driver value to traffic; D103 draw the side zone that acts; D104 the nine tests' rung order; D105 a sighted car's endless wait (in part resolved by row 670); D106 the standstill rule; D107 rung 1's envelope and beam; D108 when the dash arrives; D109 the return against the drive-in; D110 rung 2 waits for any dummy in its field; D111 cover open at rung 2; D112 the plinth needs a dash-jump; D114 rung 4: the street cameras or slowing past blind spots; D115 the sprint from past the field; D116 DUCK's numbers (built, rows 695–697); D117 the pace of a write-off. D113, D115, D118 resolved (rows 685, 701).
+- **Next row 703. Next open decision D119.**
 
 ## 9 The crux and the ten tests (user-decided 1 November, row 653)
 
@@ -1024,3 +1028,21 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
 - **Human pass (H5):** does the player read HIDDEN and SEEN, and find the spring over the row?
 - **D117** the ambush's strength; **D118** the cameras' range; **D115** the sprint from past the field.
 - **Next:** 10.7, rung 6: it counters your habit. Learning the spot it was hit from closes the ambush.
+
+## 22 Showing what it learned; pace (3 November, rows 701–702)
+
+> "the car in 10.7 who has learned also needs to show that it's learned. Sensor display is crucial then." (Lawrence, 3 November)
+
+- **Rule (row 701):** every learned behaviour draws, on the car and on the road. It extends D103: draw the zone that acts.
+- **Kept:** the sprint from past the field (D115); each camera watches the cover near its post (D118).
+
+### 22.1 Pace (row 702)
+
+| Measure | 10.6, DUCK behind a planter | GDD target |
+|---|---|---|
+| A hit | Every 20 s | Inside the first minute (Edit 18 §10.2) |
+| A write-off | Every 140 s (800-point body, 114 a hit) | At most 80 s; 100 s in a five-minute visit |
+| Passes | 5.6 a minute; 54% struck | — |
+
+- **The limit is the car's supply.** A pass takes 10.7 s; 5.2 s of it is the run-in, off screen (D109).
+- **D117:** cut the dead time; a lighter test-road body; more from a spring out of a duck; or leave it, since the duel pays in lessons.
