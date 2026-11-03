@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Prototype 10 test-road report (GDD Edits 101–106): qa/baseline/p10_<n>.json -> qa/baseline/p10_<n>.md.
+"""Prototype 10 test-road report (GDD Edits 101–107): qa/baseline/p10_<n>.json -> qa/baseline/p10_<n>.md.
     python3 qa/testroad_report.py qa/baseline/p10_2.json qa/baseline/p10_2.md "Prototype 10.2: the first lesson"
 10.1's report (p10_1.md) was written by this script's first version; its JSON has no 'mode' and reads as 'lesson'.
 """
@@ -27,12 +27,18 @@ DESC = {'stand': "Stands on the north lane's line, road A", 'standSouth': "Stand
         'conebait': "The gap until Hands 1; then lays a cone ahead of the car waiting for it, steps out of its field, strikes as it swerves round the cone",
         'lurk': "Waits past every field's edge, south-east; sprints in as a car passes in road A's south lane, dashes before the field notices",
         'planter': "The cone bait until DUCK; then ducks behind the planter row south of road A, east, and springs over it at a passing car",
-        'standplanter': "The same spot behind the planter row, standing"}
+        'standplanter': "The same spot behind the planter row, standing",
+        'roam': "DUCK behind a planter row, at the nearest spot for the car's road that it does not remember (it reads the red rings); springs at a passing car"}
 HOME_COVER = "aim, flank, jump and dashjump wait at (300, 410), behind the barrier: cover"
 MODE_DESC = {'lesson': "from the build's start (10.2: rung 0, on foot; 10.3: rung 1, Battery 1 fitted; 10.5: rung 3, Battery 1 and Legs 1 fitted); the lesson and the part as the build delivers them",
              'trained': "at the top rung from the start, every part its rungs bring fitted: the rung's own table"}
 STAGE = str(d.get('stage', '10.1'))
-if STAGE >= '10.6':  # rung 5: the cone bait closes; DUCK behind a planter and the sprint from beyond the field stay
+if STAGE >= '10.7':  # rung 6: the same spot closes; any other spot stays, and the sprint from beyond the field
+    CLOSED, OPEN_FOOT, OPEN_DASH = ['stand', 'standSouth', 'standOff', 'charge', 'kerb', 'flankOpen', 'walkin', 'corner', 'gap', 'plinth', 'conebait', 'standplanter'], ['lurk'], ['roam']
+    COVER = ['gap', 'aim', 'flank', 'jump', 'dashjump']
+    ESC_CLOSED, ESC_OPEN = ['planter'], ['roam']
+    HOME_COVER += "; conebait starts at the gap (188, 414); planter and standplanter use one spot behind the planter row south of road A, east (590, 418); roam uses nine spots behind the three rows; lurk waits at (660, 576)"
+elif STAGE >= '10.6':  # rung 5: the cone bait closes; DUCK behind a planter and the sprint from beyond the field stay
     CLOSED, OPEN_FOOT, OPEN_DASH = ['stand', 'standSouth', 'standOff', 'charge', 'kerb', 'flankOpen', 'walkin', 'corner', 'gap', 'plinth', 'conebait', 'standplanter'], ['lurk'], ['planter']
     COVER = ['gap', 'aim', 'flank', 'jump', 'dashjump']
     ESC_CLOSED, ESC_OPEN = ['conebait'], ['planter']
@@ -68,7 +74,8 @@ w(f"- **Build:** `{d['build']}`, level `{d['level']}`, stage {d.get('stage', '10
 w(f"- **Runs:** {len(POL)} bots × {len(MODES)} mode(s) × offsets {d['offsets']} s × {d['secs']} sim-seconds; escalation {d['esc']} s.")
 for mo in MODES: w(f'- **Mode `{mo}`:** {MODE_DESC.get(mo, "")}.')
 if STAGE >= '10.3': w(f'- **Cover:** {HOME_COVER}.')
-if STAGE >= '10.6': w('- **Parts:** Battery 1, Legs 1 and Hands 1 fitted from the start; DUCK by drone at the first stop at a cone. Three low planter rows by the road.')
+if STAGE >= '10.7': w('- **Parts:** Battery 1, Legs 1, Hands 1 and DUCK fitted from the start. No new part. Every crash leaves an outline; from rung 6 the car remembers the latest `duel.memorySites` spots.')
+elif STAGE >= '10.6': w('- **Parts:** Battery 1, Legs 1 and Hands 1 fitted from the start; DUCK by drone at the first stop at a cone. Three low planter rows by the road.')
 elif STAGE >= '10.5': w('- **Parts:** Battery 1 and Legs 1 fitted from the start; Hands 1, the cones, by drone at the first stop for a dummy behind cover.')
 elif STAGE >= '10.4': w('- **No new part:** Battery 1 and Legs 1 are fitted from the start.')
 w('- **The build\'s values:** ' + ', '.join(f'`{k}` {v}' for k, v in d['p10'].items()) + '.')
@@ -122,7 +129,23 @@ w('|---|---|---|---|')
 for r in d['escalation']:
     w(f"| {r['policy']} | {' '.join(str(x) for x in r['windows'])} | {f(r.get('decay'))} | {r['learnEvents']} |")
 w('')
-if STAGE >= '10.5' and 'lurk' in esc_pol and 'lurk' not in ESC_OPEN: w("- **lurk decays by the dummy's own damage, not the car.** Each hit lands on a leg; the dash shortens with leg damage (164 to 116 after four hits), below what the sprint from past the field needs. The car stays at rung 3 throughout.\n")
+if STAGE >= '10.5' and 'lurk' in esc_pol and 'lurk' not in ESC_OPEN: w("- **lurk decays by the dummy's own damage, not the car.** Each hit lands on a leg; the dash shortens with leg damage (164 to 116 after four hits), below what the sprint from past the field needs. " + ("Its repeated spot also teaches rung 6.\n" if STAGE >= '10.7' else "The car stays at rung 3 throughout.\n"))
+if STAGE >= '10.7':  # row 703 (D117): the shorter run-in and the lighter body
+    w(f'## {n} Pace (row 703; D117)'); n += 1
+    w('')
+    pace = json.load(open(sys.argv[4])) if len(sys.argv) > 4 else None
+    w('| Way in | Mode | Hits a minute | Damage a hit | Seconds a write-off | Cars a minute |')
+    w('|---|---|---|---|---|---|')
+    rows = [(p, mo, sel(mo, p)) for mo in MODES for p in ('roam', 'planter', 'lurk')]
+    if pace: rows.append(('planter, no memory (`duel.topRung` 5)', 'lesson', [r for r in pace['runs'] if r['policy'] == 'planter']))
+    for p, mo, rs in rows:
+        if not rs: continue
+        mins = [r['simSeconds'] / 60 for r in rs]; wo = sum(r['writeOffs'] for r in rs); secs = sum(r['simSeconds'] for r in rs)
+        w(f"| {p} | {mo} | {f(m([r['hitsPerMin'] for r in rs]))} | {f(m([r['lost'] / r['hits'] if r['hits'] else None for r in rs]), 0)} | {f(secs / wo, 0) if wo else '—'} | {f(m([r['cars']['appearances'] / mm for r, mm in zip(rs, mins)]), 1)} |")
+    w('')
+    w('- **GDD target:** at most 80 s a write-off (Edit 18 §10.2); 100 s in a five-minute visit. 10.6\'s planter ambush: 148 s (`qa/baseline/p10_6.md`).')
+    w(f"- **Values:** `duel.runInLength` {d['p10'].get('duel.runInLength')}, `duel.redReturnSeconds` {d['p10'].get('duel.redReturnSeconds')}, `proto.health.standard` {d['p10'].get('proto.health.standard')}. Cars that appeared slowed for a dummy they already sensed: {sum(r.get('spawnSlow', 0) for r in runs)} in {sum(r['cars']['appearances'] for r in runs)}.")
+    w('')
 w(f'## {n} Checks'); n += 1
 w('')
 allr = runs + d['escalation']
@@ -146,7 +169,7 @@ if top >= 1:
         (f'Rung {top} closes: ' + ', '.join(CLOSED) + ' score 0', all(r['hits'] == 0 for r in tr if r['policy'] in CLOSED), ', '.join(f"{p} {sum(r['hits'] for r in tr if r['policy'] == p)}" for p in CLOSED)),
         ('It stops beyond dash reach for a dummy standing ahead', all(r['cars']['minStopGap'] >= r['cars']['reach'] for r in stops), f"closest stop {min(r['cars']['minStopGap'] for r in stops)} (reach {tr[0]['cars']['reach']:.0f})" if stops else 'no stops'),
         ('An opening without the new part still lands (pillar 1, D97)', all(r['hits'] > 0 for r in tr if r['policy'] in OPEN_FOOT), ', '.join(f"{p} {m([r['hitsPerMin'] for r in tr if r['policy'] == p])}/min" for p in OPEN_FOOT)),
-        ('The opening the new part unlocks lands', all(r['hits'] > 0 for r in tr if r['policy'] in OPEN_DASH) if OPEN_DASH else True, (', '.join(f"{p} {m([r['hitsPerMin'] for r in tr if r['policy'] == p])}/min" for p in OPEN_DASH) or 'no new part in this test')),
+        ('Any other spot still lands' if top >= 6 else 'The opening the new part unlocks lands', all(r['hits'] > 0 for r in tr if r['policy'] in OPEN_DASH) if OPEN_DASH else True, (', '.join(f"{p} {m([r['hitsPerMin'] for r in tr if r['policy'] == p])}/min" for p in OPEN_DASH) or 'no new part in this test')),
     ]
 if top == 1:
     checks += [
@@ -191,6 +214,19 @@ if top == 5:
         ('DUCK arrives at the first stop at a cone', bool(stops) and all(duck(r) is not None and duck(r) - r['firstItemAt'] < 5 for r in stops), f"stop to DUCK: {', '.join(sorted(set(str(round(duck(r) - r['firstItemAt'], 1)) for r in stops if duck(r) is not None)))} s in {len(stops)} runs"),
         ('The planter hides only a ducked dummy: standing behind it scores 0; ducked, it lands', all(r['hits'] == 0 for r in sp) and all(r['hits'] > 0 for r in pl), f"standing {sum(r['hits'] for r in sp)} hits; ducked {sum(r['hits'] for r in pl)} hits, {sum(r.get('duckHits', 0) for r in pl)} sprung from a duck"),
         ('Rung 5 keeps cover closed: ' + ', '.join(COVER) + ': at most one hit in 15 minutes each', all(sum(r['hits'] for r in tr if r['policy'] == p) <= 1 for p in COVER), ', '.join(f"{p} {sum(r['hits'] for r in tr if r['policy'] == p)}" for p in COVER)),
+    ]
+if top == 6:
+    les = [r for r in runs if r['mode'] == 'lesson']
+    rep_ = [r for r in les if r.get('habitHits', 0) > 0]
+    other = [r for r in les if r['hits'] > 0 and not r.get('habitHits', 0)]
+    pl, N = [r for r in tr if r['policy'] == 'planter'], d['p10'].get('duel.memorySites', 0)
+    checks += [
+        ('Only a hit sprung from the spot of an earlier crash teaches rung 6', all(r.get('lesson') for r in rep_) and not any(r.get('lesson') for r in other), f"lessons: {sum(1 for r in rep_ if r.get('lesson'))} of {len(rep_)} runs with such a hit; {sum(1 for r in other if r.get('lesson'))} of {len(other)} runs with only hits from new spots"),
+        ('A new behaviour: it stops for a dummy at a spot it remembers (none at rung 5)', sum(r.get('expectStops', 0) for r in tr) > 0, f"trained: {sum(r.get('expectStops', 0) for r in tr)} cars stopped so; {sum(r.get('expectHidden', 0) for r in tr)} for a dummy cover hid"),
+        ('Rung 6 closes the same spot: planter scores once a run, then never', all(r['hits'] <= 1 for r in pl), 'planter ' + ', '.join(str(r['hits']) for r in pl) + ' hits in 300 s'),
+        ('No hit sprung from a duck at a spot it remembered (the sprint from past the field may still land from one: D115)', sum(r.get('rememberedDucked', 0) for r in tr) == 0, f"trained: {sum(r.get('rememberedDucked', 0) for r in tr)} of {sum(r['hits'] for r in tr)} hits; from a remembered spot at all: {sum(r.get('rememberedHits', 0) for r in tr)} (" + ', '.join(f"{p} {sum(r.get('rememberedHits', 0) for r in tr if r['policy'] == p)}" for p in dict.fromkeys(r['policy'] for r in tr if r.get('rememberedHits', 0))) + ')'),
+        ('Every damaging hit leaves a crash; memory holds at most duel.memorySites', all(r.get('crashes') == r['hits'] for r in tr) and all(r.get('sites', 0) <= (N or 10 ** 9) for r in allr), f"crashes = hits in {sum(1 for r in tr if r.get('crashes') == r['hits'])} of {len(tr)} trained runs; most remembered {max(r.get('sites', 0) for r in allr)} (cap {N or 'none'})"),
+        ('Rung 6 keeps cover closed: ' + ', '.join(COVER) + ': at most one hit in 15 minutes each', all(sum(r['hits'] for r in tr if r['policy'] == p) <= 1 for p in COVER), ', '.join(f"{p} {sum(r['hits'] for r in tr if r['policy'] == p)}" for p in COVER)),
     ]
 if top == 2 and d['p10'].get('duel.jumpArrives') == 2:
     leg = [r for r in runs if r['mode'] == 'lesson' and r.get('firstSideAt') is not None]

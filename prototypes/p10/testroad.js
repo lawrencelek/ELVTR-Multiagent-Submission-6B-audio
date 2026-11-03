@@ -7,6 +7,8 @@
 // 10.5: from rung 3, a hit out of cover teaches rung 4, the street cameras: it sees behind cover. Hands 1, the cones, arrive.
 // 10.6: from rung 4, a hit while it swerves round a cone teaches rung 5: it stops at a cone and never swerves. DUCK arrives;
 // low planter rows stand by the road. Sightlines run by height: a ducked dummy behind a planter is hidden.
+// 10.7: from rung 5, a hit sprung from the spot of an earlier crash teaches rung 6, crash memory: it remembers where you
+// struck from, and expects you there. Every crash leaves a chalk outline on the road. A shorter run-in; a lighter body.
 // Extends the base Sim from prototypes/p6/sim.js. Shared files are untouched, so Prototype 9's build keeps its md5.
 // Runs in the browser (window.DUMMIES) and in node (require), so the probes run headless without a page.
 (function (root) {
@@ -26,8 +28,10 @@
   // Each lane starts runIn before the screen's edge and ends world.spawnLeadIn past the far edge. 10.1: runIn is
   // world.spawnLeadIn. From 10.2 (row 670): at least the forward beam plus a car length, so a car sees a dummy at the screen's
   // edge before it could need to stop for it. It never appears already too close.
+  // 10.7 (row 703; D117): duel.runInLength sets a shorter run-in. The car then appears at the speed its envelope allows
+  // for a dummy it already senses (spawnSpeed), so it still never appears too close.
   const ROAD_A = 320, ROAD_B = 400;
-  const runInFor = (P) => Math.max(P['world.spawnLeadIn'], Math.ceil(P['perception.forwardLength'] + P['vehicles.sedan.length']));
+  const runInFor = (P) => P['duel.runInLength'] > 0 ? P['duel.runInLength'] : Math.max(P['world.spawnLeadIn'], Math.ceil(P['perception.forwardLength'] + P['vehicles.sedan.length']));
   function junctionLevel(P) {
     const half = P['world.laneWidth'] / 2, R = runInFor(P), out = P['world.spawnLeadIn'];
     const a = [[-R, ROAD_A], [P['world.width'] + out, ROAD_A]], b = [[ROAD_B, -R], [ROAD_B, P['world.height'] + out]];
@@ -93,6 +97,10 @@
   // Rung 5, road items (handover v2 §14.2; robotaxis stopped by a cone on the bonnet, 2023): it stops short of a cone in its
   // lane and never swerves round it. It waits while FARSIGHT fetches the cone. Only a hit while it swerved round a cone
   // teaches it (items): the training clip shows the swerve. Its part is DUCK (rows 694–696).
+  // Rung 6, crash memory (handover v2 §14.2: it counters your habit; §4.3: Metal Gear Solid V's Revenge, Alien: Isolation):
+  // it remembers the spot each crash was sprung from (crashes; duel.memorySites, the latest; 0 all). A dummy within
+  // duel.memoryRadius of one is expected: cover does not hide it and the field notices it at once. Only a hit sprung from
+  // the spot of an earlier crash teaches it (habit). New spots still work, once each. No part.
   // Each rung brings the dummy a part by drone (part, partKey): when that value is 1, as the lesson ends; 2, the first
   // time the car uses the new rung against the dummy (trigger); 3, fitted from the start.
   const RUNGS = [
@@ -102,6 +110,7 @@
     { rung: 3, name: 'Roof lidar', sensor: 'ROOF LIDAR', learnsFrom: ['front', 'frontDiagonal', 'side', 'rearDiagonal'], high: true },
     { rung: 4, name: 'Street cameras', sensor: 'STREET CAMERAS', fit: 'LINK', learnsFrom: ['front', 'frontDiagonal', 'side', 'rearDiagonal'], cover: true, part: 'hands1', partKey: 'duel.conesArrives', trigger: 'first-cover' },
     { rung: 5, name: 'Road items', sensor: 'ROAD ITEMS', fit: 'UPDATE', learnsFrom: ['front', 'frontDiagonal', 'side', 'rearDiagonal'], items: true, part: 'duck1', partKey: 'duel.duckArrives', trigger: 'first-item' },
+    { rung: 6, name: 'Crash memory', sensor: 'YOUR HABIT', fit: 'MEMORY', learnsFrom: ['front', 'frontDiagonal', 'side', 'rearDiagonal'], habit: true },
   ];
 
   // ---------- The test road: one red sedan, alone on the road
@@ -128,6 +137,7 @@
       this.leftAt = 0; // when the red car last left the screen
       this.rung = Math.max(0, Math.min(RUNGS.length - 1, Math.round(P['duel.startRung'] || 0))); // the red car's rung
       this.lesson = null; this.lessons = []; this.delivery = null; this.firstBrakeT = null; this.firstSideT = null; this.firstCoverT = null; this.firstItemT = null;
+      this.crashes = []; this.spring = null; // every damaging hit: where it struck, the spot it was sprung from (row 703); the last dash or jump's start
       let fitted = false; // parts fitted from the start (partKey 3)
       for (const r of RUNGS) if (r.part && Math.round(P[r.partKey] || 0) === 3) { this.run.owned[r.part] = true; fitted = true; }
       if (fitted && this.body) this.body.health = this.maxHealth();
@@ -189,6 +199,7 @@
         const m = c.man, hz = c.hz, b = this.body;
         if (!c.red || c.ghost) continue;
         this.trackSight(c, dt);
+        c.checks = this.rung >= 6 ? this.checking(c) : null; // rung 6: the remembered spots in its field, which it watches
         if (c.dodge && c.dodge.kind === 'cone' && c.cause === 'cone' && c.man && c.man.type === 'shift' || c.coneSwerve && c.dodge && c.dodge.kind === 'cone') { c.coneSwerve = true; c.coneSwerveT = this.t; } else c.coneSwerve = false; // row 695: swerving round a cone, and when last
         if (this.rung >= 2 && this.watchField(c, dt)) continue;
         if (!m || m.type !== 'brake' || m.emergency || c.cause !== 'body' || !hz || !hz.inPath || c.v < 1) continue;
@@ -204,7 +215,7 @@
       const P = this.P, b = this.body, hz = c.hz;
       const side = !!(hz && !hz.inPath && b.alive), wasHolding = c.cause === 'side' && !!c.man;
       c.fieldT = side ? (c.fieldT || 0) + dt : 0;
-      c.noticed = side && c.fieldT >= P['perception.sideNoticeSeconds'] * (b.duck ? P['perception.duckNoticeFactor'] || 1 : 1) - 1e-9; // a ducked dummy is noticed slower (row 696)
+      c.noticed = side && c.fieldT >= (this.expected() ? 0 : P['perception.sideNoticeSeconds'] * (b.duck ? P['perception.duckNoticeFactor'] || 1 : 1)) - 1e-9; // a ducked dummy is noticed slower (row 696); one at a remembered spot, at once (rung 6)
       if (this.rung < 5 && c.dodge && c.dodge.kind === 'cone' && c.cause === 'cone') { c.sideHonk = false; c.sideHoldT = 0; return false; } // its swerve round a cone holds until it has passed it (rungs 2–4)
       if (!c.noticed) { c.sideHonk = false; c.sideHoldT = 0; if (wasHolding && c.v < 1 && !(hz && hz.inPath)) { c.man = null; c.state = 'cruise'; } return false; } // a dummy that steps from its field into its path keeps it stopped (row 688)
       // the stop point: where its nose stays envelope(0) from the dummy, measured straight, not along the road
@@ -242,7 +253,18 @@
       if (this.cars.length > before) {
         const c = this.cars[this.cars.length - 1]; c.red = true; c.rung = this.rung;
         if (this.rung >= 1) c.standoff = this.envelope(0); // its stop line: honks and holds there
+        if (P['duel.runInLength'] > 0) { const v = this.spawnSpeed(c); if (v < c.v) { c.v = v; this.emit('spawn-slow', { car: c.id, v: +v.toFixed(1) }); } }
       }
+    }
+    // A short run-in (duel.runInLength): the car appears at the speed it would have braked to for a dummy it senses ahead
+    // (its beam, or its field from rung 2), never faster than the envelope allows. A dummy it cannot see changes nothing.
+    spawnSpeed(c) {
+      const b = this.body, beam = this.beamFor();
+      if (!b || !b.alive || beam <= 0 || !c.path) return c.v;
+      const ca = Math.cos(c.h), sa = Math.sin(c.h), nx = c.x + ca * c.L / 2, ny = c.y + sa * c.L / 2;
+      const fx = (b.x - nx) * ca + (b.y - ny) * sa, fy = -(b.x - nx) * sa + (b.y - ny) * ca, half = c.W / 2 + this.P['body.radius'] + this.fieldFor();
+      if (fx < -c.L || fx > beam || Math.abs(fy) > half || this.occluded(c, nx, ny, b.x, b.y)) return c.v;
+      return Math.min(c.v, this.envSpeed(Math.hypot(Math.max(0, fx), Math.max(0, Math.abs(fy) - c.W / 2))));
     }
     exitCars() {
       super.exitCars();
@@ -268,6 +290,7 @@
     occluded(self, x0, y0, x1, y1) {
       const b = this.body;
       if (!this.testRoad || !b || x1 !== b.x || y1 !== b.y) return super.occluded(self, x0, y0, x1, y1);
+      if (self && self.red && this.expected()) return false; // rung 6: it looks where it remembers you
       if (this.carSees(self, x0, y0, true)) return false;
       return !(this.rung >= 4 && self && self.red && this.cameraSees());
     }
@@ -309,6 +332,16 @@
       c.sightT = b.alive && !cover ? (c.sightT || 0) + dt : 0;
       c.hidden = !!(b.alive && cover); if (c.hidden) c.coverT = this.t; // behind cover now; when last
     }
+    // ----- rung 6, crash memory (row 703). The remembered spots: the latest duel.memorySites crashes' spring spots (0: all).
+    memory() { if (this.rung < 6) return []; const n = Math.round(this.P['duel.memorySites'] || 0); return n > 0 ? this.crashes.slice(-n) : this.crashes.slice(); }
+    nearSite(x, y, sites) { const R = this.P['duel.memoryRadius'] || 0; return (sites || this.crashes).find((m) => hyp(x - m.ox, y - m.oy) <= R + 1e-9) || null; }
+    expected() { const b = this.body; return this.rung >= 6 && !!b && b.alive && !!this.nearSite(b.x, b.y, this.memory()); } // the dummy stands at a spot it remembers
+    checking(c) { // the remembered spots inside its field ahead: drawn as the spots it watches
+      const ca = Math.cos(c.h), sa = Math.sin(c.h), half = c.W / 2 + this.P['body.radius'] + this.fieldFor() + (this.P['duel.memoryRadius'] || 0);
+      return this.memory().filter((m) => { const dx = m.ox - c.x, dy = m.oy - c.y, fx = dx * ca + dy * sa, fy = -dx * sa + dy * ca; return fx > -c.L && fx < c.fwdLen + c.L / 2 && Math.abs(fy) < half; });
+    }
+    // Where a hit was sprung from: a dash's or a jump's start; a walk-in or a car's own strike, where the dummy stood.
+    springOrigin(e) { const b = this.body, sp = this.spring; return (e.kind === 'dash' || e.kind === 'jump') && sp ? { x: sp.x, y: sp.y } : { x: b.x, y: b.y }; }
     // A cone took it: it swerved round a cone within the training clip (duel.lessonClipSeconds).
     itemHit(c) { return c.coneSwerveT != null && this.t - c.coneSwerveT <= this.P['duel.lessonClipSeconds'] + 1e-9; }
     // Cover hid the dummy: the car lost it behind cover within the training clip (duel.lessonClipSeconds).
@@ -318,8 +351,8 @@
     heightHid(e, c) { return this.fromAbove(e) && (c.sightT || 0) >= this.P['duel.lessonClipSeconds'] - 1e-9; }
     // A hit from above: a jump's strike, or a dash launched from the plinth (or a jump out of one).
     fromAbove(e) { const b = this.body; return e.kind === 'jump' || !!(b && ((b.lunge && b.lunge.fromRaised) || (b.jump && b.jump.fromRaised))); }
-    startLunge(facing0, k) { const b = this.body, up = !!b.raised; super.startLunge(facing0, k); if (this.testRoad && b.lunge) b.lunge.fromRaised = up; }
-    tryJump() { const b = this.body, up = !!b.raised; super.tryJump(); if (this.testRoad && b.mode === 'jump' && b.jump) { b.jump.fromRaised = up; b.raised = false; } }
+    startLunge(facing0, k) { const b = this.body, up = !!b.raised, x = b.x, y = b.y; super.startLunge(facing0, k); if (this.testRoad && b.lunge) { b.lunge.fromRaised = up; this.spring = { x, y, t: this.t }; } }
+    tryJump() { const b = this.body, up = !!b.raised, x = b.x, y = b.y, dashing = b.mode === 'lunge'; super.tryJump(); if (this.testRoad && b.mode === 'jump' && b.jump) { b.jump.fromRaised = up; b.raised = false; if (!dashing) this.spring = { x, y, t: this.t }; } } // a jump out of a dash keeps the dash's start
     landJump() { const b = this.body; super.landJump(); if (this.testRoad) { b.raised = this.onPlinth(b.x, b.y); if (b.raised) this.emit('raised', { x: +b.x.toFixed(1), y: +b.y.toFixed(1) }); } }
     // A dash vaults low cover (row 696): a planter stops a walk, not a dash. The dummy springs from a duck over the row.
     collideBody(contacts, k) {
@@ -378,6 +411,12 @@
       const e0 = this.events.length, positive = super.account(keep);
       for (const e of this.events.slice(e0)) if (e.type === 'impact') {
         const c = this.carById(e.car); if (c && c.red) { e.sight = +(c.sightT || 0).toFixed(2); e.above = this.fromAbove(e); e.cover = this.coverHid(c); e.coned = this.itemHit(c); e.ducked = !!this.body.duck || !!this.body.duckAt && this.t - this.body.duckAt < 0.5; } // in sight past cover (s); from above (D113); out of cover (row 687); round a cone (row 695); from a duck
+        if (e.lost > 0 && c && c.red) { // the crash: an outline where it struck; the spot it was sprung from; is that spot an earlier crash's? (row 703)
+          const o = this.springOrigin(e), b = this.body, fx = this.effects.filter((q) => q.type === 'burst').pop(), prev = this.nearSite(o.x, o.y);
+          e.origin = { x: +o.x.toFixed(1), y: +o.y.toFixed(1) }; e.habit = !!prev; e.remembered = !!this.nearSite(o.x, o.y, this.memory());
+          this.crashes.push({ n: this.crashes.length + 1, x: +b.x.toFixed(1), y: +b.y.toFixed(1), ox: e.origin.x, oy: e.origin.y, px: fx ? +fx.x.toFixed(1) : null, py: fx ? +fx.y.toFixed(1) : null, h: +c.h.toFixed(3), t: +this.t.toFixed(2), model: c.model, zone: e.zone, prev: prev ? prev.n : null, writeoff: b.health <= 0 });
+          this.emit('crash', { n: this.crashes.length, x: e.origin.x, y: e.origin.y, habit: e.habit, prev: prev ? prev.n : null });
+        }
         if (e.lost > 0) this.learnFrom(e);
       }
       return positive;
@@ -389,8 +428,9 @@
       if (next.high && !this.heightHid(e, c)) return; // rung 3 learns only from a hit where height hid the dummy (row 685)
       if (next.cover && !this.coverHid(c)) return; // rung 4, only from a hit where cover hid it
       if (next.items && !this.itemHit(c)) return; // rung 5, only from a hit while it swerved round a cone (row 695)
-      this.lesson = { state: 'due', from: this.rung, to: next.rung, name: next.name, sensor: next.sensor, model: c.model, car: c.id, zone: e.zone, kind: e.kind, hitT: e.t, lost: e.lost };
-      this.emit('lesson-due', { model: c.model, from: this.rung, to: next.rung, zone: e.zone, car: c.id });
+      if (next.habit && !e.habit) return; // rung 6, only from a hit sprung from the spot of an earlier crash (row 703)
+      this.lesson = { state: 'due', from: this.rung, to: next.rung, name: next.name, sensor: next.sensor, model: c.model, car: c.id, zone: e.zone, kind: e.kind, hitT: e.t, lost: e.lost, origin: e.origin || null };
+      this.emit('lesson-due', { model: c.model, from: this.rung, to: next.rung, zone: e.zone, car: c.id, origin: e.origin || null, habit: !!e.habit });
     }
     step(cmd) {
       if (this.testRoad && this.phase === 'play' && this.lesson && this.lesson.state === 'due' && this.body.alive && !this.onRoad().some((c) => c.red)) {
@@ -431,6 +471,7 @@
       if (cause === 'body' && this.rung >= 1 && this.firstBrakeT == null) { this.firstBrakeT = this.t; this.emit('first-brake', { car: c.id, model: c.model }); this.partFor(1, 2); }
       if (cause === 'side' && this.rung >= 2 && this.firstSideT == null) { this.firstSideT = this.t; this.emit('first-side', { car: c.id, model: c.model }); this.partFor(2, 2); }
       if (cause === 'cone' && man.type === 'brake' && this.rung >= 5 && this.firstItemT == null) { this.firstItemT = this.t; this.emit('first-item', { car: c.id, model: c.model }); this.partFor(5, 2); } // it stops at a cone: DUCK arrives
+      if ((cause === 'side' || cause === 'body') && this.rung >= 6 && this.expected()) { const m = this.nearSite(this.body.x, this.body.y, this.memory()); this.emit('expect-stop', { car: c.id, site: m ? m.n : null, hidden: !!c.hidden }); } // it stops for a dummy where it remembers one
       if ((cause === 'side' || cause === 'body') && this.rung >= 4 && c.hidden && this.firstCoverT == null) { this.firstCoverT = this.t; this.emit('first-cover', { car: c.id, model: c.model }); this.partFor(4, 2); } // it stops for a dummy only its cameras see
     }
     partFor(rung, when) { // rung's part, if its partKey says it comes now (1: the lesson's end; 2: the first use)

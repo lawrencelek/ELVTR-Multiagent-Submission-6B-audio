@@ -14177,6 +14177,72 @@
    "purpose": "Beat 2 of a lesson: the new sensor fitted on screen, after the clip. Then play resumes and the car drives back in"
   },
   {
+   "id": "duel.runInLength",
+   "group": "Prototype P10",
+   "owner": "Design",
+   "label": "Run-in length",
+   "description": "How far before the screen's edge the red car appears on the test road. 0: the forward beam plus a car length (10.2–10.6, row 670). Above 0, the car appears at the speed its safe envelope allows for a dummy it already senses. 10.7 sets 200 (D117)",
+   "unit": "world units",
+   "type": "number",
+   "default": 0,
+   "status": "proposed",
+   "source": "GDD Edit 107 (Prototype 10.7): handover v2 §23; DECISIONS rows 703–",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-run",
+   "validation": {
+    "min": 0,
+    "max": 2000
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "How far before the screen's edge the red car appears on the test road. 0: the forward beam plus a car length (10.2–10.6, row 670). Above 0, the car appears at the speed its safe envelope allows for a dummy it already senses. 10.7 sets 200 (D117)"
+  },
+  {
+   "id": "duel.memoryRadius",
+   "group": "Prototype P10",
+   "owner": "Design",
+   "label": "Crash memory radius",
+   "description": "Rung 6: a crash's spring spot covers this radius. A hit sprung within it of an earlier crash's spot teaches rung 6; at rung 6 a dummy within it of a remembered spot is expected: cover does not hide it and the field notices it at once",
+   "unit": "world units",
+   "type": "number",
+   "default": 0,
+   "status": "proposed",
+   "source": "GDD Edit 107 (Prototype 10.7): handover v2 §23; DECISIONS rows 703–",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-run",
+   "validation": {
+    "min": 0,
+    "max": 400
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "Rung 6: a crash's spring spot covers this radius. A hit sprung within it of an earlier crash's spot teaches rung 6; at rung 6 a dummy within it of a remembered spot is expected: cover does not hide it and the field notices it at once"
+  },
+  {
+   "id": "duel.memorySites",
+   "group": "Prototype P10",
+   "owner": "Design",
+   "label": "Crash memory sites",
+   "description": "Rung 6: how many crash spots the car remembers, the latest first. 0: every crash. An older spot falls out of memory (counters are capped and can fall back; handover v2 §4.3)",
+   "unit": "count",
+   "type": "number",
+   "default": 0,
+   "status": "proposed",
+   "source": "GDD Edit 107 (Prototype 10.7): handover v2 §23; DECISIONS rows 703–",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-run",
+   "validation": {
+    "min": 0,
+    "max": 100
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "Rung 6: how many crash spots the car remembers, the latest first. 0: every crash. An older spot falls out of memory (counters are capped and can fall back; handover v2 §4.3)"
+  },
+  {
    "id": "proto.droneSpeed",
    "group": "Props",
    "owner": "Design",

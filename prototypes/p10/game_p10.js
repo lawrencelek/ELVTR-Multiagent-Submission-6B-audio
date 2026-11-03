@@ -5,7 +5,9 @@
 // 10.3 adds rung 2's field, its notice meter, the jump and the plinth's raised edge. 10.4: rung 3's roof lidar.
 // 10.5: rung 4's street cameras and their link to the car; the cones (Hands 1) carried, put down and fetched by drone; a
 // marker at the screen's edge for a car waiting off screen. 10.6: DUCK, the planter rows, each camera's reach, and whether
-// any of the car's sensors has the dummy (a ducked dummy it has not got draws dim).
+// any of the car's sensors has the dummy (a ducked dummy it has not got draws dim). 10.7: every crash leaves a chalk outline,
+// debris and a numbered evidence marker on the road. From rung 6 the car's memory draws: a red ring on each spot it
+// remembers, a line to that crash's outline, a scan from the car to the spots in its field, its memory module and count.
 // Keys: arrows or WASD move; Space or J dash, K or Shift jump, E picks up or puts down a cone, hold C or Ctrl to duck (once
 // fitted); Z zones; P pause; R restart; L saves this session's log (JSON). Pad: A dash, B jump, X cone, hold LB or RB to
 // duck. Touch: drag on the left half to move; the right half's bands, top to bottom: jump, cone (Hands 1), duck (hold;
@@ -19,17 +21,18 @@
     plinth: '#a89f8c', plinthTop: '#c2b9a5', block: '#262a35', blockEdge: '#5b6e9c', jersey: '#8494b8', cone: '#f2a65a',
     red: '#ff3d3d', redDark: '#9e1f1f', glass: '#1b2a38', dummy: '#ffd400', joint: '#2a2a2a', beam: 'rgba(244,248,250,0.10)',
     beamHot: 'rgba(255,61,61,0.22)', field: 'rgba(127,168,188,0.10)', fieldHot: 'rgba(255,212,0,0.14)', text: '#f4f8fa', dim: '#7fa8bc', hud: '#12151c',
-    cam: '#9ff2c8', camDim: 'rgba(159,242,200,0.55)', drone: '#20242e', rotor: 'rgba(200,214,230,0.5)', part: '#ffd400' };
+    cam: '#9ff2c8', camDim: 'rgba(159,242,200,0.55)', drone: '#20242e', rotor: 'rgba(200,214,230,0.5)', part: '#ffd400',
+    chalk: 'rgba(238,240,232,0.85)', chalkDim: 'rgba(238,240,232,0.35)', glassBit: '#9fb4c8', mem: '#ff5a5a', memDim: 'rgba(255,90,90,0.55)', tent: '#ffd400' };
   const PARTS = { battery1: 'BATTERY 1 · DASH', legs1: 'LEGS 1 · JUMP', hands1: 'HANDS 1 · CONES', duck1: 'DUCK · HOLD C' }, LOAD = { battery1: 'B1', legs1: 'L1', hands1: 'H1', duck1: 'D1' }, ZONES = { front: 'FRONT', frontDiagonal: 'FRONT CORNER', side: 'SIDE', rearDiagonal: 'REAR CORNER', rear: 'REAR' };
   const CLIP = F['duel.lessonClipSeconds'], HOLD = F['duel.lessonHoldSeconds'], FIT = F['duel.lessonFitSeconds']; // the clip, its last frame held, the fitting
   const cv = document.getElementById('game'), ctx = cv.getContext('2d');
   let s, paused = false, started = false, showZones = true, log = [], session = {}, prevV = new Map(), flash = [];
-  let ring = [], clip = null, lessonT = null; // the recording, the hit's clip, the lesson's clock
+  let ring = [], clip = null, lessonT = null, lastCrash = null; // the recording, the hit's clip, the lesson's clock, the latest crash
   const keys = new Set(); let aEdge = false, bEdge = false, xEdge = false, touchMove = null, touchA = false, touchB = false, touchX = null, touchD = null;
 
   function newSim() {
     s = new T.TestRoadSim(Object.assign({}, F)); log = []; session = { start: Date.now(), build: 'P' + ST.id };
-    prevV.clear(); flash = []; ring = []; clip = null; lessonT = null;
+    prevV.clear(); flash = []; ring = []; clip = null; lessonT = null; lastCrash = null;
   }
   newSim();
 
@@ -81,11 +84,12 @@
     const e0 = s.events.length; s.step(command());
     record();
     for (const e of s.events.slice(e0)) {
-      if (['impact', 'writeoff', 'admit', 'lunge', 'honk', 'lesson-due', 'lesson', 'learned', 'first-brake', 'first-side', 'first-cover', 'first-item', 'duck', 'stand', 'part-dispatch', 'gift', 'left', 'jump', 'raised', 'step-down', 'pickup', 'drop', 'drone-dispatch', 'drone-pickup'].includes(e.type) || (e.type === 'touch' && e.standstill)) log.push(e);
+      if (['impact', 'writeoff', 'admit', 'lunge', 'honk', 'lesson-due', 'lesson', 'learned', 'first-brake', 'first-side', 'first-cover', 'first-item', 'duck', 'stand', 'part-dispatch', 'gift', 'left', 'jump', 'raised', 'step-down', 'pickup', 'drop', 'drone-dispatch', 'drone-pickup', 'crash', 'spawn-slow'].includes(e.type) || (e.type === 'touch' && e.standstill)) log.push(e);
       if (e.type === 'impact' && Math.round(e.lost) > 0) flash.push({ x: s.body.x, y: s.body.y, t: 0.5, n: Math.round(e.lost) });
       if (e.type === 'writeoff') flash.push({ x: s.body.x, y: s.body.y, t: 1.2, n: 'WRITE-OFF' });
       if (e.type === 'gift') flash.push({ x: s.body.x, y: s.body.y, t: 1.6, n: PARTS[e.node] || e.node });
-      if (e.type === 'lesson-due') clip = { frames: ring.slice(), hitT: e.t, model: e.model, zone: e.zone, to: e.to, info: T.RUNGS[e.to] };
+      if (e.type === 'crash') lastCrash = e;
+      if (e.type === 'lesson-due') clip = { frames: ring.slice(), hitT: e.t, model: e.model, zone: e.zone, to: e.to, info: T.RUNGS[e.to], origin: e.origin, prev: lastCrash && lastCrash.habit ? lastCrash.prev : null };
     }
   }
   function record() { // the last CLIP seconds of the road, kept for a hit's training clip
@@ -145,6 +149,43 @@
     }
     for (const cn of s.cones) if (cn.state === 'free' || cn.state === 'flight') drawCone(cn.x, cn.y);
   }
+  // ---------- 10.7: crash detritus. A chalk outline where the dummy was struck (the NYC pavement's), the debris round the
+  // point of impact, a numbered evidence marker. It stays on the road. Cosmetic variety comes from the crash's number.
+  const hash = (n, k) => { const v = Math.sin(n * 12.9898 + k * 78.233) * 43758.5453; return v - Math.floor(v); };
+  function chalkFigure(x, y, ang, pose, col, k) { // a dummy's outline, lying where it fell
+    ctx.save(); ctx.translate(x, y); ctx.rotate(ang); ctx.scale(k || 1, k || 1);
+    ctx.strokeStyle = col; ctx.lineWidth = 1.6 / (k || 1); ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    const sp = [[[-15, -16], [15, -4], [-9, 22], [11, 21]], [[-16, -2], [13, -18], [-12, 20], [8, 23]], [[-14, -14], [16, -12], [-4, 24], [13, 17]]][pose % 3]; // hands, then feet
+    ctx.beginPath(); ctx.arc(0, -20, 6, 0, TAU); ctx.stroke(); // head
+    ctx.beginPath(); ctx.moveTo(-5, -13); ctx.lineTo(sp[0][0], sp[0][1]); ctx.moveTo(5, -13); ctx.lineTo(sp[1][0], sp[1][1]); // arms
+    ctx.moveTo(-5, -13); ctx.lineTo(-6, 6); ctx.lineTo(sp[2][0], sp[2][1]); ctx.moveTo(5, -13); ctx.lineTo(6, 6); ctx.lineTo(sp[3][0], sp[3][1]); ctx.moveTo(-6, 6); ctx.lineTo(6, 6); // torso, legs
+    ctx.stroke(); ctx.restore();
+  }
+  function drawCrashes(tMax) { // tMax: only crashes before then (the training clip)
+    const mem = s.memory ? s.memory() : [], R = s.P['duel.memoryRadius'] || 0, checked = new Set();
+    for (const c of s.onRoad()) for (const m of c.checks || []) checked.add(m.n);
+    for (const cr of s.crashes || []) {
+      if (tMax != null && cr.t > tMax + 1e-6) continue;
+      const kept = mem.includes(cr), faded = s.rung >= 6 && !kept, n = cr.n, cx = cr.px != null ? cr.px : cr.x, cy = cr.py != null ? cr.py : cr.y;
+      ctx.globalAlpha = faded ? 0.5 : 1;
+      for (let k = 0; k < (cr.writeoff ? 14 : 8); k++) { // debris: dummy plastic and glass, about the point of impact
+        const a = hash(n, k) * TAU, d = 4 + hash(n, k + 20) * (cr.writeoff ? 26 : 18), w = 2 + hash(n, k + 40) * 3;
+        ctx.save(); ctx.translate(cx + Math.cos(a) * d, cy + Math.sin(a) * d); ctx.rotate(hash(n, k + 60) * TAU); rect(-w / 2, -1, w, 2, k % 3 === 0 ? C.glassBit : k % 3 === 1 ? C.dummy : '#c9ced6'); ctx.restore();
+      }
+      chalkFigure(cr.x, cr.y, cr.h + Math.PI / 2 + (hash(n, 7) - 0.5) * 1.2, n, faded ? C.chalkDim : C.chalk, 0.9);
+      const tx = cr.x + 16, ty = cr.y - 18; // the evidence marker: a yellow tent, its number
+      ctx.fillStyle = C.tent; ctx.beginPath(); ctx.moveTo(tx - 7, ty + 6); ctx.lineTo(tx, ty - 7); ctx.lineTo(tx + 7, ty + 6); ctx.closePath(); ctx.fill();
+      text(String(n), tx, ty + 5, 8, C.joint, 'center');
+      ctx.globalAlpha = 1;
+      if (!kept) continue;
+      const hot = checked.has(n), pulse = hot ? 0.8 + 0.2 * Math.sin(s.t * 10) : 1; // rung 6 remembers it: the spot it was sprung from, ringed
+      ctx.strokeStyle = hot ? C.mem : C.memDim; ctx.lineWidth = hot ? 2.5 : 1.5; ctx.setLineDash(hot ? [] : [6, 5]); ctx.globalAlpha = pulse;
+      ctx.beginPath(); ctx.arc(cr.ox, cr.oy, R, 0, TAU); ctx.stroke();
+      ctx.setLineDash([2, 4]); ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(cr.ox, cr.oy); ctx.lineTo(cr.x, cr.y); ctx.stroke(); ctx.setLineDash([]);
+      ctx.beginPath(); ctx.moveTo(cr.ox - 5, cr.oy - 5); ctx.lineTo(cr.ox + 5, cr.oy + 5); ctx.moveTo(cr.ox + 5, cr.oy - 5); ctx.lineTo(cr.ox - 5, cr.oy + 5); ctx.stroke();
+      text('#' + n, cr.ox, cr.oy - R - 4, 9, C.mem, 'center'); ctx.globalAlpha = 1;
+    }
+  }
   function drawCone(x, y) { ctx.fillStyle = C.cone; ctx.beginPath(); ctx.arc(x, y, 7, 0, TAU); ctx.fill(); ctx.fillStyle = C.zebra; ctx.fillRect(x - 4, y - 1, 8, 2); }
   function drawCameras() { // rung 4: the junction's street cameras. A link draws from a camera to the dummy behind cover, and on to the car
     const L = s.level; if (s.rung < 4 || !L.cameras) return;
@@ -152,6 +193,7 @@
     if (R > 0) { ctx.strokeStyle = C.camDim; ctx.lineWidth = 1; ctx.setLineDash([2, 6]); for (const [x, y] of L.cameras) { ctx.beginPath(); ctx.arc(x, y, R, 0, TAU); ctx.stroke(); } ctx.setLineDash([]); } // what each camera watches
     for (const [x, y] of L.cameras) { rect(x - 1.5, y - 14, 3, 14, C.joint); rect(x - 5, y - 19, 10, 6, C.joint); ctx.fillStyle = seen.length ? C.cam : C.camDim; ctx.beginPath(); ctx.arc(x + 3, y - 16, 2, 0, TAU); ctx.fill(); }
     if (!seen.length || !b || !b.alive) return;
+    if (s.expected && s.expected() && !(s.seeingCamera && s.seeingCamera())) return; // rung 6 expects it there: its memory, not a camera (drawCrashes, drawCar)
     const cam = (s.seeingCamera && s.seeingCamera()) || L.cameras.slice().sort((p, q) => Math.hypot(p[0] - b.x, p[1] - b.y) - Math.hypot(q[0] - b.x, q[1] - b.y))[0];
     ctx.strokeStyle = C.cam; ctx.lineWidth = 1.5; ctx.setLineDash([5, 5]);
     for (const c of seen) { ctx.beginPath(); ctx.moveTo(b.x, b.y); ctx.lineTo(cam[0], cam[1] - 16); ctx.lineTo(c.x, c.y); ctx.stroke(); }
@@ -178,18 +220,26 @@
     }
     if (rung >= 2) for (const sg of [-1, 1]) { rect(-5, sg * c.W / 2 - 3, 8, 6, C.joint); ctx.fillStyle = C.cam; ctx.beginPath(); ctx.arc(-1, sg * (c.W / 2 + 1), 1.6, 0, TAU); ctx.fill(); }
     if (rung >= 4) { ctx.strokeStyle = C.joint; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(-c.L / 2 + 8, 0); ctx.lineTo(-c.L / 2 + 8, -c.W / 2 - 5); ctx.stroke(); ctx.fillStyle = C.cam; ctx.beginPath(); ctx.arc(-c.L / 2 + 8, -c.W / 2 - 6, 2, 0, TAU); ctx.fill(); } // rung 4: the link's aerial
+    if (rung >= 6) { // rung 6: the memory module, one red light a remembered spot
+      const n = c.mem != null ? c.mem : 3; rect(-c.L / 2 + 11, -7, 7, 14, C.joint);
+      for (let i = 0; i < 3; i++) { ctx.fillStyle = i < n ? C.mem : '#3a2a2a'; ctx.beginPath(); ctx.arc(-c.L / 2 + 14.5, -4 + i * 4, 1.4, 0, TAU); ctx.fill(); }
+    }
   }
   function drawCar(c) {
     const pv = prevV.get(c.id), braking = pv != null && c.v < pv - 0.05; prevV.set(c.id, c.v);
+    if (c.red && (c.rung || 0) >= 6) { c.mem = s.memory().length; for (const m of c.checks || []) { // its scan of the spots it remembers, in its field
+      ctx.strokeStyle = C.mem; ctx.lineWidth = 1.5; ctx.setLineDash([3, 4]); ctx.beginPath(); ctx.moveTo(c.x, c.y); ctx.lineTo(m.ox, m.oy); ctx.stroke(); ctx.setLineDash([]); } }
     ctx.save(); ctx.translate(c.x, c.y); ctx.rotate(c.h);
     carShape(c, c.rung || 0);
     const noticed = c.state === 'caution' || c.state === 'intention' || c.cause === 'body', on = !noticed || Math.floor(s.t * (F['proto.art.noticeFlashHz'] || 4) * 2) % 2 === 0;
     if (on) { rect(c.L / 2 - 3, -c.W / 2 + 2, 3, 5, '#fffbe0'); rect(c.L / 2 - 3, c.W / 2 - 7, 3, 5, '#fffbe0'); }
     if (braking || c.v < 2) { rect(-c.L / 2, -c.W / 2 + 2, 3, 5, '#ff2020'); rect(-c.L / 2, c.W / 2 - 7, 3, 5, '#ff2020'); }
     ctx.restore();
-    text(c.model + ' · R' + (c.rung || 0) + (c.state !== 'cruise' ? ' · ' + c.state.toUpperCase() : ''), c.x, c.y - 26, 10, C.text, 'center');
+    const tag = c.model + ' · R' + (c.rung || 0) + ((c.rung || 0) >= 6 && c.red ? ' · MEMORY ' + (c.mem || 0) : '') + (c.state !== 'cruise' ? ' · ' + c.state.toUpperCase() : '');
+    text(tag, c.x, c.y - 26, 10, C.text, 'center'); const tw = ctx.measureText(tag).width; // the notice meter sits past the tag's end
+    if (c.checks && c.checks.length) text('CHECKING ' + c.checks.map((m) => '#' + m.n).join(' '), c.x, c.y - 38, 10, C.mem, 'center'); // rung 6: the spots it is watching
     const nT = s.P['perception.sideNoticeSeconds']; // rung 2's notice: a meter fills while the dummy is in its field, unnoticed
-    if (c.fieldT > 0 && nT > 0) { const u = Math.min(1, c.fieldT / nT); ctx.strokeStyle = u >= 1 ? C.dummy : C.text; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(c.x + 30, c.y - 30, 6, -Math.PI / 2, -Math.PI / 2 + TAU * u); ctx.stroke(); }
+    if (c.fieldT > 0 && nT > 0) { const u = Math.min(1, c.fieldT / nT); ctx.strokeStyle = u >= 1 ? C.dummy : C.text; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(c.x + Math.max(30, tw / 2 + 12), c.y - 30, 6, -Math.PI / 2, -Math.PI / 2 + TAU * u); ctx.stroke(); }
     if (c.honking || c.sideHonk) { rect(c.x - 24, c.y - 52, 48, 16, C.text); text('HONK', c.x, c.y - 40, 11, C.joint, 'center'); }
   }
   function drawDummy(b) {
@@ -202,7 +252,10 @@
     ctx.fillStyle = C.dummy; ctx.beginPath(); ctx.arc(b.x, y, r, 0, TAU); ctx.fill();
     ctx.strokeStyle = C.joint; ctx.lineWidth = 2; ctx.stroke();
     ctx.globalAlpha = 1;
-    if (b.duck) { ctx.strokeStyle = unseen ? C.dim : C.dummy; ctx.lineWidth = 1.5; ctx.setLineDash(unseen ? [3, 4] : []); ctx.beginPath(); ctx.arc(b.x, y, r + 6, 0, TAU); ctx.stroke(); ctx.setLineDash([]); if (live) text(unseen ? 'HIDDEN' : 'SEEN', b.x, y - r - 10, 9, unseen ? C.dim : C.dummy, 'center'); }
+    const expect = live && s.expected && s.expected(); // rung 6: at a spot it remembers, it expects the dummy
+    const label = (t, col) => { ctx.font = '700 9px B612, system-ui, sans-serif'; const w = ctx.measureText(t).width + 8; rect(b.x - w / 2, y - r - 20, w, 13, 'rgba(12,14,20,0.75)'); text(t, b.x, y - r - 10, 9, col, 'center'); };
+    if (b.duck) { ctx.strokeStyle = unseen ? C.dim : C.dummy; ctx.lineWidth = 1.5; ctx.setLineDash(unseen ? [3, 4] : []); ctx.beginPath(); ctx.arc(b.x, y, r + 6, 0, TAU); ctx.stroke(); ctx.setLineDash([]); if (live) label(expect ? 'EXPECTED' : unseen ? 'HIDDEN' : 'SEEN', expect ? C.mem : unseen ? C.dim : C.dummy); }
+    else if (expect) label('EXPECTED', C.mem);
     const f = b.facing != null ? b.facing : b.f;
     ctx.beginPath(); ctx.moveTo(b.x, y); ctx.lineTo(b.x + Math.cos(f) * 20 * k, y + Math.sin(f) * 20 * k); ctx.stroke();
     if (s.dashFitted() && b === s.body) { rect(b.x - 4, y - 4, 8, 8, C.joint); rect(b.x - 2, y - 2, 4, 4, C.part); } // Battery 1 on the chest
@@ -237,7 +290,7 @@
   function drawClip(t) {
     const fr = clip.frames, t0 = clip.hitT - CLIP, tt = t0 + Math.min(t, CLIP); // then the hit's frame holds
     let f = fr[0]; for (const q of fr) { if (q.t <= tt) f = q; else break; }
-    drawRoads(s.level); drawStatics(s.level);
+    drawRoads(s.level); drawStatics(s.level); drawCrashes(tt);
     rect(0, 0, FW, FH, 'rgba(8,24,18,0.55)'); // the camera's tint
     if (f) {
       for (const c of f.cars) { ctx.save(); ctx.translate(c.x, c.y); ctx.rotate(c.h); carShape(c, c.rung || 0); ctx.restore(); }
@@ -245,6 +298,12 @@
       if (f.b && t >= CLIP) { // the frame of the hit, held: a detection box, as the car's vision would draw it
         ctx.strokeStyle = C.cam; ctx.lineWidth = 2; ctx.strokeRect(f.b.x - 22, f.b.y - 22, 44, 44);
         text('IMPACT · ' + (ZONES[clip.zone] || clip.zone.toUpperCase()), f.b.x, f.b.y - 28, 11, C.cam, 'center');
+        if (clip.info && clip.info.habit && clip.origin) { // rung 6's cause: the strike came from the spot of an earlier crash
+          const o = clip.origin, R = s.P['duel.memoryRadius'] || 30, pr = clip.prev != null ? s.crashes[clip.prev - 1] : null;
+          ctx.strokeStyle = C.mem; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(o.x, o.y, R, 0, TAU); ctx.stroke();
+          if (pr) { ctx.setLineDash([3, 4]); ctx.beginPath(); ctx.moveTo(o.x, o.y); ctx.lineTo(pr.x, pr.y); ctx.stroke(); ctx.setLineDash([]); }
+          text('SAME SPOT' + (pr ? ' AS CRASH ' + pr.n : ''), o.x, o.y - R - 6, 12, C.mem, 'center');
+        }
       }
     }
     for (let y = 0; y < FH; y += 4) rect(0, y, FW, 1, 'rgba(0,0,0,0.18)'); // scan lines
@@ -265,6 +324,14 @@
       ctx.save(); ctx.translate(x + 60, cy); ctx.scale(3, 3); drawCone(0, 0); ctx.restore();
       rect(x, cy - (car.W / 2 + 6) * k, 6, (car.W + 12) * k, C.red); text('STOPS · NEVER SWERVES', x + 30, cy + (car.W / 2 + 14) * k, 13, C.text, 'center'); ctx.globalAlpha = 1;
     }
+    if (to === 6 && reach > 0) { // crash memory: the road's outlines, and a ring on each spot it now remembers
+      const k2 = 0.34, mx = 452, my = 210, R = (s.P['duel.memoryRadius'] || 30) * k2, N = Math.round(s.P['duel.memorySites'] || 0), all = s.crashes || [], mem = N > 0 ? all.slice(-N) : all; // what it will remember
+      ctx.save(); ctx.globalAlpha = Math.min(1, reach * 2); ctx.translate(mx, my); ctx.scale(k2, k2); drawRoads(s.level); drawStatics(s.level); ctx.restore();
+      ctx.strokeStyle = C.kerb; ctx.lineWidth = 1; ctx.strokeRect(mx, my, FW * k2, FH * k2);
+      const crs = s.crashes || [];
+      crs.forEach((cr, i) => { chalkFigure(mx + cr.x * k2, my + cr.y * k2, cr.h + Math.PI / 2, cr.n, C.chalk, 0.4); if (mem.includes(cr) && reach > (i + 1) / (crs.length + 1)) { ctx.strokeStyle = C.mem; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(mx + cr.ox * k2, my + cr.oy * k2, Math.max(6, R), 0, TAU); ctx.stroke(); } });
+      ctx.globalAlpha = 1; text('REMEMBERS WHERE YOU STRUCK FROM · THE LATEST ' + (s.P['duel.memorySites'] || 'ALL'), mx + FW * k2 / 2, my + FH * k2 + 22, 12, C.text, 'center');
+    }
     if (to === 4 && reach > 0) { // the street cameras: three posts round the junction link to the car
       ctx.strokeStyle = C.cam; ctx.lineWidth = 2; ctx.setLineDash([6, 6]); ctx.globalAlpha = reach;
       for (const [x, y] of [[620, 170], [690, 330], [620, 490]]) { ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(cx - car.L / 2 * k + 8 * k, cy - (car.W / 2 + 6) * k); ctx.stroke(); rect(x - 3, y, 6, 30, C.joint); rect(x - 10, y - 10, 20, 12, C.joint); ctx.fillStyle = C.cam; ctx.beginPath(); ctx.arc(x + 6, y - 4, 3, 0, TAU); ctx.fill(); }
@@ -272,8 +339,8 @@
     }
     if (to === 3 && reach > 0) { ctx.strokeStyle = C.cam; ctx.lineWidth = 2; for (let i = 1; i <= 3; i++) { ctx.globalAlpha = Math.max(0, 1 - i / 3.5) * reach; ctx.beginPath(); ctx.arc(cx - 2 * k, cy, reach * 60 * i, 0, TAU); ctx.stroke(); } ctx.globalAlpha = 1; } // the lidar's sweep
     ctx.save(); ctx.translate(cx, cy); ctx.scale(k, k); carShape(car, u >= 0.45 ? to : from); ctx.restore();
-    const px = to === 4 ? cx + (-car.L / 2 + 8) * k : to >= 2 ? cx - (to === 3 ? 2 : 1) * k : cx + (car.L / 2 - 17) * k; // where the new sensor goes: the nose (1), the flanks (2), the roof (3), the link's aerial (4)
-    if (u < 0.45) drawDrone(px, cy - 160 + 160 * (u / 0.45), to === 5 ? 'U5' : to === 4 ? 'C4' : to === 3 ? 'L3' : to === 2 ? 'S2' : true);
+    const px = to === 6 ? cx + (-car.L / 2 + 14) * k : to === 4 ? cx + (-car.L / 2 + 8) * k : to >= 2 ? cx - (to === 3 ? 2 : 1) * k : cx + (car.L / 2 - 17) * k; // where the new sensor goes: the nose (1), the flanks (2), the roof (3), the link's aerial (4), the memory module (6)
+    if (u < 0.45) drawDrone(px, cy - 160 + 160 * (u / 0.45), to === 6 ? 'M6' : to === 5 ? 'U5' : to === 4 ? 'C4' : to === 3 ? 'L3' : to === 2 ? 'S2' : true);
     else if (u < 0.7) drawDrone(px, cy - 160 * ((u - 0.45) / 0.25), false);
     text((info && info.fit ? info.fit : 'SENSOR') + ' FITTED · ' + (info && info.sensor ? info.sensor : ''), 40, 90, 22, C.text);
     text((clip ? clip.model : s.models.sedan.id) + ' · RUNG ' + (info ? info.rung : ''), 40, 120, 14, C.dim);
@@ -283,7 +350,7 @@
       if (clip && lessonT < CLIP + HOLD) drawClip(lessonT); else drawFit(lessonT - (clip ? CLIP + HOLD : 0));
       drawHud(); return;
     }
-    const L = s.level; drawRoads(L); drawStatics(L);
+    const L = s.level; drawRoads(L); drawStatics(L); drawCrashes();
     const cars = s.cars.filter((c) => !c.ghost);
     if (showZones) for (const c of cars) drawZones(c);
     for (const c of cars) drawCar(c);
@@ -297,7 +364,7 @@
     if (!started || paused) {
       rect(0, 0, FW, FH, 'rgba(10,12,18,0.72)');
       text(paused ? 'PAUSED' : 'PROTOTYPE ' + ST.id + ' · ' + ST.title, FW / 2, 250, 24, C.text, 'center');
-      text('Two one-way roads cross at the Monument. One red car drives through.', FW / 2, 292, 14, C.dim, 'center');
+      text('Two one-way roads cross at the Monument. One red car drives through.' + (s.rung >= 5 && (s.P['duel.topRung'] || 0) >= 6 ? ' Every crash leaves its mark.' : ''), FW / 2, 292, 14, C.dim, 'center');
       text('Arrows or WASD move · Space dash · K jump, E cone, C duck, once fitted · Z zones · P pause · R restart · L save log', FW / 2, 330, 13, C.dim, 'center');
       text(paused ? 'P to resume' : 'Press any key', FW / 2, 380, 16, C.dummy, 'center');
     }

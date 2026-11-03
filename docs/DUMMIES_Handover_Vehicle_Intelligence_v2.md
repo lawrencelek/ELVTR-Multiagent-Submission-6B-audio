@@ -26,6 +26,8 @@
 
 **Updated 3 November, 10.6 built:** §21. DUCK plays at `prototypes/p10/dummies_p10_6.html`; GDD Edit 106. Rung 5 stops at cones; DUCK behind a planter row is the way in. Sightlines run by height. 10.5's page is frozen.
 
+**Updated 3 November, 10.7 built:** §23. Crash memory plays at `prototypes/p10/dummies_p10_7.html`; GDD Edit 107. Every crash leaves a chalk outline; rung 6 rings the last three spots you struck from and expects you there. A shorter drive-in and a 500 body (D117). 10.6's page is frozen.
+
 ## 0 How to use this with v1
 
 - **v1** (`claude/DUMMIES_Handover_Vehicle_Intelligence.md`) still holds: constraints (§4), code survey (§5), tools (§8), repos (§9), run and test (§11), conventions (§12).
@@ -1046,3 +1048,57 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
 
 - **The limit is the car's supply.** A pass takes 10.7 s; 5.2 s of it is the run-in, off screen (D109).
 - **D117:** cut the dead time; a lighter test-road body; more from a spring out of a duck; or leave it, since the duel pays in lessons.
+
+## 23 Result: Prototype 10.7, crash memory (3 November, rows 703–709; GDD Edit 107)
+
+> "there should be a 'crash detritus' left on the road when you crash there. Like an 'outline' they have on NYC sidewalk if someone dies. On the car: Let's try ok having it on the car. And OK on the lesson screen. Let's try shorter drive-in, and lighter body on the test road (500 health)." (Lawrence, 3 November)
+
+- **Build:** `prototypes/p10/dummies_p10_7.html`. 10.6's page is frozen.
+- **The one change:** rung 6, taught by one lesson. The car starts at rung 5; the dummy starts with all four parts. No new part.
+- **Checks:** `node prototypes/p10/test_p10.js --page` 49/49. Probes `qa/baseline/p10_7.md` 15/15. 10.6 reruns identical; 10.3–10.5 on today's code 12/12, 12/12, 13/13. Prototype 9 and the frozen md5s hold; sound freeze holds.
+
+### 23.1 What changed
+
+| | Before (rung 5) | After (rung 6) |
+|---|---|---|
+| A crash | Leaves nothing | A chalk outline, debris, a numbered evidence marker; it stays |
+| What teaches it | A hit while it swerved round a cone | A hit sprung from the spot of an earlier crash |
+| A dummy at a spot it remembers | Hidden behind a planter, noticed slowly in the open | Expected: seen past cover, noticed at once |
+| What it remembers | — | The latest three crash spots (`duel.memorySites`) |
+| Between passes | 5.2 s of empty road; an 800 body | 2 s; a 500 body |
+
+### 23.2 Showing what it learned (row 701)
+
+- **Road:** a red ring on each remembered spot, its crash's number, a line to the outline. A forgotten crash fades.
+- **Car:** a memory module, one red light a spot. "R6 · MEMORY 3". A red scan to each spot in its field: "CHECKING #n".
+- **Dummy:** EXPECTED at a remembered spot.
+- **Lesson:** the clip rings "SAME SPOT AS CRASH n"; the fitting maps the spots it now remembers.
+
+### 23.3 Measured (rung 6 alone; `trained` mode)
+
+| Way in | Hits a minute | Verdict |
+|---|---|---|
+| DUCK behind a planter, the same spot | 0.20 (once a run) | Closed: it then stops for the dummy there |
+| DUCK behind a planter, moving to free spots | 6.97 (242) | Open: a write-off every 18 s (D119) |
+| The sprint from past the field | 0.80 (52) | Open, no part (D115); lands from a remembered spot too |
+| Every other bot | 0 | Closed |
+
+- **Pace:** the same ambush, without memory, on 10.7's run-in and body: a write-off every 74 s (10.6: 148 s; target 80 s).
+- **Short run-in:** a car that already senses the dummy appears at its envelope's speed (75 of 670). Standing at the edge is never hit.
+
+### 23.4 The stealth reading, so far (§20)
+
+| Rung | The car's sense | The dummy's tool | The opening it leaves |
+|---|---|---|---|
+| 5 | Road items | DUCK | Low cover, by height |
+| 6 | Your habit: the last three spots | — | Any other spot; the sprint |
+
+- **The guard now checks your old hiding places.** Alien: Isolation's and MGS V's counter, capped and falling back (§4.3).
+
+### 23.5 Open
+
+- **Human pass (H6):** does the player read the red rings, and move?
+- **D119:** an expert mover writes off a body every 18 s, a quarter of the target.
+- **D120:** the memory's cap: 3, 5, or every crash.
+- **Next:** 10.8, the road upgrade (§14.2): two-way, white sedans that never learn.
+
