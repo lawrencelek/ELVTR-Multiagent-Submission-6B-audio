@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Prototype 10 test-road report (GDD Edits 101–105): qa/baseline/p10_<n>.json -> qa/baseline/p10_<n>.md.
+"""Prototype 10 test-road report (GDD Edits 101–106): qa/baseline/p10_<n>.json -> qa/baseline/p10_<n>.md.
     python3 qa/testroad_report.py qa/baseline/p10_2.json qa/baseline/p10_2.md "Prototype 10.2: the first lesson"
 10.1's report (p10_1.md) was written by this script's first version; its JSON has no 'mode' and reads as 'lesson'.
 """
@@ -25,12 +25,19 @@ DESC = {'stand': "Stands on the north lane's line, road A", 'standSouth': "Stand
         'flankOpen': 'The flank bot from open pavement (no cover)', 'gap': "Waits behind the barrier at its gap; dashes through it",
         'plinth': "With Legs 1: jumps up on the plinth; dashes down from its edge",
         'conebait': "The gap until Hands 1; then lays a cone ahead of the car waiting for it, steps out of its field, strikes as it swerves round the cone",
-        'lurk': "Waits past every field's edge, south-east; sprints in as a car passes in road A's south lane, dashes before the field notices"}
+        'lurk': "Waits past every field's edge, south-east; sprints in as a car passes in road A's south lane, dashes before the field notices",
+        'planter': "The cone bait until DUCK; then ducks behind the planter row south of road A, east, and springs over it at a passing car",
+        'standplanter': "The same spot behind the planter row, standing"}
 HOME_COVER = "aim, flank, jump and dashjump wait at (300, 410), behind the barrier: cover"
 MODE_DESC = {'lesson': "from the build's start (10.2: rung 0, on foot; 10.3: rung 1, Battery 1 fitted; 10.5: rung 3, Battery 1 and Legs 1 fitted); the lesson and the part as the build delivers them",
              'trained': "at the top rung from the start, every part its rungs bring fitted: the rung's own table"}
 STAGE = str(d.get('stage', '10.1'))
-if STAGE >= '10.5':  # rung 4: cover closes; the cone's swerve and the sprint from beyond the field stay
+if STAGE >= '10.6':  # rung 5: the cone bait closes; DUCK behind a planter and the sprint from beyond the field stay
+    CLOSED, OPEN_FOOT, OPEN_DASH = ['stand', 'standSouth', 'standOff', 'charge', 'kerb', 'flankOpen', 'walkin', 'corner', 'gap', 'plinth', 'conebait', 'standplanter'], ['lurk'], ['planter']
+    COVER = ['gap', 'aim', 'flank', 'jump', 'dashjump']
+    ESC_CLOSED, ESC_OPEN = ['conebait'], ['planter']
+    HOME_COVER += "; conebait and planter start at the gap (188, 414); planter and standplanter use the spot behind the planter row south of road A, east (590, 418); lurk waits at (660, 576)"
+elif STAGE >= '10.5':  # rung 4: cover closes; the cone's swerve and the sprint from beyond the field stay
     CLOSED, OPEN_FOOT, OPEN_DASH = ['stand', 'standSouth', 'standOff', 'charge', 'kerb', 'flankOpen', 'walkin', 'corner', 'gap', 'plinth', 'aim'], ['lurk'], ['conebait']
     COVER = ['gap', 'aim', 'flank', 'jump', 'dashjump']  # every bot that waits behind the barrier
     ESC_CLOSED, ESC_OPEN = ['gap', 'jump'], ['conebait']  # lurk decays by the dummy's own leg damage (its dash shortens), not the car: noted under the escalation table
@@ -61,7 +68,8 @@ w(f"- **Build:** `{d['build']}`, level `{d['level']}`, stage {d.get('stage', '10
 w(f"- **Runs:** {len(POL)} bots × {len(MODES)} mode(s) × offsets {d['offsets']} s × {d['secs']} sim-seconds; escalation {d['esc']} s.")
 for mo in MODES: w(f'- **Mode `{mo}`:** {MODE_DESC.get(mo, "")}.')
 if STAGE >= '10.3': w(f'- **Cover:** {HOME_COVER}.')
-if STAGE >= '10.5': w('- **Parts:** Battery 1 and Legs 1 fitted from the start; Hands 1, the cones, by drone at the first stop for a dummy behind cover.')
+if STAGE >= '10.6': w('- **Parts:** Battery 1, Legs 1 and Hands 1 fitted from the start; DUCK by drone at the first stop at a cone. Three low planter rows by the road.')
+elif STAGE >= '10.5': w('- **Parts:** Battery 1 and Legs 1 fitted from the start; Hands 1, the cones, by drone at the first stop for a dummy behind cover.')
 elif STAGE >= '10.4': w('- **No new part:** Battery 1 and Legs 1 are fitted from the start.')
 w('- **The build\'s values:** ' + ', '.join(f'`{k}` {v}' for k, v in d['p10'].items()) + '.')
 w('')
@@ -114,7 +122,7 @@ w('|---|---|---|---|')
 for r in d['escalation']:
     w(f"| {r['policy']} | {' '.join(str(x) for x in r['windows'])} | {f(r.get('decay'))} | {r['learnEvents']} |")
 w('')
-if STAGE >= '10.5' and 'lurk' in esc_pol: w("- **lurk decays by the dummy's own damage, not the car.** Each hit lands on a leg; the dash shortens with leg damage (164 to 116 after four hits), below what the sprint from past the field needs. The car stays at rung 3 throughout.\n")
+if STAGE >= '10.5' and 'lurk' in esc_pol and 'lurk' not in ESC_OPEN: w("- **lurk decays by the dummy's own damage, not the car.** Each hit lands on a leg; the dash shortens with leg damage (164 to 116 after four hits), below what the sprint from past the field needs. The car stays at rung 3 throughout.\n")
 w(f'## {n} Checks'); n += 1
 w('')
 allr = runs + d['escalation']
@@ -123,7 +131,7 @@ esc = {r['policy']: r for r in d['escalation']}
 tr = [r for r in runs if r['mode'] == 'trained']
 checks = [
     ('The red car alone on the road', all(r['cars']['maxOnRoad'] <= 1 for r in allr), f"most on the road at once: {max(r['cars']['maxOnRoad'] for r in allr)}"),
-    ('The car never stalls (no wait over 20 s without the dummy in its path)', all(r['cars']['stalls20s'] == 0 for r in allr), f"stalls: {sum(r['cars']['stalls20s'] for r in allr)}; waits for a dummy in its path: {sum(r['cars'].get('blocked20s', 0) for r in allr)}"),
+    ('The car never stalls (no wait over 20 s without the dummy, or a cone, in its way)', all(r['cars']['stalls20s'] == 0 for r in allr), f"stalls: {sum(r['cars']['stalls20s'] for r in allr)}; waits for the dummy or its cone: {sum(r['cars'].get('blocked20s', 0) for r in allr)}"),
     (f'At most {top} lesson(s) a run; never past duel.topRung', all(r['learnEvents'] <= top and r.get('rungEnd', 0) <= top for r in allr), f"most lessons in a run: {max(r['learnEvents'] for r in allr)}"),
 ]
 stops = [r for r in tr if r['policy'] in ('stand', 'standSouth', 'standOff') and r['cars'].get('minStopGap') is not None]
@@ -169,6 +177,20 @@ if top == 4:
         ('Rung 4 closes cover: ' + ', '.join(COVER) + ': at most one hit in 15 minutes each', all(sum(r['hits'] for r in tr if r['policy'] == p) <= 1 for p in COVER), ', '.join(f"{p} {sum(r['hits'] for r in tr if r['policy'] == p)}" for p in COVER)),
         ('Hands 1 arrives at the first stop for a dummy behind cover', bool(stops) and all(hands(r) is not None and hands(r) - r['firstCoverAt'] < 5 for r in stops), f"stop to Hands 1: {', '.join(sorted(set(str(round(hands(r) - r['firstCoverAt'], 1)) for r in stops if hands(r) is not None)))} s in {len(stops)} runs"),
         ('A new behaviour: it stops for a dummy only its cameras see (none at rung 3)', sum(1 for r in tr if r.get('firstCoverAt') is not None) > 0, f"trained runs with such a stop: {sum(1 for r in tr if r.get('firstCoverAt') is not None)} of {len(tr)}"),
+    ]
+if top == 5:
+    les = [r for r in runs if r['mode'] == 'lesson']
+    coned = [r for r in les if r.get('conedHits', 0) > 0]
+    other = [r for r in les if r['hits'] > 0 and not r.get('conedHits', 0)]
+    duck = lambda r: next((q['t'] for q in r.get('parts', []) if q['node'] == 'duck1'), None)
+    stops = [r for r in les if r.get('firstItemAt') is not None]
+    pl, sp = [r for r in tr if r['policy'] == 'planter'], [r for r in tr if r['policy'] == 'standplanter']
+    checks += [
+        ('Only a hit while it swerved round a cone teaches rung 5', all(r.get('lesson') for r in coned) and not any(r.get('lesson') for r in other), f"lessons: {sum(1 for r in coned if r.get('lesson'))} of {len(coned)} runs with such a hit; {sum(1 for r in other if r.get('lesson'))} of {len(other)} runs with only other hits"),
+        ('A new behaviour: rung 5 stops at a cone and never swerves round it', sum(r.get('coneSwerves', 0) for r in tr) == 0 and sum(r.get('coneStops', 0) for r in tr) > 0, f"trained: {sum(r.get('coneStops', 0) for r in tr)} stops at a cone, {sum(r.get('coneSwerves', 0) for r in tr)} swerves round one"),
+        ('DUCK arrives at the first stop at a cone', bool(stops) and all(duck(r) is not None and duck(r) - r['firstItemAt'] < 5 for r in stops), f"stop to DUCK: {', '.join(sorted(set(str(round(duck(r) - r['firstItemAt'], 1)) for r in stops if duck(r) is not None)))} s in {len(stops)} runs"),
+        ('The planter hides only a ducked dummy: standing behind it scores 0; ducked, it lands', all(r['hits'] == 0 for r in sp) and all(r['hits'] > 0 for r in pl), f"standing {sum(r['hits'] for r in sp)} hits; ducked {sum(r['hits'] for r in pl)} hits, {sum(r.get('duckHits', 0) for r in pl)} sprung from a duck"),
+        ('Rung 5 keeps cover closed: ' + ', '.join(COVER) + ': at most one hit in 15 minutes each', all(sum(r['hits'] for r in tr if r['policy'] == p) <= 1 for p in COVER), ', '.join(f"{p} {sum(r['hits'] for r in tr if r['policy'] == p)}" for p in COVER)),
     ]
 if top == 2 and d['p10'].get('duel.jumpArrives') == 2:
     leg = [r for r in runs if r['mode'] == 'lesson' and r.get('firstSideAt') is not None]

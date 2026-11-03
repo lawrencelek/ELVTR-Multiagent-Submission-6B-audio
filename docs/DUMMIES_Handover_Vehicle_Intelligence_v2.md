@@ -22,6 +22,8 @@
 
 **Updated 2 November, 22:58:** §20. Major learning (row 694): the duel is a stealth game, played from the other side. DUCK becomes an ability.
 
+**Updated 3 November, 10.6 built:** §21. DUCK plays at `prototypes/p10/dummies_p10_6.html`; GDD Edit 106. Rung 5 stops at cones; DUCK behind a planter row is the way in. Sightlines run by height. 10.5's page is frozen.
+
 ## 0 How to use this with v1
 
 - **v1** (`claude/DUMMIES_Handover_Vehicle_Intelligence.md`) still holds: constraints (§4), code survey (§5), tools (§8), repos (§9), run and test (§11), conventions (§12).
@@ -287,9 +289,15 @@ Recorded in `DECISIONS.md`. Replaces the rows v1 §3.2 proposed.
 | 692 | 10.5 measured: cover 0; the cone bait 2.0 a minute; the sprint from past the field 0.8 | tested (2 November) |
 | 693 | Probes: bots `conebait` and `lurk`; the page's cameras, cones and edge marker; `duel.conesArrives`, 648 entries | tested (2 November) |
 | 694 | Major learning: the duel is a stealth game, played from the other side; DUCK becomes an ability (§20) | user-decided (2 November) |
+| 695 | Prototype 10.6 built: from rung 4, a hit while it swerves round a cone teaches rung 5, road items; DUCK by drone at its first stop at a cone (§21; GDD Edit 106) | tested (3 November) |
+| 696 | DUCK as built: hold C; lower, slower, noticed slower; planter rows by the road; a dash vaults a planter | proposed |
+| 697 | Sightlines by height; each street camera sees within its range (180) | proposed (D118) |
+| 698 | 10.6 measured: the cone bait 0; DUCK behind the planter 3.03 a minute at 114; standing there 0 | tested (3 November) |
+| 699 | Probes: bots `planter`, `standplanter`; 10 IDs added, 659 entries | tested (3 November) |
+| 700 | 10.5's page frozen (md5 `25278535…`) | tested (3 November) |
 
-- **Open:** D89 red hue; D90 white role; D91 fixed or adaptive ladder; D92 car contact; D93 flank damage; D94 venue; D95 law clauses; D96 boss families; D97 parts as keys; D98 lessons, not damage; D99 learning carries across Story levels; D100 10.1's target (overtaken by row 661: rung 1 is 10.2); D101 what "something new" means; D102 pass every driver value to traffic; D103 draw the side zone that acts; D104 the nine tests' rung order; D105 a sighted car's endless wait (in part resolved by row 670); D106 the standstill rule; D107 rung 1's envelope and beam; D108 when the dash arrives; D109 the return against the drive-in; D110 rung 2 waits for any dummy in its field; D111 cover open at rung 2; D112 the plinth needs a dash-jump; D114 rung 4: the street cameras or slowing past blind spots; D115 the sprint from past the field; D116 DUCK's rules and where it lands. D113 resolved (row 685).
-- **Next row 695. Next open decision D117.**
+- **Open:** D89 red hue; D90 white role; D91 fixed or adaptive ladder; D92 car contact; D93 flank damage; D94 venue; D95 law clauses; D96 boss families; D97 parts as keys; D98 lessons, not damage; D99 learning carries across Story levels; D100 10.1's target (overtaken by row 661: rung 1 is 10.2); D101 what "something new" means; D102 pass every driver value to traffic; D103 draw the side zone that acts; D104 the nine tests' rung order; D105 a sighted car's endless wait (in part resolved by row 670); D106 the standstill rule; D107 rung 1's envelope and beam; D108 when the dash arrives; D109 the return against the drive-in; D110 rung 2 waits for any dummy in its field; D111 cover open at rung 2; D112 the plinth needs a dash-jump; D114 rung 4: the street cameras or slowing past blind spots; D115 the sprint from past the field; D116 DUCK's numbers (built, rows 695–697); D117 the planter ambush's strength; D118 the street cameras' range. D113 resolved (row 685).
+- **Next row 701. Next open decision D119.**
 
 ## 9 The crux and the ten tests (user-decided 1 November, row 653)
 
@@ -962,3 +970,57 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
 
 - **10.6:** rung 5 stops at a cone and never swerves (§14.2), which closes the cone bait. DUCK arrives; low planters stand by the road.
 - **A later rung:** the car remembers where it lost you and stops short of that spot. It leaves open what true stealth needs: get into hiding before it sees you.
+
+## 21 Result: Prototype 10.6, DUCK (3 November, rows 695–700; GDD Edit 106)
+
+- **Build:** `prototypes/p10/dummies_p10_6.html`. 10.5's page is frozen.
+- **The one change:** rung 5, taught by one lesson. The car starts at rung 4; the dummy starts with the dash, the jump and the cones. DUCK arrives by drone.
+- **Checks:** `node prototypes/p10/test_p10.js --page` 41/41. Probes `qa/baseline/p10_6.md` 14/14. 10.3–10.5 on today's code 12/12, 12/12, 13/13. Prototype 9 51/51; frozen md5s hold; sound freeze holds.
+
+### 21.1 What changed
+
+| | Before (rung 4) | After (rung 5) |
+|---|---|---|
+| A cone in its lane | It swerves round it, and holds its line | It stops short and waits for FARSIGHT |
+| What teaches it | A hit out of cover | A hit while it swerved round a cone |
+| The dummy's parts | Battery 1, Legs 1, Hands 1 | DUCK arrives at its first stop at a cone |
+| Low cover | — | Three planter rows; sightlines run by height |
+
+### 21.2 DUCK and the planters (rows 696–697)
+
+- **Hold C to duck:** lower, slower, noticed slower. A dash or a jump stands it up.
+- **A planter row hides only a ducked dummy.** Standing, it shows over the row.
+- **Rows, not single planters.** The field sees 720 up the road, so one planter hid a ducked dummy only from a car abreast of it.
+- **A dash vaults a planter.** The ambush: duck behind a row, spring over it as the car passes.
+- **The cameras watch the cover near their posts** (`perception.streetCameraRange` 180). The rows lie outside it.
+- **On screen:** ducked and unseen, the dummy dims and reads HIDDEN. Each camera's reach is a dotted ring.
+
+### 21.3 Measured (rung 5 alone; `trained` mode)
+
+| Way in | Hits a minute | Verdict |
+|---|---|---|
+| The cone bait | 0 (318 stops at a cone, 0 swerves) | Closed |
+| Cover, the plinth, the kerb, the corner, the lane | 0–0.07 | Closed |
+| Standing behind the planter | 0 | Closed: it sees over the row |
+| DUCK behind the planter | 3.03 (114) | Open: 0.40 write-offs a minute (D117) |
+| The sprint from past the field | 0.80 (52) | Open, no part (D115) |
+
+- **The lesson:** in 6 of 6 runs with a hit round a cone; 0 of 7 others. DUCK 1.4–2.5 s after the first stop at a cone.
+- **Escalation (10 minutes):** the cone bait decays to 0; the planter ambush holds at 1.0.
+
+### 21.4 The stealth reading, so far (§20)
+
+| Rung | The car's sense | The dummy's tool | The opening it leaves |
+|---|---|---|---|
+| 1 | A forward camera | The dash | The flank |
+| 2 | Side sensors | The jump | Height, cover |
+| 3 | A roof lidar | — | Cover |
+| 4 | Street cameras | Cones | The cone's swerve |
+| 5 | Road items | DUCK | Low cover, by height |
+| 6 (next) | Your habit | — | Any other way |
+
+### 21.5 Open
+
+- **Human pass (H5):** does the player read HIDDEN and SEEN, and find the spring over the row?
+- **D117** the ambush's strength; **D118** the cameras' range; **D115** the sprint from past the field.
+- **Next:** 10.7, rung 6: it counters your habit. Learning the spot it was hit from closes the ambush.

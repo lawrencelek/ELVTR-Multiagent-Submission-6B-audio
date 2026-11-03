@@ -6,7 +6,7 @@ const fs = require('fs'), path = require('path'), cp = require('child_process'),
 const ROOT = path.resolve(__dirname, '..', '..');
 const X = require(path.join(ROOT, 'prototypes/p6/sim.js'));
 const { TestRoadSim, junctionLevel } = require(path.join(__dirname, 'testroad.js'));
-const SF = JSON.parse(fs.readFileSync(path.join(__dirname, 'sim_flags.json'), 'utf8')), F1 = SF.stages['10.1'].flags, F2 = SF.stages['10.2'].flags, F3 = SF.stages['10.3'].flags, F4 = SF.stages['10.4'].flags, F5 = SF.stages['10.5'].flags;
+const SF = JSON.parse(fs.readFileSync(path.join(__dirname, 'sim_flags.json'), 'utf8')), F1 = SF.stages['10.1'].flags, F2 = SF.stages['10.2'].flags, F3 = SF.stages['10.3'].flags, F4 = SF.stages['10.4'].flags, F5 = SF.stages['10.5'].flags, F6 = SF.stages['10.6'].flags;
 const results = [];
 const check = (name, fn) => { try { const r = fn(); results.push([r.ok, name, r.detail]); } catch (e) { results.push([false, name, String(e.stack || e).slice(0, 300)]); } };
 const md5 = (p) => crypto.createHash('md5').update(fs.readFileSync(p)).digest('hex');
@@ -256,6 +256,49 @@ check('10.5 (row 688): a dummy that steps from a waiting car\'s field into its p
   return { ok: phase === 1 && held > 3 * 60 && moved === 0, detail: `a car waiting for the dummy behind the barrier: ${!!c}; the dummy then 200 ahead in its lane for ${(held / 60).toFixed(1)} s; ticks it moved: ${moved}` };
 });
 
+// ---------- 10.6
+// A scripted cone bait: a cone laid in a road A car's lane 600 along; as it swerves round it, the dummy strikes from the north kerb.
+const coneStrike = () => { let laid = null, struck = null; return (q) => { const b = q.body; if (!b.alive || q.lesson || q.rung !== 4) return {};
+  const c = q.onRoad().find((x) => x.red && !x.spent && x.path.road === 'A'); if (!c) return to(b, 720, 600);
+  if (laid !== c.id && c.x > -100 && c.x < 0) { Object.assign(q.cones[0], { x: 600, y: c.y, state: 'free', vx: 0, vy: 0 }); laid = c.id; }
+  if (laid === c.id && struck !== c.id && c.cause === 'cone' && c.dodge && c.x > 480 && c.x < 540 && b.mode !== 'lunge' && b.mode !== 'recover') {
+    struck = c.id; Object.assign(b, { x: c.x + 50, y: 244, vx: 0, vy: 0 }); const ang = Math.atan2(c.y - b.y, c.x + 25 - b.x); b.facing = ang; return { mx: Math.cos(ang) * 0.3, my: Math.sin(ang) * 0.3, aPress: true }; }
+  return laid === c.id ? {} : to(b, 720, 600); }; };
+check('10.6: starts at rung 4 with the dash, the jump and the cones; a hit while it swerves round a cone teaches rung 5; a sprint from past the field does not', () => {
+  const s = sim(F6), start = { rung: s.rung, parts: ['battery1', 'legs1', 'hands1'].every((k) => s.run.owned[k]), duck: !!s.run.owned.duck1, planters: s.level.statics.filter((q) => q.low).length };
+  drive(s, 120, coneStrike()); const due = s.events.find((e) => e.type === 'lesson-due'), hit = s.events.find((e) => e.type === 'impact' && e.lost > 0);
+  const l = sim(F6); drive(l, 240, lurkBot()); const lh = hits(l);
+  return { ok: start.rung === 4 && start.parts && !start.duck && start.planters === 3 && !!due && due.to === 5 && s.rung === 5 && !!hit && hit.coned && lh.length > 0 && lh.every((e) => !e.coned) && l.rung === 4,
+    detail: `start: rung ${start.rung}, three parts ${start.parts}, DUCK ${start.duck}, planter rows ${start.planters}; round a cone: lesson ${due ? 'at ' + due.t.toFixed(1) + ' s (' + due.zone + ')' : 'none'}, rung ${s.rung}; from past the field: ${lh.length} hits, rung ${l.rung}` };
+});
+check('10.6 rung 5: it stops short of a cone in its lane and never swerves; DUCK arrives at that first stop; FARSIGHT fetches the cone and it drives on', () => {
+  const s = sim(F6, { 'duel.startRung': 5 }); let laid = false, first = null, gift = null, fetched = null, passed = false, swerves = 0, stopped = 0;
+  for (let i = 0; i < 60 * 60 && !passed; i++) {
+    const c = s.onRoad().find((q) => q.red && q.path.road === 'A');
+    if (c && !laid && c.x > -400 && c.x < -300) { Object.assign(s.cones[0], { x: 300, y: c.y, state: 'free', vx: 0, vy: 0 }); laid = true; }
+    Object.assign(s.body, { x: 720, y: 600, vx: 0, vy: 0 }); const e0 = s.events.length; s.step({});
+    for (const e of s.events.slice(e0)) { if (e.type === 'commit' && e.cause === 'cone' && e.man === 'shift') swerves++; if (e.type === 'first-item') first = e.t; if (e.type === 'gift' && e.node === 'duck1') gift = e.t; if (e.type === 'drone-pickup') fetched = e.t; }
+    if (c && laid && c.v < 1 && c.x < 300) stopped++; if (c && fetched && c.x - c.L / 2 > 320) passed = true;
+  }
+  return { ok: laid && swerves === 0 && first != null && gift != null && gift - first < 5 && s.has('duck1') && stopped > 0 && fetched != null && passed,
+    detail: `swerves ${swerves}; first stop at a cone ${first && first.toFixed(1)} s, DUCK fitted ${gift && gift.toFixed(1)} s; waited ${(stopped / 60).toFixed(1)} s; cone fetched ${fetched && fetched.toFixed(1)} s; drove past ${passed}` };
+});
+check('10.6 DUCK: behind a planter row a ducked dummy is never noticed; standing there it is; ducked, it moves at movement.duckSpeedFactor', () => {
+  const look = (duck) => { const t = sim(F6, { 'duel.startRung': 5 }, { owned: { battery1: true, legs1: true, hands1: true, duck1: true } }); let n = 0; for (let i = 0; i < 120 * 60; i++) { Object.assign(t.body, { x: 590, y: 418, vx: 0, vy: 0 }); t.step({ duck }); for (const c of t.onRoad()) if (c.noticed) n++; } return n; };
+  const run = (duck) => { const t = sim(F6, {}, { owned: { duck1: true } }); Object.assign(t.body, { x: 760, y: 620 }); for (let i = 0; i < 90; i++) t.step({ mx: -1, my: 0, duck }); return Math.hypot(t.body.vx, t.body.vy); };
+  const ducked = look(true), standing = look(false), vDuck = run(true), vRun = run(false), k = F6['movement.duckSpeedFactor'];
+  return { ok: ducked === 0 && standing > 0 && Math.abs(vDuck / vRun - k) < 0.02, detail: `noticed on ${ducked} car-ticks ducked, ${standing} standing (120 s); speed ducked ${vDuck.toFixed(1)}, standing ${vRun.toFixed(1)} (factor ${k})` };
+});
+check('10.6: from a duck behind the planter, a dash vaults the row and lands on a passing car', () => {
+  const s = sim(F6, { 'duel.startRung': 5 }, { owned: { battery1: true, legs1: true, hands1: true, duck1: true } }); Object.assign(s.body, { x: 590, y: 418 });
+  drive(s, 120, (q) => { const b = q.body; if (!b.alive) return {}; if (Math.hypot(590 - b.x, 418 - b.y) > 8) return b.y > 412 ? to(b, 590, 418) : (b.x < 646 && b.y < 388 ? to(b, 652, 380) : to(b, 646, 428));
+    const c = q.onRoad().find((x) => x.v > 15); if (c) { const tx = c.x + c.vx * 0.15, ty = c.y + c.vy * 0.15, d = Math.hypot(tx - b.x, ty - b.y), ang = Math.atan2(ty - b.y, tx - b.x);
+      if (d < q.reach() + 6 && q.dashFitted() && b.mode !== 'lunge' && b.mode !== 'recover') return { mx: Math.cos(ang) * 0.3, my: Math.sin(ang) * 0.3, aPress: true, duck: true }; }
+    return { duck: true }; });
+  const h = hits(s);
+  return { ok: h.length > 0 && h.every((e) => e.ducked), detail: `${h.length} hits in 120 s, ${h.filter((e) => e.ducked).length} sprung from a duck` };
+});
+
 // ---------- registry and frozen builds
 check('Prototype 10 values are registered (registry first)', () => {
   const reg = new Set(JSON.parse(fs.readFileSync(path.join(ROOT, 'content/params/tuning.parameters.json'), 'utf8')).entries.map((e) => e.id));
@@ -284,7 +327,7 @@ if (process.argv.includes('--page')) {
     const srv = http.createServer((q, r) => { const p = path.join(ROOT, decodeURIComponent(q.url.split('?')[0])); if (!fs.existsSync(p) || fs.statSync(p).isDirectory()) { r.writeHead(404); return r.end(); } r.writeHead(200); fs.createReadStream(p).pipe(r); });
     srv.listen(0, async () => {
       const { chromium } = require('playwright'); const br = await chromium.launch();
-      for (const page of ['dummies_p10.html', 'dummies_p10_2.html', 'dummies_p10_3.html', 'dummies_p10_4.html', 'dummies_p10_5.html']) {
+      for (const page of ['dummies_p10.html', 'dummies_p10_2.html', 'dummies_p10_3.html', 'dummies_p10_4.html', 'dummies_p10_5.html', 'dummies_p10_6.html']) {
         const pg = await br.newPage(); const errs = [];
         pg.on('pageerror', (e) => errs.push(e.message));
         await pg.goto(`http://127.0.0.1:${srv.address().port}/prototypes/p10/${page}`); await pg.waitForTimeout(600);
@@ -347,6 +390,24 @@ if (process.argv.includes('--page')) {
           await pg.evaluate(() => Object.assign(window.__p10.sim.body, { vx: 0, vy: 0 })); await pg.keyboard.press('e'); await pg.waitForTimeout(300);
           const down = await pg.evaluate(() => !window.__p10.sim.body.held && window.__p10.sim.events.some((e) => e.type === 'drop'));
           results.push([fit && rung === 4 && held && down && errs.length === 0, '10.5 page: a dash out of cover teaches rung 4; the link is fitted; E picks up a cone and puts it down', `fitting ${fit}, rung ${rung}, E picked up ${held}, E put down ${down}, errors ${errs.length}`]);
+        }
+        if (page === 'dummies_p10_6.html') { // rung 4 → 5: a cone laid in a road A car's lane; strike as it swerves round it; the update fitted; then C ducks
+          await pg.evaluate(() => {
+            window.__p10.newSim(); const s = window.__p10.sim, step = s.step.bind(s); let laid = null, struck = null;
+            const to = (b, x, y) => { const dx = x - b.x, dy = y - b.y, d = Math.hypot(dx, dy); return d > 6 ? { mx: dx / d, my: dy / d } : {}; };
+            const bot = () => { const b = s.body; if (!b.alive || s.lesson || s.rung !== 4) return null;
+              const c = s.onRoad().find((x) => x.red && !x.spent && x.path.road === 'A'); if (!c) return to(b, 720, 600);
+              if (laid !== c.id && c.x > -100 && c.x < 0) { Object.assign(s.cones[0], { x: 600, y: c.y, state: 'free', vx: 0, vy: 0 }); laid = c.id; }
+              if (laid === c.id && struck !== c.id && c.cause === 'cone' && c.dodge && c.x > 480 && c.x < 540 && b.mode !== 'lunge' && b.mode !== 'recover') {
+                struck = c.id; Object.assign(b, { x: c.x + 50, y: 244, vx: 0, vy: 0 }); const ang = Math.atan2(c.y - b.y, c.x + 25 - b.x); b.facing = ang; return { mx: Math.cos(ang) * 0.3, my: Math.sin(ang) * 0.3, aPress: true }; }
+              return laid === c.id ? {} : to(b, 720, 600); };
+            s.step = (cmd) => { const c = bot(); return step(c || cmd); };
+          });
+          let fit = false, rung = 4; for (let i = 0; i < 1920; i++) { await pg.waitForTimeout(125); const q = await pg.evaluate(() => ({ ph: window.__p10.sim.phase, lt: window.__p10.lessonT, rung: window.__p10.sim.rung })); rung = q.rung; if (q.ph === 'lesson' && q.lt > F6['duel.lessonClipSeconds'] + F6['duel.lessonHoldSeconds'] + 0.2) fit = true; if (q.rung === 5 && q.ph === 'play') break; }
+          await pg.evaluate(() => { const s = window.__p10.sim; s.run.owned.duck1 = true; Object.assign(s.body, { x: 590, y: 418, vx: 0, vy: 0 }); });
+          await pg.keyboard.down('c'); await pg.waitForTimeout(300); const ducked = await pg.evaluate(() => !!window.__p10.sim.body.duck);
+          await pg.keyboard.up('c'); await pg.waitForTimeout(300); const stood = await pg.evaluate(() => !window.__p10.sim.body.duck);
+          results.push([fit && rung === 5 && ducked && stood && errs.length === 0, '10.6 page: a hit while it swerves round a cone teaches rung 5; the update is fitted; holding C ducks, letting go stands', `fitting ${fit}, rung ${rung}, ducked ${ducked}, stood ${stood}, errors ${errs.length}`]);
         }
         await pg.close();
       }

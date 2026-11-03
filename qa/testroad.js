@@ -36,12 +36,14 @@ const POLICIES = {
   gap: { home: { x: 188, y: 414 }, from: 10.3 },      // waits behind the barrier at its gap; dashes through it at a road A car
   plinth: { home: { x: 275, y: 226 }, from: 10.3 },   // jumps up on the plinth; dashes down from its edge at a road A car
   conebait: { home: { x: 188, y: 414 }, from: 10.5 }, // the gap until Hands 1; then lays a cone ahead of the car waiting for it, steps out of its field, strikes as it swerves round the cone
+  planter: { home: { x: 188, y: 414 }, from: 10.6 },  // the cone bait (from its home) until DUCK; then ducks behind the planter row south of road A, east (SPOT); springs at a passing car
+  standplanter: { home: { x: 590, y: 418 }, from: 10.6 }, // the same spot, standing: the row hides only a ducked dummy
   lurk: { home: { x: 660, y: 576 }, from: 10.3 },     // waits past every field's edge, south-east; sprints in as a car passes in road A's south lane, dashes before the field notices
 };
 
 function run(policy, offset, secs, mode) {
   const pol = POLICIES[policy], trained = mode === 'trained';
-  const parts = { battery1: true }; if (FLAGS['duel.topRung'] >= 2) parts.legs1 = true; if (FLAGS['duel.topRung'] >= 4) parts.hands1 = true; // trained: every part its rungs bring
+  const parts = { battery1: true }; if (FLAGS['duel.topRung'] >= 2) parts.legs1 = true; if (FLAGS['duel.topRung'] >= 4) parts.hands1 = true; if (FLAGS['duel.topRung'] >= 5) parts.duck1 = true; // trained: every part its rungs bring
   const s = new TestRoadSim(Object.assign({}, FLAGS, trained ? { 'duel.startRung': FLAGS['duel.topRung'] } : {}), trained ? { owned: parts } : null);
   const service = () => { if (s.phase === 'report') s.continueReport(); else if (s.phase === 'shop') s.leaveShop(); else if (s.phase === 'lesson') s.continueLesson(); };
   for (let k = 0; k < offset * 60; k++) { service(); s.step({}); }
@@ -77,8 +79,14 @@ function run(policy, offset, secs, mode) {
   };
   const done = new Set(); let cur = null, tries = 0, climb = null, layStage = 0;
   if (policy === 'charge') { b().x = home.x; b().y = home.y; for (const c of s.cars) done.add(c.id); } // it starts in its lane, and charges only cars that arrive after it
+  const SPOT = { x: 590, y: 418 }; // behind the planter row south of road A, east
+  const back = () => { // to SPOT: past the row's east end when on its road side
+    const x = b().x, y = b().y;
+    if (x > 492 && x < 700 && y > 330 && y < 412) return y < 388 && x < 640 ? goTo(652, 380) : goTo(646, 428); // north of it, east to its end; then down past the end
+    return nav(SPOT.x, SPOT.y);
+  };
   const act = {
-    stand: () => goTo(home.x, home.y), standSouth: () => goTo(home.x, home.y), standOff: () => goTo(home.x, home.y),
+    stand: () => nav(home.x, home.y), standSouth: () => nav(home.x, home.y), standOff: () => nav(home.x, home.y), // round the statics (10.6's planters)
     charge: () => {
       const c = s.onRoad().find((q) => q.lane === 1 && !done.has(q.id));
       if (!b().alive) return {};
@@ -177,6 +185,26 @@ function run(policy, offset, secs, mode) {
       if (!cn) return nav(home.x, home.y);
       return Math.hypot(cn.x - b().x, cn.y - b().y) < P['body.radius'] + P['props.cone.radius'] + 8 ? { xPress: true } : nav(cn.x, cn.y);
     },
+    planter: () => { // DUCK behind low cover: hidden from the car's sensors, it springs as the car passes in reach
+      if (!b().alive) return {};
+      if (!s.has('duck1')) return act.conebait();
+      const c = live().find((q) => q.v > 15), atSpot = Math.hypot(SPOT.x - b().x, SPOT.y - b().y) < 8;
+      if (c && atSpot) {
+        const tx = c.x + (c.vx || 0) * 0.15, ty = c.y + (c.vy || 0) * 0.15, d = Math.hypot(tx - b().x, ty - b().y), ang = Math.atan2(ty - b().y, tx - b().x);
+        if (d < s.reach() + 6 && can()) return { mx: Math.cos(ang) * 0.3, my: Math.sin(ang) * 0.3, aPress: true, duck: true };
+      }
+      if (!atSpot) return back();
+      return { duck: true };
+    },
+    standplanter: () => {
+      if (!b().alive) return {};
+      const c = live().find((q) => q.v > 15), atSpot = Math.hypot(SPOT.x - b().x, SPOT.y - b().y) < 8;
+      if (c && atSpot) {
+        const tx = c.x + (c.vx || 0) * 0.15, ty = c.y + (c.vy || 0) * 0.15, d = Math.hypot(tx - b().x, ty - b().y), ang = Math.atan2(ty - b().y, tx - b().x);
+        if (d < s.reach() + 6 && can()) return { mx: Math.cos(ang) * 0.3, my: Math.sin(ang) * 0.3, aPress: true };
+      }
+      return atSpot ? {} : back();
+    },
     lurk: () => { // past the field's edge, it sprints in as the car passes and dashes before the field notices (perception.sideNoticeSeconds)
       if (!b().alive) return {};
       const c = live().find((q) => q.path.road === 'A' && q.lane === 0 && q.v > 15);
@@ -238,7 +266,7 @@ function run(policy, offset, secs, mode) {
     for (const c of on) {
       seen.add(c.id);
       const st = c.v < 1 ? (stops.get(c.id) || 0) + 1 / 60 : 0; stops.set(c.id, st);
-      const inPath = !!(c.hz && (c.hz.inPath || c.noticed)); // waiting for a dummy in its path, or (rung 2) in its field
+      const inPath = !!(c.hz && (c.hz.inPath || c.noticed)) || !!(c.det && c.det.fwd && c.det.fwd.kind === 'cone'); // waiting for a dummy in its path, (rung 2) in its field, or (rung 5) for a cone ahead
       if (st > 20 && st - 1 / 60 <= 20) { if (inPath) blockedStall++; else stall++; }
       if (c.v < 1 && c.hz && c.hz.inPath && s.body.alive) minStopGap = Math.min(minStopGap, c.hz.lx);
       if (c.v < 1 && c.noticed && s.body.alive) minSideGap = Math.min(minSideGap, Math.hypot(s.body.x - (c.x + Math.cos(c.h) * c.L / 2), s.body.y - (c.y + Math.sin(c.h) * c.L / 2)));
@@ -247,7 +275,7 @@ function run(policy, offset, secs, mode) {
   while (wins.length < Math.ceil(secs / 60)) wins.push(0);
   const ev = s.events.slice(e0), imp = ev.filter((e) => e.type === 'impact' && e.lost > 0), mins = (s.t - t0) / 60, n = (t) => ev.filter((e) => e.type === t);
   const tally = (k) => imp.reduce((a, e) => (a[e[k]] = (a[e[k]] || 0) + 1, a), {});
-  const lessonAt = n('lesson-due')[0], learned = n('learned')[0], firstBrake = n('first-brake')[0], firstSide = n('first-side')[0], firstCover = n('first-cover')[0], gift = n('gift')[0];
+  const lessonAt = n('lesson-due')[0], learned = n('learned')[0], firstBrake = n('first-brake')[0], firstSide = n('first-side')[0], firstCover = n('first-cover')[0], firstItem = n('first-item')[0], gift = n('gift')[0];
   const after = learned ? imp.filter((e) => e.t > learned.t) : null;
   const commits = n('commit').reduce((a, e) => (a[e.cause] = (a[e.cause] || 0) + 1, a), {});
   return { policy, mode, offset, simSeconds: +(s.t - t0).toFixed(1), rungEnd: s.rung,
@@ -256,10 +284,12 @@ function run(policy, offset, secs, mode) {
     zones: tally('zone'), carStates: tally('carState'), kinds: tally('kind'), dashes: n('lunge').length,
     above: imp.filter((e) => e.above).length, heightHid: imp.filter((e) => e.above && e.sight >= s.P['duel.lessonClipSeconds'] - 1e-9).length, // D113: hits from above; of those, in sight past cover for the whole clip
     sights: imp.filter((e) => e.above).map((e) => e.sight), coverHits: imp.filter((e) => e.cover).length, // row 687: hits where cover hid the dummy
+    conedHits: imp.filter((e) => e.coned).length, duckHits: imp.filter((e) => e.ducked).length, ducks: n('duck').length, // row 695: hits while it swerved round a cone; row 696: strikes from a duck
+    coneSwerves: n('commit').filter((e) => e.cause === 'cone' && e.man === 'shift').length, coneStops: n('commit').filter((e) => e.cause === 'cone' && e.man === 'brake').length,
     standstillTouches: n('touch').filter((e) => e.standstill).length, tries: policy === 'charge' ? tries : null,
     lesson: lessonAt ? { hitAt: +(lessonAt.t - t0).toFixed(1), zone: lessonAt.zone, learnedAt: learned ? +(learned.t - t0).toFixed(1) : null } : null,
     afterLesson: after ? { hits: after.length, hitsPerMin: +(after.length / Math.max(1e-9, (s.t - learned.t) / 60)).toFixed(2), lost: Math.round(after.reduce((a, e) => a + e.lost, 0)) } : null,
-    firstBrakeAt: firstBrake ? +(firstBrake.t - t0).toFixed(1) : null, firstSideAt: firstSide ? +(firstSide.t - t0).toFixed(1) : null, firstCoverAt: firstCover ? +(firstCover.t - t0).toFixed(1) : null,
+    firstBrakeAt: firstBrake ? +(firstBrake.t - t0).toFixed(1) : null, firstSideAt: firstSide ? +(firstSide.t - t0).toFixed(1) : null, firstCoverAt: firstCover ? +(firstCover.t - t0).toFixed(1) : null, firstItemAt: firstItem ? +(firstItem.t - t0).toFixed(1) : null,
     dashAt: gift ? +(gift.t - t0).toFixed(1) : null, parts: n('gift').map((e) => ({ node: e.node, t: +(e.t - t0).toFixed(1) })),
     behaviours: commits, learnEvents: n('learn-standoff').length + imp.filter((e) => e.learned != null).length + n('lesson-due').length,
     cars: { appearances: seen.size, maxOnRoad: maxOn, stalls20s: stall, blocked20s: blockedStall, honks: n('honk').length, minStopGap: Number.isFinite(minStopGap) ? Math.round(minStopGap) : null, minSideGap: Number.isFinite(minSideGap) ? Math.round(minSideGap) : null, reach },
@@ -274,7 +304,7 @@ for (const mode of modes) for (const p of Object.keys(POLICIES).filter((q) => (!
   const r = run(p, off, o.secs, mode); out.runs.push(r);
   console.log(`${mode.padEnd(7)} ${p.padEnd(10)} +${String(off).padEnd(3)} hits ${r.hits} (${r.hitsPerMin}/min) wo ${r.writeOffs} lesson ${r.lesson ? r.lesson.hitAt : '-'} after ${r.afterLesson ? r.afterLesson.hits : '-'} part ${r.parts.map((q) => q.node + '@' + q.t).join(',')} stills ${r.standstillTouches} tries ${r.tries} stalls ${r.cars.stalls20s}/${r.cars.blocked20s} gap ${r.cars.minStopGap}`);
 }
-for (const p of FLAGS['duel.topRung'] >= 4 ? ['gap', 'jump', 'conebait', 'lurk'] : FLAGS['duel.topRung'] >= 3 ? ['plinth', 'jump', 'dashjump', 'gap', 'kerb'] : FLAGS['duel.topRung'] >= 2 ? ['kerb', 'flankOpen', 'walkin', 'plinth', 'gap', 'corner'] : ['stand', 'charge', 'walkin', 'aim']) {
+for (const p of FLAGS['duel.topRung'] >= 5 ? ['conebait', 'planter', 'lurk'] : FLAGS['duel.topRung'] >= 4 ? ['gap', 'jump', 'conebait', 'lurk'] : FLAGS['duel.topRung'] >= 3 ? ['plinth', 'jump', 'dashjump', 'gap', 'kerb'] : FLAGS['duel.topRung'] >= 2 ? ['kerb', 'flankOpen', 'walkin', 'plinth', 'gap', 'corner'] : ['stand', 'charge', 'walkin', 'aim']) {
   if (!want(p)) continue;
   const r = run(p, 0, o.esc, 'lesson'), w = r.windows, f = (w[0] + w[1]) / 2, l = (w[w.length - 1] + w[w.length - 2]) / 2;
   r.decay = f ? +(l / f).toFixed(2) : null; out.escalation.push(r);

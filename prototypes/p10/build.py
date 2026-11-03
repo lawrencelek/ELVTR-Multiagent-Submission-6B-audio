@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Prototype 10 build (GDD Edits 101–105): the Monument test road, one page per test.
+"""Prototype 10 build (GDD Edits 101–106): the Monument test road, one page per test.
 
     python3 prototypes/p10/build.py          # writes sim_flags.json and every page not frozen
 
@@ -9,8 +9,8 @@ build flags (window.DUMMIES_SIM in dummies_p9.html), every Prototype P10 registr
 Shared files are not touched. sim_flags.json holds every test's values for the headless probes (qa/testroad.js).
 
 A test's page freezes once its human pass may use it, and is never rewritten (md5 below): 10.1 (dummies_p10.html, built
-at 4b3d668), 10.2 (dummies_p10_2.html, built at eab988b), 10.3 (dummies_p10_3.html, built at c3b0177) and 10.4 (dummies_p10_4.html, built with
-row 685's rule). Their values still live here, so the probes rerun them on today's code. 10.0 has no page: it measured Prototype 9 as built.
+at 4b3d668), 10.2 (dummies_p10_2.html, built at eab988b), 10.3 (dummies_p10_3.html, built at c3b0177), 10.4 (dummies_p10_4.html, built with
+row 685's rule) and 10.5 (dummies_p10_5.html, built at b4361dc). Their values still live here, so the probes rerun them on today's code. 10.0 has no page: it measured Prototype 9 as built.
 """
 import hashlib, json, re, subprocess
 from pathlib import Path
@@ -70,14 +70,26 @@ T105 = dict(T104, **{
     'duel.startRung': 3, 'duel.topRung': 4,  # one lesson: rung 3 to rung 4 (row 687)
     'duel.conesArrives': 2,                  # Hands 1 by drone at the car's first stop for a dummy behind cover (row 687)
 })
+# Prototype 10.6: from rung 4, a hit while it swerves round a cone teaches rung 5: it stops at a cone and never swerves.
+# DUCK arrives at its first stop at a cone; low planter rows stand by the road (row 695)
+T106 = dict(T105, **{
+    'duel.startRung': 4, 'duel.topRung': 5,  # one lesson: rung 4 to rung 5 (row 695)
+    'duel.conesArrives': 3,                  # Hands 1 fitted from the start: 10.5's part
+    'duel.duckArrives': 2,                   # DUCK by drone at the car's first stop at a cone (row 695)
+    'duel.planters': 1,                      # three low planter rows by the road: cover for a ducked dummy (row 696)
+    'props.planter.height': 14, 'body.duckHeight': 6, 'movement.duckSpeedFactor': 0.35, 'perception.duckNoticeFactor': 1.5,  # DUCK (row 696)
+    'perception.sensorHeight': 14, 'perception.lidarHeight': 26, 'perception.streetCameraHeight': 60,                       # sightlines by height (row 697)
+    'perception.streetCameraRange': 180,     # each camera watches the cover near its post: the barrier, the building corner (row 697)
+})
 STAGES = {
     '10.1': {'title': 'THE TEST ROAD', 'page': 'dummies_p10.html', 'frozen': '82ab5e55d243ee500d6dfcaa60af74e6', 'edit': 101, 'values': T101},
     '10.2': {'title': 'THE FIRST LESSON', 'page': 'dummies_p10_2.html', 'frozen': '9dd14c5877128390fbad2595e86edce7', 'edit': 102, 'values': T102},
     '10.3': {'title': 'THE SIDE SENSORS', 'page': 'dummies_p10_3.html', 'frozen': '5aed8e43a39631596233903de95ca5d7', 'edit': 103, 'values': T103},
     '10.4': {'title': 'THE ROOF LIDAR', 'page': 'dummies_p10_4.html', 'frozen': 'b12b48d8dee90294829366f07ef7d1b6', 'edit': 104, 'values': T104},
-    '10.5': {'title': 'THE STREET CAMERAS', 'page': 'dummies_p10_5.html', 'frozen': None, 'edit': 105, 'values': T105},
+    '10.5': {'title': 'THE STREET CAMERAS', 'page': 'dummies_p10_5.html', 'frozen': '252785354962f8ac050f022b251bd29f', 'edit': 105, 'values': T105},
+    '10.6': {'title': 'DUCK', 'page': 'dummies_p10_6.html', 'frozen': None, 'edit': 106, 'values': T106},
 }
-CURRENT = '10.5'
+CURRENT = '10.6'
 
 out = {'registry': reg['registryVersion'], 'current': CURRENT, 'stages': {}}
 for sid, st in STAGES.items():
