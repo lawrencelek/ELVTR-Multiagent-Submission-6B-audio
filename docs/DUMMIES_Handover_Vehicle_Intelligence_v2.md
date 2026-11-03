@@ -28,6 +28,8 @@
 
 **Updated 3 November, 10.7 built:** §23. Crash memory plays at `prototypes/p10/dummies_p10_7.html`; GDD Edit 107. Every crash leaves a chalk outline; rung 6 rings the last three spots you struck from and expects you there. A shorter drive-in and a 500 body (D117). 10.6's page is frozen.
 
+**Updated 3 November, 22:59:** §24. A running document of five interlocking systems, read before any level redesign (row 710).
+
 ## 0 How to use this with v1
 
 - **v1** (`claude/DUMMIES_Handover_Vehicle_Intelligence.md`) still holds: constraints (§4), code survey (§5), tools (§8), repos (§9), run and test (§11), conventions (§12).
@@ -1101,4 +1103,13 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
 - **D119:** an expert mover writes off a body every 18 s, a quarter of the target.
 - **D120:** the memory's cap: 3, 5, or every crash.
 - **Next:** 10.8, the road upgrade (§14.2): two-way, white sedans that never learn.
+
+## 24 Five interlocking systems (3 November, row 710)
+
+> "it seems like there should be these interlocking factors. This will have implications for these other design systems later on. Make a running document of these factors, as we will use them to re-design the levels." (Lawrence, 3 November)
+
+- **Document:** `docs/DUMMIES_Interlocking_Systems.md`. Running: every test and level edit updates it.
+- **Factors:** character control and abilities; car behaviour and abilities; emergent group behaviour; level design; moveable objects.
+- **Contents:** an interlock table; each factor as built, with registry values; findings F1–F14; a level checklist; questions Q1–Q7.
+- **Use:** the level redesign reads it first. A change to one factor lists its effect on the other four.
 
