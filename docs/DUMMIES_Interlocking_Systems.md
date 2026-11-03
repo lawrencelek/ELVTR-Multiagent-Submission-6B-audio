@@ -5,7 +5,7 @@
 - **Five factors:** character control and abilities; car behaviour and abilities; emergent group behaviour; level design; moveable objects.
 - **Rule:** a change to one factor lists its effect on the other four (§0).
 - **Values:** registry IDs at the 10.7 build. Derived values name their inputs. IDs marked *unregistered* need registering before use.
-- **Sources:** handover v2 §14, §20–§23; GDD Edits 101–107; `DECISIONS.md` rows 648–710.
+- **Sources:** handover v2 §14, §20–§23; GDD Edits 101–107; `DECISIONS.md` rows 648–711.
 
 ## 0 The interlock
 
@@ -15,8 +15,8 @@ Read across: what the row's factor sets for the column's.
 |---|---|---|---|---|---|
 | **1 Character** | — | Dash reach sets the car's envelope and stop line | Each verb needs a group answer: queues, boxing in | Reach and speed set cover spacing and spot distance | Carry, push and throw set what moves, how far |
 | **2 Car** | Each rung closes one verb; the next part reopens one | — | A red car's stop blocks a lane; its memory may spread | Sensor geometry sets cover length, height and camera posts | Rung 4 swerves round cones; rung 5 stops; rung 6 remembers spots |
-| **3 Group** | White cars are hazards and moving cover | White cars price the red car's swerve and box it in | — | Lanes, two-way roads, priority, spawn rates | Queued cars are obstacles; drones tidy up |
-| **4 Level** | Routes, heights, hiding spots | Sightlines, run-in, camera reach | Throughput: lanes, junction priority | — | Object homes, drone access, room to move |
+| **3 Group** | White cars are hazards and moving cover | White cars block the red car's sight and path; queued cars flash their lights at it | — | Lanes, two-way roads, priority, spawn rates | Queued cars are obstacles; drones tidy up |
+| **4 Level** | Routes, heights, hiding spots, parked cars | Sightlines, run-in, camera reach | Throughput: lanes, junction priority | — | Object homes, drone access, room to move |
 | **5 Objects** | The dummy's tools | Road items to read; occluders by height | A lane block makes a queue | Moveable cover rewrites the level | — |
 
 ## 1 Character control and abilities
@@ -108,16 +108,18 @@ Read across: what the row's factor sets for the column's.
 | Behaviour | Factors | Real basis | Status |
 |---|---|---|---|
 | White cars queue behind a red car waiting for the dummy | 2, 3, 4 | Cones stop robotaxis, 2023 (v2 §4.2) | Untested |
+| Queued cars flash their lights at the waiting red car | 2, 3 | The notice cue exists: `proto.art.noticeFlashHz` 4 | Decided (row 711); test with the group |
 | Honk chains down the queue | 3 | Waymo cars honking at each other, 2024 | Untested |
 | A red swerve into a white car is an Incident | 2, 3 | Real systems prefer braking | 10.9 |
-| White cars box in the red car's escape | 2, 3, 4 | — | 10.9 |
+| White cars box in the red car's escape | 2, 3, 4 | — | Decided (row 711): white cars block it; 10.9 |
 | Red cars of a model share crash memory | 2, 3 | Prototype 9's learning by model | Q2 |
-| White cars as moving cover | 1, 3, 5 | Height: `vehicles.sedan.height` 19.8 | Q3 |
+| White cars as moving cover | 1, 3, 5 | Height: `vehicles.sedan.height` 19.8 | Decided (row 711): they block its sight |
+| Parked cars as cover | 1, 4, 5 | Kerbside parking hides pedestrians from drivers | Decided (row 711) |
 | Drones tidy objects back to their homes | 3, 5 | — | Cones only |
 
 ### 3.3 Risks
 
-- **Stalemate.** A car waiting for a dummy in its field waits forever (rows 688, 699). A queue behind it multiplies the cost.
+- **Stalemate.** A car waiting for a dummy in its field waits forever (rows 688, 699). A queue behind it multiplies the cost. Queued cars flash their lights (row 711).
 - **Deadlock.** v1 W7's watchdog applies once cars meet cars.
 - **Noise.** Each group cue must read at a glance beside the red car's display.
 
@@ -145,6 +147,7 @@ Read across: what the row's factor sets for the column's.
 - **L5. The run-in sets the pace.** It was half of every pass at 771 (row 702).
 - **L6. Every rung needs its opening in the level.** A plinth for rung 2; cover for 3; cone homes for 4; low cover for 5; spots for 6.
 - **L7. An opening without a part stays** (pillar 1, D97): today, the sprint from past the field.
+- **L8. Parked cars are cover** (row 711). A kerbside parking lane runs up the road: L1's cover, built in. Taller than a standing dummy (`vehicles.sedan.height` 19.8 against 18).
 
 ### 4.3 Redesign checklist (proposed)
 
@@ -163,7 +166,7 @@ Read across: what the row's factor sets for the column's.
 | Venue | Stresses |
 |---|---|
 | Proving Ground: open tarmac | Car (no lanes), objects |
-| Car park | Group (slow, reversing), cover between bays |
+| Car park | Group (slow, reversing); parked cars as cover between bays (row 711) |
 | Two-way arterial | Group: oncoming traffic prices a swerve |
 | School crossing | Car: priority choices (trolley set pieces, PT13) |
 | Tunnel | Car: sensors weaken by type |
@@ -180,11 +183,14 @@ Read across: what the row's factor sets for the column's.
 | Barrier | No | — | Tall | Cover; cameras see past it |
 | Sculpture (`world.sculptureScaleLarge` 2) | No (Lawrence, 2 November: move planters and sculptures to hide behind) | — | By size | Not yet cover |
 | Decoys (`props.decoy.<kind>`, *unregistered*) | Planned (PT13) | — | — | A priority choice |
+| Parked car (`vehicles.sedan.height` 19.8) | Proposed: leaves and arrives (Q8) | Its own driver | Taller than either body | Cover (row 711) |
+| White car (`vehicles.sedan.height` 19.8) | Yes, in traffic | Traffic | Taller than either body | Moving cover; blocks the red car's sight and path (row 711) |
 | Crash outlines | No; persist | — | Flat | Rung 6's memory marks |
 
 ### 5.2 Interlocks
 
 - **Anything in a lane is a road item.** Rung 5 stops for it. The car blocks its lane meanwhile: a queue once traffic returns.
+- **Cars are cover** (row 711). Parked cars hold still; white cars move, and their cover moves with them.
 - **Moving cover makes new spots.** It answers rung 6. Q1 decides whether memory follows spots or cover.
 - **Cover height sets how close a sensor gets before it sees over.** A body taller than the cover always shows. Taller cover holds out the lidar (26) and the cameras (60) longer.
 - **Drone time is pace.** Each fetch takes `proto.droneConeSeconds` 5 plus flight at `proto.droneSpeed` 240.
@@ -196,6 +202,7 @@ Read across: what the row's factor sets for the column's.
 - Who moves objects: dummy, drones, cars (bumps).
 - Persistence: where objects reset, and when.
 - Height class per object, in the registry.
+- Cars as occluders in the sightline rule (§2.3). Not built: today only statics block sight.
 
 ## 6 Findings log
 
@@ -218,13 +225,15 @@ Read across: what the row's factor sets for the column's.
 
 ## 7 Open questions
 
-- **Q1.** Does rung 6 remember spots, or the cover behind them? Matters once cover moves.
+- **Q1.** Does rung 6 remember spots, or the cover behind them? Cars are moving cover (row 711), so it matters now: a parked car that leaves takes its spot with it.
 - **Q2.** Is crash memory per car or per model (fleet learning)?
-- **Q3.** Are white cars cover? A sedan (`vehicles.sedan.height` 19.8) is taller than the sensors (14) and either body; the lidar (26) sees over it unless it stands close to the dummy (§2.3).
+- **Q3.** ~~Are white cars cover?~~ **Answered (row 711):** yes. Parked cars count; white cars block the red car. A sedan (19.8) is taller than the sensors (14) and either body; the lidar (26) sees over it unless it stands close to the dummy (§2.3).
 - **Q4.** Who moves objects: the dummy, drones, cars?
-- **Q5.** What does a red car waiting for the dummy do to the traffic behind it?
+- **Q5.** ~~What does a red car waiting for the dummy do to the traffic behind it?~~ **Answered (row 711):** the cars behind flash their lights. Test under group behaviour.
 - **Q6.** Do crash outlines persist across levels or sessions, as level history?
 - **Q7.** When do Story's Arms verbs (push, throw, hitch) enter the duel?
+- **Q8.** Do parked cars leave and arrive? If so, how often, and does the dummy see it coming?
+- **Q9.** Do white cars block the red car on one-way roads, or only on two-way roads (10.8)?
 - **Linked decisions:** D57, D97, D115, D119, D120.
 
 ## Change log
@@ -232,3 +241,4 @@ Read across: what the row's factor sets for the column's.
 | Date | Change | Row |
 |---|---|---|
 | 3 November 2026 | Started at the 10.7 build: five factors, interlock table, findings F1–F14, questions Q1–Q7 | 710 |
+| 3 November 2026 | Cars are cover: parked cars count; white cars block the red car (Q3). Queued cars flash their lights (Q5). Q8–Q9 added | 711 |
