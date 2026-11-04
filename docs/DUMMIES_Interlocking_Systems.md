@@ -4,8 +4,9 @@
 
 - **Five factors:** character control and abilities; car behaviour and abilities; emergent group behaviour; level design; moveable objects.
 - **Rule:** a change to one factor lists its effect on the other four (§0).
+- **Control table (§8):** every object type: what hides, obstructs, is remembered, resets. Stealth research in §9.
 - **Values:** registry IDs at the 10.7 build. Derived values name their inputs. IDs marked *unregistered* need registering before use.
-- **Sources:** handover v2 §14, §20–§23; GDD Edits 101–107; `DECISIONS.md` rows 648–713.
+- **Sources:** handover v2 §14, §20–§23; GDD Edits 101–107; `DECISIONS.md` rows 648–714.
 
 ## 0 The interlock
 
@@ -245,6 +246,119 @@ Read across: what the row's factor sets for the column's.
 - **Q10.** ~~Does a crash from the open leave a spot?~~ **Answered (row 713):** no. It was skill from a player who judged it right. 10.7 amended.
 - **Linked decisions:** D57, D97, D115, D119, D120.
 
+## 8 The control table: what hides, obstructs, is remembered, resets (row 714)
+
+One row per object type. Edit this table first; the sections above follow it.
+
+- **Hides:** blocks a car's sight of the dummy. Eyes: sensors `perception.sensorHeight` 14 (rungs 1–2), lidar `perception.lidarHeight` 26 (rung 3 up), cameras `perception.streetCameraHeight` 60.
+- **Obstructs:** blocks movement. D = the dummy; R = the red car.
+- **Remembered:** rung 6 keeps a spot (`duel.memoryRadius` 50; the latest `duel.memorySites` 3), only from cover (row 713).
+- **Resets:** what clears or restores it, and when.
+
+### 8.1 Object types
+
+| # | Object | Class | States | Hides | Obstructs | Remembered | Resets | Status |
+|---|---|---|---|---|---|---|---|---|
+| L1 | Road, lanes (`world.laneWidth` 56) | Landscape, static | — | No | Neither; lanes set R's paths | No | — | Built |
+| L2 | Kerb | Landscape, static | — | No | Bounds R's swerve | No | — | Built |
+| L3 | Plinth (`world.jumpableHeight` 20) | Landscape, raised | Behind it; on top | Behind: yes. On top: rungs 0–2 cannot see it; rung 3 can | D walks round; a jump tops it | No: height, not cover (row 685) | — | Built |
+| L4 | Building | Landscape, tall | — | Yes, from every car eye; a camera sees past it within 180 of its post | D, R | Yes, as cover | Never moves | Built |
+| L5 | Barrier and gap | Street furniture, tall | — | Yes; a camera sees past it within 180 of its post | D (walk and dash); the gap lets D through | Yes, as cover | Never moves | Built |
+| L6 | Planter row (`props.planter.height` 14) | Street furniture, low | — | A ducked dummy only; higher eyes see in sooner | D's walk; a dash vaults it | Yes, as cover | Never moves | Built |
+| L7 | Camera post | Street furniture | Watching; linked to R | No | No | No: it sees live, keeps nothing | — | Built |
+| L8 | Sculpture (`world.sculptureScaleLarge` 2) | Street furniture | — | Not yet | — | — | — | Proposed moveable |
+| M1 | Cone (`props.cone.radius` 7.2) | Moveable | Free; held; in flight; fetched | No | R: rung 4 swerves, rung 5 stops; D punts it | No | FARSIGHT fetches it from a lane after `proto.droneConeSeconds` 5, to its home | Built |
+| M2 | Planter, pushed | Moveable | Still; moving | A ducked dummy | D | Yes; memory follows it (row 712) | Moved by D | Proposed (Arms) |
+| M3 | Decoy (`props.decoy.<kind>`, *unregistered*) | Moveable | — | — | R: a priority choice | — | — | Planned (PT13) |
+| V1 | Red car | Vehicle, learns | Cruising; braking; waiting; spent; away (lesson); off screen | No | D: a hit, or a touch below `duel.standstillSpeed` 5 | It is the one that remembers | Leaves the screen; back after `duel.redReturnSeconds` 2 | Built |
+| V2 | White car (`vehicles.sedan.height` 19.8) | Vehicle, never learns | Moving; queued; flashing | Yes: moving cover (row 711) | R's sight and path; D (a hazard) | While it stays; memory leaves with it (row 712) | Drives on | Decided; arrives 10.8 |
+| V3 | Parked car (`vehicles.sedan.height` 19.8) | Vehicle, still while parked | Arriving; parked; leaving | Yes (row 711) | D, R | While parked; a new car there is a fresh spot (row 712) | Leaves and arrives, seen coming (row 712) | Decided; not built |
+| V4 | FARSIGHT drone (`proto.droneSpeed` 240) | Vehicle, air | Inbound; lowering; outbound; carrying | No | No | No | Leaves the screen | Built |
+| C1 | The dummy | Character | §8.2 | — | R: the hit | Its spring spots, from cover (row 713) | Write-off: a new body by drone. R: everything | Built |
+| C2 | Other dummies, trainees | Character | — | — | — | — | — | Planned (PT13) |
+| T1 | Crash outline, debris, marker | Trace | Remembered; faded | No | No | Marks a remembered spot | Persists through write-offs; R clears it | Built |
+| T2 | Wreck at a write-off | Trace | — | No | No | No | — | Built (cosmetic) |
+
+### 8.2 States that change the answers
+
+**The dummy:**
+
+| State | Height | Behind low cover | Behind tall cover | Field notices after | Notes |
+|---|---|---|---|---|---|
+| Standing | `proto.art.dummyHeight` 18 | Seen | Hidden | `perception.sideNoticeSeconds` 0.6 | — |
+| Ducked | `body.duckHeight` 6 | Hidden until higher eyes clear it | Hidden | 0.6 × `perception.duckNoticeFactor` 1.5 | Speed × `movement.duckSpeedFactor` 0.35 |
+| On the plinth | 18 + 20 | Seen | — | Rungs 0–2 never; rung 3 as standing | — |
+| In the air | Its arc | — | — | Rungs 0–2 never; rung 3 as standing | — |
+| At a remembered spot (rung 6) | Any | Seen | Seen | At once | EXPECTED |
+| Knocked, written off | — | — | — | — | Out of play until it recovers, or a new body lands |
+
+**The red car:**
+
+| State | It sees | It stops for the dummy | A hit |
+|---|---|---|---|
+| Cruising | By rung | Yes, by rung | Damages; may teach |
+| Waiting (below `duel.standstillSpeed` 5) | By rung | Already stopped | A touch: no damage, no lesson |
+| Swerving round a cone (rungs 2–4) | By rung | No, until past the cone | Damages; at rung 4, teaches rung 5 |
+| Spent (just hit) | — | No | — |
+
+### 8.3 Resets by event
+
+| Event | Dummy | Red car's memory | Outlines | Objects | Cars |
+|---|---|---|---|---|---|
+| A pass ends | — | Kept | Kept | Cones in a lane fetched | Back in 2 s |
+| Write-off | New body (`proto.health.standard` 500); parts kept | Kept | Kept | A held cone drops | — |
+| Lesson | — | Grows (rung 6 fitted) | Kept | — | Away, then back |
+| Cover leaves (parked car) | — | That spot forgotten | Outline fades | — | — |
+| Restart (R) | Everything | Cleared | Cleared | Back to homes | Rung back to start |
+| Level change | Q6 | Q6 | Q6 | Q6 | Q6 |
+
+## 9 How the best stealth games handle it (research, 4 November)
+
+### 9.1 Game by game
+
+| Game | Hide | Detect, and show it | Remember | Reset |
+|---|---|---|---|---|
+| Metal Gear (1987), Metal Gear Solid (1998) | The cardboard box: still, invisible (1987); moving, suspicious | One vision cone on the radar (1998); noise sends a guard to look | Guards check the noise's source | They return to their route; a full alert jams the radar |
+| Metal Gear Solid V (2015) | The box: moving, it is reported ("a cardboard box is moving!") | Curious, vigilant, full alert. A found body or an unsuppressed shot raises vigilance | Vigilant guards hunt in groups. Radio spreads an alert between outposts; cutting the antenna stops it | Vigilance calms "after some time" |
+| MGS V's Revenge system | — | — | Habits buy counters: headshots, helmets; night, goggles; stealth, decoys, mines, cameras. Shown as icon colours on the map | Levels fall after each mission; story progress caps them |
+| Splinter Cell: Conviction (2010) | Hidden: the screen turns grey | Binary | Last known position: a silhouette where the guard thinks you are, when you break its line of sight | — |
+| Thief (1998) | Shadow; quiet surfaces | Footsteps by surface; three guard states | An investigating guard updates its point of interest | Thief 1 guards return still aroused: easy to re-provoke |
+| Dishonored (2012) | Darkness, distance | A three-stage meter over each guard | Full alert chases the last known position | Afterwards that area's guards stay at stage 1: faster next time |
+| Mark of the Ninja (2012) | Shadow: unseen | Sight arcs and sound rings drawn on screen | A partial sighting marks your last location; the guard goes there | It gives up and returns to its post |
+| Hitman (2016) | Disguises; crowds | Civilians flag extreme behaviour; guards react to bodies and weapons left out | Bodies found are shared; characters notice missing or tampered items; "compromised" and last-seen are shared, updated periodically, so they go stale | Panicked crowds never calm down |
+| Alien: Isolation (2014) | Lockers, vents, crawlspaces | Senses only; a director nudges it to your area | Searching lockers and small vents unlocks only after you repeatedly escape that way: "the illusion that the creature is learning" | Each reading decays: it forgets; it gives up an ambush after a set time; a menace gauge forces breaks |
+| Assassin's Creed (2007–2024) | Haystacks, benches, crowds; moving haycarts and wagons | Awareness meters per guard | Unity: a last-known-position silhouette | Guards give up after a brief search |
+
+### 9.2 Patterns, and what DUMMIES takes
+
+| Pattern | Seen in | DUMMIES now | Proposal |
+|---|---|---|---|
+| Perception is readable; binary where it can be | Mark of the Ninja, Conviction, Blacklist's GDC talk | Beam and field zones, notice meter, HIDDEN, SEEN, EXPECTED | Keep binary labels; one cue per state |
+| Last known position, drawn | Conviction, Unity, Mark of the Ninja | None | A ghost where the car last saw the dummy, while it waits |
+| Graded alert that decays | MGS, Thief, Dishonored | Notice, then stop, then wait; drives on when hidden | A short search state: it slows past the last known position, then gives up |
+| An area stays on edge after an alert | Dishonored, Thief 1 | None | The junction's notice runs faster for a while after a hit |
+| Habits buy counters, capped, decaying | MGS V Revenge, Alien: Isolation | Rung 6, three spots (D120) | Decay by level change (Q6); show the counters on the map, as MGS V does |
+| Moving cover is suspicious | The cardboard box; AC's haycarts | Parked cars arrive "seen coming" (row 712) | Cover that moves in a car's sight draws its notice; still cover hides |
+| Traces raise the alert | MGS V bodies; Hitman bodies, missing items | Outlines: only crashes from cover are remembered | White cars slow past fresh outlines (group, later) |
+| Shared, stale information | Hitman services; MGS V radio | Street cameras feed the car live | Fleet memory (Q2); a camera blocked by moved cover sees nothing |
+| Crowds are cover | AC, Hitman | White cars as moving cover (row 711) | Queues as cover; their flashing lights as the alarm (row 711) |
+| Failure is cheap | Mark of the Ninja's frequent checkpoints | A new body by drone; 2 s between passes | Keep |
+
+### 9.3 Sources
+
+- [MGS V: enemies' states of alert (Gamepressure)](https://www.gamepressure.com/mgs5thephantompain/enemies-states-of-alert/z27b18)
+- [Revenge System (Metal Gear Wiki)](https://metalgear.fandom.com/wiki/Revenge_System_(enemy_preparedness))
+- [Cardboard box (Metal Gear Wiki)](https://metalgear.fandom.com/wiki/Cardboard_box)
+- [MGS V's cardboard box is the best (Kotaku)](https://kotaku.com/metal-gear-solid-v-s-cardboard-box-is-the-best-1729367320)
+- [Splinter Cell: Conviction (Wikipedia)](https://en.wikipedia.org/wiki/Tom_Clancy%27s_Splinter_Cell:_Conviction)
+- [Modeling AI Perception and Awareness, Splinter Cell: Blacklist (GDC Vault)](https://www.gdcvault.com/play/1020436/Modeling-AI-Perception-and-Awareness)
+- [Stealth game spotting deconstruction (Critical Points)](https://critpoints.net/2015/03/30/stealth-game-spotting-deconstruction/)
+- [The innovations of Thief (PC Gamer)](https://pcgamer.com/stealth-is-everywhere-in-games-but-the-innovations-of-thief-have-been-forgotten)
+- [Stealth in Mark of the Ninja (Virtual Bastion)](https://virtualbastion.com/2015/04/15/playing-like-a-designer-stealth-in-mark-of-the-ninja)
+- [The AI of Hitman (Game Developer)](https://www.gamedeveloper.com/design/the-ai-of-hitman-2016-)
+- [Revisiting the AI of Alien: Isolation (Game Developer)](https://www.gamedeveloper.com/design/revisiting-the-ai-of-alien-isolation)
+- [The evolution of Assassin's Creed's stealth (Ubisoft)](https://news.ubisoft.com/en-us/article/1hges9IWLOmNAFpiavYmKl/the-evolution-of-assassins-creeds-stealth)
+
 ## Change log
 
 | Date | Change | Row |
@@ -253,3 +367,4 @@ Read across: what the row's factor sets for the column's.
 | 3 November 2026 | Cars are cover: parked cars count; white cars block the red car (Q3). Queued cars flash their lights (Q5). Q8–Q9 added | 711 |
 | 4 November 2026 | Memory follows cover (Q1). Parked cars leave and arrive, seen coming (Q8). White cars block on one-way roads; they arrive in 10.8 (Q9). Q10 added | 712 |
 | 4 November 2026 | A hit from the open leaves no spot (Q10); 10.7 amended. F13 superseded; F15 added | 713 |
+| 4 November 2026 | §8 the control table: object types, states, resets. §9 stealth research: ten games, ten patterns | 714 |

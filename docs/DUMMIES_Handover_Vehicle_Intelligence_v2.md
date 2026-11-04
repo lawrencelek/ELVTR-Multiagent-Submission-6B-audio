@@ -1115,4 +1115,5 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
 - **Answered (row 711):** cars are cover. Parked cars count; white cars block the red car. Cars queued behind a waiting red car flash their lights: test under group behaviour.
 - **Answered (row 712):** memory follows cover. A parked car that drives off takes its spot's memory; a new car there makes a fresh spot. Parked cars leave and arrive, seen coming. White cars block the red car on one-way roads too; they arrive in 10.8.
 - **Answered (row 713):** a crash from the open leaves no spot: it was skill. 10.7 amended; probes 16/16.
+- **Added (row 714):** §8, the control table: every object type, what hides, obstructs, is remembered and resets. §9, stealth research: ten games, ten patterns, each with a proposal.
 
