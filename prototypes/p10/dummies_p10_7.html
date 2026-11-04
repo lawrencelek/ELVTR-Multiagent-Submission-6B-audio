@@ -3855,9 +3855,10 @@
   // lane and never swerves round it. It waits while FARSIGHT fetches the cone. Only a hit while it swerved round a cone
   // teaches it (items): the training clip shows the swerve. Its part is DUCK (rows 694–696).
   // Rung 6, crash memory (handover v2 §14.2: it counters your habit; §4.3: Metal Gear Solid V's Revenge, Alien: Isolation):
-  // it remembers the spot each crash was sprung from (crashes; duel.memorySites, the latest; 0 all). A dummy within
-  // duel.memoryRadius of one is expected: cover does not hide it and the field notices it at once. Only a hit sprung from
-  // the spot of an earlier crash teaches it (habit). New spots still work, once each. No part.
+  // it remembers the spot each crash was sprung from, if cover hid the dummy there (crashes; duel.memorySites, the latest;
+  // 0 all). A hit from the open was the player's skill: it leaves an outline, not a memory (row 713). A dummy within
+  // duel.memoryRadius of a remembered spot is expected: cover does not hide it and the field notices it at once. Only a hit
+  // sprung from cover at the spot of an earlier such crash teaches it (habit). New spots still work, once each. No part.
   // Each rung brings the dummy a part by drone (part, partKey): when that value is 1, as the lesson ends; 2, the first
   // time the car uses the new rung against the dummy (trigger); 3, fitted from the start.
   const RUNGS = [
@@ -4087,18 +4088,31 @@
       const b = this.body, ca = Math.cos(c.h), sa = Math.sin(c.h), nx = c.x + ca * c.L / 2, ny = c.y + sa * c.L / 2;
       const cover = !this.carSees(c, nx, ny, false); // its own sensors: tall statics but the plinth; low cover by height
       c.sightT = b.alive && !cover ? (c.sightT || 0) + dt : 0;
-      c.hidden = !!(b.alive && cover); if (c.hidden) c.coverT = this.t; // behind cover now; when last
+      c.hidden = !!(b.alive && cover); if (c.hidden) { c.coverT = this.t; c.coverBy = this.hidingCover(c, nx, ny); } // behind cover now; when last; which cover (row 713)
+    }
+    hidingCover(self, x0, y0) { // the first static that hides the dummy from the car's own sensors (as trackSight: not the plinth), or null
+      const b = this.body, keep = this.level.statics, st = this.plinth();
+      try {
+        for (const q of keep) {
+          if (q === st) continue;
+          this.level.statics = [q];
+          if (q.low ? this.lowBlocked(x0, y0, this.eyeHeight(self), b.x, b.y, this.bodyHeight()) : super.occluded(self, x0, y0, b.x, b.y)) return q.id;
+        }
+      } finally { this.level.statics = keep; }
+      return null;
     }
     // ----- rung 6, crash memory (row 703). The remembered spots: the latest duel.memorySites crashes' spring spots (0: all).
-    memory() { if (this.rung < 6) return []; const n = Math.round(this.P['duel.memorySites'] || 0); return n > 0 ? this.crashes.slice(-n) : this.crashes.slice(); }
-    nearSite(x, y, sites) { const R = this.P['duel.memoryRadius'] || 0; return (sites || this.crashes).find((m) => hyp(x - m.ox, y - m.oy) <= R + 1e-9) || null; }
+    // Only crashes sprung from cover make spots (row 713): a hit from the open was skill. Each spot keeps the cover that hid it.
+    sites() { return this.crashes.filter((m) => m.cover); }
+    memory() { if (this.rung < 6) return []; const n = Math.round(this.P['duel.memorySites'] || 0), all = this.sites(); return n > 0 ? all.slice(-n) : all; }
+    nearSite(x, y, sites) { const R = this.P['duel.memoryRadius'] || 0; return (sites || this.sites()).find((m) => hyp(x - m.ox, y - m.oy) <= R + 1e-9) || null; }
     expected() { const b = this.body; return this.rung >= 6 && !!b && b.alive && !!this.nearSite(b.x, b.y, this.memory()); } // the dummy stands at a spot it remembers
     checking(c) { // the remembered spots inside its field ahead: drawn as the spots it watches
       const ca = Math.cos(c.h), sa = Math.sin(c.h), half = c.W / 2 + this.P['body.radius'] + this.fieldFor() + (this.P['duel.memoryRadius'] || 0);
       return this.memory().filter((m) => { const dx = m.ox - c.x, dy = m.oy - c.y, fx = dx * ca + dy * sa, fy = -dx * sa + dy * ca; return fx > -c.L && fx < c.fwdLen + c.L / 2 && Math.abs(fy) < half; });
     }
     // Where a hit was sprung from: a dash's or a jump's start; a walk-in or a car's own strike, where the dummy stood.
-    springOrigin(e) { const b = this.body, sp = this.spring; return (e.kind === 'dash' || e.kind === 'jump') && sp ? { x: sp.x, y: sp.y } : { x: b.x, y: b.y }; }
+    springOrigin(e) { const b = this.body, sp = this.spring; return (e.kind === 'dash' || e.kind === 'jump') && sp ? { x: sp.x, y: sp.y, cover: sp.cover || null } : { x: b.x, y: b.y, cover: null }; } // a walk-in springs from the open
     // A cone took it: it swerved round a cone within the training clip (duel.lessonClipSeconds).
     itemHit(c) { return c.coneSwerveT != null && this.t - c.coneSwerveT <= this.P['duel.lessonClipSeconds'] + 1e-9; }
     // Cover hid the dummy: the car lost it behind cover within the training clip (duel.lessonClipSeconds).
@@ -4108,8 +4122,9 @@
     heightHid(e, c) { return this.fromAbove(e) && (c.sightT || 0) >= this.P['duel.lessonClipSeconds'] - 1e-9; }
     // A hit from above: a jump's strike, or a dash launched from the plinth (or a jump out of one).
     fromAbove(e) { const b = this.body; return e.kind === 'jump' || !!(b && ((b.lunge && b.lunge.fromRaised) || (b.jump && b.jump.fromRaised))); }
-    startLunge(facing0, k) { const b = this.body, up = !!b.raised, x = b.x, y = b.y; super.startLunge(facing0, k); if (this.testRoad && b.lunge) { b.lunge.fromRaised = up; this.spring = { x, y, t: this.t }; } }
-    tryJump() { const b = this.body, up = !!b.raised, x = b.x, y = b.y, dashing = b.mode === 'lunge'; super.tryJump(); if (this.testRoad && b.mode === 'jump' && b.jump) { b.jump.fromRaised = up; b.raised = false; if (!dashing) this.spring = { x, y, t: this.t }; } } // a jump out of a dash keeps the dash's start
+    springCover() { const c = this.onRoad().find((q) => q.red && !q.spent); return c && c.hidden ? (c.coverBy || null) : null; } // the cover hiding the dummy from the red car as it springs, or null (the open)
+    startLunge(facing0, k) { const b = this.body, up = !!b.raised, x = b.x, y = b.y, cover = this.testRoad ? this.springCover() : null; super.startLunge(facing0, k); if (this.testRoad && b.lunge) { b.lunge.fromRaised = up; this.spring = { x, y, t: this.t, cover }; } }
+    tryJump() { const b = this.body, up = !!b.raised, x = b.x, y = b.y, dashing = b.mode === 'lunge', cover = this.testRoad && !dashing ? this.springCover() : null; super.tryJump(); if (this.testRoad && b.mode === 'jump' && b.jump) { b.jump.fromRaised = up; b.raised = false; if (!dashing) this.spring = { x, y, t: this.t, cover }; } } // a jump out of a dash keeps the dash's start
     landJump() { const b = this.body; super.landJump(); if (this.testRoad) { b.raised = this.onPlinth(b.x, b.y); if (b.raised) this.emit('raised', { x: +b.x.toFixed(1), y: +b.y.toFixed(1) }); } }
     // A dash vaults low cover (row 696): a planter stops a walk, not a dash. The dummy springs from a duck over the row.
     collideBody(contacts, k) {
@@ -4169,10 +4184,10 @@
       for (const e of this.events.slice(e0)) if (e.type === 'impact') {
         const c = this.carById(e.car); if (c && c.red) { e.sight = +(c.sightT || 0).toFixed(2); e.above = this.fromAbove(e); e.cover = this.coverHid(c); e.coned = this.itemHit(c); e.ducked = !!this.body.duck || !!this.body.duckAt && this.t - this.body.duckAt < 0.5; } // in sight past cover (s); from above (D113); out of cover (row 687); round a cone (row 695); from a duck
         if (e.lost > 0 && c && c.red) { // the crash: an outline where it struck; the spot it was sprung from; is that spot an earlier crash's? (row 703)
-          const o = this.springOrigin(e), b = this.body, fx = this.effects.filter((q) => q.type === 'burst').pop(), prev = this.nearSite(o.x, o.y);
-          e.origin = { x: +o.x.toFixed(1), y: +o.y.toFixed(1) }; e.habit = !!prev; e.remembered = !!this.nearSite(o.x, o.y, this.memory());
-          this.crashes.push({ n: this.crashes.length + 1, x: +b.x.toFixed(1), y: +b.y.toFixed(1), ox: e.origin.x, oy: e.origin.y, px: fx ? +fx.x.toFixed(1) : null, py: fx ? +fx.y.toFixed(1) : null, h: +c.h.toFixed(3), t: +this.t.toFixed(2), model: c.model, zone: e.zone, prev: prev ? prev.n : null, writeoff: b.health <= 0 });
-          this.emit('crash', { n: this.crashes.length, x: e.origin.x, y: e.origin.y, habit: e.habit, prev: prev ? prev.n : null });
+          const o = this.springOrigin(e), b = this.body, fx = this.effects.filter((q) => q.type === 'burst').pop(), prev = o.cover ? this.nearSite(o.x, o.y) : null; // from the open: skill, no spot (row 713)
+          e.origin = { x: +o.x.toFixed(1), y: +o.y.toFixed(1) }; e.covered = o.cover; e.habit = !!prev; e.remembered = !!this.nearSite(o.x, o.y, this.memory());
+          this.crashes.push({ n: this.crashes.length + 1, x: +b.x.toFixed(1), y: +b.y.toFixed(1), ox: e.origin.x, oy: e.origin.y, cover: o.cover, px: fx ? +fx.x.toFixed(1) : null, py: fx ? +fx.y.toFixed(1) : null, h: +c.h.toFixed(3), t: +this.t.toFixed(2), model: c.model, zone: e.zone, prev: prev ? prev.n : null, writeoff: b.health <= 0 });
+          this.emit('crash', { n: this.crashes.length, x: e.origin.x, y: e.origin.y, cover: o.cover, habit: e.habit, prev: prev ? prev.n : null });
         }
         if (e.lost > 0) this.learnFrom(e);
       }

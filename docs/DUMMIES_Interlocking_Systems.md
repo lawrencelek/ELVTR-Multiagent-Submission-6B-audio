@@ -5,7 +5,7 @@
 - **Five factors:** character control and abilities; car behaviour and abilities; emergent group behaviour; level design; moveable objects.
 - **Rule:** a change to one factor lists its effect on the other four (§0).
 - **Values:** registry IDs at the 10.7 build. Derived values name their inputs. IDs marked *unregistered* need registering before use.
-- **Sources:** handover v2 §14, §20–§23; GDD Edits 101–107; `DECISIONS.md` rows 648–712.
+- **Sources:** handover v2 §14, §20–§23; GDD Edits 101–107; `DECISIONS.md` rows 648–713.
 
 ## 0 The interlock
 
@@ -64,9 +64,9 @@ Read across: what the row's factor sets for the column's.
 | 3 | Roof lidar | `perception.lidarHeight` 26 (rungs 1–2: `perception.sensorHeight` 14) | The plinth, the jump | Cover | — |
 | 4 | Street cameras | `perception.streetCameraRange` 180; `perception.streetCameraHeight` 60 | Watched cover | A cone's swerve | Hands 1 |
 | 5 | Road items | Stops at a cone; waits `proto.droneConeSeconds` 5 for FARSIGHT | The cone bait | Low cover | DUCK |
-| 6 | Crash memory | `duel.memoryRadius` 50; `duel.memorySites` 3 | A repeated spot, while its cover stays | Any other spot; a spot with new cover (row 712) | — |
+| 6 | Crash memory | `duel.memoryRadius` 50; `duel.memorySites` 3 | A repeated spot from cover, while the cover stays | Any other spot; a spot with new cover (row 712); hits from the open (row 713) | — |
 
-- **Always open:** the sprint from past the field (D115).
+- **Always open:** the sprint from past the field (D115). It leaves no spot (row 713).
 - **Planned (handover v2 §14.2):** 10.8, white sedans that never learn (`traffic.white.learns`, *unregistered*). 10.9, swerve cost (`traffic.carContact`, *unregistered*).
 
 ### 2.2 The safe envelope
@@ -191,6 +191,7 @@ Read across: what the row's factor sets for the column's.
 
 - **Anything in a lane is a road item.** Rung 5 stops for it. The car blocks its lane meanwhile: a queue once traffic returns.
 - **Cars are cover** (row 711). Parked cars hold still; white cars move, and their cover moves with them.
+- **Only cover makes a spot** (row 713). A hit from the open was skill: an outline, no memory.
 - **Memory follows cover** (row 712). A remembered spot belongs to the cover that hid the dummy.
   - The cover leaves: the car forgets the spot.
   - New cover arrives there: a fresh spot, hit once before it is remembered.
@@ -208,7 +209,7 @@ Read across: what the row's factor sets for the column's.
 - Arrival and departure cues for parked cars: the dummy sees them coming (row 712). IDs to register.
 - Height class per object, in the registry.
 - Cars as occluders in the sightline rule (§2.3). Not built: today only statics block sight.
-- Crashes record the cover that hid the dummy, so memory can follow it (row 712). Not built: today memory holds spots only.
+- Memory follows a cover that moves (row 712). Built for static cover: each crash records the cover that hid the dummy (row 713); nothing moves yet.
 
 ## 6 Findings log
 
@@ -226,7 +227,8 @@ Read across: what the row's factor sets for the column's.
 | F10 | A short run-in needs the spawn-speed rule | 2, 4 | 706 |
 | F11 | Crash memory needs ≥ 4 spots per road, about 60 apart | 2, 4 | 708 |
 | F12 | An expert mover writes off a body every 18 s (500 body, 242 a hit) | 1, 2 | 707 |
-| F13 | The sprint lands from a remembered spot: noticed at once, too late to stop | 1, 2 | 707 |
+| F13 | ~~The sprint lands from a remembered spot~~ Superseded: a hit from the open leaves no spot | 1, 2 | 707, 713 |
+| F15 | Skill and habit separate: cover makes a habit the car can learn; the open stays the player's judgement | 1, 2, 4 | 713 |
 | F14 | A waiting car and a waiting dummy make a stalemate | 2, 3 | 688, 699 |
 
 ## 7 Open questions
@@ -240,7 +242,7 @@ Read across: what the row's factor sets for the column's.
 - **Q7.** When do Story's Arms verbs (push, throw, hitch) enter the duel?
 - **Q8.** ~~Do parked cars leave and arrive?~~ **Answered (row 712):** yes; the dummy sees them coming. Open: how often (turnover rate, to register).
 - **Q9.** ~~One-way or two-way roads?~~ **Answered (row 712):** white cars block the red car on one-way roads too. They first appear in 10.8, with two-way roads.
-- **Q10.** Does a crash with no cover behind it (a sprint in the open) leave a spot the car remembers, as built, or nothing?
+- **Q10.** ~~Does a crash from the open leave a spot?~~ **Answered (row 713):** no. It was skill from a player who judged it right. 10.7 amended.
 - **Linked decisions:** D57, D97, D115, D119, D120.
 
 ## Change log
@@ -250,3 +252,4 @@ Read across: what the row's factor sets for the column's.
 | 3 November 2026 | Started at the 10.7 build: five factors, interlock table, findings F1–F14, questions Q1–Q7 | 710 |
 | 3 November 2026 | Cars are cover: parked cars count; white cars block the red car (Q3). Queued cars flash their lights (Q5). Q8–Q9 added | 711 |
 | 4 November 2026 | Memory follows cover (Q1). Parked cars leave and arrive, seen coming (Q8). White cars block on one-way roads; they arrive in 10.8 (Q9). Q10 added | 712 |
+| 4 November 2026 | A hit from the open leaves no spot (Q10); 10.7 amended. F13 superseded; F15 added | 713 |

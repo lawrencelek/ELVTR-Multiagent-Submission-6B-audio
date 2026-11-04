@@ -1057,7 +1057,7 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
 
 - **Build:** `prototypes/p10/dummies_p10_7.html`. 10.6's page is frozen.
 - **The one change:** rung 6, taught by one lesson. The car starts at rung 5; the dummy starts with all four parts. No new part.
-- **Checks:** `node prototypes/p10/test_p10.js --page` 49/49. Probes `qa/baseline/p10_7.md` 15/15. 10.6 reruns identical; 10.3–10.5 on today's code 12/12, 12/12, 13/13. Prototype 9 and the frozen md5s hold; sound freeze holds.
+- **Checks:** `node prototypes/p10/test_p10.js --page` 50/50. Probes `qa/baseline/p10_7.md` 16/16 (row 713). 10.6 reruns identical; 10.3–10.5 on today's code 12/12, 12/12, 13/13. Prototype 9 and the frozen md5s hold; sound freeze holds.
 
 ### 23.1 What changed
 
@@ -1080,9 +1080,9 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
 
 | Way in | Hits a minute | Verdict |
 |---|---|---|
-| DUCK behind a planter, the same spot | 0.20 (once a run) | Closed: it then stops for the dummy there |
+| DUCK behind a planter, the same spot | 0.27 (once from cover a run) | Closed: it then stops for the dummy there |
 | DUCK behind a planter, moving to free spots | 6.97 (242) | Open: a write-off every 18 s (D119) |
-| The sprint from past the field | 0.80 (52) | Open, no part (D115); lands from a remembered spot too |
+| The sprint from past the field | 0.60 (53) | Open, no part (D115); leaves no spot (row 713) |
 | Every other bot | 0 | Closed |
 
 - **Pace:** the same ambush, without memory, on 10.7's run-in and body: a write-off every 74 s (10.6: 148 s; target 80 s).
@@ -1114,4 +1114,5 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
 - **Use:** the level redesign reads it first. A change to one factor lists its effect on the other four.
 - **Answered (row 711):** cars are cover. Parked cars count; white cars block the red car. Cars queued behind a waiting red car flash their lights: test under group behaviour.
 - **Answered (row 712):** memory follows cover. A parked car that drives off takes its spot's memory; a new car there makes a fresh spot. Parked cars leave and arrive, seen coming. White cars block the red car on one-way roads too; they arrive in 10.8.
+- **Answered (row 713):** a crash from the open leaves no spot: it was skill. 10.7 amended; probes 16/16.
 

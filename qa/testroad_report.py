@@ -129,7 +129,7 @@ w('|---|---|---|---|')
 for r in d['escalation']:
     w(f"| {r['policy']} | {' '.join(str(x) for x in r['windows'])} | {f(r.get('decay'))} | {r['learnEvents']} |")
 w('')
-if STAGE >= '10.5' and 'lurk' in esc_pol and 'lurk' not in ESC_OPEN: w("- **lurk decays by the dummy's own damage, not the car.** Each hit lands on a leg; the dash shortens with leg damage (164 to 116 after four hits), below what the sprint from past the field needs. " + ("Its repeated spot also teaches rung 6.\n" if STAGE >= '10.7' else "The car stays at rung 3 throughout.\n"))
+if STAGE >= '10.5' and 'lurk' in esc_pol and 'lurk' not in ESC_OPEN: w("- **lurk decays by the dummy's own damage, not the car.** Each hit lands on a leg; the dash shortens with leg damage (164 to 116 after four hits), below what the sprint from past the field needs. " + ("A sprint from the open leaves no spot: the car stays at rung 5 (row 713).\n" if STAGE >= '10.7' else "The car stays at rung 3 throughout.\n"))
 if STAGE >= '10.7':  # row 703 (D117): the shorter run-in and the lighter body
     w(f'## {n} Pace (row 703; D117)'); n += 1
     w('')
@@ -223,8 +223,9 @@ if top == 6:
     checks += [
         ('Only a hit sprung from the spot of an earlier crash teaches rung 6', all(r.get('lesson') for r in rep_) and not any(r.get('lesson') for r in other), f"lessons: {sum(1 for r in rep_ if r.get('lesson'))} of {len(rep_)} runs with such a hit; {sum(1 for r in other if r.get('lesson'))} of {len(other)} runs with only hits from new spots"),
         ('A new behaviour: it stops for a dummy at a spot it remembers (none at rung 5)', sum(r.get('expectStops', 0) for r in tr) > 0, f"trained: {sum(r.get('expectStops', 0) for r in tr)} cars stopped so; {sum(r.get('expectHidden', 0) for r in tr)} for a dummy cover hid"),
-        ('Rung 6 closes the same spot: planter scores once a run, then never', all(r['hits'] <= 1 for r in pl), 'planter ' + ', '.join(str(r['hits']) for r in pl) + ' hits in 300 s'),
-        ('No hit sprung from a duck at a spot it remembered (the sprint from past the field may still land from one: D115)', sum(r.get('rememberedDucked', 0) for r in tr) == 0, f"trained: {sum(r.get('rememberedDucked', 0) for r in tr)} of {sum(r['hits'] for r in tr)} hits; from a remembered spot at all: {sum(r.get('rememberedHits', 0) for r in tr)} (" + ', '.join(f"{p} {sum(r.get('rememberedHits', 0) for r in tr if r['policy'] == p)}" for p in dict.fromkeys(r['policy'] for r in tr if r.get('rememberedHits', 0))) + ')'),
+        ('Rung 6 closes the same spot: planter lands from cover once a run, then never (a first spring it saw coming leaves no spot: row 713)', all(r.get('coveredHits', 0) <= 1 and r['hits'] <= 2 for r in pl), 'planter ' + ', '.join(f"{r['hits']} ({r.get('coveredHits', 0)} from cover)" for r in pl) + ' hits in 300 s'),
+        ('No hit from a spot it remembered at the time', sum(r.get('rememberedHits', 0) for r in tr) == 0, f"trained: {sum(r.get('rememberedHits', 0) for r in tr)} of {sum(r['hits'] for r in tr)} hits"),
+        ('A hit from the open leaves no spot (row 713): the sprint from past the field never teaches rung 6', all(not r.get('lesson') for r in les if r['policy'] == 'lurk') and all(r.get('sites', 0) == 0 for r in tr if r['policy'] == 'lurk'), f"lurk: lessons {sum(1 for r in les if r['policy'] == 'lurk' and r.get('lesson'))} of {sum(1 for r in les if r['policy'] == 'lurk')} runs; spots remembered {max([r.get('sites', 0) for r in tr if r['policy'] == 'lurk'] or [0])}"),
         ('Every damaging hit leaves a crash; memory holds at most duel.memorySites', all(r.get('crashes') == r['hits'] for r in tr) and all(r.get('sites', 0) <= (N or 10 ** 9) for r in allr), f"crashes = hits in {sum(1 for r in tr if r.get('crashes') == r['hits'])} of {len(tr)} trained runs; most remembered {max(r.get('sites', 0) for r in allr)} (cap {N or 'none'})"),
         ('Rung 6 keeps cover closed: ' + ', '.join(COVER) + ': at most one hit in 15 minutes each', all(sum(r['hits'] for r in tr if r['policy'] == p) <= 1 for p in COVER), ', '.join(f"{p} {sum(r['hits'] for r in tr if r['policy'] == p)}" for p in COVER)),
     ]

@@ -2,11 +2,13 @@
 
 **3 November 2026 · Lawrence Lek** · The seventh of the nine escalating tests (handover v2 §14.2, §22–§23). Localized: adds §10.7 to the Prototype 10 chapter; amends §10.2 (the run-in) for 10.7 on.
 
+**Amended 4 November (row 713):** only a hit sprung from cover leaves a spot. A hit from the open was skill.
+
 - **Build:** `prototypes/p10/dummies_p10_7.html` (`python3 prototypes/p10/build.py`).
 - **Playtest pages:** `index.html`, one per test. 10.1–10.6 are frozen; 10.6 at md5 `7acd08d2…`.
-- **Tests:** `node prototypes/p10/test_p10.js --page` 49/49. Prototype 9 rebuild md5 `be163e7d014344e062965986b3da5786`. 8.4 md5 `9f5549201d88891f9f0b22c461602909`. Sound freeze: 211 items, 0 changed.
-- **Probes:** `node qa/testroad.js --stage 10.7 --out qa/baseline/p10_7.json`; report `qa/baseline/p10_7.md`, 15/15 checks. Pace probe `qa/baseline/p10_7_pace.json`. 10.6 reruns identical to its baseline; 10.3–10.5 on today's code 12/12, 12/12, 13/13.
-- **Decision log:** rows 703–709. D117 resolved. Open D119, D120.
+- **Tests:** `node prototypes/p10/test_p10.js --page` 50/50. Prototype 9 rebuild md5 `be163e7d014344e062965986b3da5786`. 8.4 md5 `9f5549201d88891f9f0b22c461602909`. Sound freeze: 211 items, 0 changed.
+- **Probes:** `node qa/testroad.js --stage 10.7 --out qa/baseline/p10_7.json`; report `qa/baseline/p10_7.md`, 16/16 checks. Pace probe `qa/baseline/p10_7_pace.json`. 10.6 reruns identical to its baseline; 10.3–10.5 on today's code 12/12, 12/12, 13/13.
+- **Decision log:** rows 703–709, 713. D117 resolved. Open D119, D120.
 
 ## Request
 
@@ -21,6 +23,7 @@
 | It remembers the latest three spots | §4.3: counters are capped and fall back | Proposed (row 704; D120) |
 | "Shorter drive-in": the run-in and the wait between passes both shorten | D117's first option: cut the dead time | Proposed (row 706) |
 | "500 health": the test road's Standard body, `proto.health.standard` 500 | The sim sets `damage.bodyHealth` from it | Decided (row 706) |
+| A hit from the open leaves no spot | Lawrence, 4 November: "that was just skill from the player who judged it right" | Decided (row 713) |
 
 ## 10.2 The run-in (amends Edit 102)
 
@@ -37,12 +40,13 @@
   - Debris round the point of impact: dummy plastic, glass. A write-off scatters more.
   - A yellow evidence marker with the crash's number.
 - **It stays.** Write-offs do not clear it; R (restart) does.
-- **The crash records the spot it was sprung from:** a dash's or a jump's start; for a walk-in, where the dummy stood.
+- **The crash records the spot it was sprung from,** a dash's or a jump's start, and the cover that hid the dummy from the car as it sprang.
+- **A hit from the open records no spot** (row 713): the sprint, a walk-in, a spring the car saw coming. It was skill.
 
 ### 10.7.2 The lesson
 
 - **Start:** rung 5 (`duel.startRung` 5). Battery 1, Legs 1, Hands 1 and DUCK fitted (`duel.duckArrives` 3).
-- **Cause: a hit sprung from the spot of an earlier crash,** within `duel.memoryRadius` (50) of it. Hits from new spots teach nothing.
+- **Cause: a hit sprung from cover at the spot of an earlier crash from cover,** within `duel.memoryRadius` (50) of it. Hits from new spots, or from the open, teach nothing.
 - **Beats:** as 10.2.
   - The clip's last frame rings the spot: "SAME SPOT AS CRASH n", a line to that crash's outline.
   - The fitting reads "MEMORY FITTED · YOUR HABIT". A drone fits a memory module. A map of the road rings each spot it now remembers.
@@ -50,7 +54,7 @@
 
 ### 10.7.3 Rung 6: it expects you where you struck from
 
-- **It remembers the latest `duel.memorySites` (3) crash spots.** An older spot falls out of memory.
+- **It remembers the latest `duel.memorySites` (3) spots sprung from cover.** An older spot falls out of memory.
 - **At a remembered spot the dummy is expected:**
   - Cover does not hide it: no planter, no building.
   - The field notices it at once: no `perception.sideNoticeSeconds`, no `perception.duckNoticeFactor`.
@@ -61,7 +65,7 @@
 
 - **On the road, from rung 6:**
   - A red ring on each remembered spot, labelled with its crash's number, and a line to that crash's outline.
-  - A crash it no longer remembers fades to faint chalk.
+  - A crash it does not remember fades to faint chalk: a forgotten spot, or a hit from the open.
 - **On the car:**
   - A memory module on its roof: one red light a remembered spot.
   - Its tag: "R6 · MEMORY 3".
@@ -79,7 +83,7 @@
 ### 10.7.6 The opening
 
 - **Move.** Each spot works once; the fourth spot frees the first.
-- **The sprint from past the field still lands** (D115). At a remembered spot it is noticed at once, but too late to stop.
+- **The sprint from past the field still lands** (D115). It leaves an outline, never a spot.
 - **Next (§14.2, 10.8):** the road upgrade. Two-way, with white sedans that never learn.
 
 ## Build
@@ -87,6 +91,7 @@
 - `testroad.js`:
   - Rung 6 in the rungs table (habit: true; fit 'MEMORY'; no part).
   - Crashes: `account` records each damaging hit, its spring spot (`springOrigin`; `startLunge`, `tryJump`) and whether it repeats an earlier spot.
+  - Row 713: `trackSight` keeps the cover that hides the dummy (`hidingCover`); a spring records it (`springCover`); `sites` holds only crashes from cover.
   - `memory`, `nearSite`, `expected`, `checking`. `occluded`: an expected dummy is seen. `watchField`: noticed at once. `learnFrom`: the habit cause.
   - `runInFor` reads `duel.runInLength`; `admit` applies `spawnSpeed`.
 - `game_p10.js`: outlines, debris, markers; rings, lines, scans; the memory module, tag and CHECKING; EXPECTED; the clip's ring; the fitting's map. Labels sit on a dark backing; the notice meter sits past the tag.
@@ -99,18 +104,18 @@
 
 | Way in | Hits a minute | Damage a hit | Verdict |
 |---|---|---|---|
-| DUCK behind a planter, the same spot | 0.20 | 53 | Closed: one hit a run, then it stops for the dummy there |
+| DUCK behind a planter, the same spot | 0.27 | 84 | Closed: one hit from cover a run, then it stops for the dummy there. In one run a first spring it saw coming left no spot |
 | DUCK behind a planter, moving to spots it does not remember | 6.97 | 242 | Open: 98 hits from 103 cars; a write-off every 18 s (D119) |
-| The sprint from past the field | 0.80 | 52 | Open (D115): 9 of 12 hits from a remembered spot |
+| The sprint from past the field | 0.60 | 53 | Open (D115): it leaves no spot |
 | Every other bot | 0 | — | Closed |
 
-- **A new behaviour:** 95 cars stopped for a dummy at a remembered spot; for 32 of them, cover hid it.
-- **Short run-in:** 75 of 670 cars appeared slowed for a dummy they already sensed. The closest stop for a dummy standing ahead: 226 (reach 177).
+- **A new behaviour:** 71 cars stopped for a dummy at a remembered spot; for 32 of them, cover hid it. No hit came from a remembered spot (0 of 111).
+- **Short run-in:** 75 of 672 cars appeared slowed for a dummy they already sensed. The closest stop for a dummy standing ahead: 226 (reach 177).
 
 **The lesson** (mode `lesson`):
 
-- **Lessons:** in 9 of 9 runs with a repeat. The planter ambush taught it at 11–28 s, the sprint at 43–54 s. No run hit only from new spots before its lesson.
-- **Escalation (10 minutes):** the same spot decays to 0 after two hits. Moving holds at 6–8 a minute; its tenth minute holds 22 s, as each write-off pauses the clock. The sprint stops after four hits: the dummy's own leg damage.
+- **Lessons:** in 6 of 6 runs with a repeat from cover, at 11–34 s. The sprint never teaches it: 0 of 3 runs.
+- **Escalation (10 minutes):** the same spot decays to 0 after two hits. Moving holds at 6–8 a minute; its tenth minute holds 22 s, as each write-off pauses the clock. The sprint stops after three hits: the dummy's own leg damage, on a 500 body.
 
 **Pace:**
 
@@ -131,4 +136,4 @@
 - **Human pass (H6):** does the player read the red rings, and move?
 - **D119:** an expert moving between spots writes off a body every 18 s: a quarter of the target.
 - **D120:** the memory's cap. 3 keeps the planters open to a mover; 0 closes them after about nine hits.
-- **D115:** the sprint from past the field still lands, from a remembered spot too.
+- **D115:** the sprint from past the field still lands. It leaves no spot (row 713).

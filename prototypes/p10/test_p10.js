@@ -336,16 +336,22 @@ check('10.7: every damaging hit leaves a crash (where it struck, the spot it spr
     detail: `crashes ${cr.length}, hits ${h.length}; spots ${cr.slice(0, 3).map((c) => `(${Math.round(c.ox)}, ${Math.round(c.oy)})`).join(' ')}; lesson after the new spot ${dueAt2}; after the repeat ${due ? 'to rung ' + due.to + ', same spot as crash ' + cr[2].prev : 'none'}; rung ${s.rung}` };
 });
 check('10.7 rung 6: ducked behind a planter at a spot it remembers, the dummy is expected: noticed at once, the car stops; one spot over, hidden, it drives on', () => {
-  const look = (x, y) => { const t = sim(F7, { 'duel.startRung': 6 }, ALL); t.crashes.push({ n: 1, x: 560, y: 348, ox: 559, oy: 421, t: 0, h: 0 }); let n = 0, stops = 0;
+  const look = (x, y) => { const t = sim(F7, { 'duel.startRung': 6 }, ALL); t.crashes.push({ n: 1, x: 560, y: 348, ox: 559, oy: 421, cover: 's5', t: 0, h: 0 }); let n = 0, stops = 0;
     for (let i = 0; i < 90 * 60; i++) { Object.assign(t.body, { x, y, vx: 0, vy: 0 }); const e0 = t.events.length; t.step({ duck: true }); for (const c of t.onRoad()) if (c.noticed) n++; stops += t.events.slice(e0).filter((e) => e.type === 'expect-stop').length; } return { n, stops, hits: hits(t).length }; };
   const at = look(559, 421), over = look(617, 421);
   return { ok: at.n > 0 && at.stops > 0 && over.n === 0 && over.stops === 0, detail: `at the remembered spot: noticed on ${at.n} car-ticks, ${at.stops} stops for it; 58 over: noticed on ${over.n}, stops ${over.stops}` };
 });
 check('10.7 rung 6: it remembers the latest duel.memorySites spots; the oldest falls out of memory, and of the car\'s sight', () => {
   const t = sim(F7, { 'duel.startRung': 6 }, ALL), N = F7['duel.memorySites'];
-  [[559, 421], [501, 481], [110, 203], [501, 541]].forEach(([x, y], i) => t.crashes.push({ n: i + 1, x, y, ox: x, oy: y, t: i, h: 0 }));
+  [[559, 421], [501, 481], [110, 203], [501, 541]].forEach(([x, y], i) => t.crashes.push({ n: i + 1, x, y, ox: x, oy: y, cover: 's' + (4 + (i % 3)), t: i, h: 0 }));
   const mem = t.memory().map((m) => m.n); Object.assign(t.body, { x: 559, y: 421 }); const oldest = t.expected(); Object.assign(t.body, { x: 501, y: 541 }); const newest = t.expected();
   return { ok: N === 3 && mem.join() === '2,3,4' && !oldest && newest, detail: `cap ${N}; remembers crashes ${mem.join(', ')}; expected at crash 1's spot ${oldest}, at crash 4's ${newest}` };
+});
+check('10.7 (row 713): a hit from the open leaves an outline but no spot; repeating it teaches nothing; a hit from cover records the cover that hid it', () => {
+  const l = sim(F7, {}, ALL); drive(l, 240, lurkBot()); const lc = l.crashes;
+  const p = sim(F7, {}, ALL); drive(p, 120, ambush([{ road: 'A', x: 559, y: 421 }, { road: 'A', x: 559, y: 421 }])); const pc = p.crashes, row = p.level.statics.find((q) => q.id === (pc[0] && pc[0].cover));
+  return { ok: lc.length >= 2 && lc.every((c) => c.cover === null) && !l.events.some((e) => e.type === 'lesson-due') && l.rung === 5 && pc.length >= 2 && !!row && row.kind === 'planter' && p.rung === 6,
+    detail: `sprints from past the field: ${lc.length} crashes, cover ${[...new Set(lc.map((c) => c.cover || 'none'))].join(', ')}, rung ${l.rung}; from behind the planter: ${pc.length} crashes, cover ${pc.map((c) => c.cover).join(', ')} (${row ? row.kind : '—'}), rung ${p.rung}` };
 });
 check('10.7 rung 6: the same spot scores once, then the car stops for it; moving to a spot it does not remember lands again', () => {
   const same = sim(F7, { 'duel.startRung': 6 }, ALL); drive(same, 150, ambush(Array(20).fill({ road: 'A', x: 559, y: 421 })));
