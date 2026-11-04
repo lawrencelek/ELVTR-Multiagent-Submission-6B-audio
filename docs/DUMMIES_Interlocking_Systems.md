@@ -5,7 +5,7 @@
 - **Five factors:** character control and abilities; car behaviour and abilities; emergent group behaviour; level design; moveable objects.
 - **Rule:** a change to one factor lists its effect on the other four (§0).
 - **Values:** registry IDs at the 10.7 build. Derived values name their inputs. IDs marked *unregistered* need registering before use.
-- **Sources:** handover v2 §14, §20–§23; GDD Edits 101–107; `DECISIONS.md` rows 648–711.
+- **Sources:** handover v2 §14, §20–§23; GDD Edits 101–107; `DECISIONS.md` rows 648–712.
 
 ## 0 The interlock
 
@@ -64,7 +64,7 @@ Read across: what the row's factor sets for the column's.
 | 3 | Roof lidar | `perception.lidarHeight` 26 (rungs 1–2: `perception.sensorHeight` 14) | The plinth, the jump | Cover | — |
 | 4 | Street cameras | `perception.streetCameraRange` 180; `perception.streetCameraHeight` 60 | Watched cover | A cone's swerve | Hands 1 |
 | 5 | Road items | Stops at a cone; waits `proto.droneConeSeconds` 5 for FARSIGHT | The cone bait | Low cover | DUCK |
-| 6 | Crash memory | `duel.memoryRadius` 50; `duel.memorySites` 3 | A repeated spot | Any other spot | — |
+| 6 | Crash memory | `duel.memoryRadius` 50; `duel.memorySites` 3 | A repeated spot, while its cover stays | Any other spot; a spot with new cover (row 712) | — |
 
 - **Always open:** the sprint from past the field (D115).
 - **Planned (handover v2 §14.2):** 10.8, white sedans that never learn (`traffic.white.learns`, *unregistered*). 10.9, swerve cost (`traffic.carContact`, *unregistered*).
@@ -183,7 +183,7 @@ Read across: what the row's factor sets for the column's.
 | Barrier | No | — | Tall | Cover; cameras see past it |
 | Sculpture (`world.sculptureScaleLarge` 2) | No (Lawrence, 2 November: move planters and sculptures to hide behind) | — | By size | Not yet cover |
 | Decoys (`props.decoy.<kind>`, *unregistered*) | Planned (PT13) | — | — | A priority choice |
-| Parked car (`vehicles.sedan.height` 19.8) | Proposed: leaves and arrives (Q8) | Its own driver | Taller than either body | Cover (row 711) |
+| Parked car (`vehicles.sedan.height` 19.8) | Yes: leaves and arrives, seen coming (row 712) | Its own driver | Taller than either body | Cover (row 711); its spot's memory goes when it leaves (row 712) |
 | White car (`vehicles.sedan.height` 19.8) | Yes, in traffic | Traffic | Taller than either body | Moving cover; blocks the red car's sight and path (row 711) |
 | Crash outlines | No; persist | — | Flat | Rung 6's memory marks |
 
@@ -191,7 +191,11 @@ Read across: what the row's factor sets for the column's.
 
 - **Anything in a lane is a road item.** Rung 5 stops for it. The car blocks its lane meanwhile: a queue once traffic returns.
 - **Cars are cover** (row 711). Parked cars hold still; white cars move, and their cover moves with them.
-- **Moving cover makes new spots.** It answers rung 6. Q1 decides whether memory follows spots or cover.
+- **Memory follows cover** (row 712). A remembered spot belongs to the cover that hid the dummy.
+  - The cover leaves: the car forgets the spot.
+  - New cover arrives there: a fresh spot, hit once before it is remembered.
+  - Static cover (planters) never leaves: its spots behave as built.
+- **Parking turnover refreshes spots.** Arrivals reset the habit counter on the kerb. Turnover rate sets how often (to register).
 - **Cover height sets how close a sensor gets before it sees over.** A body taller than the cover always shows. Taller cover holds out the lidar (26) and the cameras (60) longer.
 - **Drone time is pace.** Each fetch takes `proto.droneConeSeconds` 5 plus flight at `proto.droneSpeed` 240.
 - **Untested (D57):** long throws off rails; four-cone walls that stop a lane.
@@ -201,8 +205,10 @@ Read across: what the row's factor sets for the column's.
 - Weight classes: what the dummy moves by hand, by push, never.
 - Who moves objects: dummy, drones, cars (bumps).
 - Persistence: where objects reset, and when.
+- Arrival and departure cues for parked cars: the dummy sees them coming (row 712). IDs to register.
 - Height class per object, in the registry.
 - Cars as occluders in the sightline rule (§2.3). Not built: today only statics block sight.
+- Crashes record the cover that hid the dummy, so memory can follow it (row 712). Not built: today memory holds spots only.
 
 ## 6 Findings log
 
@@ -225,15 +231,16 @@ Read across: what the row's factor sets for the column's.
 
 ## 7 Open questions
 
-- **Q1.** Does rung 6 remember spots, or the cover behind them? Cars are moving cover (row 711), so it matters now: a parked car that leaves takes its spot with it.
+- **Q1.** ~~Does rung 6 remember spots, or the cover behind them?~~ **Answered (row 712):** the cover. A parked car that drives off takes the memory with it. A new car parking there makes a fresh spot.
 - **Q2.** Is crash memory per car or per model (fleet learning)?
 - **Q3.** ~~Are white cars cover?~~ **Answered (row 711):** yes. Parked cars count; white cars block the red car. A sedan (19.8) is taller than the sensors (14) and either body; the lidar (26) sees over it unless it stands close to the dummy (§2.3).
 - **Q4.** Who moves objects: the dummy, drones, cars?
 - **Q5.** ~~What does a red car waiting for the dummy do to the traffic behind it?~~ **Answered (row 711):** the cars behind flash their lights. Test under group behaviour.
 - **Q6.** Do crash outlines persist across levels or sessions, as level history?
 - **Q7.** When do Story's Arms verbs (push, throw, hitch) enter the duel?
-- **Q8.** Do parked cars leave and arrive? If so, how often, and does the dummy see it coming?
-- **Q9.** Do white cars block the red car on one-way roads, or only on two-way roads (10.8)?
+- **Q8.** ~~Do parked cars leave and arrive?~~ **Answered (row 712):** yes; the dummy sees them coming. Open: how often (turnover rate, to register).
+- **Q9.** ~~One-way or two-way roads?~~ **Answered (row 712):** white cars block the red car on one-way roads too. They first appear in 10.8, with two-way roads.
+- **Q10.** Does a crash with no cover behind it (a sprint in the open) leave a spot the car remembers, as built, or nothing?
 - **Linked decisions:** D57, D97, D115, D119, D120.
 
 ## Change log
@@ -242,3 +249,4 @@ Read across: what the row's factor sets for the column's.
 |---|---|---|
 | 3 November 2026 | Started at the 10.7 build: five factors, interlock table, findings F1–F14, questions Q1–Q7 | 710 |
 | 3 November 2026 | Cars are cover: parked cars count; white cars block the red car (Q3). Queued cars flash their lights (Q5). Q8–Q9 added | 711 |
+| 4 November 2026 | Memory follows cover (Q1). Parked cars leave and arrive, seen coming (Q8). White cars block on one-way roads; they arrive in 10.8 (Q9). Q10 added | 712 |

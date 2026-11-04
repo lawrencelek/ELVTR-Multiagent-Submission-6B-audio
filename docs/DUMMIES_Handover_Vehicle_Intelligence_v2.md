@@ -1113,4 +1113,5 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
 - **Contents:** an interlock table; each factor as built, with registry values; findings F1–F14; a level checklist; questions Q1–Q7.
 - **Use:** the level redesign reads it first. A change to one factor lists its effect on the other four.
 - **Answered (row 711):** cars are cover. Parked cars count; white cars block the red car. Cars queued behind a waiting red car flash their lights: test under group behaviour.
+- **Answered (row 712):** memory follows cover. A parked car that drives off takes its spot's memory; a new car there makes a fresh spot. Parked cars leave and arrive, seen coming. White cars block the red car on one-way roads too; they arrive in 10.8.
 
