@@ -3766,6 +3766,7 @@
 // low planter rows stand by the road. Sightlines run by height: a ducked dummy behind a planter is hidden.
 // 10.7: from rung 5, a hit sprung from the spot of an earlier crash teaches rung 6, crash memory: it remembers where you
 // struck from, and expects you there. Every crash leaves a chalk outline on the road. A shorter run-in; a lighter body.
+// A car kept waiting for the dummy duel.blockSeconds calls FARSIGHT: a drone lifts the dummy to the side of the road.
 // Extends the base Sim from prototypes/p6/sim.js. Shared files are untouched, so Prototype 9's build keeps its md5.
 // Runs in the browser (window.DUMMIES) and in node (require), so the probes run headless without a page.
 (function (root) {
@@ -3896,6 +3897,7 @@
       this.rung = Math.max(0, Math.min(RUNGS.length - 1, Math.round(P['duel.startRung'] || 0))); // the red car's rung
       this.lesson = null; this.lessons = []; this.delivery = null; this.firstBrakeT = null; this.firstSideT = null; this.firstCoverT = null; this.firstItemT = null;
       this.crashes = []; this.spring = null; // every damaging hit: where it struck, the spot it was sprung from (row 703); the last dash or jump's start
+      this.lift = null; this.blockT = 0; // the block lift (row 715): the drone that moves a blocking dummy; how long the car has waited for it
       let fitted = false; // parts fitted from the start (partKey 3)
       for (const r of RUNGS) if (r.part && Math.round(P[r.partKey] || 0) === 3) { this.run.owned[r.part] = true; fitted = true; }
       if (fitted && this.body) this.body.health = this.maxHealth();
@@ -3940,6 +3942,7 @@
     assessBody(c) {
       if (!this.testRoad) return super.assessBody(c);
       if (c.spent) return null; // the car that hit you drives off to its lesson: it no longer stops for you (row 681)
+      if (this.body && this.body.lifted) return null; // FARSIGHT has the dummy (row 715)
       if (this.rung < 3 && (this.airborne() || this.body.raised)) return null; // it sees the ground: not the air, not the plinth's top
       const P = this.P, keep = P['proto.driver.cautionZone'];
       P['proto.driver.cautionZone'] = this.fieldFor();
@@ -4048,6 +4051,7 @@
     occluded(self, x0, y0, x1, y1) {
       const b = this.body;
       if (!this.testRoad || !b || x1 !== b.x || y1 !== b.y) return super.occluded(self, x0, y0, x1, y1);
+      if (b.lifted) return true; // in FARSIGHT's grip, out of play (row 715)
       if (self && self.red && this.expected()) return false; // rung 6: it looks where it remembers you
       if (this.carSees(self, x0, y0, true)) return false;
       return !(this.rung >= 4 && self && self.red && this.cameraSees());
@@ -4129,6 +4133,7 @@
     // A dash vaults low cover (row 696): a planter stops a walk, not a dash. The dummy springs from a duck over the row.
     collideBody(contacts, k) {
       const b = this.body;
+      if (this.testRoad && b && b.lifted) return; // carried over the road: it touches nothing (row 715)
       if (!this.testRoad || !b || b.mode !== 'lunge' || !this.level.statics.some((q) => q.low)) return this.collideStatics(contacts, k);
       const keep = this.level.statics; this.level.statics = keep.filter((q) => !q.low);
       try { return this.collideStatics(contacts, k); } finally { this.level.statics = keep; }
@@ -4211,6 +4216,7 @@
         this.emit('lesson', { model: this.lesson.model, from: this.lesson.from, to: this.lesson.to, name: this.lesson.name, zone: this.lesson.zone });
         return;
       }
+      if (this.testRoad && this.lift && this.lift.state !== 'inbound' && this.lift.state !== 'outbound') cmd = {}; // in FARSIGHT's grip: no control
       if (this.testRoad && this.body) this.duckFor(cmd);
       const r = super.step(cmd);
       if (this.testRoad && this.body && this.body.duck && !this.canDuck()) this.stand();
@@ -4218,7 +4224,7 @@
     }
     // DUCK (rows 694, 696): hold to duck. Lower (body.duckHeight) and slower (movement.duckSpeedFactor). A dash or a jump
     // from a duck stands the dummy up as it goes.
-    canDuck() { const b = this.body; return !!this.run.owned.duck1 && b.alive && (b.mode === 'idle' || b.mode === 'move' || b.mode === 'coast') && !b.stair; }
+    canDuck() { const b = this.body; return !!this.run.owned.duck1 && b.alive && !b.lifted && (b.mode === 'idle' || b.mode === 'move' || b.mode === 'coast') && !b.stair; }
     duckFor(cmd) {
       const b = this.body, want = !!(cmd && cmd.duck) && this.canDuck();
       if (want && !b.duck) { b.duck = true; this.emit('duck', { x: +b.x.toFixed(1), y: +b.y.toFixed(1) }); }
@@ -4263,8 +4269,62 @@
       if (b && b.alive) b.health = Math.min(this.maxHealth(), b.health + this.maxHealth() - m0);
       this.emit('gift', { node });
     }
+    // ----- the block lift (row 715). A car kept waiting by the dummy (in its path, noticed in its field, or a cone ahead)
+    // for duel.blockSeconds calls FARSIGHT. A drone flies in (proto.droneSpeed), lifts the dummy (proto.droneLiftSeconds),
+    // carries it to the side of the car's road (sidePoint; off the road, it lifts it where it stands), holds it until the car
+    // has left the screen, and puts it down. Lifted, the dummy is out of play: unseen, untouchable, without control.
+    sidePoint(c) { // beside the car's road, on the dummy's side, clear of the other road and of every static: the kerb plus a body's width, further out if need be
+      const P = this.P, b = this.body, W = P['world.laneWidth'], r = P['body.radius'], off = W + 2 * r, A = c.path.road === 'A';
+      if (Math.abs(A ? b.y - ROAD_A : b.x - ROAD_B) >= off) return { x: b.x, y: b.y }; // already off the car's road: lifted where it stands
+      const sg = A ? (b.y < ROAD_A ? -1 : 1) : (b.x < ROAD_B ? -1 : 1);
+      let along = clamp(A ? b.x : b.y, 2 * r, (A ? P['world.width'] : P['world.height']) - 2 * r); const other = A ? ROAD_B : ROAD_A;
+      if (Math.abs(along - other) < off) along = other + (along < other ? -off : off);
+      const at = (k) => { const d = (A ? ROAD_A : ROAD_B) + sg * (off + k * r); return A ? { x: along, y: d } : { x: d, y: along }; };
+      for (let k = 0; k <= 8; k++) { const q = at(k); if (!this.level.statics.some((st) => circleRect(q.x, q.y, r, st))) return q; }
+      return at(0);
+    }
+    carPassed(c) { return !c || c.gone || c.spent; } // it has moved on: off the screen (a dummy put down beside a car still in reach would strike it)
+    blocked() { const b = this.body, c = this.onRoad().find((q) => q.red && !q.spent); return c && b && b.alive && c.v < 1 && (c.noticed || (c.hz && c.hz.inPath) || (c.det && c.det.fwd && c.det.fwd.kind === 'cone')) ? c : null; } // a car kept waiting by the dummy or its cone
+    fetchBlockingCones(c) { // the cones in its lane ahead go too: a drone each, now (the base waits proto.droneConeSeconds, and 20 s between fetches of one cone)
+      const r = this.P['props.cone.radius'];
+      for (const cn of this.cones) {
+        if (cn.state !== 'free' || this.drones.some((d) => d.cone === cn.id)) continue;
+        const pr = X.pathProject(c.path, cn.x, cn.y), ds = pr.s - c.s - c.L / 2;
+        if (ds > -r && ds < c.fwdLen && Math.abs(pr.lat) < c.W / 2 + r + 2) { cn.droneT = null; this.dispatchDrone(cn); }
+      }
+    }
+    stepLift(dt) {
+      const P = this.P, Xs = P['duel.blockSeconds'] || 0, b = this.body, v = P['proto.droneSpeed'] * dt;
+      if (Xs <= 0 || !b) return;
+      const L = this.lift;
+      if (!L) { // the wait counts while the car stays stopped: a cone fetched and laid again does not restart it
+        const c = this.onRoad().find((q) => q.red && !q.spent), stopped = !!(c && b.alive && c.v < 1); this.blockT = stopped ? this.blockT + dt : 0;
+        if (stopped && this.blockT >= Xs - 1e-9) {
+          const sp = this.sidePoint(c); this.lift = { car: c.id, state: 'inbound', x: b.x, y: -40, sx: sp.x, sy: sp.y, tl: 0, t0: this.t };
+          this.fetchBlockingCones(c);
+          this.emit('block-lift', { car: c.id, wait: +this.blockT.toFixed(1), x: +b.x.toFixed(1), y: +b.y.toFixed(1), to: { x: +sp.x.toFixed(1), y: +sp.y.toFixed(1) } });
+        }
+        return;
+      }
+      const c = this.carById(L.car), go = (tx, ty) => { const dx = tx - L.x, dy = ty - L.y, d = hyp(dx, dy); if (d <= v) { L.x = tx; L.y = ty; return true; } L.x += dx / d * v; L.y += dy / d * v; return false; };
+      if (L.state === 'inbound') { if (!b.alive || this.carPassed(c) || c.v >= 1) { L.state = 'outbound'; this.blockT = 0; return; } if (go(b.x, b.y) && b.mode !== 'lunge' && b.mode !== 'jump') { L.state = 'lifting'; L.tl = 0; } return; } // the car moved off first: the drone turns back. Mid-dash or mid-jump, it hovers
+      if (L.state === 'lifting') { L.x = b.x; L.y = b.y; L.tl += dt; if (L.tl >= P['proto.droneLiftSeconds'] - 1e-9) { b.lifted = true; b.duck = false; L.state = 'carrying'; } return; }
+      if (L.state === 'carrying' || L.state === 'holding') {
+        if (L.state === 'carrying' && go(L.sx, L.sy)) L.state = 'holding';
+        Object.assign(b, { x: L.x, y: L.y, vx: 0, vy: 0 });
+        if (L.state === 'holding' && this.carPassed(c)) { L.state = 'lowering'; L.tl = 0; }
+        return;
+      }
+      if (L.state === 'lowering') {
+        Object.assign(b, { x: L.x, y: L.y, vx: 0, vy: 0 }); L.tl += dt;
+        if (L.tl >= P['proto.droneLiftSeconds'] - 1e-9) { b.lifted = false; L.state = 'outbound'; this.blockT = 0; this.emit('block-drop', { x: +b.x.toFixed(1), y: +b.y.toFixed(1), held: +(this.t - L.t0).toFixed(1) }); }
+        return;
+      }
+      L.y -= v; if (L.y < -60) this.lift = null; // outbound
+    }
     stepDrones(dt) {
       super.stepDrones(dt);
+      if (this.testRoad) this.stepLift(dt);
       const d = this.delivery, b = this.body, P = this.P;
       if (!this.testRoad || !d) return;
       const v = P['proto.droneSpeed'] * dt;
@@ -4287,7 +4347,7 @@
 
 </script>
 <script>
-window.DUMMIES_SIM = {"proto.droneConeSeconds": 5, "traffic.ringLaneChange": 150, "traffic.ringEntryGap": 2, "traffic.signalDistance": 140, "vehicles.scale": 0.9, "proto.turnModel": 2, "proto.input.fourButtons": 1, "proto.combo": 1, "proto.abilities": 3, "proto.jump.runToClear": 1, "proto.bounce.newton": 1, "proto.recoilScale": 0.7, "abilities.maxLevel": 3, "abilities.wearCut": 0.25, "battery.secondsPerCharge": 1, "scoring.comboVariety": 0.5, "scoring.comboAirPause": 1, "scoring.coneLink": 1, "scoring.comboMax": 5, "input.dropHoldSeconds": 0.3, "vehicles.sedan.length": 50.4, "vehicles.sedan.width": 25.2, "vehicles.sedan.height": 19.8, "vehicles.van.height": 30.6, "vehicles.van.length": 61.2, "vehicles.van.width": 28.8, "vehicles.hatchback.length": 41.4, "vehicles.hatchback.width": 23.4, "vehicles.hatchback.height": 20.7, "vehicles.police.length": 52.2, "vehicles.police.width": 25.2, "vehicles.police.height": 20.7, "vehicles.bus.length": 86.4, "vehicles.bus.width": 30.6, "vehicles.bus.height": 43.2, "proto.bounce.maxThrow": 40, "world.deckDropGaps": 1, "world.deckFlightsMin": 1, "props.cone.minVisible": 0.9, "battery.dashJumpCost": 0, "abilities.hands.tapDrop": 1, "proto.batteryModel": 1, "world.dummyMonument": 1, "world.storyArt": 1, "world.monumentShroud": 1, "arcade.grades": 1, "ui.introScreen": 1, "ui.levelCard": 1, "world.droneDropIn": 1, "ui.storySplash": 1, "arcade.grade.healthStep": 0.25, "arcade.grade.densityStep": 0.2, "arcade.grade.max": 5, "highscore.tableSize": 10, "ui.intro.loopSeconds": 6.5, "ui.splash.cycleSeconds": 3.6, "proto.driver.coneSteepPass": 1, "proto.art.beamStraight": 1, "proto.art.brakeGlowStopped": 1, "proto.art.spentGrey": 1, "ui.cueKey.simple": 1, "ui.layerEdgeFix": 1, "proto.art.noticeFlashHz": 4, "proto.stopCue": 0, "audio.enabled": 1, "story.coneBaitSeconds": 6, "story.floorHold": 1, "ui.hud.bodyCeil": 1, "ui.spentTick": 1, "proto.contactGraceSeconds": 0.3, "proto.driver.dodgeFollowsCone": 1, "ui.lampsOnCar": 1, "ui.pause.quiet": 1, "ui.conesXray": 1, "arcade.modes": 1, "arcade.trial.writeOffs": 10, "arcade.endless.gradeWriteOffs": 3, "ui.exploreArrows": 1, "ui.coreOnChest": 1, "economy.price.ability.level1": 2, "economy.price.ability.level2": 4, "economy.price.ability.level3": 6, "economy.price.ability.level4": 8, "duel.enabled": 1, "duel.carsOnRoad": 1, "duel.redReturnSeconds": 2, "duel.startRung": 5, "duel.topRung": 6, "duel.standstillSpeed": 5, "duel.dashArrives": 3, "duel.jumpArrives": 3, "duel.conesArrives": 3, "duel.duckArrives": 3, "duel.planters": 1, "duel.lessonClipSeconds": 3, "duel.lessonHoldSeconds": 0.8, "duel.lessonFitSeconds": 2, "duel.runInLength": 200, "duel.memoryRadius": 50, "duel.memorySites": 3, "proto.learningEnabled": 0, "proto.learn.standoffEnabled": 0, "perception.forwardLength": 720, "proto.driver.cautionZone": 180, "run.appearances.road": 1000, "run.quota.road": 1000000, "perception.sideNoticeSeconds": 0.6, "props.planter.height": 14, "body.duckHeight": 6, "movement.duckSpeedFactor": 0.35, "perception.duckNoticeFactor": 1.5, "perception.sensorHeight": 14, "perception.lidarHeight": 26, "perception.streetCameraHeight": 60, "perception.streetCameraRange": 180, "proto.health.standard": 500}; // Edit 107 (P10.7): registry edit100-2026-10-30; P6SIM, P7SIM, Prototype 9 flags, P10 defaults, then 10.7
+window.DUMMIES_SIM = {"proto.droneConeSeconds": 5, "traffic.ringLaneChange": 150, "traffic.ringEntryGap": 2, "traffic.signalDistance": 140, "vehicles.scale": 0.9, "proto.turnModel": 2, "proto.input.fourButtons": 1, "proto.combo": 1, "proto.abilities": 3, "proto.jump.runToClear": 1, "proto.bounce.newton": 1, "proto.recoilScale": 0.7, "abilities.maxLevel": 3, "abilities.wearCut": 0.25, "battery.secondsPerCharge": 1, "scoring.comboVariety": 0.5, "scoring.comboAirPause": 1, "scoring.coneLink": 1, "scoring.comboMax": 5, "input.dropHoldSeconds": 0.3, "vehicles.sedan.length": 50.4, "vehicles.sedan.width": 25.2, "vehicles.sedan.height": 19.8, "vehicles.van.height": 30.6, "vehicles.van.length": 61.2, "vehicles.van.width": 28.8, "vehicles.hatchback.length": 41.4, "vehicles.hatchback.width": 23.4, "vehicles.hatchback.height": 20.7, "vehicles.police.length": 52.2, "vehicles.police.width": 25.2, "vehicles.police.height": 20.7, "vehicles.bus.length": 86.4, "vehicles.bus.width": 30.6, "vehicles.bus.height": 43.2, "proto.bounce.maxThrow": 40, "world.deckDropGaps": 1, "world.deckFlightsMin": 1, "props.cone.minVisible": 0.9, "battery.dashJumpCost": 0, "abilities.hands.tapDrop": 1, "proto.batteryModel": 1, "world.dummyMonument": 1, "world.storyArt": 1, "world.monumentShroud": 1, "arcade.grades": 1, "ui.introScreen": 1, "ui.levelCard": 1, "world.droneDropIn": 1, "ui.storySplash": 1, "arcade.grade.healthStep": 0.25, "arcade.grade.densityStep": 0.2, "arcade.grade.max": 5, "highscore.tableSize": 10, "ui.intro.loopSeconds": 6.5, "ui.splash.cycleSeconds": 3.6, "proto.driver.coneSteepPass": 1, "proto.art.beamStraight": 1, "proto.art.brakeGlowStopped": 1, "proto.art.spentGrey": 1, "ui.cueKey.simple": 1, "ui.layerEdgeFix": 1, "proto.art.noticeFlashHz": 4, "proto.stopCue": 0, "audio.enabled": 1, "story.coneBaitSeconds": 6, "story.floorHold": 1, "ui.hud.bodyCeil": 1, "ui.spentTick": 1, "proto.contactGraceSeconds": 0.3, "proto.driver.dodgeFollowsCone": 1, "ui.lampsOnCar": 1, "ui.pause.quiet": 1, "ui.conesXray": 1, "arcade.modes": 1, "arcade.trial.writeOffs": 10, "arcade.endless.gradeWriteOffs": 3, "ui.exploreArrows": 1, "ui.coreOnChest": 1, "economy.price.ability.level1": 2, "economy.price.ability.level2": 4, "economy.price.ability.level3": 6, "economy.price.ability.level4": 8, "duel.enabled": 1, "duel.carsOnRoad": 1, "duel.redReturnSeconds": 2, "duel.startRung": 5, "duel.topRung": 6, "duel.standstillSpeed": 5, "duel.dashArrives": 3, "duel.jumpArrives": 3, "duel.conesArrives": 3, "duel.duckArrives": 3, "duel.planters": 1, "duel.lessonClipSeconds": 3, "duel.lessonHoldSeconds": 0.8, "duel.lessonFitSeconds": 2, "duel.runInLength": 200, "duel.memoryRadius": 50, "duel.memorySites": 3, "duel.blockSeconds": 10, "proto.learningEnabled": 0, "proto.learn.standoffEnabled": 0, "perception.forwardLength": 720, "proto.driver.cautionZone": 180, "run.appearances.road": 1000, "run.quota.road": 1000000, "perception.sideNoticeSeconds": 0.6, "props.planter.height": 14, "body.duckHeight": 6, "movement.duckSpeedFactor": 0.35, "perception.duckNoticeFactor": 1.5, "perception.sensorHeight": 14, "perception.lidarHeight": 26, "perception.streetCameraHeight": 60, "perception.streetCameraRange": 180, "proto.health.standard": 500}; // Edit 107 (P10.7): registry edit100-2026-10-30; P6SIM, P7SIM, Prototype 9 flags, P10 defaults, then 10.7
 window.DUMMIES_P10_STAGE = {"id": "10.7", "title": "CRASH MEMORY", "edit": 107};
 </script>
 <script>
@@ -4301,6 +4361,7 @@ window.DUMMIES_P10_STAGE = {"id": "10.7", "title": "CRASH MEMORY", "edit": 107};
 // any of the car's sensors has the dummy (a ducked dummy it has not got draws dim). 10.7: every crash leaves a chalk outline,
 // debris and a numbered evidence marker on the road. From rung 6 the car's memory draws: a red ring on each spot it
 // remembers, a line to that crash's outline, a scan from the car to the spots in its field, its memory module and count.
+// The block lift (row 715): a countdown over a dummy that keeps a car waiting; then a drone lifts it aside until the car has passed.
 // Keys: arrows or WASD move; Space or J dash, K or Shift jump, E picks up or puts down a cone, hold C or Ctrl to duck (once
 // fitted); Z zones; P pause; R restart; L saves this session's log (JSON). Pad: A dash, B jump, X cone, hold LB or RB to
 // duck. Touch: drag on the left half to move; the right half's bands, top to bottom: jump, cone (Hands 1), duck (hold;
@@ -4377,7 +4438,7 @@ window.DUMMIES_P10_STAGE = {"id": "10.7", "title": "CRASH MEMORY", "edit": 107};
     const e0 = s.events.length; s.step(command());
     record();
     for (const e of s.events.slice(e0)) {
-      if (['impact', 'writeoff', 'admit', 'lunge', 'honk', 'lesson-due', 'lesson', 'learned', 'first-brake', 'first-side', 'first-cover', 'first-item', 'duck', 'stand', 'part-dispatch', 'gift', 'left', 'jump', 'raised', 'step-down', 'pickup', 'drop', 'drone-dispatch', 'drone-pickup', 'crash', 'spawn-slow'].includes(e.type) || (e.type === 'touch' && e.standstill)) log.push(e);
+      if (['impact', 'writeoff', 'admit', 'lunge', 'honk', 'lesson-due', 'lesson', 'learned', 'first-brake', 'first-side', 'first-cover', 'first-item', 'duck', 'stand', 'part-dispatch', 'gift', 'left', 'jump', 'raised', 'step-down', 'pickup', 'drop', 'drone-dispatch', 'drone-pickup', 'crash', 'spawn-slow', 'block-lift', 'block-drop'].includes(e.type) || (e.type === 'touch' && e.standstill)) log.push(e);
       if (e.type === 'impact' && Math.round(e.lost) > 0) flash.push({ x: s.body.x, y: s.body.y, t: 0.5, n: Math.round(e.lost) });
       if (e.type === 'writeoff') flash.push({ x: s.body.x, y: s.body.y, t: 1.2, n: 'WRITE-OFF' });
       if (e.type === 'gift') flash.push({ x: s.body.x, y: s.body.y, t: 1.6, n: PARTS[e.node] || e.node });
@@ -4537,7 +4598,7 @@ window.DUMMIES_P10_STAGE = {"id": "10.7", "title": "CRASH MEMORY", "edit": 107};
   }
   function drawDummy(b) {
     if (!b || !b.alive) return;
-    const up = (b.z || 0) + (b.raised ? s.P['world.jumpableHeight'] : 0), lift = up * 0.4, k = 1 + up / 120; // height: the body rises off its shadow
+    const up = (b.z || 0) + (b.raised ? s.P['world.jumpableHeight'] : 0) + (b.lifted ? 40 : 0), lift = up * 0.4, k = 1 + up / 120; // height: the body rises off its shadow (lifted: in the drone's grip)
     ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.beginPath(); ctx.ellipse(b.x + 3 + lift * 0.3, b.y + 4 + lift * 0.3, 13, 9, 0, 0, TAU); ctx.fill();
     const y = b.y - lift, r = s.P['body.radius'] * k * (b.duck ? 0.8 : 1);
     const live = b === s.body, unseen = live && b.duck && !s.onRoad().some((c) => c.red && c.hz); // DUCK: no sensor of the car has it
@@ -4546,6 +4607,8 @@ window.DUMMIES_P10_STAGE = {"id": "10.7", "title": "CRASH MEMORY", "edit": 107};
     ctx.strokeStyle = C.joint; ctx.lineWidth = 2; ctx.stroke();
     ctx.globalAlpha = 1;
     const expect = live && s.expected && s.expected(); // rung 6: at a spot it remembers, it expects the dummy
+    const Xs = s.P['duel.blockSeconds'] || 0, hs = s.P['proto.honkSeconds'] || 0; // the block lift's countdown, once the car has honked
+    if (live && Xs > 0 && !s.lift && s.blockT >= Math.min(hs, Xs - 3)) { const n = Math.ceil(Xs - s.blockT - 1e-9); ctx.font = '700 10px B612, system-ui, sans-serif'; const t = 'MOVE ALONG · DRONE IN ' + n, w = ctx.measureText(t).width + 8; rect(b.x - w / 2, y - r - 36, w, 13, 'rgba(12,14,20,0.75)'); text(t, b.x, y - r - 26, 10, C.dummy, 'center'); }
     const label = (t, col) => { ctx.font = '700 9px B612, system-ui, sans-serif'; const w = ctx.measureText(t).width + 8; rect(b.x - w / 2, y - r - 20, w, 13, 'rgba(12,14,20,0.75)'); text(t, b.x, y - r - 10, 9, col, 'center'); };
     if (b.duck) { ctx.strokeStyle = unseen ? C.dim : C.dummy; ctx.lineWidth = 1.5; ctx.setLineDash(unseen ? [3, 4] : []); ctx.beginPath(); ctx.arc(b.x, y, r + 6, 0, TAU); ctx.stroke(); ctx.setLineDash([]); if (live) label(expect ? 'EXPECTED' : unseen ? 'HIDDEN' : 'SEEN', expect ? C.mem : unseen ? C.dim : C.dummy); }
     else if (expect) label('EXPECTED', C.mem);
@@ -4652,6 +4715,7 @@ window.DUMMIES_P10_STAGE = {"id": "10.7", "title": "CRASH MEMORY", "edit": 107};
     for (const c of s.onRoad()) if (c.red) drawOffscreen(c);
     for (const dr of s.drones) { const cn = s.cones.find((q) => q.id === dr.cone); if (cn && cn.state === 'drone') drawCone(dr.x, dr.y + 12); drawDrone(dr.x, dr.y, false); } // FARSIGHT fetches a cone left in a lane (proto.droneConeSeconds)
     const d = s.delivery; if (d) drawDrone(d.x, d.y, d.state !== 'outbound' && (LOAD[d.node] || 'B1'));
+    const lf = s.lift; if (lf) { const held = s.body && s.body.lifted; drawDrone(lf.x, lf.y - (held ? 30 : 0), false); if (held) { ctx.strokeStyle = C.joint; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(lf.x, lf.y - 24); ctx.lineTo(lf.x, lf.y - 16); ctx.stroke(); } } // FARSIGHT's block lift
     for (let i = flash.length - 1; i >= 0; i--) { const f = flash[i]; f.t -= 1 / 60; if (f.t <= 0) { flash.splice(i, 1); continue; } const big = typeof f.n !== 'number'; text(big ? f.n : '−' + f.n, f.x, f.y - 24 - (1 - f.t) * 20, big ? 16 : 13, f.n === 'WRITE-OFF' ? C.red : C.dummy, 'center'); }
     drawHud();
     if (!started || paused) {

@@ -6,7 +6,7 @@
 - **Rule:** a change to one factor lists its effect on the other four (§0).
 - **Control table (§8):** every object type: what hides, obstructs, is remembered, resets. Stealth research in §9.
 - **Values:** registry IDs at the 10.7 build. Derived values name their inputs. IDs marked *unregistered* need registering before use.
-- **Sources:** handover v2 §14, §20–§23; GDD Edits 101–107; `DECISIONS.md` rows 648–714.
+- **Sources:** handover v2 §14, §20–§23; GDD Edits 101–107; `DECISIONS.md` rows 648–716.
 
 ## 0 The interlock
 
@@ -120,7 +120,7 @@ Read across: what the row's factor sets for the column's.
 
 ### 3.3 Risks
 
-- **Stalemate.** A car waiting for a dummy in its field waits forever (rows 688, 699). A queue behind it multiplies the cost. Queued cars flash their lights (row 711).
+- **Stalemate: solved (row 715).** A car kept waiting `duel.blockSeconds` (10) by the dummy or its cone calls FARSIGHT. A drone lifts the dummy to the side of the road, holds it until the car has left, and puts it down. Queued cars flash their lights meanwhile (row 711).
 - **Deadlock.** v1 W7's watchdog applies once cars meet cars.
 - **Noise.** Each group cue must read at a glance beside the red car's display.
 
@@ -160,7 +160,7 @@ Read across: what the row's factor sets for the column's.
 - [ ] An opening without a part.
 - [ ] Pace: the main opening writes off a body in at most 80 s (Edit 18 §10.2).
 - [ ] Drone access to every object home.
-- [ ] No stalemate the dummy cannot leave.
+- [ ] No stalemate: the block lift (`duel.blockSeconds`, row 715) ends any wait.
 
 ### 4.4 Venues to test against (v1 PT14)
 
@@ -230,6 +230,7 @@ Read across: what the row's factor sets for the column's.
 | F12 | An expert mover writes off a body every 18 s (500 body, 242 a hit) | 1, 2 | 707 |
 | F13 | ~~The sprint lands from a remembered spot~~ Superseded: a hit from the open leaves no spot | 1, 2 | 707, 713 |
 | F15 | Skill and habit separate: cover makes a habit the car can learn; the open stays the player's judgement | 1, 2, 4 | 713 |
+| F16 | Stalemates hid openings. With the block lift, closed bots meet 2–3 cars a minute, not 0.3; the flank from open pavement lands 0.4 a minute (the sprint from past the field, D115) | 2, 3 | 715 |
 | F14 | A waiting car and a waiting dummy make a stalemate | 2, 3 | 688, 699 |
 
 ## 7 Open questions
@@ -273,7 +274,7 @@ One row per object type. Edit this table first; the sections above follow it.
 | V1 | Red car | Vehicle, learns | Cruising; braking; waiting; spent; away (lesson); off screen | No | D: a hit, or a touch below `duel.standstillSpeed` 5 | It is the one that remembers | Leaves the screen; back after `duel.redReturnSeconds` 2 | Built |
 | V2 | White car (`vehicles.sedan.height` 19.8) | Vehicle, never learns | Moving; queued; flashing | Yes: moving cover (row 711) | R's sight and path; D (a hazard) | While it stays; memory leaves with it (row 712) | Drives on | Decided; arrives 10.8 |
 | V3 | Parked car (`vehicles.sedan.height` 19.8) | Vehicle, still while parked | Arriving; parked; leaving | Yes (row 711) | D, R | While parked; a new car there is a fresh spot (row 712) | Leaves and arrives, seen coming (row 712) | Decided; not built |
-| V4 | FARSIGHT drone (`proto.droneSpeed` 240) | Vehicle, air | Inbound; lowering; outbound; carrying | No | No | No | Leaves the screen | Built |
+| V4 | FARSIGHT drone (`proto.droneSpeed` 240) | Vehicle, air | Inbound; lowering; outbound; carrying a part or a cone; lifting the dummy (row 715) | No | No | No | Leaves the screen | Built |
 | C1 | The dummy | Character | §8.2 | — | R: the hit | Its spring spots, from cover (row 713) | Write-off: a new body by drone. R: everything | Built |
 | C2 | Other dummies, trainees | Character | — | — | — | — | — | Planned (PT13) |
 | T1 | Crash outline, debris, marker | Trace | Remembered; faded | No | No | Marks a remembered spot | Persists through write-offs; R clears it | Built |
@@ -306,6 +307,7 @@ One row per object type. Edit this table first; the sections above follow it.
 | Event | Dummy | Red car's memory | Outlines | Objects | Cars |
 |---|---|---|---|---|---|
 | A pass ends | — | Kept | Kept | Cones in a lane fetched | Back in 2 s |
+| A block (the car waits `duel.blockSeconds` 10) | Lifted beside the road; put down once the car has left | Kept | Kept | Cones ahead of it fetched at once | Drives on |
 | Write-off | New body (`proto.health.standard` 500); parts kept | Kept | Kept | A held cone drops | — |
 | Lesson | — | Grows (rung 6 fitted) | Kept | — | Away, then back |
 | Cover leaves (parked car) | — | That spot forgotten | Outline fades | — | — |
@@ -331,18 +333,18 @@ One row per object type. Edit this table first; the sections above follow it.
 
 ### 9.2 Patterns, and what DUMMIES takes
 
-| Pattern | Seen in | DUMMIES now | Proposal |
-|---|---|---|---|
-| Perception is readable; binary where it can be | Mark of the Ninja, Conviction, Blacklist's GDC talk | Beam and field zones, notice meter, HIDDEN, SEEN, EXPECTED | Keep binary labels; one cue per state |
-| Last known position, drawn | Conviction, Unity, Mark of the Ninja | None | A ghost where the car last saw the dummy, while it waits |
-| Graded alert that decays | MGS, Thief, Dishonored | Notice, then stop, then wait; drives on when hidden | A short search state: it slows past the last known position, then gives up |
-| An area stays on edge after an alert | Dishonored, Thief 1 | None | The junction's notice runs faster for a while after a hit |
-| Habits buy counters, capped, decaying | MGS V Revenge, Alien: Isolation | Rung 6, three spots (D120) | Decay by level change (Q6); show the counters on the map, as MGS V does |
-| Moving cover is suspicious | The cardboard box; AC's haycarts | Parked cars arrive "seen coming" (row 712) | Cover that moves in a car's sight draws its notice; still cover hides |
-| Traces raise the alert | MGS V bodies; Hitman bodies, missing items | Outlines: only crashes from cover are remembered | White cars slow past fresh outlines (group, later) |
-| Shared, stale information | Hitman services; MGS V radio | Street cameras feed the car live | Fleet memory (Q2); a camera blocked by moved cover sees nothing |
-| Crowds are cover | AC, Hitman | White cars as moving cover (row 711) | Queues as cover; their flashing lights as the alarm (row 711) |
-| Failure is cheap | Mark of the Ninja's frequent checkpoints | A new body by drone; 2 s between passes | Keep |
+| Pattern | Seen in | DUMMIES now | Proposal | Decision (row 716) |
+|---|---|---|---|---|
+| Perception is readable; binary where it can be | Mark of the Ninja, Conviction, Blacklist's GDC talk | Beam and field zones, notice meter, HIDDEN, SEEN, EXPECTED | Keep binary labels; one cue per state | Keep |
+| Last known position, drawn | Conviction, Unity, Mark of the Ninja | None | A ghost where the car last saw the dummy, while it waits | Adopted. Lands with the search state |
+| Graded alert that decays | MGS, Thief, Dishonored | Notice, then stop, then wait; drives on when hidden | A short search state: it slows past the last known position, then gives up | Adopted. A car behaviour: its own test |
+| An area stays on edge after an alert | Dishonored, Thief 1 | None | The junction's notice runs faster for a while after a hit | Adopted. A car behaviour: its own test |
+| Habits buy counters, capped, decaying | MGS V Revenge, Alien: Isolation | Rung 6, three spots (D120) | Decay by level change (Q6); show the counters on the map, as MGS V does | Adopted: the spots on a map. Lands with the multi-screen levels |
+| Moving cover is suspicious | The cardboard box; AC's haycarts | Parked cars arrive "seen coming" (row 712) | Cover that moves in a car's sight draws its notice; still cover hides | Adopted. Lands with moveable cover: pushed planters, parked cars |
+| Traces raise the alert | MGS V bodies; Hitman bodies, missing items | Outlines: only crashes from cover are remembered | White cars slow past fresh outlines (group, later) | Adopted, for later: a group behaviour after 10.8 |
+| Shared, stale information | Hitman services; MGS V radio | Street cameras feed the car live | Fleet memory (Q2); a camera blocked by moved cover sees nothing | Open (Q2) |
+| Crowds are cover | AC, Hitman | White cars as moving cover (row 711) | Queues as cover; their flashing lights as the alarm (row 711) | Decided (row 711) |
+| Failure is cheap | Mark of the Ninja's frequent checkpoints | A new body by drone; 2 s between passes | Keep | Keep; the block lift (row 715) |
 
 ### 9.3 Sources
 
@@ -368,3 +370,5 @@ One row per object type. Edit this table first; the sections above follow it.
 | 4 November 2026 | Memory follows cover (Q1). Parked cars leave and arrive, seen coming (Q8). White cars block on one-way roads; they arrive in 10.8 (Q9). Q10 added | 712 |
 | 4 November 2026 | A hit from the open leaves no spot (Q10); 10.7 amended. F13 superseded; F15 added | 713 |
 | 4 November 2026 | §8 the control table: object types, states, resets. §9 stealth research: ten games, ten patterns | 714 |
+| 4 November 2026 | The block lift ends the stalemate (built in 10.7); F16 | 715 |
+| 4 November 2026 | §9.2: six proposals adopted, with where each lands | 716 |

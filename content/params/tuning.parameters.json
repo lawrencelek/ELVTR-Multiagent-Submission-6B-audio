@@ -14243,6 +14243,28 @@
    "purpose": "Rung 6: how many crash spots the car remembers, the latest first. 0: every crash. An older spot falls out of memory (counters are capped and can fall back; handover v2 §4.3)"
   },
   {
+   "id": "duel.blockSeconds",
+   "group": "Prototype P10",
+   "owner": "Design",
+   "label": "Block lift",
+   "description": "A car kept waiting for the dummy (in its path, or noticed in its field) this long calls FARSIGHT: a drone lifts the dummy to the side of the road, holds it until the car has passed, and puts it down. 0: never (the car waits). 10.7 sets 10",
+   "unit": "seconds",
+   "type": "number",
+   "default": 0,
+   "status": "proposed",
+   "source": "GDD Edit 107 amendment (row 715): Lawrence, 4 November",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-run",
+   "validation": {
+    "min": 0,
+    "max": 120
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "A car kept waiting for the dummy (in its path, or noticed in its field) this long calls FARSIGHT: a drone lifts the dummy to the side of the road, holds it until the car has passed, and puts it down. 0: never (the car waits). 10.7 sets 10"
+  },
+  {
    "id": "proto.droneSpeed",
    "group": "Props",
    "owner": "Design",

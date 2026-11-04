@@ -33,8 +33,8 @@ HOME_COVER = "aim, flank, jump and dashjump wait at (300, 410), behind the barri
 MODE_DESC = {'lesson': "from the build's start (10.2: rung 0, on foot; 10.3: rung 1, Battery 1 fitted; 10.5: rung 3, Battery 1 and Legs 1 fitted); the lesson and the part as the build delivers them",
              'trained': "at the top rung from the start, every part its rungs bring fitted: the rung's own table"}
 STAGE = str(d.get('stage', '10.1'))
-if STAGE >= '10.7':  # rung 6: the same spot closes; any other spot stays, and the sprint from beyond the field
-    CLOSED, OPEN_FOOT, OPEN_DASH = ['stand', 'standSouth', 'standOff', 'charge', 'kerb', 'flankOpen', 'walkin', 'corner', 'gap', 'plinth', 'conebait', 'standplanter'], ['lurk'], ['roam']
+if STAGE >= '10.7':  # rung 6: the same spot closes; any other spot stays, and the sprint from beyond the field (lurk; flankOpen, once the lift ends its stalemate: row 715)
+    CLOSED, OPEN_FOOT, OPEN_DASH = ['stand', 'standSouth', 'standOff', 'charge', 'kerb', 'walkin', 'corner', 'gap', 'plinth', 'conebait', 'standplanter'], ['lurk', 'flankOpen'], ['roam']
     COVER = ['gap', 'aim', 'flank', 'jump', 'dashjump']
     ESC_CLOSED, ESC_OPEN = ['planter'], ['roam']
     HOME_COVER += "; conebait starts at the gap (188, 414); planter and standplanter use one spot behind the planter row south of road A, east (590, 418); roam uses nine spots behind the three rows; lurk waits at (660, 576)"
@@ -227,6 +227,7 @@ if top == 6:
         ('No hit from a spot it remembered at the time', sum(r.get('rememberedHits', 0) for r in tr) == 0, f"trained: {sum(r.get('rememberedHits', 0) for r in tr)} of {sum(r['hits'] for r in tr)} hits"),
         ('A hit from the open leaves no spot (row 713): the sprint from past the field never teaches rung 6', all(not r.get('lesson') for r in les if r['policy'] == 'lurk') and all(r.get('sites', 0) == 0 for r in tr if r['policy'] == 'lurk'), f"lurk: lessons {sum(1 for r in les if r['policy'] == 'lurk' and r.get('lesson'))} of {sum(1 for r in les if r['policy'] == 'lurk')} runs; spots remembered {max([r.get('sites', 0) for r in tr if r['policy'] == 'lurk'] or [0])}"),
         ('Every damaging hit leaves a crash; memory holds at most duel.memorySites', all(r.get('crashes') == r['hits'] for r in tr) and all(r.get('sites', 0) <= (N or 10 ** 9) for r in allr), f"crashes = hits in {sum(1 for r in tr if r.get('crashes') == r['hits'])} of {len(tr)} trained runs; most remembered {max(r.get('sites', 0) for r in allr)} (cap {N or 'none'})"),
+        ('No car waits for the dummy past duel.blockSeconds: FARSIGHT lifts it aside (row 715)', all(r['cars'].get('blocked20s', 0) == 0 for r in allr) and sum(r.get('lifts', 0) for r in tr if r['policy'] in ('stand', 'standSouth', 'standOff')) > 0, f"waits over 20 s: {sum(r['cars'].get('blocked20s', 0) for r in allr)}; lifts {sum(r.get('lifts', 0) for r in allr)}, put down {sum(r.get('liftDrops', 0) for r in allr)} (standing bots: {sum(r.get('lifts', 0) for r in tr if r['policy'] in ('stand', 'standSouth', 'standOff'))})") if d['p10'].get('duel.blockSeconds') else ('—', True, ''),
         ('Rung 6 keeps cover closed: ' + ', '.join(COVER) + ': at most one hit in 15 minutes each', all(sum(r['hits'] for r in tr if r['policy'] == p) <= 1 for p in COVER), ', '.join(f"{p} {sum(r['hits'] for r in tr if r['policy'] == p)}" for p in COVER)),
     ]
 if top == 2 and d['p10'].get('duel.jumpArrives') == 2:
@@ -243,6 +244,7 @@ if top >= 1:
     ]
 w('| Check | Result | Evidence |')
 w('|---|---|---|')
+checks = [c for c in checks if c[0] != '—']
 for name, ok, ev in checks: w(f"| {name} | {'PASS' if ok else 'FAIL'} | {ev} |")
 w('')
 open(dst, 'w').write('\n'.join(out) + '\n')

@@ -353,6 +353,15 @@ check('10.7 (row 713): a hit from the open leaves an outline but no spot; repeat
   return { ok: lc.length >= 2 && lc.every((c) => c.cover === null) && !l.events.some((e) => e.type === 'lesson-due') && l.rung === 5 && pc.length >= 2 && !!row && row.kind === 'planter' && p.rung === 6,
     detail: `sprints from past the field: ${lc.length} crashes, cover ${[...new Set(lc.map((c) => c.cover || 'none'))].join(', ')}, rung ${l.rung}; from behind the planter: ${pc.length} crashes, cover ${pc.map((c) => c.cover).join(', ')} (${row ? row.kind : '—'}), rung ${p.rung}` };
 });
+check('10.7 (row 715): a car kept waiting duel.blockSeconds for the dummy calls a drone; it lifts the dummy beside the road, the car passes, the dummy is put down; no hits', () => {
+  const t = sim(F7, { 'duel.startRung': 6 }, ALL), Xs = F7['duel.blockSeconds']; Object.assign(t.body, { x: 200, y: 292 }); let lift = null, drop = null, left = 0, maxWait = 0, w = 0;
+  for (let i = 0; i < 90 * 60; i++) { const b = t.body, cmd = b.alive && !b.lifted ? to(b, 200, 292) : {}; const e0 = t.events.length; t.step(cmd);
+    for (const e of t.events.slice(e0)) { if (e.type === 'block-lift' && !lift) lift = e; if (e.type === 'block-drop' && !drop) drop = e; if (e.type === 'left' && lift && !drop) left++; }
+    const c = t.blocked(); w = c ? w + 1 / 60 : 0; maxWait = Math.max(maxWait, w); }
+  const W = t.P['world.laneWidth'], side = drop && (drop.y < 320 - W || drop.y > 320 + W), flight = (t.P['world.height'] + 40) / t.P['proto.droneSpeed'] + t.P['proto.droneLiftSeconds'];
+  return { ok: !!lift && Math.abs(lift.wait - Xs) < 0.05 && !!drop && side && hits(t).length === 0 && maxWait <= Xs + flight + 0.05,
+    detail: `lift after ${lift && lift.wait} s (duel.blockSeconds ${Xs}); put down at ${drop ? drop.x + ', ' + drop.y : '—'}, beside road A: ${side}; held ${drop && drop.held} s; longest wait for the dummy ${maxWait.toFixed(1)} s (at most ${Xs} + the drone's flight and lift, ${flight.toFixed(1)}); hits ${hits(t).length}` };
+});
 check('10.7 rung 6: the same spot scores once, then the car stops for it; moving to a spot it does not remember lands again', () => {
   const same = sim(F7, { 'duel.startRung': 6 }, ALL); drive(same, 150, ambush(Array(20).fill({ road: 'A', x: 559, y: 421 })));
   const spots = [[559, 421], [501, 421], [617, 421], [559, 421], [501, 421], [617, 421]].map(([x, y]) => ({ road: 'A', x, y }));

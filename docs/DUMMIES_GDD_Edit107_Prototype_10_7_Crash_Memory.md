@@ -4,11 +4,13 @@
 
 **Amended 4 November (row 713):** only a hit sprung from cover leaves a spot. A hit from the open was skill.
 
+**Amended 4 November (row 715):** the block lift. A car kept waiting 10 s by the dummy calls a drone that lifts the dummy aside (§10.7.7).
+
 - **Build:** `prototypes/p10/dummies_p10_7.html` (`python3 prototypes/p10/build.py`).
 - **Playtest pages:** `index.html`, one per test. 10.1–10.6 are frozen; 10.6 at md5 `7acd08d2…`.
-- **Tests:** `node prototypes/p10/test_p10.js --page` 50/50. Prototype 9 rebuild md5 `be163e7d014344e062965986b3da5786`. 8.4 md5 `9f5549201d88891f9f0b22c461602909`. Sound freeze: 211 items, 0 changed.
-- **Probes:** `node qa/testroad.js --stage 10.7 --out qa/baseline/p10_7.json`; report `qa/baseline/p10_7.md`, 16/16 checks. Pace probe `qa/baseline/p10_7_pace.json`. 10.6 reruns identical to its baseline; 10.3–10.5 on today's code 12/12, 12/12, 13/13.
-- **Decision log:** rows 703–709, 713. D117 resolved. Open D119, D120.
+- **Tests:** `node prototypes/p10/test_p10.js --page` 51/51. Prototype 9 rebuild md5 `be163e7d014344e062965986b3da5786`. 8.4 md5 `9f5549201d88891f9f0b22c461602909`. Sound freeze: 211 items, 0 changed.
+- **Probes:** `node qa/testroad.js --stage 10.7 --out qa/baseline/p10_7.json`; report `qa/baseline/p10_7.md`, 17/17 checks. Pace probe `qa/baseline/p10_7_pace.json`. 10.6 reruns identical to its baseline; 10.3–10.5 on today's code 12/12, 12/12, 13/13.
+- **Decision log:** rows 703–709, 713, 715. D117 resolved. Open D119, D120.
 
 ## Request
 
@@ -24,6 +26,8 @@
 | "Shorter drive-in": the run-in and the wait between passes both shorten | D117's first option: cut the dead time | Proposed (row 706) |
 | "500 health": the test road's Standard body, `proto.health.standard` 500 | The sim sets `damage.bodyHealth` from it | Decided (row 706) |
 | A hit from the open leaves no spot | Lawrence, 4 November: "that was just skill from the player who judged it right" | Decided (row 713) |
+| The block lift: a drone moves a dummy that keeps the car waiting | Lawrence, 4 November: "a drone moves the dummy to the side of the road, waits for the car to move on, and then puts the player down" | Decided (row 715) |
+| [X] = 10 s: twice the honk; a cone it laid counts; held until the car leaves the screen | "after [X] seconds"; a drop beside a car still in reach was struck at once | Proposed (row 715) |
 
 ## 10.2 The run-in (amends Edit 102)
 
@@ -86,6 +90,16 @@
 - **The sprint from past the field still lands** (D115). It leaves an outline, never a spot.
 - **Next (§14.2, 10.8):** the road upgrade. Two-way, with white sedans that never learn.
 
+### 10.7.7 The block lift (row 715)
+
+- **When:** the red car has waited `duel.blockSeconds` (10) for the dummy: in its path, noticed in its field, or behind its cone.
+- **Warning:** from the honk (`proto.honkSeconds` 5), a countdown over the dummy: "MOVE ALONG · DRONE IN n".
+- **The drone:** a FARSIGHT drone flies in (`proto.droneSpeed` 240) and lifts the dummy (`proto.droneLiftSeconds` 0.5). Mid-dash or mid-jump, it hovers until the move ends.
+- **Where to:** beside the car's road, on the dummy's side, clear of the other road and of statics. Off the road already, it lifts the dummy where it stands.
+- **Cones go too:** a drone fetches each cone in the car's lane ahead, at once.
+- **Held until the car has left the screen.** Put down beside a car still in reach, the dummy would strike it.
+- **Lifted, the dummy is out of play:** unseen, untouchable, without control. The car drives on.
+
 ## Build
 
 - `testroad.js`:
@@ -97,6 +111,7 @@
 - `game_p10.js`: outlines, debris, markers; rings, lines, scans; the memory module, tag and CHECKING; EXPECTED; the clip's ring; the fitting's map. Labels sit on a dark backing; the notice meter sits past the tag.
 - `build.py`: 10.7's stage; 10.6's page frozen.
 - `qa/testroad.js`: bot `roam`; the stand bots start on their spot when the run-in is short; a stall is 20 s stopped with nothing in its way at any moment.
+- Row 715: `stepLift`, `sidePoint`, `fetchBlockingCones`, `blocked`; the lifted dummy is skipped by `assessBody`, `occluded` and `collideBody`. `game_p10.js` draws the countdown, the drone and the lifted dummy.
 
 ## Measured (`qa/baseline/p10_7.md`)
 
@@ -107,10 +122,12 @@
 | DUCK behind a planter, the same spot | 0.27 | 84 | Closed: one hit from cover a run, then it stops for the dummy there. In one run a first spring it saw coming left no spot |
 | DUCK behind a planter, moving to spots it does not remember | 6.97 | 242 | Open: 98 hits from 103 cars; a write-off every 18 s (D119) |
 | The sprint from past the field | 0.60 | 53 | Open (D115): it leaves no spot |
+| The flank from open pavement | 0.40 | 53 | Open (D115): the sprint from past the field. Its stalemate had hidden it |
 | Every other bot | 0 | — | Closed |
 
-- **A new behaviour:** 71 cars stopped for a dummy at a remembered spot; for 32 of them, cover hid it. No hit came from a remembered spot (0 of 111).
-- **Short run-in:** 75 of 672 cars appeared slowed for a dummy they already sensed. The closest stop for a dummy standing ahead: 226 (reach 177).
+- **A new behaviour:** 93 cars stopped for a dummy at a remembered spot; for 54 of them, cover hid it. No hit came from a remembered spot (0 of 117).
+- **Short run-in:** 702 of 1,725 cars appeared slowed for a dummy they already sensed. The closest stop for a dummy standing ahead: 226 (reach 177).
+- **The block lift:** 949 lifts. No car waited for the dummy past 20 s. The closed bots now meet 2.4 cars a minute, not 0.3: a stalemate no longer shields a trick from the test.
 
 **The lesson** (mode `lesson`):
 
@@ -127,9 +144,9 @@
 
 ## Registry
 
-- **Added (3):** `duel.runInLength`, `duel.memoryRadius`, `duel.memorySites`.
-- **Set by stage:** `proto.health.standard` 500, `duel.redReturnSeconds` 2.
-- **662 entries.** `registryVersion` unchanged (row 665).
+- **Added (4):** `duel.runInLength`, `duel.memoryRadius`, `duel.memorySites`, `duel.blockSeconds` (row 715).
+- **Set by stage:** `proto.health.standard` 500, `duel.redReturnSeconds` 2, `duel.blockSeconds` 10.
+- **663 entries.** `registryVersion` unchanged (row 665).
 
 ## Open
 

@@ -9,6 +9,7 @@
 // low planter rows stand by the road. Sightlines run by height: a ducked dummy behind a planter is hidden.
 // 10.7: from rung 5, a hit sprung from the spot of an earlier crash teaches rung 6, crash memory: it remembers where you
 // struck from, and expects you there. Every crash leaves a chalk outline on the road. A shorter run-in; a lighter body.
+// A car kept waiting for the dummy duel.blockSeconds calls FARSIGHT: a drone lifts the dummy to the side of the road.
 // Extends the base Sim from prototypes/p6/sim.js. Shared files are untouched, so Prototype 9's build keeps its md5.
 // Runs in the browser (window.DUMMIES) and in node (require), so the probes run headless without a page.
 (function (root) {
@@ -139,6 +140,7 @@
       this.rung = Math.max(0, Math.min(RUNGS.length - 1, Math.round(P['duel.startRung'] || 0))); // the red car's rung
       this.lesson = null; this.lessons = []; this.delivery = null; this.firstBrakeT = null; this.firstSideT = null; this.firstCoverT = null; this.firstItemT = null;
       this.crashes = []; this.spring = null; // every damaging hit: where it struck, the spot it was sprung from (row 703); the last dash or jump's start
+      this.lift = null; this.blockT = 0; // the block lift (row 715): the drone that moves a blocking dummy; how long the car has waited for it
       let fitted = false; // parts fitted from the start (partKey 3)
       for (const r of RUNGS) if (r.part && Math.round(P[r.partKey] || 0) === 3) { this.run.owned[r.part] = true; fitted = true; }
       if (fitted && this.body) this.body.health = this.maxHealth();
@@ -183,6 +185,7 @@
     assessBody(c) {
       if (!this.testRoad) return super.assessBody(c);
       if (c.spent) return null; // the car that hit you drives off to its lesson: it no longer stops for you (row 681)
+      if (this.body && this.body.lifted) return null; // FARSIGHT has the dummy (row 715)
       if (this.rung < 3 && (this.airborne() || this.body.raised)) return null; // it sees the ground: not the air, not the plinth's top
       const P = this.P, keep = P['proto.driver.cautionZone'];
       P['proto.driver.cautionZone'] = this.fieldFor();
@@ -291,6 +294,7 @@
     occluded(self, x0, y0, x1, y1) {
       const b = this.body;
       if (!this.testRoad || !b || x1 !== b.x || y1 !== b.y) return super.occluded(self, x0, y0, x1, y1);
+      if (b.lifted) return true; // in FARSIGHT's grip, out of play (row 715)
       if (self && self.red && this.expected()) return false; // rung 6: it looks where it remembers you
       if (this.carSees(self, x0, y0, true)) return false;
       return !(this.rung >= 4 && self && self.red && this.cameraSees());
@@ -372,6 +376,7 @@
     // A dash vaults low cover (row 696): a planter stops a walk, not a dash. The dummy springs from a duck over the row.
     collideBody(contacts, k) {
       const b = this.body;
+      if (this.testRoad && b && b.lifted) return; // carried over the road: it touches nothing (row 715)
       if (!this.testRoad || !b || b.mode !== 'lunge' || !this.level.statics.some((q) => q.low)) return this.collideStatics(contacts, k);
       const keep = this.level.statics; this.level.statics = keep.filter((q) => !q.low);
       try { return this.collideStatics(contacts, k); } finally { this.level.statics = keep; }
@@ -454,6 +459,7 @@
         this.emit('lesson', { model: this.lesson.model, from: this.lesson.from, to: this.lesson.to, name: this.lesson.name, zone: this.lesson.zone });
         return;
       }
+      if (this.testRoad && this.lift && this.lift.state !== 'inbound' && this.lift.state !== 'outbound') cmd = {}; // in FARSIGHT's grip: no control
       if (this.testRoad && this.body) this.duckFor(cmd);
       const r = super.step(cmd);
       if (this.testRoad && this.body && this.body.duck && !this.canDuck()) this.stand();
@@ -461,7 +467,7 @@
     }
     // DUCK (rows 694, 696): hold to duck. Lower (body.duckHeight) and slower (movement.duckSpeedFactor). A dash or a jump
     // from a duck stands the dummy up as it goes.
-    canDuck() { const b = this.body; return !!this.run.owned.duck1 && b.alive && (b.mode === 'idle' || b.mode === 'move' || b.mode === 'coast') && !b.stair; }
+    canDuck() { const b = this.body; return !!this.run.owned.duck1 && b.alive && !b.lifted && (b.mode === 'idle' || b.mode === 'move' || b.mode === 'coast') && !b.stair; }
     duckFor(cmd) {
       const b = this.body, want = !!(cmd && cmd.duck) && this.canDuck();
       if (want && !b.duck) { b.duck = true; this.emit('duck', { x: +b.x.toFixed(1), y: +b.y.toFixed(1) }); }
@@ -506,8 +512,62 @@
       if (b && b.alive) b.health = Math.min(this.maxHealth(), b.health + this.maxHealth() - m0);
       this.emit('gift', { node });
     }
+    // ----- the block lift (row 715). A car kept waiting by the dummy (in its path, noticed in its field, or a cone ahead)
+    // for duel.blockSeconds calls FARSIGHT. A drone flies in (proto.droneSpeed), lifts the dummy (proto.droneLiftSeconds),
+    // carries it to the side of the car's road (sidePoint; off the road, it lifts it where it stands), holds it until the car
+    // has left the screen, and puts it down. Lifted, the dummy is out of play: unseen, untouchable, without control.
+    sidePoint(c) { // beside the car's road, on the dummy's side, clear of the other road and of every static: the kerb plus a body's width, further out if need be
+      const P = this.P, b = this.body, W = P['world.laneWidth'], r = P['body.radius'], off = W + 2 * r, A = c.path.road === 'A';
+      if (Math.abs(A ? b.y - ROAD_A : b.x - ROAD_B) >= off) return { x: b.x, y: b.y }; // already off the car's road: lifted where it stands
+      const sg = A ? (b.y < ROAD_A ? -1 : 1) : (b.x < ROAD_B ? -1 : 1);
+      let along = clamp(A ? b.x : b.y, 2 * r, (A ? P['world.width'] : P['world.height']) - 2 * r); const other = A ? ROAD_B : ROAD_A;
+      if (Math.abs(along - other) < off) along = other + (along < other ? -off : off);
+      const at = (k) => { const d = (A ? ROAD_A : ROAD_B) + sg * (off + k * r); return A ? { x: along, y: d } : { x: d, y: along }; };
+      for (let k = 0; k <= 8; k++) { const q = at(k); if (!this.level.statics.some((st) => circleRect(q.x, q.y, r, st))) return q; }
+      return at(0);
+    }
+    carPassed(c) { return !c || c.gone || c.spent; } // it has moved on: off the screen (a dummy put down beside a car still in reach would strike it)
+    blocked() { const b = this.body, c = this.onRoad().find((q) => q.red && !q.spent); return c && b && b.alive && c.v < 1 && (c.noticed || (c.hz && c.hz.inPath) || (c.det && c.det.fwd && c.det.fwd.kind === 'cone')) ? c : null; } // a car kept waiting by the dummy or its cone
+    fetchBlockingCones(c) { // the cones in its lane ahead go too: a drone each, now (the base waits proto.droneConeSeconds, and 20 s between fetches of one cone)
+      const r = this.P['props.cone.radius'];
+      for (const cn of this.cones) {
+        if (cn.state !== 'free' || this.drones.some((d) => d.cone === cn.id)) continue;
+        const pr = X.pathProject(c.path, cn.x, cn.y), ds = pr.s - c.s - c.L / 2;
+        if (ds > -r && ds < c.fwdLen && Math.abs(pr.lat) < c.W / 2 + r + 2) { cn.droneT = null; this.dispatchDrone(cn); }
+      }
+    }
+    stepLift(dt) {
+      const P = this.P, Xs = P['duel.blockSeconds'] || 0, b = this.body, v = P['proto.droneSpeed'] * dt;
+      if (Xs <= 0 || !b) return;
+      const L = this.lift;
+      if (!L) { // the wait counts while the car stays stopped: a cone fetched and laid again does not restart it
+        const c = this.onRoad().find((q) => q.red && !q.spent), stopped = !!(c && b.alive && c.v < 1); this.blockT = stopped ? this.blockT + dt : 0;
+        if (stopped && this.blockT >= Xs - 1e-9) {
+          const sp = this.sidePoint(c); this.lift = { car: c.id, state: 'inbound', x: b.x, y: -40, sx: sp.x, sy: sp.y, tl: 0, t0: this.t };
+          this.fetchBlockingCones(c);
+          this.emit('block-lift', { car: c.id, wait: +this.blockT.toFixed(1), x: +b.x.toFixed(1), y: +b.y.toFixed(1), to: { x: +sp.x.toFixed(1), y: +sp.y.toFixed(1) } });
+        }
+        return;
+      }
+      const c = this.carById(L.car), go = (tx, ty) => { const dx = tx - L.x, dy = ty - L.y, d = hyp(dx, dy); if (d <= v) { L.x = tx; L.y = ty; return true; } L.x += dx / d * v; L.y += dy / d * v; return false; };
+      if (L.state === 'inbound') { if (!b.alive || this.carPassed(c) || c.v >= 1) { L.state = 'outbound'; this.blockT = 0; return; } if (go(b.x, b.y) && b.mode !== 'lunge' && b.mode !== 'jump') { L.state = 'lifting'; L.tl = 0; } return; } // the car moved off first: the drone turns back. Mid-dash or mid-jump, it hovers
+      if (L.state === 'lifting') { L.x = b.x; L.y = b.y; L.tl += dt; if (L.tl >= P['proto.droneLiftSeconds'] - 1e-9) { b.lifted = true; b.duck = false; L.state = 'carrying'; } return; }
+      if (L.state === 'carrying' || L.state === 'holding') {
+        if (L.state === 'carrying' && go(L.sx, L.sy)) L.state = 'holding';
+        Object.assign(b, { x: L.x, y: L.y, vx: 0, vy: 0 });
+        if (L.state === 'holding' && this.carPassed(c)) { L.state = 'lowering'; L.tl = 0; }
+        return;
+      }
+      if (L.state === 'lowering') {
+        Object.assign(b, { x: L.x, y: L.y, vx: 0, vy: 0 }); L.tl += dt;
+        if (L.tl >= P['proto.droneLiftSeconds'] - 1e-9) { b.lifted = false; L.state = 'outbound'; this.blockT = 0; this.emit('block-drop', { x: +b.x.toFixed(1), y: +b.y.toFixed(1), held: +(this.t - L.t0).toFixed(1) }); }
+        return;
+      }
+      L.y -= v; if (L.y < -60) this.lift = null; // outbound
+    }
     stepDrones(dt) {
       super.stepDrones(dt);
+      if (this.testRoad) this.stepLift(dt);
       const d = this.delivery, b = this.body, P = this.P;
       if (!this.testRoad || !d) return;
       const v = P['proto.droneSpeed'] * dt;

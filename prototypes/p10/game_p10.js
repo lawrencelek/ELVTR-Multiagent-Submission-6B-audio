@@ -8,6 +8,7 @@
 // any of the car's sensors has the dummy (a ducked dummy it has not got draws dim). 10.7: every crash leaves a chalk outline,
 // debris and a numbered evidence marker on the road. From rung 6 the car's memory draws: a red ring on each spot it
 // remembers, a line to that crash's outline, a scan from the car to the spots in its field, its memory module and count.
+// The block lift (row 715): a countdown over a dummy that keeps a car waiting; then a drone lifts it aside until the car has passed.
 // Keys: arrows or WASD move; Space or J dash, K or Shift jump, E picks up or puts down a cone, hold C or Ctrl to duck (once
 // fitted); Z zones; P pause; R restart; L saves this session's log (JSON). Pad: A dash, B jump, X cone, hold LB or RB to
 // duck. Touch: drag on the left half to move; the right half's bands, top to bottom: jump, cone (Hands 1), duck (hold;
@@ -84,7 +85,7 @@
     const e0 = s.events.length; s.step(command());
     record();
     for (const e of s.events.slice(e0)) {
-      if (['impact', 'writeoff', 'admit', 'lunge', 'honk', 'lesson-due', 'lesson', 'learned', 'first-brake', 'first-side', 'first-cover', 'first-item', 'duck', 'stand', 'part-dispatch', 'gift', 'left', 'jump', 'raised', 'step-down', 'pickup', 'drop', 'drone-dispatch', 'drone-pickup', 'crash', 'spawn-slow'].includes(e.type) || (e.type === 'touch' && e.standstill)) log.push(e);
+      if (['impact', 'writeoff', 'admit', 'lunge', 'honk', 'lesson-due', 'lesson', 'learned', 'first-brake', 'first-side', 'first-cover', 'first-item', 'duck', 'stand', 'part-dispatch', 'gift', 'left', 'jump', 'raised', 'step-down', 'pickup', 'drop', 'drone-dispatch', 'drone-pickup', 'crash', 'spawn-slow', 'block-lift', 'block-drop'].includes(e.type) || (e.type === 'touch' && e.standstill)) log.push(e);
       if (e.type === 'impact' && Math.round(e.lost) > 0) flash.push({ x: s.body.x, y: s.body.y, t: 0.5, n: Math.round(e.lost) });
       if (e.type === 'writeoff') flash.push({ x: s.body.x, y: s.body.y, t: 1.2, n: 'WRITE-OFF' });
       if (e.type === 'gift') flash.push({ x: s.body.x, y: s.body.y, t: 1.6, n: PARTS[e.node] || e.node });
@@ -244,7 +245,7 @@
   }
   function drawDummy(b) {
     if (!b || !b.alive) return;
-    const up = (b.z || 0) + (b.raised ? s.P['world.jumpableHeight'] : 0), lift = up * 0.4, k = 1 + up / 120; // height: the body rises off its shadow
+    const up = (b.z || 0) + (b.raised ? s.P['world.jumpableHeight'] : 0) + (b.lifted ? 40 : 0), lift = up * 0.4, k = 1 + up / 120; // height: the body rises off its shadow (lifted: in the drone's grip)
     ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.beginPath(); ctx.ellipse(b.x + 3 + lift * 0.3, b.y + 4 + lift * 0.3, 13, 9, 0, 0, TAU); ctx.fill();
     const y = b.y - lift, r = s.P['body.radius'] * k * (b.duck ? 0.8 : 1);
     const live = b === s.body, unseen = live && b.duck && !s.onRoad().some((c) => c.red && c.hz); // DUCK: no sensor of the car has it
@@ -253,6 +254,8 @@
     ctx.strokeStyle = C.joint; ctx.lineWidth = 2; ctx.stroke();
     ctx.globalAlpha = 1;
     const expect = live && s.expected && s.expected(); // rung 6: at a spot it remembers, it expects the dummy
+    const Xs = s.P['duel.blockSeconds'] || 0, hs = s.P['proto.honkSeconds'] || 0; // the block lift's countdown, once the car has honked
+    if (live && Xs > 0 && !s.lift && s.blockT >= Math.min(hs, Xs - 3)) { const n = Math.ceil(Xs - s.blockT - 1e-9); ctx.font = '700 10px B612, system-ui, sans-serif'; const t = 'MOVE ALONG · DRONE IN ' + n, w = ctx.measureText(t).width + 8; rect(b.x - w / 2, y - r - 36, w, 13, 'rgba(12,14,20,0.75)'); text(t, b.x, y - r - 26, 10, C.dummy, 'center'); }
     const label = (t, col) => { ctx.font = '700 9px B612, system-ui, sans-serif'; const w = ctx.measureText(t).width + 8; rect(b.x - w / 2, y - r - 20, w, 13, 'rgba(12,14,20,0.75)'); text(t, b.x, y - r - 10, 9, col, 'center'); };
     if (b.duck) { ctx.strokeStyle = unseen ? C.dim : C.dummy; ctx.lineWidth = 1.5; ctx.setLineDash(unseen ? [3, 4] : []); ctx.beginPath(); ctx.arc(b.x, y, r + 6, 0, TAU); ctx.stroke(); ctx.setLineDash([]); if (live) label(expect ? 'EXPECTED' : unseen ? 'HIDDEN' : 'SEEN', expect ? C.mem : unseen ? C.dim : C.dummy); }
     else if (expect) label('EXPECTED', C.mem);
@@ -359,6 +362,7 @@
     for (const c of s.onRoad()) if (c.red) drawOffscreen(c);
     for (const dr of s.drones) { const cn = s.cones.find((q) => q.id === dr.cone); if (cn && cn.state === 'drone') drawCone(dr.x, dr.y + 12); drawDrone(dr.x, dr.y, false); } // FARSIGHT fetches a cone left in a lane (proto.droneConeSeconds)
     const d = s.delivery; if (d) drawDrone(d.x, d.y, d.state !== 'outbound' && (LOAD[d.node] || 'B1'));
+    const lf = s.lift; if (lf) { const held = s.body && s.body.lifted; drawDrone(lf.x, lf.y - (held ? 30 : 0), false); if (held) { ctx.strokeStyle = C.joint; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(lf.x, lf.y - 24); ctx.lineTo(lf.x, lf.y - 16); ctx.stroke(); } } // FARSIGHT's block lift
     for (let i = flash.length - 1; i >= 0; i--) { const f = flash[i]; f.t -= 1 / 60; if (f.t <= 0) { flash.splice(i, 1); continue; } const big = typeof f.n !== 'number'; text(big ? f.n : '−' + f.n, f.x, f.y - 24 - (1 - f.t) * 20, big ? 16 : 13, f.n === 'WRITE-OFF' ? C.red : C.dummy, 'center'); }
     drawHud();
     if (!started || paused) {

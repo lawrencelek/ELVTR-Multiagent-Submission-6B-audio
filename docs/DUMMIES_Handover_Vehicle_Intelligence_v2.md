@@ -1057,7 +1057,7 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
 
 - **Build:** `prototypes/p10/dummies_p10_7.html`. 10.6's page is frozen.
 - **The one change:** rung 6, taught by one lesson. The car starts at rung 5; the dummy starts with all four parts. No new part.
-- **Checks:** `node prototypes/p10/test_p10.js --page` 50/50. Probes `qa/baseline/p10_7.md` 16/16 (row 713). 10.6 reruns identical; 10.3–10.5 on today's code 12/12, 12/12, 13/13. Prototype 9 and the frozen md5s hold; sound freeze holds.
+- **Checks:** `node prototypes/p10/test_p10.js --page` 51/51. Probes `qa/baseline/p10_7.md` 17/17 (rows 713, 715). 10.6 reruns identical; 10.3–10.5 on today's code 12/12, 12/12, 13/13. Prototype 9 and the frozen md5s hold; sound freeze holds.
 
 ### 23.1 What changed
 
@@ -1116,4 +1116,6 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
 - **Answered (row 712):** memory follows cover. A parked car that drives off takes its spot's memory; a new car there makes a fresh spot. Parked cars leave and arrive, seen coming. White cars block the red car on one-way roads too; they arrive in 10.8.
 - **Answered (row 713):** a crash from the open leaves no spot: it was skill. 10.7 amended; probes 16/16.
 - **Added (row 714):** §8, the control table: every object type, what hides, obstructs, is remembered and resets. §9, stealth research: ten games, ten patterns, each with a proposal.
+- **Built (row 715):** the block lift. A car kept waiting 10 s by the dummy or its cone calls a drone; it lifts the dummy beside the road until the car has left. 10.7 amended; probes 17/17. The flank from open pavement now lands 0.4 a minute: its stalemate had hidden the sprint from past the field (D115).
+- **Adopted (row 716):** the six §9.2 proposals: a last-seen ghost, a search state, an area alert, moving cover draws notice, spots on a map, white cars slow past outlines (later).
 

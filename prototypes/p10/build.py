@@ -90,6 +90,7 @@ T107 = dict(T106, **{
     'duel.runInLength': 200,                 # the car appears 200 before the edge, not 771 (D117: Lawrence, "shorter drive-in")
     'duel.redReturnSeconds': 2,              # back 2 s after it leaves: the empty road between passes falls from 5.2 s to 2 s
     'proto.health.standard': 500,            # the test road's body: 500, not 800 (D117: Lawrence, "lighter body … 500 health")
+    'duel.blockSeconds': 10,                 # a car kept waiting 10 s for the dummy calls a drone to lift it aside (row 715)
 })
 STAGES = {
     '10.1': {'title': 'THE TEST ROAD', 'page': 'dummies_p10.html', 'frozen': '82ab5e55d243ee500d6dfcaa60af74e6', 'edit': 101, 'values': T101},
