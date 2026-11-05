@@ -24,7 +24,7 @@
     plinth: '#a89f8c', plinthTop: '#c2b9a5', block: '#262a35', blockEdge: '#5b6e9c', jersey: '#8494b8', cone: '#f2a65a',
     red: '#ff3d3d', redDark: '#9e1f1f', glass: '#1b2a38', dummy: '#ffd400', joint: '#2a2a2a', beam: 'rgba(244,248,250,0.10)',
     beamHot: 'rgba(255,61,61,0.22)', field: 'rgba(127,168,188,0.10)', fieldHot: 'rgba(255,212,0,0.14)', text: '#f4f8fa', dim: '#7fa8bc', hud: '#12151c',
-    cam: '#9ff2c8', camDim: 'rgba(159,242,200,0.55)', drone: '#20242e', rotor: 'rgba(200,214,230,0.5)', part: '#ffd400',
+    cam: '#9ff2c8', camDim: 'rgba(159,242,200,0.55)', camCone: 'rgba(159,242,200,0.08)', drone: '#20242e', rotor: 'rgba(200,214,230,0.5)', part: '#ffd400',
     search: '#ffb347', searchDim: 'rgba(255,179,71,0.5)',
     chalk: 'rgba(238,240,232,0.85)', chalkDim: 'rgba(238,240,232,0.35)', glassBit: '#9fb4c8', mem: '#ff5a5a', memDim: 'rgba(255,90,90,0.55)', tent: '#ffd400' };
   const PARTS = { battery1: 'BATTERY 1 · DASH', legs1: 'LEGS 1 · JUMP', hands1: 'HANDS 1 · CONES', duck1: 'DUCK · HOLD C' }, LOAD = { battery1: 'B1', legs1: 'L1', hands1: 'H1', duck1: 'D1' }, ZONES = { front: 'FRONT', frontDiagonal: 'FRONT CORNER', side: 'SIDE', rearDiagonal: 'REAR CORNER', rear: 'REAR' };
@@ -212,8 +212,16 @@
   function drawCameras() { // rung 4: the junction's street cameras. A link draws from a camera to the dummy behind cover, and on to the car
     const L = s.level; if (s.rung < 4 || !L.cameras) return;
     const b = s.body, cars = s.onRoad().filter((c) => c.red), seen = cars.filter((c) => c.hidden && (c.noticed || (c.hz && c.hz.inPath))), R = s.P['perception.streetCameraRange'] || 0;
-    if (R > 0) { ctx.strokeStyle = C.camDim; ctx.lineWidth = 1; ctx.setLineDash([2, 6]); for (const [x, y] of L.cameras) { ctx.beginPath(); ctx.arc(x, y, R, 0, TAU); ctx.stroke(); } ctx.setLineDash([]); } // what each camera watches
-    for (const [x, y] of L.cameras) { rect(x - 1.5, y - 14, 3, 14, C.joint); rect(x - 5, y - 19, 10, 6, C.joint); ctx.fillStyle = seen.length ? C.cam : C.camDim; ctx.beginPath(); ctx.arc(x + 3, y - 16, 2, 0, TAU); ctx.fill(); }
+    const F = s.P['perception.streetCameraFov'] || 360, cone = F < 360; // row 723: a cone of perception.streetCameraFov along its aim
+    if (R > 0) { ctx.strokeStyle = C.camDim; ctx.lineWidth = 1; ctx.setLineDash([2, 6]);
+      for (const [x, y, aim] of L.cameras) { ctx.beginPath();
+        if (cone && aim != null) { const a0 = (aim - F / 2) * Math.PI / 180, a1 = (aim + F / 2) * Math.PI / 180; ctx.moveTo(x, y); ctx.arc(x, y, R, a0, a1); ctx.closePath(); ctx.fillStyle = C.camCone; ctx.fill(); }
+        else ctx.arc(x, y, R, 0, TAU);
+        ctx.stroke(); }
+      ctx.setLineDash([]); } // what each camera watches
+    for (const [x, y, aim] of L.cameras) { rect(x - 1.5, y - 14, 3, 14, C.joint); rect(x - 5, y - 19, 10, 6, C.joint); ctx.fillStyle = seen.length ? C.cam : C.camDim;
+      const ax = cone && aim != null ? Math.cos(aim * Math.PI / 180) * 4 : 3, ay = cone && aim != null ? Math.sin(aim * Math.PI / 180) * 2 : 0; // the lens looks along its aim
+      ctx.beginPath(); ctx.arc(x + ax, y - 16 + ay, 2, 0, TAU); ctx.fill(); }
     if (!seen.length || !b || !b.alive) return;
     if (s.expected && s.expected() && !(s.seeingCamera && s.seeingCamera())) return; // rung 6 expects it there: its memory, not a camera (drawCrashes, drawCar)
     const cam = (s.seeingCamera && s.seeingCamera()) || L.cameras.slice().sort((p, q) => Math.hypot(p[0] - b.x, p[1] - b.y) - Math.hypot(q[0] - b.x, q[1] - b.y))[0];

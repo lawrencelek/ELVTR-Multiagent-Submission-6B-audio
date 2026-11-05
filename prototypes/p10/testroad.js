@@ -74,7 +74,9 @@
       spawns: [{ x: 600, y: 520, f: -90 }, { x: 200, y: 520, f: -90 }, { x: 640, y: 120, f: 90 }],
       crossings: [{ road: 'A', x: 620 }], // a zebra on road A, east of the junction (drawn; cars do not stop for it yet)
       barrierGap: { x: 160, y: ROAD_A + W + 12, w: 56 }, canal: true, gates: {}, theme: 'start', patches: [],
-      cameras: [[24, ROAD_A + W + 4], [352, ROAD_A + W + 4], [476, 228]], // rung 4's street cameras (drawn): the barrier's two ends, the building's corner
+      // rung 4's street cameras (drawn): the barrier's two ends, the building's corner. Each aims (degrees, 0 east, 90 south) along
+      // the cover it was put up for: perception.streetCameraFov sets its cone (row 723).
+      cameras: [[24, ROAD_A + W + 4, 30], [352, ROAD_A + W + 4, 150], [476, 228, 20]],
     };
   }
 
@@ -302,7 +304,8 @@
     // A dummy standing on the plinth stands above it: the plinth does not hide it from a car that sees height (rung 3).
     // Sightlines to the dummy (rows 696–697). Tall statics hide it from the car's own sensors; the plinth does not hide a dummy
     // standing on it. Low cover hides it by height (lowBlocked). From rung 4 the street cameras see it too: past every tall
-    // static, within perception.streetCameraRange of a post (0: anywhere), and over low cover by height.
+    // static, within perception.streetCameraRange of a post (0: anywhere), and over low cover by height. From 10.8 (row 723)
+    // only within perception.streetCameraFov of its aim (360: all round).
     occluded(self, x0, y0, x1, y1) {
       const b = this.body;
       if (!this.testRoad || !b || x1 !== b.x || y1 !== b.y) return super.occluded(self, x0, y0, x1, y1);
@@ -319,13 +322,19 @@
     }
     cameraSees() { return !!this.seeingCamera(); }
     seeingCamera() { // the first street camera that sees the dummy, or null
-      const P = this.P, b = this.body, R = P['perception.streetCameraRange'] || 0, H = P['perception.streetCameraHeight'] || 0;
+      const P = this.P, b = this.body, R = P['perception.streetCameraRange'] || 0, H = P['perception.streetCameraHeight'] || 0, F = P['perception.streetCameraFov'] || 360;
       for (const cam of this.level.cameras || []) {
-        const [x, y] = cam;
+        const [x, y, aim] = cam;
         if (R > 0 && hyp(b.x - x, b.y - y) > R) continue;
+        if (F < 360 && aim != null && !this.inCameraCone(cam, b.x, b.y)) continue;
         if (!this.lowBlocked(x, y - 16, H, b.x, b.y, this.bodyHeight())) return cam;
       }
       return null;
+    }
+    inCameraCone(cam, px, py) { // within half of perception.streetCameraFov of the camera's aim
+      const F = this.P['perception.streetCameraFov'] || 360; if (F >= 360 || cam[2] == null) return true;
+      const a = Math.atan2(py - cam[1], px - cam[0]) * 180 / Math.PI, d = ((a - cam[2]) % 360 + 540) % 360 - 180;
+      return Math.abs(d) <= F / 2;
     }
     eyeHeight(c) { return this.rung >= 3 ? this.P['perception.lidarHeight'] : this.P['perception.sensorHeight']; } // rung 3's lidar rides above the roof
     bodyHeight() { const b = this.body, P = this.P; return (b.duck ? P['body.duckHeight'] : P['proto.art.dummyHeight']) + (b.raised ? P['world.jumpableHeight'] : 0) + (b.z || 0); }

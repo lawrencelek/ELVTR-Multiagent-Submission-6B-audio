@@ -35,8 +35,10 @@ HOME_COVER = "aim, flank, jump and dashjump wait at (300, 410), behind the barri
 MODE_DESC = {'lesson': "from the build's start (10.2: rung 0, on foot; 10.3: rung 1, Battery 1 fitted; 10.5: rung 3, Battery 1 and Legs 1 fitted); the lesson and the part as the build delivers them",
              'trained': "at the top rung from the start, every part its rungs bring fitted: the rung's own table"}
 STAGE = str(d.get('stage', '10.1'))
+RARE = []
 if STAGE >= '10.8':  # rung 7: seen-then-hidden closes; hiding before it sees you, or crawling away from the ghost, stays
-    CLOSED, OPEN_FOOT, OPEN_DASH = ['stand', 'standSouth', 'standOff', 'charge', 'kerb', 'walkin', 'corner', 'gap', 'plinth', 'conebait', 'standplanter', 'peek'], ['lurk', 'flankOpen'], ['peekmove', 'roam']
+    CLOSED, OPEN_FOOT, OPEN_DASH = ['stand', 'standSouth', 'standOff', 'charge', 'kerb', 'walkin', 'corner', 'plinth', 'standplanter', 'peek'], ['lurk', 'flankOpen'], ['peekmove', 'roam']
+    RARE = ['gap', 'conebait']  # row 723: the cameras' cones (perception.streetCameraFov) leave blind sides; rare, not closed
     COVER = ['gap', 'aim', 'flank', 'jump', 'dashjump']
     ESC_CLOSED, ESC_OPEN = ['peek'], ['peekmove']
     HOME_COVER += "; conebait starts at the gap (188, 414); planter and standplanter use one spot behind the planter row south of road A, east (590, 418); roam, peek and peekmove use nine spots behind the three rows; lurk waits at (660, 576)"
@@ -175,6 +177,7 @@ if top == 2:
 if top >= 1:
     checks += [
         (f'Rung {top} closes: ' + ', '.join(CLOSED) + ' score 0', all(r['hits'] == 0 for r in tr if r['policy'] in CLOSED), ', '.join(f"{p} {sum(r['hits'] for r in tr if r['policy'] == p)}" for p in CLOSED)),
+    ] + ([(f'The cameras\' blind sides leave rare edges: ' + ', '.join(RARE) + ' under 0.2 a minute (row 723)', all(m([r['hitsPerMin'] for r in tr if r['policy'] == p]) < 0.2 for p in RARE), ', '.join(f"{p} {m([r['hitsPerMin'] for r in tr if r['policy'] == p])}/min" for p in RARE))] if RARE else []) + [
         ('It stops beyond dash reach for a dummy standing ahead', all(r['cars']['minStopGap'] >= r['cars']['reach'] for r in stops), f"closest stop {min(r['cars']['minStopGap'] for r in stops)} (reach {tr[0]['cars']['reach']:.0f})" if stops else 'no stops'),
         ('An opening without the new part still lands (pillar 1, D97)', all(r['hits'] > 0 for r in tr if r['policy'] in OPEN_FOOT), ', '.join(f"{p} {m([r['hitsPerMin'] for r in tr if r['policy'] == p])}/min" for p in OPEN_FOOT)),
         ('Any other spot still lands' if top >= 6 else 'The opening the new part unlocks lands', all(r['hits'] > 0 for r in tr if r['policy'] in OPEN_DASH) if OPEN_DASH else True, (', '.join(f"{p} {m([r['hitsPerMin'] for r in tr if r['policy'] == p])}/min" for p in OPEN_DASH) or 'no new part in this test')),

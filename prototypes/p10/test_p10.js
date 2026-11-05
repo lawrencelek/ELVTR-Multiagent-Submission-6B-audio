@@ -405,6 +405,16 @@ check('10.8 rung 7: crawled beyond duel.searchRadius of the ghost, the dummy is 
     detail: `ghost ${ghost ? ghost.t.toFixed(1) + ' s' : '—'}; gave up ${end ? end.t.toFixed(1) + ' s, ' + (wait != null ? wait.toFixed(2) : '—') + ' s after its last find (duel.searchSeconds ' + T + '); dummy ' + Math.round(gap) + ' from the ghost' : '—'}; hit ${h ? h.t.toFixed(1) + ' s, ' + h.zone + ', ' + Math.round(h.lost) : 'none'}` };
 });
 
+check('10.8 (row 723): each street camera sees only within perception.streetCameraFov of its aim; at 360 (10.7) it sees all round', () => {
+  const t = sim(F8, {}, ALL), o = sim(F7, {}, ALL), F = F8['perception.streetCameraFov'], R = F8['perception.streetCameraRange'];
+  const at = (q, x, y) => { Object.assign(q.body, { x, y, duck: false }); return !!q.seeingCamera(); };
+  const [cx, cy, aim] = t.level.cameras[0], pt = (deg, r) => [cx + Math.cos(deg * Math.PI / 180) * r, cy + Math.sin(deg * Math.PI / 180) * r];
+  const inside = pt(aim, R * 0.6), outside = pt(aim + F / 2 + 25, R * 0.6), north = [50, 203];
+  const r = { inside: at(t, ...inside), outside: at(t, ...outside), north8: at(t, ...north), north7: at(o, ...north), outside7: at(o, ...outside) };
+  return { ok: F < 360 && t.level.cameras.every((c) => c.length === 3) && r.inside && !r.outside && !r.north8 && r.north7 && r.outside7,
+    detail: `fov ${F}°, range ${R}; camera 1 aims ${aim}°. 10.8: inside the cone ${r.inside}, ${F / 2 + 25}° off its aim ${r.outside}, the north planters ${r.north8}. 10.7: north planters ${r.north7}, off its aim ${r.outside7}` };
+});
+
 // ---------- registry and frozen builds
 check('Prototype 10 values are registered (registry first)', () => {
   const reg = new Set(JSON.parse(fs.readFileSync(path.join(ROOT, 'content/params/tuning.parameters.json'), 'utf8')).entries.map((e) => e.id));

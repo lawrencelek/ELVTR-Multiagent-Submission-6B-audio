@@ -14111,6 +14111,28 @@
    "purpose": "Rung 4 and up: a street camera sees a dummy within this of its post. 0: the whole screen (10.5). 10.6 sets 180: the barrier and the building corner, which they watch"
   },
   {
+   "id": "perception.streetCameraFov",
+   "group": "Vehicles and traffic",
+   "owner": "Design",
+   "label": "Street camera field of view",
+   "description": "Rung 4 and up: a street camera sees only within this angle, centred on its aim along the cover it was put up for. 360: all round (10.5–10.7). 10.8 sets 60",
+   "unit": "degrees",
+   "type": "number",
+   "default": 360,
+   "status": "proposed",
+   "source": "GDD Edit 108 amendment (Prototype 10.8): DECISIONS row 723",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-run",
+   "validation": {
+    "min": 10,
+    "max": 360
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "Rung 4 and up: a street camera sees only within this angle, centred on its aim along the cover it was put up for. 360: all round (10.5–10.7). 10.8 sets 60"
+  },
+  {
    "id": "duel.lessonClipSeconds",
    "group": "Prototype P10",
    "owner": "Design",

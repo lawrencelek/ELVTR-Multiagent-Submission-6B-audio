@@ -1003,7 +1003,8 @@
     "proto.health.standard": 500,
     "duel.blockSeconds": 10,
     "duel.searchRadius": 60,
-    "duel.searchSeconds": 4
+    "duel.searchSeconds": 4,
+    "perception.streetCameraFov": 60
    },
    "flags": {
     "proto.droneConeSeconds": 5,
@@ -1124,7 +1125,8 @@
     "perception.lidarHeight": 26,
     "perception.streetCameraHeight": 60,
     "perception.streetCameraRange": 180,
-    "proto.health.standard": 500
+    "proto.health.standard": 500,
+    "perception.streetCameraFov": 60
    }
   }
  }

@@ -97,6 +97,7 @@ T107 = dict(T106, **{
 T108 = dict(T107, **{
     'duel.startRung': 6, 'duel.topRung': 7,  # one lesson: rung 6 to rung 7 (row 717)
     'duel.searchRadius': 60, 'duel.searchSeconds': 4,  # the ghost's reach: about one hiding spot; four seconds, then it gives up (row 717)
+    'perception.streetCameraFov': 60,  # each street camera sees a cone along the cover it watches, not all round (row 723)
 })
 STAGES = {
     '10.1': {'title': 'THE TEST ROAD', 'page': 'dummies_p10.html', 'frozen': '82ab5e55d243ee500d6dfcaa60af74e6', 'edit': 101, 'values': T101},

@@ -2,11 +2,13 @@
 
 **5 November 2026 · Lawrence Lek** · The eighth escalating test (handover v2 §14.2, §25). Localized: adds §10.8 to the Prototype 10 chapter. Builds row 716's first two proposals: the ghost and the search state.
 
+**Amended 5 November (row 723):** each street camera sees a cone of `perception.streetCameraFov` (60°), not all round (§10.8.4).
+
 - **Build:** `prototypes/p10/dummies_p10_8.html` (`python3 prototypes/p10/build.py`).
 - **Playtest pages:** `index.html`, one per test. 10.1–10.7 are frozen; 10.7 at md5 `54328d01…`.
-- **Tests:** `node prototypes/p10/test_p10.js --page` 56/56. Prototype 9 rebuild md5 `be163e7d014344e062965986b3da5786`. 8.4 md5 `9f5549201d88891f9f0b22c461602909`. Sound freeze: 211 items, 0 changed.
-- **Probes:** `node qa/testroad.js --stage 10.8 --out qa/baseline/p10_8.json`; report `qa/baseline/p10_8.md`, 15/15 checks. 10.7 reruns identical to its baseline, new fields aside.
-- **Decision log:** rows 717–722. Open D119, D120, D121, D122.
+- **Tests:** `node prototypes/p10/test_p10.js --page` 57/57. Prototype 9 rebuild md5 `be163e7d014344e062965986b3da5786`. 8.4 md5 `9f5549201d88891f9f0b22c461602909`. Sound freeze: 211 items, 0 changed.
+- **Probes:** `node qa/testroad.js --stage 10.8 --out qa/baseline/p10_8.json`; report `qa/baseline/p10_8.md`, 16/16 checks. 10.7 reruns identical to its baseline, new fields aside.
+- **Decision log:** rows 717–723. Open D119, D120, D121, D122, D123.
 
 ## Request
 
@@ -23,6 +25,8 @@
 | The ghost marks a true sighting only: its own sensors, or a street camera | Memory and the search see through cover; a ghost set by them would follow the dummy | Proposed (row 718) |
 | `duel.searchRadius` 60: about one spot's spacing | The nine hiding spots sit about 60 apart (row 708) | Proposed (row 718; D122) |
 | `duel.searchSeconds` 4: from the last time it had the dummy | Short: a search, not a stalemate. The block lift ends a found dummy's wait (row 715) | Proposed (row 718; D122) |
+| Narrower cameras: a cone along the cover each was put up for | Lawrence, 5 November: "with the cameras it's super difficult since they have this 360 view. they need a narrower field of view" | Decided (row 723) |
+| 60°; aims along the barrier and the building's south face | D118: each camera watches the cover near its post | Proposed (row 723; D123) |
 
 ## 10.8 The search
 
@@ -60,7 +64,19 @@
 - **On the dummy:** inside the ring, FOUND, in amber. At a remembered spot, EXPECTED, in red. Elsewhere, HIDDEN or SEEN.
 - **On the lesson screen:** §10.8.1's beats.
 
-### 10.8.4 The opening
+### 10.8.4 The street cameras' cones (row 723)
+
+- **Each camera sees a cone:** `perception.streetCameraFov` (60°) about its aim, out to `perception.streetCameraRange` (180).
+- **Aims (degrees; 0 east, 90 south):**
+  - The barrier's west end: 30°, along the barrier's back.
+  - The barrier's east end: 150°, along it from the other end.
+  - The building's corner: 20°, along the building's south face.
+- **Outside every cone, cover hides the dummy** as from the car's own sensors.
+- **Now unwatched:** the north planter row, the plinth, the building's west face, both planter rows south-east.
+- **Drawn:** a faint cone per camera, replacing the range circle. The lens points along its aim.
+- **Frozen 10.5–10.7 keep 360°.**
+
+### 10.8.5 The opening
 
 - **Crawl away.** Ducked, cross more than `duel.searchRadius` along the cover. It gives up and drives on into the strike.
 - **Hide before it sees you.** No sighting, no ghost: the spot works as at rung 6.
@@ -76,6 +92,7 @@
   - `searched`: `expected` covers the ring.
   - `springSeen`: each spring records the last sighting. `account` sets `lostSight` and `seenAt`. `learnFrom`: the search cause.
 - `game_p10.js`: the ghost, ring, arc and line; the beacon and tag; FOUND; the clip's ghost; the fitting's diagram; the title line "It looks where it last saw you."
+- Row 723: each camera carries an aim; `inCameraCone` in `seeingCamera`; the cones drawn.
 - `build.py`: 10.8's stage; 10.7's page frozen.
 - `qa/testroad.js`: bots `peek` (stand in view until noticed; duck; spring) and `peekmove` (the same; crawl beyond the radius along the row first). Fields: searches, found, ended, hits after a lost sighting.
 
@@ -85,22 +102,37 @@
 
 | Way in | Hits a minute | Damage a hit | Verdict |
 |---|---|---|---|
-| Seen, then ducked, the same spot (`peek`) | 0 | — | Closed: 28 searches, 28 found |
-| Seen, then crawled beyond the ring (`peekmove`) | 1.89 | 161 | Open: the crawl |
-| Moving between spots it does not remember (`roam`) | 2.52 | 233 | Open, narrowed: 6.97 at rung 6. Walks in view leave ghosts |
+| Seen, then ducked, the same spot (`peek`) | 0 | — | Closed: 30 searches, 30 found |
+| Seen, then crawled beyond the ring (`peekmove`) | 1.96 | 166 | Open: the crawl |
+| Moving between spots it does not remember (`roam`) | 2.59 | 226 | Open, narrowed: 6.97 at rung 6. Walks in view leave ghosts |
 | The sprint from past the field (`lurk`) | 0.60 | 53 | Open (D115) |
-| The flank from open pavement | 0.40 | 52 | Open (D115) |
+| The flank from open pavement | 0.60 | 53 | Open (D115) |
 | The planter ambush, the same spot | 0.27 | 84 | Closed after one hit a run (rung 6) |
+| Behind the barrier at its gap; the cone bait | 0.07; 0.13 | 71; 53 | Rare: the cameras' blind sides (row 723) |
 | Every other bot | 0 | — | Closed |
 
-- **A new behaviour:** 564 searches; 106 found the dummy near the ghost; 558 ended. None at rung 6.
-- **No hit from a remembered spot:** 0 of 84.
-- **The block lift:** 525 lifts. No wait for the dummy past 20 s.
+- **A new behaviour:** 779 searches; 120 found the dummy near the ghost; 773 ended. None at rung 6.
+- **No hit from a remembered spot:** 0 of 92.
+- **The block lift:** 1,079 lifts. No wait for the dummy past 20 s.
+
+**The cones (row 723; trained, hits a minute):**
+
+| Way in | 360° | 60° |
+|---|---|---|
+| The crawl (`peekmove`) | 1.89 | 1.96 |
+| Moving between spots (`roam`) | 2.52 | 2.59 |
+| The flank from open pavement | 0.40 | 0.60 |
+| Behind the barrier at its gap (`gap`) | 0 | 0.07 |
+| The cone bait | 0 | 0.13 |
+| Searches | 564 | 779 |
+
+- **The bots barely move.** Their spots sat outside the cameras' range already. A human hiding by the plinth, the north planters or the building's west face gains most.
 
 **The lesson** (mode `lesson`):
 
-- **Lessons:** in 9 of 9 runs with a hit from cover after a sighting, at 3–54 s. 0 of 9 runs with other hits only.
-- **Escalation (10 minutes):** seen-then-hidden decays to 0 after two hits. The crawl holds at 2–5 a minute (decay 0.67). Roaming holds at 3 (0.60).
+- **Lessons:** in 9 of 9 runs with a hit from cover after a sighting, at 3–54 s.
+- **Lessons:** 0 of 10 runs with other hits only.
+- **Escalation (10 minutes):** seen-then-hidden decays to 0 after two hits. The crawl holds at 1–4 a minute (decay 0.50). Roaming holds at 3 (0.70).
 
 **Pace:**
 
@@ -108,17 +140,18 @@
 |---|---|---|
 | Moving between spots, rung 6 (10.7) | 18 | At most 80 (Edit 18 §10.2) |
 | Moving between spots, rung 7 | 55 | |
-| The crawl, rung 7 | 111 | |
+| The crawl, rung 7 | 99 (111 at 360°) | |
 
 ## Registry
 
-- **Added (2):** `duel.searchRadius`, `duel.searchSeconds`.
-- **Set by stage:** `duel.startRung` 6, `duel.topRung` 7, `duel.searchRadius` 60, `duel.searchSeconds` 4. 10.7's values otherwise.
-- **665 entries.** `registryVersion` unchanged (row 665).
+- **Added (3):** `duel.searchRadius`, `duel.searchSeconds`; `perception.streetCameraFov` (row 723; default 360).
+- **Set by stage:** `duel.startRung` 6, `duel.topRung` 7, `duel.searchRadius` 60, `duel.searchSeconds` 4, `perception.streetCameraFov` 60. 10.7's values otherwise.
+- **666 entries.** `registryVersion` unchanged (row 665).
 
 ## Open
 
-- **Human pass (H6):** does the player read the ghost, and crawl away?
+- **Human pass (H6):** does the player read the ghost, and crawl away? Do the cones read as blind sides?
+- **D123:** the cones' width and aims. 60° fixed; or panning, as MGS's cameras sweep.
 - **D121:** the order from here. The road upgrade at 10.9, swerve cost at 10.10.
 - **D122:** the search's values. 60 and 4 leave the crawl open along a row longer than 60.
 - **D119:** eased. The roaming expert writes off a body every 55 s, within the target.
