@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Prototype 10 build (GDD Edits 101–107): the Monument test road, one page per test.
+"""Prototype 10 build (GDD Edits 101–108): the Monument test road, one page per test.
 
     python3 prototypes/p10/build.py          # writes sim_flags.json and every page not frozen
 
@@ -10,7 +10,7 @@ Shared files are not touched. sim_flags.json holds every test's values for the h
 
 A test's page freezes once its human pass may use it, and is never rewritten (md5 below): 10.1 (dummies_p10.html, built
 at 4b3d668), 10.2 (dummies_p10_2.html, built at eab988b), 10.3 (dummies_p10_3.html, built at c3b0177), 10.4 (dummies_p10_4.html, built with
-row 685's rule), 10.5 (dummies_p10_5.html, built at b4361dc) and 10.6 (dummies_p10_6.html, built at 37fa80b). Their values still live here, so the probes rerun them on today's code. 10.0 has no page: it measured Prototype 9 as built.
+row 685's rule), 10.5 (dummies_p10_5.html, built at b4361dc), 10.6 (dummies_p10_6.html, built at 37fa80b) and 10.7 (dummies_p10_7.html, built at a3e29f0). Their values still live here, so the probes rerun them on today's code. 10.0 has no page: it measured Prototype 9 as built.
 """
 import hashlib, json, re, subprocess
 from pathlib import Path
@@ -92,6 +92,12 @@ T107 = dict(T106, **{
     'proto.health.standard': 500,            # the test road's body: 500, not 800 (D117: Lawrence, "lighter body … 500 health")
     'duel.blockSeconds': 10,                 # a car kept waiting 10 s for the dummy calls a drone to lift it aside (row 715)
 })
+# Prototype 10.8: from rung 6, a hit from cover by a dummy the car had just seen teaches rung 7, the search: a ghost where it
+# last saw the dummy; it stops short of it, finds a dummy still near it, gives up after duel.searchSeconds (row 717)
+T108 = dict(T107, **{
+    'duel.startRung': 6, 'duel.topRung': 7,  # one lesson: rung 6 to rung 7 (row 717)
+    'duel.searchRadius': 60, 'duel.searchSeconds': 4,  # the ghost's reach: about one hiding spot; four seconds, then it gives up (row 717)
+})
 STAGES = {
     '10.1': {'title': 'THE TEST ROAD', 'page': 'dummies_p10.html', 'frozen': '82ab5e55d243ee500d6dfcaa60af74e6', 'edit': 101, 'values': T101},
     '10.2': {'title': 'THE FIRST LESSON', 'page': 'dummies_p10_2.html', 'frozen': '9dd14c5877128390fbad2595e86edce7', 'edit': 102, 'values': T102},
@@ -99,9 +105,10 @@ STAGES = {
     '10.4': {'title': 'THE ROOF LIDAR', 'page': 'dummies_p10_4.html', 'frozen': 'b12b48d8dee90294829366f07ef7d1b6', 'edit': 104, 'values': T104},
     '10.5': {'title': 'THE STREET CAMERAS', 'page': 'dummies_p10_5.html', 'frozen': '252785354962f8ac050f022b251bd29f', 'edit': 105, 'values': T105},
     '10.6': {'title': 'DUCK', 'page': 'dummies_p10_6.html', 'frozen': '7acd08d2cc239e1743f2b85786ce411e', 'edit': 106, 'values': T106},
-    '10.7': {'title': 'CRASH MEMORY', 'page': 'dummies_p10_7.html', 'frozen': None, 'edit': 107, 'values': T107},
+    '10.7': {'title': 'CRASH MEMORY', 'page': 'dummies_p10_7.html', 'frozen': '54328d019a708d70615b3bc57b0b7366', 'edit': 107, 'values': T107},
+    '10.8': {'title': 'THE SEARCH', 'page': 'dummies_p10_8.html', 'frozen': None, 'edit': 108, 'values': T108},
 }
-CURRENT = '10.7'
+CURRENT = '10.8'
 
 out = {'registry': reg['registryVersion'], 'current': CURRENT, 'stages': {}}
 for sid, st in STAGES.items():

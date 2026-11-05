@@ -28,6 +28,8 @@
 
 **Updated 3 November, 10.7 built:** §23. Crash memory plays at `prototypes/p10/dummies_p10_7.html`; GDD Edit 107. Every crash leaves a chalk outline; rung 6 rings the last three spots you struck from and expects you there. A shorter drive-in and a 500 body (D117). 10.6's page is frozen.
 
+**Updated 5 November, 10.8 built:** §25. The search plays at `prototypes/p10/dummies_p10_8.html`; GDD Edit 108. Rung 7 marks a ghost where it last saw you, stops short, finds you near it, gives up after 4 s. Crawling away is the opening. The road upgrade moves to 10.9 (D121). 10.7's page is frozen.
+
 **Updated 3 November, 22:59:** §24. A running document of five interlocking systems, read before any level redesign (row 710).
 
 ## 0 How to use this with v1
@@ -699,6 +701,7 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
 | **10.8** | B | The road upgrade: two-way, with white sedans that never learn | — | Its swerve into an empty lane | Oncoming traffic blocks its escape | — |
 | **10.9** | B | Swerve cost: a red swerve into a white sedan is an Incident (`traffic.carContact`) | Prefer braking | The swerve escape | Box it in | — |
 
+- **Revised (row 717, proposed; D121):** 10.8 is rung 7, the search: it looks where it last saw you; closes seen-then-hidden; leaves the crawl. The road upgrade moves to 10.9, swerve cost to 10.10.
 - **Every test reruns the probes** on its build: `qa/stand.js`, `qa/policy.js`, `qa/escalation.js`, `qa/flank.js`.
 - **Pass (proposed):**
   - The new behaviour appears (`qa.esc.newBehaviours`).
@@ -1102,7 +1105,7 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
 - **Human pass (H6):** does the player read the red rings, and move?
 - **D119:** an expert mover writes off a body every 18 s, a quarter of the target.
 - **D120:** the memory's cap: 3, 5, or every crash.
-- **Next:** 10.8, the road upgrade (§14.2): two-way, white sedans that never learn.
+- **Next:** ~~10.8, the road upgrade (§14.2)~~ 10.8 became the search (§25, row 717). The road upgrade moves to 10.9 (D121).
 
 ## 24 Five interlocking systems (3 November, row 710)
 
@@ -1118,4 +1121,57 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
 - **Added (row 714):** §8, the control table: every object type, what hides, obstructs, is remembered and resets. §9, stealth research: ten games, ten patterns, each with a proposal.
 - **Built (row 715):** the block lift. A car kept waiting 10 s by the dummy or its cone calls a drone; it lifts the dummy beside the road until the car has left. 10.7 amended; probes 17/17. The flank from open pavement now lands 0.4 a minute: its stalemate had hidden the sprint from past the field (D115).
 - **Adopted (row 716):** the six §9.2 proposals: a last-seen ghost, a search state, an area alert, moving cover draws notice, spots on a map, white cars slow past outlines (later).
+- **Built (row 717):** the first two, as rung 7 in 10.8 (§25).
+
+## 25 Result: Prototype 10.8, the search (5 November, rows 717–722; GDD Edit 108)
+
+> "Search state with its ghost" (Lawrence), picking row 716's first two proposals.
+
+- **Build:** `prototypes/p10/dummies_p10_8.html`. 10.7's page is frozen.
+- **The one change:** rung 7, taught by one lesson. The car starts at rung 6; the dummy starts with all four parts. No new part.
+- **Checks:** `node prototypes/p10/test_p10.js --page` 56/56. Probes `qa/baseline/p10_8.md` 15/15. 10.7 reruns identical. Prototype 9 and the frozen md5s hold; sound freeze holds.
+
+### 25.1 What changed
+
+| | Before (rung 6) | After (rung 7) |
+|---|---|---|
+| What teaches it | A hit from a spot it struck from before | A hit from cover within 3 s of it truly seeing the dummy |
+| The dummy vanishes behind cover | It forgets it, and drives on | It marks a ghost there and stops short of it |
+| A dummy near the ghost (`duel.searchRadius` 60) | Hidden | Found: seen past cover, noticed at once |
+| How long it looks | — | `duel.searchSeconds` 4 after it last had the dummy |
+
+### 25.2 Showing what it learned (row 701)
+
+- **Road:** an amber ghost, "LAST SEEN"; its ring, solid while you are inside; an arc, the time left.
+- **Car:** an amber beacon. "SEARCHING", then "FOUND".
+- **Dummy:** FOUND in amber; EXPECTED in red at a remembered spot.
+- **Lesson:** the clip draws the ghost, "LAST SEEN · n s BEFORE"; the fitting diagrams the stop line, ghost and ring.
+
+### 25.3 Measured (rung 7 alone; `trained` mode)
+
+| Way in | Hits a minute | Verdict |
+|---|---|---|
+| Seen, then ducked, the same spot | 0 | Closed: 28 searches, all found |
+| Seen, then crawled beyond the ring | 1.89 (161) | Open: the crawl |
+| Moving between free spots | 2.52 (233) | Open, narrowed from 6.97: walks in view leave ghosts |
+| The sprint from past the field | 0.60 (53) | Open, no part (D115) |
+| Every other bot | 0 | Closed |
+
+- **Pace:** the roaming expert writes off a body every 55 s (18 s at rung 6). Within the 80 s target (D119 eased).
+
+### 25.4 The stealth reading, so far (§20)
+
+| Rung | The car's sense | The dummy's tool | The opening it leaves |
+|---|---|---|---|
+| 6 | Your habit: the last three spots | — | Any other spot; the sprint |
+| 7 | Where it last saw you | — | Crawl beyond the ring; hide before it sees you; the sprint |
+
+- **The guard now goes to where it lost you.** Conviction's and Mark of the Ninja's last known position, short and giving up (§9 of the systems document).
+
+### 25.5 Open
+
+- **Human pass (H6):** does the player read the ghost, and crawl away?
+- **D121:** the order from here: the road upgrade at 10.9, or the area alert first.
+- **D122:** the search's values. The crawl's room is a level rule: rows longer than the ring.
+- **Next:** 10.9, the road upgrade (D121): two-way, white sedans that never learn.
 

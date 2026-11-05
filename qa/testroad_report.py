@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Prototype 10 test-road report (GDD Edits 101–107): qa/baseline/p10_<n>.json -> qa/baseline/p10_<n>.md.
+"""Prototype 10 test-road report (GDD Edits 101–108): qa/baseline/p10_<n>.json -> qa/baseline/p10_<n>.md.
     python3 qa/testroad_report.py qa/baseline/p10_2.json qa/baseline/p10_2.md "Prototype 10.2: the first lesson"
 10.1's report (p10_1.md) was written by this script's first version; its JSON has no 'mode' and reads as 'lesson'.
 """
@@ -28,12 +28,19 @@ DESC = {'stand': "Stands on the north lane's line, road A", 'standSouth': "Stand
         'lurk': "Waits past every field's edge, south-east; sprints in as a car passes in road A's south lane, dashes before the field notices",
         'planter': "The cone bait until DUCK; then ducks behind the planter row south of road A, east, and springs over it at a passing car",
         'standplanter': "The same spot behind the planter row, standing",
+        'peek': "Stands in view at a free spot behind a row for the car's road; once the car has noticed it, ducks and springs as it passes",
+        'peekmove': "The same, but once ducked it crawls along the row beyond duel.searchRadius of where it was seen, then springs",
         'roam': "DUCK behind a planter row, at the nearest spot for the car's road that it does not remember (it reads the red rings); springs at a passing car"}
 HOME_COVER = "aim, flank, jump and dashjump wait at (300, 410), behind the barrier: cover"
 MODE_DESC = {'lesson': "from the build's start (10.2: rung 0, on foot; 10.3: rung 1, Battery 1 fitted; 10.5: rung 3, Battery 1 and Legs 1 fitted); the lesson and the part as the build delivers them",
              'trained': "at the top rung from the start, every part its rungs bring fitted: the rung's own table"}
 STAGE = str(d.get('stage', '10.1'))
-if STAGE >= '10.7':  # rung 6: the same spot closes; any other spot stays, and the sprint from beyond the field (lurk; flankOpen, once the lift ends its stalemate: row 715)
+if STAGE >= '10.8':  # rung 7: seen-then-hidden closes; hiding before it sees you, or crawling away from the ghost, stays
+    CLOSED, OPEN_FOOT, OPEN_DASH = ['stand', 'standSouth', 'standOff', 'charge', 'kerb', 'walkin', 'corner', 'gap', 'plinth', 'conebait', 'standplanter', 'peek'], ['lurk', 'flankOpen'], ['peekmove', 'roam']
+    COVER = ['gap', 'aim', 'flank', 'jump', 'dashjump']
+    ESC_CLOSED, ESC_OPEN = ['peek'], ['peekmove']
+    HOME_COVER += "; conebait starts at the gap (188, 414); planter and standplanter use one spot behind the planter row south of road A, east (590, 418); roam, peek and peekmove use nine spots behind the three rows; lurk waits at (660, 576)"
+elif STAGE >= '10.7':  # rung 6: the same spot closes; any other spot stays, and the sprint from beyond the field (lurk; flankOpen, once the lift ends its stalemate: row 715)
     CLOSED, OPEN_FOOT, OPEN_DASH = ['stand', 'standSouth', 'standOff', 'charge', 'kerb', 'walkin', 'corner', 'gap', 'plinth', 'conebait', 'standplanter'], ['lurk', 'flankOpen'], ['roam']
     COVER = ['gap', 'aim', 'flank', 'jump', 'dashjump']
     ESC_CLOSED, ESC_OPEN = ['planter'], ['roam']
@@ -74,7 +81,8 @@ w(f"- **Build:** `{d['build']}`, level `{d['level']}`, stage {d.get('stage', '10
 w(f"- **Runs:** {len(POL)} bots × {len(MODES)} mode(s) × offsets {d['offsets']} s × {d['secs']} sim-seconds; escalation {d['esc']} s.")
 for mo in MODES: w(f'- **Mode `{mo}`:** {MODE_DESC.get(mo, "")}.')
 if STAGE >= '10.3': w(f'- **Cover:** {HOME_COVER}.')
-if STAGE >= '10.7': w('- **Parts:** Battery 1, Legs 1, Hands 1 and DUCK fitted from the start. No new part. Every crash leaves an outline; from rung 6 the car remembers the latest `duel.memorySites` spots.')
+if STAGE >= '10.8': w('- **Parts:** Battery 1, Legs 1, Hands 1 and DUCK fitted from the start. No new part. The car starts at rung 6, crash memory; from rung 7 it searches where it last saw the dummy.')
+elif STAGE >= '10.7': w('- **Parts:** Battery 1, Legs 1, Hands 1 and DUCK fitted from the start. No new part. Every crash leaves an outline; from rung 6 the car remembers the latest `duel.memorySites` spots.')
 elif STAGE >= '10.6': w('- **Parts:** Battery 1, Legs 1 and Hands 1 fitted from the start; DUCK by drone at the first stop at a cone. Three low planter rows by the road.')
 elif STAGE >= '10.5': w('- **Parts:** Battery 1 and Legs 1 fitted from the start; Hands 1, the cones, by drone at the first stop for a dummy behind cover.')
 elif STAGE >= '10.4': w('- **No new part:** Battery 1 and Legs 1 are fitted from the start.')
@@ -136,7 +144,7 @@ if STAGE >= '10.7':  # row 703 (D117): the shorter run-in and the lighter body
     pace = json.load(open(sys.argv[4])) if len(sys.argv) > 4 else None
     w('| Way in | Mode | Hits a minute | Damage a hit | Seconds a write-off | Cars a minute |')
     w('|---|---|---|---|---|---|')
-    rows = [(p, mo, sel(mo, p)) for mo in MODES for p in ('roam', 'planter', 'lurk')]
+    rows = [(p, mo, sel(mo, p)) for mo in MODES for p in ('peekmove', 'roam', 'peek', 'planter', 'lurk')]
     if pace: rows.append(('planter, no memory (`duel.topRung` 5)', 'lesson', [r for r in pace['runs'] if r['policy'] == 'planter']))
     for p, mo, rs in rows:
         if not rs: continue
@@ -229,6 +237,19 @@ if top == 6:
         ('Every damaging hit leaves a crash; memory holds at most duel.memorySites', all(r.get('crashes') == r['hits'] for r in tr) and all(r.get('sites', 0) <= (N or 10 ** 9) for r in allr), f"crashes = hits in {sum(1 for r in tr if r.get('crashes') == r['hits'])} of {len(tr)} trained runs; most remembered {max(r.get('sites', 0) for r in allr)} (cap {N or 'none'})"),
         ('No car waits for the dummy past duel.blockSeconds: FARSIGHT lifts it aside (row 715)', all(r['cars'].get('blocked20s', 0) == 0 for r in allr) and sum(r.get('lifts', 0) for r in tr if r['policy'] in ('stand', 'standSouth', 'standOff')) > 0, f"waits over 20 s: {sum(r['cars'].get('blocked20s', 0) for r in allr)}; lifts {sum(r.get('lifts', 0) for r in allr)}, put down {sum(r.get('liftDrops', 0) for r in allr)} (standing bots: {sum(r.get('lifts', 0) for r in tr if r['policy'] in ('stand', 'standSouth', 'standOff'))})") if d['p10'].get('duel.blockSeconds') else ('—', True, ''),
         ('Rung 6 keeps cover closed: ' + ', '.join(COVER) + ': at most one hit in 15 minutes each', all(sum(r['hits'] for r in tr if r['policy'] == p) <= 1 for p in COVER), ', '.join(f"{p} {sum(r['hits'] for r in tr if r['policy'] == p)}" for p in COVER)),
+    ]
+if top == 7:
+    les = [r for r in runs if r['mode'] == 'lesson']
+    ls = [r for r in les if r.get('lostSightHits', 0) > 0]
+    other = [r for r in les if r['hits'] > 0 and not r.get('lostSightHits', 0)]
+    pk, pm = [r for r in tr if r['policy'] == 'peek'], [r for r in tr if r['policy'] == 'peekmove']
+    checks += [
+        ('Only a hit from cover by a dummy it had just seen teaches rung 7', all(r.get('lesson') for r in ls) and not any(r.get('lesson') for r in other), f"lessons: {sum(1 for r in ls if r.get('lesson'))} of {len(ls)} runs with such a hit; {sum(1 for r in other if r.get('lesson'))} of {len(other)} runs with only other hits"),
+        ('A new behaviour: it searches the ghost (none at rung 6)', sum(r.get('searches', 0) for r in tr) > 0 and sum(r.get('searchFound', 0) for r in tr) > 0, f"trained: {sum(r.get('searches', 0) for r in tr)} searches; {sum(r.get('searchFound', 0) for r in tr)} found the dummy near the ghost; {sum(r.get('searchEnd', 0) for r in tr)} ended"),
+        ('Rung 7 closes seen-then-hidden: peek at most one hit in 15 minutes', sum(r['hits'] for r in pk) <= 1, f"peek {sum(r['hits'] for r in pk)} hits; peekmove, crawling beyond duel.searchRadius, {sum(r['hits'] for r in pm)}"),
+        ('No hit from a spot it remembered at the time', sum(r.get('rememberedHits', 0) for r in tr) == 0, f"trained: {sum(r.get('rememberedHits', 0) for r in tr)} of {sum(r['hits'] for r in tr)} hits"),
+        ('No car waits for the dummy past duel.blockSeconds: FARSIGHT lifts it aside (row 715)', all(r['cars'].get('blocked20s', 0) == 0 for r in allr), f"waits over 20 s: {sum(r['cars'].get('blocked20s', 0) for r in allr)}; lifts {sum(r.get('lifts', 0) for r in allr)}"),
+        ('Rung 7 keeps cover closed: ' + ', '.join(COVER) + ': at most one hit in 15 minutes each', all(sum(r['hits'] for r in tr if r['policy'] == p) <= 1 for p in COVER), ', '.join(f"{p} {sum(r['hits'] for r in tr if r['policy'] == p)}" for p in COVER)),
     ]
 if top == 2 and d['p10'].get('duel.jumpArrives') == 2:
     leg = [r for r in runs if r['mode'] == 'lesson' and r.get('firstSideAt') is not None]

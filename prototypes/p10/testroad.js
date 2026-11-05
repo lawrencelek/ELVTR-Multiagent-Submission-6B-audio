@@ -10,6 +10,9 @@
 // 10.7: from rung 5, a hit sprung from the spot of an earlier crash teaches rung 6, crash memory: it remembers where you
 // struck from, and expects you there. Every crash leaves a chalk outline on the road. A shorter run-in; a lighter body.
 // A car kept waiting for the dummy duel.blockSeconds calls FARSIGHT: a drone lifts the dummy to the side of the road.
+// 10.8: from rung 6, a hit from cover by a dummy the car had seen just before teaches rung 7, the search: when it loses the
+// dummy behind cover it leaves a ghost where it last saw it, slows to stop short of it, and finds a dummy still near it.
+// After duel.searchSeconds it gives up and drives on.
 // Extends the base Sim from prototypes/p6/sim.js. Shared files are untouched, so Prototype 9's build keeps its md5.
 // Runs in the browser (window.DUMMIES) and in node (require), so the probes run headless without a page.
 (function (root) {
@@ -103,6 +106,12 @@
   // 0 all). A hit from the open was the player's skill: it leaves an outline, not a memory (row 713). A dummy within
   // duel.memoryRadius of a remembered spot is expected: cover does not hide it and the field notices it at once. Only a hit
   // sprung from cover at the spot of an earlier such crash teaches it (habit). New spots still work, once each. No part.
+  // Rung 7, the search (systems document §9.2, row 716; Splinter Cell: Conviction's last known position, Mark of the Ninja's
+  // partial sighting): when the car loses a dummy it had in sight behind cover, it keeps a ghost where it last saw it. It
+  // slows to stop short of the ghost, as for a dummy there, and a dummy within duel.searchRadius of it is found: cover does
+  // not hide it, and the field notices it at once. After duel.searchSeconds it gives up and drives on. Only a hit from cover
+  // by a dummy the car had in sight within the training clip teaches it (search). The opening it leaves: get into hiding
+  // before the car sees you, or crawl away from the ghost before it gets there. No part.
   // Each rung brings the dummy a part by drone (part, partKey): when that value is 1, as the lesson ends; 2, the first
   // time the car uses the new rung against the dummy (trigger); 3, fitted from the start.
   const RUNGS = [
@@ -113,6 +122,7 @@
     { rung: 4, name: 'Street cameras', sensor: 'STREET CAMERAS', fit: 'LINK', learnsFrom: ['front', 'frontDiagonal', 'side', 'rearDiagonal'], cover: true, part: 'hands1', partKey: 'duel.conesArrives', trigger: 'first-cover' },
     { rung: 5, name: 'Road items', sensor: 'ROAD ITEMS', fit: 'UPDATE', learnsFrom: ['front', 'frontDiagonal', 'side', 'rearDiagonal'], items: true, part: 'duck1', partKey: 'duel.duckArrives', trigger: 'first-item' },
     { rung: 6, name: 'Crash memory', sensor: 'YOUR HABIT', fit: 'MEMORY', learnsFrom: ['front', 'frontDiagonal', 'side', 'rearDiagonal'], habit: true },
+    { rung: 7, name: 'Search', sensor: 'LAST SEEN', fit: 'SEARCH', learnsFrom: ['front', 'frontDiagonal', 'side', 'rearDiagonal'], search: true },
   ];
 
   // ---------- The test road: one red sedan, alone on the road
@@ -203,6 +213,8 @@
         const m = c.man, hz = c.hz, b = this.body;
         if (!c.red || c.ghost) continue;
         this.trackSight(c, dt);
+        if (c.hz && (c.noticed || c.hz.inPath) && b.alive && this.trulySees(c)) { c.seenT = this.t; c.seenAt = { x: b.x, y: b.y }; } // it truly had the dummy (last tick's sensing): when, and where
+        if (this.rung >= 7) this.searchStep(c);
         c.checks = this.rung >= 6 ? this.checking(c) : null; // rung 6: the remembered spots in its field, which it watches
         if (c.dodge && c.dodge.kind === 'cone' && c.cause === 'cone' && c.man && c.man.type === 'shift' || c.coneSwerve && c.dodge && c.dodge.kind === 'cone') { c.coneSwerve = true; c.coneSwerveT = this.t; } else c.coneSwerve = false; // row 695: swerving round a cone, and when last
         if (this.rung >= 2 && this.watchField(c, dt)) continue;
@@ -353,7 +365,32 @@
     sites() { return this.crashes.filter((m) => m.cover); }
     memory() { if (this.rung < 6) return []; const n = Math.round(this.P['duel.memorySites'] || 0), all = this.sites(); return n > 0 ? all.slice(-n) : all; }
     nearSite(x, y, sites) { const R = this.P['duel.memoryRadius'] || 0; return (sites || this.sites()).find((m) => hyp(x - m.ox, y - m.oy) <= R + 1e-9) || null; }
-    expected() { const b = this.body; return this.rung >= 6 && !!b && b.alive && !!this.nearSite(b.x, b.y, this.memory()); } // the dummy stands at a spot it remembers
+    expected() { const b = this.body; return this.rung >= 6 && !!b && b.alive && (!!this.nearSite(b.x, b.y, this.memory()) || this.searched()); } // the dummy stands at a spot it remembers, or (rung 7) near a ghost it searches
+    // ----- rung 7, the search (row 717). The ghost: where it last had the dummy, kept when cover takes it away.
+    searched() { const b = this.body, R = this.P['duel.searchRadius'] || 0; return this.rung >= 7 && !!b && b.alive && this.onRoad().some((c) => c.red && c.lkp && hyp(b.x - c.lkp.x, b.y - c.lkp.y) <= R + 1e-9); }
+    // Truly seen: by its own sensors, or a street camera (rung 4). Memory and the search see through cover; they find the
+    // dummy, but do not move the ghost.
+    trulySees(c) { return !c.hidden || (this.rung >= 4 && this.cameraSees()); }
+    searchStep(c) {
+      const P = this.P, b = this.body, T = P['duel.searchSeconds'] || 0, sensed = !!(c.hz && (c.noticed || c.hz.inPath));
+      if (!(T > 0) || c.spent) { c.lkp = null; return; }
+      if (sensed && this.trulySees(c)) { if (c.lkp) { this.emit('search-end', { car: c.id, found: true, seen: true }); c.lkp = null; } return; } // in plain sight again: no ghost
+      if (sensed && c.lkp) { c.lkp.had = this.t; if (!c.lkp.found) { c.lkp.found = true; this.emit('search-found', { car: c.id, x: +b.x.toFixed(1), y: +b.y.toFixed(1), after: +(this.t - c.lkp.t0).toFixed(2) }); } return; } // found near the ghost, behind cover: it keeps the dummy; the ghost stays
+      if (!c.lkp && c.seenT != null && this.t - c.seenT <= 0.05 && c.hidden && b.alive && !b.lifted) { // lost behind cover this tick
+        c.lkp = { x: c.seenAt.x, y: c.seenAt.y, t0: this.t, had: this.t }; this.emit('search', { car: c.id, x: +c.lkp.x.toFixed(1), y: +c.lkp.y.toFixed(1) });
+      }
+      if (!c.lkp) return;
+      if (this.t - c.lkp.had >= T - 1e-9 || !b.alive || b.lifted) { // duel.searchSeconds since it last had the dummy: it gives up and drives on
+        this.emit('search-end', { car: c.id, found: false }); c.lkp = null;
+        if (c.cause === 'search') { c.man = null; c.state = 'cruise'; }
+        return;
+      }
+      if (c.man && c.cause !== 'search') return; // a plan for the dummy or a cone comes first
+      const E0 = this.envelope(0), pr = X.pathProject(c.path, c.lkp.x, c.lkp.y), lat = Math.max(0, Math.abs(pr.lat) - c.W / 2);
+      const sBody = pr.s - Math.sqrt(Math.max(0, E0 * E0 - lat * lat)) + E0; // its stop line short of the ghost, measured straight
+      if (pr.s < c.s - c.L) return; // the ghost is behind it
+      c.man = null; this.commit(c, c.v < 1 ? { type: 'brake', v0: 0, a: P['traffic.comfortBraking'], vTarget: 0, sStop: c.s, standoff: true } : { type: 'brake', v0: c.v, a: P['traffic.hardBraking'], vTarget: 0, standoff: true, env: true, sBody }, 'search', null);
+    }
     checking(c) { // the remembered spots inside its field ahead: drawn as the spots it watches
       const ca = Math.cos(c.h), sa = Math.sin(c.h), half = c.W / 2 + this.P['body.radius'] + this.fieldFor() + (this.P['duel.memoryRadius'] || 0);
       return this.memory().filter((m) => { const dx = m.ox - c.x, dy = m.oy - c.y, fx = dx * ca + dy * sa, fy = -dx * sa + dy * ca; return fx > -c.L && fx < c.fwdLen + c.L / 2 && Math.abs(fy) < half; });
@@ -370,8 +407,9 @@
     // A hit from above: a jump's strike, or a dash launched from the plinth (or a jump out of one).
     fromAbove(e) { const b = this.body; return e.kind === 'jump' || !!(b && ((b.lunge && b.lunge.fromRaised) || (b.jump && b.jump.fromRaised))); }
     springCover() { const c = this.onRoad().find((q) => q.red && !q.spent); return c && c.hidden ? (c.coverBy || null) : null; } // the cover hiding the dummy from the red car as it springs, or null (the open)
-    startLunge(facing0, k) { const b = this.body, up = !!b.raised, x = b.x, y = b.y, cover = this.testRoad ? this.springCover() : null; super.startLunge(facing0, k); if (this.testRoad && b.lunge) { b.lunge.fromRaised = up; this.spring = { x, y, t: this.t, cover }; } }
-    tryJump() { const b = this.body, up = !!b.raised, x = b.x, y = b.y, dashing = b.mode === 'lunge', cover = this.testRoad && !dashing ? this.springCover() : null; super.tryJump(); if (this.testRoad && b.mode === 'jump' && b.jump) { b.jump.fromRaised = up; b.raised = false; if (!dashing) this.spring = { x, y, t: this.t, cover }; } } // a jump out of a dash keeps the dash's start
+    springSeen() { const c = this.onRoad().find((q) => q.red && !q.spent); return c && c.seenT != null ? { ago: this.t - c.seenT, x: c.seenAt.x, y: c.seenAt.y } : null; } // when and where that car last had the dummy, as it springs (rung 7's cause)
+    startLunge(facing0, k) { const b = this.body, up = !!b.raised, x = b.x, y = b.y, cover = this.testRoad ? this.springCover() : null; super.startLunge(facing0, k); if (this.testRoad && b.lunge) { b.lunge.fromRaised = up; this.spring = { x, y, t: this.t, cover, seen: this.springSeen() }; } }
+    tryJump() { const b = this.body, up = !!b.raised, x = b.x, y = b.y, dashing = b.mode === 'lunge', cover = this.testRoad && !dashing ? this.springCover() : null; super.tryJump(); if (this.testRoad && b.mode === 'jump' && b.jump) { b.jump.fromRaised = up; b.raised = false; if (!dashing) this.spring = { x, y, t: this.t, cover, seen: this.springSeen() }; } } // a jump out of a dash keeps the dash's start
     landJump() { const b = this.body; super.landJump(); if (this.testRoad) { b.raised = this.onPlinth(b.x, b.y); if (b.raised) this.emit('raised', { x: +b.x.toFixed(1), y: +b.y.toFixed(1) }); } }
     // A dash vaults low cover (row 696): a planter stops a walk, not a dash. The dummy springs from a duck over the row.
     collideBody(contacts, k) {
@@ -433,6 +471,8 @@
         const c = this.carById(e.car); if (c && c.red) { e.sight = +(c.sightT || 0).toFixed(2); e.above = this.fromAbove(e); e.cover = this.coverHid(c); e.coned = this.itemHit(c); e.ducked = !!this.body.duck || !!this.body.duckAt && this.t - this.body.duckAt < 0.5; } // in sight past cover (s); from above (D113); out of cover (row 687); round a cone (row 695); from a duck
         if (e.lost > 0 && c && c.red) { // the crash: an outline where it struck; the spot it was sprung from; is that spot an earlier crash's? (row 703)
           const o = this.springOrigin(e), b = this.body, fx = this.effects.filter((q) => q.type === 'burst').pop(), prev = o.cover ? this.nearSite(o.x, o.y) : null; // from the open: skill, no spot (row 713)
+          const sn = (e.kind === 'dash' || e.kind === 'jump') && this.spring ? this.spring.seen : null; // rung 7: had the car seen it just before it hid and sprang?
+          e.lostSight = !!(o.cover && sn && sn.ago <= this.P['duel.lessonClipSeconds'] + 1e-9); e.seenAt = e.lostSight ? { x: +sn.x.toFixed(1), y: +sn.y.toFixed(1), ago: +sn.ago.toFixed(2) } : null;
           e.origin = { x: +o.x.toFixed(1), y: +o.y.toFixed(1) }; e.covered = o.cover; e.habit = !!prev; e.remembered = !!this.nearSite(o.x, o.y, this.memory());
           this.crashes.push({ n: this.crashes.length + 1, x: +b.x.toFixed(1), y: +b.y.toFixed(1), ox: e.origin.x, oy: e.origin.y, cover: o.cover, px: fx ? +fx.x.toFixed(1) : null, py: fx ? +fx.y.toFixed(1) : null, h: +c.h.toFixed(3), t: +this.t.toFixed(2), model: c.model, zone: e.zone, prev: prev ? prev.n : null, writeoff: b.health <= 0 });
           this.emit('crash', { n: this.crashes.length, x: e.origin.x, y: e.origin.y, cover: o.cover, habit: e.habit, prev: prev ? prev.n : null });
@@ -449,8 +489,9 @@
       if (next.cover && !this.coverHid(c)) return; // rung 4, only from a hit where cover hid it
       if (next.items && !this.itemHit(c)) return; // rung 5, only from a hit while it swerved round a cone (row 695)
       if (next.habit && !e.habit) return; // rung 6, only from a hit sprung from the spot of an earlier crash (row 703)
-      this.lesson = { state: 'due', from: this.rung, to: next.rung, name: next.name, sensor: next.sensor, model: c.model, car: c.id, zone: e.zone, kind: e.kind, hitT: e.t, lost: e.lost, origin: e.origin || null };
-      this.emit('lesson-due', { model: c.model, from: this.rung, to: next.rung, zone: e.zone, car: c.id, origin: e.origin || null, habit: !!e.habit });
+      if (next.search && !e.lostSight) return; // rung 7, only from a hit from cover by a dummy it had seen within the clip (row 717)
+      this.lesson = { state: 'due', from: this.rung, to: next.rung, name: next.name, sensor: next.sensor, model: c.model, car: c.id, zone: e.zone, kind: e.kind, hitT: e.t, lost: e.lost, origin: e.origin || null, seenAt: e.seenAt || null };
+      this.emit('lesson-due', { model: c.model, from: this.rung, to: next.rung, zone: e.zone, car: c.id, origin: e.origin || null, habit: !!e.habit, seenAt: e.seenAt || null });
     }
     step(cmd) {
       if (this.testRoad && this.phase === 'play' && this.lesson && this.lesson.state === 'due' && this.body.alive && !this.onRoad().some((c) => c.red)) {

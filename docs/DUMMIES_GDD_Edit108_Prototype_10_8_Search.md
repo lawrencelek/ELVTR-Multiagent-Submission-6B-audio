@@ -1,0 +1,126 @@
+# DUMMIES — GDD Edit 108: Prototype 10.8, the search
+
+**5 November 2026 · Lawrence Lek** · The eighth escalating test (handover v2 §14.2, §25). Localized: adds §10.8 to the Prototype 10 chapter. Builds row 716's first two proposals: the ghost and the search state.
+
+- **Build:** `prototypes/p10/dummies_p10_8.html` (`python3 prototypes/p10/build.py`).
+- **Playtest pages:** `index.html`, one per test. 10.1–10.7 are frozen; 10.7 at md5 `54328d01…`.
+- **Tests:** `node prototypes/p10/test_p10.js --page` 56/56. Prototype 9 rebuild md5 `be163e7d014344e062965986b3da5786`. 8.4 md5 `9f5549201d88891f9f0b22c461602909`. Sound freeze: 211 items, 0 changed.
+- **Probes:** `node qa/testroad.js --stage 10.8 --out qa/baseline/p10_8.json`; report `qa/baseline/p10_8.md`, 15/15 checks. 10.7 reruns identical to its baseline, new fields aside.
+- **Decision log:** rows 717–722. Open D119, D120, D121, D122.
+
+## Request
+
+> "Search state with its ghost" (Lawrence, after row 716), picking from row 716: "The car draws a ghost where it last saw the dummy while it waits. A short search state: the car slows past that last-seen spot, then gives up."
+
+## Readings
+
+| Reading | Basis | Status |
+|---|---|---|
+| The search is rung 7, taught by one lesson | One change a test (row 653); §14.2: each rung closes the trick that won | Proposed (row 717) |
+| The road upgrade moves to 10.9; swerve cost to 10.10 | The search is a car behaviour on road A | Proposed (row 717; D121) |
+| Cause: a hit from cover, sprung within `duel.lessonClipSeconds` (3) of the car truly seeing the dummy | The clip must show the sighting it lost | Proposed (row 718) |
+| "Slows past" reads as "stops short, then drives on" | Slowing past hidden cover cannot close it: a dash crosses a lane in under 0.1 s (row 690, F3) | Proposed (row 718) |
+| The ghost marks a true sighting only: its own sensors, or a street camera | Memory and the search see through cover; a ghost set by them would follow the dummy | Proposed (row 718) |
+| `duel.searchRadius` 60: about one spot's spacing | The nine hiding spots sit about 60 apart (row 708) | Proposed (row 718; D122) |
+| `duel.searchSeconds` 4: from the last time it had the dummy | Short: a search, not a stalemate. The block lift ends a found dummy's wait (row 715) | Proposed (row 718; D122) |
+
+## 10.8 The search
+
+### 10.8.1 The lesson
+
+- **Start:** rung 6 (`duel.startRung` 6). Battery 1, Legs 1, Hands 1 and DUCK fitted (`duel.duckArrives` 3).
+- **Cause: seen, then struck from cover.** The car truly had the dummy within `duel.lessonClipSeconds` (3) of the spring. The dummy sprang from cover.
+- **Teaches nothing:** a hit from the open; a spring the car never saw; a sighting older than the clip.
+- **Beats:** as 10.2.
+  - The clip's last frame draws the ghost where it last had the dummy: "LAST SEEN · n s BEFORE", a line to the impact.
+  - The fitting reads "SEARCH FITTED · LAST SEEN". A drone fits an amber beacon. The diagram: the car, its stop line, the ghost, the ring.
+- **One lesson:** rung 6 to `duel.topRung` 7. No part.
+
+### 10.8.2 Rung 7: it looks where it last saw you
+
+- **The ghost.** The dummy vanishes behind cover from a car that truly had it. The car marks where it last saw it.
+- **It stops short.** It brakes to its stop line short of the ghost, as for a dummy standing there.
+- **It finds you near the ghost.** A dummy within `duel.searchRadius` (60) of it is expected:
+  - Cover does not hide it.
+  - The field notices it at once.
+  - The ghost stays where it was.
+- **It gives up.** `duel.searchSeconds` (4) after it last had the dummy, it drops the ghost and drives on.
+- **A true sighting clears the ghost.** In plain sight again, the dummy is simply seen.
+- **Memory comes first.** At a spot rung 6 remembers, the dummy is expected and never lost: no ghost.
+- **The block lift still ends a wait** (row 715). A found dummy is lifted aside after `duel.blockSeconds` (10).
+
+### 10.8.3 What the car shows (row 701)
+
+- **On the road, from rung 7:**
+  - The ghost: a dashed amber outline of the dummy where it was last seen. "LAST SEEN" over it.
+  - A dashed ring of `duel.searchRadius` round it. It turns solid while the dummy is inside.
+  - An amber arc round the ring: the time left before it gives up.
+  - A dashed amber line from the car to its ghost.
+- **On the car:** an amber beacon on its roof, flashing while it searches. Its tag: "R7 · MEMORY n · SEARCHING", then "FOUND".
+- **On the dummy:** inside the ring, FOUND, in amber. At a remembered spot, EXPECTED, in red. Elsewhere, HIDDEN or SEEN.
+- **On the lesson screen:** §10.8.1's beats.
+
+### 10.8.4 The opening
+
+- **Crawl away.** Ducked, cross more than `duel.searchRadius` along the cover. It gives up and drives on into the strike.
+- **Hide before it sees you.** No sighting, no ghost: the spot works as at rung 6.
+- **The sprint from past the field** (D115). Unseen until it lands.
+- **Next (§14.2, 10.9):** the road upgrade. Two-way, with white sedans that never learn (D121).
+
+## Build
+
+- `testroad.js`:
+  - Rung 7 in the rungs table (search: true; fit 'SEARCH'; no part).
+  - `trulySees`; `c.seenT` and `c.seenAt` each tick the car truly has the dummy.
+  - `searchStep`: the ghost (`c.lkp`), the stop line, found, give up.
+  - `searched`: `expected` covers the ring.
+  - `springSeen`: each spring records the last sighting. `account` sets `lostSight` and `seenAt`. `learnFrom`: the search cause.
+- `game_p10.js`: the ghost, ring, arc and line; the beacon and tag; FOUND; the clip's ghost; the fitting's diagram; the title line "It looks where it last saw you."
+- `build.py`: 10.8's stage; 10.7's page frozen.
+- `qa/testroad.js`: bots `peek` (stand in view until noticed; duck; spring) and `peekmove` (the same; crawl beyond the radius along the row first). Fields: searches, found, ended, hits after a lost sighting.
+
+## Measured (`qa/baseline/p10_8.md`)
+
+**Rung 7 alone** (mode `trained`; 3 offsets × 300 s):
+
+| Way in | Hits a minute | Damage a hit | Verdict |
+|---|---|---|---|
+| Seen, then ducked, the same spot (`peek`) | 0 | — | Closed: 28 searches, 28 found |
+| Seen, then crawled beyond the ring (`peekmove`) | 1.89 | 161 | Open: the crawl |
+| Moving between spots it does not remember (`roam`) | 2.52 | 233 | Open, narrowed: 6.97 at rung 6. Walks in view leave ghosts |
+| The sprint from past the field (`lurk`) | 0.60 | 53 | Open (D115) |
+| The flank from open pavement | 0.40 | 52 | Open (D115) |
+| The planter ambush, the same spot | 0.27 | 84 | Closed after one hit a run (rung 6) |
+| Every other bot | 0 | — | Closed |
+
+- **A new behaviour:** 564 searches; 106 found the dummy near the ghost; 558 ended. None at rung 6.
+- **No hit from a remembered spot:** 0 of 84.
+- **The block lift:** 525 lifts. No wait for the dummy past 20 s.
+
+**The lesson** (mode `lesson`):
+
+- **Lessons:** in 9 of 9 runs with a hit from cover after a sighting, at 3–54 s. 0 of 9 runs with other hits only.
+- **Escalation (10 minutes):** seen-then-hidden decays to 0 after two hits. The crawl holds at 2–5 a minute (decay 0.67). Roaming holds at 3 (0.60).
+
+**Pace:**
+
+| Way in | Seconds a write-off | GDD target |
+|---|---|---|
+| Moving between spots, rung 6 (10.7) | 18 | At most 80 (Edit 18 §10.2) |
+| Moving between spots, rung 7 | 55 | |
+| The crawl, rung 7 | 111 | |
+
+## Registry
+
+- **Added (2):** `duel.searchRadius`, `duel.searchSeconds`.
+- **Set by stage:** `duel.startRung` 6, `duel.topRung` 7, `duel.searchRadius` 60, `duel.searchSeconds` 4. 10.7's values otherwise.
+- **665 entries.** `registryVersion` unchanged (row 665).
+
+## Open
+
+- **Human pass (H6):** does the player read the ghost, and crawl away?
+- **D121:** the order from here. The road upgrade at 10.9, swerve cost at 10.10.
+- **D122:** the search's values. 60 and 4 leave the crawl open along a row longer than 60.
+- **D119:** eased. The roaming expert writes off a body every 55 s, within the target.
+- **D120:** the memory's cap.
+- **D115:** the sprint from past the field.

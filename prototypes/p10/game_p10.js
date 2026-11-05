@@ -9,6 +9,8 @@
 // debris and a numbered evidence marker on the road. From rung 6 the car's memory draws: a red ring on each spot it
 // remembers, a line to that crash's outline, a scan from the car to the spots in its field, its memory module and count.
 // The block lift (row 715): a countdown over a dummy that keeps a car waiting; then a drone lifts it aside until the car has passed.
+// 10.8, rung 7's search (row 717): a ghost where the car last saw the dummy, the ring it searches, its time left; the car's
+// amber beacon and SEARCHING; FOUND when it has the dummy near the ghost.
 // Keys: arrows or WASD move; Space or J dash, K or Shift jump, E picks up or puts down a cone, hold C or Ctrl to duck (once
 // fitted); Z zones; P pause; R restart; L saves this session's log (JSON). Pad: A dash, B jump, X cone, hold LB or RB to
 // duck. Touch: drag on the left half to move; the right half's bands, top to bottom: jump, cone (Hands 1), duck (hold;
@@ -23,6 +25,7 @@
     red: '#ff3d3d', redDark: '#9e1f1f', glass: '#1b2a38', dummy: '#ffd400', joint: '#2a2a2a', beam: 'rgba(244,248,250,0.10)',
     beamHot: 'rgba(255,61,61,0.22)', field: 'rgba(127,168,188,0.10)', fieldHot: 'rgba(255,212,0,0.14)', text: '#f4f8fa', dim: '#7fa8bc', hud: '#12151c',
     cam: '#9ff2c8', camDim: 'rgba(159,242,200,0.55)', drone: '#20242e', rotor: 'rgba(200,214,230,0.5)', part: '#ffd400',
+    search: '#ffb347', searchDim: 'rgba(255,179,71,0.5)',
     chalk: 'rgba(238,240,232,0.85)', chalkDim: 'rgba(238,240,232,0.35)', glassBit: '#9fb4c8', mem: '#ff5a5a', memDim: 'rgba(255,90,90,0.55)', tent: '#ffd400' };
   const PARTS = { battery1: 'BATTERY 1 · DASH', legs1: 'LEGS 1 · JUMP', hands1: 'HANDS 1 · CONES', duck1: 'DUCK · HOLD C' }, LOAD = { battery1: 'B1', legs1: 'L1', hands1: 'H1', duck1: 'D1' }, ZONES = { front: 'FRONT', frontDiagonal: 'FRONT CORNER', side: 'SIDE', rearDiagonal: 'REAR CORNER', rear: 'REAR' };
   const CLIP = F['duel.lessonClipSeconds'], HOLD = F['duel.lessonHoldSeconds'], FIT = F['duel.lessonFitSeconds']; // the clip, its last frame held, the fitting
@@ -85,12 +88,13 @@
     const e0 = s.events.length; s.step(command());
     record();
     for (const e of s.events.slice(e0)) {
-      if (['impact', 'writeoff', 'admit', 'lunge', 'honk', 'lesson-due', 'lesson', 'learned', 'first-brake', 'first-side', 'first-cover', 'first-item', 'duck', 'stand', 'part-dispatch', 'gift', 'left', 'jump', 'raised', 'step-down', 'pickup', 'drop', 'drone-dispatch', 'drone-pickup', 'crash', 'spawn-slow', 'block-lift', 'block-drop'].includes(e.type) || (e.type === 'touch' && e.standstill)) log.push(e);
+      if (['impact', 'writeoff', 'admit', 'lunge', 'honk', 'lesson-due', 'lesson', 'learned', 'first-brake', 'first-side', 'first-cover', 'first-item', 'duck', 'stand', 'part-dispatch', 'gift', 'left', 'jump', 'raised', 'step-down', 'pickup', 'drop', 'drone-dispatch', 'drone-pickup', 'crash', 'spawn-slow', 'block-lift', 'block-drop', 'search', 'search-found', 'search-end'].includes(e.type) || (e.type === 'touch' && e.standstill)) log.push(e);
       if (e.type === 'impact' && Math.round(e.lost) > 0) flash.push({ x: s.body.x, y: s.body.y, t: 0.5, n: Math.round(e.lost) });
       if (e.type === 'writeoff') flash.push({ x: s.body.x, y: s.body.y, t: 1.2, n: 'WRITE-OFF' });
       if (e.type === 'gift') flash.push({ x: s.body.x, y: s.body.y, t: 1.6, n: PARTS[e.node] || e.node });
       if (e.type === 'crash') lastCrash = e;
-      if (e.type === 'lesson-due') clip = { frames: ring.slice(), hitT: e.t, model: e.model, zone: e.zone, to: e.to, info: T.RUNGS[e.to], origin: e.origin, prev: lastCrash && lastCrash.habit ? lastCrash.prev : null };
+      if (e.type === 'search-found') flash.push({ x: e.x, y: e.y, t: 0.9, n: 'FOUND' });
+      if (e.type === 'lesson-due') clip = { frames: ring.slice(), hitT: e.t, model: e.model, zone: e.zone, to: e.to, info: T.RUNGS[e.to], origin: e.origin, prev: lastCrash && lastCrash.habit ? lastCrash.prev : null, seenAt: e.seenAt };
     }
   }
   function record() { // the last CLIP seconds of the road, kept for a hit's training clip
@@ -162,6 +166,23 @@
     ctx.moveTo(-5, -13); ctx.lineTo(-6, 6); ctx.lineTo(sp[2][0], sp[2][1]); ctx.moveTo(5, -13); ctx.lineTo(6, 6); ctx.lineTo(sp[3][0], sp[3][1]); ctx.moveTo(-6, 6); ctx.lineTo(6, 6); // torso, legs
     ctx.stroke(); ctx.restore();
   }
+  function ghostFigure(x, y, col, k) { // the dummy as the car last saw it: an outline, dashed
+    ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.setLineDash([4, 3]); const r = s.P['body.radius'] * (k || 1);
+    ctx.beginPath(); ctx.arc(x, y, r, 0, TAU); ctx.stroke(); ctx.beginPath(); ctx.arc(x, y - r - 5 * (k || 1), 4 * (k || 1), 0, TAU); ctx.stroke(); ctx.restore();
+  }
+  function drawGhosts() { // rung 7: each car's ghost, the ring it searches, and the time it has left
+    const R = s.P['duel.searchRadius'] || 0, T = s.P['duel.searchSeconds'] || 0;
+    for (const c of s.onRoad()) {
+      const g = c.lkp; if (!g) continue;
+      const left = Math.max(0, 1 - (s.t - g.had) / (T || 1)), col = C.search, near = s.searched && s.searched(); // the ring brightens while the dummy is inside it
+      ghostFigure(g.x, g.y, col, 1);
+      ctx.strokeStyle = near ? C.search : C.searchDim; ctx.lineWidth = near ? 2 : 1.5; ctx.setLineDash(near ? [] : [6, 5]); ctx.beginPath(); ctx.arc(g.x, g.y, R, 0, TAU); ctx.stroke(); ctx.setLineDash([]);
+      ctx.strokeStyle = col; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(g.x, g.y, R + 5, -Math.PI / 2, -Math.PI / 2 + TAU * left); ctx.stroke(); // the time it has left
+      ctx.font = '700 9px B612, system-ui, sans-serif'; const t = 'LAST SEEN', w = ctx.measureText(t).width + 8;
+      rect(g.x - w / 2, g.y - R - 20, w, 13, 'rgba(12,14,20,0.75)'); text(t, g.x, g.y - R - 10, 9, col, 'center');
+      ctx.strokeStyle = C.searchDim; ctx.lineWidth = 1; ctx.setLineDash([2, 4]); ctx.beginPath(); ctx.moveTo(c.x, c.y); ctx.lineTo(g.x, g.y); ctx.stroke(); ctx.setLineDash([]);
+    }
+  }
   function drawCrashes(tMax) { // tMax: only crashes before then (the training clip)
     const mem = s.memory ? s.memory() : [], R = s.P['duel.memoryRadius'] || 0, checked = new Set();
     for (const c of s.onRoad()) for (const m of c.checks || []) checked.add(m.n);
@@ -225,6 +246,10 @@
       const n = c.mem != null ? c.mem : 3; rect(-c.L / 2 + 11, -7, 7, 14, C.joint);
       for (let i = 0; i < 3; i++) { ctx.fillStyle = i < n ? C.mem : '#3a2a2a'; ctx.beginPath(); ctx.arc(-c.L / 2 + 14.5, -4 + i * 4, 1.4, 0, TAU); ctx.fill(); }
     }
+    if (rung >= 7) { // rung 7: the search beacon, amber, turning while it searches
+      const on = c.lkp ? Math.floor((s ? s.t : 0) * 6) % 2 === 0 : false; rect(6, -4, 6, 8, C.joint);
+      ctx.fillStyle = on || c.fit ? C.search : C.searchDim; ctx.beginPath(); ctx.arc(9, 0, 2.4, 0, TAU); ctx.fill();
+    }
   }
   function drawCar(c) {
     const pv = prevV.get(c.id), braking = pv != null && c.v < pv - 0.05; prevV.set(c.id, c.v);
@@ -236,7 +261,7 @@
     if (on) { rect(c.L / 2 - 3, -c.W / 2 + 2, 3, 5, '#fffbe0'); rect(c.L / 2 - 3, c.W / 2 - 7, 3, 5, '#fffbe0'); }
     if (braking || c.v < 2) { rect(-c.L / 2, -c.W / 2 + 2, 3, 5, '#ff2020'); rect(-c.L / 2, c.W / 2 - 7, 3, 5, '#ff2020'); }
     ctx.restore();
-    const tag = c.model + ' · R' + (c.rung || 0) + ((c.rung || 0) >= 6 && c.red ? ' · MEMORY ' + (c.mem || 0) : '') + (c.state !== 'cruise' ? ' · ' + c.state.toUpperCase() : '');
+    const tag = c.model + ' · R' + (c.rung || 0) + ((c.rung || 0) >= 6 && c.red ? ' · MEMORY ' + (c.mem || 0) : '') + (c.lkp ? ' · ' + (c.lkp.found ? 'FOUND' : 'SEARCHING') : c.state !== 'cruise' ? ' · ' + c.state.toUpperCase() : '');
     text(tag, c.x, c.y - 26, 10, C.text, 'center'); const tw = ctx.measureText(tag).width; // the notice meter sits past the tag's end
     if (c.checks && c.checks.length) text('CHECKING ' + c.checks.map((m) => '#' + m.n).join(' '), c.x, c.y - 38, 10, C.mem, 'center'); // rung 6: the spots it is watching
     const nT = s.P['perception.sideNoticeSeconds']; // rung 2's notice: a meter fills while the dummy is in its field, unnoticed
@@ -254,11 +279,12 @@
     ctx.strokeStyle = C.joint; ctx.lineWidth = 2; ctx.stroke();
     ctx.globalAlpha = 1;
     const expect = live && s.expected && s.expected(); // rung 6: at a spot it remembers, it expects the dummy
+    const found = expect && !(s.nearSite && s.memory && s.nearSite(b.x, b.y, s.memory())) && s.searched && s.searched(); // rung 7: near the ghost, not at a remembered spot
     const Xs = s.P['duel.blockSeconds'] || 0, hs = s.P['proto.honkSeconds'] || 0; // the block lift's countdown, once the car has honked
     if (live && Xs > 0 && !s.lift && s.blockT >= Math.min(hs, Xs - 3)) { const n = Math.ceil(Xs - s.blockT - 1e-9); ctx.font = '700 10px B612, system-ui, sans-serif'; const t = 'MOVE ALONG · DRONE IN ' + n, w = ctx.measureText(t).width + 8; rect(b.x - w / 2, y - r - 36, w, 13, 'rgba(12,14,20,0.75)'); text(t, b.x, y - r - 26, 10, C.dummy, 'center'); }
     const label = (t, col) => { ctx.font = '700 9px B612, system-ui, sans-serif'; const w = ctx.measureText(t).width + 8; rect(b.x - w / 2, y - r - 20, w, 13, 'rgba(12,14,20,0.75)'); text(t, b.x, y - r - 10, 9, col, 'center'); };
-    if (b.duck) { ctx.strokeStyle = unseen ? C.dim : C.dummy; ctx.lineWidth = 1.5; ctx.setLineDash(unseen ? [3, 4] : []); ctx.beginPath(); ctx.arc(b.x, y, r + 6, 0, TAU); ctx.stroke(); ctx.setLineDash([]); if (live) label(expect ? 'EXPECTED' : unseen ? 'HIDDEN' : 'SEEN', expect ? C.mem : unseen ? C.dim : C.dummy); }
-    else if (expect) label('EXPECTED', C.mem);
+    if (b.duck) { ctx.strokeStyle = unseen ? C.dim : C.dummy; ctx.lineWidth = 1.5; ctx.setLineDash(unseen ? [3, 4] : []); ctx.beginPath(); ctx.arc(b.x, y, r + 6, 0, TAU); ctx.stroke(); ctx.setLineDash([]); if (live) label(expect ? (found ? 'FOUND' : 'EXPECTED') : unseen ? 'HIDDEN' : 'SEEN', expect ? (found ? C.search : C.mem) : unseen ? C.dim : C.dummy); }
+    else if (expect) label(found ? 'FOUND' : 'EXPECTED', found ? C.search : C.mem);
     const f = b.facing != null ? b.facing : b.f;
     ctx.beginPath(); ctx.moveTo(b.x, y); ctx.lineTo(b.x + Math.cos(f) * 20 * k, y + Math.sin(f) * 20 * k); ctx.stroke();
     if (s.dashFitted() && b === s.body) { rect(b.x - 4, y - 4, 8, 8, C.joint); rect(b.x - 2, y - 2, 4, 4, C.part); } // Battery 1 on the chest
@@ -300,12 +326,17 @@
       drawDummy(f.b);
       if (f.b && t >= CLIP) { // the frame of the hit, held: a detection box, as the car's vision would draw it
         ctx.strokeStyle = C.cam; ctx.lineWidth = 2; ctx.strokeRect(f.b.x - 22, f.b.y - 22, 44, 44);
-        text('IMPACT · ' + (ZONES[clip.zone] || clip.zone.toUpperCase()), f.b.x, f.b.y - 28, 11, C.cam, 'center');
+        text('IMPACT · ' + (ZONES[clip.zone] || clip.zone.toUpperCase()), Math.max(90, Math.min(FW - 90, f.b.x)), f.b.y - 28, 11, C.cam, 'center'); // kept on screen
         if (clip.info && clip.info.habit && clip.origin) { // rung 6's cause: the strike came from the spot of an earlier crash
           const o = clip.origin, R = s.P['duel.memoryRadius'] || 30, pr = clip.prev != null ? s.crashes[clip.prev - 1] : null;
           ctx.strokeStyle = C.mem; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(o.x, o.y, R, 0, TAU); ctx.stroke();
           if (pr) { ctx.setLineDash([3, 4]); ctx.beginPath(); ctx.moveTo(o.x, o.y); ctx.lineTo(pr.x, pr.y); ctx.stroke(); ctx.setLineDash([]); }
           text('SAME SPOT' + (pr ? ' AS CRASH ' + pr.n : ''), o.x, o.y - R - 6, 12, C.mem, 'center');
+        }
+        if (clip.info && clip.info.search && clip.seenAt) { // rung 7's cause: it had the dummy, lost it behind cover, and was struck from there
+          const g = clip.seenAt; ghostFigure(g.x, g.y, C.search, 1.2);
+          ctx.strokeStyle = C.search; ctx.lineWidth = 1.5; ctx.setLineDash([3, 4]); ctx.beginPath(); ctx.moveTo(g.x, g.y); ctx.lineTo(f.b.x, f.b.y); ctx.stroke(); ctx.setLineDash([]);
+          text('LAST SEEN · ' + g.ago.toFixed(1) + ' s BEFORE', g.x, g.y - 30, 12, C.search, 'center');
         }
       }
     }
@@ -327,6 +358,13 @@
       ctx.save(); ctx.translate(x + 60, cy); ctx.scale(3, 3); drawCone(0, 0); ctx.restore();
       rect(x, cy - (car.W / 2 + 6) * k, 6, (car.W + 12) * k, C.red); text('STOPS · NEVER SWERVES', x + 30, cy + (car.W / 2 + 14) * k, 13, C.text, 'center'); ctx.globalAlpha = 1;
     }
+    if (to === 7 && reach > 0) { // the search: a ghost ahead, the stop line short of it, its ring
+      const gx = cx + car.L / 2 * k + 300, gy = cy + 70; ctx.globalAlpha = Math.min(1, reach * 1.5);
+      rect(gx - 230, cy - (car.W / 2 + 6) * k, 6, (car.W + 12) * k, C.search);
+      ghostFigure(gx, gy, C.search, 3); ctx.strokeStyle = C.searchDim; ctx.setLineDash([8, 6]); ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(gx, gy, (s.P['duel.searchRadius'] || 60) * 1.6, 0, TAU); ctx.stroke(); ctx.setLineDash([]);
+      text('LAST SEEN', gx, gy - 120, 14, C.search, 'center');
+      text('STOPS SHORT OF THE GHOST · FINDS YOU NEAR IT · GIVES UP AFTER ' + (s.P['duel.searchSeconds'] || 0) + ' s', 400, cy + (car.W / 2 + 40) * k + 40, 13, C.text, 'center'); ctx.globalAlpha = 1;
+    }
     if (to === 6 && reach > 0) { // crash memory: the road's outlines, and a ring on each spot it now remembers
       const k2 = 0.34, mx = 452, my = 210, R = (s.P['duel.memoryRadius'] || 30) * k2, N = Math.round(s.P['duel.memorySites'] || 0), all = s.crashes || [], mem = N > 0 ? all.slice(-N) : all; // what it will remember
       ctx.save(); ctx.globalAlpha = Math.min(1, reach * 2); ctx.translate(mx, my); ctx.scale(k2, k2); drawRoads(s.level); drawStatics(s.level); ctx.restore();
@@ -342,8 +380,8 @@
     }
     if (to === 3 && reach > 0) { ctx.strokeStyle = C.cam; ctx.lineWidth = 2; for (let i = 1; i <= 3; i++) { ctx.globalAlpha = Math.max(0, 1 - i / 3.5) * reach; ctx.beginPath(); ctx.arc(cx - 2 * k, cy, reach * 60 * i, 0, TAU); ctx.stroke(); } ctx.globalAlpha = 1; } // the lidar's sweep
     ctx.save(); ctx.translate(cx, cy); ctx.scale(k, k); carShape(car, u >= 0.45 ? to : from); ctx.restore();
-    const px = to === 6 ? cx + (-car.L / 2 + 14) * k : to === 4 ? cx + (-car.L / 2 + 8) * k : to >= 2 ? cx - (to === 3 ? 2 : 1) * k : cx + (car.L / 2 - 17) * k; // where the new sensor goes: the nose (1), the flanks (2), the roof (3), the link's aerial (4), the memory module (6)
-    if (u < 0.45) drawDrone(px, cy - 160 + 160 * (u / 0.45), to === 6 ? 'M6' : to === 5 ? 'U5' : to === 4 ? 'C4' : to === 3 ? 'L3' : to === 2 ? 'S2' : true);
+    const px = to === 7 ? cx + 9 * k : to === 6 ? cx + (-car.L / 2 + 14) * k : to === 4 ? cx + (-car.L / 2 + 8) * k : to >= 2 ? cx - (to === 3 ? 2 : 1) * k : cx + (car.L / 2 - 17) * k; // where the new sensor goes: the nose (1), the flanks (2), the roof (3), the link's aerial (4), the memory module (6)
+    if (u < 0.45) drawDrone(px, cy - 160 + 160 * (u / 0.45), to === 7 ? 'S7' : to === 6 ? 'M6' : to === 5 ? 'U5' : to === 4 ? 'C4' : to === 3 ? 'L3' : to === 2 ? 'S2' : true);
     else if (u < 0.7) drawDrone(px, cy - 160 * ((u - 0.45) / 0.25), false);
     text((info && info.fit ? info.fit : 'SENSOR') + ' FITTED · ' + (info && info.sensor ? info.sensor : ''), 40, 90, 22, C.text);
     text((clip ? clip.model : s.models.sedan.id) + ' · RUNG ' + (info ? info.rung : ''), 40, 120, 14, C.dim);
@@ -353,7 +391,7 @@
       if (clip && lessonT < CLIP + HOLD) drawClip(lessonT); else drawFit(lessonT - (clip ? CLIP + HOLD : 0));
       drawHud(); return;
     }
-    const L = s.level; drawRoads(L); drawStatics(L); drawCrashes();
+    const L = s.level; drawRoads(L); drawStatics(L); drawCrashes(); drawGhosts();
     const cars = s.cars.filter((c) => !c.ghost);
     if (showZones) for (const c of cars) drawZones(c);
     for (const c of cars) drawCar(c);
@@ -368,7 +406,7 @@
     if (!started || paused) {
       rect(0, 0, FW, FH, 'rgba(10,12,18,0.72)');
       text(paused ? 'PAUSED' : 'PROTOTYPE ' + ST.id + ' · ' + ST.title, FW / 2, 250, 24, C.text, 'center');
-      text('Two one-way roads cross at the Monument. One red car drives through.' + (s.rung >= 5 && (s.P['duel.topRung'] || 0) >= 6 ? ' Every crash leaves its mark.' : ''), FW / 2, 292, 14, C.dim, 'center');
+      text('Two one-way roads cross at the Monument. One red car drives through.' + ((s.P['duel.topRung'] || 0) >= 7 ? ' It looks where it last saw you.' : s.rung >= 5 && (s.P['duel.topRung'] || 0) >= 6 ? ' Every crash leaves its mark.' : ''), FW / 2, 292, 14, C.dim, 'center');
       text('Arrows or WASD move · Space dash · K jump, E cone, C duck, once fitted · Z zones · P pause · R restart · L save log', FW / 2, 330, 13, C.dim, 'center');
       text(paused ? 'P to resume' : 'Press any key', FW / 2, 380, 16, C.dummy, 'center');
     }

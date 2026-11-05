@@ -5,8 +5,8 @@
 - **Five factors:** character control and abilities; car behaviour and abilities; emergent group behaviour; level design; moveable objects.
 - **Rule:** a change to one factor lists its effect on the other four (§0).
 - **Control table (§8):** every object type: what hides, obstructs, is remembered, resets. Stealth research in §9.
-- **Values:** registry IDs at the 10.7 build. Derived values name their inputs. IDs marked *unregistered* need registering before use.
-- **Sources:** handover v2 §14, §20–§23; GDD Edits 101–107; `DECISIONS.md` rows 648–716.
+- **Values:** registry IDs at the 10.8 build. Derived values name their inputs. IDs marked *unregistered* need registering before use.
+- **Sources:** handover v2 §14, §20–§25; GDD Edits 101–108; `DECISIONS.md` rows 648–722.
 
 ## 0 The interlock
 
@@ -15,14 +15,14 @@ Read across: what the row's factor sets for the column's.
 | Sets → | 1 Character | 2 Car | 3 Group | 4 Level | 5 Objects |
 |---|---|---|---|---|---|
 | **1 Character** | — | Dash reach sets the car's envelope and stop line | Each verb needs a group answer: queues, boxing in | Reach and speed set cover spacing and spot distance | Carry, push and throw set what moves, how far |
-| **2 Car** | Each rung closes one verb; the next part reopens one | — | A red car's stop blocks a lane; its memory may spread | Sensor geometry sets cover length, height and camera posts | Rung 4 swerves round cones; rung 5 stops; rung 6 remembers spots |
+| **2 Car** | Each rung closes one verb; the next part reopens one | — | A red car's stop blocks a lane; its memory may spread | Sensor geometry sets cover length, height and camera posts; the search radius sets how far a row must run | Rung 4 swerves round cones; rung 5 stops; rung 6 remembers spots; rung 7 searches round its ghost |
 | **3 Group** | White cars are hazards and moving cover | White cars block the red car's sight and path; queued cars flash their lights at it | — | Lanes, two-way roads, priority, spawn rates | Queued cars are obstacles; drones tidy up |
 | **4 Level** | Routes, heights, hiding spots, parked cars | Sightlines, run-in, camera reach | Throughput: lanes, junction priority | — | Object homes, drone access, room to move |
 | **5 Objects** | The dummy's tools | Road items to read; occluders by height | A lane block makes a queue | Moveable cover rewrites the level | — |
 
 ## 1 Character control and abilities
 
-### 1.1 Verbs as built (test road, 10.7)
+### 1.1 Verbs as built (test road, 10.8)
 
 | Verb | Input | Values | Arrives |
 |---|---|---|---|
@@ -52,6 +52,7 @@ Read across: what the row's factor sets for the column's.
 - **The body closes its own trick.** After four leg hits the dash falls from 164 to 116; the sprint stops landing.
 - **Ducking is stealth, not armour.** Hidden behind cover taller than the body; higher sensors see in sooner as they near (§2.3).
 - **A lighter body speeds the loop.** 500 against front hits of 242: two hits a write-off (D119).
+- **Crawling is the answer to the search.** At `movement.duckSpeedFactor` 0.35 a ducked crawl beyond `duel.searchRadius` 60 takes about 2 s (row 720).
 
 ## 2 Car behaviour and abilities
 
@@ -66,9 +67,11 @@ Read across: what the row's factor sets for the column's.
 | 4 | Street cameras | `perception.streetCameraRange` 180; `perception.streetCameraHeight` 60 | Watched cover | A cone's swerve | Hands 1 |
 | 5 | Road items | Stops at a cone; waits `proto.droneConeSeconds` 5 for FARSIGHT | The cone bait | Low cover | DUCK |
 | 6 | Crash memory | `duel.memoryRadius` 50; `duel.memorySites` 3 | A repeated spot from cover, while the cover stays | Any other spot; a spot with new cover (row 712); hits from the open (row 713) | — |
+| 7 | Search (row 717) | `duel.searchRadius` 60; `duel.searchSeconds` 4 | Seen, then hidden: a ghost where it lost you; stops short; finds you near it | Crawl beyond the ring; hide before it sees you | — |
 
 - **Always open:** the sprint from past the field (D115). It leaves no spot (row 713).
-- **Planned (handover v2 §14.2):** 10.8, white sedans that never learn (`traffic.white.learns`, *unregistered*). 10.9, swerve cost (`traffic.carContact`, *unregistered*).
+- **Planned (handover v2 §14.2, revised by row 717; D121):** 10.9, two-way roads and white sedans that never learn (`traffic.white.learns`, *unregistered*). 10.10, swerve cost (`traffic.carContact`, *unregistered*).
+- **Order of precedence at rung 7:** memory, then the search. At a remembered spot the dummy is expected and never lost: no ghost (row 717).
 
 ### 2.2 The safe envelope
 
@@ -88,6 +91,7 @@ Read across: what the row's factor sets for the column's.
 
 - Every learned behaviour draws on the car and on the road.
 - Beam and field zones; the notice meter; camera links; EXPECTED; memory rings, scans and CHECKING.
+- Rung 7 (row 719): the amber ghost, its ring and time arc; the beacon; SEARCHING, FOUND. Amber is the search's colour; red stays memory's.
 
 ### 2.5 Pace
 
@@ -146,9 +150,11 @@ Read across: what the row's factor sets for the column's.
 - **L3. Hiding spots need spacing.** At least `duel.memorySites` + 1 per road, about 60 apart (row 708).
 - **L4. Cover within reach of a lane.** Spots must sit within 177 of the lane they ambush.
 - **L5. The run-in sets the pace.** It was half of every pass at 771 (row 702).
-- **L6. Every rung needs its opening in the level.** A plinth for rung 2; cover for 3; cone homes for 4; low cover for 5; spots for 6.
+- **L6. Every rung needs its opening in the level.** A plinth for rung 2; cover for 3; cone homes for 4; low cover for 5; spots for 6; room to crawl out of the ring for 7.
 - **L7. An opening without a part stays** (pillar 1, D97): today, the sprint from past the field.
 - **L8. Parked cars are cover** (row 711). A kerbside parking lane runs up the road: L1's cover, built in. Taller than a standing dummy (`vehicles.sedan.height` 19.8 against 18).
+- **L9. Rows longer than the search ring leave the crawl open** (row 720). A row that runs more than `duel.searchRadius` 60 past a spot lets a seen dummy crawl out of the ring. Shorter rows, or rows broken by gaps, close it.
+- **L10. A ghost off the road stops the car short of it, wherever that falls.** Beside a junction, the stop line can land in the junction box (10.8 shots). With crossing traffic it blocks the other road.
 
 ### 4.3 Redesign checklist (proposed)
 
@@ -158,6 +164,8 @@ Read across: what the row's factor sets for the column's.
 - [ ] Each low row runs back up its road; spots stay hidden until the car is in reach.
 - [ ] Camera posts name the cover they watch.
 - [ ] An opening without a part.
+- [ ] Rows sized against `duel.searchRadius`: decide whether the crawl is open (L9).
+- [ ] No hiding spot puts a search stop line inside a junction box (L10).
 - [ ] Pace: the main opening writes off a body in at most 80 s (Edit 18 §10.2).
 - [ ] Drone access to every object home.
 - [ ] No stalemate: the block lift (`duel.blockSeconds`, row 715) ends any wait.
@@ -232,6 +240,11 @@ Read across: what the row's factor sets for the column's.
 | F15 | Skill and habit separate: cover makes a habit the car can learn; the open stays the player's judgement | 1, 2, 4 | 713 |
 | F16 | Stalemates hid openings. With the block lift, closed bots meet 2–3 cars a minute, not 0.3; the flank from open pavement lands 0.4 a minute (the sprint from past the field, D115) | 2, 3 | 715 |
 | F14 | A waiting car and a waiting dummy make a stalemate | 2, 3 | 688, 699 |
+| F17 | Seen-then-hidden closes at rung 7: 28 searches, 28 found, 0 hits | 1, 2 | 720 |
+| F18 | The crawl beyond the ring along a row lands 1.89 a minute: rows need sizing (L9) | 1, 2, 4 | 720 |
+| F19 | Roaming between free spots falls from 6.97 to 2.52 a minute: walks in view leave ghosts. Its pace, 55 s a write-off, meets the target | 1, 2, 4 | 720 |
+| F20 | Memory outranks the search: at a remembered spot the dummy is never lost, so no ghost | 2 | 717 |
+| F21 | A ghost off the road can stop the car in the junction box (L10) | 2, 3, 4 | 719 |
 
 ## 7 Open questions
 
@@ -243,9 +256,10 @@ Read across: what the row's factor sets for the column's.
 - **Q6.** Do crash outlines persist across levels or sessions, as level history?
 - **Q7.** When do Story's Arms verbs (push, throw, hitch) enter the duel?
 - **Q8.** ~~Do parked cars leave and arrive?~~ **Answered (row 712):** yes; the dummy sees them coming. Open: how often (turnover rate, to register).
-- **Q9.** ~~One-way or two-way roads?~~ **Answered (row 712):** white cars block the red car on one-way roads too. They first appear in 10.8, with two-way roads.
+- **Q9.** ~~One-way or two-way roads?~~ **Answered (row 712):** white cars block the red car on one-way roads too. They first appear with two-way roads: 10.9 since row 717 (D121).
 - **Q10.** ~~Does a crash from the open leave a spot?~~ **Answered (row 713):** no. It was skill from a player who judged it right. 10.7 amended.
-- **Linked decisions:** D57, D97, D115, D119, D120.
+- **Q11.** Does a ghost pass to the cars behind, or to the fleet (Q2)? Today each red car keeps its own.
+- **Linked decisions:** D57, D97, D115, D119, D120, D121, D122.
 
 ## 8 The control table: what hides, obstructs, is remembered, resets (row 714)
 
@@ -271,14 +285,15 @@ One row per object type. Edit this table first; the sections above follow it.
 | M1 | Cone (`props.cone.radius` 7.2) | Moveable | Free; held; in flight; fetched | No | R: rung 4 swerves, rung 5 stops; D punts it | No | FARSIGHT fetches it from a lane after `proto.droneConeSeconds` 5, to its home | Built |
 | M2 | Planter, pushed | Moveable | Still; moving | A ducked dummy | D | Yes; memory follows it (row 712) | Moved by D | Proposed (Arms) |
 | M3 | Decoy (`props.decoy.<kind>`, *unregistered*) | Moveable | — | — | R: a priority choice | — | — | Planned (PT13) |
-| V1 | Red car | Vehicle, learns | Cruising; braking; waiting; spent; away (lesson); off screen | No | D: a hit, or a touch below `duel.standstillSpeed` 5 | It is the one that remembers | Leaves the screen; back after `duel.redReturnSeconds` 2 | Built |
-| V2 | White car (`vehicles.sedan.height` 19.8) | Vehicle, never learns | Moving; queued; flashing | Yes: moving cover (row 711) | R's sight and path; D (a hazard) | While it stays; memory leaves with it (row 712) | Drives on | Decided; arrives 10.8 |
+| V1 | Red car | Vehicle, learns | Cruising; braking; waiting; searching (rung 7); spent; away (lesson); off screen | No | D: a hit, or a touch below `duel.standstillSpeed` 5 | It is the one that remembers | Leaves the screen; back after `duel.redReturnSeconds` 2 | Built |
+| V2 | White car (`vehicles.sedan.height` 19.8) | Vehicle, never learns | Moving; queued; flashing | Yes: moving cover (row 711) | R's sight and path; D (a hazard) | While it stays; memory leaves with it (row 712) | Drives on | Decided; arrives 10.9 (D121) |
 | V3 | Parked car (`vehicles.sedan.height` 19.8) | Vehicle, still while parked | Arriving; parked; leaving | Yes (row 711) | D, R | While parked; a new car there is a fresh spot (row 712) | Leaves and arrives, seen coming (row 712) | Decided; not built |
 | V4 | FARSIGHT drone (`proto.droneSpeed` 240) | Vehicle, air | Inbound; lowering; outbound; carrying a part or a cone; lifting the dummy (row 715) | No | No | No | Leaves the screen | Built |
 | C1 | The dummy | Character | §8.2 | — | R: the hit | Its spring spots, from cover (row 713) | Write-off: a new body by drone. R: everything | Built |
 | C2 | Other dummies, trainees | Character | — | — | — | — | — | Planned (PT13) |
 | T1 | Crash outline, debris, marker | Trace | Remembered; faded | No | No | Marks a remembered spot | Persists through write-offs; R clears it | Built |
 | T2 | Wreck at a write-off | Trace | — | No | No | No | — | Built (cosmetic) |
+| T3 | The ghost (rung 7) | Trace, the car's | Searching; found | No | No | Where the car last truly saw the dummy; fixed | Cleared by a true sighting, or `duel.searchSeconds` 4 without the dummy | Built (row 717) |
 
 ### 8.2 States that change the answers
 
@@ -291,6 +306,7 @@ One row per object type. Edit this table first; the sections above follow it.
 | On the plinth | 18 + 20 | Seen | — | Rungs 0–2 never; rung 3 as standing | — |
 | In the air | Its arc | — | — | Rungs 0–2 never; rung 3 as standing | — |
 | At a remembered spot (rung 6) | Any | Seen | Seen | At once | EXPECTED |
+| Within `duel.searchRadius` of a ghost (rung 7) | Any | Seen | Seen | At once | FOUND; the ghost stays put |
 | Knocked, written off | — | — | — | — | Out of play until it recovers, or a new body lands |
 
 **The red car:**
@@ -300,6 +316,7 @@ One row per object type. Edit this table first; the sections above follow it.
 | Cruising | By rung | Yes, by rung | Damages; may teach |
 | Waiting (below `duel.standstillSpeed` 5) | By rung | Already stopped | A touch: no damage, no lesson |
 | Swerving round a cone (rungs 2–4) | By rung | No, until past the cone | Damages; at rung 4, teaches rung 5 |
+| Searching (rung 7) | By rung, and past cover within the ring | Short of the ghost, for `duel.searchSeconds` after it last had the dummy | Damages; may teach rung 7 only from below it |
 | Spent (just hit) | — | No | — |
 
 ### 8.3 Resets by event
@@ -308,6 +325,8 @@ One row per object type. Edit this table first; the sections above follow it.
 |---|---|---|---|---|---|
 | A pass ends | — | Kept | Kept | Cones in a lane fetched | Back in 2 s |
 | A block (the car waits `duel.blockSeconds` 10) | Lifted beside the road; put down once the car has left | Kept | Kept | Cones ahead of it fetched at once | Drives on |
+| The search gives up (`duel.searchSeconds` 4 without the dummy) | — | Kept; the ghost cleared | Kept | — | Drives on |
+| A true sighting at rung 7 | — | The ghost cleared | Kept | — | Sees the dummy |
 | Write-off | New body (`proto.health.standard` 500); parts kept | Kept | Kept | A held cone drops | — |
 | Lesson | — | Grows (rung 6 fitted) | Kept | — | Away, then back |
 | Cover leaves (parked car) | — | That spot forgotten | Outline fades | — | — |
@@ -336,8 +355,8 @@ One row per object type. Edit this table first; the sections above follow it.
 | Pattern | Seen in | DUMMIES now | Proposal | Decision (row 716) |
 |---|---|---|---|---|
 | Perception is readable; binary where it can be | Mark of the Ninja, Conviction, Blacklist's GDC talk | Beam and field zones, notice meter, HIDDEN, SEEN, EXPECTED | Keep binary labels; one cue per state | Keep |
-| Last known position, drawn | Conviction, Unity, Mark of the Ninja | None | A ghost where the car last saw the dummy, while it waits | Adopted. Lands with the search state |
-| Graded alert that decays | MGS, Thief, Dishonored | Notice, then stop, then wait; drives on when hidden | A short search state: it slows past the last known position, then gives up | Adopted. A car behaviour: its own test |
+| Last known position, drawn | Conviction, Unity, Mark of the Ninja | The ghost (rung 7, 10.8) | A ghost where the car last saw the dummy, while it waits | Adopted. **Built 10.8 (row 717)** |
+| Graded alert that decays | MGS, Thief, Dishonored | The search: stops short of the ghost, gives up after 4 s | A short search state: it slows past the last known position, then gives up | Adopted. **Built 10.8 (row 717):** it stops short, not slows past (F3) |
 | An area stays on edge after an alert | Dishonored, Thief 1 | None | The junction's notice runs faster for a while after a hit | Adopted. A car behaviour: its own test |
 | Habits buy counters, capped, decaying | MGS V Revenge, Alien: Isolation | Rung 6, three spots (D120) | Decay by level change (Q6); show the counters on the map, as MGS V does | Adopted: the spots on a map. Lands with the multi-screen levels |
 | Moving cover is suspicious | The cardboard box; AC's haycarts | Parked cars arrive "seen coming" (row 712) | Cover that moves in a car's sight draws its notice; still cover hides | Adopted. Lands with moveable cover: pushed planters, parked cars |
@@ -372,3 +391,4 @@ One row per object type. Edit this table first; the sections above follow it.
 | 4 November 2026 | §8 the control table: object types, states, resets. §9 stealth research: ten games, ten patterns | 714 |
 | 4 November 2026 | The block lift ends the stalemate (built in 10.7); F16 | 715 |
 | 4 November 2026 | §9.2: six proposals adopted, with where each lands | 716 |
+| 5 November 2026 | 10.8 built: rung 7, the search (§2.1); its states and resets (§8); L9–L10; F17–F21; Q11; §9.2's first two built | 717–722 |

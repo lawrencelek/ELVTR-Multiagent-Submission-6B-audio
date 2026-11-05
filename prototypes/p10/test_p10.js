@@ -1,4 +1,4 @@
-// Prototype 10 checks (GDD Edits 101–107). node prototypes/p10/test_p10.js [--page]
+// Prototype 10 checks (GDD Edits 101–108). node prototypes/p10/test_p10.js [--page]
 // Headless sim checks for each test's values (sim_flags.json stages), on today's code; frozen-build checks; --page also
 // loads every test's page in Playwright and plays 10.2's lesson through.
 'use strict';
@@ -6,7 +6,7 @@ const fs = require('fs'), path = require('path'), cp = require('child_process'),
 const ROOT = path.resolve(__dirname, '..', '..');
 const X = require(path.join(ROOT, 'prototypes/p6/sim.js'));
 const { TestRoadSim, junctionLevel } = require(path.join(__dirname, 'testroad.js'));
-const SF = JSON.parse(fs.readFileSync(path.join(__dirname, 'sim_flags.json'), 'utf8')), F1 = SF.stages['10.1'].flags, F2 = SF.stages['10.2'].flags, F3 = SF.stages['10.3'].flags, F4 = SF.stages['10.4'].flags, F5 = SF.stages['10.5'].flags, F6 = SF.stages['10.6'].flags, F7 = SF.stages['10.7'].flags;
+const SF = JSON.parse(fs.readFileSync(path.join(__dirname, 'sim_flags.json'), 'utf8')), F1 = SF.stages['10.1'].flags, F2 = SF.stages['10.2'].flags, F3 = SF.stages['10.3'].flags, F4 = SF.stages['10.4'].flags, F5 = SF.stages['10.5'].flags, F6 = SF.stages['10.6'].flags, F7 = SF.stages['10.7'].flags, F8 = SF.stages['10.8'].flags;
 const results = [];
 const check = (name, fn) => { try { const r = fn(); results.push([r.ok, name, r.detail]); } catch (e) { results.push([false, name, String(e.stack || e).slice(0, 300)]); } };
 const md5 = (p) => crypto.createHash('md5').update(fs.readFileSync(p)).digest('hex');
@@ -372,6 +372,39 @@ check('10.7 rung 6: the same spot scores once, then the car stops for it; moving
   return { ok: hs === 1 && stops > 0 && hm === 3 && h4 >= 5 && hits(four).every((e) => !e.remembered), detail: `the same spot: ${hs} hit, then ${stops} car(s) stopped for it; three spots in turn: ${hm} hits; four in turn: ${h4} hits, none from a remembered spot` };
 });
 
+// ---------- 10.8
+// Seen, then hidden: the dummy stands in view behind the planter row until a road A car has it, ducks, (crawls to dest), and
+// springs as the car passes in reach.
+const peekBot = (spot, dest) => { let phase = 'show', car = null; return (q) => { const b = q.body; if (!b.alive) return {};
+  const c = q.onRoad().find((x) => x.red && !x.spent && x.path.road === 'A'); if (!c) { phase = 'show'; car = null; return to(b, spot[0], spot[1]); }
+  if (car !== c.id) { car = c.id; phase = 'show'; }
+  if (phase === 'show') { if (Math.hypot(spot[0] - b.x, spot[1] - b.y) > 6) return to(b, spot[0], spot[1]); if (c.noticed || (c.hz && c.v < 1)) phase = 'hide'; return {}; }
+  const tg = dest || spot; if (Math.hypot(tg[0] - b.x, tg[1] - b.y) > 6) { const r = to(b, tg[0], tg[1]); return Object.assign(r, { duck: true }); }
+  if (c.v > 15) { const d0 = Math.hypot(c.x - b.x, c.y - b.y), k = 0.1 + d0 / 600, tx = c.x + (c.vx || 0) * k, ty = c.y + (c.vy || 0) * k, d = Math.hypot(tx - b.x, ty - b.y), ang = Math.atan2(ty - b.y, tx - b.x);
+    if (d < q.reach() + 6 && b.mode !== 'lunge' && b.mode !== 'recover') return { mx: Math.cos(ang) * 0.3, my: Math.sin(ang) * 0.3, aPress: true, duck: true }; }
+  return { duck: true }; }; };
+check('10.8 values: starts at rung 6 with all four parts; rung 7 searches duel.searchRadius for duel.searchSeconds', () => {
+  const s = sim(F8);
+  return { ok: s.rung === 6 && ['battery1', 'legs1', 'hands1', 'duck1'].every((k) => s.run.owned[k]) && F8['duel.topRung'] === 7 && F8['duel.searchRadius'] > 0 && F8['duel.searchSeconds'] > 0 && !!T7(),
+    detail: `rung ${s.rung}, top ${F8['duel.topRung']}; search radius ${F8['duel.searchRadius']}, ${F8['duel.searchSeconds']} s` };
+  function T7() { return require(path.join(__dirname, 'testroad.js')).RUNGS[7]; }
+});
+check('10.8: seen, then ducked behind cover within duel.lessonClipSeconds of the strike: at rung 6 the strike lands and teaches rung 7; at rung 7 the car leaves a ghost, stops short, finds the dummy, takes no hit', () => {
+  const P = [170, 203], a = sim(F8, {}, ALL); Object.assign(a.body, { x: P[0], y: P[1] }); drive(a, 60, peekBot(P)); const due = a.events.find((e) => e.type === 'lesson-due'), hitA = hits(a)[0];
+  const r7 = sim(F8, { 'duel.startRung': 7 }, ALL), bot7 = peekBot(P); Object.assign(r7.body, { x: P[0], y: P[1] }); let ghost = null, found = null, stopped = 0;
+  for (let i = 0; i < 40 * 60; i++) { const e0 = r7.events.length; r7.step(bot7(r7)); for (const e of r7.events.slice(e0)) { if (e.type === 'search' && !ghost) ghost = e; if (e.type === 'search-found' && !found) found = e; } const c = r7.onRoad()[0]; if (c && c.lkp && c.v < 1) stopped++; }
+  return { ok: !!due && due.to === 7 && !!hitA && hitA.lostSight && !!ghost && !!found && stopped > 0 && hits(r7).length === 0,
+    detail: `rung 6: hit ${hitA ? 'from cover, seen ' + (hitA.seenAt && hitA.seenAt.ago) + ' s before' : 'none'}; lesson ${due ? 'to rung ' + due.to : 'none'}. Rung 7: ghost ${ghost ? 'at ' + ghost.x + ', ' + ghost.y : 'none'}; found ${found ? found.after + ' s after' : 'no'}; stopped while searching ${(stopped / 60).toFixed(1)} s; hits ${hits(r7).length}` };
+});
+check('10.8 rung 7: crawled beyond duel.searchRadius of the ghost, the dummy is lost; the car gives up duel.searchSeconds after its last find and drives on into the strike', () => {
+  const t = sim(F8, { 'duel.startRung': 7 }, ALL), T = F8['duel.searchSeconds']; Object.assign(t.body, { x: 617, y: 421 }); const bot = peekBot([617, 421], [501, 421]); let ghost = null, end = null, lastHad = null, gap = null;
+  for (let i = 0; i < 40 * 60 && !hits(t).length; i++) { const e0 = t.events.length; t.step(bot(t)); const c = t.onRoad().find((x) => x.lkp); if (c) lastHad = c.lkp.had;
+    for (const e of t.events.slice(e0)) { if (e.type === 'search' && !ghost) ghost = e; if (e.type === 'search-end' && !end) { end = e; gap = Math.hypot(t.body.x - ghost.x, t.body.y - ghost.y); } } }
+  const h = hits(t)[0], wait = end && lastHad != null ? end.t - lastHad : null;
+  return { ok: !!ghost && !!end && !end.found && gap > F8['duel.searchRadius'] && Math.abs(wait - T) < 0.1 && !!h && h.t > end.t,
+    detail: `ghost ${ghost ? ghost.t.toFixed(1) + ' s' : '—'}; gave up ${end ? end.t.toFixed(1) + ' s, ' + (wait != null ? wait.toFixed(2) : '—') + ' s after its last find (duel.searchSeconds ' + T + '); dummy ' + Math.round(gap) + ' from the ghost' : '—'}; hit ${h ? h.t.toFixed(1) + ' s, ' + h.zone + ', ' + Math.round(h.lost) : 'none'}` };
+});
+
 // ---------- registry and frozen builds
 check('Prototype 10 values are registered (registry first)', () => {
   const reg = new Set(JSON.parse(fs.readFileSync(path.join(ROOT, 'content/params/tuning.parameters.json'), 'utf8')).entries.map((e) => e.id));
@@ -400,7 +433,7 @@ if (process.argv.includes('--page')) {
     const srv = http.createServer((q, r) => { const p = path.join(ROOT, decodeURIComponent(q.url.split('?')[0])); if (!fs.existsSync(p) || fs.statSync(p).isDirectory()) { r.writeHead(404); return r.end(); } r.writeHead(200); fs.createReadStream(p).pipe(r); });
     srv.listen(0, async () => {
       const { chromium } = require('playwright'); const br = await chromium.launch();
-      for (const page of ['dummies_p10.html', 'dummies_p10_2.html', 'dummies_p10_3.html', 'dummies_p10_4.html', 'dummies_p10_5.html', 'dummies_p10_6.html', 'dummies_p10_7.html']) {
+      for (const page of ['dummies_p10.html', 'dummies_p10_2.html', 'dummies_p10_3.html', 'dummies_p10_4.html', 'dummies_p10_5.html', 'dummies_p10_6.html', 'dummies_p10_7.html', 'dummies_p10_8.html']) {
         const pg = await br.newPage(); const errs = [];
         pg.on('pageerror', (e) => errs.push(e.message));
         await pg.goto(`http://127.0.0.1:${srv.address().port}/prototypes/p10/${page}`); await pg.waitForTimeout(600);
@@ -499,6 +532,24 @@ if (process.argv.includes('--page')) {
           let checked = false; for (let i = 0; i < 480 && !checked; i++) { await pg.waitForTimeout(125); checked = await pg.evaluate(() => window.__p10.sim.onRoad().some((c) => c.red && (c.checks || []).some((m) => m.n === 1)) && window.__p10.sim.expected()); }
           const crashes = await pg.evaluate(() => window.__p10.sim.crashes.length);
           results.push([fit && sameSpot && rung === 6 && crashes >= 2 && checked && errs.length === 0, '10.7 page: two strikes from one spot leave two outlines; the clip marks the same spot; memory fitted; at rung 6 the car checks that spot and expects the dummy there', `crashes ${crashes}, same spot ${sameSpot}, fitting ${fit}, rung ${rung}, checks the spot ${checked}, errors ${errs.length}`]);
+        }
+        if (page === 'dummies_p10_8.html') { // rung 6 → 7: seen, ducked, struck within the clip; the clip draws the ghost; search fitted; at rung 7 the next car leaves a ghost and finds the dummy
+          await pg.evaluate(() => {
+            window.__p10.newSim(); const s = window.__p10.sim, step = s.step.bind(s); let phase = 'show', car = null, spot = [170, 203];
+            const to = (b, x, y) => { const dx = x - b.x, dy = y - b.y, d = Math.hypot(dx, dy); return d > 6 ? { mx: dx / d, my: dy / d } : {}; };
+            Object.assign(s.body, { x: spot[0], y: spot[1], vx: 0, vy: 0 });
+            const bot = () => { const b = s.body; if (!b.alive || s.phase !== 'play') return null; if (s.rung >= 7) spot = [110, 203]; // at rung 7, a spot it does not remember
+              const c = s.onRoad().find((x) => x.red && !x.spent && x.path.road === 'A'); if (!c) { phase = 'show'; car = null; return to(b, spot[0], spot[1]); }
+              if (car !== c.id) { car = c.id; phase = 'show'; }
+              if (phase === 'show') { if (Math.hypot(spot[0] - b.x, spot[1] - b.y) > 6) return to(b, spot[0], spot[1]); if (c.noticed || (c.hz && c.v < 1)) phase = 'hide'; return {}; }
+              if (c.v > 15) { const d0 = Math.hypot(c.x - b.x, c.y - b.y), k = 0.1 + d0 / 600, tx = c.x + (c.vx || 0) * k, ty = c.y + (c.vy || 0) * k, d = Math.hypot(tx - b.x, ty - b.y), ang = Math.atan2(ty - b.y, tx - b.x);
+                if (d < s.reach() + 6 && b.mode !== 'lunge' && b.mode !== 'recover') return { mx: Math.cos(ang) * 0.3, my: Math.sin(ang) * 0.3, aPress: true, duck: true }; }
+              return { duck: true }; };
+            s.step = (cmd) => { const c = bot(); return step(c || cmd); };
+          });
+          let fit = false, rung = 6, ghostClip = false; for (let i = 0; i < 1920; i++) { await pg.waitForTimeout(125); const q = await pg.evaluate(() => ({ ph: window.__p10.sim.phase, lt: window.__p10.lessonT, rung: window.__p10.sim.rung, g: !!(window.__p10.clip && window.__p10.clip.info && window.__p10.clip.info.search && window.__p10.clip.seenAt) })); rung = q.rung; if (q.ph === 'lesson' && q.g) ghostClip = true; if (q.ph === 'lesson' && q.lt > F8['duel.lessonClipSeconds'] + F8['duel.lessonHoldSeconds'] + 0.2) fit = true; if (q.rung === 7 && q.ph === 'play') break; }
+          let ghost = false, found = false; for (let i = 0; i < 480 && !(ghost && found); i++) { await pg.waitForTimeout(125); const q = await pg.evaluate(() => ({ g: window.__p10.sim.onRoad().some((c) => c.red && c.lkp), f: window.__p10.sim.events.some((e) => e.type === 'search-found') })); ghost = ghost || q.g; found = found || q.f; }
+          results.push([fit && ghostClip && rung === 7 && ghost && found && errs.length === 0, '10.8 page: seen, then struck from cover within the clip; the clip draws the ghost; search fitted; at rung 7 the next car leaves a ghost and finds the dummy near it', `ghost in the clip ${ghostClip}, fitting ${fit}, rung ${rung}, ghost on the road ${ghost}, found ${found}, errors ${errs.length}`]);
         }
         await pg.close();
       }

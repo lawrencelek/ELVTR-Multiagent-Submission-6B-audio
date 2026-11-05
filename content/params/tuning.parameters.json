@@ -14265,6 +14265,50 @@
    "purpose": "A car kept waiting for the dummy (in its path, or noticed in its field) this long calls FARSIGHT: a drone lifts the dummy to the side of the road, holds it until the car has passed, and puts it down. 0: never (the car waits). 10.7 sets 10"
   },
   {
+   "id": "duel.searchRadius",
+   "group": "Prototype P10",
+   "owner": "Design",
+   "label": "Search radius",
+   "description": "Rung 7: a dummy within this of the ghost (where the car last had it, before cover took it away) is found: cover does not hide it and the field notices it at once. 0: no search. 10.8 sets 60",
+   "unit": "world units",
+   "type": "number",
+   "default": 0,
+   "status": "proposed",
+   "source": "GDD Edit 108 (Prototype 10.8): handover v2 §25; DECISIONS rows 717–",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-run",
+   "validation": {
+    "min": 0,
+    "max": 400
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "Rung 7: a dummy within this of the ghost (where the car last had it, before cover took it away) is found: cover does not hide it and the field notices it at once. 0: no search. 10.8 sets 60"
+  },
+  {
+   "id": "duel.searchSeconds",
+   "group": "Prototype P10",
+   "owner": "Design",
+   "label": "Search time",
+   "description": "Rung 7: how long the car searches after it loses the dummy behind cover. It slows to stop short of the ghost meanwhile; then it gives up and drives on. 0: no search. 10.8 sets 4",
+   "unit": "seconds",
+   "type": "number",
+   "default": 0,
+   "status": "proposed",
+   "source": "GDD Edit 108 (Prototype 10.8): handover v2 §25; DECISIONS rows 717–",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-run",
+   "validation": {
+    "min": 0,
+    "max": 60
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "Rung 7: how long the car searches after it loses the dummy behind cover. It slows to stop short of the ghost meanwhile; then it gives up and drives on. 0: no search. 10.8 sets 4"
+  },
+  {
    "id": "proto.droneSpeed",
    "group": "Props",
    "owner": "Design",
