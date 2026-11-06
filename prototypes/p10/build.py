@@ -115,7 +115,7 @@ T109 = dict(T108, **{
     'duel.whiteInterval': 3.5,  # a white sedan that never learns enters about every 3.5 s, on any lane (row 734)
     'traffic.junctionLookahead': 400, 'traffic.junctionGap': 2.2,  # a car decides from 400 out (before it must commit); road B gives way to a road A car under 2.2 s from the box; anyone waits for a car in it (row 735)
     'perception.coneRadius': 320, 'perception.sideConeRatio': 0.8, 'perception.forwardGrades': 3, 'perception.sideGrades': 2,  # the proportional field from the car's middle: forward 320 in three equal rings, sides 256 in two (row 735)
-    'perception.forwardConeAngle': 15, 'perception.sideConeAxis': 62.5, 'perception.sideConeAngle': 47.5,  # forward ±15°; sides 15°–110° (row 735)
+    'perception.forwardConeAngle': 10, 'perception.sideConeAxis': 60, 'perception.sideConeAngle': 50,  # forward ±10°, its edges through the front corners (row 736); sides 10°–110° from the middle
     'perception.coneGrowthPerMemory': 0.04, 'perception.coneGrowthMax': 0.2,  # each crash spot it remembers widens the field 4%, to 384 (row 735)
 })
 STAGES = {

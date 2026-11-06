@@ -1242,6 +1242,7 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
 - **The red car:** rung 7, A eastbound and B southbound.
 - **Measured:** open ways 10; moving cover reopens cover springs and the kerb; seen-then-hidden stays closed; 7 long waits (D130).
 - **Row 735:** the junction decides by time (no long waits, no overlaps). The red car's field: one radius from its middle; forward 320 in three equal grades, sides 256 in two; it grows with crash memory.
+- **Row 736:** the forward cone's edges run through the front corners; its centre lies behind the car.
 - **Next:** 10.10, swerve cost (D121).
 
 ### 25.9 Open

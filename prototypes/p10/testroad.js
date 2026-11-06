@@ -241,7 +241,9 @@
     coneOf(c, px, py) { // row 733: all three from the nose; the side cones begin where the forward cone ends, so none overlaps
       const P = this.P, ca = Math.cos(c.h), sa = Math.sin(c.h), br = P['body.radius'], prop = this.propField(), ox = prop ? 0 : c.L / 2, dx = px - (c.x + ca * ox), dy = py - (c.y + sa * ox), fx = dx * ca + dy * sa, fy = -dx * sa + dy * ca; // row 735: proportional, from the car's middle
       const d = Math.hypot(fx, fy), a = Math.atan2(fy, fx) * 180 / Math.PI, A = P['perception.forwardConeAngle'], look = this.coneLook(c), R = prop ? this.coneReach() : null;
-      if (Math.abs(a - look) <= A && d <= (prop ? R.f : c.fwdLen) + br) return { cone: 'forward', d, R: prop ? R.f : null };
+      if (prop) { const k = this.cornerApex(c), gx = fx - k, ga = Math.atan2(fy, gx) * 180 / Math.PI, gd = Math.hypot(gx, fy), off = c.L / 2 - k; // row 736: the forward cone's edges run through the front corners; its centre lies behind, where they meet
+        if (Math.abs(ga - look) <= A && gd <= off + R.f + br) return { cone: 'forward', d: Math.max(0, gd - off), R: R.f }; }
+      else if (Math.abs(a - look) <= A && d <= c.fwdLen + br) return { cone: 'forward', d, R: null };
       const e = this.sideEdges(), aa = Math.abs(a); if (aa > e[0] && aa <= e[1] && d <= (prop ? R.s : P['perception.sideConeRange']) + br) return { cone: 'side', d, R: prop ? R.s : null };
       return null;
     }
@@ -249,6 +251,7 @@
     // middle, the side cones perception.sideConeRatio of it. Rings split each into equal grades: perception.forwardGrades (3:
     // AWARE, SLOWING, CRAWLING) and perception.sideGrades (2: AWARE, SLOWING). The radius grows as the car learns: by
     // perception.coneGrowthPerMemory for each crash spot it remembers, up to perception.coneGrowthMax.
+    cornerApex(c) { return c.L / 2 - (c.W / 2) / Math.tan(Math.max(1, this.P['perception.forwardConeAngle']) * Math.PI / 180); } // row 736: along the heading from the car's middle (negative: behind it)
     propField() { return (this.P['perception.coneRadius'] || 0) > 0 && this.coned(); }
     coneReach() { const P = this.P, g = 1 + Math.min(P['perception.coneGrowthMax'] || 0, (P['perception.coneGrowthPerMemory'] || 0) * this.memory().length), f = P['perception.coneRadius'] * g; return { f, s: f * P['perception.sideConeRatio'], g }; }
     gradeStage(cone, d, R) { const G = Math.max(1, Math.round(this.P[cone === 'side' ? 'perception.sideGrades' : 'perception.forwardGrades'])), band = clamp(Math.ceil(d / (R / G) - 1e-9), 1, G); return G - band + 1; } // innermost grade: the highest stage
@@ -257,7 +260,7 @@
     // heading toward it, as far as the side cones' outer edge (perception.sideConeAxis + perception.sideConeAngle). Degrees.
     coneLook(c) {
       const g = c.lkp; if (!g) return 0;
-      const ca = Math.cos(c.h), sa = Math.sin(c.h), ox = this.propField() ? 0 : c.L / 2, dx = g.x - (c.x + ca * ox), dy = g.y - (c.y + sa * ox), lim = this.sideEdges()[1];
+      const ca = Math.cos(c.h), sa = Math.sin(c.h), ox = this.propField() ? this.cornerApex(c) : c.L / 2, dx = g.x - (c.x + ca * ox), dy = g.y - (c.y + sa * ox), lim = this.sideEdges()[1];
       return clamp(Math.atan2(-dx * sa + dy * ca, dx * ca + dy * sa) * 180 / Math.PI, -lim, lim);
     }
     // Row 732: the lunge guide. Where a dash pressed now would land, and the first car on the way. The path follows the dash's

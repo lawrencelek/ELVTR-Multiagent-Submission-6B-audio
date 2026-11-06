@@ -6,9 +6,11 @@
 - **Playtest pages:** `index.html`. 10.1–10.8 frozen; 10.8 at md5 `e019098d…`.
 - **Tests:** `node prototypes/p10/test_p10.js --page` 66/66. Sound freeze: 211 items, 0 changed.
 - **Probes:** `node qa/testroad.js --stage 10.9 --out qa/baseline/p10_9.json`; report `qa/baseline/p10_9.md`, 12/16 checks (row 735). 10.8 reruns identical.
-- **Decision log:** rows 734–735. Open D130.
+- **Decision log:** rows 734–736. Open D130.
 
 **Amended 6 November (row 735):** the junction decides by time (§10.9.2); the red car's proportional field (§10.9.4).
+
+**Amended 6 November (row 736):** the forward cone's edges run through the front corners (§10.9.4).
 
 ## Request
 
@@ -48,19 +50,22 @@
 
 ### 10.9.4 The red car's field (row 735)
 
-- **From the car's middle.** All three cones share the apex; edge to edge.
+- **Forward cone, row 736:** its edges run through the front corners. Its centre lies behind the car, where they meet. Rings are equal steps ahead of the nose.
+- **Side cones:** from the car's middle, 10°–110° (`perception.sideConeAxis` 60 ± `perception.sideConeAngle` 50). They meet the forward cone's edge.
 - **One radius:** `perception.coneRadius` 320, half the screen's height.
 
 | Cone | Angle | Reach | Grades (equal rings) |
 |---|---|---|---|
-| Forward | ±`perception.forwardConeAngle` 15° | 320 | `perception.forwardGrades` 3: AWARE, SLOWING, CRAWLING |
-| Each side | 15°–110° (`perception.sideConeAxis` 62.5 ± `perception.sideConeAngle` 47.5) | `perception.sideConeRatio` 0.8: 256 | `perception.sideGrades` 2: AWARE, SLOWING |
+| Forward | ±`perception.forwardConeAngle` 10°, through the front corners | 320 ahead of the nose | `perception.forwardGrades` 3: AWARE, SLOWING, CRAWLING |
+| Each side | 10°–110°, from the middle | `perception.sideConeRatio` 0.8: 256 | `perception.sideGrades` 2: AWARE, SLOWING |
 
 - **It learns:** the radius grows `perception.coneGrowthPerMemory` 4% per crash spot remembered, to `perception.coneGrowthMax` 20% (384, 60% of the screen).
 - **Unchanged:** the beam (the lane ahead), stage speeds, the notice meter, the three-second forget.
 - **10.8 keeps** its row 733 field (`perception.coneRadius` 0).
 
-**Row 735, measured** (rung 7, 5 minutes × 3):
+**Row 736, measured** (rung 7, 5 minutes × 3): 13 ways in (flankOpen 4.59, kerb 2.9, the lure 2.03 a minute); peek 9 hits in 15 minutes; 4 stalls, 9 long waits, 3 remembered-spot hits. Report 12/16.
+
+**Row 735, measured:**
 
 - **More open:** 12 ways in. flankOpen 4.59 a minute, kerb 2.74, the lure 2.31, roaming 1.9, the crawl 1.61.
 - **Seen-then-hidden reopens:** peek 12 hits in 15 minutes. The smaller field notices later.

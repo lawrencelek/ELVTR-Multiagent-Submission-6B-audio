@@ -309,21 +309,22 @@
   // dummy's cone and band lit in its stage's colour.
   function drawCones(c, near) { // row 733: edge to edge; a side cone never draws under the forward one. Row 735: proportional, from the car's middle, equal rings
     const P = s.P, br = P['body.radius'], D = Math.PI / 180, A = P['perception.forwardConeAngle'] * D, e = s.sideEdges(), e0 = e[0] * D, e1 = e[1] * D, prop = !!(s.propField && s.propField()), Rp = prop ? s.coneReach() : null, O = prop ? -c.L / 2 : 0;
-    const Rf = (prop ? Rp.f : c.fwdLen) + br, Rs = (prop ? Rp.s : P['perception.sideConeRange']) + br, rC = P['perception.sideCloseRange'], rW = P['perception.sideWaryRange'], Fs = P['perception.forwardConeSensitivity'], Ss = P['perception.sideConeSensitivity'];
-    const Gf = Math.round(P['perception.forwardGrades'] || 3), Gs = Math.round(P['perception.sideGrades'] || 2), ringsOf = (q) => prop ? Array.from({ length: (q.k === 'side' ? Gs : Gf) - 1 }, (_, i) => (q.R - br) * (i + 1) / (q.k === 'side' ? Gs : Gf)) : [rC * q.sens, rW * q.sens];
-    const lk = (s.coneLook ? s.coneLook(c) : 0) * D, cones = [{ k: 'forward', a0: lk - A, a1: lk + A, R: Rf, sens: Fs }, { k: 'side', a0: e0, a1: e1, R: Rs, sens: Ss }, { k: 'side', a0: -e1, a1: -e0, R: Rs, sens: Ss }];
-    const wedge = (q) => { ctx.beginPath(); ctx.moveTo(O, 0); ctx.arc(O, 0, q.R, q.a0, q.a1); ctx.closePath(); };
+    const Fo = prop ? s.cornerApex(c) - c.L / 2 : 0, Fx = prop ? c.L / 2 - s.cornerApex(c) : 0; // row 736: the forward cone's centre, behind the nose where lines through the front corners meet
+    const Rf = (prop ? Rp.f + Fx : c.fwdLen) + br, Rs = (prop ? Rp.s : P['perception.sideConeRange']) + br, rC = P['perception.sideCloseRange'], rW = P['perception.sideWaryRange'], Fs = P['perception.forwardConeSensitivity'], Ss = P['perception.sideConeSensitivity'];
+    const Gf = Math.round(P['perception.forwardGrades'] || 3), Gs = Math.round(P['perception.sideGrades'] || 2), ringsOf = (q) => prop ? (q.k === 'side' ? Array.from({ length: Gs - 1 }, (_, i) => (q.R - br) * (i + 1) / Gs) : Array.from({ length: Gf - 1 }, (_, i) => Fx + Rp.f * (i + 1) / Gf)) : [rC * q.sens, rW * q.sens]; // forward rings: equal steps ahead of the nose
+    const lk = (s.coneLook ? s.coneLook(c) : 0) * D, cones = [{ k: 'forward', a0: lk - A, a1: lk + A, R: Rf, sens: Fs, o: prop ? Fo : 0 }, { k: 'side', a0: e0, a1: e1, R: Rs, sens: Ss, o: O }, { k: 'side', a0: -e1, a1: -e0, R: Rs, sens: Ss, o: O }];
+    const wedge = (q) => { ctx.beginPath(); ctx.moveTo(q.o, 0); ctx.arc(q.o, 0, q.R, q.a0, q.a1); ctx.closePath(); };
     const clipTo = (q) => { ctx.beginPath(); ctx.rect(-c.L - br, -2e3, 4e3, 4e3); ctx.clip(); wedge(q); ctx.clip(); // behind the rear bumper it senses nothing
-      if (q.k === 'side') { ctx.beginPath(); ctx.rect(-4e3, -4e3, 8e3, 8e3); ctx.moveTo(O, 0); ctx.arc(O, 0, Rf + 4, cones[0].a0, cones[0].a1); ctx.closePath(); ctx.clip('evenodd'); } }; // searching, the forward cone turns over a side cone: it wins
+      if (q.k === 'side') { ctx.beginPath(); ctx.rect(-4e3, -4e3, 8e3, 8e3); ctx.moveTo(cones[0].o, 0); ctx.arc(cones[0].o, 0, Rf + 4, cones[0].a0, cones[0].a1); ctx.closePath(); ctx.clip('evenodd'); } }; // searching, the forward cone turns over a side cone: it wins
     for (const q of cones) { const k = q.sens == null ? 1 : q.sens; ctx.save(); clipTo(q);
       ctx.fillStyle = near ? `rgba(255,212,0,${(0.05 + 0.13 * k).toFixed(3)})` : `rgba(127,168,188,${(0.02 + 0.18 * k).toFixed(3)})`; ctx.fillRect(-4e3, -4e3, 8e3, 8e3); // brighter = more sensitive
       ctx.strokeStyle = `rgba(255,255,255,${(0.1 + 0.3 * k).toFixed(3)})`; ctx.lineWidth = 1; ctx.setLineDash([4, 6]); wedge(q); ctx.stroke();
-      for (const r of ringsOf(q)) if (r < q.R) { ctx.beginPath(); ctx.arc(O, 0, r, 0, TAU); ctx.stroke(); } ctx.setLineDash([]); ctx.restore(); } // the grade rings: equal steps (row 735)
+      for (const r of ringsOf(q)) if (r < q.R) { ctx.beginPath(); ctx.arc(q.o, 0, r, 0, TAU); ctx.stroke(); } ctx.setLineDash([]); ctx.restore(); } // the grade rings: equal steps (row 735)
     rect(0, -(c.W / 2 + br), c.fwdLen, c.W + 2 * br, (c.hz && c.hz.inPath) || (c.det && c.det.fwd) ? C.beamHot : C.beam); // the beam: the lane ahead
     const st = c.red && s.sideStage ? s.sideStage(c) : 0, hz = c.hz;
     if (st >= 1 && hz && (hz.cone === 'forward' || hz.cone === 'side')) { const b = s.body, ly = -Math.sin(c.h) * (b.x - c.x) + Math.cos(c.h) * (b.y - c.y), q = hz.cone === 'forward' ? cones[0] : ly >= 0 ? cones[1] : cones[2], k = q.sens, d = hz.dist;
-      let band; if (prop) { const G = q.k === 'side' ? Gs : Gf, w = (q.R - br) / G, i = Math.min(G, Math.max(1, Math.ceil(d / w - 1e-9))); band = [w * (i - 1), i === G ? 1e4 : w * i]; } else band = d <= rC * k ? [0, rC * k] : d <= rW * k ? [rC * k, rW * k] : [rW * k, 1e4];
-      ctx.save(); clipTo(q); ctx.globalAlpha = 0.18; ctx.fillStyle = AWARE_C[st]; ctx.beginPath(); ctx.arc(O, 0, Math.min(band[1], q.R), 0, TAU); if (band[0] > 0) { ctx.moveTo(O + band[0], 0); ctx.arc(O, 0, band[0], 0, TAU, true); } ctx.fill('evenodd'); ctx.restore(); }
+      let band; if (prop) { const G = q.k === 'side' ? Gs : Gf, base = q.k === 'side' ? 0 : Fx, w = (q.k === 'side' ? q.R - br : Rp.f) / G, i = Math.min(G, Math.max(1, Math.ceil(d / w - 1e-9))); band = [base + w * (i - 1), i === G ? 1e4 : base + w * i]; if (i === 1) band[0] = 0; } else band = d <= rC * k ? [0, rC * k] : d <= rW * k ? [rC * k, rW * k] : [rW * k, 1e4];
+      ctx.save(); clipTo(q); ctx.globalAlpha = 0.18; ctx.fillStyle = AWARE_C[st]; ctx.beginPath(); ctx.arc(q.o, 0, Math.min(band[1], q.R), 0, TAU); if (band[0] > 0) { ctx.moveTo(q.o + band[0], 0); ctx.arc(q.o, 0, band[0], 0, TAU, true); } ctx.fill('evenodd'); ctx.restore(); }
   }
   // Row 732: the lunge guide. Where a dash now would land (its reach, stopped by statics), and whether a car will be there:
   // yellow when the dash meets a red car on the predicted path, white when it misses, faint while the dash is not ready.
