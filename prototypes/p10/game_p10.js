@@ -303,18 +303,21 @@
   // Row 731: the field as three cones, in the nose's frame. The forward cone from the nose, brighter (more sensitive); the side
   // cones from the car's centre, fainter. Rings at perception.sideCloseRange and perception.sideWaryRange inside each; the
   // dummy's cone and band lit in its stage's colour.
-  function drawCones(c, near) {
-    const P = s.P, br = P['body.radius'], D = Math.PI / 180, A = P['perception.forwardConeAngle'] * D, ax = P['perception.sideConeAxis'] * D, aw = P['perception.sideConeAngle'] * D;
-    const Rf = c.fwdLen + br, Rs = P['perception.sideConeRange'] + br, cx = -c.L / 2, rC = P['perception.sideCloseRange'], rW = P['perception.sideWaryRange'];
-    const lk = (s.coneLook ? s.coneLook(c) : 0) * D, cones = [{ k: 'forward', ox: 0, a0: lk - A, a1: lk + A, R: Rf, sens: P['perception.forwardConeSensitivity'] }, { k: 'side', ox: cx, a0: ax - aw, a1: ax + aw, R: Rs, sens: P['perception.sideConeSensitivity'] }, { k: 'side', ox: cx, a0: -ax - aw, a1: -ax + aw, R: Rs, sens: P['perception.sideConeSensitivity'] }];
-    const wedge = (q) => { ctx.beginPath(); ctx.moveTo(q.ox, 0); ctx.arc(q.ox, 0, q.R, q.a0, q.a1); ctx.closePath(); };
-    for (const q of cones) { const k = q.sens == null ? 1 : q.sens; wedge(q); ctx.fillStyle = near ? `rgba(255,212,0,${(0.05 + 0.13 * k).toFixed(3)})` : `rgba(127,168,188,${(0.02 + 0.18 * k).toFixed(3)})`; ctx.fill(); // brighter = more sensitive
-      ctx.strokeStyle = `rgba(255,255,255,${(0.1 + 0.3 * k).toFixed(3)})`; ctx.lineWidth = 1; ctx.setLineDash([4, 6]); ctx.stroke();
-      ctx.save(); wedge(q); ctx.clip(); for (const r of [rC * q.sens, rW * q.sens]) if (r < q.R) { ctx.beginPath(); ctx.arc(q.ox, 0, r, 0, TAU); ctx.stroke(); } ctx.restore(); ctx.setLineDash([]); } // the stage rings, nearer in a duller cone
+  function drawCones(c, near) { // row 733: all three from the nose, edge to edge; a side cone never draws under the forward one
+    const P = s.P, br = P['body.radius'], D = Math.PI / 180, A = P['perception.forwardConeAngle'] * D, e = s.sideEdges(), e0 = e[0] * D, e1 = e[1] * D;
+    const Rf = c.fwdLen + br, Rs = P['perception.sideConeRange'] + br, rC = P['perception.sideCloseRange'], rW = P['perception.sideWaryRange'], Fs = P['perception.forwardConeSensitivity'], Ss = P['perception.sideConeSensitivity'];
+    const lk = (s.coneLook ? s.coneLook(c) : 0) * D, cones = [{ k: 'forward', a0: lk - A, a1: lk + A, R: Rf, sens: Fs }, { k: 'side', a0: e0, a1: e1, R: Rs, sens: Ss }, { k: 'side', a0: -e1, a1: -e0, R: Rs, sens: Ss }];
+    const wedge = (q) => { ctx.beginPath(); ctx.moveTo(0, 0); ctx.arc(0, 0, q.R, q.a0, q.a1); ctx.closePath(); };
+    const clipTo = (q) => { ctx.beginPath(); ctx.rect(-c.L - br, -2e3, 4e3, 4e3); ctx.clip(); wedge(q); ctx.clip(); // behind the rear bumper it senses nothing
+      if (q.k === 'side') { ctx.beginPath(); ctx.rect(-4e3, -4e3, 8e3, 8e3); ctx.moveTo(0, 0); ctx.arc(0, 0, Rf + 4, cones[0].a0, cones[0].a1); ctx.closePath(); ctx.clip('evenodd'); } }; // searching, the forward cone turns over a side cone: it wins
+    for (const q of cones) { const k = q.sens == null ? 1 : q.sens; ctx.save(); clipTo(q);
+      ctx.fillStyle = near ? `rgba(255,212,0,${(0.05 + 0.13 * k).toFixed(3)})` : `rgba(127,168,188,${(0.02 + 0.18 * k).toFixed(3)})`; ctx.fillRect(-4e3, -4e3, 8e3, 8e3); // brighter = more sensitive
+      ctx.strokeStyle = `rgba(255,255,255,${(0.1 + 0.3 * k).toFixed(3)})`; ctx.lineWidth = 1; ctx.setLineDash([4, 6]); wedge(q); ctx.stroke();
+      for (const r of [rC * k, rW * k]) if (r < q.R) { ctx.beginPath(); ctx.arc(0, 0, r, 0, TAU); ctx.stroke(); } ctx.setLineDash([]); ctx.restore(); } // the stage rings, nearer in a duller cone
     rect(0, -(c.W / 2 + br), c.fwdLen, c.W + 2 * br, (c.hz && c.hz.inPath) || (c.det && c.det.fwd) ? C.beamHot : C.beam); // the beam: the lane ahead
     const st = c.red && s.sideStage ? s.sideStage(c) : 0, hz = c.hz;
-    if (st >= 1 && hz && hz.cone) { const b = s.body, ly = -Math.sin(c.h) * (b.x - c.x) + Math.cos(c.h) * (b.y - c.y), q = hz.cone === 'forward' ? cones[0] : ly >= 0 ? cones[1] : cones[2], k = q.sens, d = hz.dist, band = d <= rC * k ? [0, rC * k] : d <= rW * k ? [rC * k, rW * k] : [rW * k, 1e4];
-      ctx.save(); wedge(q); ctx.clip(); ctx.globalAlpha = 0.18; ctx.fillStyle = AWARE_C[st]; ctx.beginPath(); ctx.arc(q.ox, 0, Math.min(band[1], q.R), 0, TAU); if (band[0] > 0) { ctx.moveTo(q.ox + band[0], 0); ctx.arc(q.ox, 0, band[0], 0, TAU, true); } ctx.fill('evenodd'); ctx.restore(); }
+    if (st >= 1 && hz && (hz.cone === 'forward' || hz.cone === 'side')) { const b = s.body, ly = -Math.sin(c.h) * (b.x - c.x) + Math.cos(c.h) * (b.y - c.y), q = hz.cone === 'forward' ? cones[0] : ly >= 0 ? cones[1] : cones[2], k = q.sens, d = hz.dist, band = d <= rC * k ? [0, rC * k] : d <= rW * k ? [rC * k, rW * k] : [rW * k, 1e4];
+      ctx.save(); clipTo(q); ctx.globalAlpha = 0.18; ctx.fillStyle = AWARE_C[st]; ctx.beginPath(); ctx.arc(0, 0, Math.min(band[1], q.R), 0, TAU); if (band[0] > 0) { ctx.moveTo(band[0], 0); ctx.arc(0, 0, band[0], 0, TAU, true); } ctx.fill('evenodd'); ctx.restore(); }
   }
   // Row 732: the lunge guide. Where a dash now would land (its reach, stopped by statics), and whether a car will be there:
   // yellow when the dash meets a red car on the predicted path, white when it misses, faint while the dash is not ready.
@@ -336,6 +339,8 @@
     const col = AWARE_C[st];
     for (let i = 0; i < 3; i++) rect(x - 13 + i * 9, y, 7, 4, i < Math.min(st, 3) ? col : 'rgba(255,255,255,0.18)'); // three pips: one a stage
     ctx.font = '700 15px B612, system-ui, sans-serif'; text(st === 4 ? '!' : '?', x, y - 4, st >= 3 ? 17 : 13 + st, col, 'center'); // MGS: ? while it suspects, ! when it has you
+    const T = s.P['perception.trackSeconds'] || 0, hz = c.hz; // row 733: out of its cones it keeps you perception.trackSeconds; the bar runs down
+    if (st === 4 && T > 0 && hz && hz.cone === 'track' && hz.trackLeft != null) { rect(x - 13, y + 7, 25, 3, 'rgba(255,255,255,0.18)'); rect(x - 13, y + 7, 25 * hz.trackLeft / T, 3, col); }
   }
   function carShape(c, rung) { // in the car's frame: body, stripe, glass, the roof dome (D89); from rung 1 the camera pod
     rect(-c.L / 2, -c.W / 2, c.L, c.W, c.red ? C.red : '#e8edf2');

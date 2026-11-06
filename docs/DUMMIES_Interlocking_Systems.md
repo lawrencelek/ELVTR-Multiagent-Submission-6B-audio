@@ -271,6 +271,7 @@ Read across: what the row's factor sets for the column's.
 | F31 | The staged field favours roaming (2.59 to 3.15) and cuts the crawl (2.02 to 1.69): the car comes nearer before it stops | 1, 2 | 730 |
 | F32 | Duller side cones reopen rare side strikes on passing cars (0.13–0.2 a minute each): aim, flank, jump, dashjump, standplanter. Most come from road B cars, whose forward view the building blocks | 1, 2, 4 | 731 |
 | F33 | Cones alone lose a noticed dummy at the car's own stop: it stops where the dummy falls between cones. Tracking a noticed dummy fixes it | 2 | 731 |
+| F34 | A forget timer brings F33 back unless the cones leave no gap at the car's stop: forward 30° and sides to 240 close it; the crawl's escalation weakens (3 of 10 minutes) | 1, 2 | 733 |
 
 ## 7 Open questions
 
@@ -428,3 +429,4 @@ One row per object type. Edit this table first; the sections above follow it.
 | 6 November 2026 | Damage × the grade (row 728); the lure's field notes once per save file (row 729): §1.1; F29; the research rows | 728–729 |
 | 6 November 2026 | The side field in stages (row 730): §1.1; rung 2's row; F30–F31 | 730 |
 | 6 November 2026 | The field as three cones (row 731); the lunge guide (row 732): §1.1; rung 2's row; L13; F32–F33 | 731–732 |
+| 6 November 2026 | The cones edge to edge; the three-second forget (row 733): F34 | 733 |

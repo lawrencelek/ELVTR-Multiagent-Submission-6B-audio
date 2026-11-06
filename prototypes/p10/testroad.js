@@ -204,34 +204,39 @@
       const P = this.P, keep = P['proto.driver.cautionZone'];
       P['proto.driver.cautionZone'] = this.fieldFor();
       let hz; try { hz = super.assessBody(c); } finally { P['proto.driver.cautionZone'] = keep; }
-      if (!hz || hz.inPath || !this.coned()) return hz;
-      const k = this.coneOf(c, this.body.x, this.body.y); if (k && k.cone === 'forward') { hz.cone = k.cone; hz.dist = k.d; return hz; }
-      const how = hz.gapLat > keep ? null : c.noticed ? 'track' : this.rung >= 4 && this.cameraSees() ? 'link' : this.expected() ? 'memory' : null; // row 731: inside the rung's rectangle, noticed, it tracks the dummy; a street camera or its memory tells it where the dummy is, at full sensitivity, past or inside its duller side cones
-      const b = this.body; if (how) { hz.cone = how; hz.dist = Math.hypot(b.x - c.x - Math.cos(c.h) * c.L / 2, b.y - c.y - Math.sin(c.h) * c.L / 2); return hz; }
+      if (!hz || !this.coned()) return hz;
+      if (hz.inPath) { c.coneT = this.t; return hz; }
+      const k = this.coneOf(c, this.body.x, this.body.y); if (k) c.coneT = this.t; // row 733: when it last had the dummy in a cone or its path
+      if (k && k.cone === 'forward') { hz.cone = k.cone; hz.dist = k.d; return hz; }
+      const T = P['perception.trackSeconds'] || 0, held = c.noticed && (!(T > 0) || (c.coneT != null && this.t - c.coneT <= T + 1e-9)); // row 733: a noticed dummy out of its cones is kept perception.trackSeconds, then forgotten
+      const how = hz.gapLat > keep ? null : held && !k ? 'track' : this.rung >= 4 && this.cameraSees() ? 'link' : this.expected() ? 'memory' : null; // row 731: inside the rung's rectangle, noticed, it tracks the dummy; a street camera or its memory tells it where the dummy is, at full sensitivity, past or inside its duller side cones
+      const b = this.body; if (how) { if (how === 'track') hz.trackLeft = T > 0 ? Math.max(0, T - (this.t - c.coneT)) : null; hz.cone = how; hz.dist = Math.hypot(b.x - c.x - Math.cos(c.h) * c.L / 2, b.y - c.y - Math.sin(c.h) * c.L / 2); return hz; }
       if (k) { hz.cone = k.cone; hz.dist = k.d; return hz; }
       return null; // outside its three cones, unnoticed, untold: it does not sense the dummy
     }
     // Row 731: the field as three cones, not a rectangle. A forward cone from the nose, perception.forwardConeAngle either side of
-    // its heading, out to perception.forwardLength. Two side cones from the car's centre, about perception.sideConeAxis either
-    // side of its heading, perception.sideConeAngle wide each way, out to perception.sideConeRange. Each has a sensitivity
+    // its heading, out to perception.forwardLength. Two side cones, also from the nose (row 733), about perception.sideConeAxis
+    // either side of its heading, perception.sideConeAngle wide each way, from the forward cone's edge, out to
+    // perception.sideConeRange. Each has a sensitivity
     // (perception.forwardConeSensitivity, perception.sideConeSensitivity): it scales the stage ranges (a dummy must come closer
     // to a duller cone for each stage) and how fast the notice meter fills. Each stage's speed stays the same. The beam (the
     // lane ahead) is unchanged. The cones are the car's own sensors. Inside the rung's rectangle (proto.driver.cautionZone)
     // it still has the dummy past them when it has noticed it (it tracks what it detected), when a street camera sees it (the
     // link, rung 4), or when it stands where the car remembers (rung 6). 0 for perception.forwardConeAngle: the rectangle.
     coned() { return (this.P['perception.forwardConeAngle'] || 0) > 0 && this.rung >= 2; }
-    coneOf(c, px, py) {
-      const P = this.P, ca = Math.cos(c.h), sa = Math.sin(c.h), br = P['body.radius'], nx = c.x + ca * c.L / 2, ny = c.y + sa * c.L / 2;
-      const local = (ox, oy) => { const dx = px - ox, dy = py - oy, fx = dx * ca + dy * sa, fy = -dx * sa + dy * ca; return { d: Math.hypot(fx, fy), a: Math.atan2(fy, fx) * 180 / Math.PI }; };
-      const f = local(nx, ny); if (Math.abs(f.a - this.coneLook(c)) <= P['perception.forwardConeAngle'] && f.d <= c.fwdLen + br) return { cone: 'forward', d: f.d };
-      const q = local(c.x, c.y); if (Math.abs(Math.abs(q.a) - P['perception.sideConeAxis']) <= P['perception.sideConeAngle'] && q.d <= P['perception.sideConeRange'] + br) return { cone: 'side', d: q.d };
+    coneOf(c, px, py) { // row 733: all three from the nose; the side cones begin where the forward cone ends, so none overlaps
+      const P = this.P, ca = Math.cos(c.h), sa = Math.sin(c.h), br = P['body.radius'], dx = px - (c.x + ca * c.L / 2), dy = py - (c.y + sa * c.L / 2), fx = dx * ca + dy * sa, fy = -dx * sa + dy * ca;
+      const d = Math.hypot(fx, fy), a = Math.atan2(fy, fx) * 180 / Math.PI, A = P['perception.forwardConeAngle'], look = this.coneLook(c);
+      if (Math.abs(a - look) <= A && d <= c.fwdLen + br) return { cone: 'forward', d };
+      const e = this.sideEdges(), aa = Math.abs(a); if (aa > e[0] && aa <= e[1] && d <= P['perception.sideConeRange'] + br) return { cone: 'side', d };
       return null;
     }
+    sideEdges() { const P = this.P; return [Math.max(P['perception.sideConeAxis'] - P['perception.sideConeAngle'], P['perception.forwardConeAngle']), P['perception.sideConeAxis'] + P['perception.sideConeAngle']]; } // degrees off the heading
     // Searching (rung 7), the forward cone looks at the ghost, as a guard turns to the last place it saw you: turned from the
     // heading toward it, as far as the side cones' outer edge (perception.sideConeAxis + perception.sideConeAngle). Degrees.
     coneLook(c) {
       const g = c.lkp; if (!g) return 0;
-      const P = this.P, ca = Math.cos(c.h), sa = Math.sin(c.h), dx = g.x - (c.x + ca * c.L / 2), dy = g.y - (c.y + sa * c.L / 2), lim = P['perception.sideConeAxis'] + P['perception.sideConeAngle'];
+      const ca = Math.cos(c.h), sa = Math.sin(c.h), dx = g.x - (c.x + ca * c.L / 2), dy = g.y - (c.y + sa * c.L / 2), lim = this.sideEdges()[1];
       return clamp(Math.atan2(-dx * sa + dy * ca, dx * ca + dy * sa) * 180 / Math.PI, -lim, lim);
     }
     // Row 732: the lunge guide. Where a dash pressed now would land, and the first car on the way. The path follows the dash's

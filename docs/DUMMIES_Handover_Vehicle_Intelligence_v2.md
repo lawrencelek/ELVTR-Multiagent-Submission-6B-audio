@@ -1227,6 +1227,7 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
 - **Past its cones, inside the rung's rectangle:** a noticed dummy stays tracked; the camera link and memory still tell it.
 - **Searching:** the forward cone turns to the ghost.
 - **Cost:** rare side strikes reopen, 0.13–0.2 a minute each (F32). Lurk stays UNSEEN.
+- **Row 733:** all cones from the nose, edge to edge: forward ±30°, sides 30°–120° to 240. Noticed, then out of its cones, it forgets after 3 s. Cover springs closed again; the crawl's escalation weakens.
 
 > "it's also really hard to time the lunge when you don't know where the lunge will land - this should have a helper." (Lawrence, 6 November)
 

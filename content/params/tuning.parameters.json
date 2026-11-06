@@ -14775,7 +14775,7 @@
    "group": "Vehicles and traffic",
    "owner": "Vehicles / Traffic",
    "label": "Field: forward cone half-angle",
-   "description": "Rung 2 up: the driver's field is three cones, not a rectangle. The forward cone runs from the nose, this many degrees either side of the heading, out to perception.forwardLength. 0: the rectangle (10.3–10.7). 10.8 sets 20",
+   "description": "Rung 2 up: the driver's field is three cones, not a rectangle. The forward cone runs from the nose, this many degrees either side of the heading, out to perception.forwardLength. 0: the rectangle (10.3–10.7). 10.8 sets 30 (row 733; 20 in row 731)",
    "unit": "degrees",
    "type": "number",
    "default": 0,
@@ -14790,19 +14790,19 @@
    },
    "integrationStatus": "prototype-p10",
    "boundaryStatus": "proposed-adapter-contract-not-implemented",
-   "purpose": "Rung 2 up: the driver's field is three cones, not a rectangle. The forward cone runs from the nose, this many degrees either side of the heading, out to perception.forwardLength. 0: the rectangle (10.3–10.7). 10.8 sets 20"
+   "purpose": "Rung 2 up: the driver's field is three cones, not a rectangle. The forward cone runs from the nose, this many degrees either side of the heading, out to perception.forwardLength. 0: the rectangle (10.3–10.7). 10.8 sets 30 (row 733; 20 in row 731)"
   },
   {
    "id": "perception.sideConeAxis",
    "group": "Vehicles and traffic",
    "owner": "Vehicles / Traffic",
    "label": "Field: side cone axis",
-   "description": "Coned field: each side cone's centre line, this many degrees off the heading, from the car's centre. 10.8 sets 60",
+   "description": "Coned field: each side cone's centre line, this many degrees off the heading, from the nose (row 733; row 731 measured from the centre). A side cone begins no nearer the heading than the forward cone's edge, so none overlaps. 10.8 sets 75",
    "unit": "degrees",
    "type": "number",
    "default": 60,
    "status": "proposed",
-   "source": "GDD Edit 108 amendment (Prototype 10.8): DECISIONS row 731",
+   "source": "GDD Edit 108 amendment (Prototype 10.8): DECISIONS row 731; row 733",
    "editable": true,
    "protectedReason": null,
    "applyAt": "next-tick",
@@ -14812,19 +14812,19 @@
    },
    "integrationStatus": "prototype-p10",
    "boundaryStatus": "proposed-adapter-contract-not-implemented",
-   "purpose": "Coned field: each side cone's centre line, this many degrees off the heading, from the car's centre. 10.8 sets 60"
+   "purpose": "Coned field: each side cone's centre line, this many degrees off the heading, from the nose (row 733; row 731 measured from the centre). A side cone begins no nearer the heading than the forward cone's edge, so none overlaps. 10.8 sets 75"
   },
   {
    "id": "perception.sideConeAngle",
    "group": "Vehicles and traffic",
    "owner": "Vehicles / Traffic",
    "label": "Field: side cone half-angle",
-   "description": "Coned field: each side cone spans this many degrees either side of perception.sideConeAxis. 10.8 sets 45",
+   "description": "Coned field: each side cone spans this many degrees either side of perception.sideConeAxis, clipped at the forward cone's edge. 10.8 sets 45: 30° to 120° off the heading",
    "unit": "degrees",
    "type": "number",
    "default": 45,
    "status": "proposed",
-   "source": "GDD Edit 108 amendment (Prototype 10.8): DECISIONS row 731",
+   "source": "GDD Edit 108 amendment (Prototype 10.8): DECISIONS row 731; row 733",
    "editable": true,
    "protectedReason": null,
    "applyAt": "next-tick",
@@ -14834,19 +14834,19 @@
    },
    "integrationStatus": "prototype-p10",
    "boundaryStatus": "proposed-adapter-contract-not-implemented",
-   "purpose": "Coned field: each side cone spans this many degrees either side of perception.sideConeAxis. 10.8 sets 45"
+   "purpose": "Coned field: each side cone spans this many degrees either side of perception.sideConeAxis, clipped at the forward cone's edge. 10.8 sets 45: 30° to 120° off the heading"
   },
   {
    "id": "perception.sideConeRange",
    "group": "Vehicles and traffic",
    "owner": "Vehicles / Traffic",
    "label": "Field: side cone range",
-   "description": "Coned field: each side cone reaches this far from the car's centre (plus body.radius). 10.8 sets 220",
+   "description": "Coned field: each side cone reaches this far from the nose (plus body.radius; row 733). 10.8 sets 240 (220 in row 731)",
    "unit": "px",
    "type": "number",
    "default": 220,
    "status": "proposed",
-   "source": "GDD Edit 108 amendment (Prototype 10.8): DECISIONS row 731",
+   "source": "GDD Edit 108 amendment (Prototype 10.8): DECISIONS row 731; row 733",
    "editable": true,
    "protectedReason": null,
    "applyAt": "next-tick",
@@ -14856,7 +14856,7 @@
    },
    "integrationStatus": "prototype-p10",
    "boundaryStatus": "proposed-adapter-contract-not-implemented",
-   "purpose": "Coned field: each side cone reaches this far from the car's centre (plus body.radius). 10.8 sets 220"
+   "purpose": "Coned field: each side cone reaches this far from the nose (plus body.radius; row 733). 10.8 sets 240 (220 in row 731)"
   },
   {
    "id": "perception.forwardConeSensitivity",
@@ -14923,6 +14923,28 @@
    "integrationStatus": "prototype-p10",
    "boundaryStatus": "proposed-adapter-contract-not-implemented",
    "purpose": "1: while a car is near, a dotted line and a reticle show where a dash pressed now would land. Yellow with HIT when it meets the red car on its predicted path; white when it misses; faint while the dash is not ready. 0: off. 10.8 sets 1"
+  },
+  {
+   "id": "perception.trackSeconds",
+   "group": "Vehicles and traffic",
+   "owner": "Vehicles / Traffic",
+   "label": "Field: tracking after notice",
+   "description": "Coned field: a dummy the car has noticed and then lost from its cones and path stays tracked this long (inside the rung's rectangle), then is forgotten: the notice resets. 0: tracked while inside the rectangle (row 731). 10.8 sets 3",
+   "unit": "seconds",
+   "type": "number",
+   "default": 0,
+   "status": "proposed",
+   "source": "GDD Edit 108 amendment (Prototype 10.8): DECISIONS row 733",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-tick",
+   "validation": {
+    "min": 0,
+    "max": 30
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "Coned field: a dummy the car has noticed and then lost from its cones and path stays tracked this long (inside the rung's rectangle), then is forgotten: the notice resets. 0: tracked while inside the rectangle (row 731). 10.8 sets 3"
   }
  ],
  "tables": {

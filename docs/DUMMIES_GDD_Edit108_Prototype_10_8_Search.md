@@ -14,11 +14,13 @@
 
 **Amended 6 November (rows 731–732):** the field as three cones, the forward one more sensitive (§10.8.10); the lunge guide (§10.8.11).
 
+**Amended 6 November (row 733):** the cones meet edge to edge, all from the nose; a noticed car forgets the dummy 3 s after it leaves its cones (§10.8.10).
+
 - **Build:** `prototypes/p10/dummies_p10_8.html` (`python3 prototypes/p10/build.py`).
 - **Playtest pages:** `index.html`, one per test. 10.1–10.7 are frozen; 10.7 at md5 `54328d01…`.
 - **Tests:** `node prototypes/p10/test_p10.js --page` 63/63. Prototype 9 rebuild md5 `be163e7d014344e062965986b3da5786`. 8.4 md5 `9f5549201d88891f9f0b22c461602909`. Sound freeze: 211 items, 0 changed.
 - **Probes:** `node qa/testroad.js --stage 10.8 --out qa/baseline/p10_8.json`; report `qa/baseline/p10_8.md`, 24/24 checks. 10.7 reruns identical to its baseline, new fields aside.
-- **Decision log:** rows 717–732. D123, D125, D126 resolved. Open D119, D120, D121, D122, D124, D127, D128, D129.
+- **Decision log:** rows 717–733. D123, D125, D126 resolved. Open D119, D120, D121, D122, D124, D127, D128, D129.
 
 ## Request
 
@@ -198,6 +200,12 @@
   - Side range 300. The lurk spot falls inside; lurk grades SEEN.
   - Forward 25°; side sensitivity 0.6 or 0.75. No fewer side strikes.
 - **Earlier stages:** `perception.forwardConeAngle` 0, the rectangle.
+- **Row 733, edge to edge:**
+  - All three cones start at the nose. The side cones begin at the forward cone's edge; none overlaps.
+  - Forward ±30°. Each side 30°–120° off the heading (`perception.sideConeAxis` 75 ± `perception.sideConeAngle` 45), out to `perception.sideConeRange` 240.
+  - Searching, the turned forward cone wins over a side cone.
+- **Row 733, the forget:** out of its cones and path, a noticed dummy stays tracked `perception.trackSeconds` 3, then the notice resets. A bar under the "!" runs down.
+- **Row 733, tried:** the row 731 shape from the nose with the forget. The car stopped with the dummy between cones, forgot it, drove on: kerb 10, standplanter 6, aim 4, flank 4, dashjump 5 hits in 15 minutes.
 
 ### 10.8.11 The lunge guide (row 732)
 
@@ -344,7 +352,15 @@
 | The crawl, rung 7 | 111 (99 fixed 60°; 111 at 360°) | |
 | The lure, rung 7 | 68 | |
 
-**Row 731, the cones** (trained, 5 minutes × 3):
+**Row 733, edge to edge, the forget** (trained, 5 minutes × 3):
+
+- **Closed again:** cover springs 0; kerb 0. Standplanter 3, rare.
+- **Lurk:** UNSEEN, 24 of 24.
+- **Open ways in, 6:** roaming 2.86 a minute, the lure 2.24, the crawl 1.21, flankOpen 1.07, lurk 0.8, the gap 0.6.
+- **Cost:** the crawl's ten-minute escalation lands in 3 of 10 minutes (decay 0.33). The lure holds, 9 of 10.
+- **Report:** 23 of 24. The crawl's escalation fails.
+
+**Row 731, the cones** (trained, 5 minutes × 3; superseded by row 733):
 
 - **Rare side strikes reopen**, on passing cars, mostly road B cars passing a dummy beside the junction:
 
@@ -366,9 +382,10 @@
 
 - **Added (17):** `duel.searchRadius`, `duel.searchSeconds`; `perception.streetCameraFov` (row 723; default 360); `perception.streetCameraPanArc` (default 0), `perception.streetCameraPanSeconds`, `perception.streetCameraPanHold` (row 724); `scoring.stealthUnseen`, `scoring.stealthLost`, `scoring.stealthSeen` (row 725; multipliers from row 728; default 0); `ui.tip.holdSeconds` (row 729); `perception.sideCloseRange`, `perception.sideWaryRange`, `perception.sideAwareSpeed`, `perception.sideWarySpeed`, `perception.sideCloseSpeed`, `perception.sideAwareNoticeRate`, `perception.sideWaryNoticeRate` (row 730; defaults off).
 - **Set by stage:** `duel.startRung` 6, `duel.topRung` 7, `duel.searchRadius` 60, `duel.searchSeconds` 4, `perception.streetCameraFov` 60, `perception.streetCameraPanArc` 60, `perception.streetCameraPanSeconds` 3, `perception.streetCameraPanHold` 1, `scoring.stealthUnseen` 3, `scoring.stealthLost` 2, `scoring.stealthSeen` 1, `ui.tip.holdSeconds` 7, `perception.sideCloseRange` 180, `perception.sideWaryRange` 360, `perception.sideAwareSpeed` 0.85, `perception.sideWarySpeed` 0.6, `perception.sideCloseSpeed` 0.35, `perception.sideAwareNoticeRate` 0.5, `perception.sideWaryNoticeRate` 1. 10.7's values otherwise.
+- **Added (row 733):** `perception.trackSeconds` (default 0: tracked while inside the rectangle). 10.8 sets 3; the cones 30°, 75 ± 45, 240.
 - **Added (7, rows 731–732):** `perception.forwardConeAngle` (default 0: the rectangle), `perception.sideConeAxis`, `perception.sideConeAngle`, `perception.sideConeRange`, `perception.forwardConeSensitivity`, `perception.sideConeSensitivity`; `ui.lungeGuide` (default 0).
 - **Set by stage (rows 731–732):** `perception.forwardConeAngle` 20, `perception.sideConeAxis` 60, `perception.sideConeAngle` 45, `perception.sideConeRange` 220, `perception.forwardConeSensitivity` 1, `perception.sideConeSensitivity` 0.5, `ui.lungeGuide` 1.
-- **687 entries.** `registryVersion` unchanged (row 665).
+- **688 entries.** `registryVersion` unchanged (row 665).
 
 ## Open
 

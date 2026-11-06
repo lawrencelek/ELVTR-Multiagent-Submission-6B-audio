@@ -104,7 +104,8 @@ T108 = dict(T107, **{
     'perception.sideCloseRange': 180, 'perception.sideWaryRange': 360,  # the side field in stages, by distance from the nose: CLOSE (about the dash's reach), WARY, then AWARE to the field's end (row 730)
     'perception.sideAwareSpeed': 0.85, 'perception.sideWarySpeed': 0.6, 'perception.sideCloseSpeed': 0.35,  # it slows a bit, more, a lot (row 730)
     'perception.sideAwareNoticeRate': 0.5, 'perception.sideWaryNoticeRate': 1,  # AWARE notices in 1.2 s; WARY and CLOSE in 0.6 s; noticed, it stops short (row 730)
-    'perception.forwardConeAngle': 20, 'perception.sideConeAxis': 60, 'perception.sideConeAngle': 45, 'perception.sideConeRange': 220,  # three cones, not a rectangle: forward from the nose ±20°; each side 15°–105° off the heading, 220 out (row 731)
+    'perception.forwardConeAngle': 30, 'perception.sideConeAxis': 75, 'perception.sideConeAngle': 45, 'perception.sideConeRange': 240,  # three cones, all from the nose, edge to edge (rows 731, 733): forward ±30°; each side 30°–120° off the heading, 240 out
+    'perception.trackSeconds': 3,  # noticed, then out of its cones: it keeps the dummy 3 s, then forgets (row 733)
     'perception.forwardConeSensitivity': 1, 'perception.sideConeSensitivity': 0.5,  # the sides are duller: each stage at half the distance, the meter at half the rate (row 731)
     'ui.lungeGuide': 1,  # where the dash would land, and HIT when it meets the red car (row 732)
 })
