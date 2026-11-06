@@ -1964,6 +1964,72 @@
    "purpose": "Small: a link, not a payday"
   },
   {
+   "id": "scoring.stealthUnseen",
+   "group": "Scoring",
+   "owner": "Scoring",
+   "label": "Stealth grade: unseen",
+   "description": "Test road: points for a damaging strike the striking car never noticed this pass (no true sighting: its own sensors or a street camera, noticed or in its path). 0: no stealth grade (10.1–10.7). 10.8 sets 3",
+   "unit": "points",
+   "type": "number",
+   "default": 0,
+   "status": "proposed",
+   "source": "GDD Edit 108 amendment (Prototype 10.8): DECISIONS row 725",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-run",
+   "validation": {
+    "min": 0,
+    "max": 100
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "Test road: points for a damaging strike the striking car never noticed this pass (no true sighting: its own sensors or a street camera, noticed or in its path). 0: no stealth grade (10.1–10.7). 10.8 sets 3"
+  },
+  {
+   "id": "scoring.stealthLost",
+   "group": "Scoring",
+   "owner": "Scoring",
+   "label": "Stealth grade: lost",
+   "description": "Test road: points for a damaging strike the car had noticed this pass but lost before the dummy sprang. 10.8 sets 2",
+   "unit": "points",
+   "type": "number",
+   "default": 0,
+   "status": "proposed",
+   "source": "GDD Edit 108 amendment (Prototype 10.8): DECISIONS row 725",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-run",
+   "validation": {
+    "min": 0,
+    "max": 100
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "Test road: points for a damaging strike the car had noticed this pass but lost before the dummy sprang. 10.8 sets 2"
+  },
+  {
+   "id": "scoring.stealthSeen",
+   "group": "Scoring",
+   "owner": "Scoring",
+   "label": "Stealth grade: seen",
+   "description": "Test road: points for a damaging strike the car had in sight as the dummy sprang. 10.8 sets 1",
+   "unit": "points",
+   "type": "number",
+   "default": 0,
+   "status": "proposed",
+   "source": "GDD Edit 108 amendment (Prototype 10.8): DECISIONS row 725",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-run",
+   "validation": {
+    "min": 0,
+    "max": 100
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "Test road: points for a damaging strike the car had in sight as the dummy sprang. 10.8 sets 1"
+  },
+  {
    "id": "abilities.hands.maxLevel",
    "group": "Upgrades",
    "owner": "Upgrades",

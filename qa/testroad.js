@@ -42,6 +42,7 @@ const POLICIES = {
   peek: { home: { x: 617, y: 421 }, from: 10.8 },     // stands in view at a free spot behind a row for the car's road; once the car has noticed it, ducks and springs as it passes
   peekmove: { home: { x: 617, y: 421 }, from: 10.8 }, // the same, but once ducked it crawls to a free spot beyond duel.searchRadius of where it was seen, then springs
   roam: { home: { x: 501, y: 421 }, from: 10.7 },     // the planter ambush from a spot the car does not remember: it reads the red rings (rung 6) and moves to the nearest free spot behind a row for the car's road
+  lure: { home: { x: 501, y: 421 }, from: 10.8 },     // row 726: the lure. Stands at a remembered spot (rung 6: the car expects it there) or in view at a free one (rung 7: a ghost), until the car stops for it; then crawls to a free spot downstream, beyond duel.searchRadius, and strikes as the car passes
 };
 // 10.7: the spots behind the planter rows, by the road whose cars they ambush. The corner (501, 421) serves both roads.
 const ROAM = { A: [[50, 203], [110, 203], [170, 203], [501, 421], [559, 421], [617, 421]], B: [[501, 421], [501, 481], [501, 541]] }; // about duel.memoryRadius apart and more
@@ -82,7 +83,8 @@ function run(policy, offset, secs, mode) {
     while (way.length && NAVG.passed.has(way[0]) && s.t - NAVG.passed.get(way[0]) < 1.5) way.shift();
     return way.length ? goTo(pts[way[0]][0], pts[way[0]][1]) : goTo(tx, ty);
   };
-  const done = new Set(); let cur = null, tries = 0, climb = null, layStage = 0, roamT = null, pk = null;
+  const done = new Set(); let cur = null, tries = 0, climb = null, layStage = 0, roamT = null, pk = null, lu = null;
+  const lureTook = new Set(); let lureRemembered = 0, lureGhost = 0; // row 726: cars that stopped for the lure; at a remembered spot; for a ghost
   if (policy === 'charge') { b().x = home.x; b().y = home.y; for (const c of s.cars) done.add(c.id); } // it starts in its lane, and charges only cars that arrive after it
   if (s.P['duel.runInLength'] > 0 && /^stand(South|Off)?$/.test(policy)) { b().x = home.x; b().y = home.y; } // 10.7's short run-in: the first car would meet it still walking to its spot; it stands there from the start
   const SPOT = { x: 590, y: 418 }; // behind the planter row south of road A, east
@@ -230,7 +232,7 @@ function run(policy, offset, secs, mode) {
       }
       return at ? { duck: true } : nav(roamT[0], roamT[1]);
     },
-    peek: () => peekAct(false), peekmove: () => peekAct(true),
+    peek: () => peekAct(false), peekmove: () => peekAct(true), lure: () => lureAct(),
     lurk: () => { // past the field's edge, it sprints in as the car passes and dashes before the field notices (perception.sideNoticeSeconds)
       if (!b().alive) return {};
       const c = live().find((q) => q.path.road === 'A' && q.lane === 0 && q.v > 15);
@@ -302,7 +304,38 @@ function run(policy, offset, secs, mode) {
     }
     return { duck: true };
   }
+  function lureAct() { // row 726: make the car stop where the bot chooses, then strike from elsewhere
+    if (!b().alive) return {};
+    if (!s.has('duck1')) return act.conebait();
+    const c = live().find((q) => q.red), Rm = s.P['duel.memoryRadius'] || 0, Rs = s.P['duel.searchRadius'] || 0, mem = s.memory();
+    const free = (q) => !mem.some((m) => Math.hypot(q[0] - m.ox, q[1] - m.oy) <= Rm + 1e-9);
+    const at = (q) => Math.hypot(q[0] - b().x, q[1] - b().y) < 8;
+    if (!c) { lu = null; return {}; }
+    if (!lu || lu.car !== c.id) {
+      const L = ROAM[c.path.road], ca = Math.cos(c.h), sa = Math.sin(c.h), ahead = (q) => q[0] * ca + q[1] * sa; // along the car's heading
+      const lures = L.filter((q) => !free(q)), from = lures.length ? lures : s.rung >= 7 ? L.filter(free) : [];
+      let best = null;
+      for (const l of from) for (const q of L.filter(free)) { // a free spot downstream along the same row, beyond the ghost's ring
+        const d = Math.hypot(q[0] - l[0], q[1] - l[1]);
+        if (q !== l && (q[0] === l[0] || q[1] === l[1]) && d > Rs + 15 && d < 2 * (Rs + 15) + 10 && ahead(q) > ahead(l)) { const k = Math.hypot(l[0] - b().x, l[1] - b().y); if (!best || k < best.k) best = { l, q, k }; }
+      }
+      lu = best ? { car: c.id, L: best.l, S: best.q, phase: 'show', remembered: lures.includes(best.l) } : { car: c.id, none: true };
+    }
+    if (lu.none) return act.roam(); // no lure yet (rung 6 before a crash from cover): the planter ambush makes the first spot
+    if (lu.phase === 'show') { // standing at the lure until the car stops for it
+      if (!at(lu.L)) return nav(lu.L[0], lu.L[1]);
+      if (c.v < 1 && ['body', 'side', 'search'].includes(c.cause)) { lu.phase = 'move'; lureTook.add(c.id); if (lu.remembered) lureRemembered++; else lureGhost++; }
+      return {};
+    }
+    if (!at(lu.S)) { const dx = lu.S[0] - b().x, dy = lu.S[1] - b().y, d = Math.hypot(dx, dy) || 1; return { mx: dx / d, my: dy / d, duck: true }; } // crawl, ducked, along the row
+    if (c.v > 15) {
+      const d0 = Math.hypot(c.x - b().x, c.y - b().y), k = 0.1 + d0 / 600, tx = c.x + (c.vx || 0) * k, ty = c.y + (c.vy || 0) * k, d = Math.hypot(tx - b().x, ty - b().y), ang = Math.atan2(ty - b().y, tx - b().x);
+      if (d < s.reach() + 6 && can()) return { mx: Math.cos(ang) * 0.3, my: Math.sin(ang) * 0.3, aPress: true, duck: true };
+    }
+    return { duck: true };
+  }
   const actFn = act[policy];
+  const stopPred = new Map(), stopErr = []; // row 726: where the stop line said the car would stop, against where it stopped
   const t0 = s.t, e0 = s.events.length, wins = [], seen = new Set(), stops = new Map(), blk = new Map(); let maxOn = 0, stall = 0, blockedStall = 0, points = 0, minStopGap = Infinity, minSideGap = Infinity;
   const W = (t) => { const k = Math.floor((t - t0) / 60); while (wins.length <= k) wins.push(0); return k; };
   const reach = s.P['movement.lungeDistance'] + s.P['body.radius'];
@@ -322,6 +355,12 @@ function run(policy, offset, secs, mode) {
       if (inPath) blk.set(c.id, s.t);
       if (st > 20 && st - 1 / 60 <= 20) { if (blk.has(c.id) && s.t - blk.get(c.id) <= 20) blockedStall++; else stall++; } // a stall: 20 s stopped with nothing in its way at any moment of them
       if (c.v < 1 && c.hz && c.hz.inPath && s.body.alive) minStopGap = Math.min(minStopGap, c.hz.lx);
+      if (c.red) { // one braking episode a stop: the first line drawn, against where its nose comes to rest
+        const ep = stopPred.get(c.id), stopping = ['body', 'side', 'search'].includes(c.cause) && c.man && c.man.type === 'brake';
+        if (c.v >= 1 && stopping && !ep) { const sp = s.stopPoint(c); if (sp && sp.s > c.s + c.L / 2 + 1) stopPred.set(c.id, { s: sp.s }); }
+        else if (c.v >= 1 && !stopping && ep) stopPred.delete(c.id); // it dropped the plan: no stop
+        else if (c.v < 1 && ep) { stopErr.push(Math.abs(c.s + c.L / 2 - ep.s)); stopPred.delete(c.id); }
+      }
       if (c.v < 1 && c.noticed && s.body.alive) minSideGap = Math.min(minSideGap, Math.hypot(s.body.x - (c.x + Math.cos(c.h) * c.L / 2), s.body.y - (c.y + Math.sin(c.h) * c.L / 2)));
     }
   }
@@ -339,6 +378,9 @@ function run(policy, offset, secs, mode) {
     sights: imp.filter((e) => e.above).map((e) => e.sight), coverHits: imp.filter((e) => e.cover).length, // row 687: hits where cover hid the dummy
     conedHits: imp.filter((e) => e.coned).length, duckHits: imp.filter((e) => e.ducked).length, ducks: n('duck').length, // row 695: hits while it swerved round a cone; row 696: strikes from a duck
     habitHits: imp.filter((e) => e.habit).length, coveredHits: imp.filter((e) => e.covered).length, rememberedHits: imp.filter((e) => e.remembered).length, rememberedDucked: imp.filter((e) => e.remembered && e.ducked).length, crashes: s.crashes.length, sites: s.memory().length, // row 703: hits sprung from an earlier crash's spot; of those, from one it remembered at the time
+    grades: tally('grade'), stealthPoints: s.stealth ? s.stealth.points : 0, // row 725
+    lureStops: lureTook.size, lureRemembered, lureGhost, lureHits: imp.filter((e) => lureTook.has(e.car)).length, lureLost: Math.round(imp.filter((e) => lureTook.has(e.car)).reduce((a, e) => a + e.lost, 0)), // row 726
+    stopErrs: stopErr.length, stopErrMedian: stopErr.length ? +stopErr.slice().sort((a, b) => a - b)[Math.floor(stopErr.length / 2)].toFixed(1) : null, stopErrWithin10: stopErr.filter((x) => x <= 10).length,
     lostSightHits: imp.filter((e) => e.lostSight).length, searches: n('search').length, searchFound: n('search-found').length, searchEnd: n('search-end').length, // rung 7 (row 717)
     spawnSlow: n('spawn-slow').length, lifts: n('block-lift').length, liftDrops: n('block-drop').length, secsPerWriteOff: n('writeoff').length ? +((s.t - t0) / n('writeoff').length).toFixed(1) : null,
     expectStops: new Set(n('expect-stop').map((e) => e.car)).size, expectHidden: new Set(n('expect-stop').filter((e) => e.hidden).map((e) => e.car)).size, // rung 6: cars that stopped for a dummy at a remembered spot; of those, for one cover hid
@@ -361,7 +403,7 @@ for (const mode of modes) for (const p of Object.keys(POLICIES).filter((q) => (!
   const r = run(p, off, o.secs, mode); out.runs.push(r);
   console.log(`${mode.padEnd(7)} ${p.padEnd(10)} +${String(off).padEnd(3)} hits ${r.hits} (${r.hitsPerMin}/min) wo ${r.writeOffs} lesson ${r.lesson ? r.lesson.hitAt : '-'} after ${r.afterLesson ? r.afterLesson.hits : '-'} part ${r.parts.map((q) => q.node + '@' + q.t).join(',')} stills ${r.standstillTouches} tries ${r.tries} stalls ${r.cars.stalls20s}/${r.cars.blocked20s} gap ${r.cars.minStopGap}`);
 }
-for (const p of FLAGS['duel.topRung'] >= 7 ? ['peek', 'peekmove', 'roam'] : FLAGS['duel.topRung'] >= 6 ? ['planter', 'roam', 'lurk'] : FLAGS['duel.topRung'] >= 5 ? ['conebait', 'planter', 'lurk'] : FLAGS['duel.topRung'] >= 4 ? ['gap', 'jump', 'conebait', 'lurk'] : FLAGS['duel.topRung'] >= 3 ? ['plinth', 'jump', 'dashjump', 'gap', 'kerb'] : FLAGS['duel.topRung'] >= 2 ? ['kerb', 'flankOpen', 'walkin', 'plinth', 'gap', 'corner'] : ['stand', 'charge', 'walkin', 'aim']) {
+for (const p of FLAGS['duel.topRung'] >= 7 ? ['peek', 'peekmove', 'roam', 'lure'] : FLAGS['duel.topRung'] >= 6 ? ['planter', 'roam', 'lurk'] : FLAGS['duel.topRung'] >= 5 ? ['conebait', 'planter', 'lurk'] : FLAGS['duel.topRung'] >= 4 ? ['gap', 'jump', 'conebait', 'lurk'] : FLAGS['duel.topRung'] >= 3 ? ['plinth', 'jump', 'dashjump', 'gap', 'kerb'] : FLAGS['duel.topRung'] >= 2 ? ['kerb', 'flankOpen', 'walkin', 'plinth', 'gap', 'corner'] : ['stand', 'charge', 'walkin', 'aim']) {
   if (!want(p)) continue;
   const r = run(p, 0, o.esc, 'lesson'), w = r.windows, f = (w[0] + w[1]) / 2, l = (w[w.length - 1] + w[w.length - 2]) / 2;
   r.decay = f ? +(l / f).toFixed(2) : null; out.escalation.push(r);

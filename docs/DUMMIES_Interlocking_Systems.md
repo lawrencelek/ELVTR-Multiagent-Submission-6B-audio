@@ -53,6 +53,8 @@ Read across: what the row's factor sets for the column's.
 - **Ducking is stealth, not armour.** Hidden behind cover taller than the body; higher sensors see in sooner as they near (§2.3).
 - **A lighter body speeds the loop.** 500 against front hits of 242: two hits a write-off (D119).
 - **Crawling is the answer to the search.** At `movement.duckSpeedFactor` 0.35 a ducked crawl beyond `duel.searchRadius` 60 takes about 2 s (row 720).
+- **The player's own escalation: the stealth grade** (row 725). Each strike scores by how unseen it was: UNSEEN `scoring.stealthUnseen` 3, LOST `scoring.stealthLost` 2, SEEN `scoring.stealthSeen` 1. It rises with skill whatever the car's rung.
+- **Lure: a verb made from the car's learning** (row 726). Stand where it expects you; it stops short. Strike from elsewhere. The page draws its stop line.
 
 ## 2 Car behaviour and abilities
 
@@ -156,6 +158,8 @@ Read across: what the row's factor sets for the column's.
 - **L7. An opening without a part stays** (pillar 1, D97): today, the sprint from past the field.
 - **L8. Parked cars are cover** (row 711). A kerbside parking lane runs up the road: L1's cover, built in. Taller than a standing dummy (`vehicles.sedan.height` 19.8 against 18).
 - **L9. Rows longer than the search ring leave the crawl open** (row 720). A row that runs more than `duel.searchRadius` 60 past a spot lets a seen dummy crawl out of the ring. Shorter rows, or rows broken by gaps, close it.
+- **L11. Keep two open ways in at every rung** (row 727). A way is open at 0.3 hits a minute at the top rung. Each new part opens a way that uses it.
+- **L12. Every lure needs a strike spot beyond the ring, downstream** (row 726). A remembered spot or a ghost parks the car; the level must leave somewhere to strike from.
 - **L10. A ghost off the road stops the car short of it, wherever that falls.** Beside a junction, the stop line can land in the junction box (10.8 shots). With crossing traffic it blocks the other road.
 
 ### 4.3 Redesign checklist (proposed)
@@ -168,6 +172,8 @@ Read across: what the row's factor sets for the column's.
 - [ ] An opening without a part.
 - [ ] Rows sized against `duel.searchRadius`: decide whether the crawl is open (L9).
 - [ ] No hiding spot puts a search stop line inside a junction box (L10).
+- [ ] At least two open ways in at every rung, by the probes (L11).
+- [ ] Each lure spot has a strike spot downstream, beyond `duel.searchRadius` (L12).
 - [ ] Pace: the main opening writes off a body in at most 80 s (Edit 18 §10.2).
 - [ ] Drone access to every object home.
 - [ ] No stalemate: the block lift (`duel.blockSeconds`, row 715) ends any wait.
@@ -250,6 +256,10 @@ Read across: what the row's factor sets for the column's.
 | F22 | All-round cameras made play "super difficult" (Lawrence). 60° cones leave blind sides; the bots barely move, a human gains most | 2, 4 | 723 |
 | F23 | A camera's cone edge makes it lose the dummy often: searches rise 564 to 779; the cone bait sets 647 ghosts | 2 | 723 |
 | F24 | The pan opens the barrier's gap: 0.07 to 0.47 a minute, by a bot that does not time it | 1, 2, 4 | 724 |
+| F25 | The grade sorts the ways in: the sprint grades UNSEEN 18 of 18; the open-ground flank SEEN 9 of 9 | 1, 2 | 725 |
+| F26 | The lure lands: 18 lured cars, 18 struck, 225 a hit. A stopped car restarts fast enough | 1, 2, 4 | 726 |
+| F27 | Roaming beats the lure for a bot: 6.8–7.05 a minute against 4.1–4.8 at rung 6; 2.59 against 2.17 at rung 7. The lure buys control, not rate | 1, 2 | 726 |
+| F28 | 10.5 and 10.6 sat on the floor of two open ways in | 1, 2, 4 | 727 |
 
 ## 7 Open questions
 
@@ -369,6 +379,8 @@ One row per object type. Edit this table first; the sections above follow it.
 | Security cameras with a visible cone | MGS (panning cameras), Splinter Cell, Dishonored's watchtowers | A 60° cone per post, panning 60° (rows 723–724) | Panning cones: a timed crossing | **Built 10.8 (row 724)**; values D124 |
 | Shared, stale information | Hitman services; MGS V radio | Street cameras feed the car live | Fleet memory (Q2); a camera blocked by moved cover sees nothing | Open (Q2) |
 | Crowds are cover | AC, Hitman | White cars as moving cover (row 711) | Queues as cover; their flashing lights as the alarm (row 711) | Decided (row 711) |
+| Score how unseen a strike was | Mark of the Ninja's scoring; Wong: pacifist play signals skill | The stealth grade (row 725) | UNSEEN, LOST, SEEN points | **Built 10.8 (row 725)**; values D125 |
+| Manipulate the guard | Wong: a noisemaker moves a guard from idle to searching | The lure (row 726): a remembered spot or a ghost parks the car | Draw its stop line; a prompt | **Built 10.8 (row 726)**; form D126 |
 | Failure is cheap | Mark of the Ninja's frequent checkpoints | A new body by drone; 2 s between passes | Keep | Keep; the block lift (row 715) |
 
 ### 9.3 Sources
@@ -385,6 +397,7 @@ One row per object type. Edit this table first; the sections above follow it.
 - [The AI of Hitman (Game Developer)](https://www.gamedeveloper.com/design/the-ai-of-hitman-2016-)
 - [Revisiting the AI of Alien: Isolation (Game Developer)](https://www.gamedeveloper.com/design/revisiting-the-ai-of-alien-isolation)
 - [The evolution of Assassin's Creed's stealth (Ubisoft)](https://news.ubisoft.com/en-us/article/1hges9IWLOmNAFpiavYmKl/the-evolution-of-assassins-creeds-stealth)
+- [Kevin Wong, Stealth Game Design (2014)](https://thatkevinwong.com/2014/05/16/stealth-game-design/)
 
 ## Change log
 
@@ -400,3 +413,4 @@ One row per object type. Edit this table first; the sections above follow it.
 | 5 November 2026 | 10.8 built: rung 7, the search (§2.1); its states and resets (§8); L9–L10; F17–F21; Q11; §9.2's first two built | 717–722 |
 | 5 November 2026 | The street cameras' cones (row 723): rung 4's row; L2a; L7; F22–F23; the research row | 723 |
 | 6 November 2026 | The cameras pan (row 724): rung 4's row; L2b; L7; F24; the research row | 724 |
+| 6 November 2026 | The stealth grade, the lure, the floor of open ways (rows 725–727): §1.1; L11–L12; F25–F28; two research rows; Wong added to sources | 725–727 |

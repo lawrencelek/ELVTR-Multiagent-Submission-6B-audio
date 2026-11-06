@@ -6,11 +6,13 @@
 
 **Amended 6 November (row 724):** each cone pans back and forth, as in Metal Gear Solid (§10.8.4).
 
+**Amended 6 November (rows 725–727):** each strike's stealth grade (§10.8.6); the lure and its stop line (§10.8.7); a floor of two open ways in (§10.8.8).
+
 - **Build:** `prototypes/p10/dummies_p10_8.html` (`python3 prototypes/p10/build.py`).
 - **Playtest pages:** `index.html`, one per test. 10.1–10.7 are frozen; 10.7 at md5 `54328d01…`.
-- **Tests:** `node prototypes/p10/test_p10.js --page` 58/58. Prototype 9 rebuild md5 `be163e7d014344e062965986b3da5786`. 8.4 md5 `9f5549201d88891f9f0b22c461602909`. Sound freeze: 211 items, 0 changed.
-- **Probes:** `node qa/testroad.js --stage 10.8 --out qa/baseline/p10_8.json`; report `qa/baseline/p10_8.md`, 17/17 checks. 10.7 reruns identical to its baseline, new fields aside.
-- **Decision log:** rows 717–724. D123 resolved. Open D119, D120, D121, D122, D124.
+- **Tests:** `node prototypes/p10/test_p10.js --page` 60/60. Prototype 9 rebuild md5 `be163e7d014344e062965986b3da5786`. 8.4 md5 `9f5549201d88891f9f0b22c461602909`. Sound freeze: 211 items, 0 changed.
+- **Probes:** `node qa/testroad.js --stage 10.8 --out qa/baseline/p10_8.json`; report `qa/baseline/p10_8.md`, 24/24 checks. 10.7 reruns identical to its baseline, new fields aside.
+- **Decision log:** rows 717–727. D123 resolved. Open D119, D120, D121, D122, D124, D125, D126.
 
 ## Request
 
@@ -31,6 +33,12 @@
 | 60°; aims along the barrier and the building's south face | D118: each camera watches the cover near its post | Proposed (row 723) |
 | The cones pan back and forth | Lawrence, 6 November: "panning back and forth like mgs" | Decided (row 724; D123 resolved) |
 | A 60° sweep: rest 1 s, cross in 3 s; the barrier's ends as mirror images | MGS: a slow pan, a rest at each end; a window when both look away | Proposed (row 724; D124) |
+| Grade each strike: UNSEEN, LOST, SEEN | Lawrence, 6 November: "Score each strike by how unseen it was" | Decided (row 725) |
+| "Noticed" is a true sighting: the car's own sensors or a camera, noticed or in its path | The data behind rung 7's lesson (`c.seenT`) | Proposed (row 725; D125) |
+| UNSEEN 3, LOST 2, SEEN 1 points | Never noticed scores highest | Proposed (row 725; D125) |
+| The lure: the car's learning as the player's tool | Lawrence, 6 November: "Make the car's learning a lure the player can use" | Decided (row 726) |
+| A stop line drawn for every stop at rung 6 up; a prompt the first time it stops short of a remembered spot or a ghost | "Draw the car's coming stop line on the road" | Proposed (row 726; D126) |
+| An open way lands at least 0.3 a minute at the top rung; each new part opens a way that uses it | Lawrence, 6 November: "at least two bots still land at every rung, and the count rises as parts arrive" | Proposed (row 727) |
 
 ## 10.8 The search
 
@@ -94,6 +102,40 @@
 - **The sprint from past the field** (D115). Unseen until it lands.
 - **Next (§14.2, 10.9):** the road upgrade. Two-way, with white sedans that never learn (D121).
 
+### 10.8.6 The stealth grade (row 725)
+
+- **Each damaging strike is graded** by the striking car's sightings this pass:
+  - **UNSEEN:** it never noticed the dummy. `scoring.stealthUnseen` 3 points.
+  - **LOST:** it noticed the dummy, then lost it before the spring. `scoring.stealthLost` 2.
+  - **SEEN:** it had the dummy as it sprang. `scoring.stealthSeen` 1.
+- **Noticed** means a true sighting: its own sensors or a street camera, noticed or in its path.
+- **The spring** is a dash's or a jump's start. A walk-in grades at the impact.
+- **Shown:**
+  - A flash under the dummy at the strike: "UNSEEN +3".
+  - The grade under the crash's evidence marker.
+  - The HUD: "STEALTH n", then the last grade.
+- **Any rung.** The grade measures the player, not the car. A strike that lands can still land better.
+- **Earlier stages:** 0 points; no grade shown.
+
+### 10.8.7 The lure (row 726)
+
+- **The car's learning is the player's tool.** It stops where it expects the dummy. Choose that place, then strike from elsewhere.
+  - **Rung 6:** stand at a remembered spot. It stops short and waits.
+  - **Rung 7:** show yourself, then hide. It stops short of its ghost.
+  - **Then:** crawl beyond the ring, downstream. Strike as it drives on.
+- **The stop line:** from rung 6, a red car braking for the dummy, a remembered spot or a ghost draws where its nose will stop. A line across its lane; "STOPS HERE" until it arrives.
+  - Amber for a ghost; red for a remembered spot; white otherwise.
+- **The prompt,** once a run each:
+  - The first stop at a remembered spot: "IT STOPS WHERE IT EXPECTS YOU · NOW STRIKE FROM ELSEWHERE".
+  - The first ghost: "IT STOPS SHORT OF ITS GHOST · STRIKE FROM BEYOND ITS RING".
+
+### 10.8.8 The possibility space (row 727)
+
+- **An open way in** lands at least 0.3 a minute at the build's top rung (the probes' trained mode).
+- **The floor:** at least two open ways in at every rung.
+- **A new part opens a way that uses it.**
+- **The probe report checks both,** and lists every stage's count from its baseline.
+
 ## Build
 
 - `testroad.js`:
@@ -105,8 +147,11 @@
 - `game_p10.js`: the ghost, ring, arc and line; the beacon and tag; FOUND; the clip's ghost; the fitting's diagram; the title line "It looks where it last saw you."
 - Row 723: each camera carries an aim; `inCameraCone` in `seeingCamera`; the cones drawn.
 - Row 724: each camera carries a phase; `cameraAim` pans it on sim time; the cone drawn at its aim now, with its sweep's arc.
+- Row 725: `strikeGrade`, `gradePoints`; `this.stealth`; the crash records its grade. `game_p10.js`: the flash, the marker's grade, the HUD.
+- Row 726: `stopPoint` (the nose's rest on its path). `game_p10.js`: `drawStopLines`, `drawHint`.
 - `build.py`: 10.8's stage; 10.7's page frozen.
 - `qa/testroad.js`: bots `peek` (stand in view until noticed; duck; spring) and `peekmove` (the same; crawl beyond the radius along the row first). Fields: searches, found, ended, hits after a lost sighting.
+- Rows 725–727: bot `lure`; fields grades, stealth points, lures taken, lured cars struck, stop-line misses. `qa/testroad_report.py`: the grade, lure and possibility-space sections and their checks.
 
 ## Measured (`qa/baseline/p10_8.md`)
 
@@ -142,6 +187,47 @@
 - **The bots barely move.** Their spots sat outside the cameras' range already. A human hiding by the plinth, the north planters or the building's west face gains most.
 - **The pan opens the barrier's gap.** Seven hits in 15 minutes, against one fixed. The bot does not time the sweep; a player who does gains more.
 
+**The stealth grade (row 725):**
+
+| Way in (trained) | Hits | UNSEEN | LOST | SEEN | Points a minute |
+|---|---|---|---|---|---|
+| Moving between spots (`roam`) | 38 | 28 | 8 | 2 | 6.95 |
+| The lure (`lure`) | 32 | 11 | 21 | 0 | 5.09 |
+| The crawl (`peekmove`) | 30 | 9 | 17 | 4 | 4.39 |
+| The sprint from past the field (`lurk`) | 9 | 9 | 0 | 0 | 1.80 |
+| The gap | 7 | 3 | 0 | 4 | 0.87 |
+| The flank from open pavement | 9 | 0 | 0 | 9 | 0.60 |
+
+- **As predicted:** the sprint grades UNSEEN, 18 of 18 across both modes. Seen, then hidden (`peek`) grades LOST, 4 of 4.
+- **The open-ground flank grades SEEN, 9 of 9.** It lands, but scores least.
+
+**The lure (row 726):**
+
+| Mode | Lures taken | At a remembered spot | For a ghost | Lured cars struck | Damage a lure hit |
+|---|---|---|---|---|---|
+| Trained (rung 7) | 18 | 12 | 6 | 18 | 225 |
+| Lesson (rung 6, then 7) | 16 | 15 | 1 | 16 | 229 |
+
+- **It lands.** Every lured car was struck. A parked car restarts fast enough: 225 a hit, against 226 for every hit.
+- **Rung 6 alone** (`--set duel.topRung=6`, 2 × 300 s): 17 lures, all at remembered spots, all struck; 200–214 a hit. Roaming still lands more at rung 6: 6.8–7.05 a minute, against the lure bot's 4.1–4.8.
+- **Rung 7:** the lure bot lands 2.17 a minute, a write-off every 68 s. Its escalation holds: hits in 10 of 10 minutes (decay 0.60).
+- **The stop line:** the first line drawn for each stop fell within 10 of the nose at rest in 2,347 of 2,488 stops (94%). A line drawn for a dummy that then moves misses.
+
+**The possibility space (row 727):**
+
+| Stage | Top rung | Open ways in | Parts it brings | Its ways that use them |
+|---|---|---|---|---|
+| 10.1 | 0 | 6 | — | — |
+| 10.2 | 1 | 3 | Battery 1 | aim, flank |
+| 10.3 | 2 | 6 | Legs 1 | jump, dashjump, plinth |
+| 10.4 | 3 | 5 | — | — |
+| 10.5 | 4 | 2 | Hands 1 | conebait |
+| 10.6 | 5 | 2 | DUCK | planter |
+| 10.7 | 6 | 3 | — | — |
+| 10.8 | 7 | 6: the lure, roaming, the crawl, the gap, the sprint, the flank | — | — |
+
+- **Every stage held the floor of two.** 10.5 and 10.6 sat on it.
+
 **The lesson** (mode `lesson`):
 
 - **Lessons:** in 9 of 9 runs with a hit from cover after a sighting, at 3–54 s.
@@ -155,16 +241,19 @@
 | Moving between spots, rung 6 (10.7) | 18 | At most 80 (Edit 18 §10.2) |
 | Moving between spots, rung 7 | 55 | |
 | The crawl, rung 7 | 111 (99 fixed 60°; 111 at 360°) | |
+| The lure, rung 7 | 68 | |
 
 ## Registry
 
-- **Added (6):** `duel.searchRadius`, `duel.searchSeconds`; `perception.streetCameraFov` (row 723; default 360); `perception.streetCameraPanArc` (default 0), `perception.streetCameraPanSeconds`, `perception.streetCameraPanHold` (row 724).
-- **Set by stage:** `duel.startRung` 6, `duel.topRung` 7, `duel.searchRadius` 60, `duel.searchSeconds` 4, `perception.streetCameraFov` 60, `perception.streetCameraPanArc` 60, `perception.streetCameraPanSeconds` 3, `perception.streetCameraPanHold` 1. 10.7's values otherwise.
-- **669 entries.** `registryVersion` unchanged (row 665).
+- **Added (9):** `duel.searchRadius`, `duel.searchSeconds`; `perception.streetCameraFov` (row 723; default 360); `perception.streetCameraPanArc` (default 0), `perception.streetCameraPanSeconds`, `perception.streetCameraPanHold` (row 724); `scoring.stealthUnseen`, `scoring.stealthLost`, `scoring.stealthSeen` (row 725; default 0).
+- **Set by stage:** `duel.startRung` 6, `duel.topRung` 7, `duel.searchRadius` 60, `duel.searchSeconds` 4, `perception.streetCameraFov` 60, `perception.streetCameraPanArc` 60, `perception.streetCameraPanSeconds` 3, `perception.streetCameraPanHold` 1, `scoring.stealthUnseen` 3, `scoring.stealthLost` 2, `scoring.stealthSeen` 1. 10.7's values otherwise.
+- **672 entries.** `registryVersion` unchanged (row 665).
 
 ## Open
 
-- **Human pass (H6):** does the player read the ghost, and crawl away? Do the cones read? Does the player time the sweep?
+- **Human pass (H6):** does the player read the ghost, and crawl away? Do the cones read? Does the player time the sweep? Does the grade pull play toward UNSEEN? Does the player use the lure?
+- **D125:** the grade's points and what counts as noticed.
+- **D126:** the stop line and the prompt: always on, or a part?
 - **D124:** the pan's values: 60° in 3 s, 1 s rests, the barrier's ends mirrored.
 - **D121:** the order from here. The road upgrade at 10.9, swerve cost at 10.10.
 - **D122:** the search's values. 60 and 4 leave the crawl open along a row longer than 60.

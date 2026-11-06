@@ -153,6 +153,7 @@
       this.rung = Math.max(0, Math.min(RUNGS.length - 1, Math.round(P['duel.startRung'] || 0))); // the red car's rung
       this.lesson = null; this.lessons = []; this.delivery = null; this.firstBrakeT = null; this.firstSideT = null; this.firstCoverT = null; this.firstItemT = null;
       this.crashes = []; this.spring = null; // every damaging hit: where it struck, the spot it was sprung from (row 703); the last dash or jump's start
+      this.stealth = { points: 0, unseen: 0, lost: 0, seen: 0, last: null }; // row 725: the strikes' stealth grades and their points
       this.lift = null; this.blockT = 0; // the block lift (row 715): the drone that moves a blocking dummy; how long the car has waited for it
       let fitted = false; // parts fitted from the start (partKey 3)
       for (const r of RUNGS) if (r.part && Math.round(P[r.partKey] || 0) === 3) { this.run.owned[r.part] = true; fitted = true; }
@@ -411,6 +412,15 @@
       if (pr.s < c.s - c.L) return; // the ghost is behind it
       c.man = null; this.commit(c, c.v < 1 ? { type: 'brake', v0: 0, a: P['traffic.comfortBraking'], vTarget: 0, sStop: c.s, standoff: true } : { type: 'brake', v0: c.v, a: P['traffic.hardBraking'], vTarget: 0, standoff: true, env: true, sBody }, 'search', null);
     }
+    // Row 726: where a red car braking to a stop will stop: its nose's point on its path, for the stop line the page draws.
+    // An envelope stop ends duel's envelope(0) short of its target (envSpeed is 0 there); an even stop at its sStop.
+    stopPoint(c) {
+      const m = c && c.man; if (!c || !c.red || !m || m.type !== 'brake') return null;
+      const front = c.s + c.L / 2, sF = m.env ? m.sBody - this.envelope(0) : m.sStop != null ? m.sStop + c.L / 2 : null;
+      if (sF == null) return null;
+      const sAt = Math.max(front, sF), p = X.pathAt(c.path, sAt), q = X.pathAt(c.path, Math.min(c.path.length, sAt + 1));
+      return { x: p.x, y: p.y, h: Math.atan2(q.y - p.y, q.x - p.x), s: sAt, cause: c.cause, arrived: c.v < 1 };
+    }
     checking(c) { // the remembered spots inside its field ahead: drawn as the spots it watches
       const ca = Math.cos(c.h), sa = Math.sin(c.h), half = c.W / 2 + this.P['body.radius'] + this.fieldFor() + (this.P['duel.memoryRadius'] || 0);
       return this.memory().filter((m) => { const dx = m.ox - c.x, dy = m.oy - c.y, fx = dx * ca + dy * sa, fy = -dx * sa + dy * ca; return fx > -c.L && fx < c.fwdLen + c.L / 2 && Math.abs(fy) < half; });
@@ -494,13 +504,25 @@
           const sn = (e.kind === 'dash' || e.kind === 'jump') && this.spring ? this.spring.seen : null; // rung 7: had the car seen it just before it hid and sprang?
           e.lostSight = !!(o.cover && sn && sn.ago <= this.P['duel.lessonClipSeconds'] + 1e-9); e.seenAt = e.lostSight ? { x: +sn.x.toFixed(1), y: +sn.y.toFixed(1), ago: +sn.ago.toFixed(2) } : null;
           e.origin = { x: +o.x.toFixed(1), y: +o.y.toFixed(1) }; e.covered = o.cover; e.habit = !!prev; e.remembered = !!this.nearSite(o.x, o.y, this.memory());
-          this.crashes.push({ n: this.crashes.length + 1, x: +b.x.toFixed(1), y: +b.y.toFixed(1), ox: e.origin.x, oy: e.origin.y, cover: o.cover, px: fx ? +fx.x.toFixed(1) : null, py: fx ? +fx.y.toFixed(1) : null, h: +c.h.toFixed(3), t: +this.t.toFixed(2), model: c.model, zone: e.zone, prev: prev ? prev.n : null, writeoff: b.health <= 0 });
-          this.emit('crash', { n: this.crashes.length, x: e.origin.x, y: e.origin.y, cover: o.cover, habit: e.habit, prev: prev ? prev.n : null });
+          e.grade = this.strikeGrade(e, c); const pts = this.gradePoints(e.grade); // row 725: how unseen the strike was
+          this.stealth.points += pts; this.stealth[e.grade]++; this.stealth.last = { grade: e.grade, points: pts, t: +this.t.toFixed(2) }; e.points = pts;
+          this.crashes.push({ n: this.crashes.length + 1, x: +b.x.toFixed(1), y: +b.y.toFixed(1), ox: e.origin.x, oy: e.origin.y, cover: o.cover, px: fx ? +fx.x.toFixed(1) : null, py: fx ? +fx.y.toFixed(1) : null, h: +c.h.toFixed(3), t: +this.t.toFixed(2), model: c.model, zone: e.zone, prev: prev ? prev.n : null, writeoff: b.health <= 0, grade: e.grade, points: pts });
+          this.emit('crash', { n: this.crashes.length, x: e.origin.x, y: e.origin.y, cover: o.cover, habit: e.habit, prev: prev ? prev.n : null, grade: e.grade, points: pts });
         }
         if (e.lost > 0) this.learnFrom(e);
       }
       return positive;
     }
+    // Row 725: the stealth grade of a damaging strike, from the striking car's sightings this pass (c.seenT: it truly had the
+    // dummy, noticed or in its path). 'unseen': it never had it. 'lost': it had it, but not as the dummy sprang. 'seen': it had
+    // it on the spring's tick (a dash's or a jump's start; for a walk-in, the impact). Scored by scoring.stealthUnseen,
+    // scoring.stealthLost, scoring.stealthSeen.
+    strikeGrade(e, c) {
+      const sp = (e.kind === 'dash' || e.kind === 'jump') && this.spring ? this.spring : null, TICK = 0.05;
+      const had = sp ? sp.seen : c.seenT != null ? { ago: this.t - c.seenT } : null;
+      return !had ? 'unseen' : had.ago <= TICK ? 'seen' : 'lost';
+    }
+    gradePoints(g) { return this.P[{ unseen: 'scoring.stealthUnseen', lost: 'scoring.stealthLost', seen: 'scoring.stealthSeen' }[g]] || 0; }
     // Beat 1, the cause: a damaging hit on the part the next rung guards. The lesson shows once the car has left the screen.
     learnFrom(e) {
       const c = this.carById(e.car), next = RUNGS[this.rung + 1];

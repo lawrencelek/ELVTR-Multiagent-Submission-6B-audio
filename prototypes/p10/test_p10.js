@@ -426,6 +426,28 @@ check('10.8 (row 724): each camera pans across perception.streetCameraPanArc, MG
     detail: `arc ${A}°, sweep ${T} s, hold ${H} s (cycle ${cyc} s); camera 1 aims ${lo.toFixed(0)}–${hi.toFixed(0)}°; a spot at the sweep's far edge watched ${(100 * seen / n).toFixed(0)}% of the cycle (${flips} changes); the barrier's two ends sweep as mirror images ${mirror}; 10.7 fixed at ${aims0[0]}°` };
 });
 
+check('10.8 (row 725): each strike is graded by how unseen it was: hidden from the start, UNSEEN (scoring.stealthUnseen); seen, then hidden, LOST (scoring.stealthLost); 10.7 scores none', () => {
+  const ambush = (spot) => (q) => { const b = q.body; if (!b.alive) return {}; const c = q.onRoad().find((x) => x.red && !x.spent && x.path.road === 'A');
+    if (Math.hypot(spot[0] - b.x, spot[1] - b.y) > 6) return Object.assign(to(b, spot[0], spot[1]), { duck: true });
+    if (c && c.v > 15) { const d0 = Math.hypot(c.x - b.x, c.y - b.y), k = 0.1 + d0 / 600, tx = c.x + (c.vx || 0) * k, ty = c.y + (c.vy || 0) * k, d = Math.hypot(tx - b.x, ty - b.y), ang = Math.atan2(ty - b.y, tx - b.x);
+      if (d < q.reach() + 6 && b.mode !== 'lunge' && b.mode !== 'recover') return { mx: Math.cos(ang) * 0.3, my: Math.sin(ang) * 0.3, aPress: true, duck: true }; }
+    return { duck: true }; };
+  const u = sim(F8, { 'duel.startRung': 7 }, ALL); Object.assign(u.body, { x: 559, y: 421, duck: true }); drive(u, 40, ambush([559, 421])); const hu = hits(u)[0];
+  const l = sim(F8, {}, ALL); Object.assign(l.body, { x: 170, y: 203 }); drive(l, 60, peekBot([170, 203])); const hl = hits(l)[0];
+  const o = sim(F7, {}, ALL); Object.assign(o.body, { x: 559, y: 421, duck: true }); drive(o, 40, ambush([559, 421])); const ho = hits(o)[0];
+  return { ok: !!hu && hu.grade === 'unseen' && u.stealth.points === F8['scoring.stealthUnseen'] * u.stealth.unseen && !!hl && hl.grade === 'lost' && l.stealth.lost >= 1 && !!ho && o.stealth.points === 0 && F8['scoring.stealthUnseen'] > F8['scoring.stealthLost'] && F8['scoring.stealthLost'] > F8['scoring.stealthSeen'],
+    detail: `ambush from the start: ${hu ? hu.grade : 'no hit'}, ${u.stealth.points} points (${u.stealth.unseen} UNSEEN × ${F8['scoring.stealthUnseen']}); seen, then hidden: ${hl ? hl.grade : 'no hit'}; 10.7: ${ho ? ho.grade : 'no hit'}, ${o.stealth.points} points` };
+});
+check('10.8 (row 726): the stop line: a car braking for the dummy, a remembered spot or its ghost stops where stopPoint first said, within 10 of its nose', () => {
+  const runs = [], one = (x, y, bot, secs) => { const t = sim(F8, { 'duel.startRung': 7 }, ALL); Object.assign(t.body, { x, y }); const pred = new Map(), errs = [];
+    for (let i = 0; i < secs * 60; i++) { t.step(bot ? bot(t) : {}); for (const c of t.onRoad()) { if (!c.red) continue; const k = c.id + ':' + (c.man && c.man.t0);
+      if (c.v >= 1 && ['body', 'side', 'search'].includes(c.cause) && !pred.has(k)) { const sp = t.stopPoint(c); if (sp && sp.s > c.s + c.L / 2 + 1) pred.set(k, { s: sp.s, car: c.id, done: false }); }
+      if (c.v < 1) for (const q of pred.values()) if (q.car === c.id && !q.done) { q.done = true; errs.push(Math.abs(c.s + c.L / 2 - q.s)); } } }
+    return errs; };
+  const stand = one(250, 292, null, 30), peek = one(170, 203, peekBot([170, 203]), 40), all = stand.concat(peek), within = all.filter((e) => e <= 10).length;
+  return { ok: all.length >= 2 && within === all.length, detail: `stops ${all.length} (standing in the lane ${stand.length}; seen, then hidden ${peek.length}); within 10: ${within}; worst ${all.length ? Math.max(...all).toFixed(1) : '—'}` };
+});
+
 // ---------- registry and frozen builds
 check('Prototype 10 values are registered (registry first)', () => {
   const reg = new Set(JSON.parse(fs.readFileSync(path.join(ROOT, 'content/params/tuning.parameters.json'), 'utf8')).entries.map((e) => e.id));

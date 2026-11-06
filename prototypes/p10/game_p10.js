@@ -31,12 +31,13 @@
   const CLIP = F['duel.lessonClipSeconds'], HOLD = F['duel.lessonHoldSeconds'], FIT = F['duel.lessonFitSeconds']; // the clip, its last frame held, the fitting
   const cv = document.getElementById('game'), ctx = cv.getContext('2d');
   let s, paused = false, started = false, showZones = true, log = [], session = {}, prevV = new Map(), flash = [];
+  let hint = null; const hinted = new Set(); // row 726: the lure's one-time prompts
   let ring = [], clip = null, lessonT = null, lastCrash = null; // the recording, the hit's clip, the lesson's clock, the latest crash
   const keys = new Set(); let aEdge = false, bEdge = false, xEdge = false, touchMove = null, touchA = false, touchB = false, touchX = null, touchD = null;
 
   function newSim() {
     s = new T.TestRoadSim(Object.assign({}, F)); log = []; session = { start: Date.now(), build: 'P' + ST.id };
-    prevV.clear(); flash = []; ring = []; clip = null; lessonT = null; lastCrash = null;
+    prevV.clear(); flash = []; ring = []; clip = null; lessonT = null; lastCrash = null; hint = null; hinted.clear();
   }
   newSim();
 
@@ -92,8 +93,10 @@
       if (e.type === 'impact' && Math.round(e.lost) > 0) flash.push({ x: s.body.x, y: s.body.y, t: 0.5, n: Math.round(e.lost) });
       if (e.type === 'writeoff') flash.push({ x: s.body.x, y: s.body.y, t: 1.2, n: 'WRITE-OFF' });
       if (e.type === 'gift') flash.push({ x: s.body.x, y: s.body.y, t: 1.6, n: PARTS[e.node] || e.node });
-      if (e.type === 'crash') lastCrash = e;
+      if (e.type === 'crash') { lastCrash = e; if (graded() && e.grade) flash.push({ x: s.body.x, y: s.body.y + 62, t: 1.1, n: GRADE[e.grade] + ' +' + (e.points || 0), c: GRADE_C[e.grade]() }); } // row 725: below the dummy, clear of the damage and the car's tag
       if (e.type === 'search-found') flash.push({ x: e.x, y: e.y, t: 0.9, n: 'FOUND' });
+      if (e.type === 'expect-stop' && !hinted.has('mem')) { hinted.add('mem'); hint = { text: 'IT STOPS WHERE IT EXPECTS YOU · NOW STRIKE FROM ELSEWHERE', t: 5, c: C.mem }; } // row 726: the lure
+      if (e.type === 'search' && !hinted.has('ghost')) { hinted.add('ghost'); hint = { text: 'IT STOPS SHORT OF ITS GHOST · STRIKE FROM BEYOND ITS RING', t: 5, c: C.search }; }
       if (e.type === 'lesson-due') clip = { frames: ring.slice(), hitT: e.t, model: e.model, zone: e.zone, to: e.to, info: T.RUNGS[e.to], origin: e.origin, prev: lastCrash && lastCrash.habit ? lastCrash.prev : null, seenAt: e.seenAt };
     }
   }
@@ -198,6 +201,7 @@
       const tx = cr.x + 16, ty = cr.y - 18; // the evidence marker: a yellow tent, its number
       ctx.fillStyle = C.tent; ctx.beginPath(); ctx.moveTo(tx - 7, ty + 6); ctx.lineTo(tx, ty - 7); ctx.lineTo(tx + 7, ty + 6); ctx.closePath(); ctx.fill();
       text(String(n), tx, ty + 5, 8, C.joint, 'center');
+      if (graded() && cr.grade) text(GRADE[cr.grade], tx, ty + 16, 7, GRADE_C[cr.grade](), 'center'); // row 725: its stealth grade
       ctx.globalAlpha = 1;
       if (!kept) continue;
       const hot = checked.has(n), pulse = hot ? 0.8 + 0.2 * Math.sin(s.t * 10) : 1; // rung 6 remembers it: the spot it was sprung from, ringed
@@ -207,6 +211,28 @@
       ctx.beginPath(); ctx.moveTo(cr.ox - 5, cr.oy - 5); ctx.lineTo(cr.ox + 5, cr.oy + 5); ctx.moveTo(cr.ox + 5, cr.oy - 5); ctx.lineTo(cr.ox - 5, cr.oy + 5); ctx.stroke();
       text('#' + n, cr.ox, cr.oy - R - 4, 9, C.mem, 'center'); ctx.globalAlpha = 1;
     }
+  }
+  // Row 725: a strike's stealth grade, shown when the stage scores it (scoring.stealthUnseen, scoring.stealthLost, scoring.stealthSeen).
+  const GRADE = { unseen: 'UNSEEN', lost: 'LOST', seen: 'SEEN' }, GRADE_C = { unseen: () => C.dummy, lost: () => C.search, seen: () => C.dim };
+  function graded() { return !!(s && s.P && (s.P['scoring.stealthUnseen'] || s.P['scoring.stealthLost'] || s.P['scoring.stealthSeen'])); }
+  // Row 726: the lure. A red car braking for the dummy, a remembered spot or its ghost draws where it will stop, across its lane.
+  function drawStopLines() {
+    if (s.rung < 6 || !s.stopPoint) return;
+    for (const c of s.onRoad()) {
+      if (!c.red || c.spent || !['body', 'side', 'search'].includes(c.cause)) continue;
+      const sp = s.stopPoint(c); if (!sp) continue;
+      const col = c.cause === 'search' ? C.search : s.expected && s.expected() ? C.mem : C.text, half = c.W / 2 + 6, nx = -Math.sin(sp.h), ny = Math.cos(sp.h);
+      ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = 3; ctx.globalAlpha = sp.arrived ? 0.9 : 0.75; ctx.setLineDash(sp.arrived ? [] : [5, 4]);
+      ctx.beginPath(); ctx.moveTo(sp.x + nx * half, sp.y + ny * half); ctx.lineTo(sp.x - nx * half, sp.y - ny * half); ctx.stroke(); ctx.restore();
+      if (!sp.arrived) { ctx.font = '700 8px B612, system-ui, sans-serif'; const t = 'STOPS HERE', w = ctx.measureText(t).width + 6, lx = sp.x + nx * (half + 10), ly = sp.y + ny * (half + 10);
+        rect(lx - w / 2, ly - 6, w, 11, 'rgba(12,14,20,0.75)'); text(t, lx, ly + 3, 8, col, 'center'); }
+    }
+  }
+  // Row 726: a one-time prompt, the first time a car stops short of a remembered spot (rung 6) or of its ghost (rung 7).
+  function drawHint() {
+    if (!hint) return; hint.t -= 1 / 60; if (hint.t <= 0) { hint = null; return; }
+    ctx.font = '700 12px B612, system-ui, sans-serif'; const w = ctx.measureText(hint.text).width + 20;
+    ctx.globalAlpha = Math.min(1, hint.t / 0.4); rect(FW / 2 - w / 2, 10, w, 22, 'rgba(12,14,20,0.85)'); text(hint.text, FW / 2, 25, 12, hint.c, 'center'); ctx.globalAlpha = 1;
   }
   function drawCone(x, y) { ctx.fillStyle = C.cone; ctx.beginPath(); ctx.arc(x, y, 7, 0, TAU); ctx.fill(); ctx.fillStyle = C.zebra; ctx.fillRect(x - 4, y - 1, 8, 2); }
   function drawCameras() { // rung 4: the junction's street cameras. A link draws from a camera to the dummy behind cover, and on to the car
@@ -322,6 +348,8 @@
     const bx = 340; // the body bar sits left of the key hints, which grow with each part
     text('BODY', bx - 40, FH + 22, 11, C.dim); rect(bx, FH + 12, 120, 12, '#2c3447'); rect(bx, FH + 12, 120 * hp, 12, C.dummy);
     text('WRITE-OFFS ' + s.run.writeOffs, bx, FH + 42, 11, C.text);
+    if (graded() && s.stealth) { const st = s.stealth, l = st.last; text('STEALTH ' + st.points, bx + 96, FH + 42, 11, C.text); // row 725
+      if (l) text(GRADE[l.grade] + ' +' + l.points, bx + 172, FH + 42, 11, GRADE_C[l.grade]()); }
     text(s.dashFitted() ? 'SPACE DASH' + (s.has('jump') ? ' · K JUMP' : '') + (s.has('carry') ? ' · E CONE' : '') + (s.has('duck1') ? ' · C DUCK' : '') : 'ON FOOT', 786, FH + 22, 11, C.dim, 'right');
     text(Math.floor(s.t / 60) + ':' + String(Math.floor(s.t % 60)).padStart(2, '0'), 786, FH + 42, 11, C.text, 'right');
   }
@@ -401,7 +429,7 @@
       if (clip && lessonT < CLIP + HOLD) drawClip(lessonT); else drawFit(lessonT - (clip ? CLIP + HOLD : 0));
       drawHud(); return;
     }
-    const L = s.level; drawRoads(L); drawStatics(L); drawCrashes(); drawGhosts();
+    const L = s.level; drawRoads(L); drawStatics(L); drawCrashes(); drawGhosts(); drawStopLines();
     const cars = s.cars.filter((c) => !c.ghost);
     if (showZones) for (const c of cars) drawZones(c);
     for (const c of cars) drawCar(c);
@@ -411,7 +439,8 @@
     for (const dr of s.drones) { const cn = s.cones.find((q) => q.id === dr.cone); if (cn && cn.state === 'drone') drawCone(dr.x, dr.y + 12); drawDrone(dr.x, dr.y, false); } // FARSIGHT fetches a cone left in a lane (proto.droneConeSeconds)
     const d = s.delivery; if (d) drawDrone(d.x, d.y, d.state !== 'outbound' && (LOAD[d.node] || 'B1'));
     const lf = s.lift; if (lf) { const held = s.body && s.body.lifted; drawDrone(lf.x, lf.y - (held ? 30 : 0), false); if (held) { ctx.strokeStyle = C.joint; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(lf.x, lf.y - 24); ctx.lineTo(lf.x, lf.y - 16); ctx.stroke(); } } // FARSIGHT's block lift
-    for (let i = flash.length - 1; i >= 0; i--) { const f = flash[i]; f.t -= 1 / 60; if (f.t <= 0) { flash.splice(i, 1); continue; } const big = typeof f.n !== 'number'; text(big ? f.n : '−' + f.n, f.x, f.y - 24 - (1 - f.t) * 20, big ? 16 : 13, f.n === 'WRITE-OFF' ? C.red : C.dummy, 'center'); }
+    for (let i = flash.length - 1; i >= 0; i--) { const f = flash[i]; f.t -= 1 / 60; if (f.t <= 0) { flash.splice(i, 1); continue; } const big = typeof f.n !== 'number'; text(big ? f.n : '−' + f.n, f.x, f.y - 24 - (1 - f.t) * 20, big ? 16 : 13, f.c || (f.n === 'WRITE-OFF' ? C.red : C.dummy), 'center'); }
+    drawHint();
     drawHud();
     if (!started || paused) {
       rect(0, 0, FW, FH, 'rgba(10,12,18,0.72)');

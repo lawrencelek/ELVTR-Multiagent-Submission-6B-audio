@@ -1007,7 +1007,10 @@
     "perception.streetCameraFov": 60,
     "perception.streetCameraPanArc": 60,
     "perception.streetCameraPanSeconds": 3,
-    "perception.streetCameraPanHold": 1
+    "perception.streetCameraPanHold": 1,
+    "scoring.stealthUnseen": 3,
+    "scoring.stealthLost": 2,
+    "scoring.stealthSeen": 1
    },
    "flags": {
     "proto.droneConeSeconds": 5,
@@ -1132,7 +1135,10 @@
     "perception.streetCameraFov": 60,
     "perception.streetCameraPanArc": 60,
     "perception.streetCameraPanSeconds": 3,
-    "perception.streetCameraPanHold": 1
+    "perception.streetCameraPanHold": 1,
+    "scoring.stealthUnseen": 3,
+    "scoring.stealthLost": 2,
+    "scoring.stealthSeen": 1
    }
   }
  }

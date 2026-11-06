@@ -1129,9 +1129,10 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
 
 - **Build:** `prototypes/p10/dummies_p10_8.html`. 10.7's page is frozen.
 - **The one change:** rung 7, taught by one lesson. The car starts at rung 6; the dummy starts with all four parts. No new part.
-- **Checks:** `node prototypes/p10/test_p10.js --page` 58/58. Probes `qa/baseline/p10_8.md` 17/17. 10.7 reruns identical. Prototype 9 and the frozen md5s hold; sound freeze holds.
+- **Checks:** `node prototypes/p10/test_p10.js --page` 60/60. Probes `qa/baseline/p10_8.md` 24/24. 10.7 reruns identical. Prototype 9 and the frozen md5s hold; sound freeze holds.
 - **Amended (row 723):** the street cameras see a 60° cone along their cover, not all round (§25.5).
 - **Amended (row 724):** the cones pan back and forth, as in Metal Gear Solid (§25.5).
+- **Amended (rows 725–727):** the stealth grade, the lure and its stop line, the floor of open ways (§25.6).
 
 ### 25.1 What changed
 
@@ -1185,11 +1186,24 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
   - The barrier's two ends sweep as mirror images: a window when both look south.
   - The gap behind the barrier opens: 0.07 to 0.47 a minute.
 
-### 25.6 Open
+### 25.6 The player's escalation (rows 725–727)
+
+> From Kevin Wong's "Stealth Game Design": car learning is not the player's fun. Lawrence, 6 November: "do all three".
+
+| Change | What it does | Measured (trained) |
+|---|---|---|
+| The stealth grade (row 725) | Each strike scores UNSEEN 3, LOST 2, SEEN 1 (`scoring.stealth*`). Flash, marker, HUD | The sprint UNSEEN 18 of 18; seen-then-hidden LOST 4 of 4; the open flank SEEN 9 of 9 |
+| The lure (row 726) | A remembered spot or a ghost parks the car; strike from downstream, beyond the ring. A stop line; a one-time prompt | 18 lures, 18 struck, 225 a hit; 2.17 a minute; the line within 10 in 94% of stops |
+| The floor (row 727) | The probe report needs two open ways in at every rung, and a way for each new part | 10.8: six. History: 6, 3, 6, 5, 2, 2, 3, 6 |
+
+- **Roaming still beats the lure for a bot:** 6.8–7.05 a minute against 4.1–4.8 at rung 6; 2.59 against 2.17 at rung 7. The lure buys control: the car stops where the dummy chose.
+
+### 25.7 Open
 
 - **Human pass (H6):** does the player read the ghost, and crawl away?
 - **D121:** the order from here: the road upgrade at 10.9, or the area alert first.
 - **D122:** the search's values. The crawl's room is a level rule: rows longer than the ring.
 - **D124:** the pan's values: 60° in 3 s, 1 s rests, mirrored.
+- **D125:** the grade's points. **D126:** the stop line and prompt: always on, or a part.
 - **Next:** 10.9, the road upgrade (D121): two-way, white sedans that never learn.
 
