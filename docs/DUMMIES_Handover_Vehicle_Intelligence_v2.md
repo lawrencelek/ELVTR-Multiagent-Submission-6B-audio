@@ -1211,8 +1211,29 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
 | STOPPING | Noticed | Stops short | — | "!" red |
 
 - **Closures hold;** roaming rises to 3.15 a minute, the crawl falls to 1.69.
+- **Row 731:** the stages now run inside three cones (§25.8). Each distance is from its cone's apex.
 
-### 25.8 Open
+### 25.8 The field as three cones; the lunge guide (rows 731–732)
+
+> "The sensitivitiy should be from a more sensitive forward cone, and two side cones. at the moment it's just a dumb rectangle that doesn't feel right" (Lawrence, 6 November)
+
+| Cone | Apex | Angle | Reach | Sensitivity | CLOSE · WARY |
+|---|---|---|---|---|---|
+| Forward | Nose | ±20° | 720 | 1 | 180 · 360 |
+| Side, each | Centre | 15°–105° off the heading | 220 | 0.5 | 90 · 180 |
+
+- **Sensitivity** scales the stage ranges and the notice meter. Speeds stay per stage.
+- **Blind:** behind, and between cones.
+- **Past its cones, inside the rung's rectangle:** a noticed dummy stays tracked; the camera link and memory still tell it.
+- **Searching:** the forward cone turns to the ghost.
+- **Cost:** rare side strikes reopen, 0.13–0.2 a minute each (F32). Lurk stays UNSEEN.
+
+> "it's also really hard to time the lunge when you don't know where the lunge will land - this should have a helper." (Lawrence, 6 November)
+
+- **`ui.lungeGuide`:** a dotted line and reticle at the dash's landing, near a car. Yellow "HIT" when it meets the red car; white, a miss; faint, not ready.
+- **Reverses** GDD Edit 19 §4.2.8 on the test road.
+
+### 25.9 Open
 
 - **Human pass (H6):** does the player read the ghost, and crawl away?
 - **D121:** the order from here: the road upgrade at 10.9, or the area alert first.
@@ -1220,5 +1241,7 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
 - **D124:** the pan's values: 60° in 3 s, 1 s rests, mirrored.
 - **D125, D126 resolved (rows 728–729).** After the playtest: does the stop line stay free, or become a part?
 - **D127:** the side stages' values.
+- **D128:** the cones' values. Sides at 1 close the side strikes and bring back the even field.
+- **D129:** the lunge guide: always on, a part, or only while aiming?
 - **Next:** 10.9, the road upgrade (D121): two-way, white sedans that never learn.
 

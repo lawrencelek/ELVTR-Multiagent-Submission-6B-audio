@@ -3960,8 +3960,57 @@
       if (this.rung < 3 && (this.airborne() || this.body.raised)) return null; // it sees the ground: not the air, not the plinth's top
       const P = this.P, keep = P['proto.driver.cautionZone'];
       P['proto.driver.cautionZone'] = this.fieldFor();
-      try { return super.assessBody(c); } finally { P['proto.driver.cautionZone'] = keep; }
+      let hz; try { hz = super.assessBody(c); } finally { P['proto.driver.cautionZone'] = keep; }
+      if (!hz || hz.inPath || !this.coned()) return hz;
+      const k = this.coneOf(c, this.body.x, this.body.y); if (k && k.cone === 'forward') { hz.cone = k.cone; hz.dist = k.d; return hz; }
+      const how = hz.gapLat > keep ? null : c.noticed ? 'track' : this.rung >= 4 && this.cameraSees() ? 'link' : this.expected() ? 'memory' : null; // row 731: inside the rung's rectangle, noticed, it tracks the dummy; a street camera or its memory tells it where the dummy is, at full sensitivity, past or inside its duller side cones
+      const b = this.body; if (how) { hz.cone = how; hz.dist = Math.hypot(b.x - c.x - Math.cos(c.h) * c.L / 2, b.y - c.y - Math.sin(c.h) * c.L / 2); return hz; }
+      if (k) { hz.cone = k.cone; hz.dist = k.d; return hz; }
+      return null; // outside its three cones, unnoticed, untold: it does not sense the dummy
     }
+    // Row 731: the field as three cones, not a rectangle. A forward cone from the nose, perception.forwardConeAngle either side of
+    // its heading, out to perception.forwardLength. Two side cones from the car's centre, about perception.sideConeAxis either
+    // side of its heading, perception.sideConeAngle wide each way, out to perception.sideConeRange. Each has a sensitivity
+    // (perception.forwardConeSensitivity, perception.sideConeSensitivity): it scales the stage ranges (a dummy must come closer
+    // to a duller cone for each stage) and how fast the notice meter fills. Each stage's speed stays the same. The beam (the
+    // lane ahead) is unchanged. The cones are the car's own sensors. Inside the rung's rectangle (proto.driver.cautionZone)
+    // it still has the dummy past them when it has noticed it (it tracks what it detected), when a street camera sees it (the
+    // link, rung 4), or when it stands where the car remembers (rung 6). 0 for perception.forwardConeAngle: the rectangle.
+    coned() { return (this.P['perception.forwardConeAngle'] || 0) > 0 && this.rung >= 2; }
+    coneOf(c, px, py) {
+      const P = this.P, ca = Math.cos(c.h), sa = Math.sin(c.h), br = P['body.radius'], nx = c.x + ca * c.L / 2, ny = c.y + sa * c.L / 2;
+      const local = (ox, oy) => { const dx = px - ox, dy = py - oy, fx = dx * ca + dy * sa, fy = -dx * sa + dy * ca; return { d: Math.hypot(fx, fy), a: Math.atan2(fy, fx) * 180 / Math.PI }; };
+      const f = local(nx, ny); if (Math.abs(f.a - this.coneLook(c)) <= P['perception.forwardConeAngle'] && f.d <= c.fwdLen + br) return { cone: 'forward', d: f.d };
+      const q = local(c.x, c.y); if (Math.abs(Math.abs(q.a) - P['perception.sideConeAxis']) <= P['perception.sideConeAngle'] && q.d <= P['perception.sideConeRange'] + br) return { cone: 'side', d: q.d };
+      return null;
+    }
+    // Searching (rung 7), the forward cone looks at the ghost, as a guard turns to the last place it saw you: turned from the
+    // heading toward it, as far as the side cones' outer edge (perception.sideConeAxis + perception.sideConeAngle). Degrees.
+    coneLook(c) {
+      const g = c.lkp; if (!g) return 0;
+      const P = this.P, ca = Math.cos(c.h), sa = Math.sin(c.h), dx = g.x - (c.x + ca * c.L / 2), dy = g.y - (c.y + sa * c.L / 2), lim = P['perception.sideConeAxis'] + P['perception.sideConeAngle'];
+      return clamp(Math.atan2(-dx * sa + dy * ca, dx * ca + dy * sa) * 180 / Math.PI, -lim, lim);
+    }
+    // Row 732: the lunge guide. Where a dash pressed now would land, and the first car on the way. The path follows the dash's
+    // own profile (movement.lungeFastTimeFraction of movement.lungeDuration covers movement.lungeFastDistanceFraction of the
+    // reach); a solid stops it (low cover does not; the plinth does not, from on top). Cars move straight on at their speed.
+    lungePreview(mx, my) {
+      const P = this.P, b = this.body; if (!b || !b.alive) return null;
+      const direct = P['proto.turnModel'] === 2, m = hyp(mx || 0, my || 0), dir = direct && m > 0.05 ? Math.atan2(my, mx) : b.facing;
+      const lk = this.underfoot('lunge'), R = this.reach() * Math.max(0, lk), T = P['movement.lungeDuration'], tf = T * P['movement.lungeFastTimeFraction'], df = P['movement.lungeFastDistanceFraction'], r = P['body.radius'];
+      const ready = this.dashFitted() && b.mode !== 'lunge' && b.mode !== 'recover' && !b.stair && !(b.landT > 0) && b.charge >= P['battery.lungeCost'] - 1e-9 && lk > 0;
+      const solids = this.level.statics.filter((q) => !q.low && !(b.raised && q === this.plinth())), ca = Math.cos(dir), sa = Math.sin(dir);
+      const cars = this.onRoad();
+      const tAt = (d) => d <= R * df ? tf * d / (R * df) : tf + (T - tf) * (d - R * df) / (R * (1 - df)), free = (d) => !solids.some((q) => circleRect(b.x + ca * d, b.y + sa * d, r, q));
+      let x1 = b.x, y1 = b.y, hit = null; const N = Math.max(24, Math.ceil(R / 4)); // about every 4 px
+      for (let i = 1; i <= N; i++) { const d = R * i / N;
+        if (!free(d)) { let lo = R * (i - 1) / N, hi = d; for (let j = 0; j < 12; j++) { const m = (lo + hi) / 2; if (free(m)) lo = m; else hi = m; } x1 = b.x + ca * lo; y1 = b.y + sa * lo; break; } // a solid: it stops touching it
+        const t = tAt(d), x = b.x + ca * d, y = b.y + sa * d; x1 = x; y1 = y;
+        for (const c of cars) if (X.circleCar(x, y, r, { x: c.x + Math.cos(c.h) * c.v * t, y: c.y + Math.sin(c.h) * c.v * t, h: c.h, L: c.L, W: c.W })) { hit = { x, y, t, car: c.id, red: !!c.red }; break; } // the sim's own contact test, the car where it will be
+        if (hit) break; }
+      return { x0: b.x, y0: b.y, x1, y1, dir, R, hit, ready };
+    }
+    coneSensitivity(c) { const P = this.P, hz = c.hz; return !hz || !hz.cone ? 1 : hz.cone === 'side' ? P['perception.sideConeSensitivity'] : P['perception.forwardConeSensitivity']; }
     manSpeed(c, man, tau, sAt) {
       if (!man || !man.env) return super.manSpeed(c, man, tau, sAt);
       const s = sAt != null ? sAt : c.s, gap = man.sBody - (s + c.L / 2), v0 = Math.max(0, man.v0);
@@ -3997,7 +4046,7 @@
     // perception.sideAwareNoticeRate, perception.sideWaryNoticeRate; CLOSE at full. Noticed (stage 4), it stops short, as
     // before. 0 for perception.sideCloseRange: off, the whole field alike (10.3–10.7).
     sideStaged() { return (this.P['perception.sideCloseRange'] || 0) > 0 && this.rung >= 2; }
-    sideDist(c) { const hz = c.hz; return hz && !hz.inPath ? Math.hypot(Math.max(0, hz.lx), Math.max(0, Math.abs(hz.ly) - c.W / 2)) : null; }
+    sideDist(c) { const hz = c.hz; return hz && !hz.inPath ? (hz.dist != null ? hz.dist / Math.max(0.05, this.coneSensitivity(c)) : Math.hypot(Math.max(0, hz.lx), Math.max(0, Math.abs(hz.ly) - c.W / 2))) : null; } // row 731: coned, from the cone's apex, over its sensitivity: a dummy must come closer to a duller cone for each stage
     sideStage(c) {
       if (!this.sideStaged() || !c.red || !c.hz || c.hz.inPath || !this.body.alive) return 0;
       if (c.noticed) return 4;
@@ -4007,7 +4056,7 @@
     noticeRate(c) {
       if (!this.sideStaged()) return 1;
       const st = this.sideStage(c), P = this.P, k = st === 1 ? P['perception.sideAwareNoticeRate'] : st === 2 ? P['perception.sideWaryNoticeRate'] : 1;
-      return k == null ? 1 : k;
+      return (k == null ? 1 : k) * this.coneSensitivity(c); // row 731: a less sensitive cone notices slower
     }
     cornerSpeed(c) {
       const v = super.cornerSpeed(c);
@@ -4017,10 +4066,14 @@
     stageSpeed(c) { // a red car's caution speed by stage; any other car keeps proto.driver.cautionSpeed
       if (!c.red) return this.stageCaution;
       const st = this.sideStage(c), P = this.P, k = st === 1 ? P['perception.sideAwareSpeed'] : st === 2 ? P['perception.sideWarySpeed'] : st >= 3 ? P['perception.sideCloseSpeed'] : null;
-      return k == null ? this.stageCaution : (c.cruise || P['vehicles.sedan.cruiseSpeed']) * k;
+      return k == null ? this.stageCaution : (c.cruise || P['vehicles.sedan.cruiseSpeed']) * k; // each stage's speed is the same in every cone: the stage shown is what the car does
     }
     // The field's width: rung 2 and up. Below, the car has no field (10.1, 10.2: proto.driver.cautionZone 0 by rung).
-    fieldFor() { return this.rung >= 2 ? this.P['proto.driver.cautionZone'] : 0; }
+    fieldFor() { // row 731: coned, wide enough to hold the cones; the cones then decide
+      const P = this.P; if (this.rung < 2) return 0;
+      if (!this.coned()) return P['proto.driver.cautionZone'];
+      return Math.max(Math.tan(P['perception.forwardConeAngle'] * Math.PI / 180) * (P['perception.forwardLength'] + P['body.radius']), P['perception.sideConeRange'] + P['body.radius']);
+    }
     // ----- rung 2: the dummy in its field, beside its path (in its path is the beam's: rung 1's brake)
     watchField(c, dt) {
       const P = this.P, b = this.body, hz = c.hz;
@@ -4075,6 +4128,7 @@
       const ca = Math.cos(c.h), sa = Math.sin(c.h), nx = c.x + ca * c.L / 2, ny = c.y + sa * c.L / 2;
       const fx = (b.x - nx) * ca + (b.y - ny) * sa, fy = -(b.x - nx) * sa + (b.y - ny) * ca, half = c.W / 2 + this.P['body.radius'] + this.fieldFor();
       if (fx < -c.L || fx > beam || Math.abs(fy) > half || this.occluded(c, nx, ny, b.x, b.y)) return c.v;
+      if (this.coned() && Math.abs(fy) > c.W / 2 + this.P['body.radius'] && !this.coneOf(c, b.x, b.y)) return c.v; // row 731: outside its cones and its lane
       return Math.min(c.v, this.envSpeed(Math.hypot(Math.max(0, fx), Math.max(0, Math.abs(fy) - c.W / 2))));
     }
     exitCars() {
@@ -4464,7 +4518,7 @@
 
 </script>
 <script>
-window.DUMMIES_SIM = {"proto.droneConeSeconds": 5, "traffic.ringLaneChange": 150, "traffic.ringEntryGap": 2, "traffic.signalDistance": 140, "vehicles.scale": 0.9, "proto.turnModel": 2, "proto.input.fourButtons": 1, "proto.combo": 1, "proto.abilities": 3, "proto.jump.runToClear": 1, "proto.bounce.newton": 1, "proto.recoilScale": 0.7, "abilities.maxLevel": 3, "abilities.wearCut": 0.25, "battery.secondsPerCharge": 1, "scoring.comboVariety": 0.5, "scoring.comboAirPause": 1, "scoring.coneLink": 1, "scoring.comboMax": 5, "input.dropHoldSeconds": 0.3, "vehicles.sedan.length": 50.4, "vehicles.sedan.width": 25.2, "vehicles.sedan.height": 19.8, "vehicles.van.height": 30.6, "vehicles.van.length": 61.2, "vehicles.van.width": 28.8, "vehicles.hatchback.length": 41.4, "vehicles.hatchback.width": 23.4, "vehicles.hatchback.height": 20.7, "vehicles.police.length": 52.2, "vehicles.police.width": 25.2, "vehicles.police.height": 20.7, "vehicles.bus.length": 86.4, "vehicles.bus.width": 30.6, "vehicles.bus.height": 43.2, "proto.bounce.maxThrow": 40, "world.deckDropGaps": 1, "world.deckFlightsMin": 1, "props.cone.minVisible": 0.9, "battery.dashJumpCost": 0, "abilities.hands.tapDrop": 1, "proto.batteryModel": 1, "world.dummyMonument": 1, "world.storyArt": 1, "world.monumentShroud": 1, "arcade.grades": 1, "ui.introScreen": 1, "ui.levelCard": 1, "world.droneDropIn": 1, "ui.storySplash": 1, "arcade.grade.healthStep": 0.25, "arcade.grade.densityStep": 0.2, "arcade.grade.max": 5, "highscore.tableSize": 10, "ui.intro.loopSeconds": 6.5, "ui.splash.cycleSeconds": 3.6, "proto.driver.coneSteepPass": 1, "proto.art.beamStraight": 1, "proto.art.brakeGlowStopped": 1, "proto.art.spentGrey": 1, "ui.cueKey.simple": 1, "ui.layerEdgeFix": 1, "proto.art.noticeFlashHz": 4, "proto.stopCue": 0, "audio.enabled": 1, "story.coneBaitSeconds": 6, "story.floorHold": 1, "ui.hud.bodyCeil": 1, "ui.spentTick": 1, "proto.contactGraceSeconds": 0.3, "proto.driver.dodgeFollowsCone": 1, "ui.lampsOnCar": 1, "ui.pause.quiet": 1, "ui.conesXray": 1, "arcade.modes": 1, "arcade.trial.writeOffs": 10, "arcade.endless.gradeWriteOffs": 3, "ui.exploreArrows": 1, "ui.coreOnChest": 1, "economy.price.ability.level1": 2, "economy.price.ability.level2": 4, "economy.price.ability.level3": 6, "economy.price.ability.level4": 8, "duel.enabled": 1, "duel.carsOnRoad": 1, "duel.redReturnSeconds": 2, "duel.startRung": 6, "duel.topRung": 7, "duel.standstillSpeed": 5, "duel.dashArrives": 3, "duel.jumpArrives": 3, "duel.conesArrives": 3, "duel.duckArrives": 3, "duel.planters": 1, "duel.lessonClipSeconds": 3, "duel.lessonHoldSeconds": 0.8, "duel.lessonFitSeconds": 2, "duel.runInLength": 200, "duel.memoryRadius": 50, "duel.memorySites": 3, "duel.blockSeconds": 10, "duel.searchRadius": 60, "duel.searchSeconds": 4, "proto.learningEnabled": 0, "proto.learn.standoffEnabled": 0, "perception.forwardLength": 720, "proto.driver.cautionZone": 180, "run.appearances.road": 1000, "run.quota.road": 1000000, "perception.sideNoticeSeconds": 0.6, "props.planter.height": 14, "body.duckHeight": 6, "movement.duckSpeedFactor": 0.35, "perception.duckNoticeFactor": 1.5, "perception.sensorHeight": 14, "perception.lidarHeight": 26, "perception.streetCameraHeight": 60, "perception.streetCameraRange": 180, "proto.health.standard": 500, "perception.streetCameraFov": 60, "perception.streetCameraPanArc": 60, "perception.streetCameraPanSeconds": 3, "perception.streetCameraPanHold": 1, "scoring.stealthUnseen": 3, "scoring.stealthLost": 2, "scoring.stealthSeen": 1, "ui.tip.holdSeconds": 7, "perception.sideCloseRange": 180, "perception.sideWaryRange": 360, "perception.sideAwareSpeed": 0.85, "perception.sideWarySpeed": 0.6, "perception.sideCloseSpeed": 0.35, "perception.sideAwareNoticeRate": 0.5, "perception.sideWaryNoticeRate": 1}; // Edit 108 (P10.8): registry edit100-2026-10-30; P6SIM, P7SIM, Prototype 9 flags, P10 defaults, then 10.8
+window.DUMMIES_SIM = {"proto.droneConeSeconds": 5, "traffic.ringLaneChange": 150, "traffic.ringEntryGap": 2, "traffic.signalDistance": 140, "vehicles.scale": 0.9, "proto.turnModel": 2, "proto.input.fourButtons": 1, "proto.combo": 1, "proto.abilities": 3, "proto.jump.runToClear": 1, "proto.bounce.newton": 1, "proto.recoilScale": 0.7, "abilities.maxLevel": 3, "abilities.wearCut": 0.25, "battery.secondsPerCharge": 1, "scoring.comboVariety": 0.5, "scoring.comboAirPause": 1, "scoring.coneLink": 1, "scoring.comboMax": 5, "input.dropHoldSeconds": 0.3, "vehicles.sedan.length": 50.4, "vehicles.sedan.width": 25.2, "vehicles.sedan.height": 19.8, "vehicles.van.height": 30.6, "vehicles.van.length": 61.2, "vehicles.van.width": 28.8, "vehicles.hatchback.length": 41.4, "vehicles.hatchback.width": 23.4, "vehicles.hatchback.height": 20.7, "vehicles.police.length": 52.2, "vehicles.police.width": 25.2, "vehicles.police.height": 20.7, "vehicles.bus.length": 86.4, "vehicles.bus.width": 30.6, "vehicles.bus.height": 43.2, "proto.bounce.maxThrow": 40, "world.deckDropGaps": 1, "world.deckFlightsMin": 1, "props.cone.minVisible": 0.9, "battery.dashJumpCost": 0, "abilities.hands.tapDrop": 1, "proto.batteryModel": 1, "world.dummyMonument": 1, "world.storyArt": 1, "world.monumentShroud": 1, "arcade.grades": 1, "ui.introScreen": 1, "ui.levelCard": 1, "world.droneDropIn": 1, "ui.storySplash": 1, "arcade.grade.healthStep": 0.25, "arcade.grade.densityStep": 0.2, "arcade.grade.max": 5, "highscore.tableSize": 10, "ui.intro.loopSeconds": 6.5, "ui.splash.cycleSeconds": 3.6, "proto.driver.coneSteepPass": 1, "proto.art.beamStraight": 1, "proto.art.brakeGlowStopped": 1, "proto.art.spentGrey": 1, "ui.cueKey.simple": 1, "ui.layerEdgeFix": 1, "proto.art.noticeFlashHz": 4, "proto.stopCue": 0, "audio.enabled": 1, "story.coneBaitSeconds": 6, "story.floorHold": 1, "ui.hud.bodyCeil": 1, "ui.spentTick": 1, "proto.contactGraceSeconds": 0.3, "proto.driver.dodgeFollowsCone": 1, "ui.lampsOnCar": 1, "ui.pause.quiet": 1, "ui.conesXray": 1, "arcade.modes": 1, "arcade.trial.writeOffs": 10, "arcade.endless.gradeWriteOffs": 3, "ui.exploreArrows": 1, "ui.coreOnChest": 1, "economy.price.ability.level1": 2, "economy.price.ability.level2": 4, "economy.price.ability.level3": 6, "economy.price.ability.level4": 8, "duel.enabled": 1, "duel.carsOnRoad": 1, "duel.redReturnSeconds": 2, "duel.startRung": 6, "duel.topRung": 7, "duel.standstillSpeed": 5, "duel.dashArrives": 3, "duel.jumpArrives": 3, "duel.conesArrives": 3, "duel.duckArrives": 3, "duel.planters": 1, "duel.lessonClipSeconds": 3, "duel.lessonHoldSeconds": 0.8, "duel.lessonFitSeconds": 2, "duel.runInLength": 200, "duel.memoryRadius": 50, "duel.memorySites": 3, "duel.blockSeconds": 10, "duel.searchRadius": 60, "duel.searchSeconds": 4, "proto.learningEnabled": 0, "proto.learn.standoffEnabled": 0, "perception.forwardLength": 720, "proto.driver.cautionZone": 180, "run.appearances.road": 1000, "run.quota.road": 1000000, "perception.sideNoticeSeconds": 0.6, "props.planter.height": 14, "body.duckHeight": 6, "movement.duckSpeedFactor": 0.35, "perception.duckNoticeFactor": 1.5, "perception.sensorHeight": 14, "perception.lidarHeight": 26, "perception.streetCameraHeight": 60, "perception.streetCameraRange": 180, "proto.health.standard": 500, "perception.streetCameraFov": 60, "perception.streetCameraPanArc": 60, "perception.streetCameraPanSeconds": 3, "perception.streetCameraPanHold": 1, "scoring.stealthUnseen": 3, "scoring.stealthLost": 2, "scoring.stealthSeen": 1, "ui.tip.holdSeconds": 7, "perception.sideCloseRange": 180, "perception.sideWaryRange": 360, "perception.sideAwareSpeed": 0.85, "perception.sideWarySpeed": 0.6, "perception.sideCloseSpeed": 0.35, "perception.sideAwareNoticeRate": 0.5, "perception.sideWaryNoticeRate": 1, "perception.forwardConeAngle": 20, "perception.sideConeAxis": 60, "perception.sideConeAngle": 45, "perception.sideConeRange": 220, "perception.forwardConeSensitivity": 1, "perception.sideConeSensitivity": 0.5, "ui.lungeGuide": 1}; // Edit 108 (P10.8): registry edit100-2026-10-30; P6SIM, P7SIM, Prototype 9 flags, P10 defaults, then 10.8
 window.DUMMIES_P10_STAGE = {"id": "10.8", "title": "THE SEARCH", "edit": 108};
 </script>
 <script>
@@ -4504,6 +4558,7 @@ window.DUMMIES_P10_STAGE = {"id": "10.8", "title": "THE SEARCH", "edit": 108};
   // Row 729: the test road's save file: one record in this browser for every Prototype 10 page, holding the field notes
   // already shown. Without storage it lasts the visit. N on the pause screen starts a new save file.
   const SAVE_KEY = 'dummies.p10.save'; let memSave = null, tip = null, saveNote = 0;
+  let lastCmd = { mx: 0, my: 0 }; // row 732: the input the lunge guide aims by
   function readSave() { let v = memSave; try { const raw = localStorage.getItem(SAVE_KEY); if (raw != null) v = JSON.parse(raw); } catch (e) { /* storage off */ } return v && v.v === 1 && v.tips ? v : { v: 1, tips: {} }; }
   function writeSave(v) { v.saved = Date.now(); memSave = v; try { localStorage.setItem(SAVE_KEY, JSON.stringify(v)); } catch (e) { /* storage off: it lasts this visit */ } }
   function tipSeen(id) { return !!readSave().tips[id]; }
@@ -4563,7 +4618,7 @@ window.DUMMIES_P10_STAGE = {"id": "10.8", "title": "THE SEARCH", "edit": 108};
       if (lessonT >= CLIP + HOLD + FIT) { lessonT = null; clip = null; s.continueLesson(); }
       return;
     }
-    const e0 = s.events.length; s.step(command());
+    const e0 = s.events.length; lastCmd = command(); s.step(lastCmd);
     record();
     for (const e of s.events.slice(e0)) {
       if (['impact', 'writeoff', 'admit', 'lunge', 'honk', 'lesson-due', 'lesson', 'learned', 'first-brake', 'first-side', 'first-cover', 'first-item', 'duck', 'stand', 'part-dispatch', 'gift', 'left', 'jump', 'raised', 'step-down', 'pickup', 'drop', 'drone-dispatch', 'drone-pickup', 'crash', 'spawn-slow', 'block-lift', 'block-drop', 'search', 'search-found', 'search-end'].includes(e.type) || (e.type === 'touch' && e.standstill)) log.push(e);
@@ -4752,6 +4807,7 @@ window.DUMMIES_P10_STAGE = {"id": "10.8", "title": "THE SEARCH", "edit": 108};
     const P = s.P, br = P['body.radius'], ca = Math.cos(c.h), sa = Math.sin(c.h), nx = c.x + ca * c.L / 2, ny = c.y + sa * c.L / 2;
     ctx.save(); ctx.translate(nx, ny); ctx.rotate(c.h);
     const half = c.W / 2 + br + s.fieldFor(), near = !!c.noticed; // the field acts from rung 2 (D103: draw what acts)
+    if (s.coned && s.coned()) { drawCones(c, near); ctx.restore(); return; } // row 731: three cones, not a rectangle
     rect(-c.L - br, -half, c.fwdLen + c.L + 2 * br, 2 * half, near ? C.fieldHot : C.field);
     rect(0, -(c.W / 2 + br), c.fwdLen, c.W + 2 * br, (c.hz && c.hz.inPath) || (c.det && c.det.fwd) ? C.beamHot : C.beam);
     if (c.red && s.sideStaged && s.sideStaged()) { // row 730: the field's bands, rings from the nose: CLOSE, WARY, AWARE beyond; the dummy's band lit
@@ -4766,6 +4822,35 @@ window.DUMMIES_P10_STAGE = {"id": "10.8", "title": "THE SEARCH", "edit": 108};
         ctx.fill('evenodd'); ctx.globalAlpha = 1; }
       ctx.restore();
     }
+    ctx.restore();
+  }
+  // Row 731: the field as three cones, in the nose's frame. The forward cone from the nose, brighter (more sensitive); the side
+  // cones from the car's centre, fainter. Rings at perception.sideCloseRange and perception.sideWaryRange inside each; the
+  // dummy's cone and band lit in its stage's colour.
+  function drawCones(c, near) {
+    const P = s.P, br = P['body.radius'], D = Math.PI / 180, A = P['perception.forwardConeAngle'] * D, ax = P['perception.sideConeAxis'] * D, aw = P['perception.sideConeAngle'] * D;
+    const Rf = c.fwdLen + br, Rs = P['perception.sideConeRange'] + br, cx = -c.L / 2, rC = P['perception.sideCloseRange'], rW = P['perception.sideWaryRange'];
+    const lk = (s.coneLook ? s.coneLook(c) : 0) * D, cones = [{ k: 'forward', ox: 0, a0: lk - A, a1: lk + A, R: Rf, sens: P['perception.forwardConeSensitivity'] }, { k: 'side', ox: cx, a0: ax - aw, a1: ax + aw, R: Rs, sens: P['perception.sideConeSensitivity'] }, { k: 'side', ox: cx, a0: -ax - aw, a1: -ax + aw, R: Rs, sens: P['perception.sideConeSensitivity'] }];
+    const wedge = (q) => { ctx.beginPath(); ctx.moveTo(q.ox, 0); ctx.arc(q.ox, 0, q.R, q.a0, q.a1); ctx.closePath(); };
+    for (const q of cones) { const k = q.sens == null ? 1 : q.sens; wedge(q); ctx.fillStyle = near ? `rgba(255,212,0,${(0.05 + 0.13 * k).toFixed(3)})` : `rgba(127,168,188,${(0.02 + 0.18 * k).toFixed(3)})`; ctx.fill(); // brighter = more sensitive
+      ctx.strokeStyle = `rgba(255,255,255,${(0.1 + 0.3 * k).toFixed(3)})`; ctx.lineWidth = 1; ctx.setLineDash([4, 6]); ctx.stroke();
+      ctx.save(); wedge(q); ctx.clip(); for (const r of [rC * q.sens, rW * q.sens]) if (r < q.R) { ctx.beginPath(); ctx.arc(q.ox, 0, r, 0, TAU); ctx.stroke(); } ctx.restore(); ctx.setLineDash([]); } // the stage rings, nearer in a duller cone
+    rect(0, -(c.W / 2 + br), c.fwdLen, c.W + 2 * br, (c.hz && c.hz.inPath) || (c.det && c.det.fwd) ? C.beamHot : C.beam); // the beam: the lane ahead
+    const st = c.red && s.sideStage ? s.sideStage(c) : 0, hz = c.hz;
+    if (st >= 1 && hz && hz.cone) { const b = s.body, ly = -Math.sin(c.h) * (b.x - c.x) + Math.cos(c.h) * (b.y - c.y), q = hz.cone === 'forward' ? cones[0] : ly >= 0 ? cones[1] : cones[2], k = q.sens, d = hz.dist, band = d <= rC * k ? [0, rC * k] : d <= rW * k ? [rC * k, rW * k] : [rW * k, 1e4];
+      ctx.save(); wedge(q); ctx.clip(); ctx.globalAlpha = 0.18; ctx.fillStyle = AWARE_C[st]; ctx.beginPath(); ctx.arc(q.ox, 0, Math.min(band[1], q.R), 0, TAU); if (band[0] > 0) { ctx.moveTo(q.ox + band[0], 0); ctx.arc(q.ox, 0, band[0], 0, TAU, true); } ctx.fill('evenodd'); ctx.restore(); }
+  }
+  // Row 732: the lunge guide. Where a dash now would land (its reach, stopped by statics), and whether a car will be there:
+  // yellow when the dash meets a red car on the predicted path, white when it misses, faint while the dash is not ready.
+  function drawLungeGuide() {
+    if (!s.P['ui.lungeGuide'] || !s.lungePreview || s.phase !== 'play') return;
+    const b = s.body; if (!b.alive || b.mode === 'lunge' || b.mode === 'recover' || b.lifted || !s.dashFitted()) return;
+    if (!s.onRoad().some((c) => Math.hypot(c.x - b.x, c.y - b.y) < 2.6 * s.reach())) return; // only when a car is near enough to matter
+    const g = s.lungePreview(lastCmd.mx, lastCmd.my); if (!g) return;
+    const hot = !!(g.hit && g.hit.red), col = !g.ready ? 'rgba(255,255,255,0.22)' : hot ? C.dummy : 'rgba(255,255,255,0.65)', ex = hot ? g.hit.x : g.x1, ey = hot ? g.hit.y : g.y1, r = s.P['body.radius'];
+    ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.setLineDash([2, 5]); ctx.beginPath(); ctx.moveTo(g.x0, g.y0); ctx.lineTo(ex, ey); ctx.stroke(); ctx.setLineDash([]);
+    ctx.lineWidth = hot ? 3 : 2; ctx.beginPath(); ctx.arc(ex, ey, r, 0, TAU); ctx.stroke(); ctx.beginPath(); ctx.moveTo(ex - r - 5, ey); ctx.lineTo(ex - r + 3, ey); ctx.moveTo(ex + r - 3, ey); ctx.lineTo(ex + r + 5, ey); ctx.moveTo(ex, ey - r - 5); ctx.lineTo(ex, ey - r + 3); ctx.moveTo(ex, ey + r - 3); ctx.lineTo(ex, ey + r + 5); ctx.stroke();
+    if (hot && g.ready) { ctx.globalAlpha = 0.25; ctx.fillStyle = C.dummy; ctx.beginPath(); ctx.arc(ex, ey, r, 0, TAU); ctx.fill(); ctx.globalAlpha = 1; text('HIT', ex + r + 9, ey + 4, 11, C.dummy, 'left'); }
     ctx.restore();
   }
   // Row 730: the car's awareness, in stages: AWARE, SLOWING, CRAWLING, then noticed (it stops short)
@@ -4947,6 +5032,7 @@ window.DUMMIES_P10_STAGE = {"id": "10.8", "title": "THE SEARCH", "edit": 108};
     if (showZones) for (const c of cars) drawZones(c);
     for (const c of cars) drawCar(c);
     drawCameras();
+    drawLungeGuide();
     drawDummy(s.body);
     for (const c of s.onRoad()) if (c.red) drawOffscreen(c);
     for (const dr of s.drones) { const cn = s.cones.find((q) => q.id === dr.cone); if (cn && cn.state === 'drone') drawCone(dr.x, dr.y + 12); drawDrone(dr.x, dr.y, false); } // FARSIGHT fetches a cone left in a lane (proto.droneConeSeconds)

@@ -34,6 +34,7 @@
   // Row 729: the test road's save file: one record in this browser for every Prototype 10 page, holding the field notes
   // already shown. Without storage it lasts the visit. N on the pause screen starts a new save file.
   const SAVE_KEY = 'dummies.p10.save'; let memSave = null, tip = null, saveNote = 0;
+  let lastCmd = { mx: 0, my: 0 }; // row 732: the input the lunge guide aims by
   function readSave() { let v = memSave; try { const raw = localStorage.getItem(SAVE_KEY); if (raw != null) v = JSON.parse(raw); } catch (e) { /* storage off */ } return v && v.v === 1 && v.tips ? v : { v: 1, tips: {} }; }
   function writeSave(v) { v.saved = Date.now(); memSave = v; try { localStorage.setItem(SAVE_KEY, JSON.stringify(v)); } catch (e) { /* storage off: it lasts this visit */ } }
   function tipSeen(id) { return !!readSave().tips[id]; }
@@ -93,7 +94,7 @@
       if (lessonT >= CLIP + HOLD + FIT) { lessonT = null; clip = null; s.continueLesson(); }
       return;
     }
-    const e0 = s.events.length; s.step(command());
+    const e0 = s.events.length; lastCmd = command(); s.step(lastCmd);
     record();
     for (const e of s.events.slice(e0)) {
       if (['impact', 'writeoff', 'admit', 'lunge', 'honk', 'lesson-due', 'lesson', 'learned', 'first-brake', 'first-side', 'first-cover', 'first-item', 'duck', 'stand', 'part-dispatch', 'gift', 'left', 'jump', 'raised', 'step-down', 'pickup', 'drop', 'drone-dispatch', 'drone-pickup', 'crash', 'spawn-slow', 'block-lift', 'block-drop', 'search', 'search-found', 'search-end'].includes(e.type) || (e.type === 'touch' && e.standstill)) log.push(e);
@@ -282,6 +283,7 @@
     const P = s.P, br = P['body.radius'], ca = Math.cos(c.h), sa = Math.sin(c.h), nx = c.x + ca * c.L / 2, ny = c.y + sa * c.L / 2;
     ctx.save(); ctx.translate(nx, ny); ctx.rotate(c.h);
     const half = c.W / 2 + br + s.fieldFor(), near = !!c.noticed; // the field acts from rung 2 (D103: draw what acts)
+    if (s.coned && s.coned()) { drawCones(c, near); ctx.restore(); return; } // row 731: three cones, not a rectangle
     rect(-c.L - br, -half, c.fwdLen + c.L + 2 * br, 2 * half, near ? C.fieldHot : C.field);
     rect(0, -(c.W / 2 + br), c.fwdLen, c.W + 2 * br, (c.hz && c.hz.inPath) || (c.det && c.det.fwd) ? C.beamHot : C.beam);
     if (c.red && s.sideStaged && s.sideStaged()) { // row 730: the field's bands, rings from the nose: CLOSE, WARY, AWARE beyond; the dummy's band lit
@@ -296,6 +298,35 @@
         ctx.fill('evenodd'); ctx.globalAlpha = 1; }
       ctx.restore();
     }
+    ctx.restore();
+  }
+  // Row 731: the field as three cones, in the nose's frame. The forward cone from the nose, brighter (more sensitive); the side
+  // cones from the car's centre, fainter. Rings at perception.sideCloseRange and perception.sideWaryRange inside each; the
+  // dummy's cone and band lit in its stage's colour.
+  function drawCones(c, near) {
+    const P = s.P, br = P['body.radius'], D = Math.PI / 180, A = P['perception.forwardConeAngle'] * D, ax = P['perception.sideConeAxis'] * D, aw = P['perception.sideConeAngle'] * D;
+    const Rf = c.fwdLen + br, Rs = P['perception.sideConeRange'] + br, cx = -c.L / 2, rC = P['perception.sideCloseRange'], rW = P['perception.sideWaryRange'];
+    const lk = (s.coneLook ? s.coneLook(c) : 0) * D, cones = [{ k: 'forward', ox: 0, a0: lk - A, a1: lk + A, R: Rf, sens: P['perception.forwardConeSensitivity'] }, { k: 'side', ox: cx, a0: ax - aw, a1: ax + aw, R: Rs, sens: P['perception.sideConeSensitivity'] }, { k: 'side', ox: cx, a0: -ax - aw, a1: -ax + aw, R: Rs, sens: P['perception.sideConeSensitivity'] }];
+    const wedge = (q) => { ctx.beginPath(); ctx.moveTo(q.ox, 0); ctx.arc(q.ox, 0, q.R, q.a0, q.a1); ctx.closePath(); };
+    for (const q of cones) { const k = q.sens == null ? 1 : q.sens; wedge(q); ctx.fillStyle = near ? `rgba(255,212,0,${(0.05 + 0.13 * k).toFixed(3)})` : `rgba(127,168,188,${(0.02 + 0.18 * k).toFixed(3)})`; ctx.fill(); // brighter = more sensitive
+      ctx.strokeStyle = `rgba(255,255,255,${(0.1 + 0.3 * k).toFixed(3)})`; ctx.lineWidth = 1; ctx.setLineDash([4, 6]); ctx.stroke();
+      ctx.save(); wedge(q); ctx.clip(); for (const r of [rC * q.sens, rW * q.sens]) if (r < q.R) { ctx.beginPath(); ctx.arc(q.ox, 0, r, 0, TAU); ctx.stroke(); } ctx.restore(); ctx.setLineDash([]); } // the stage rings, nearer in a duller cone
+    rect(0, -(c.W / 2 + br), c.fwdLen, c.W + 2 * br, (c.hz && c.hz.inPath) || (c.det && c.det.fwd) ? C.beamHot : C.beam); // the beam: the lane ahead
+    const st = c.red && s.sideStage ? s.sideStage(c) : 0, hz = c.hz;
+    if (st >= 1 && hz && hz.cone) { const b = s.body, ly = -Math.sin(c.h) * (b.x - c.x) + Math.cos(c.h) * (b.y - c.y), q = hz.cone === 'forward' ? cones[0] : ly >= 0 ? cones[1] : cones[2], k = q.sens, d = hz.dist, band = d <= rC * k ? [0, rC * k] : d <= rW * k ? [rC * k, rW * k] : [rW * k, 1e4];
+      ctx.save(); wedge(q); ctx.clip(); ctx.globalAlpha = 0.18; ctx.fillStyle = AWARE_C[st]; ctx.beginPath(); ctx.arc(q.ox, 0, Math.min(band[1], q.R), 0, TAU); if (band[0] > 0) { ctx.moveTo(q.ox + band[0], 0); ctx.arc(q.ox, 0, band[0], 0, TAU, true); } ctx.fill('evenodd'); ctx.restore(); }
+  }
+  // Row 732: the lunge guide. Where a dash now would land (its reach, stopped by statics), and whether a car will be there:
+  // yellow when the dash meets a red car on the predicted path, white when it misses, faint while the dash is not ready.
+  function drawLungeGuide() {
+    if (!s.P['ui.lungeGuide'] || !s.lungePreview || s.phase !== 'play') return;
+    const b = s.body; if (!b.alive || b.mode === 'lunge' || b.mode === 'recover' || b.lifted || !s.dashFitted()) return;
+    if (!s.onRoad().some((c) => Math.hypot(c.x - b.x, c.y - b.y) < 2.6 * s.reach())) return; // only when a car is near enough to matter
+    const g = s.lungePreview(lastCmd.mx, lastCmd.my); if (!g) return;
+    const hot = !!(g.hit && g.hit.red), col = !g.ready ? 'rgba(255,255,255,0.22)' : hot ? C.dummy : 'rgba(255,255,255,0.65)', ex = hot ? g.hit.x : g.x1, ey = hot ? g.hit.y : g.y1, r = s.P['body.radius'];
+    ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.setLineDash([2, 5]); ctx.beginPath(); ctx.moveTo(g.x0, g.y0); ctx.lineTo(ex, ey); ctx.stroke(); ctx.setLineDash([]);
+    ctx.lineWidth = hot ? 3 : 2; ctx.beginPath(); ctx.arc(ex, ey, r, 0, TAU); ctx.stroke(); ctx.beginPath(); ctx.moveTo(ex - r - 5, ey); ctx.lineTo(ex - r + 3, ey); ctx.moveTo(ex + r - 3, ey); ctx.lineTo(ex + r + 5, ey); ctx.moveTo(ex, ey - r - 5); ctx.lineTo(ex, ey - r + 3); ctx.moveTo(ex, ey + r - 3); ctx.lineTo(ex, ey + r + 5); ctx.stroke();
+    if (hot && g.ready) { ctx.globalAlpha = 0.25; ctx.fillStyle = C.dummy; ctx.beginPath(); ctx.arc(ex, ey, r, 0, TAU); ctx.fill(); ctx.globalAlpha = 1; text('HIT', ex + r + 9, ey + 4, 11, C.dummy, 'left'); }
     ctx.restore();
   }
   // Row 730: the car's awareness, in stages: AWARE, SLOWING, CRAWLING, then noticed (it stops short)
@@ -477,6 +508,7 @@
     if (showZones) for (const c of cars) drawZones(c);
     for (const c of cars) drawCar(c);
     drawCameras();
+    drawLungeGuide();
     drawDummy(s.body);
     for (const c of s.onRoad()) if (c.red) drawOffscreen(c);
     for (const dr of s.drones) { const cn = s.cones.find((q) => q.id === dr.cone); if (cn && cn.state === 'drone') drawCone(dr.x, dr.y + 12); drawDrone(dr.x, dr.y, false); } // FARSIGHT fetches a cone left in a lane (proto.droneConeSeconds)

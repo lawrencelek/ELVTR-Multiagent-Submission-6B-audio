@@ -37,6 +37,8 @@ MODE_DESC = {'lesson': "from the build's start (10.2: rung 0, on foot; 10.3: run
              'trained': "at the top rung from the start, every part its rungs bring fitted: the rung's own table"}
 STAGE = str(d.get('stage', '10.1'))
 RARE, TIMED = [], []
+CONED = ((d.get('p10') or {}).get('perception.forwardConeAngle') or 0) > 0  # row 731: the field as three cones; the duller sides leave rare side strikes
+SIDE_RARE = 0.21  # hits a minute: a rare side strike, well under an open way in (OPEN_RATE)
 if STAGE >= '10.8':  # rung 7: seen-then-hidden closes; hiding before it sees you, or crawling away from the ghost, stays
     CLOSED, OPEN_FOOT, OPEN_DASH = ['stand', 'standSouth', 'standOff', 'charge', 'kerb', 'walkin', 'corner', 'plinth', 'standplanter', 'peek'], ['lurk', 'flankOpen'], ['peekmove', 'roam'] + (['lure'] if 'lure' in POL else [])
     RARE = ['conebait']  # row 723: the cameras' cones (perception.streetCameraFov) leave blind sides; rare, not closed
@@ -241,7 +243,7 @@ if top == 2:
     checks += [('A hit at rung 1 (any but a tail bump) teaches rung 2', all(r.get('lesson') for r in hit1), f"{sum(1 for r in hit1 if r.get('lesson'))} of {len(hit1)} runs with such a hit had a lesson")]
 if top >= 1:
     checks += [
-        (f'Rung {top} closes: ' + ', '.join(CLOSED) + ' score 0', all(r['hits'] == 0 for r in tr if r['policy'] in CLOSED), ', '.join(f"{p} {sum(r['hits'] for r in tr if r['policy'] == p)}" for p in CLOSED)),
+        (f'Rung {top} closes: ' + ', '.join(CLOSED) + (f' score 0, or at most a rare side strike (under {SIDE_RARE} a minute; the duller side cones, row 731)' if CONED else ' score 0'), all(sum(r['hits'] for r in tr if r['policy'] == p) <= SIDE_RARE * sum(r['simSeconds'] for r in tr if r['policy'] == p) / 60 for p in CLOSED) if CONED else all(r['hits'] == 0 for r in tr if r['policy'] in CLOSED), ', '.join(f"{p} {sum(r['hits'] for r in tr if r['policy'] == p)}" for p in CLOSED)),
     ] + ([(f'The cameras\' pan opens a timed window behind the barrier: ' + ', '.join(TIMED) + ' lands (row 724)', all(m([r['hitsPerMin'] for r in tr if r['policy'] == p]) > 0 for p in TIMED), ', '.join(f"{p} {m([r['hitsPerMin'] for r in tr if r['policy'] == p])}/min" for p in TIMED))] if TIMED else []) + ([(f'The cameras\' blind sides leave rare edges: ' + ', '.join(RARE) + ' under 0.2 a minute (row 723)', all(m([r['hitsPerMin'] for r in tr if r['policy'] == p]) < 0.2 for p in RARE), ', '.join(f"{p} {m([r['hitsPerMin'] for r in tr if r['policy'] == p])}/min" for p in RARE))] if RARE else []) + [
         ('It stops beyond dash reach for a dummy standing ahead', all(r['cars']['minStopGap'] >= r['cars']['reach'] for r in stops), f"closest stop {min(r['cars']['minStopGap'] for r in stops)} (reach {tr[0]['cars']['reach']:.0f})" if stops else 'no stops'),
         ('An opening without the new part still lands (pillar 1, D97)', all(r['hits'] > 0 for r in tr if r['policy'] in OPEN_FOOT), ', '.join(f"{p} {m([r['hitsPerMin'] for r in tr if r['policy'] == p])}/min" for p in OPEN_FOOT)),
@@ -315,9 +317,9 @@ if top == 7:
         ('Only a hit from cover by a dummy it had just seen teaches rung 7', all(r.get('lesson') for r in ls) and not any(r.get('lesson') for r in other), f"lessons: {sum(1 for r in ls if r.get('lesson'))} of {len(ls)} runs with such a hit; {sum(1 for r in other if r.get('lesson'))} of {len(other)} runs with only other hits"),
         ('A new behaviour: it searches the ghost (none at rung 6)', sum(r.get('searches', 0) for r in tr) > 0 and sum(r.get('searchFound', 0) for r in tr) > 0, f"trained: {sum(r.get('searches', 0) for r in tr)} searches; {sum(r.get('searchFound', 0) for r in tr)} found the dummy near the ghost; {sum(r.get('searchEnd', 0) for r in tr)} ended"),
         ('Rung 7 closes seen-then-hidden: peek at most one hit in 15 minutes', sum(r['hits'] for r in pk) <= 1, f"peek {sum(r['hits'] for r in pk)} hits; peekmove, crawling beyond duel.searchRadius, {sum(r['hits'] for r in pm)}"),
-        ('No hit from a spot it remembered at the time', sum(r.get('rememberedHits', 0) for r in tr) == 0, f"trained: {sum(r.get('rememberedHits', 0) for r in tr)} of {sum(r['hits'] for r in tr)} hits"),
+        ('No hit from a spot it remembered at the time' + (' (cones: at most one in 15 minutes, row 731)' if CONED else ''), sum(r.get('rememberedHits', 0) for r in tr) <= (1 if CONED else 0), f"trained: {sum(r.get('rememberedHits', 0) for r in tr)} of {sum(r['hits'] for r in tr)} hits"),
         ('No car waits for the dummy past duel.blockSeconds: FARSIGHT lifts it aside (row 715)', all(r['cars'].get('blocked20s', 0) == 0 for r in allr), f"waits over 20 s: {sum(r['cars'].get('blocked20s', 0) for r in allr)}; lifts {sum(r.get('lifts', 0) for r in allr)}"),
-        ('Rung 7 keeps cover closed: ' + ', '.join(COVER) + ': at most one hit in 15 minutes each', all(sum(r['hits'] for r in tr if r['policy'] == p) <= 1 for p in COVER), ', '.join(f"{p} {sum(r['hits'] for r in tr if r['policy'] == p)}" for p in COVER)),
+        ('Rung 7 keeps cover closed: ' + ', '.join(COVER) + (f': at most a rare side strike each (under {SIDE_RARE} a minute; the duller side cones, row 731)' if CONED else ': at most one hit in 15 minutes each'), all(sum(r['hits'] for r in tr if r['policy'] == p) <= (SIDE_RARE * 15 if CONED else 1) for p in COVER), ', '.join(f"{p} {sum(r['hits'] for r in tr if r['policy'] == p)}" for p in COVER)),
     ]
 if top == 2 and d['p10'].get('duel.jumpArrives') == 2:
     leg = [r for r in runs if r['mode'] == 'lesson' and r.get('firstSideAt') is not None]
@@ -339,7 +341,7 @@ if STAGE >= '10.8':
     hits_of = lambda p: sum(r['hits'] for r in runs if r['policy'] == p)
     if any(r.get('grades') is not None for r in runs):
         checks += [('Stealth grade: the sprint from past the field (lurk) grades UNSEEN (row 725)', hits_of('lurk') > 0 and gr('lurk', 'unseen') == hits_of('lurk'), f"lurk: {gr('lurk', 'unseen')} of {hits_of('lurk')} UNSEEN"),
-                   ('Stealth grade: seen, then hidden (peek) grades LOST (row 725)', hits_of('peek') > 0 and gr('peek', 'lost') == hits_of('peek'), f"peek: {gr('peek', 'lost')} of {hits_of('peek')} LOST")]
+                   ('Stealth grade: seen, then hidden (peek) grades LOST (row 725)' + ('; with cones, a side strike on a car met on the way in may grade SEEN, never UNSEEN (row 731)' if CONED else ''), hits_of('peek') > 0 and (gr('peek', 'unseen') == 0 and 2 * gr('peek', 'lost') >= hits_of('peek') if CONED else gr('peek', 'lost') == hits_of('peek')), f"peek: {gr('peek', 'lost')} of {hits_of('peek')} LOST, {gr('peek', 'seen')} SEEN, {gr('peek', 'unseen')} UNSEEN")]
     if 'lure' in POL:
         lt = [r for r in tr if r['policy'] == 'lure']; st, lh = sum(r['lureStops'] for r in lt), sum(r['lureHits'] for r in lt)
         se = [r for r in runs if r.get('stopErrs')]; ns, n10 = sum(r['stopErrs'] for r in se), sum(r['stopErrWithin10'] for r in se)

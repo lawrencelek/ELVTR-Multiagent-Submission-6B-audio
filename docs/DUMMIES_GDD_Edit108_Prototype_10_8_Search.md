@@ -12,11 +12,13 @@
 
 **Amended 6 November (row 730):** the side field in stages: the nearer the dummy, the slower the car, and it shows its stage (§10.8.9).
 
+**Amended 6 November (rows 731–732):** the field as three cones, the forward one more sensitive (§10.8.10); the lunge guide (§10.8.11).
+
 - **Build:** `prototypes/p10/dummies_p10_8.html` (`python3 prototypes/p10/build.py`).
 - **Playtest pages:** `index.html`, one per test. 10.1–10.7 are frozen; 10.7 at md5 `54328d01…`.
-- **Tests:** `node prototypes/p10/test_p10.js --page` 62/62. Prototype 9 rebuild md5 `be163e7d014344e062965986b3da5786`. 8.4 md5 `9f5549201d88891f9f0b22c461602909`. Sound freeze: 211 items, 0 changed.
+- **Tests:** `node prototypes/p10/test_p10.js --page` 63/63. Prototype 9 rebuild md5 `be163e7d014344e062965986b3da5786`. 8.4 md5 `9f5549201d88891f9f0b22c461602909`. Sound freeze: 211 items, 0 changed.
 - **Probes:** `node qa/testroad.js --stage 10.8 --out qa/baseline/p10_8.json`; report `qa/baseline/p10_8.md`, 24/24 checks. 10.7 reruns identical to its baseline, new fields aside.
-- **Decision log:** rows 717–730. D123, D125, D126 resolved. Open D119, D120, D121, D122, D124, D127.
+- **Decision log:** rows 717–732. D123, D125, D126 resolved. Open D119, D120, D121, D122, D124, D127, D128, D129.
 
 ## Request
 
@@ -167,6 +169,52 @@
 - **A dummy stepping out nearer:** SLOWING or CRAWLING first, then STOPPING.
 - **Drawn:** dashed rings at 180 and 360 from the nose, inside the field; the dummy's band lit in its stage's colour. Over the car: the glyph and pips, above its tag.
 - **Earlier stages:** `perception.sideCloseRange` 0, one caution speed, one notice time.
+- **Row 731:** the stages now run inside three cones (§10.8.10). Distances are from each cone's apex.
+
+### 10.8.10 The field as three cones (row 731)
+
+- **Forward cone:** from the nose, `perception.forwardConeAngle` 20° either side of the heading. Reaches `perception.forwardLength` 720. Sensitivity `perception.forwardConeSensitivity` 1.
+- **Side cones:** from the car's centre, `perception.sideConeAxis` 60° ± `perception.sideConeAngle` 45°: 15° to 105° off the heading. Reach `perception.sideConeRange` 220. Sensitivity `perception.sideConeSensitivity` 0.5.
+- **Sensitivity scales the stages.** A dummy must come closer to a duller cone for each stage:
+
+| Stage | Forward cone (from the nose) | Side cone (from the centre) |
+|---|---|---|
+| 1 AWARE | Beyond 360 | Beyond 180 |
+| 2 SLOWING | Within `perception.sideWaryRange` 360 | Within 180 |
+| 3 CRAWLING | Within `perception.sideCloseRange` 180 | Within 90 |
+| Notice meter | Stage rate × 1 | Stage rate × 0.5 |
+
+- **Speeds stay per stage.** The stage shown is what the car does, in any cone.
+- **Blind:** behind the car (past 105°), and the wedges between cones.
+- **Past its cones, inside the rung's rectangle** (`proto.driver.cautionZone` 180), it still has the dummy:
+  - once noticed: it tracks what it detected;
+  - when a street camera sees it (rung 4);
+  - at a remembered spot (rung 6).
+  - These count at full sensitivity.
+- **Searching (rung 7):** the forward cone turns toward the ghost. It turns up to 105° (`perception.sideConeAxis` + `perception.sideConeAngle`).
+- **Drawn:** three wedges, brighter for the more sensitive; dashed stage rings in each; the dummy's cone and band lit.
+- **Tried and dropped:**
+  - Cones alone. The car lost a noticed dummy in the gap at its own stop: kerb 9, standplanter 9 hits in 15 minutes.
+  - Side range 300. The lurk spot falls inside; lurk grades SEEN.
+  - Forward 25°; side sensitivity 0.6 or 0.75. No fewer side strikes.
+- **Earlier stages:** `perception.forwardConeAngle` 0, the rectangle.
+
+### 10.8.11 The lunge guide (row 732)
+
+- **`ui.lungeGuide` 1:** a dotted line and a reticle show where a dash pressed now would land.
+- **Shown while a car is within 2.6 dash reaches.** Hidden mid-dash, recovering, lifted, or before Battery 1.
+- **Aim:** the input's direction (DIRECT, `proto.turnModel` 2); otherwise the facing.
+- **Reach:** `movement.lungeDistance`, worn by leg damage, times the ground's lunge multiplier. A solid stops it, touching. Low cover does not.
+- **Path:** the dash's profile: `movement.lungeFastDistanceFraction` 0.7 of the reach in `movement.lungeFastTimeFraction` ⅓ of `movement.lungeDuration` 0.3 s.
+- **Cars:** each moves straight on at its speed. Contact uses the sim's own test.
+
+| Reticle | Means |
+|---|---|
+| Yellow, "HIT", at the contact | The dash meets a red car |
+| White | It misses |
+| Faint | The dash is not ready: no charge, or recovering |
+
+- **Reverses GDD Edit 19 §4.2.8** ("current reach is never shown") on the test road.
 
 ## Build
 
@@ -184,9 +232,12 @@
 - Row 728: `gradeMultiplier`; the strike's points are its damage × it.
 - Row 729: `game_p10.js`: the save file (`dummies.p10.save`: `readSave`, `writeSave`, `newSave`), `showTip`, `drawTip`; N on the pause screen.
 - Row 730: `sideStaged`, `sideDist`, `sideStage`, `noticeRate`, `stageSpeed`; `cornerSpeed` sets each red car's caution speed; `watchField` fills the meter by stage. `game_p10.js`: the rings and lit band in `drawZones`; `drawAwareness`; the tag.
+- Row 731: `coned`, `coneOf`, `coneLook`, `coneSensitivity`; `assessBody` keeps the forward cone, then tracking, the link and memory, then the side cones; `fieldFor` holds the cones; `sideDist` over the cone's sensitivity. `game_p10.js`: `drawCones` in `drawZones`.
+- Row 732: `lungePreview`. `game_p10.js`: `drawLungeGuide`, fed the last input (`lastCmd`).
 - `build.py`: 10.8's stage; 10.7's page frozen.
 - `qa/testroad.js`: bots `peek` (stand in view until noticed; duck; spring) and `peekmove` (the same; crawl beyond the radius along the row first). Fields: searches, found, ended, hits after a lost sighting.
 - Rows 725–727: bot `lure`; fields grades, stealth points, lures taken, lured cars struck, stop-line misses. `qa/testroad_report.py`: the grade, lure and possibility-space sections and their checks.
+- Row 731: `qa/testroad_report.py` reads a coned field. Closed tricks may leave a rare side strike, under 0.21 a minute. Peek's hits may grade SEEN, never UNSEEN. One remembered-spot hit in 15 minutes is allowed.
 
 ## Measured (`qa/baseline/p10_8.md`)
 
@@ -293,16 +344,38 @@
 | The crawl, rung 7 | 111 (99 fixed 60°; 111 at 360°) | |
 | The lure, rung 7 | 68 | |
 
+**Row 731, the cones** (trained, 5 minutes × 3):
+
+- **Rare side strikes reopen**, on passing cars, mostly road B cars passing a dummy beside the junction:
+
+| Trick | Hits in 15 minutes | A minute |
+|---|---|---|
+| aim | 2 | 0.13 |
+| flank | 2 | 0.13 |
+| jump | 2 | 0.13 |
+| dashjump | 3 | 0.2 |
+| standplanter | 3 | 0.2 |
+
+- **Still closed:** stand, standSouth, standOff, charge, kerb, walkin, corner, plinth. Peek: 1.
+- **Open ways in, 6:** roaming 2.59 a minute, the lure 2.31, the crawl 1.89, flankOpen 1.2, lurk 0.6, the gap 0.47.
+- **Lurk** stays UNSEEN, 18 of 18. Its spot lies past the side cones' reach.
+- **Escalation:** the crawl lands in 8 of 10 minutes (decay 0.43); the lure 0.8.
+- **Report:** 24 of 24, with the coned thresholds above.
+
 ## Registry
 
 - **Added (17):** `duel.searchRadius`, `duel.searchSeconds`; `perception.streetCameraFov` (row 723; default 360); `perception.streetCameraPanArc` (default 0), `perception.streetCameraPanSeconds`, `perception.streetCameraPanHold` (row 724); `scoring.stealthUnseen`, `scoring.stealthLost`, `scoring.stealthSeen` (row 725; multipliers from row 728; default 0); `ui.tip.holdSeconds` (row 729); `perception.sideCloseRange`, `perception.sideWaryRange`, `perception.sideAwareSpeed`, `perception.sideWarySpeed`, `perception.sideCloseSpeed`, `perception.sideAwareNoticeRate`, `perception.sideWaryNoticeRate` (row 730; defaults off).
 - **Set by stage:** `duel.startRung` 6, `duel.topRung` 7, `duel.searchRadius` 60, `duel.searchSeconds` 4, `perception.streetCameraFov` 60, `perception.streetCameraPanArc` 60, `perception.streetCameraPanSeconds` 3, `perception.streetCameraPanHold` 1, `scoring.stealthUnseen` 3, `scoring.stealthLost` 2, `scoring.stealthSeen` 1, `ui.tip.holdSeconds` 7, `perception.sideCloseRange` 180, `perception.sideWaryRange` 360, `perception.sideAwareSpeed` 0.85, `perception.sideWarySpeed` 0.6, `perception.sideCloseSpeed` 0.35, `perception.sideAwareNoticeRate` 0.5, `perception.sideWaryNoticeRate` 1. 10.7's values otherwise.
-- **680 entries.** `registryVersion` unchanged (row 665).
+- **Added (7, rows 731–732):** `perception.forwardConeAngle` (default 0: the rectangle), `perception.sideConeAxis`, `perception.sideConeAngle`, `perception.sideConeRange`, `perception.forwardConeSensitivity`, `perception.sideConeSensitivity`; `ui.lungeGuide` (default 0).
+- **Set by stage (rows 731–732):** `perception.forwardConeAngle` 20, `perception.sideConeAxis` 60, `perception.sideConeAngle` 45, `perception.sideConeRange` 220, `perception.forwardConeSensitivity` 1, `perception.sideConeSensitivity` 0.5, `ui.lungeGuide` 1.
+- **687 entries.** `registryVersion` unchanged (row 665).
 
 ## Open
 
-- **Human pass (H6):** does the player read the ghost, and crawl away? Do the cones read? Does the player time the sweep? Does the grade pull play toward UNSEEN? Does the player use the lure?
+- **Human pass (H6):** does the player read the ghost, and crawl away? Do the cones read? Does the player time the sweep? Does the grade pull play toward UNSEEN? Does the player use the lure? Do the three field cones read, and does the player approach from the side? Does the lunge guide make the timing learnable?
 - **After the playtest:** does the stop line stay free, or become a part the dummy earns (row 729)?
+- **D128:** the cones' values. Duller sides reopen rare side strikes. Sides at 1 close them, and bring back the even field.
+- **D129:** the lunge guide: always on near a car, a part, or only while aiming?
 - **D127:** the side stages' values: ranges, speeds, notice rates. Does the player read AWARE before the car stops?
 - **D124:** the pan's values: 60° in 3 s, 1 s rests, the barrier's ends mirrored.
 - **D121:** the order from here. The road upgrade at 10.9, swerve cost at 10.10.

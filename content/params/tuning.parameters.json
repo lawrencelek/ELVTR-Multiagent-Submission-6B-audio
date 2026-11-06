@@ -14769,6 +14769,160 @@
    "integrationStatus": "prototype-p6-to-p10",
    "boundaryStatus": "proposed-adapter-contract-not-implemented",
    "purpose": "1: damage from the impulse of the impact (P1.3 impulseImpact: the dummy's strike, capped at proto.dummyStrikeSpeed, against the car's speed along the normal). 0: the closing-speed model (assess, with damage.zone.*)"
+  },
+  {
+   "id": "perception.forwardConeAngle",
+   "group": "Vehicles and traffic",
+   "owner": "Vehicles / Traffic",
+   "label": "Field: forward cone half-angle",
+   "description": "Rung 2 up: the driver's field is three cones, not a rectangle. The forward cone runs from the nose, this many degrees either side of the heading, out to perception.forwardLength. 0: the rectangle (10.3–10.7). 10.8 sets 20",
+   "unit": "degrees",
+   "type": "number",
+   "default": 0,
+   "status": "proposed",
+   "source": "GDD Edit 108 amendment (Prototype 10.8): DECISIONS row 731",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-tick",
+   "validation": {
+    "min": 0,
+    "max": 60
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "Rung 2 up: the driver's field is three cones, not a rectangle. The forward cone runs from the nose, this many degrees either side of the heading, out to perception.forwardLength. 0: the rectangle (10.3–10.7). 10.8 sets 20"
+  },
+  {
+   "id": "perception.sideConeAxis",
+   "group": "Vehicles and traffic",
+   "owner": "Vehicles / Traffic",
+   "label": "Field: side cone axis",
+   "description": "Coned field: each side cone's centre line, this many degrees off the heading, from the car's centre. 10.8 sets 60",
+   "unit": "degrees",
+   "type": "number",
+   "default": 60,
+   "status": "proposed",
+   "source": "GDD Edit 108 amendment (Prototype 10.8): DECISIONS row 731",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-tick",
+   "validation": {
+    "min": 0,
+    "max": 180
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "Coned field: each side cone's centre line, this many degrees off the heading, from the car's centre. 10.8 sets 60"
+  },
+  {
+   "id": "perception.sideConeAngle",
+   "group": "Vehicles and traffic",
+   "owner": "Vehicles / Traffic",
+   "label": "Field: side cone half-angle",
+   "description": "Coned field: each side cone spans this many degrees either side of perception.sideConeAxis. 10.8 sets 45",
+   "unit": "degrees",
+   "type": "number",
+   "default": 45,
+   "status": "proposed",
+   "source": "GDD Edit 108 amendment (Prototype 10.8): DECISIONS row 731",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-tick",
+   "validation": {
+    "min": 0,
+    "max": 90
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "Coned field: each side cone spans this many degrees either side of perception.sideConeAxis. 10.8 sets 45"
+  },
+  {
+   "id": "perception.sideConeRange",
+   "group": "Vehicles and traffic",
+   "owner": "Vehicles / Traffic",
+   "label": "Field: side cone range",
+   "description": "Coned field: each side cone reaches this far from the car's centre (plus body.radius). 10.8 sets 220",
+   "unit": "px",
+   "type": "number",
+   "default": 220,
+   "status": "proposed",
+   "source": "GDD Edit 108 amendment (Prototype 10.8): DECISIONS row 731",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-tick",
+   "validation": {
+    "min": 0,
+    "max": 720
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "Coned field: each side cone reaches this far from the car's centre (plus body.radius). 10.8 sets 220"
+  },
+  {
+   "id": "perception.forwardConeSensitivity",
+   "group": "Vehicles and traffic",
+   "owner": "Vehicles / Traffic",
+   "label": "Field: forward cone sensitivity",
+   "description": "Coned field: the forward cone's sensitivity. It scales the stage ranges (perception.sideCloseRange, perception.sideWaryRange) and the notice meter's fill rate. 10.8 sets 1",
+   "unit": "fraction",
+   "type": "number",
+   "default": 1,
+   "status": "proposed",
+   "source": "GDD Edit 108 amendment (Prototype 10.8): DECISIONS row 731",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-tick",
+   "validation": {
+    "min": 0.05,
+    "max": 1
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "Coned field: the forward cone's sensitivity. It scales the stage ranges (perception.sideCloseRange, perception.sideWaryRange) and the notice meter's fill rate. 10.8 sets 1"
+  },
+  {
+   "id": "perception.sideConeSensitivity",
+   "group": "Vehicles and traffic",
+   "owner": "Vehicles / Traffic",
+   "label": "Field: side cone sensitivity",
+   "description": "Coned field: each side cone's sensitivity. A dummy must come this much closer for each stage; the notice meter fills this much slower. 10.8 sets 0.5",
+   "unit": "fraction",
+   "type": "number",
+   "default": 1,
+   "status": "proposed",
+   "source": "GDD Edit 108 amendment (Prototype 10.8): DECISIONS row 731",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-tick",
+   "validation": {
+    "min": 0.05,
+    "max": 1
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "Coned field: each side cone's sensitivity. A dummy must come this much closer for each stage; the notice meter fills this much slower. 10.8 sets 0.5"
+  },
+  {
+   "id": "ui.lungeGuide",
+   "group": "UI",
+   "owner": "UI",
+   "label": "Lunge guide",
+   "description": "1: while a car is near, a dotted line and a reticle show where a dash pressed now would land. Yellow with HIT when it meets the red car on its predicted path; white when it misses; faint while the dash is not ready. 0: off. 10.8 sets 1",
+   "unit": "flag",
+   "type": "number",
+   "default": 0,
+   "status": "proposed",
+   "source": "GDD Edit 108 amendment (Prototype 10.8): DECISIONS row 732",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "immediate",
+   "validation": {
+    "min": 0,
+    "max": 1
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "1: while a car is near, a dotted line and a reticle show where a dash pressed now would land. Yellow with HIT when it meets the red car on its predicted path; white when it misses; faint while the dash is not ready. 0: off. 10.8 sets 1"
   }
  ],
  "tables": {

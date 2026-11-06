@@ -203,8 +203,57 @@
       if (this.rung < 3 && (this.airborne() || this.body.raised)) return null; // it sees the ground: not the air, not the plinth's top
       const P = this.P, keep = P['proto.driver.cautionZone'];
       P['proto.driver.cautionZone'] = this.fieldFor();
-      try { return super.assessBody(c); } finally { P['proto.driver.cautionZone'] = keep; }
+      let hz; try { hz = super.assessBody(c); } finally { P['proto.driver.cautionZone'] = keep; }
+      if (!hz || hz.inPath || !this.coned()) return hz;
+      const k = this.coneOf(c, this.body.x, this.body.y); if (k && k.cone === 'forward') { hz.cone = k.cone; hz.dist = k.d; return hz; }
+      const how = hz.gapLat > keep ? null : c.noticed ? 'track' : this.rung >= 4 && this.cameraSees() ? 'link' : this.expected() ? 'memory' : null; // row 731: inside the rung's rectangle, noticed, it tracks the dummy; a street camera or its memory tells it where the dummy is, at full sensitivity, past or inside its duller side cones
+      const b = this.body; if (how) { hz.cone = how; hz.dist = Math.hypot(b.x - c.x - Math.cos(c.h) * c.L / 2, b.y - c.y - Math.sin(c.h) * c.L / 2); return hz; }
+      if (k) { hz.cone = k.cone; hz.dist = k.d; return hz; }
+      return null; // outside its three cones, unnoticed, untold: it does not sense the dummy
     }
+    // Row 731: the field as three cones, not a rectangle. A forward cone from the nose, perception.forwardConeAngle either side of
+    // its heading, out to perception.forwardLength. Two side cones from the car's centre, about perception.sideConeAxis either
+    // side of its heading, perception.sideConeAngle wide each way, out to perception.sideConeRange. Each has a sensitivity
+    // (perception.forwardConeSensitivity, perception.sideConeSensitivity): it scales the stage ranges (a dummy must come closer
+    // to a duller cone for each stage) and how fast the notice meter fills. Each stage's speed stays the same. The beam (the
+    // lane ahead) is unchanged. The cones are the car's own sensors. Inside the rung's rectangle (proto.driver.cautionZone)
+    // it still has the dummy past them when it has noticed it (it tracks what it detected), when a street camera sees it (the
+    // link, rung 4), or when it stands where the car remembers (rung 6). 0 for perception.forwardConeAngle: the rectangle.
+    coned() { return (this.P['perception.forwardConeAngle'] || 0) > 0 && this.rung >= 2; }
+    coneOf(c, px, py) {
+      const P = this.P, ca = Math.cos(c.h), sa = Math.sin(c.h), br = P['body.radius'], nx = c.x + ca * c.L / 2, ny = c.y + sa * c.L / 2;
+      const local = (ox, oy) => { const dx = px - ox, dy = py - oy, fx = dx * ca + dy * sa, fy = -dx * sa + dy * ca; return { d: Math.hypot(fx, fy), a: Math.atan2(fy, fx) * 180 / Math.PI }; };
+      const f = local(nx, ny); if (Math.abs(f.a - this.coneLook(c)) <= P['perception.forwardConeAngle'] && f.d <= c.fwdLen + br) return { cone: 'forward', d: f.d };
+      const q = local(c.x, c.y); if (Math.abs(Math.abs(q.a) - P['perception.sideConeAxis']) <= P['perception.sideConeAngle'] && q.d <= P['perception.sideConeRange'] + br) return { cone: 'side', d: q.d };
+      return null;
+    }
+    // Searching (rung 7), the forward cone looks at the ghost, as a guard turns to the last place it saw you: turned from the
+    // heading toward it, as far as the side cones' outer edge (perception.sideConeAxis + perception.sideConeAngle). Degrees.
+    coneLook(c) {
+      const g = c.lkp; if (!g) return 0;
+      const P = this.P, ca = Math.cos(c.h), sa = Math.sin(c.h), dx = g.x - (c.x + ca * c.L / 2), dy = g.y - (c.y + sa * c.L / 2), lim = P['perception.sideConeAxis'] + P['perception.sideConeAngle'];
+      return clamp(Math.atan2(-dx * sa + dy * ca, dx * ca + dy * sa) * 180 / Math.PI, -lim, lim);
+    }
+    // Row 732: the lunge guide. Where a dash pressed now would land, and the first car on the way. The path follows the dash's
+    // own profile (movement.lungeFastTimeFraction of movement.lungeDuration covers movement.lungeFastDistanceFraction of the
+    // reach); a solid stops it (low cover does not; the plinth does not, from on top). Cars move straight on at their speed.
+    lungePreview(mx, my) {
+      const P = this.P, b = this.body; if (!b || !b.alive) return null;
+      const direct = P['proto.turnModel'] === 2, m = hyp(mx || 0, my || 0), dir = direct && m > 0.05 ? Math.atan2(my, mx) : b.facing;
+      const lk = this.underfoot('lunge'), R = this.reach() * Math.max(0, lk), T = P['movement.lungeDuration'], tf = T * P['movement.lungeFastTimeFraction'], df = P['movement.lungeFastDistanceFraction'], r = P['body.radius'];
+      const ready = this.dashFitted() && b.mode !== 'lunge' && b.mode !== 'recover' && !b.stair && !(b.landT > 0) && b.charge >= P['battery.lungeCost'] - 1e-9 && lk > 0;
+      const solids = this.level.statics.filter((q) => !q.low && !(b.raised && q === this.plinth())), ca = Math.cos(dir), sa = Math.sin(dir);
+      const cars = this.onRoad();
+      const tAt = (d) => d <= R * df ? tf * d / (R * df) : tf + (T - tf) * (d - R * df) / (R * (1 - df)), free = (d) => !solids.some((q) => circleRect(b.x + ca * d, b.y + sa * d, r, q));
+      let x1 = b.x, y1 = b.y, hit = null; const N = Math.max(24, Math.ceil(R / 4)); // about every 4 px
+      for (let i = 1; i <= N; i++) { const d = R * i / N;
+        if (!free(d)) { let lo = R * (i - 1) / N, hi = d; for (let j = 0; j < 12; j++) { const m = (lo + hi) / 2; if (free(m)) lo = m; else hi = m; } x1 = b.x + ca * lo; y1 = b.y + sa * lo; break; } // a solid: it stops touching it
+        const t = tAt(d), x = b.x + ca * d, y = b.y + sa * d; x1 = x; y1 = y;
+        for (const c of cars) if (X.circleCar(x, y, r, { x: c.x + Math.cos(c.h) * c.v * t, y: c.y + Math.sin(c.h) * c.v * t, h: c.h, L: c.L, W: c.W })) { hit = { x, y, t, car: c.id, red: !!c.red }; break; } // the sim's own contact test, the car where it will be
+        if (hit) break; }
+      return { x0: b.x, y0: b.y, x1, y1, dir, R, hit, ready };
+    }
+    coneSensitivity(c) { const P = this.P, hz = c.hz; return !hz || !hz.cone ? 1 : hz.cone === 'side' ? P['perception.sideConeSensitivity'] : P['perception.forwardConeSensitivity']; }
     manSpeed(c, man, tau, sAt) {
       if (!man || !man.env) return super.manSpeed(c, man, tau, sAt);
       const s = sAt != null ? sAt : c.s, gap = man.sBody - (s + c.L / 2), v0 = Math.max(0, man.v0);
@@ -240,7 +289,7 @@
     // perception.sideAwareNoticeRate, perception.sideWaryNoticeRate; CLOSE at full. Noticed (stage 4), it stops short, as
     // before. 0 for perception.sideCloseRange: off, the whole field alike (10.3–10.7).
     sideStaged() { return (this.P['perception.sideCloseRange'] || 0) > 0 && this.rung >= 2; }
-    sideDist(c) { const hz = c.hz; return hz && !hz.inPath ? Math.hypot(Math.max(0, hz.lx), Math.max(0, Math.abs(hz.ly) - c.W / 2)) : null; }
+    sideDist(c) { const hz = c.hz; return hz && !hz.inPath ? (hz.dist != null ? hz.dist / Math.max(0.05, this.coneSensitivity(c)) : Math.hypot(Math.max(0, hz.lx), Math.max(0, Math.abs(hz.ly) - c.W / 2))) : null; } // row 731: coned, from the cone's apex, over its sensitivity: a dummy must come closer to a duller cone for each stage
     sideStage(c) {
       if (!this.sideStaged() || !c.red || !c.hz || c.hz.inPath || !this.body.alive) return 0;
       if (c.noticed) return 4;
@@ -250,7 +299,7 @@
     noticeRate(c) {
       if (!this.sideStaged()) return 1;
       const st = this.sideStage(c), P = this.P, k = st === 1 ? P['perception.sideAwareNoticeRate'] : st === 2 ? P['perception.sideWaryNoticeRate'] : 1;
-      return k == null ? 1 : k;
+      return (k == null ? 1 : k) * this.coneSensitivity(c); // row 731: a less sensitive cone notices slower
     }
     cornerSpeed(c) {
       const v = super.cornerSpeed(c);
@@ -260,10 +309,14 @@
     stageSpeed(c) { // a red car's caution speed by stage; any other car keeps proto.driver.cautionSpeed
       if (!c.red) return this.stageCaution;
       const st = this.sideStage(c), P = this.P, k = st === 1 ? P['perception.sideAwareSpeed'] : st === 2 ? P['perception.sideWarySpeed'] : st >= 3 ? P['perception.sideCloseSpeed'] : null;
-      return k == null ? this.stageCaution : (c.cruise || P['vehicles.sedan.cruiseSpeed']) * k;
+      return k == null ? this.stageCaution : (c.cruise || P['vehicles.sedan.cruiseSpeed']) * k; // each stage's speed is the same in every cone: the stage shown is what the car does
     }
     // The field's width: rung 2 and up. Below, the car has no field (10.1, 10.2: proto.driver.cautionZone 0 by rung).
-    fieldFor() { return this.rung >= 2 ? this.P['proto.driver.cautionZone'] : 0; }
+    fieldFor() { // row 731: coned, wide enough to hold the cones; the cones then decide
+      const P = this.P; if (this.rung < 2) return 0;
+      if (!this.coned()) return P['proto.driver.cautionZone'];
+      return Math.max(Math.tan(P['perception.forwardConeAngle'] * Math.PI / 180) * (P['perception.forwardLength'] + P['body.radius']), P['perception.sideConeRange'] + P['body.radius']);
+    }
     // ----- rung 2: the dummy in its field, beside its path (in its path is the beam's: rung 1's brake)
     watchField(c, dt) {
       const P = this.P, b = this.body, hz = c.hz;
@@ -318,6 +371,7 @@
       const ca = Math.cos(c.h), sa = Math.sin(c.h), nx = c.x + ca * c.L / 2, ny = c.y + sa * c.L / 2;
       const fx = (b.x - nx) * ca + (b.y - ny) * sa, fy = -(b.x - nx) * sa + (b.y - ny) * ca, half = c.W / 2 + this.P['body.radius'] + this.fieldFor();
       if (fx < -c.L || fx > beam || Math.abs(fy) > half || this.occluded(c, nx, ny, b.x, b.y)) return c.v;
+      if (this.coned() && Math.abs(fy) > c.W / 2 + this.P['body.radius'] && !this.coneOf(c, b.x, b.y)) return c.v; // row 731: outside its cones and its lane
       return Math.min(c.v, this.envSpeed(Math.hypot(Math.max(0, fx), Math.max(0, Math.abs(fy) - c.W / 2))));
     }
     exitCars() {

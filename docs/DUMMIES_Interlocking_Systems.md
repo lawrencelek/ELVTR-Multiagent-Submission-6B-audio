@@ -56,6 +56,8 @@ Read across: what the row's factor sets for the column's.
 - **The player's own escalation: the stealth grade** (rows 725, 728). Each strike scores its damage × its grade: UNSEEN × `scoring.stealthUnseen` 3, LOST × `scoring.stealthLost` 2, SEEN × `scoring.stealthSeen` 1. It rises with skill whatever the car's rung; power and stealth both pay.
 - **Lure: a verb made from the car's learning** (row 726). Stand where it expects you; it stops short. Strike from elsewhere. The page draws its stop line.
 - **The car's field reads in stages** (row 730). AWARE, SLOWING, CRAWLING, STOPPING, by distance from its nose: the player reads how near is too near.
+- **The field has a front and sides** (row 731). A long, sensitive forward cone; two short, duller side cones; blind behind. The player reads where to come from, not just how near.
+- **The lunge guide shows the landing** (row 732). The player reads whether a dash now meets the car.
 
 ## 2 Car behaviour and abilities
 
@@ -68,6 +70,7 @@ Read across: what the row's factor sets for the column's.
 | 2 | Side sensors | `proto.driver.cautionZone` 180; `perception.sideNoticeSeconds` 0.6 | The open flank | Height, cover | Legs 1 |
 | 3 | Roof lidar | `perception.lidarHeight` 26 (rungs 1–2: `perception.sensorHeight` 14) | The plinth, the jump | Cover | — |
 | 2+ | The field in stages (row 730) | `perception.sideCloseRange` 180, `perception.sideWaryRange` 360; speeds 0.85, 0.6, 0.35 | — | — | — |
+| 2+ | The field as three cones (row 731) | `perception.forwardConeAngle` 20, `perception.sideConeAxis` 60 ± `perception.sideConeAngle` 45, `perception.sideConeRange` 220; `perception.sideConeSensitivity` 0.5 | — | — | — |
 | 4 | Street cameras | `perception.streetCameraRange` 180; `perception.streetCameraHeight` 60; `perception.streetCameraFov` 60 from 10.8 (row 723), panning `perception.streetCameraPanArc` 60 (row 724) | Watched cover, within each cone | A cone's swerve; cover outside the cones; the pan's window | Hands 1 |
 | 5 | Road items | Stops at a cone; waits `proto.droneConeSeconds` 5 for FARSIGHT | The cone bait | Low cover | DUCK |
 | 6 | Crash memory | `duel.memoryRadius` 50; `duel.memorySites` 3 | A repeated spot from cover, while the cover stays | Any other spot; a spot with new cover (row 712); hits from the open (row 713) | — |
@@ -162,6 +165,7 @@ Read across: what the row's factor sets for the column's.
 - **L9. Rows longer than the search ring leave the crawl open** (row 720). A row that runs more than `duel.searchRadius` 60 past a spot lets a seen dummy crawl out of the ring. Shorter rows, or rows broken by gaps, close it.
 - **L11. Keep two open ways in at every rung** (row 727). A way is open at 0.3 hits a minute at the top rung. Each new part opens a way that uses it.
 - **L12. Every lure needs a strike spot beyond the ring, downstream** (row 726). A remembered spot or a ghost parks the car; the level must leave somewhere to strike from.
+- **L13. Cover that hides from the forward cone makes a flank** (row 731). A building that blocks a car's long view leaves only its duller side cone. Place it where a side strike is wanted.
 - **L10. A ghost off the road stops the car short of it, wherever that falls.** Beside a junction, the stop line can land in the junction box (10.8 shots). With crossing traffic it blocks the other road.
 
 ### 4.3 Redesign checklist (proposed)
@@ -265,6 +269,8 @@ Read across: what the row's factor sets for the column's.
 | F29 | Damage × grade reorders the ways in: roaming 635 a hit, the lure 529, the crawl 370; the UNSEEN sprint only 158 (53 damage) | 1, 2 | 728 |
 | F30 | A field that notices late lets cover springs back in: AWARE never noticing reopened aim, jump, dashjump. Noticing speed matters more than slowing | 2 | 730 |
 | F31 | The staged field favours roaming (2.59 to 3.15) and cuts the crawl (2.02 to 1.69): the car comes nearer before it stops | 1, 2 | 730 |
+| F32 | Duller side cones reopen rare side strikes on passing cars (0.13–0.2 a minute each): aim, flank, jump, dashjump, standplanter. Most come from road B cars, whose forward view the building blocks | 1, 2, 4 | 731 |
+| F33 | Cones alone lose a noticed dummy at the car's own stop: it stops where the dummy falls between cones. Tracking a noticed dummy fixes it | 2 | 731 |
 
 ## 7 Open questions
 
@@ -421,3 +427,4 @@ One row per object type. Edit this table first; the sections above follow it.
 | 6 November 2026 | The stealth grade, the lure, the floor of open ways (rows 725–727): §1.1; L11–L12; F25–F28; two research rows; Wong added to sources | 725–727 |
 | 6 November 2026 | Damage × the grade (row 728); the lure's field notes once per save file (row 729): §1.1; F29; the research rows | 728–729 |
 | 6 November 2026 | The side field in stages (row 730): §1.1; rung 2's row; F30–F31 | 730 |
+| 6 November 2026 | The field as three cones (row 731); the lunge guide (row 732): §1.1; rung 2's row; L13; F32–F33 | 731–732 |

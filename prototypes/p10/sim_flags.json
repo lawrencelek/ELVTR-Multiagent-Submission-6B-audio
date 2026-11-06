@@ -1018,7 +1018,14 @@
     "perception.sideWarySpeed": 0.6,
     "perception.sideCloseSpeed": 0.35,
     "perception.sideAwareNoticeRate": 0.5,
-    "perception.sideWaryNoticeRate": 1
+    "perception.sideWaryNoticeRate": 1,
+    "perception.forwardConeAngle": 20,
+    "perception.sideConeAxis": 60,
+    "perception.sideConeAngle": 45,
+    "perception.sideConeRange": 220,
+    "perception.forwardConeSensitivity": 1,
+    "perception.sideConeSensitivity": 0.5,
+    "ui.lungeGuide": 1
    },
    "flags": {
     "proto.droneConeSeconds": 5,
@@ -1154,7 +1161,14 @@
     "perception.sideWarySpeed": 0.6,
     "perception.sideCloseSpeed": 0.35,
     "perception.sideAwareNoticeRate": 0.5,
-    "perception.sideWaryNoticeRate": 1
+    "perception.sideWaryNoticeRate": 1,
+    "perception.forwardConeAngle": 20,
+    "perception.sideConeAxis": 60,
+    "perception.sideConeAngle": 45,
+    "perception.sideConeRange": 220,
+    "perception.forwardConeSensitivity": 1,
+    "perception.sideConeSensitivity": 0.5,
+    "ui.lungeGuide": 1
    }
   }
  }
