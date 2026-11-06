@@ -49,7 +49,8 @@
   "perception.streetCameraPanHold": 1,
   "scoring.stealthUnseen": 3,
   "scoring.stealthLost": 2,
-  "scoring.stealthSeen": 1
+  "scoring.stealthSeen": 1,
+  "ui.tip.holdSeconds": 7
  },
  "runs": [
   {
@@ -1431,7 +1432,7 @@
    "grades": {
     "seen": 1
    },
-   "stealthPoints": 1,
+   "stealthPoints": 8,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -1523,7 +1524,7 @@
    "grades": {
     "seen": 1
    },
-   "stealthPoints": 1,
+   "stealthPoints": 8,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -2206,7 +2207,7 @@
     "lost": 2,
     "seen": 4
    },
-   "stealthPoints": 8,
+   "stealthPoints": 606,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -3128,7 +3129,7 @@
    "grades": {
     "seen": 3
    },
-   "stealthPoints": 3,
+   "stealthPoints": 159,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -3219,7 +3220,7 @@
    "grades": {
     "seen": 3
    },
-   "stealthPoints": 3,
+   "stealthPoints": 159,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -3310,7 +3311,7 @@
    "grades": {
     "seen": 3
    },
-   "stealthPoints": 3,
+   "stealthPoints": 159,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -3404,7 +3405,7 @@
     "seen": 2,
     "unseen": 1
    },
-   "stealthPoints": 5,
+   "stealthPoints": 390,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -3497,7 +3498,7 @@
    "grades": {
     "seen": 4
    },
-   "stealthPoints": 4,
+   "stealthPoints": 212,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -3591,7 +3592,7 @@
    "grades": {
     "seen": 5
    },
-   "stealthPoints": 5,
+   "stealthPoints": 212,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -4186,7 +4187,7 @@
    "grades": {
     "unseen": 1
    },
-   "stealthPoints": 3,
+   "stealthPoints": 158,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -4277,7 +4278,7 @@
    "grades": {
     "unseen": 1
    },
-   "stealthPoints": 3,
+   "stealthPoints": 158,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -4371,7 +4372,7 @@
     "lost": 1,
     "unseen": 1
    },
-   "stealthPoints": 5,
+   "stealthPoints": 834,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -4713,7 +4714,7 @@
    "grades": {
     "unseen": 3
    },
-   "stealthPoints": 9,
+   "stealthPoints": 474,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -4804,7 +4805,7 @@
    "grades": {
     "unseen": 3
    },
-   "stealthPoints": 9,
+   "stealthPoints": 474,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -4895,7 +4896,7 @@
    "grades": {
     "unseen": 3
    },
-   "stealthPoints": 9,
+   "stealthPoints": 474,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -4984,7 +4985,7 @@
    "grades": {
     "lost": 2
    },
-   "stealthPoints": 4,
+   "stealthPoints": 1000,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -5083,7 +5084,7 @@
    "grades": {
     "lost": 1
    },
-   "stealthPoints": 2,
+   "stealthPoints": 580,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -5182,7 +5183,7 @@
    "grades": {
     "lost": 1
    },
-   "stealthPoints": 2,
+   "stealthPoints": 440,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -5287,7 +5288,7 @@
     "lost": 8,
     "unseen": 4
    },
-   "stealthPoints": 28,
+   "stealthPoints": 5581,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -5393,7 +5394,7 @@
     "lost": 8,
     "unseen": 3
    },
-   "stealthPoints": 25,
+   "stealthPoints": 4101,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -5501,7 +5502,7 @@
     "seen": 3,
     "unseen": 1
    },
-   "stealthPoints": 8,
+   "stealthPoints": 833,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -5605,7 +5606,7 @@
     "unseen": 15,
     "lost": 4
    },
-   "stealthPoints": 53,
+   "stealthPoints": 12608,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -5708,7 +5709,7 @@
     "unseen": 9,
     "lost": 4
    },
-   "stealthPoints": 35,
+   "stealthPoints": 8757,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -5815,7 +5816,7 @@
     "unseen": 9,
     "seen": 1
    },
-   "stealthPoints": 36,
+   "stealthPoints": 8222,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -5921,7 +5922,7 @@
     "lost": 8,
     "seen": 1
    },
-   "stealthPoints": 32,
+   "stealthPoints": 7298,
    "lureStops": 5,
    "lureRemembered": 5,
    "lureGhost": 0,
@@ -6025,7 +6026,7 @@
     "unseen": 5,
     "lost": 7
    },
-   "stealthPoints": 29,
+   "stealthPoints": 5794,
    "lureStops": 6,
    "lureRemembered": 6,
    "lureGhost": 0,
@@ -6128,7 +6129,7 @@
     "lost": 6,
     "unseen": 6
    },
-   "stealthPoints": 30,
+   "stealthPoints": 6885,
    "lureStops": 5,
    "lureRemembered": 4,
    "lureGhost": 1,
@@ -9237,7 +9238,7 @@
    "grades": {
     "seen": 3
    },
-   "stealthPoints": 3,
+   "stealthPoints": 159,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -9328,7 +9329,7 @@
    "grades": {
     "seen": 3
    },
-   "stealthPoints": 3,
+   "stealthPoints": 159,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -9419,7 +9420,7 @@
    "grades": {
     "seen": 3
    },
-   "stealthPoints": 3,
+   "stealthPoints": 159,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -9513,7 +9514,7 @@
     "seen": 3,
     "unseen": 2
    },
-   "stealthPoints": 9,
+   "stealthPoints": 601,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -9690,7 +9691,7 @@
     "seen": 1,
     "unseen": 1
    },
-   "stealthPoints": 4,
+   "stealthPoints": 304,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -10289,7 +10290,7 @@
    "grades": {
     "unseen": 1
    },
-   "stealthPoints": 3,
+   "stealthPoints": 158,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -10380,7 +10381,7 @@
    "grades": {
     "unseen": 1
    },
-   "stealthPoints": 3,
+   "stealthPoints": 158,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -10474,7 +10475,7 @@
     "lost": 1,
     "unseen": 1
    },
-   "stealthPoints": 5,
+   "stealthPoints": 834,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -10816,7 +10817,7 @@
    "grades": {
     "unseen": 3
    },
-   "stealthPoints": 9,
+   "stealthPoints": 474,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -10907,7 +10908,7 @@
    "grades": {
     "unseen": 3
    },
-   "stealthPoints": 9,
+   "stealthPoints": 474,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -10998,7 +10999,7 @@
    "grades": {
     "unseen": 3
    },
-   "stealthPoints": 9,
+   "stealthPoints": 474,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -11342,7 +11343,7 @@
     "unseen": 2,
     "seen": 2
    },
-   "stealthPoints": 16,
+   "stealthPoints": 2460,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -11440,7 +11441,7 @@
     "lost": 8,
     "unseen": 3
    },
-   "stealthPoints": 25,
+   "stealthPoints": 4101,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -11540,7 +11541,7 @@
     "unseen": 4,
     "seen": 2
    },
-   "stealthPoints": 24,
+   "stealthPoints": 4533,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -11640,7 +11641,7 @@
     "lost": 3,
     "seen": 1
    },
-   "stealthPoints": 31,
+   "stealthPoints": 6987,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -11736,7 +11737,7 @@
     "unseen": 10,
     "lost": 1
    },
-   "stealthPoints": 32,
+   "stealthPoints": 8012,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -11834,7 +11835,7 @@
     "lost": 4,
     "seen": 1
    },
-   "stealthPoints": 39,
+   "stealthPoints": 9131,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -11930,7 +11931,7 @@
     "lost": 9,
     "unseen": 3
    },
-   "stealthPoints": 27,
+   "stealthPoints": 6443,
    "lureStops": 6,
    "lureRemembered": 4,
    "lureGhost": 2,
@@ -12027,7 +12028,7 @@
     "lost": 6,
     "unseen": 4
    },
-   "stealthPoints": 24,
+   "stealthPoints": 5225,
    "lureStops": 6,
    "lureRemembered": 4,
    "lureGhost": 2,
@@ -12124,7 +12125,7 @@
     "lost": 6,
     "unseen": 4
    },
-   "stealthPoints": 24,
+   "stealthPoints": 5271,
    "lureStops": 6,
    "lureRemembered": 4,
    "lureGhost": 2,
@@ -12219,7 +12220,7 @@
    "grades": {
     "lost": 2
    },
-   "stealthPoints": 4,
+   "stealthPoints": 1000,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -12332,7 +12333,7 @@
     "unseen": 7,
     "seen": 1
    },
-   "stealthPoints": 46,
+   "stealthPoints": 9775,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -12442,7 +12443,7 @@
     "unseen": 28,
     "lost": 7
    },
-   "stealthPoints": 98,
+   "stealthPoints": 23901,
    "lureStops": 0,
    "lureRemembered": 0,
    "lureGhost": 0,
@@ -12553,7 +12554,7 @@
     "lost": 15,
     "seen": 1
    },
-   "stealthPoints": 49,
+   "stealthPoints": 10334,
    "lureStops": 10,
    "lureRemembered": 10,
    "lureGhost": 0,

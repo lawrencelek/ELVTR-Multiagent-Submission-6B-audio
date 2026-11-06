@@ -1010,7 +1010,8 @@
     "perception.streetCameraPanHold": 1,
     "scoring.stealthUnseen": 3,
     "scoring.stealthLost": 2,
-    "scoring.stealthSeen": 1
+    "scoring.stealthSeen": 1,
+    "ui.tip.holdSeconds": 7
    },
    "flags": {
     "proto.droneConeSeconds": 5,
@@ -1138,7 +1139,8 @@
     "perception.streetCameraPanHold": 1,
     "scoring.stealthUnseen": 3,
     "scoring.stealthLost": 2,
-    "scoring.stealthSeen": 1
+    "scoring.stealthSeen": 1,
+    "ui.tip.holdSeconds": 7
    }
   }
  }

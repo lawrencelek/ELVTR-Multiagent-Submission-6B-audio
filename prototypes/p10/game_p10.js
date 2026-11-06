@@ -31,13 +31,19 @@
   const CLIP = F['duel.lessonClipSeconds'], HOLD = F['duel.lessonHoldSeconds'], FIT = F['duel.lessonFitSeconds']; // the clip, its last frame held, the fitting
   const cv = document.getElementById('game'), ctx = cv.getContext('2d');
   let s, paused = false, started = false, showZones = true, log = [], session = {}, prevV = new Map(), flash = [];
-  let hint = null; const hinted = new Set(); // row 726: the lure's one-time prompts
+  // Row 729: the test road's save file: one record in this browser for every Prototype 10 page, holding the field notes
+  // already shown. Without storage it lasts the visit. N on the pause screen starts a new save file.
+  const SAVE_KEY = 'dummies.p10.save'; let memSave = null, tip = null, saveNote = 0;
+  function readSave() { let v = memSave; try { const raw = localStorage.getItem(SAVE_KEY); if (raw != null) v = JSON.parse(raw); } catch (e) { /* storage off */ } return v && v.v === 1 && v.tips ? v : { v: 1, tips: {} }; }
+  function writeSave(v) { v.saved = Date.now(); memSave = v; try { localStorage.setItem(SAVE_KEY, JSON.stringify(v)); } catch (e) { /* storage off: it lasts this visit */ } }
+  function tipSeen(id) { return !!readSave().tips[id]; }
+  function newSave() { memSave = null; tip = null; try { localStorage.removeItem(SAVE_KEY); } catch (e) { /* storage off */ } }
   let ring = [], clip = null, lessonT = null, lastCrash = null; // the recording, the hit's clip, the lesson's clock, the latest crash
   const keys = new Set(); let aEdge = false, bEdge = false, xEdge = false, touchMove = null, touchA = false, touchB = false, touchX = null, touchD = null;
 
   function newSim() {
     s = new T.TestRoadSim(Object.assign({}, F)); log = []; session = { start: Date.now(), build: 'P' + ST.id };
-    prevV.clear(); flash = []; ring = []; clip = null; lessonT = null; lastCrash = null; hint = null; hinted.clear();
+    prevV.clear(); flash = []; ring = []; clip = null; lessonT = null; lastCrash = null; tip = null;
   }
   newSim();
 
@@ -50,6 +56,7 @@
     if (k === 'e' || k === 'x') { if (!keys.has(k)) xEdge = true; }
     if (k === 'p' || k === 'escape') paused = !paused;
     if (k === 'r') newSim();
+    if (k === 'n' && paused) { newSave(); saveNote = 3; } // row 729: a new save file: the field notes show again
     if (k === 'z') showZones = !showZones;
     if (k === 'l') saveLog();
     keys.add(k); if ([' ', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(k)) e.preventDefault();
@@ -93,10 +100,10 @@
       if (e.type === 'impact' && Math.round(e.lost) > 0) flash.push({ x: s.body.x, y: s.body.y, t: 0.5, n: Math.round(e.lost) });
       if (e.type === 'writeoff') flash.push({ x: s.body.x, y: s.body.y, t: 1.2, n: 'WRITE-OFF' });
       if (e.type === 'gift') flash.push({ x: s.body.x, y: s.body.y, t: 1.6, n: PARTS[e.node] || e.node });
-      if (e.type === 'crash') { lastCrash = e; if (graded() && e.grade) flash.push({ x: s.body.x, y: s.body.y + 62, t: 1.1, n: GRADE[e.grade] + ' +' + (e.points || 0), c: GRADE_C[e.grade]() }); } // row 725: below the dummy, clear of the damage and the car's tag
+      if (e.type === 'crash') { lastCrash = e; if (graded() && e.grade) flash.push({ x: s.body.x, y: s.body.y + 62, t: 1.1, n: GRADE[e.grade] + ' ×' + (e.mult || 0) + ' +' + (e.points || 0), c: GRADE_C[e.grade]() }); } // row 725: below the dummy, clear of the damage and the car's tag
       if (e.type === 'search-found') flash.push({ x: e.x, y: e.y, t: 0.9, n: 'FOUND' });
-      if (e.type === 'expect-stop' && !hinted.has('mem')) { hinted.add('mem'); hint = { text: 'IT STOPS WHERE IT EXPECTS YOU · NOW STRIKE FROM ELSEWHERE', t: 5, c: C.mem }; } // row 726: the lure
-      if (e.type === 'search' && !hinted.has('ghost')) { hinted.add('ghost'); hint = { text: 'IT STOPS SHORT OF ITS GHOST · STRIKE FROM BEYOND ITS RING', t: 5, c: C.search }; }
+      if (e.type === 'expect-stop' && !tip && !tipSeen('lure.memory')) showTip('lure.memory', e.car); // row 726: the lure; row 729: once a save file
+      if (e.type === 'search' && !tip && !tipSeen('lure.ghost')) showTip('lure.ghost', e.car);
       if (e.type === 'lesson-due') clip = { frames: ring.slice(), hitT: e.t, model: e.model, zone: e.zone, to: e.to, info: T.RUNGS[e.to], origin: e.origin, prev: lastCrash && lastCrash.habit ? lastCrash.prev : null, seenAt: e.seenAt };
     }
   }
@@ -228,11 +235,25 @@
         rect(lx - w / 2, ly - 6, w, 11, 'rgba(12,14,20,0.75)'); text(t, lx, ly + 3, 8, col, 'center'); }
     }
   }
-  // Row 726: a one-time prompt, the first time a car stops short of a remembered spot (rung 6) or of its ghost (rung 7).
-  function drawHint() {
-    if (!hint) return; hint.t -= 1 / 60; if (hint.t <= 0) { hint = null; return; }
-    ctx.font = '700 12px B612, system-ui, sans-serif'; const w = ctx.measureText(hint.text).width + 20;
-    ctx.globalAlpha = Math.min(1, hint.t / 0.4); rect(FW / 2 - w / 2, 10, w, 22, 'rgba(12,14,20,0.85)'); text(hint.text, FW / 2, 25, 12, hint.c, 'center'); ctx.globalAlpha = 1;
+  // Row 726: the lure's field notes. Row 729: each shows once per save file, as a FARSIGHT diagnostic panel pinned to the
+  // car's stop line by a leader, for ui.tip.holdSeconds, with its timer bar. Play goes on.
+  const TIPS = { 'lure.memory': { title: 'THE LURE', lines: ['IT STOPS WHERE IT EXPECTS YOU.', 'NOW STRIKE FROM ELSEWHERE.'], c: () => C.mem },
+    'lure.ghost': { title: 'THE LURE', lines: ['IT STOPS SHORT OF ITS GHOST.', 'STRIKE FROM BEYOND ITS RING.'], c: () => C.search } };
+  function showTip(id, car) { const T0 = s.P['ui.tip.holdSeconds'] || 7, v = readSave(); v.tips[id] = Date.now(); writeSave(v); tip = Object.assign({ id, car, t: T0, t0: T0 }, TIPS[id]); }
+  function drawTip() {
+    if (!tip) return; if (!paused) tip.t -= 1 / 60; if (tip.t <= 0) { tip = null; return; }
+    const c = s.cars.find((q) => q.id === tip.car), sp = c && s.stopPoint ? s.stopPoint(c) : null;
+    if (sp) tip.at = { x: sp.x, y: sp.y }; else if (c && !tip.at) tip.at = { x: c.x, y: c.y };
+    const a = tip.at || { x: FW / 2, y: FH / 2 }, col = tip.c(), W = 262, H = 70, px = Math.max(10, Math.min(FW - W - 10, a.x - W / 2)), above = a.y > H + 80, py = above ? a.y - H - 60 : a.y + 60;
+    const al = Math.max(0, Math.min(1, (tip.t0 - tip.t) / 0.25, tip.t / 0.4)); ctx.save(); ctx.globalAlpha = al;
+    const lx = Math.max(px + 14, Math.min(px + W - 14, a.x)), ly = above ? py + H : py; // the leader, from the panel to the stop line
+    ctx.strokeStyle = col; ctx.lineWidth = 1.5; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(a.x, a.y); ctx.stroke(); ctx.setLineDash([]);
+    ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(a.x, a.y, 9 + 3 * Math.sin(s.t * 6), 0, TAU); ctx.stroke();
+    rect(px, py, W, H, 'rgba(12,14,20,0.94)'); ctx.strokeStyle = col; ctx.lineWidth = 1.5; ctx.strokeRect(px + 0.5, py + 0.5, W - 1, H - 1);
+    ctx.globalAlpha = al * 0.22; rect(px, py, W, 17, col); ctx.globalAlpha = al;
+    text('FARSIGHT · FIELD NOTE', px + 9, py + 12, 8, col); text(tip.title, px + W - 9, py + 12, 8, col, 'right');
+    text(tip.lines[0], px + 10, py + 35, 12, C.text); text(tip.lines[1], px + 10, py + 53, 12, C.text);
+    rect(px, py + H - 4, W * (tip.t / tip.t0), 3, col); ctx.restore(); // the time it has left
   }
   function drawCone(x, y) { ctx.fillStyle = C.cone; ctx.beginPath(); ctx.arc(x, y, 7, 0, TAU); ctx.fill(); ctx.fillStyle = C.zebra; ctx.fillRect(x - 4, y - 1, 8, 2); }
   function drawCameras() { // rung 4: the junction's street cameras. A link draws from a camera to the dummy behind cover, and on to the car
@@ -348,8 +369,8 @@
     const bx = 340; // the body bar sits left of the key hints, which grow with each part
     text('BODY', bx - 40, FH + 22, 11, C.dim); rect(bx, FH + 12, 120, 12, '#2c3447'); rect(bx, FH + 12, 120 * hp, 12, C.dummy);
     text('WRITE-OFFS ' + s.run.writeOffs, bx, FH + 42, 11, C.text);
-    if (graded() && s.stealth) { const st = s.stealth, l = st.last; text('STEALTH ' + st.points, bx + 96, FH + 42, 11, C.text); // row 725
-      if (l) text(GRADE[l.grade] + ' +' + l.points, bx + 172, FH + 42, 11, GRADE_C[l.grade]()); }
+    if (graded() && s.stealth) { const st = s.stealth, l = st.last; text('STEALTH ' + st.points, bx + 96, FH + 42, 11, C.text); // row 725; row 728: damage × the grade
+      if (l) text(GRADE[l.grade] + ' ×' + l.mult + ' +' + l.points, bx + 196, FH + 42, 11, GRADE_C[l.grade]()); }
     text(s.dashFitted() ? 'SPACE DASH' + (s.has('jump') ? ' · K JUMP' : '') + (s.has('carry') ? ' · E CONE' : '') + (s.has('duck1') ? ' · C DUCK' : '') : 'ON FOOT', 786, FH + 22, 11, C.dim, 'right');
     text(Math.floor(s.t / 60) + ':' + String(Math.floor(s.t % 60)).padStart(2, '0'), 786, FH + 42, 11, C.text, 'right');
   }
@@ -440,7 +461,7 @@
     const d = s.delivery; if (d) drawDrone(d.x, d.y, d.state !== 'outbound' && (LOAD[d.node] || 'B1'));
     const lf = s.lift; if (lf) { const held = s.body && s.body.lifted; drawDrone(lf.x, lf.y - (held ? 30 : 0), false); if (held) { ctx.strokeStyle = C.joint; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(lf.x, lf.y - 24); ctx.lineTo(lf.x, lf.y - 16); ctx.stroke(); } } // FARSIGHT's block lift
     for (let i = flash.length - 1; i >= 0; i--) { const f = flash[i]; f.t -= 1 / 60; if (f.t <= 0) { flash.splice(i, 1); continue; } const big = typeof f.n !== 'number'; text(big ? f.n : '−' + f.n, f.x, f.y - 24 - (1 - f.t) * 20, big ? 16 : 13, f.c || (f.n === 'WRITE-OFF' ? C.red : C.dummy), 'center'); }
-    drawHint();
+    drawTip();
     drawHud();
     if (!started || paused) {
       rect(0, 0, FW, FH, 'rgba(10,12,18,0.72)');
@@ -448,8 +469,9 @@
       text('Two one-way roads cross at the Monument. One red car drives through.' + ((s.P['duel.topRung'] || 0) >= 7 ? ' It looks where it last saw you.' : s.rung >= 5 && (s.P['duel.topRung'] || 0) >= 6 ? ' Every crash leaves its mark.' : ''), FW / 2, 292, 14, C.dim, 'center');
       text('Arrows or WASD move · Space dash · K jump, E cone, C duck, once fitted · Z zones · P pause · R restart · L save log', FW / 2, 330, 13, C.dim, 'center');
       text(paused ? 'P to resume' : 'Press any key', FW / 2, 380, 16, C.dummy, 'center');
+      if (paused) { if (saveNote > 0) saveNote -= 1 / 60; text(saveNote > 0 ? 'NEW SAVE FILE · THE FIELD NOTES WILL SHOW AGAIN' : 'N new save file (field notes show again)', FW / 2, 412, 12, saveNote > 0 ? C.dummy : C.dim, 'center'); } // row 729
     }
   }
-  window.__p10 = { get sim() { return s; }, get clip() { return clip; }, get lessonT() { return lessonT; }, stage: ST, newSim, start() { started = true; } };
+  window.__p10 = { get sim() { return s; }, get clip() { return clip; }, get lessonT() { return lessonT; }, get tip() { return tip; }, save: { read: readSave, clear: newSave, key: SAVE_KEY }, stage: ST, newSim, start() { started = true; } };
   requestAnimationFrame(frame);
 })();

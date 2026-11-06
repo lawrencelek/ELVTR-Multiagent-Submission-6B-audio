@@ -53,7 +53,7 @@ Read across: what the row's factor sets for the column's.
 - **Ducking is stealth, not armour.** Hidden behind cover taller than the body; higher sensors see in sooner as they near (§2.3).
 - **A lighter body speeds the loop.** 500 against front hits of 242: two hits a write-off (D119).
 - **Crawling is the answer to the search.** At `movement.duckSpeedFactor` 0.35 a ducked crawl beyond `duel.searchRadius` 60 takes about 2 s (row 720).
-- **The player's own escalation: the stealth grade** (row 725). Each strike scores by how unseen it was: UNSEEN `scoring.stealthUnseen` 3, LOST `scoring.stealthLost` 2, SEEN `scoring.stealthSeen` 1. It rises with skill whatever the car's rung.
+- **The player's own escalation: the stealth grade** (rows 725, 728). Each strike scores its damage × its grade: UNSEEN × `scoring.stealthUnseen` 3, LOST × `scoring.stealthLost` 2, SEEN × `scoring.stealthSeen` 1. It rises with skill whatever the car's rung; power and stealth both pay.
 - **Lure: a verb made from the car's learning** (row 726). Stand where it expects you; it stops short. Strike from elsewhere. The page draws its stop line.
 
 ## 2 Car behaviour and abilities
@@ -260,6 +260,7 @@ Read across: what the row's factor sets for the column's.
 | F26 | The lure lands: 18 lured cars, 18 struck, 225 a hit. A stopped car restarts fast enough | 1, 2, 4 | 726 |
 | F27 | Roaming beats the lure for a bot: 6.8–7.05 a minute against 4.1–4.8 at rung 6; 2.59 against 2.17 at rung 7. The lure buys control, not rate | 1, 2 | 726 |
 | F28 | 10.5 and 10.6 sat on the floor of two open ways in | 1, 2, 4 | 727 |
+| F29 | Damage × grade reorders the ways in: roaming 635 a hit, the lure 529, the crawl 370; the UNSEEN sprint only 158 (53 damage) | 1, 2 | 728 |
 
 ## 7 Open questions
 
@@ -379,8 +380,8 @@ One row per object type. Edit this table first; the sections above follow it.
 | Security cameras with a visible cone | MGS (panning cameras), Splinter Cell, Dishonored's watchtowers | A 60° cone per post, panning 60° (rows 723–724) | Panning cones: a timed crossing | **Built 10.8 (row 724)**; values D124 |
 | Shared, stale information | Hitman services; MGS V radio | Street cameras feed the car live | Fleet memory (Q2); a camera blocked by moved cover sees nothing | Open (Q2) |
 | Crowds are cover | AC, Hitman | White cars as moving cover (row 711) | Queues as cover; their flashing lights as the alarm (row 711) | Decided (row 711) |
-| Score how unseen a strike was | Mark of the Ninja's scoring; Wong: pacifist play signals skill | The stealth grade (row 725) | UNSEEN, LOST, SEEN points | **Built 10.8 (row 725)**; values D125 |
-| Manipulate the guard | Wong: a noisemaker moves a guard from idle to searching | The lure (row 726): a remembered spot or a ghost parks the car | Draw its stop line; a prompt | **Built 10.8 (row 726)**; form D126 |
+| Score how unseen a strike was | Mark of the Ninja's scoring; Wong: pacifist play signals skill | The stealth grade (rows 725, 728) | Damage × the grade: UNSEEN ×3, LOST ×2, SEEN ×1 | **Built 10.8**; D125 resolved (row 728) |
+| Manipulate the guard | Wong: a noisemaker moves a guard from idle to searching | The lure (row 726): a remembered spot or a ghost parks the car | Draw its stop line; a field note once per save file | **Built 10.8 (rows 726, 729)**; D126 resolved |
 | Failure is cheap | Mark of the Ninja's frequent checkpoints | A new body by drone; 2 s between passes | Keep | Keep; the block lift (row 715) |
 
 ### 9.3 Sources
@@ -414,3 +415,4 @@ One row per object type. Edit this table first; the sections above follow it.
 | 5 November 2026 | The street cameras' cones (row 723): rung 4's row; L2a; L7; F22–F23; the research row | 723 |
 | 6 November 2026 | The cameras pan (row 724): rung 4's row; L2b; L7; F24; the research row | 724 |
 | 6 November 2026 | The stealth grade, the lure, the floor of open ways (rows 725–727): §1.1; L11–L12; F25–F28; two research rows; Wong added to sources | 725–727 |
+| 6 November 2026 | Damage × the grade (row 728); the lure's field notes once per save file (row 729): §1.1; F29; the research rows | 728–729 |

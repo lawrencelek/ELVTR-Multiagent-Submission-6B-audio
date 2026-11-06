@@ -504,10 +504,10 @@
           const sn = (e.kind === 'dash' || e.kind === 'jump') && this.spring ? this.spring.seen : null; // rung 7: had the car seen it just before it hid and sprang?
           e.lostSight = !!(o.cover && sn && sn.ago <= this.P['duel.lessonClipSeconds'] + 1e-9); e.seenAt = e.lostSight ? { x: +sn.x.toFixed(1), y: +sn.y.toFixed(1), ago: +sn.ago.toFixed(2) } : null;
           e.origin = { x: +o.x.toFixed(1), y: +o.y.toFixed(1) }; e.covered = o.cover; e.habit = !!prev; e.remembered = !!this.nearSite(o.x, o.y, this.memory());
-          e.grade = this.strikeGrade(e, c); const pts = this.gradePoints(e.grade); // row 725: how unseen the strike was
-          this.stealth.points += pts; this.stealth[e.grade]++; this.stealth.last = { grade: e.grade, points: pts, t: +this.t.toFixed(2) }; e.points = pts;
+          e.grade = this.strikeGrade(e, c); const mult = this.gradeMultiplier(e.grade), pts = Math.round(e.lost * mult); // row 725: how unseen the strike was; row 728: its damage × the grade
+          this.stealth.points += pts; this.stealth[e.grade]++; this.stealth.last = { grade: e.grade, mult, points: pts, t: +this.t.toFixed(2) }; e.points = pts; e.mult = mult;
           this.crashes.push({ n: this.crashes.length + 1, x: +b.x.toFixed(1), y: +b.y.toFixed(1), ox: e.origin.x, oy: e.origin.y, cover: o.cover, px: fx ? +fx.x.toFixed(1) : null, py: fx ? +fx.y.toFixed(1) : null, h: +c.h.toFixed(3), t: +this.t.toFixed(2), model: c.model, zone: e.zone, prev: prev ? prev.n : null, writeoff: b.health <= 0, grade: e.grade, points: pts });
-          this.emit('crash', { n: this.crashes.length, x: e.origin.x, y: e.origin.y, cover: o.cover, habit: e.habit, prev: prev ? prev.n : null, grade: e.grade, points: pts });
+          this.emit('crash', { n: this.crashes.length, x: e.origin.x, y: e.origin.y, cover: o.cover, habit: e.habit, prev: prev ? prev.n : null, grade: e.grade, mult, points: pts });
         }
         if (e.lost > 0) this.learnFrom(e);
       }
@@ -515,14 +515,14 @@
     }
     // Row 725: the stealth grade of a damaging strike, from the striking car's sightings this pass (c.seenT: it truly had the
     // dummy, noticed or in its path). 'unseen': it never had it. 'lost': it had it, but not as the dummy sprang. 'seen': it had
-    // it on the spring's tick (a dash's or a jump's start; for a walk-in, the impact). Scored by scoring.stealthUnseen,
-    // scoring.stealthLost, scoring.stealthSeen.
+    // it on the spring's tick (a dash's or a jump's start; for a walk-in, the impact). Row 728: the strike scores its damage
+    // times its grade's multiplier: scoring.stealthUnseen, scoring.stealthLost, scoring.stealthSeen.
     strikeGrade(e, c) {
       const sp = (e.kind === 'dash' || e.kind === 'jump') && this.spring ? this.spring : null, TICK = 0.05;
       const had = sp ? sp.seen : c.seenT != null ? { ago: this.t - c.seenT } : null;
       return !had ? 'unseen' : had.ago <= TICK ? 'seen' : 'lost';
     }
-    gradePoints(g) { return this.P[{ unseen: 'scoring.stealthUnseen', lost: 'scoring.stealthLost', seen: 'scoring.stealthSeen' }[g]] || 0; }
+    gradeMultiplier(g) { return this.P[{ unseen: 'scoring.stealthUnseen', lost: 'scoring.stealthLost', seen: 'scoring.stealthSeen' }[g]] || 0; }
     // Beat 1, the cause: a damaging hit on the part the next rung guards. The lesson shows once the car has left the screen.
     learnFrom(e) {
       const c = this.carById(e.car), next = RUNGS[this.rung + 1];

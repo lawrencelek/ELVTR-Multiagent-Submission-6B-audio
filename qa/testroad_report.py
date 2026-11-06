@@ -184,7 +184,7 @@ if STAGE >= '10.8':
     if imp_all:
         w(f'## {n} Stealth grades (row 725)'); n += 1
         w('')
-        w(f"- **Points:** UNSEEN `scoring.stealthUnseen` {d['p10'].get('scoring.stealthUnseen', 0)}, LOST `scoring.stealthLost` {d['p10'].get('scoring.stealthLost', 0)}, SEEN `scoring.stealthSeen` {d['p10'].get('scoring.stealthSeen', 0)}.")
+        w(f"- **Points (row 728):** a strike scores its damage × its grade: UNSEEN × `scoring.stealthUnseen` {d['p10'].get('scoring.stealthUnseen', 0)}, LOST × `scoring.stealthLost` {d['p10'].get('scoring.stealthLost', 0)}, SEEN × `scoring.stealthSeen` {d['p10'].get('scoring.stealthSeen', 0)}.")
         w('')
         w('| Mode | Bot | Hits | UNSEEN | LOST | SEEN | Stealth points a minute |')
         w('|---|---|---|---|---|---|---|')

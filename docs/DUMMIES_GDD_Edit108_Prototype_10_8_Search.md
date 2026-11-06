@@ -8,11 +8,13 @@
 
 **Amended 6 November (rows 725–727):** each strike's stealth grade (§10.8.6); the lure and its stop line (§10.8.7); a floor of two open ways in (§10.8.8).
 
+**Amended 6 November (rows 728–729):** a strike scores its damage × its grade; the lure's field notes show once per save file, as a panel (§10.8.6–§10.8.7).
+
 - **Build:** `prototypes/p10/dummies_p10_8.html` (`python3 prototypes/p10/build.py`).
 - **Playtest pages:** `index.html`, one per test. 10.1–10.7 are frozen; 10.7 at md5 `54328d01…`.
-- **Tests:** `node prototypes/p10/test_p10.js --page` 60/60. Prototype 9 rebuild md5 `be163e7d014344e062965986b3da5786`. 8.4 md5 `9f5549201d88891f9f0b22c461602909`. Sound freeze: 211 items, 0 changed.
+- **Tests:** `node prototypes/p10/test_p10.js --page` 61/61. Prototype 9 rebuild md5 `be163e7d014344e062965986b3da5786`. 8.4 md5 `9f5549201d88891f9f0b22c461602909`. Sound freeze: 211 items, 0 changed.
 - **Probes:** `node qa/testroad.js --stage 10.8 --out qa/baseline/p10_8.json`; report `qa/baseline/p10_8.md`, 24/24 checks. 10.7 reruns identical to its baseline, new fields aside.
-- **Decision log:** rows 717–727. D123 resolved. Open D119, D120, D121, D122, D124, D125, D126.
+- **Decision log:** rows 717–729. D123, D125, D126 resolved. Open D119, D120, D121, D122, D124.
 
 ## Request
 
@@ -34,10 +36,11 @@
 | The cones pan back and forth | Lawrence, 6 November: "panning back and forth like mgs" | Decided (row 724; D123 resolved) |
 | A 60° sweep: rest 1 s, cross in 3 s; the barrier's ends as mirror images | MGS: a slow pan, a rest at each end; a window when both look away | Proposed (row 724; D124) |
 | Grade each strike: UNSEEN, LOST, SEEN | Lawrence, 6 November: "Score each strike by how unseen it was" | Decided (row 725) |
-| "Noticed" is a true sighting: the car's own sensors or a camera, noticed or in its path | The data behind rung 7's lesson (`c.seenT`) | Proposed (row 725; D125) |
-| UNSEEN 3, LOST 2, SEEN 1 points | Never noticed scores highest | Proposed (row 725; D125) |
+| "Noticed" is a true sighting: the car's own sensors or a camera, noticed or in its path | The data behind rung 7's lesson (`c.seenT`) | Decided (row 728) |
+| A strike scores its damage × its grade: UNSEEN ×3, LOST ×2, SEEN ×1 | Lawrence, 6 November: "multiply each strike's damage by its grade, so big unseen strikes score most" | Decided (row 728) |
 | The lure: the car's learning as the player's tool | Lawrence, 6 November: "Make the car's learning a lure the player can use" | Decided (row 726) |
-| A stop line drawn for every stop at rung 6 up; a prompt the first time it stops short of a remembered spot or a ghost | "Draw the car's coming stop line on the road" | Proposed (row 726; D126) |
+| A stop line drawn for every stop at rung 6 up | "Draw the car's coming stop line on the road"; "keep the stop line always on while we playtest" | Decided (row 729) |
+| The prompt: once per save file, as a panel | Lawrence, 6 November: "only happen once per save file (test this), ideally it should be shown with UI" | Decided (row 729) |
 | An open way lands at least 0.3 a minute at the top rung; each new part opens a way that uses it | Lawrence, 6 November: "at least two bots still land at every rung, and the count rises as parts arrive" | Proposed (row 727) |
 
 ## 10.8 The search
@@ -105,15 +108,16 @@
 ### 10.8.6 The stealth grade (row 725)
 
 - **Each damaging strike is graded** by the striking car's sightings this pass:
-  - **UNSEEN:** it never noticed the dummy. `scoring.stealthUnseen` 3 points.
-  - **LOST:** it noticed the dummy, then lost it before the spring. `scoring.stealthLost` 2.
-  - **SEEN:** it had the dummy as it sprang. `scoring.stealthSeen` 1.
+  - **UNSEEN:** it never noticed the dummy. × `scoring.stealthUnseen` 3.
+  - **LOST:** it noticed the dummy, then lost it before the spring. × `scoring.stealthLost` 2.
+  - **SEEN:** it had the dummy as it sprang. × `scoring.stealthSeen` 1.
+- **A strike scores its damage × its grade** (row 728). Big unseen strikes score most: power and stealth both pay.
 - **Noticed** means a true sighting: its own sensors or a street camera, noticed or in its path.
 - **The spring** is a dash's or a jump's start. A walk-in grades at the impact.
 - **Shown:**
-  - A flash under the dummy at the strike: "UNSEEN +3".
+  - A flash under the dummy at the strike: "UNSEEN ×3 +675".
   - The grade under the crash's evidence marker.
-  - The HUD: "STEALTH n", then the last grade.
+  - The HUD: "STEALTH n", then the last grade, its multiplier and its points.
 - **Any rung.** The grade measures the player, not the car. A strike that lands can still land better.
 - **Earlier stages:** 0 points; no grade shown.
 
@@ -125,9 +129,15 @@
   - **Then:** crawl beyond the ring, downstream. Strike as it drives on.
 - **The stop line:** from rung 6, a red car braking for the dummy, a remembered spot or a ghost draws where its nose will stop. A line across its lane; "STOPS HERE" until it arrives.
   - Amber for a ghost; red for a remembered spot; white otherwise.
-- **The prompt,** once a run each:
-  - The first stop at a remembered spot: "IT STOPS WHERE IT EXPECTS YOU · NOW STRIKE FROM ELSEWHERE".
-  - The first ghost: "IT STOPS SHORT OF ITS GHOST · STRIKE FROM BEYOND ITS RING".
+- **The field notes, once per save file** (row 729):
+  - The first stop at a remembered spot: "IT STOPS WHERE IT EXPECTS YOU. NOW STRIKE FROM ELSEWHERE."
+  - The first ghost: "IT STOPS SHORT OF ITS GHOST. STRIKE FROM BEYOND ITS RING."
+- **The panel:** a FARSIGHT diagnostic panel, "FARSIGHT · FIELD NOTE" and "THE LURE" in its header strip.
+  - A leader runs from it to the car's stop line, with a pulsing ring.
+  - It holds `ui.tip.holdSeconds` (7), with a timer bar. Play goes on.
+- **The save file:** one record in this browser for every Prototype 10 page. R does not reset it; a reload keeps it.
+  - N on the pause screen starts a new save file: the notes show again.
+  - Without browser storage, it lasts the visit.
 
 ### 10.8.8 The possibility space (row 727)
 
@@ -148,7 +158,9 @@
 - Row 723: each camera carries an aim; `inCameraCone` in `seeingCamera`; the cones drawn.
 - Row 724: each camera carries a phase; `cameraAim` pans it on sim time; the cone drawn at its aim now, with its sweep's arc.
 - Row 725: `strikeGrade`, `gradePoints`; `this.stealth`; the crash records its grade. `game_p10.js`: the flash, the marker's grade, the HUD.
-- Row 726: `stopPoint` (the nose's rest on its path). `game_p10.js`: `drawStopLines`, `drawHint`.
+- Row 726: `stopPoint` (the nose's rest on its path). `game_p10.js`: `drawStopLines`.
+- Row 728: `gradeMultiplier`; the strike's points are its damage × it.
+- Row 729: `game_p10.js`: the save file (`dummies.p10.save`: `readSave`, `writeSave`, `newSave`), `showTip`, `drawTip`; N on the pause screen.
 - `build.py`: 10.8's stage; 10.7's page frozen.
 - `qa/testroad.js`: bots `peek` (stand in view until noticed; duck; spring) and `peekmove` (the same; crawl beyond the radius along the row first). Fields: searches, found, ended, hits after a lost sighting.
 - Rows 725–727: bot `lure`; fields grades, stealth points, lures taken, lured cars struck, stop-line misses. `qa/testroad_report.py`: the grade, lure and possibility-space sections and their checks.
@@ -189,17 +201,18 @@
 
 **The stealth grade (row 725):**
 
-| Way in (trained) | Hits | UNSEEN | LOST | SEEN | Points a minute |
-|---|---|---|---|---|---|
-| Moving between spots (`roam`) | 38 | 28 | 8 | 2 | 6.95 |
-| The lure (`lure`) | 32 | 11 | 21 | 0 | 5.09 |
-| The crawl (`peekmove`) | 30 | 9 | 17 | 4 | 4.39 |
-| The sprint from past the field (`lurk`) | 9 | 9 | 0 | 0 | 1.80 |
-| The gap | 7 | 3 | 0 | 4 | 0.87 |
-| The flank from open pavement | 9 | 0 | 0 | 9 | 0.60 |
+| Way in (trained) | Hits | UNSEEN | LOST | SEEN | Damage a hit | Points a hit (row 728) | Points a minute |
+|---|---|---|---|---|---|---|---|
+| Moving between spots (`roam`) | 38 | 28 | 8 | 2 | 225 | 635 | 1,644 |
+| The lure (`lure`) | 32 | 11 | 21 | 0 | 226 | 529 | 1,150 |
+| The crawl (`peekmove`) | 30 | 9 | 17 | 4 | 152 | 370 | 749 |
+| The sprint from past the field (`lurk`) | 9 | 9 | 0 | 0 | 53 | 158 | 95 |
+| The gap | 7 | 3 | 0 | 4 | 65 | 129 | 60 |
+| The flank from open pavement | 9 | 0 | 0 | 9 | 53 | 53 | 32 |
 
 - **As predicted:** the sprint grades UNSEEN, 18 of 18 across both modes. Seen, then hidden (`peek`) grades LOST, 4 of 4.
 - **The open-ground flank grades SEEN, 9 of 9.** It lands, but scores least.
+- **Power now counts.** The sprint grades UNSEEN, but its 53-damage hits score 158 each. A full ambush from cover scores four times that.
 
 **The lure (row 726):**
 
@@ -245,15 +258,14 @@
 
 ## Registry
 
-- **Added (9):** `duel.searchRadius`, `duel.searchSeconds`; `perception.streetCameraFov` (row 723; default 360); `perception.streetCameraPanArc` (default 0), `perception.streetCameraPanSeconds`, `perception.streetCameraPanHold` (row 724); `scoring.stealthUnseen`, `scoring.stealthLost`, `scoring.stealthSeen` (row 725; default 0).
-- **Set by stage:** `duel.startRung` 6, `duel.topRung` 7, `duel.searchRadius` 60, `duel.searchSeconds` 4, `perception.streetCameraFov` 60, `perception.streetCameraPanArc` 60, `perception.streetCameraPanSeconds` 3, `perception.streetCameraPanHold` 1, `scoring.stealthUnseen` 3, `scoring.stealthLost` 2, `scoring.stealthSeen` 1. 10.7's values otherwise.
-- **672 entries.** `registryVersion` unchanged (row 665).
+- **Added (10):** `duel.searchRadius`, `duel.searchSeconds`; `perception.streetCameraFov` (row 723; default 360); `perception.streetCameraPanArc` (default 0), `perception.streetCameraPanSeconds`, `perception.streetCameraPanHold` (row 724); `scoring.stealthUnseen`, `scoring.stealthLost`, `scoring.stealthSeen` (row 725; multipliers from row 728; default 0); `ui.tip.holdSeconds` (row 729).
+- **Set by stage:** `duel.startRung` 6, `duel.topRung` 7, `duel.searchRadius` 60, `duel.searchSeconds` 4, `perception.streetCameraFov` 60, `perception.streetCameraPanArc` 60, `perception.streetCameraPanSeconds` 3, `perception.streetCameraPanHold` 1, `scoring.stealthUnseen` 3, `scoring.stealthLost` 2, `scoring.stealthSeen` 1, `ui.tip.holdSeconds` 7. 10.7's values otherwise.
+- **673 entries.** `registryVersion` unchanged (row 665).
 
 ## Open
 
 - **Human pass (H6):** does the player read the ghost, and crawl away? Do the cones read? Does the player time the sweep? Does the grade pull play toward UNSEEN? Does the player use the lure?
-- **D125:** the grade's points and what counts as noticed.
-- **D126:** the stop line and the prompt: always on, or a part?
+- **After the playtest:** does the stop line stay free, or become a part the dummy earns (row 729)?
 - **D124:** the pan's values: 60° in 3 s, 1 s rests, the barrier's ends mirrored.
 - **D121:** the order from here. The road upgrade at 10.9, swerve cost at 10.10.
 - **D122:** the search's values. 60 and 4 leave the crawl open along a row longer than 60.

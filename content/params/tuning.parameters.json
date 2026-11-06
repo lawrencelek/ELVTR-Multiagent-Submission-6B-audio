@@ -1968,66 +1968,66 @@
    "group": "Scoring",
    "owner": "Scoring",
    "label": "Stealth grade: unseen",
-   "description": "Test road: points for a damaging strike the striking car never noticed this pass (no true sighting: its own sensors or a street camera, noticed or in its path). 0: no stealth grade (10.1–10.7). 10.8 sets 3",
-   "unit": "points",
+   "description": "Test road: a damaging strike the striking car never noticed this pass (no true sighting: its own sensors or a street camera, noticed or in its path) scores its damage times this. 0: no stealth grade (10.1–10.7). 10.8 sets 3",
+   "unit": "multiplier",
    "type": "number",
    "default": 0,
    "status": "proposed",
-   "source": "GDD Edit 108 amendment (Prototype 10.8): DECISIONS row 725",
+   "source": "GDD Edit 108 amendment (Prototype 10.8): DECISIONS rows 725, 728",
    "editable": true,
    "protectedReason": null,
    "applyAt": "next-run",
    "validation": {
     "min": 0,
-    "max": 100
+    "max": 10
    },
    "integrationStatus": "prototype-p10",
    "boundaryStatus": "proposed-adapter-contract-not-implemented",
-   "purpose": "Test road: points for a damaging strike the striking car never noticed this pass (no true sighting: its own sensors or a street camera, noticed or in its path). 0: no stealth grade (10.1–10.7). 10.8 sets 3"
+   "purpose": "Test road: a damaging strike the striking car never noticed this pass (no true sighting: its own sensors or a street camera, noticed or in its path) scores its damage times this. 0: no stealth grade (10.1–10.7). 10.8 sets 3"
   },
   {
    "id": "scoring.stealthLost",
    "group": "Scoring",
    "owner": "Scoring",
    "label": "Stealth grade: lost",
-   "description": "Test road: points for a damaging strike the car had noticed this pass but lost before the dummy sprang. 10.8 sets 2",
-   "unit": "points",
+   "description": "Test road: a damaging strike the car had noticed this pass but lost before the dummy sprang scores its damage times this. 10.8 sets 2",
+   "unit": "multiplier",
    "type": "number",
    "default": 0,
    "status": "proposed",
-   "source": "GDD Edit 108 amendment (Prototype 10.8): DECISIONS row 725",
+   "source": "GDD Edit 108 amendment (Prototype 10.8): DECISIONS rows 725, 728",
    "editable": true,
    "protectedReason": null,
    "applyAt": "next-run",
    "validation": {
     "min": 0,
-    "max": 100
+    "max": 10
    },
    "integrationStatus": "prototype-p10",
    "boundaryStatus": "proposed-adapter-contract-not-implemented",
-   "purpose": "Test road: points for a damaging strike the car had noticed this pass but lost before the dummy sprang. 10.8 sets 2"
+   "purpose": "Test road: a damaging strike the car had noticed this pass but lost before the dummy sprang scores its damage times this. 10.8 sets 2"
   },
   {
    "id": "scoring.stealthSeen",
    "group": "Scoring",
    "owner": "Scoring",
    "label": "Stealth grade: seen",
-   "description": "Test road: points for a damaging strike the car had in sight as the dummy sprang. 10.8 sets 1",
-   "unit": "points",
+   "description": "Test road: a damaging strike the car had in sight as the dummy sprang scores its damage times this. 10.8 sets 1",
+   "unit": "multiplier",
    "type": "number",
    "default": 0,
    "status": "proposed",
-   "source": "GDD Edit 108 amendment (Prototype 10.8): DECISIONS row 725",
+   "source": "GDD Edit 108 amendment (Prototype 10.8): DECISIONS rows 725, 728",
    "editable": true,
    "protectedReason": null,
    "applyAt": "next-run",
    "validation": {
     "min": 0,
-    "max": 100
+    "max": 10
    },
    "integrationStatus": "prototype-p10",
    "boundaryStatus": "proposed-adapter-contract-not-implemented",
-   "purpose": "Test road: points for a damaging strike the car had in sight as the dummy sprang. 10.8 sets 1"
+   "purpose": "Test road: a damaging strike the car had in sight as the dummy sprang scores its damage times this. 10.8 sets 1"
   },
   {
    "id": "abilities.hands.maxLevel",
@@ -10237,6 +10237,28 @@
    "integrationStatus": "prototype-p7.3",
    "boundaryStatus": "proposed-adapter-contract-not-implemented",
    "purpose": "\"JUICE and SATISFACTION\""
+  },
+  {
+   "id": "ui.tip.holdSeconds",
+   "group": "UI",
+   "owner": "UI",
+   "label": "Field note hold",
+   "description": "A one-time FARSIGHT field note (a tip, shown once per save file) stays on screen this long, with its timer bar. Prototype 10.8: the lure's notes",
+   "unit": "seconds",
+   "type": "number",
+   "default": 7,
+   "status": "proposed",
+   "source": "GDD Edit 108 amendment (Prototype 10.8): DECISIONS row 729",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "immediate",
+   "validation": {
+    "min": 2,
+    "max": 20
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "A one-time FARSIGHT field note (a tip, shown once per save file) stays on screen this long, with its timer bar. Prototype 10.8: the lure's notes"
   },
   {
    "id": "ui.finale.unveilSeconds",

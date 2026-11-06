@@ -426,7 +426,7 @@ check('10.8 (row 724): each camera pans across perception.streetCameraPanArc, MG
     detail: `arc ${A}°, sweep ${T} s, hold ${H} s (cycle ${cyc} s); camera 1 aims ${lo.toFixed(0)}–${hi.toFixed(0)}°; a spot at the sweep's far edge watched ${(100 * seen / n).toFixed(0)}% of the cycle (${flips} changes); the barrier's two ends sweep as mirror images ${mirror}; 10.7 fixed at ${aims0[0]}°` };
 });
 
-check('10.8 (row 725): each strike is graded by how unseen it was: hidden from the start, UNSEEN (scoring.stealthUnseen); seen, then hidden, LOST (scoring.stealthLost); 10.7 scores none', () => {
+check('10.8 (rows 725, 728): each strike is graded by how unseen it was and scores its damage × the grade: hidden from the start, UNSEEN (scoring.stealthUnseen); seen, then hidden, LOST (scoring.stealthLost); 10.7 scores none', () => {
   const ambush = (spot) => (q) => { const b = q.body; if (!b.alive) return {}; const c = q.onRoad().find((x) => x.red && !x.spent && x.path.road === 'A');
     if (Math.hypot(spot[0] - b.x, spot[1] - b.y) > 6) return Object.assign(to(b, spot[0], spot[1]), { duck: true });
     if (c && c.v > 15) { const d0 = Math.hypot(c.x - b.x, c.y - b.y), k = 0.1 + d0 / 600, tx = c.x + (c.vx || 0) * k, ty = c.y + (c.vy || 0) * k, d = Math.hypot(tx - b.x, ty - b.y), ang = Math.atan2(ty - b.y, tx - b.x);
@@ -435,8 +435,9 @@ check('10.8 (row 725): each strike is graded by how unseen it was: hidden from t
   const u = sim(F8, { 'duel.startRung': 7 }, ALL); Object.assign(u.body, { x: 559, y: 421, duck: true }); drive(u, 40, ambush([559, 421])); const hu = hits(u)[0];
   const l = sim(F8, {}, ALL); Object.assign(l.body, { x: 170, y: 203 }); drive(l, 60, peekBot([170, 203])); const hl = hits(l)[0];
   const o = sim(F7, {}, ALL); Object.assign(o.body, { x: 559, y: 421, duck: true }); drive(o, 40, ambush([559, 421])); const ho = hits(o)[0];
-  return { ok: !!hu && hu.grade === 'unseen' && u.stealth.points === F8['scoring.stealthUnseen'] * u.stealth.unseen && !!hl && hl.grade === 'lost' && l.stealth.lost >= 1 && !!ho && o.stealth.points === 0 && F8['scoring.stealthUnseen'] > F8['scoring.stealthLost'] && F8['scoring.stealthLost'] > F8['scoring.stealthSeen'],
-    detail: `ambush from the start: ${hu ? hu.grade : 'no hit'}, ${u.stealth.points} points (${u.stealth.unseen} UNSEEN × ${F8['scoring.stealthUnseen']}); seen, then hidden: ${hl ? hl.grade : 'no hit'}; 10.7: ${ho ? ho.grade : 'no hit'}, ${o.stealth.points} points` };
+  const sum = (q) => hits(q).filter((e) => e.grade).reduce((t, e) => t + Math.round(e.lost * ({ unseen: F8['scoring.stealthUnseen'], lost: F8['scoring.stealthLost'], seen: F8['scoring.stealthSeen'] })[e.grade]), 0);
+  return { ok: !!hu && hu.grade === 'unseen' && u.stealth.points === sum(u) && hu.points === Math.round(hu.lost * F8['scoring.stealthUnseen']) && !!hl && hl.grade === 'lost' && l.stealth.lost >= 1 && !!ho && o.stealth.points === 0 && F8['scoring.stealthUnseen'] > F8['scoring.stealthLost'] && F8['scoring.stealthLost'] > F8['scoring.stealthSeen'],
+    detail: `ambush from the start: ${hu ? hu.grade + ', ' + Math.round(hu.lost) + ' damage × ' + hu.mult + ' = ' + hu.points : 'no hit'}; run total ${u.stealth.points}; seen, then hidden: ${hl ? hl.grade : 'no hit'}; 10.7: ${ho ? ho.grade : 'no hit'}, ${o.stealth.points} points` };
 });
 check('10.8 (row 726): the stop line: a car braking for the dummy, a remembered spot or its ghost stops where stopPoint first said, within 10 of its nose', () => {
   const runs = [], one = (x, y, bot, secs) => { const t = sim(F8, { 'duel.startRung': 7 }, ALL); Object.assign(t.body, { x, y }); const pred = new Map(), errs = [];
@@ -593,6 +594,20 @@ if (process.argv.includes('--page')) {
           let fit = false, rung = 6, ghostClip = false; for (let i = 0; i < 1920; i++) { await pg.waitForTimeout(125); const q = await pg.evaluate(() => ({ ph: window.__p10.sim.phase, lt: window.__p10.lessonT, rung: window.__p10.sim.rung, g: !!(window.__p10.clip && window.__p10.clip.info && window.__p10.clip.info.search && window.__p10.clip.seenAt) })); rung = q.rung; if (q.ph === 'lesson' && q.g) ghostClip = true; if (q.ph === 'lesson' && q.lt > F8['duel.lessonClipSeconds'] + F8['duel.lessonHoldSeconds'] + 0.2) fit = true; if (q.rung === 7 && q.ph === 'play') break; }
           let ghost = false, found = false; for (let i = 0; i < 480 && !(ghost && found); i++) { await pg.waitForTimeout(125); const q = await pg.evaluate(() => ({ g: window.__p10.sim.onRoad().some((c) => c.red && c.lkp), f: window.__p10.sim.events.some((e) => e.type === 'search-found') })); ghost = ghost || q.g; found = found || q.f; }
           results.push([fit && ghostClip && rung === 7 && ghost && found && errs.length === 0, '10.8 page: seen, then struck from cover within the clip; the clip draws the ghost; search fitted; at rung 7 the next car leaves a ghost and finds the dummy near it', `ghost in the clip ${ghostClip}, fitting ${fit}, rung ${rung}, ghost on the road ${ghost}, found ${found}, errors ${errs.length}`]);
+          // Row 729: the lure's field note shows once per save file: not again after R, nor after a reload; again after a new save file (N, paused)
+          const peekRig = () => pg.evaluate(() => { const s = window.__p10.sim, step = s.step.bind(s), spot = [617, 421]; s.rung = 7; let phase = 'show', car = null; Object.assign(s.body, { x: spot[0], y: spot[1], vx: 0, vy: 0 });
+            const bot = () => { const b = s.body; if (!b.alive || s.phase !== 'play') return null; const c = s.onRoad().find((x) => x.red && !x.spent && x.path.road === 'A'); if (!c) { phase = 'show'; car = null; return {}; }
+              if (car !== c.id) { car = c.id; phase = 'show'; } if (phase === 'show') { if (c.noticed || (c.hz && c.v < 1)) phase = 'hide'; return {}; } return { duck: true }; };
+            s.step = (cmd) => { const c = bot(); return step(c || cmd); }; });
+          const ghostTip = async () => { await peekRig(); for (let i = 0; i < 400; i++) { await pg.waitForTimeout(100); const q = await pg.evaluate(() => { const s = window.__p10.sim, e = s.events.find((x) => x.type === 'search'); return e && s.t - e.t > 0.2 ? { tip: window.__p10.tip ? window.__p10.tip.id : null, saved: !!window.__p10.save.read().tips['lure.ghost'], stored: (() => { try { return !!JSON.parse(localStorage.getItem(window.__p10.save.key) || '{}').tips['lure.ghost']; } catch (er) { return null; } })() } : null; }); if (q) return q; } return { tip: 'no ghost', saved: null }; };
+          await pg.evaluate(() => { window.__p10.save.clear(); window.__p10.newSim(); });
+          const first = await ghostTip();
+          await pg.keyboard.press('r'); await pg.waitForTimeout(200); const afterR = await ghostTip();
+          await pg.reload(); await pg.waitForTimeout(600); await pg.keyboard.press('Enter'); await pg.waitForTimeout(300); const afterReload = await ghostTip();
+          await pg.keyboard.press('p'); await pg.keyboard.press('n'); await pg.keyboard.press('p'); await pg.evaluate(() => window.__p10.newSim()); const afterNew = await ghostTip();
+          results.push([first.tip === 'lure.ghost' && first.stored && afterR.tip === null && afterR.saved && afterReload.tip === null && afterReload.saved && afterNew.tip === 'lure.ghost' && errs.length === 0,
+            '10.8 page (row 729): the lure field note shows once per save file: not after R, not after a reload; again after a new save file (N, paused)',
+            `first ghost: ${first.tip}, stored ${first.stored}; after R: ${afterR.tip}; after a reload: ${afterReload.tip}; after N: ${afterNew.tip}; errors ${errs.length}`]);
         }
         await pg.close();
       }

@@ -4261,10 +4261,10 @@
           const sn = (e.kind === 'dash' || e.kind === 'jump') && this.spring ? this.spring.seen : null; // rung 7: had the car seen it just before it hid and sprang?
           e.lostSight = !!(o.cover && sn && sn.ago <= this.P['duel.lessonClipSeconds'] + 1e-9); e.seenAt = e.lostSight ? { x: +sn.x.toFixed(1), y: +sn.y.toFixed(1), ago: +sn.ago.toFixed(2) } : null;
           e.origin = { x: +o.x.toFixed(1), y: +o.y.toFixed(1) }; e.covered = o.cover; e.habit = !!prev; e.remembered = !!this.nearSite(o.x, o.y, this.memory());
-          e.grade = this.strikeGrade(e, c); const pts = this.gradePoints(e.grade); // row 725: how unseen the strike was
-          this.stealth.points += pts; this.stealth[e.grade]++; this.stealth.last = { grade: e.grade, points: pts, t: +this.t.toFixed(2) }; e.points = pts;
+          e.grade = this.strikeGrade(e, c); const mult = this.gradeMultiplier(e.grade), pts = Math.round(e.lost * mult); // row 725: how unseen the strike was; row 728: its damage × the grade
+          this.stealth.points += pts; this.stealth[e.grade]++; this.stealth.last = { grade: e.grade, mult, points: pts, t: +this.t.toFixed(2) }; e.points = pts; e.mult = mult;
           this.crashes.push({ n: this.crashes.length + 1, x: +b.x.toFixed(1), y: +b.y.toFixed(1), ox: e.origin.x, oy: e.origin.y, cover: o.cover, px: fx ? +fx.x.toFixed(1) : null, py: fx ? +fx.y.toFixed(1) : null, h: +c.h.toFixed(3), t: +this.t.toFixed(2), model: c.model, zone: e.zone, prev: prev ? prev.n : null, writeoff: b.health <= 0, grade: e.grade, points: pts });
-          this.emit('crash', { n: this.crashes.length, x: e.origin.x, y: e.origin.y, cover: o.cover, habit: e.habit, prev: prev ? prev.n : null, grade: e.grade, points: pts });
+          this.emit('crash', { n: this.crashes.length, x: e.origin.x, y: e.origin.y, cover: o.cover, habit: e.habit, prev: prev ? prev.n : null, grade: e.grade, mult, points: pts });
         }
         if (e.lost > 0) this.learnFrom(e);
       }
@@ -4272,14 +4272,14 @@
     }
     // Row 725: the stealth grade of a damaging strike, from the striking car's sightings this pass (c.seenT: it truly had the
     // dummy, noticed or in its path). 'unseen': it never had it. 'lost': it had it, but not as the dummy sprang. 'seen': it had
-    // it on the spring's tick (a dash's or a jump's start; for a walk-in, the impact). Scored by scoring.stealthUnseen,
-    // scoring.stealthLost, scoring.stealthSeen.
+    // it on the spring's tick (a dash's or a jump's start; for a walk-in, the impact). Row 728: the strike scores its damage
+    // times its grade's multiplier: scoring.stealthUnseen, scoring.stealthLost, scoring.stealthSeen.
     strikeGrade(e, c) {
       const sp = (e.kind === 'dash' || e.kind === 'jump') && this.spring ? this.spring : null, TICK = 0.05;
       const had = sp ? sp.seen : c.seenT != null ? { ago: this.t - c.seenT } : null;
       return !had ? 'unseen' : had.ago <= TICK ? 'seen' : 'lost';
     }
-    gradePoints(g) { return this.P[{ unseen: 'scoring.stealthUnseen', lost: 'scoring.stealthLost', seen: 'scoring.stealthSeen' }[g]] || 0; }
+    gradeMultiplier(g) { return this.P[{ unseen: 'scoring.stealthUnseen', lost: 'scoring.stealthLost', seen: 'scoring.stealthSeen' }[g]] || 0; }
     // Beat 1, the cause: a damaging hit on the part the next rung guards. The lesson shows once the car has left the screen.
     learnFrom(e) {
       const c = this.carById(e.car), next = RUNGS[this.rung + 1];
@@ -4430,7 +4430,7 @@
 
 </script>
 <script>
-window.DUMMIES_SIM = {"proto.droneConeSeconds": 5, "traffic.ringLaneChange": 150, "traffic.ringEntryGap": 2, "traffic.signalDistance": 140, "vehicles.scale": 0.9, "proto.turnModel": 2, "proto.input.fourButtons": 1, "proto.combo": 1, "proto.abilities": 3, "proto.jump.runToClear": 1, "proto.bounce.newton": 1, "proto.recoilScale": 0.7, "abilities.maxLevel": 3, "abilities.wearCut": 0.25, "battery.secondsPerCharge": 1, "scoring.comboVariety": 0.5, "scoring.comboAirPause": 1, "scoring.coneLink": 1, "scoring.comboMax": 5, "input.dropHoldSeconds": 0.3, "vehicles.sedan.length": 50.4, "vehicles.sedan.width": 25.2, "vehicles.sedan.height": 19.8, "vehicles.van.height": 30.6, "vehicles.van.length": 61.2, "vehicles.van.width": 28.8, "vehicles.hatchback.length": 41.4, "vehicles.hatchback.width": 23.4, "vehicles.hatchback.height": 20.7, "vehicles.police.length": 52.2, "vehicles.police.width": 25.2, "vehicles.police.height": 20.7, "vehicles.bus.length": 86.4, "vehicles.bus.width": 30.6, "vehicles.bus.height": 43.2, "proto.bounce.maxThrow": 40, "world.deckDropGaps": 1, "world.deckFlightsMin": 1, "props.cone.minVisible": 0.9, "battery.dashJumpCost": 0, "abilities.hands.tapDrop": 1, "proto.batteryModel": 1, "world.dummyMonument": 1, "world.storyArt": 1, "world.monumentShroud": 1, "arcade.grades": 1, "ui.introScreen": 1, "ui.levelCard": 1, "world.droneDropIn": 1, "ui.storySplash": 1, "arcade.grade.healthStep": 0.25, "arcade.grade.densityStep": 0.2, "arcade.grade.max": 5, "highscore.tableSize": 10, "ui.intro.loopSeconds": 6.5, "ui.splash.cycleSeconds": 3.6, "proto.driver.coneSteepPass": 1, "proto.art.beamStraight": 1, "proto.art.brakeGlowStopped": 1, "proto.art.spentGrey": 1, "ui.cueKey.simple": 1, "ui.layerEdgeFix": 1, "proto.art.noticeFlashHz": 4, "proto.stopCue": 0, "audio.enabled": 1, "story.coneBaitSeconds": 6, "story.floorHold": 1, "ui.hud.bodyCeil": 1, "ui.spentTick": 1, "proto.contactGraceSeconds": 0.3, "proto.driver.dodgeFollowsCone": 1, "ui.lampsOnCar": 1, "ui.pause.quiet": 1, "ui.conesXray": 1, "arcade.modes": 1, "arcade.trial.writeOffs": 10, "arcade.endless.gradeWriteOffs": 3, "ui.exploreArrows": 1, "ui.coreOnChest": 1, "economy.price.ability.level1": 2, "economy.price.ability.level2": 4, "economy.price.ability.level3": 6, "economy.price.ability.level4": 8, "duel.enabled": 1, "duel.carsOnRoad": 1, "duel.redReturnSeconds": 2, "duel.startRung": 6, "duel.topRung": 7, "duel.standstillSpeed": 5, "duel.dashArrives": 3, "duel.jumpArrives": 3, "duel.conesArrives": 3, "duel.duckArrives": 3, "duel.planters": 1, "duel.lessonClipSeconds": 3, "duel.lessonHoldSeconds": 0.8, "duel.lessonFitSeconds": 2, "duel.runInLength": 200, "duel.memoryRadius": 50, "duel.memorySites": 3, "duel.blockSeconds": 10, "duel.searchRadius": 60, "duel.searchSeconds": 4, "proto.learningEnabled": 0, "proto.learn.standoffEnabled": 0, "perception.forwardLength": 720, "proto.driver.cautionZone": 180, "run.appearances.road": 1000, "run.quota.road": 1000000, "perception.sideNoticeSeconds": 0.6, "props.planter.height": 14, "body.duckHeight": 6, "movement.duckSpeedFactor": 0.35, "perception.duckNoticeFactor": 1.5, "perception.sensorHeight": 14, "perception.lidarHeight": 26, "perception.streetCameraHeight": 60, "perception.streetCameraRange": 180, "proto.health.standard": 500, "perception.streetCameraFov": 60, "perception.streetCameraPanArc": 60, "perception.streetCameraPanSeconds": 3, "perception.streetCameraPanHold": 1, "scoring.stealthUnseen": 3, "scoring.stealthLost": 2, "scoring.stealthSeen": 1}; // Edit 108 (P10.8): registry edit100-2026-10-30; P6SIM, P7SIM, Prototype 9 flags, P10 defaults, then 10.8
+window.DUMMIES_SIM = {"proto.droneConeSeconds": 5, "traffic.ringLaneChange": 150, "traffic.ringEntryGap": 2, "traffic.signalDistance": 140, "vehicles.scale": 0.9, "proto.turnModel": 2, "proto.input.fourButtons": 1, "proto.combo": 1, "proto.abilities": 3, "proto.jump.runToClear": 1, "proto.bounce.newton": 1, "proto.recoilScale": 0.7, "abilities.maxLevel": 3, "abilities.wearCut": 0.25, "battery.secondsPerCharge": 1, "scoring.comboVariety": 0.5, "scoring.comboAirPause": 1, "scoring.coneLink": 1, "scoring.comboMax": 5, "input.dropHoldSeconds": 0.3, "vehicles.sedan.length": 50.4, "vehicles.sedan.width": 25.2, "vehicles.sedan.height": 19.8, "vehicles.van.height": 30.6, "vehicles.van.length": 61.2, "vehicles.van.width": 28.8, "vehicles.hatchback.length": 41.4, "vehicles.hatchback.width": 23.4, "vehicles.hatchback.height": 20.7, "vehicles.police.length": 52.2, "vehicles.police.width": 25.2, "vehicles.police.height": 20.7, "vehicles.bus.length": 86.4, "vehicles.bus.width": 30.6, "vehicles.bus.height": 43.2, "proto.bounce.maxThrow": 40, "world.deckDropGaps": 1, "world.deckFlightsMin": 1, "props.cone.minVisible": 0.9, "battery.dashJumpCost": 0, "abilities.hands.tapDrop": 1, "proto.batteryModel": 1, "world.dummyMonument": 1, "world.storyArt": 1, "world.monumentShroud": 1, "arcade.grades": 1, "ui.introScreen": 1, "ui.levelCard": 1, "world.droneDropIn": 1, "ui.storySplash": 1, "arcade.grade.healthStep": 0.25, "arcade.grade.densityStep": 0.2, "arcade.grade.max": 5, "highscore.tableSize": 10, "ui.intro.loopSeconds": 6.5, "ui.splash.cycleSeconds": 3.6, "proto.driver.coneSteepPass": 1, "proto.art.beamStraight": 1, "proto.art.brakeGlowStopped": 1, "proto.art.spentGrey": 1, "ui.cueKey.simple": 1, "ui.layerEdgeFix": 1, "proto.art.noticeFlashHz": 4, "proto.stopCue": 0, "audio.enabled": 1, "story.coneBaitSeconds": 6, "story.floorHold": 1, "ui.hud.bodyCeil": 1, "ui.spentTick": 1, "proto.contactGraceSeconds": 0.3, "proto.driver.dodgeFollowsCone": 1, "ui.lampsOnCar": 1, "ui.pause.quiet": 1, "ui.conesXray": 1, "arcade.modes": 1, "arcade.trial.writeOffs": 10, "arcade.endless.gradeWriteOffs": 3, "ui.exploreArrows": 1, "ui.coreOnChest": 1, "economy.price.ability.level1": 2, "economy.price.ability.level2": 4, "economy.price.ability.level3": 6, "economy.price.ability.level4": 8, "duel.enabled": 1, "duel.carsOnRoad": 1, "duel.redReturnSeconds": 2, "duel.startRung": 6, "duel.topRung": 7, "duel.standstillSpeed": 5, "duel.dashArrives": 3, "duel.jumpArrives": 3, "duel.conesArrives": 3, "duel.duckArrives": 3, "duel.planters": 1, "duel.lessonClipSeconds": 3, "duel.lessonHoldSeconds": 0.8, "duel.lessonFitSeconds": 2, "duel.runInLength": 200, "duel.memoryRadius": 50, "duel.memorySites": 3, "duel.blockSeconds": 10, "duel.searchRadius": 60, "duel.searchSeconds": 4, "proto.learningEnabled": 0, "proto.learn.standoffEnabled": 0, "perception.forwardLength": 720, "proto.driver.cautionZone": 180, "run.appearances.road": 1000, "run.quota.road": 1000000, "perception.sideNoticeSeconds": 0.6, "props.planter.height": 14, "body.duckHeight": 6, "movement.duckSpeedFactor": 0.35, "perception.duckNoticeFactor": 1.5, "perception.sensorHeight": 14, "perception.lidarHeight": 26, "perception.streetCameraHeight": 60, "perception.streetCameraRange": 180, "proto.health.standard": 500, "perception.streetCameraFov": 60, "perception.streetCameraPanArc": 60, "perception.streetCameraPanSeconds": 3, "perception.streetCameraPanHold": 1, "scoring.stealthUnseen": 3, "scoring.stealthLost": 2, "scoring.stealthSeen": 1, "ui.tip.holdSeconds": 7}; // Edit 108 (P10.8): registry edit100-2026-10-30; P6SIM, P7SIM, Prototype 9 flags, P10 defaults, then 10.8
 window.DUMMIES_P10_STAGE = {"id": "10.8", "title": "THE SEARCH", "edit": 108};
 </script>
 <script>
@@ -4467,13 +4467,19 @@ window.DUMMIES_P10_STAGE = {"id": "10.8", "title": "THE SEARCH", "edit": 108};
   const CLIP = F['duel.lessonClipSeconds'], HOLD = F['duel.lessonHoldSeconds'], FIT = F['duel.lessonFitSeconds']; // the clip, its last frame held, the fitting
   const cv = document.getElementById('game'), ctx = cv.getContext('2d');
   let s, paused = false, started = false, showZones = true, log = [], session = {}, prevV = new Map(), flash = [];
-  let hint = null; const hinted = new Set(); // row 726: the lure's one-time prompts
+  // Row 729: the test road's save file: one record in this browser for every Prototype 10 page, holding the field notes
+  // already shown. Without storage it lasts the visit. N on the pause screen starts a new save file.
+  const SAVE_KEY = 'dummies.p10.save'; let memSave = null, tip = null, saveNote = 0;
+  function readSave() { let v = memSave; try { const raw = localStorage.getItem(SAVE_KEY); if (raw != null) v = JSON.parse(raw); } catch (e) { /* storage off */ } return v && v.v === 1 && v.tips ? v : { v: 1, tips: {} }; }
+  function writeSave(v) { v.saved = Date.now(); memSave = v; try { localStorage.setItem(SAVE_KEY, JSON.stringify(v)); } catch (e) { /* storage off: it lasts this visit */ } }
+  function tipSeen(id) { return !!readSave().tips[id]; }
+  function newSave() { memSave = null; tip = null; try { localStorage.removeItem(SAVE_KEY); } catch (e) { /* storage off */ } }
   let ring = [], clip = null, lessonT = null, lastCrash = null; // the recording, the hit's clip, the lesson's clock, the latest crash
   const keys = new Set(); let aEdge = false, bEdge = false, xEdge = false, touchMove = null, touchA = false, touchB = false, touchX = null, touchD = null;
 
   function newSim() {
     s = new T.TestRoadSim(Object.assign({}, F)); log = []; session = { start: Date.now(), build: 'P' + ST.id };
-    prevV.clear(); flash = []; ring = []; clip = null; lessonT = null; lastCrash = null; hint = null; hinted.clear();
+    prevV.clear(); flash = []; ring = []; clip = null; lessonT = null; lastCrash = null; tip = null;
   }
   newSim();
 
@@ -4486,6 +4492,7 @@ window.DUMMIES_P10_STAGE = {"id": "10.8", "title": "THE SEARCH", "edit": 108};
     if (k === 'e' || k === 'x') { if (!keys.has(k)) xEdge = true; }
     if (k === 'p' || k === 'escape') paused = !paused;
     if (k === 'r') newSim();
+    if (k === 'n' && paused) { newSave(); saveNote = 3; } // row 729: a new save file: the field notes show again
     if (k === 'z') showZones = !showZones;
     if (k === 'l') saveLog();
     keys.add(k); if ([' ', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(k)) e.preventDefault();
@@ -4529,10 +4536,10 @@ window.DUMMIES_P10_STAGE = {"id": "10.8", "title": "THE SEARCH", "edit": 108};
       if (e.type === 'impact' && Math.round(e.lost) > 0) flash.push({ x: s.body.x, y: s.body.y, t: 0.5, n: Math.round(e.lost) });
       if (e.type === 'writeoff') flash.push({ x: s.body.x, y: s.body.y, t: 1.2, n: 'WRITE-OFF' });
       if (e.type === 'gift') flash.push({ x: s.body.x, y: s.body.y, t: 1.6, n: PARTS[e.node] || e.node });
-      if (e.type === 'crash') { lastCrash = e; if (graded() && e.grade) flash.push({ x: s.body.x, y: s.body.y + 62, t: 1.1, n: GRADE[e.grade] + ' +' + (e.points || 0), c: GRADE_C[e.grade]() }); } // row 725: below the dummy, clear of the damage and the car's tag
+      if (e.type === 'crash') { lastCrash = e; if (graded() && e.grade) flash.push({ x: s.body.x, y: s.body.y + 62, t: 1.1, n: GRADE[e.grade] + ' ×' + (e.mult || 0) + ' +' + (e.points || 0), c: GRADE_C[e.grade]() }); } // row 725: below the dummy, clear of the damage and the car's tag
       if (e.type === 'search-found') flash.push({ x: e.x, y: e.y, t: 0.9, n: 'FOUND' });
-      if (e.type === 'expect-stop' && !hinted.has('mem')) { hinted.add('mem'); hint = { text: 'IT STOPS WHERE IT EXPECTS YOU · NOW STRIKE FROM ELSEWHERE', t: 5, c: C.mem }; } // row 726: the lure
-      if (e.type === 'search' && !hinted.has('ghost')) { hinted.add('ghost'); hint = { text: 'IT STOPS SHORT OF ITS GHOST · STRIKE FROM BEYOND ITS RING', t: 5, c: C.search }; }
+      if (e.type === 'expect-stop' && !tip && !tipSeen('lure.memory')) showTip('lure.memory', e.car); // row 726: the lure; row 729: once a save file
+      if (e.type === 'search' && !tip && !tipSeen('lure.ghost')) showTip('lure.ghost', e.car);
       if (e.type === 'lesson-due') clip = { frames: ring.slice(), hitT: e.t, model: e.model, zone: e.zone, to: e.to, info: T.RUNGS[e.to], origin: e.origin, prev: lastCrash && lastCrash.habit ? lastCrash.prev : null, seenAt: e.seenAt };
     }
   }
@@ -4664,11 +4671,25 @@ window.DUMMIES_P10_STAGE = {"id": "10.8", "title": "THE SEARCH", "edit": 108};
         rect(lx - w / 2, ly - 6, w, 11, 'rgba(12,14,20,0.75)'); text(t, lx, ly + 3, 8, col, 'center'); }
     }
   }
-  // Row 726: a one-time prompt, the first time a car stops short of a remembered spot (rung 6) or of its ghost (rung 7).
-  function drawHint() {
-    if (!hint) return; hint.t -= 1 / 60; if (hint.t <= 0) { hint = null; return; }
-    ctx.font = '700 12px B612, system-ui, sans-serif'; const w = ctx.measureText(hint.text).width + 20;
-    ctx.globalAlpha = Math.min(1, hint.t / 0.4); rect(FW / 2 - w / 2, 10, w, 22, 'rgba(12,14,20,0.85)'); text(hint.text, FW / 2, 25, 12, hint.c, 'center'); ctx.globalAlpha = 1;
+  // Row 726: the lure's field notes. Row 729: each shows once per save file, as a FARSIGHT diagnostic panel pinned to the
+  // car's stop line by a leader, for ui.tip.holdSeconds, with its timer bar. Play goes on.
+  const TIPS = { 'lure.memory': { title: 'THE LURE', lines: ['IT STOPS WHERE IT EXPECTS YOU.', 'NOW STRIKE FROM ELSEWHERE.'], c: () => C.mem },
+    'lure.ghost': { title: 'THE LURE', lines: ['IT STOPS SHORT OF ITS GHOST.', 'STRIKE FROM BEYOND ITS RING.'], c: () => C.search } };
+  function showTip(id, car) { const T0 = s.P['ui.tip.holdSeconds'] || 7, v = readSave(); v.tips[id] = Date.now(); writeSave(v); tip = Object.assign({ id, car, t: T0, t0: T0 }, TIPS[id]); }
+  function drawTip() {
+    if (!tip) return; if (!paused) tip.t -= 1 / 60; if (tip.t <= 0) { tip = null; return; }
+    const c = s.cars.find((q) => q.id === tip.car), sp = c && s.stopPoint ? s.stopPoint(c) : null;
+    if (sp) tip.at = { x: sp.x, y: sp.y }; else if (c && !tip.at) tip.at = { x: c.x, y: c.y };
+    const a = tip.at || { x: FW / 2, y: FH / 2 }, col = tip.c(), W = 262, H = 70, px = Math.max(10, Math.min(FW - W - 10, a.x - W / 2)), above = a.y > H + 80, py = above ? a.y - H - 60 : a.y + 60;
+    const al = Math.max(0, Math.min(1, (tip.t0 - tip.t) / 0.25, tip.t / 0.4)); ctx.save(); ctx.globalAlpha = al;
+    const lx = Math.max(px + 14, Math.min(px + W - 14, a.x)), ly = above ? py + H : py; // the leader, from the panel to the stop line
+    ctx.strokeStyle = col; ctx.lineWidth = 1.5; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(a.x, a.y); ctx.stroke(); ctx.setLineDash([]);
+    ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(a.x, a.y, 9 + 3 * Math.sin(s.t * 6), 0, TAU); ctx.stroke();
+    rect(px, py, W, H, 'rgba(12,14,20,0.94)'); ctx.strokeStyle = col; ctx.lineWidth = 1.5; ctx.strokeRect(px + 0.5, py + 0.5, W - 1, H - 1);
+    ctx.globalAlpha = al * 0.22; rect(px, py, W, 17, col); ctx.globalAlpha = al;
+    text('FARSIGHT · FIELD NOTE', px + 9, py + 12, 8, col); text(tip.title, px + W - 9, py + 12, 8, col, 'right');
+    text(tip.lines[0], px + 10, py + 35, 12, C.text); text(tip.lines[1], px + 10, py + 53, 12, C.text);
+    rect(px, py + H - 4, W * (tip.t / tip.t0), 3, col); ctx.restore(); // the time it has left
   }
   function drawCone(x, y) { ctx.fillStyle = C.cone; ctx.beginPath(); ctx.arc(x, y, 7, 0, TAU); ctx.fill(); ctx.fillStyle = C.zebra; ctx.fillRect(x - 4, y - 1, 8, 2); }
   function drawCameras() { // rung 4: the junction's street cameras. A link draws from a camera to the dummy behind cover, and on to the car
@@ -4784,8 +4805,8 @@ window.DUMMIES_P10_STAGE = {"id": "10.8", "title": "THE SEARCH", "edit": 108};
     const bx = 340; // the body bar sits left of the key hints, which grow with each part
     text('BODY', bx - 40, FH + 22, 11, C.dim); rect(bx, FH + 12, 120, 12, '#2c3447'); rect(bx, FH + 12, 120 * hp, 12, C.dummy);
     text('WRITE-OFFS ' + s.run.writeOffs, bx, FH + 42, 11, C.text);
-    if (graded() && s.stealth) { const st = s.stealth, l = st.last; text('STEALTH ' + st.points, bx + 96, FH + 42, 11, C.text); // row 725
-      if (l) text(GRADE[l.grade] + ' +' + l.points, bx + 172, FH + 42, 11, GRADE_C[l.grade]()); }
+    if (graded() && s.stealth) { const st = s.stealth, l = st.last; text('STEALTH ' + st.points, bx + 96, FH + 42, 11, C.text); // row 725; row 728: damage × the grade
+      if (l) text(GRADE[l.grade] + ' ×' + l.mult + ' +' + l.points, bx + 196, FH + 42, 11, GRADE_C[l.grade]()); }
     text(s.dashFitted() ? 'SPACE DASH' + (s.has('jump') ? ' · K JUMP' : '') + (s.has('carry') ? ' · E CONE' : '') + (s.has('duck1') ? ' · C DUCK' : '') : 'ON FOOT', 786, FH + 22, 11, C.dim, 'right');
     text(Math.floor(s.t / 60) + ':' + String(Math.floor(s.t % 60)).padStart(2, '0'), 786, FH + 42, 11, C.text, 'right');
   }
@@ -4876,7 +4897,7 @@ window.DUMMIES_P10_STAGE = {"id": "10.8", "title": "THE SEARCH", "edit": 108};
     const d = s.delivery; if (d) drawDrone(d.x, d.y, d.state !== 'outbound' && (LOAD[d.node] || 'B1'));
     const lf = s.lift; if (lf) { const held = s.body && s.body.lifted; drawDrone(lf.x, lf.y - (held ? 30 : 0), false); if (held) { ctx.strokeStyle = C.joint; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(lf.x, lf.y - 24); ctx.lineTo(lf.x, lf.y - 16); ctx.stroke(); } } // FARSIGHT's block lift
     for (let i = flash.length - 1; i >= 0; i--) { const f = flash[i]; f.t -= 1 / 60; if (f.t <= 0) { flash.splice(i, 1); continue; } const big = typeof f.n !== 'number'; text(big ? f.n : '−' + f.n, f.x, f.y - 24 - (1 - f.t) * 20, big ? 16 : 13, f.c || (f.n === 'WRITE-OFF' ? C.red : C.dummy), 'center'); }
-    drawHint();
+    drawTip();
     drawHud();
     if (!started || paused) {
       rect(0, 0, FW, FH, 'rgba(10,12,18,0.72)');
@@ -4884,9 +4905,10 @@ window.DUMMIES_P10_STAGE = {"id": "10.8", "title": "THE SEARCH", "edit": 108};
       text('Two one-way roads cross at the Monument. One red car drives through.' + ((s.P['duel.topRung'] || 0) >= 7 ? ' It looks where it last saw you.' : s.rung >= 5 && (s.P['duel.topRung'] || 0) >= 6 ? ' Every crash leaves its mark.' : ''), FW / 2, 292, 14, C.dim, 'center');
       text('Arrows or WASD move · Space dash · K jump, E cone, C duck, once fitted · Z zones · P pause · R restart · L save log', FW / 2, 330, 13, C.dim, 'center');
       text(paused ? 'P to resume' : 'Press any key', FW / 2, 380, 16, C.dummy, 'center');
+      if (paused) { if (saveNote > 0) saveNote -= 1 / 60; text(saveNote > 0 ? 'NEW SAVE FILE · THE FIELD NOTES WILL SHOW AGAIN' : 'N new save file (field notes show again)', FW / 2, 412, 12, saveNote > 0 ? C.dummy : C.dim, 'center'); } // row 729
     }
   }
-  window.__p10 = { get sim() { return s; }, get clip() { return clip; }, get lessonT() { return lessonT; }, stage: ST, newSim, start() { started = true; } };
+  window.__p10 = { get sim() { return s; }, get clip() { return clip; }, get lessonT() { return lessonT; }, get tip() { return tip; }, save: { read: readSave, clear: newSave, key: SAVE_KEY }, stage: ST, newSim, start() { started = true; } };
   requestAnimationFrame(frame);
 })();
 
