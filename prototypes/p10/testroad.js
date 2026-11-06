@@ -40,7 +40,10 @@
     const half = P['world.laneWidth'] / 2, R = runInFor(P), out = P['world.spawnLeadIn'];
     const a = [[-R, ROAD_A], [P['world.width'] + out, ROAD_A]], b = [[ROAD_B, -R], [ROAD_B, P['world.height'] + out]];
     const lane = (c, off) => X.makePath(X.offsetPts(c, off));
-    const lanes = [lane(a, half), lane(a, -half), lane(b, half), lane(b, -half)]; // A near, A far, B near, B far: all one-way
+    const two = (P['duel.twoWay'] || 0) > 0, aR = [[P['world.width'] + R, ROAD_A], [-R, ROAD_A]], bR = [[ROAD_B, P['world.height'] + R], [ROAD_B, -R]];
+    // 10.9 (row 734): two two-way roads, traffic on the left (London). Each lane keeps its place: 0 road A westbound (south
+    // lane), 1 eastbound (north lane), 2 road B northbound (west lane), 3 southbound (east lane). 10.1–10.8: all one-way.
+    const lanes = two ? [lane(aR, -half), lane(a, -half), lane(bR, -half), lane(b, -half)] : [lane(a, half), lane(a, -half), lane(b, half), lane(b, -half)]; // A near, A far, B near, B far
     const W = P['world.laneWidth']; // road A spans ROAD_A ± W; road B spans ROAD_B ± W
     lanes.forEach((p, i) => {
       p.road = i < 2 ? 'A' : 'B'; p.enterS = R; // where the lane meets the screen's edge
@@ -48,7 +51,17 @@
       const e = p.road === 'A' ? [[300, ROAD_A - W], [300, ROAD_A + W]] : [[ROAD_B - W, 300], [ROAD_B + W, 300]];
       const lat = e.map(([x, y]) => X.pathProject(p, x, y).lat);
       p.edges = [Math.min(...lat), Math.max(...lat)];
+      if (two) { p.dir = i % 2 ? 1 : -1; p.twoWay = true; }
     });
+    if (two) { // row 734: the junction box; road B gives way to road A (proto.driver ranks: A 0, B 1)
+      const Wl = P['world.laneWidth'], box = { x0: ROAD_B - Wl, x1: ROAD_B + Wl, y0: ROAD_A - Wl, y1: ROAD_A + Wl };
+      const span = (p) => { const q0 = p.pts[0], q1 = p.pts[p.pts.length - 1], ax = p.road === 'A', v0 = ax ? q0[0] : q0[1], dir = Math.sign((ax ? q1[0] : q1[1]) - v0), lo = ax ? box.x0 : box.y0, hi = ax ? box.x1 : box.y1; return dir > 0 ? [lo - v0, hi - v0] : [v0 - hi, v0 - lo]; };
+      lanes.forEach((p, i) => { p.box = span(p); });
+      const look = P['traffic.junctionLookahead'] || 0;
+      lanes.forEach((p, i) => { if (p.road !== 'B') return; // road A drives on; road B holds at its line while a road A car is in the box or within the lookahead
+        p.junction = { line: p.box[0] - 2, rank: 1, zones: lanes.map((o, j) => o.road === 'A' ? { lane: j, o0: o.box[0] - look, o1: o.box[1] } : null).filter(Boolean) }; });
+      lanes.forEach((p) => { if (p.road === 'A') p.junction = { line: null, rank: 0, zones: [] }; });
+    }
     const statics = [
       // NW: the monument's plinth, a raised edge to jump from (height ≤ world.jumpableHeight)
       { x: 230, y: 150, w: 90, h: 90, kind: 'block', height: P['world.jumpableHeight'], plinth: true },
@@ -148,7 +161,9 @@
       if (!this.testRoad) return;
       const P = this.P, n = this.level.lanes.length, g = (i, o) => ((i * 0.6180339887 + o) % 1);
       // One car type: every appearance is a sedan. Its lane rotates over the four by the golden ratio, so both roads recur.
-      this.schedule = Array.from({ length: P['run.appearances.road'] }, (_, i) => ({ i, cls: 'sedan', lane: Math.floor(g(i, 0.31) * n), mult: 1 }));
+      const redLanes = this.level.lanes.map((l, i) => i).filter((i) => !this.level.lanes[i].twoWay || this.level.lanes[i].dir > 0); // row 734: on two-way roads the red car keeps its directions: road A eastbound, road B southbound
+      this.schedule = Array.from({ length: P['run.appearances.road'] }, (_, i) => ({ i, cls: 'sedan', lane: redLanes[Math.floor(g(i, 0.31) * redLanes.length)], mult: 1 }));
+      this.whiteAt = null; this.whiteSeq = 0;
       this.leftAt = 0; // when the red car last left the screen
       this.rung = Math.max(0, Math.min(RUNGS.length - 1, Math.round(P['duel.startRung'] || 0))); // the red car's rung
       this.lesson = null; this.lessons = []; this.delivery = null; this.firstBrakeT = null; this.firstSideT = null; this.firstCoverT = null; this.firstItemT = null;
@@ -181,6 +196,7 @@
     // proto.swerveOuter to the other: a district road's hard shoulder. Here both bounds are the road's kerbs.
     choose(c, tg, opts) {
       if (!this.testRoad || !c.path.edges) return super.choose(c, tg, opts);
+      if (c.white) { const P = this.P, margin = 12 + (tg.r || P['body.radius']), dist = Math.max(1, (tg.lx || 0) - margin), a = c.v * c.v / (2 * dist) > P['traffic.comfortBraking'] ? P['traffic.hardBraking'] : P['traffic.comfortBraking']; return { type: 'brake', v0: c.v, a, vTarget: 0, sStop: tg.s - c.L / 2 - margin }; } // row 734: it brakes, never swerves
       if (tg.kind === 'cone' && this.rung >= 5) { // rung 5 never swerves round a cone: it stops short and waits (the base driver's stop)
         const P = this.P, margin = 12 + tg.r, dist = Math.max(1, tg.lx - margin);
         const a = c.v * c.v / (2 * dist) > P['traffic.comfortBraking'] ? P['traffic.hardBraking'] : P['traffic.comfortBraking'];
@@ -200,6 +216,7 @@
       if (!this.testRoad) return super.assessBody(c);
       if (c.spent) return null; // the car that hit you drives off to its lesson: it no longer stops for you (row 681)
       if (this.body && this.body.lifted) return null; // FARSIGHT has the dummy (row 715)
+      if (c.white) { const P = this.P, keep = P['proto.driver.cautionZone']; P['proto.driver.cautionZone'] = 0; let hz; try { hz = super.assessBody(c); } finally { P['proto.driver.cautionZone'] = keep; } return hz && hz.inPath ? hz : null; } // row 734: a white car never learns: its path only
       if (this.rung < 3 && (this.airborne() || this.body.raised)) return null; // it sees the ground: not the air, not the plinth's top
       const P = this.P, keep = P['proto.driver.cautionZone'];
       P['proto.driver.cautionZone'] = this.fieldFor();
@@ -355,8 +372,9 @@
     admit() {
       if (!this.testRoad) return super.admit();
       const P = this.P;
+      if ((P['duel.whiteInterval'] || 0) > 0) this.admitWhite(); // row 734: white traffic on every lane
       if (this.lesson) return; // a lesson is due or showing: the car is away being trained
-      if (this.onRoad().length >= P['duel.carsOnRoad']) return;
+      if (this.onRoad().filter((c) => c.red).length >= P['duel.carsOnRoad']) return; // the red car alone among red cars
       if (this.t + 1e-9 < this.leftAt + P['duel.redReturnSeconds'] - this.driveIn()) return; // it appears R after the last left, or as soon as it can drive in
       const before = this.cars.length, keep = P['perception.forwardLength'];
       this.nextAt = 0; // the test road's own pacing replaces the admission interval
@@ -367,6 +385,20 @@
         if (this.rung >= 1) c.standoff = this.envelope(0); // its stop line: honks and holds there
         if (P['duel.runInLength'] > 0) { const v = this.spawnSpeed(c); if (v < c.v) { c.v = v; this.emit('spawn-slow', { car: c.id, v: +v.toFixed(1) }); } }
       }
+    }
+    // Row 734: white sedans that never learn. One enters every duel.whiteInterval on average (spread ±40%), on a lane chosen by
+    // the golden ratio; it waits while that lane's start is not clear. It brakes for what is in its path (its beam), follows,
+    // gives way, and nothing else: no field, no lessons, no swerve. It scores nothing; its hits still damage the dummy.
+    admitWhite() {
+      const P = this.P, iv = P['duel.whiteInterval'], L = this.level.lanes, k = this.whiteSeq || 0;
+      if (this.whiteAt == null) this.whiteAt = this.t + 0.4 * iv;
+      if (this.t + 1e-9 < this.whiteAt) return;
+      const li = Math.floor(((k * 0.6180339887 + 0.17) % 1) * L.length), path = L[li], gap = 3 * P['vehicles.sedan.length'] + 40;
+      if (this.cars.some((o) => o.path === path && !o.gone && o.s < gap)) { this.whiteAt = this.t + 0.5; return; }
+      const c = this.newCar('white' + (++this.carSeq), 'sedan', li, path, 0, 0);
+      c.white = true; c.red = false; c.rung = 0; c.slot = 1e6 + k; c.v = Math.min(c.v, this.cornerSpeed(c)); this.pose(c); this.cars.push(c);
+      this.emit('admit', { car: c.id, cls: c.cls, model: c.model, lane: li, white: true });
+      this.whiteSeq = k + 1; this.whiteAt = this.t + iv * (0.6 + 0.8 * ((k * 0.7548776662 + 0.29) % 1));
     }
     // A short run-in (duel.runInLength): the car appears at the speed it would have braked to for a dummy it senses ahead
     // (its beam, or its field from rung 2), never faster than the envelope allows. A dummy it cannot see changes nothing.
@@ -386,7 +418,7 @@
       for (const c of this.cars) {
         if (c.gone || c.ghost || c.s < c.path.enterS) continue;
         const m = c.L / 2 + c.W;
-        if (c.x < -m || c.x > W + m || c.y < -m || c.y > H + m) { c.gone = true; this.leftAt = this.t; this.emit('left', { car: c.id, model: c.model }); }
+        if (c.x < -m || c.x > W + m || c.y < -m || c.y > H + m) { c.gone = true; if (c.white) { this.emit('left', { car: c.id, model: c.model, white: true }); continue; } this.leftAt = this.t; this.emit('left', { car: c.id, model: c.model }); }
       }
     }
 
@@ -406,6 +438,7 @@
       if (!this.testRoad || !b || x1 !== b.x || y1 !== b.y) return super.occluded(self, x0, y0, x1, y1);
       if (b.lifted) return true; // in FARSIGHT's grip, out of play (row 715)
       if (self && self.red && this.expected()) return false; // rung 6: it looks where it remembers you
+      if (self && self.red && this.whiteHides(self, x0, y0)) return !(this.rung >= 4 && this.cameraSees()); // row 734: a white car between them hides the dummy; the street cameras still see
       if (this.carSees(self, x0, y0, true)) return false;
       return !(this.rung >= 4 && self && self.red && this.cameraSees());
     }
@@ -416,6 +449,12 @@
       return !blocked && !this.lowBlocked(x0, y0, this.eyeHeight(self), b.x, b.y, this.bodyHeight());
     }
     cameraSees() { return !!this.seeingCamera(); }
+    whiteHides(self, x0, y0) { // row 711, built in row 734: a white sedan on the sightline, from the red car's sensors to the dummy
+      const b = this.body, ws = this.cars.filter((o) => o.white && !o.gone && o !== self); if (!ws.length || b.raised) return false;
+      const d = hyp(b.x - x0, b.y - y0), n = Math.max(2, Math.ceil(d / 8));
+      for (let i = 1; i < n; i++) { const u = i / n, px = x0 + (b.x - x0) * u, py = y0 + (b.y - y0) * u; if (ws.some((o) => X.circleCar(px, py, 1, o))) return true; }
+      return false;
+    }
     seeingCamera() { // the first street camera that sees the dummy, or null
       const P = this.P, b = this.body, R = P['perception.streetCameraRange'] || 0, H = P['perception.streetCameraHeight'] || 0, F = P['perception.streetCameraFov'] || 360;
       for (const cam of this.level.cameras || []) {
@@ -589,7 +628,9 @@
         if (still > 0 && !ct.drop && Math.abs(ct.carSpeed) < still && this.body.alive && !ct.car.spent) { this.emit('touch', { car: ct.car.id, standstill: true, closing: +ct.closing.toFixed(2), zone: ct.zone }); continue; }
         keep.push(ct);
       }
-      const e0 = this.events.length, positive = super.account(keep);
+      const white = keep.filter((ct) => ct.car && ct.car.white), red = keep.filter((ct) => !(ct.car && ct.car.white));
+      if (white.length) { const p0 = this.run.points, w0 = this.events.length; super.account(white); this.run.points = p0; for (const e of this.events.slice(w0)) if (e.type === 'impact') { e.white = true; e.points = 0; } } // row 734: a white car's hit damages the dummy, scores nothing, teaches nothing
+      const e0 = this.events.length, positive = super.account(red);
       for (const e of this.events.slice(e0)) if (e.type === 'impact') {
         const c = this.carById(e.car); if (c && c.red) { e.sight = +(c.sightT || 0).toFixed(2); e.above = this.fromAbove(e); e.cover = this.coverHid(c); e.coned = this.itemHit(c); e.ducked = !!this.body.duck || !!this.body.duckAt && this.t - this.body.duckAt < 0.5; } // in sight past cover (s); from above (D113); out of cover (row 687); round a cone (row 695); from a duck
         if (e.lost > 0 && c && c.red) { // the crash: an outline where it struck; the spot it was sprung from; is that spot an earlier crash's? (row 703)
@@ -703,7 +744,8 @@
       return at(0);
     }
     carPassed(c) { return !c || c.gone || c.spent; } // it has moved on: off the screen (a dummy put down beside a car still in reach would strike it)
-    blocked() { const b = this.body, c = this.onRoad().find((q) => q.red && !q.spent); return c && b && b.alive && c.v < 1 && (c.noticed || (c.hz && c.hz.inPath) || (c.det && c.det.fwd && c.det.fwd.kind === 'cone')) ? c : null; } // a car kept waiting by the dummy or its cone
+    blocked() { const b = this.body, c = this.onRoad().find((q) => q.red && !q.spent); if (!b || !b.alive) return null; if (c && c.v < 1 && (c.noticed || (c.hz && c.hz.inPath) || (c.det && c.det.fwd && c.det.fwd.kind === 'cone'))) return c; // a car kept waiting by the dummy or its cone
+      return this.onRoad().find((q) => q.white && q.v < 1 && q.hz && q.hz.inPath) || null; } // row 734: a white car the dummy keeps waiting: FARSIGHT lifts the dummy for it too
     fetchBlockingCones(c) { // the cones in its lane ahead go too: a drone each, now (the base waits proto.droneConeSeconds, and 20 s between fetches of one cone)
       const r = this.P['props.cone.radius'];
       for (const cn of this.cones) {
@@ -717,7 +759,9 @@
       if (Xs <= 0 || !b) return;
       const L = this.lift;
       if (!L) { // the wait counts while the car stays stopped: a cone fetched and laid again does not restart it
-        const c = this.onRoad().find((q) => q.red && !q.spent), stopped = !!(c && b.alive && c.v < 1); this.blockT = stopped ? this.blockT + dt : 0;
+        const two = !!P['duel.twoWay'], red = this.onRoad().find((q) => q.red && !q.spent); let c = two ? this.blocked() : red; // row 734: in traffic, a car the dummy keeps waiting (red first, then white)
+        if (two && c) { this.blockCar = c.id; this.blockSeen = this.t; } else if (two && this.blockSeen != null && this.t - this.blockSeen < 3.5) { const k = this.carById(this.blockCar); if (k && !k.gone && k.v < 1) c = k; } // through a flicker (a white car passing, the three-second forget) it still counts
+        const stopped = !!(c && b.alive && c.v < 1); this.blockT = stopped ? this.blockT + dt : 0;
         if (stopped && this.blockT >= Xs - 1e-9) {
           const sp = this.sidePoint(c); this.lift = { car: c.id, state: 'inbound', x: b.x, y: -40, sx: sp.x, sy: sp.y, tl: 0, t0: this.t };
           this.fetchBlockingCones(c);

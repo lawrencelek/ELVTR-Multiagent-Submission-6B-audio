@@ -14945,6 +14945,72 @@
    "integrationStatus": "prototype-p10",
    "boundaryStatus": "proposed-adapter-contract-not-implemented",
    "purpose": "Coned field: a dummy the car has noticed and then lost from its cones and path stays tracked this long (inside the rung's rectangle), then is forgotten: the notice resets. 0: tracked while inside the rectangle (row 731). 10.8 sets 3"
+  },
+  {
+   "id": "duel.twoWay",
+   "group": "Prototype P10",
+   "owner": "Design",
+   "label": "Two-way roads",
+   "description": "1: the junction's two roads carry traffic both ways, on the left (London): road A eastbound in its north lane, westbound in its south lane; road B southbound in its east lane, northbound in its west lane. Road B gives way to road A. The red car keeps its directions (A east, B south). 0: two one-way roads (10.1–10.8). 10.9 sets 1",
+   "unit": "flag",
+   "type": "number",
+   "default": 0,
+   "status": "proposed",
+   "source": "GDD Edit 109 (Prototype 10.9): DECISIONS row 734",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-run",
+   "validation": {
+    "min": 0,
+    "max": 1
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "1: the junction's two roads carry traffic both ways, on the left (London): road A eastbound in its north lane, westbound in its south lane; road B southbound in its east lane, northbound in its west lane. Road B gives way to road A. The red car keeps its directions (A east, B south). 0: two one-way roads (10.1–10.8). 10.9 sets 1"
+  },
+  {
+   "id": "duel.whiteInterval",
+   "group": "Prototype P10",
+   "owner": "Design",
+   "label": "White traffic interval",
+   "description": "Seconds between white sedans entering, on average (each 60–140% of it), on a lane chosen by the golden ratio. White sedans never learn: they brake for what is in their path, follow, give way; no field, no lessons, no swerve; their hits damage the dummy and score nothing; they hide the dummy from the red car. 0: none (10.1–10.8). 10.9 sets 3.5",
+   "unit": "seconds",
+   "type": "number",
+   "default": 0,
+   "status": "proposed",
+   "source": "GDD Edit 109 (Prototype 10.9): DECISIONS row 734",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-run",
+   "validation": {
+    "min": 0,
+    "max": 30
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "Seconds between white sedans entering, on average (each 60–140% of it), on a lane chosen by the golden ratio. White sedans never learn: they brake for what is in their path, follow, give way; no field, no lessons, no swerve; their hits damage the dummy and score nothing; they hide the dummy from the red car. 0: none (10.1–10.8). 10.9 sets 3.5"
+  },
+  {
+   "id": "traffic.junctionLookahead",
+   "group": "Prototype P10",
+   "owner": "Design",
+   "label": "Give way: lookahead",
+   "description": "Two-way roads: a road B car holds at its line while a road A car is in the junction box or within this distance of it along its lane. 10.9 sets 420",
+   "unit": "px",
+   "type": "number",
+   "default": 0,
+   "status": "proposed",
+   "source": "GDD Edit 109 (Prototype 10.9): DECISIONS row 734",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-run",
+   "validation": {
+    "min": 0,
+    "max": 1000
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "Two-way roads: a road B car holds at its line while a road A car is in the junction box or within this distance of it along its lane. 10.9 sets 420"
   }
  ],
  "tables": {

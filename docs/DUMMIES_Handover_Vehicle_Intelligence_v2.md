@@ -1234,6 +1234,15 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
 - **`ui.lungeGuide`:** a dotted line and reticle at the dash's landing, near a car. Yellow "HIT" when it meets the red car; white, a miss; faint, not ready.
 - **Reverses** GDD Edit 19 §4.2.8 on the test road.
 
+## 26 Prototype 10.9: the two-way road (row 734)
+
+- **Plays at** `prototypes/p10/dummies_p10_9.html`; GDD Edit 109.
+- **Roads:** two-lane, two-way, traffic on the left. Road B gives way to road A.
+- **White sedans** never learn: path braking, following, giving way. Moving cover for the dummy; a hazard that scores nothing.
+- **The red car:** rung 7, A eastbound and B southbound.
+- **Measured:** open ways 10; moving cover reopens cover springs and the kerb; seen-then-hidden stays closed; 7 long waits (D130).
+- **Next:** 10.10, swerve cost (D121).
+
 ### 25.9 Open
 
 - **Human pass (H6):** does the player read the ghost, and crawl away?

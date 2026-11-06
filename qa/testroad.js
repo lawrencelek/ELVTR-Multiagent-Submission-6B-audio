@@ -55,7 +55,7 @@ function run(policy, offset, secs, mode) {
   for (let k = 0; k < offset * 60; k++) { service(); s.step({}); }
   const b = () => s.body, home = pol.home, can = () => s.dashFitted() && b().mode !== 'lunge' && b().mode !== 'recover';
   const goTo = (tx, ty, k) => { const dx = tx - b().x, dy = ty - b().y, d = Math.hypot(dx, dy); return d > 6 ? { mx: dx / d * (k || 1), my: dy / d * (k || 1) } : {}; };
-  const live = () => s.onRoad().filter((c) => !c.spent);
+  const live = () => s.onRoad().filter((c) => !c.spent && !c.white); // row 734: the bots play the red car; white traffic is in the way
   const NAVG = (() => { // the statics' corners, pushed out past the dummy's radius, and which see each other
     const E = 12, F = E + 6, W = s.P['world.width'], H = s.P['world.height'], st = s.level.statics;
     const inBox = (x, y, q) => x > q.x - E && x < q.x + q.w + E && y > q.y - E && y < q.y + q.h + E;
@@ -346,8 +346,8 @@ function run(policy, offset, secs, mode) {
     if (o.trace) { for (const e of s.events.slice(eB)) if (!['commit', 'release', 'lunge-end'].includes(e.type)) console.log('   ', e.t.toFixed(2), e.type, JSON.stringify(e).slice(0, 140));
       if (i % 60 === 0) { const c = s.onRoad()[0]; console.log('  t', s.t.toFixed(1), 'cmd', JSON.stringify(actFn(i)), 'b', b().x.toFixed(1), b().y.toFixed(1), b().mode, 'v', b().vx.toFixed(1), b().vy.toFixed(1), 'f', (b().facing * 180 / Math.PI).toFixed(0), 'held', !!b().held, 'cones', s.cones.map((q) => q.state[0] + (q.x | 0) + ',' + (q.y | 0)).join(' '), c ? `car ${c.path.road}${c.lane} ${c.x | 0},${c.y | 0} v${c.v.toFixed(0)} ${c.cause} dodge ${c.dodge ? c.dodge.kind : '-'} noticed ${!!c.noticed}` : 'no car'); } }
     points += s.run.points - before;
-    for (const e of s.events.slice(eB)) if (e.type === 'impact' && e.lost > 0) wins[W(e.t)]++;
-    const on = s.onRoad(); maxOn = Math.max(maxOn, on.length);
+    for (const e of s.events.slice(eB)) if (e.type === 'impact' && e.lost > 0 && !e.white) wins[W(e.t)]++;
+    const on = s.onRoad().filter((c) => !c.white); maxOn = Math.max(maxOn, on.length); // row 734: white traffic aside
     for (const c of on) {
       seen.add(c.id);
       const st = c.v < 1 ? (stops.get(c.id) || 0) + 1 / 60 : 0; stops.set(c.id, st);
@@ -365,12 +365,12 @@ function run(policy, offset, secs, mode) {
     }
   }
   while (wins.length < Math.ceil(secs / 60)) wins.push(0);
-  const ev = s.events.slice(e0), imp = ev.filter((e) => e.type === 'impact' && e.lost > 0), mins = (s.t - t0) / 60, n = (t) => ev.filter((e) => e.type === t);
+  const ev = s.events.slice(e0), imp = ev.filter((e) => e.type === 'impact' && e.lost > 0 && !e.white), whiteHits = ev.filter((e) => e.type === 'impact' && e.lost > 0 && e.white).length, whites = ev.filter((e) => e.type === 'admit' && e.white).length, mins = (s.t - t0) / 60, n = (t) => ev.filter((e) => e.type === t);
   const tally = (k) => imp.reduce((a, e) => (a[e[k]] = (a[e[k]] || 0) + 1, a), {});
   const lessonAt = n('lesson-due')[0], learned = n('learned')[0], firstBrake = n('first-brake')[0], firstSide = n('first-side')[0], firstCover = n('first-cover')[0], firstItem = n('first-item')[0], gift = n('gift')[0];
   const after = learned ? imp.filter((e) => e.t > learned.t) : null;
   const commits = n('commit').reduce((a, e) => (a[e.cause] = (a[e.cause] || 0) + 1, a), {});
-  return { policy, mode, offset, simSeconds: +(s.t - t0).toFixed(1), rungEnd: s.rung,
+  return { policy, mode, offset, simSeconds: +(s.t - t0).toFixed(1), rungEnd: s.rung, whiteHits, whites,
     hits: imp.length, hitsPerMin: +(imp.length / mins).toFixed(2), writeOffs: n('writeoff').length,
     firstHit: imp.length ? +(imp[0].t - t0).toFixed(1) : null, points: Math.round(points), lost: Math.round(imp.reduce((a, e) => a + e.lost, 0)),
     zones: tally('zone'), carStates: tally('carState'), kinds: tally('kind'), dashes: n('lunge').length,

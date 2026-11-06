@@ -109,6 +109,12 @@ T108 = dict(T107, **{
     'perception.forwardConeSensitivity': 1, 'perception.sideConeSensitivity': 0.5,  # the sides are duller: each stage at half the distance, the meter at half the rate (row 731)
     'ui.lungeGuide': 1,  # where the dash would land, and HIT when it meets the red car (row 732)
 })
+T109 = dict(T108, **{
+    'duel.startRung': 7, 'duel.topRung': 7,  # the red car fully trained; no lesson: the road changes, not the car (row 734)
+    'duel.twoWay': 1,  # two two-way roads, traffic on the left; road B gives way to road A (row 734)
+    'duel.whiteInterval': 3.5,  # a white sedan that never learns enters about every 3.5 s, on any lane (row 734)
+    'traffic.junctionLookahead': 420,  # road B waits while a road A car is within 420 of the box (row 734)
+})
 STAGES = {
     '10.1': {'title': 'THE TEST ROAD', 'page': 'dummies_p10.html', 'frozen': '82ab5e55d243ee500d6dfcaa60af74e6', 'edit': 101, 'values': T101},
     '10.2': {'title': 'THE FIRST LESSON', 'page': 'dummies_p10_2.html', 'frozen': '9dd14c5877128390fbad2595e86edce7', 'edit': 102, 'values': T102},
@@ -117,9 +123,10 @@ STAGES = {
     '10.5': {'title': 'THE STREET CAMERAS', 'page': 'dummies_p10_5.html', 'frozen': '252785354962f8ac050f022b251bd29f', 'edit': 105, 'values': T105},
     '10.6': {'title': 'DUCK', 'page': 'dummies_p10_6.html', 'frozen': '7acd08d2cc239e1743f2b85786ce411e', 'edit': 106, 'values': T106},
     '10.7': {'title': 'CRASH MEMORY', 'page': 'dummies_p10_7.html', 'frozen': '54328d019a708d70615b3bc57b0b7366', 'edit': 107, 'values': T107},
-    '10.8': {'title': 'THE SEARCH', 'page': 'dummies_p10_8.html', 'frozen': None, 'edit': 108, 'values': T108},
+    '10.8': {'title': 'THE SEARCH', 'page': 'dummies_p10_8.html', 'frozen': 'e019098dac43a6b1c12d4685f0f23a9c', 'edit': 108, 'values': T108},
+    '10.9': {'title': 'THE TWO-WAY ROAD', 'page': 'dummies_p10_9.html', 'frozen': None, 'edit': 109, 'values': T109},
 }
-CURRENT = '10.8'
+CURRENT = '10.9'
 
 out = {'registry': reg['registryVersion'], 'current': CURRENT, 'stages': {}}
 for sid, st in STAGES.items():

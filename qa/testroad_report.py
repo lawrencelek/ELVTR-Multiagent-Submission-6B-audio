@@ -228,7 +228,7 @@ w('')
 allr = runs + d['escalation']
 top = d['p10'].get('duel.topRung', 0)
 esc = {r['policy']: r for r in d['escalation']}
-tr = [r for r in runs if r['mode'] == 'trained']
+tr = [r for r in runs if r['mode'] == 'trained'] or [r for r in runs if r['mode'] == 'lesson']  # row 734: a build with no lesson (10.9 starts at its top rung) is its own trained table
 checks = [
     ('The red car alone on the road', all(r['cars']['maxOnRoad'] <= 1 for r in allr), f"most on the road at once: {max(r['cars']['maxOnRoad'] for r in allr)}"),
     ('The car never stalls (no wait over 20 s without the dummy, or a cone, in its way)', all(r['cars']['stalls20s'] == 0 for r in allr), f"stalls: {sum(r['cars']['stalls20s'] for r in allr)}; waits for the dummy or its cone: {sum(r['cars'].get('blocked20s', 0) for r in allr)}"),
@@ -333,6 +333,8 @@ if top >= 1:
         ('Escalation: the closed trick decays below 0.5', all(esc[p]['decay'] is not None and esc[p]['decay'] < 0.5 for p in ESC_CLOSED if p in esc), ', '.join(f"{p} {esc[p]['decay']}" for p in ESC_CLOSED if p in esc)),
         ('Escalation: the opening holds (no stalemate: decay at least 0.5, or hits in 8 of 10 minutes)', all(esc[p]['decay'] is not None and (esc[p]['decay'] >= 0.5 or sum(1 for x in esc[p]['windows'] if x > 0) >= 8) for p in ESC_OPEN if p in esc), ', '.join(f"{p} {esc[p]['decay']} (hits in {sum(1 for x in esc[p]['windows'] if x > 0)} of {len(esc[p]['windows'])} minutes)" for p in ESC_OPEN + [q for q in ('plinth', 'aim') if q not in ESC_CLOSED and q not in ESC_OPEN] if p in esc)),
     ]
+TWO = bool((d.get('p10') or {}).get('duel.twoWay'))
+RUNG_ONLY = ('Rung 7 closes:', 'Rung 7 keeps cover closed', 'It stops beyond dash reach', 'An opening without the new part', 'Only a hit from cover', 'Escalation: the closed trick', 'Escalation: the opening holds')
 w('| Check | Result | Evidence |')
 w('|---|---|---|')
 checks = [c for c in checks if c[0] != '—']
@@ -348,10 +350,19 @@ if STAGE >= '10.8':
         checks += [('The lure lands: cars stop for it, and at least half the lured cars are struck (row 726)', st > 0 and lh >= st / 2, f"trained: {st} lures taken, {lh} lured cars struck"),
                    ('The stop line says where the car stops: within 10 in 90% of stops (row 726)', ns > 0 and n10 >= 0.9 * ns, f"{n10} of {ns}")]
     mo_, ow_ = open_ways(d); nps_ = new_parts(d); uses_ = sorted({q for k2 in nps_ for q in PART_OF[k2][1] if q in ow_})
+    if (d.get('p10') or {}).get('duel.twoWay'):  # row 734: the two-way road and its white traffic
+        wsum, wh, mn = sum(r.get('whites', 0) for r in runs), sum(r.get('whiteHits', 0) for r in runs), sum(r['simSeconds'] for r in runs) / 60
+        checks += [('White traffic runs both ways, and never scores (row 734)', wsum > 0, f"{round(wsum / mn, 1)} white cars a minute; white hits on the dummy {wh} ({round(wh / mn, 2)} a minute), damage only")]
     checks += [(f'At least two open ways in at the top rung, each {OPEN_RATE} a minute or more (row 727)', len(ow_) >= 2, f"{len(ow_)}: " + ', '.join(f'{p} {v}' for p, v in sorted(ow_.items()))),
                ('Each part the stage brings opens a way that uses it (row 727)', not nps_ or bool(uses_), (', '.join(PART_OF[k2][0] for k2 in nps_) + ': ' + (', '.join(uses_) or 'none')) if nps_ else 'no part arrives in this stage'),
                ('Every earlier stage held the floor of two (row 727)', all(len(ow) >= 2 for _, _, _, ow, _ in space), ', '.join(f'{stg} {len(ow)}' for stg, _, _, ow, _ in space))]
+if TWO:  # row 734: white traffic reopens rung 7's closures by design (moving cover, the boxed-in car): measured, not passed or failed
+    info = [c for c in checks if c[0].startswith(RUNG_ONLY) or c[0].startswith('Stealth grade:')]
+    checks = [c for c in checks if c not in info]
 for name, ok, ev in checks: w(f"| {name} | {'PASS' if ok else 'FAIL'} | {ev} |")
+if TWO:
+    w(''); w('Rung 7\'s closures with white traffic (measured; row 734):'); w(''); w('| Measure | Evidence |'); w('|---|---|')
+    for name, ok, ev in info: w(f"| {name} | {ev} |")
 w('')
 open(dst, 'w').write('\n'.join(out) + '\n')
 print('wrote', dst, '·', sum(1 for c in checks if c[1]), '/', len(checks), 'checks pass')

@@ -272,6 +272,7 @@ Read across: what the row's factor sets for the column's.
 | F32 | Duller side cones reopen rare side strikes on passing cars (0.13–0.2 a minute each): aim, flank, jump, dashjump, standplanter. Most come from road B cars, whose forward view the building blocks | 1, 2, 4 | 731 |
 | F33 | Cones alone lose a noticed dummy at the car's own stop: it stops where the dummy falls between cones. Tracking a noticed dummy fixes it | 2 | 731 |
 | F34 | A forget timer brings F33 back unless the cones leave no gap at the car's stop: forward 30° and sides to 240 close it; the crawl's escalation weakens (3 of 10 minutes) | 1, 2 | 733 |
+| F35 | White traffic is moving cover: it reopens rung 7's cover springs (dashjump 1.4, flank 0.73, aim 0.33 a minute) and the kerb (0.8); open ways rise 6 to 10. Seen-then-hidden stays closed | 1, 2, 4 | 734 |
 
 ## 7 Open questions
 
@@ -430,3 +431,4 @@ One row per object type. Edit this table first; the sections above follow it.
 | 6 November 2026 | The side field in stages (row 730): §1.1; rung 2's row; F30–F31 | 730 |
 | 6 November 2026 | The field as three cones (row 731); the lunge guide (row 732): §1.1; rung 2's row; L13; F32–F33 | 731–732 |
 | 6 November 2026 | The cones edge to edge; the three-second forget (row 733): F34 | 733 |
+| 6 November 2026 | 10.9 built: two-way roads, white sedans (row 734): V2 built; F35 | 734 |

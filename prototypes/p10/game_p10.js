@@ -148,8 +148,11 @@
     ctx.beginPath(); ctx.moveTo(0, A.at); ctx.lineTo(B.at - B.half, A.at); ctx.moveTo(B.at + B.half, A.at); ctx.lineTo(FW, A.at);
     ctx.moveTo(B.at, 0); ctx.lineTo(B.at, A.at - A.half); ctx.moveTo(B.at, A.at + A.half); ctx.lineTo(B.at, FH); ctx.stroke(); ctx.setLineDash([]);
     const arrow = (x, y, ang) => { ctx.save(); ctx.translate(x, y); ctx.rotate(ang); ctx.fillStyle = C.lane; ctx.beginPath(); ctx.moveTo(12, 0); ctx.lineTo(-6, -7); ctx.lineTo(-6, 7); ctx.closePath(); ctx.fill(); ctx.restore(); };
-    for (const x of [90, 700]) for (const off of [-A.half / 2, A.half / 2]) arrow(x, A.at + off, 0);
-    for (const y of [70, 580]) for (const off of [-B.half / 2, B.half / 2]) arrow(B.at + off, y, Math.PI / 2);
+    const two = !!s.P['duel.twoWay']; // row 734: traffic on the left: road A eastbound north, westbound south; road B southbound east, northbound west
+    if (two) { ctx.strokeStyle = C.lane; ctx.lineWidth = 2; ctx.beginPath(); for (const d of [-3, 3]) { ctx.moveTo(0, A.at + d); ctx.lineTo(B.at - B.half, A.at + d); ctx.moveTo(B.at + B.half, A.at + d); ctx.lineTo(FW, A.at + d); ctx.moveTo(B.at + d, 0); ctx.lineTo(B.at + d, A.at - A.half); ctx.moveTo(B.at + d, A.at + A.half); ctx.lineTo(B.at + d, FH); } ctx.stroke(); // a double line: no overtaking
+      ctx.setLineDash([6, 6]); ctx.beginPath(); for (const sg of [-1, 1]) { ctx.moveTo(B.at - B.half, A.at - A.half); ctx.lineTo(B.at - B.half, A.at + A.half); ctx.moveTo(B.at + B.half, A.at - A.half); ctx.lineTo(B.at + B.half, A.at + A.half); } ctx.stroke(); ctx.setLineDash([]); } // road B's give-way lines
+    for (const x of [90, 700]) for (const off of [-A.half / 2, A.half / 2]) arrow(x, A.at + off, two && off > 0 ? Math.PI : 0);
+    for (const y of [70, 580]) for (const off of [-B.half / 2, B.half / 2]) arrow(B.at + off, y, two && off < 0 ? -Math.PI / 2 : Math.PI / 2);
     for (const z of L.crossings) for (let k = -A.half + 4; k < A.half - 4; k += 14) rect(z.x - 14, A.at + k, 28, 8, C.zebra);
   }
   function drawStatics(L) {
@@ -283,6 +286,7 @@
     const P = s.P, br = P['body.radius'], ca = Math.cos(c.h), sa = Math.sin(c.h), nx = c.x + ca * c.L / 2, ny = c.y + sa * c.L / 2;
     ctx.save(); ctx.translate(nx, ny); ctx.rotate(c.h);
     const half = c.W / 2 + br + s.fieldFor(), near = !!c.noticed; // the field acts from rung 2 (D103: draw what acts)
+    if (c.white) { rect(0, -(c.W / 2 + br), c.fwdLen, c.W + 2 * br, c.hz && c.hz.inPath ? C.beamHot : 'rgba(244,248,250,0.05)'); ctx.restore(); return; } // row 734: a white car's beam only
     if (s.coned && s.coned()) { drawCones(c, near); ctx.restore(); return; } // row 731: three cones, not a rectangle
     rect(-c.L - br, -half, c.fwdLen + c.L + 2 * br, 2 * half, near ? C.fieldHot : C.field);
     rect(0, -(c.W / 2 + br), c.fwdLen, c.W + 2 * br, (c.hz && c.hz.inPath) || (c.det && c.det.fwd) ? C.beamHot : C.beam);
@@ -370,10 +374,12 @@
       ctx.strokeStyle = C.mem; ctx.lineWidth = 1.5; ctx.setLineDash([3, 4]); ctx.beginPath(); ctx.moveTo(c.x, c.y); ctx.lineTo(m.ox, m.oy); ctx.stroke(); ctx.setLineDash([]); } }
     ctx.save(); ctx.translate(c.x, c.y); ctx.rotate(c.h);
     carShape(c, c.rung || 0);
-    const noticed = c.state === 'caution' || c.state === 'intention' || c.cause === 'body', on = !noticed || Math.floor(s.t * (F['proto.art.noticeFlashHz'] || 4) * 2) % 2 === 0;
+    const queued = c.white && c.v < 1 && s.cars.some((o) => o.red && !o.gone && o.v < 1 && o.path === c.path && o.s > c.s && o.s - c.s < 3 * c.L); // row 711, built in row 734: white cars queued behind the waiting red car flash their lights
+    const noticed = queued || (!c.white && (c.state === 'caution' || c.state === 'intention' || c.cause === 'body')), on = !noticed || Math.floor(s.t * (F['proto.art.noticeFlashHz'] || 4) * 2) % 2 === 0;
     if (on) { rect(c.L / 2 - 3, -c.W / 2 + 2, 3, 5, '#fffbe0'); rect(c.L / 2 - 3, c.W / 2 - 7, 3, 5, '#fffbe0'); }
     if (braking || c.v < 2) { rect(-c.L / 2, -c.W / 2 + 2, 3, 5, '#ff2020'); rect(-c.L / 2, c.W / 2 - 7, 3, 5, '#ff2020'); }
     ctx.restore();
+    if (c.white) return; // row 734: white traffic carries no tag: it never learns
     const ast = c.red && s.sideStage ? s.sideStage(c) : 0; // row 730: the field's stage names the state while it slows
     const tag = c.model + ' · R' + (c.rung || 0) + ((c.rung || 0) >= 6 && c.red ? ' · MEMORY ' + (c.mem || 0) : '') + (c.lkp ? ' · ' + (c.lkp.found ? 'FOUND' : 'SEARCHING') : ast >= 1 && c.v >= 1 ? ' · ' + AWARE[ast] : c.state !== 'cruise' ? ' · ' + c.state.toUpperCase() : '');
     text(tag, c.x, c.y - 26, 10, C.text, 'center'); const tw = ctx.measureText(tag).width; // the notice meter sits past the tag's end
@@ -525,7 +531,7 @@
     if (!started || paused) {
       rect(0, 0, FW, FH, 'rgba(10,12,18,0.72)');
       text(paused ? 'PAUSED' : 'PROTOTYPE ' + ST.id + ' · ' + ST.title, FW / 2, 250, 24, C.text, 'center');
-      text('Two one-way roads cross at the Monument. One red car drives through.' + ((s.P['duel.topRung'] || 0) >= 7 ? ' It looks where it last saw you.' : s.rung >= 5 && (s.P['duel.topRung'] || 0) >= 6 ? ' Every crash leaves its mark.' : ''), FW / 2, 292, 14, C.dim, 'center');
+      text(s.P['duel.twoWay'] ? 'Two two-way roads cross at the Monument. White cars never learn. One red car does.' : 'Two one-way roads cross at the Monument. One red car drives through.' + ((s.P['duel.topRung'] || 0) >= 7 ? ' It looks where it last saw you.' : s.rung >= 5 && (s.P['duel.topRung'] || 0) >= 6 ? ' Every crash leaves its mark.' : ''), FW / 2, 292, 14, C.dim, 'center');
       text('Arrows or WASD move · Space dash · K jump, E cone, C duck, once fitted · Z zones · P pause · R restart · L save log', FW / 2, 330, 13, C.dim, 'center');
       text(paused ? 'P to resume' : 'Press any key', FW / 2, 380, 16, C.dummy, 'center');
       if (paused) { if (saveNote > 0) saveNote -= 1 / 60; text(saveNote > 0 ? 'NEW SAVE FILE · THE FIELD NOTES WILL SHOW AGAIN' : 'N new save file (field notes show again)', FW / 2, 412, 12, saveNote > 0 ? C.dummy : C.dim, 'center'); } // row 729

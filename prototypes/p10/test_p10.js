@@ -486,6 +486,24 @@ check('10.8 (row 732): the lunge guide shows where a dash pressed now would land
   return { ok, detail: `open ground: lands ${Math.hypot(g0.x1 - 60, g0.y1 - 100).toFixed(0)} out (reach ${R.toFixed(0)}), ready ${g0.ready}; the real dash lands ${land.toFixed(1)} from it; toward a wall 40 away: stops ${wall ? Math.hypot(wall.x1 - wall.x0, wall.y1 - wall.y0).toFixed(0) : '—'} out (touching: ${40 - t.P['body.radius']}); rung 1, a red car passing below: HIT predicted ${hot ? 'for ' + hots.length + ' frames; dashing at ' + hot.t.toFixed(2) + ' s' : 'never'}, a dash then hits: ${hitReal}` };
 });
 
+// ---------- 10.9
+const F9 = SF.stages['10.9'] && SF.stages['10.9'].flags;
+check('10.9 (row 734): two two-way roads, traffic on the left; white sedans that never learn enter on all four lanes, the red car only eastbound on road A and southbound on road B; road B gives way to road A; no two cars overlap; a white car hides the dummy from the red car; its hits damage the dummy and score nothing', () => {
+  const s = sim(F9, {}, ALL); Object.assign(s.body, { x: 700, y: 600 }); const W = s.P['world.width'], H = s.P['world.height'], lanesW = new Set(), lanesR = new Set(); let maxRed = 0, overlaps = 0, yields = 0;
+  const dir = s.level.lanes.map((l) => [Math.sign(l.pts[l.pts.length - 1][0] - l.pts[0][0]), Math.sign(l.pts[l.pts.length - 1][1] - l.pts[0][1]), l.pts[0][0] === l.pts[l.pts.length - 1][0] ? l.pts[0][0] : l.pts[0][1]]);
+  for (let i = 0; i < 120 * 60; i++) { service(s); s.step({}); const on = s.onRoad(), vis = on.filter((c) => c.x > -30 && c.x < W + 30 && c.y > -30 && c.y < H + 30); maxRed = Math.max(maxRed, on.filter((c) => c.red).length);
+    for (const c of on) { (c.white ? lanesW : lanesR).add(c.lane); if (c.yielding) yields++; }
+    for (let a = 0; a < vis.length; a++) for (let b = a + 1; b < vis.length; b++) if (Math.hypot(vis[a].x - vis[b].x, vis[a].y - vis[b].y) < 0.9 * vis[a].L) overlaps++; }
+  const lessons = s.events.filter((e) => e.type === 'lesson-due').length;
+  const h = sim(F9, {}, ALL); Object.assign(h.body, { x: 650, y: 400 }); let wHit = null, p0 = 0, st0 = 0, hp0 = 0;
+  for (let i = 0; i < 90 * 60 && !wHit; i++) { service(h); const p = h.lungePreview(0, -1), c = p && p.hit ? h.carById(p.hit.car) : null; const go = !!(p && p.ready && c && c.white && h.body.mode !== 'lunge'); if (go) { p0 = h.run.points; st0 = h.stealth.points; hp0 = h.body.health; } const e0 = h.events.length; h.step(go ? { mx: 0, my: -1, aPress: true } : {}); for (let k = 0; k < (go ? 30 : 0); k++) h.step({}); wHit = h.events.slice(e0).find((e) => e.type === 'impact' && e.white && e.lost > 0) || null; if (!wHit && go) Object.assign(h.body, { x: 650, y: 400, vx: 0, vy: 0, mode: 'idle' }); }
+  const g = sim(F9, {}, ALL); let red = null; for (let i = 0; i < 20 * 60 && !red; i++) { g.step({}); red = g.onRoad().find((c) => c.red && c.x > 50 && c.path.road === 'A'); }
+  const nx = red.x + red.L / 2, by = red.y; Object.assign(g.body, { x: nx + 200, y: by }); const seen0 = g.whiteHides(red, nx, by); g.cars.push({ id: 'wtest', white: true, x: nx + 100, y: by, h: 0, L: red.L, W: red.W, gone: false }); const hid = g.whiteHides(red, nx, by); g.cars.pop();
+  const ok = s.level.lanes.length === 4 && dir[0][0] === -1 && dir[1][0] === 1 && dir[2][1] === -1 && dir[3][1] === 1 && dir[0][2] === 348 && dir[1][2] === 292 && dir[2][2] === 372 && dir[3][2] === 428 &&
+    lanesW.size === 4 && [...lanesR].every((l) => l === 1 || l === 3) && maxRed === 1 && overlaps === 0 && yields > 0 && lessons === 0 && !!wHit && wHit.points === 0 && h.run.points === p0 && h.stealth.points === st0 && h.body.health < hp0 && !seen0 && hid;
+  return { ok, detail: `lanes: A west at y ${dir[0][2]}, A east ${dir[1][2]}, B north at x ${dir[2][2]}, B south ${dir[3][2]}; white lanes ${[...lanesW].sort().join(',')}, red lanes ${[...lanesR].sort().join(',')}; most red cars on the road ${maxRed}; overlapping car pairs ${overlaps}; give-way holds ${(yields / 60).toFixed(0)} car-seconds; lessons ${lessons}; a dash into a white car: ${wHit ? Math.round(wHit.lost) + ' damage, ' + wHit.points + ' points, run score ' + p0 + ' to ' + h.run.points : 'none'}; a white car between the red car and the dummy hides it: ${hid} (without: ${seen0})` };
+});
+
 // ---------- registry and frozen builds
 check('Prototype 10 values are registered (registry first)', () => {
   const reg = new Set(JSON.parse(fs.readFileSync(path.join(ROOT, 'content/params/tuning.parameters.json'), 'utf8')).entries.map((e) => e.id));
@@ -514,7 +532,7 @@ if (process.argv.includes('--page')) {
     const srv = http.createServer((q, r) => { const p = path.join(ROOT, decodeURIComponent(q.url.split('?')[0])); if (!fs.existsSync(p) || fs.statSync(p).isDirectory()) { r.writeHead(404); return r.end(); } r.writeHead(200); fs.createReadStream(p).pipe(r); });
     srv.listen(0, async () => {
       const { chromium } = require('playwright'); const br = await chromium.launch();
-      for (const page of ['dummies_p10.html', 'dummies_p10_2.html', 'dummies_p10_3.html', 'dummies_p10_4.html', 'dummies_p10_5.html', 'dummies_p10_6.html', 'dummies_p10_7.html', 'dummies_p10_8.html']) {
+      for (const page of ['dummies_p10.html', 'dummies_p10_2.html', 'dummies_p10_3.html', 'dummies_p10_4.html', 'dummies_p10_5.html', 'dummies_p10_6.html', 'dummies_p10_7.html', 'dummies_p10_8.html', 'dummies_p10_9.html']) {
         const pg = await br.newPage(); const errs = [];
         pg.on('pageerror', (e) => errs.push(e.message));
         await pg.goto(`http://127.0.0.1:${srv.address().port}/prototypes/p10/${page}`); await pg.waitForTimeout(600);
