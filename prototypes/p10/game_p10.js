@@ -214,12 +214,14 @@
     const b = s.body, cars = s.onRoad().filter((c) => c.red), seen = cars.filter((c) => c.hidden && (c.noticed || (c.hz && c.hz.inPath))), R = s.P['perception.streetCameraRange'] || 0;
     const F = s.P['perception.streetCameraFov'] || 360, cone = F < 360; // row 723: a cone of perception.streetCameraFov along its aim
     if (R > 0) { ctx.strokeStyle = C.camDim; ctx.lineWidth = 1; ctx.setLineDash([2, 6]);
-      for (const [x, y, aim] of L.cameras) { ctx.beginPath();
+      const A = s.P['perception.streetCameraPanArc'] || 0; // row 724: the cone pans; a faint arc marks its whole sweep
+      for (const cam of L.cameras) { const [x, y, base] = cam, aim = cone && base != null && s.cameraAim ? s.cameraAim(cam) : base; ctx.beginPath();
         if (cone && aim != null) { const a0 = (aim - F / 2) * Math.PI / 180, a1 = (aim + F / 2) * Math.PI / 180; ctx.moveTo(x, y); ctx.arc(x, y, R, a0, a1); ctx.closePath(); ctx.fillStyle = C.camCone; ctx.fill(); }
         else ctx.arc(x, y, R, 0, TAU);
-        ctx.stroke(); }
+        ctx.stroke();
+        if (cone && A > 0 && base != null) { ctx.save(); ctx.strokeStyle = C.camDim; ctx.globalAlpha = 0.5; ctx.setLineDash([1, 5]); ctx.beginPath(); ctx.arc(x, y, R + 4, (base - A / 2 - F / 2) * Math.PI / 180, (base + A / 2 + F / 2) * Math.PI / 180); ctx.stroke(); ctx.restore(); } }
       ctx.setLineDash([]); } // what each camera watches
-    for (const [x, y, aim] of L.cameras) { rect(x - 1.5, y - 14, 3, 14, C.joint); rect(x - 5, y - 19, 10, 6, C.joint); ctx.fillStyle = seen.length ? C.cam : C.camDim;
+    for (const cam of L.cameras) { const [x, y] = cam, aim = cone && cam[2] != null && s.cameraAim ? s.cameraAim(cam) : cam[2]; rect(x - 1.5, y - 14, 3, 14, C.joint); rect(x - 5, y - 19, 10, 6, C.joint); ctx.fillStyle = seen.length ? C.cam : C.camDim;
       const ax = cone && aim != null ? Math.cos(aim * Math.PI / 180) * 4 : 3, ay = cone && aim != null ? Math.sin(aim * Math.PI / 180) * 2 : 0; // the lens looks along its aim
       ctx.beginPath(); ctx.arc(x + ax, y - 16 + ay, 2, 0, TAU); ctx.fill(); }
     if (!seen.length || !b || !b.alive) return;

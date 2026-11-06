@@ -408,11 +408,22 @@ check('10.8 rung 7: crawled beyond duel.searchRadius of the ghost, the dummy is 
 check('10.8 (row 723): each street camera sees only within perception.streetCameraFov of its aim; at 360 (10.7) it sees all round', () => {
   const t = sim(F8, {}, ALL), o = sim(F7, {}, ALL), F = F8['perception.streetCameraFov'], R = F8['perception.streetCameraRange'];
   const at = (q, x, y) => { Object.assign(q.body, { x, y, duck: false }); return !!q.seeingCamera(); };
-  const [cx, cy, aim] = t.level.cameras[0], pt = (deg, r) => [cx + Math.cos(deg * Math.PI / 180) * r, cy + Math.sin(deg * Math.PI / 180) * r];
+  const cam = t.level.cameras[0], [cx, cy] = cam, aim = t.cameraAim(cam), pt = (deg, r) => [cx + Math.cos(deg * Math.PI / 180) * r, cy + Math.sin(deg * Math.PI / 180) * r];
   const inside = pt(aim, R * 0.6), outside = pt(aim + F / 2 + 25, R * 0.6), north = [50, 203];
   const r = { inside: at(t, ...inside), outside: at(t, ...outside), north8: at(t, ...north), north7: at(o, ...north), outside7: at(o, ...outside) };
-  return { ok: F < 360 && t.level.cameras.every((c) => c.length === 3) && r.inside && !r.outside && !r.north8 && r.north7 && r.outside7,
-    detail: `fov ${F}°, range ${R}; camera 1 aims ${aim}°. 10.8: inside the cone ${r.inside}, ${F / 2 + 25}° off its aim ${r.outside}, the north planters ${r.north8}. 10.7: north planters ${r.north7}, off its aim ${r.outside7}` };
+  return { ok: F < 360 && t.level.cameras.every((c) => c.length >= 3) && r.inside && !r.outside && !r.north8 && r.north7 && r.outside7,
+    detail: `fov ${F}°, range ${R}; camera 1 aims ${aim}° now. 10.8: inside the cone ${r.inside}, ${F / 2 + 25}° off its aim ${r.outside}, the north planters ${r.north8}. 10.7: north planters ${r.north7}, off its aim ${r.outside7}` };
+});
+
+check('10.8 (row 724): each camera pans across perception.streetCameraPanArc, MGS-style: rests perception.streetCameraPanHold at each end, sweeps in perception.streetCameraPanSeconds; a spot at one end of the sweep is watched part of each cycle; 10.7 stays fixed', () => {
+  const t = sim(F8, {}, ALL), o = sim(F7, {}, ALL), A = F8['perception.streetCameraPanArc'], T = F8['perception.streetCameraPanSeconds'], H = F8['perception.streetCameraPanHold'], Fv = F8['perception.streetCameraFov'], R = F8['perception.streetCameraRange'];
+  const cam = t.level.cameras[0], [cx, cy, base] = cam, end = base + A / 2 + Fv / 2 - 5, px = cx + Math.cos(end * Math.PI / 180) * R * 0.6, py = cy + Math.sin(end * Math.PI / 180) * R * 0.6;
+  const cyc = 2 * (T + H); let lo = 1e9, hi = -1e9, seen = 0, n = 0, flips = 0, last = null; const aims0 = [];
+  for (let k = 0; k <= cyc * 60; k++) { t.t = k / 60; const a = t.cameraAim(cam); lo = Math.min(lo, a); hi = Math.max(hi, a); const v = t.inCameraCone(cam, px, py); seen += v; n++; if (last !== null && v !== last) flips++; last = v; }
+  for (const k of [0, 3, 7, 11]) { o.t = k; aims0.push(o.cameraAim(o.level.cameras[0])); }
+  const t2 = sim(F8, {}, ALL), mirror = [0, 1.5, 2.5, 4.3].every((k) => { t2.t = k; return Math.abs((t2.cameraAim(t2.level.cameras[0]) - base) + (t2.cameraAim(t2.level.cameras[1]) - t2.level.cameras[1][2])) < 1e-6; });
+  return { ok: A > 0 && Math.abs(hi - lo - A) < 0.5 && seen > 0 && seen < n && flips === 2 && aims0.every((a) => a === aims0[0]) && mirror,
+    detail: `arc ${A}°, sweep ${T} s, hold ${H} s (cycle ${cyc} s); camera 1 aims ${lo.toFixed(0)}–${hi.toFixed(0)}°; a spot at the sweep's far edge watched ${(100 * seen / n).toFixed(0)}% of the cycle (${flips} changes); the barrier's two ends sweep as mirror images ${mirror}; 10.7 fixed at ${aims0[0]}°` };
 });
 
 // ---------- registry and frozen builds

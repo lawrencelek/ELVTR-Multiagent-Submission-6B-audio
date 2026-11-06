@@ -1129,8 +1129,9 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
 
 - **Build:** `prototypes/p10/dummies_p10_8.html`. 10.7's page is frozen.
 - **The one change:** rung 7, taught by one lesson. The car starts at rung 6; the dummy starts with all four parts. No new part.
-- **Checks:** `node prototypes/p10/test_p10.js --page` 57/57. Probes `qa/baseline/p10_8.md` 16/16. 10.7 reruns identical. Prototype 9 and the frozen md5s hold; sound freeze holds.
+- **Checks:** `node prototypes/p10/test_p10.js --page` 58/58. Probes `qa/baseline/p10_8.md` 17/17. 10.7 reruns identical. Prototype 9 and the frozen md5s hold; sound freeze holds.
 - **Amended (row 723):** the street cameras see a 60° cone along their cover, not all round (§25.5).
+- **Amended (row 724):** the cones pan back and forth, as in Metal Gear Solid (§25.5).
 
 ### 25.1 What changed
 
@@ -1153,10 +1154,10 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
 | Way in | Hits a minute | Verdict |
 |---|---|---|
 | Seen, then ducked, the same spot | 0 | Closed: 28 searches, all found |
-| Seen, then crawled beyond the ring | 1.96 (166) | Open: the crawl |
+| Seen, then crawled beyond the ring | 2.02 (150) | Open: the crawl |
 | Moving between free spots | 2.59 (226) | Open, narrowed from 6.97: walks in view leave ghosts |
 | The sprint from past the field | 0.60 (53) | Open, no part (D115) |
-| The gap; the cone bait | 0.07; 0.13 | Rare: the cameras' blind sides (row 723) |
+| Behind the barrier at its gap | 0.47 (66) | Open: the pan's window (row 724) |
 | Every other bot | 0 | Closed |
 
 - **Pace:** the roaming expert writes off a body every 55 s (18 s at rung 6). Within the 80 s target (D119 eased).
@@ -1179,12 +1180,16 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
 - **Now unwatched:** the north planters, the plinth, the building's west face, the planters south-east.
 - **Drawn:** a faint cone per camera. Frozen 10.5–10.7 keep 360°.
 - **Measured:** the bots barely move (their spots lay outside the range). Searches rise 564 to 779.
+- **Panning (row 724):** "panning back and forth like mgs" (Lawrence, 6 November).
+  - Each cone sweeps `perception.streetCameraPanArc` 60°: rests `perception.streetCameraPanHold` 1 s, crosses in `perception.streetCameraPanSeconds` 3 s. Cycle 8 s.
+  - The barrier's two ends sweep as mirror images: a window when both look south.
+  - The gap behind the barrier opens: 0.07 to 0.47 a minute.
 
 ### 25.6 Open
 
 - **Human pass (H6):** does the player read the ghost, and crawl away?
 - **D121:** the order from here: the road upgrade at 10.9, or the area alert first.
 - **D122:** the search's values. The crawl's room is a level rule: rows longer than the ring.
-- **D123:** the cones: 60° fixed; wider; or panning, as MGS's cameras sweep.
+- **D124:** the pan's values: 60° in 3 s, 1 s rests, mirrored.
 - **Next:** 10.9, the road upgrade (D121): two-way, white sedans that never learn.
 

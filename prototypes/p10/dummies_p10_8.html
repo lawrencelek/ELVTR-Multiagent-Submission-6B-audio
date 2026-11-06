@@ -3832,8 +3832,9 @@
       crossings: [{ road: 'A', x: 620 }], // a zebra on road A, east of the junction (drawn; cars do not stop for it yet)
       barrierGap: { x: 160, y: ROAD_A + W + 12, w: 56 }, canal: true, gates: {}, theme: 'start', patches: [],
       // rung 4's street cameras (drawn): the barrier's two ends, the building's corner. Each aims (degrees, 0 east, 90 south) along
-      // the cover it was put up for: perception.streetCameraFov sets its cone (row 723).
-      cameras: [[24, ROAD_A + W + 4, 30], [352, ROAD_A + W + 4, 150], [476, 228, 20]],
+      // the cover it was put up for: perception.streetCameraFov sets its cone (row 723). The fourth value is its pan's phase, a
+      // fraction of the cycle (row 724): the barrier's two ends sweep as mirror images, so both look away at once.
+      cameras: [[24, ROAD_A + W + 4, 30, 0], [352, ROAD_A + W + 4, 150, 0.5], [476, 228, 20, 0.25]],
     };
   }
 
@@ -4088,10 +4089,20 @@
       }
       return null;
     }
-    inCameraCone(cam, px, py) { // within half of perception.streetCameraFov of the camera's aim
+    inCameraCone(cam, px, py) { // within half of perception.streetCameraFov of the camera's aim now
       const F = this.P['perception.streetCameraFov'] || 360; if (F >= 360 || cam[2] == null) return true;
-      const a = Math.atan2(py - cam[1], px - cam[0]) * 180 / Math.PI, d = ((a - cam[2]) % 360 + 540) % 360 - 180;
+      const a = Math.atan2(py - cam[1], px - cam[0]) * 180 / Math.PI, d = ((a - this.cameraAim(cam)) % 360 + 540) % 360 - 180;
       return Math.abs(d) <= F / 2;
+    }
+    // Row 724: a camera pans across perception.streetCameraPanArc about its aim, as Metal Gear Solid's do: it rests
+    // perception.streetCameraPanHold at one end, sweeps across in perception.streetCameraPanSeconds at a steady rate, rests, sweeps back.
+    // 0: fixed. Its phase (the fourth value) offsets it in the cycle. Sim time only: no randomness.
+    cameraAim(cam) {
+      const P = this.P, A = P['perception.streetCameraPanArc'] || 0; if (!A || cam[2] == null) return cam[2];
+      const T = Math.max(0.1, P['perception.streetCameraPanSeconds'] || 0), H = Math.max(0, P['perception.streetCameraPanHold'] || 0), cyc = 2 * (T + H);
+      const ph = (((this.t || 0) / cyc + (cam[3] || 0)) % 1 + 1) % 1 * cyc;
+      const u = ph < H ? 0 : ph < H + T ? (ph - H) / T : ph < 2 * H + T ? 1 : 1 - (ph - 2 * H - T) / T;
+      return cam[2] - A / 2 + A * u;
     }
     eyeHeight(c) { return this.rung >= 3 ? this.P['perception.lidarHeight'] : this.P['perception.sensorHeight']; } // rung 3's lidar rides above the roof
     bodyHeight() { const b = this.body, P = this.P; return (b.duck ? P['body.duckHeight'] : P['proto.art.dummyHeight']) + (b.raised ? P['world.jumpableHeight'] : 0) + (b.z || 0); }
@@ -4397,7 +4408,7 @@
 
 </script>
 <script>
-window.DUMMIES_SIM = {"proto.droneConeSeconds": 5, "traffic.ringLaneChange": 150, "traffic.ringEntryGap": 2, "traffic.signalDistance": 140, "vehicles.scale": 0.9, "proto.turnModel": 2, "proto.input.fourButtons": 1, "proto.combo": 1, "proto.abilities": 3, "proto.jump.runToClear": 1, "proto.bounce.newton": 1, "proto.recoilScale": 0.7, "abilities.maxLevel": 3, "abilities.wearCut": 0.25, "battery.secondsPerCharge": 1, "scoring.comboVariety": 0.5, "scoring.comboAirPause": 1, "scoring.coneLink": 1, "scoring.comboMax": 5, "input.dropHoldSeconds": 0.3, "vehicles.sedan.length": 50.4, "vehicles.sedan.width": 25.2, "vehicles.sedan.height": 19.8, "vehicles.van.height": 30.6, "vehicles.van.length": 61.2, "vehicles.van.width": 28.8, "vehicles.hatchback.length": 41.4, "vehicles.hatchback.width": 23.4, "vehicles.hatchback.height": 20.7, "vehicles.police.length": 52.2, "vehicles.police.width": 25.2, "vehicles.police.height": 20.7, "vehicles.bus.length": 86.4, "vehicles.bus.width": 30.6, "vehicles.bus.height": 43.2, "proto.bounce.maxThrow": 40, "world.deckDropGaps": 1, "world.deckFlightsMin": 1, "props.cone.minVisible": 0.9, "battery.dashJumpCost": 0, "abilities.hands.tapDrop": 1, "proto.batteryModel": 1, "world.dummyMonument": 1, "world.storyArt": 1, "world.monumentShroud": 1, "arcade.grades": 1, "ui.introScreen": 1, "ui.levelCard": 1, "world.droneDropIn": 1, "ui.storySplash": 1, "arcade.grade.healthStep": 0.25, "arcade.grade.densityStep": 0.2, "arcade.grade.max": 5, "highscore.tableSize": 10, "ui.intro.loopSeconds": 6.5, "ui.splash.cycleSeconds": 3.6, "proto.driver.coneSteepPass": 1, "proto.art.beamStraight": 1, "proto.art.brakeGlowStopped": 1, "proto.art.spentGrey": 1, "ui.cueKey.simple": 1, "ui.layerEdgeFix": 1, "proto.art.noticeFlashHz": 4, "proto.stopCue": 0, "audio.enabled": 1, "story.coneBaitSeconds": 6, "story.floorHold": 1, "ui.hud.bodyCeil": 1, "ui.spentTick": 1, "proto.contactGraceSeconds": 0.3, "proto.driver.dodgeFollowsCone": 1, "ui.lampsOnCar": 1, "ui.pause.quiet": 1, "ui.conesXray": 1, "arcade.modes": 1, "arcade.trial.writeOffs": 10, "arcade.endless.gradeWriteOffs": 3, "ui.exploreArrows": 1, "ui.coreOnChest": 1, "economy.price.ability.level1": 2, "economy.price.ability.level2": 4, "economy.price.ability.level3": 6, "economy.price.ability.level4": 8, "duel.enabled": 1, "duel.carsOnRoad": 1, "duel.redReturnSeconds": 2, "duel.startRung": 6, "duel.topRung": 7, "duel.standstillSpeed": 5, "duel.dashArrives": 3, "duel.jumpArrives": 3, "duel.conesArrives": 3, "duel.duckArrives": 3, "duel.planters": 1, "duel.lessonClipSeconds": 3, "duel.lessonHoldSeconds": 0.8, "duel.lessonFitSeconds": 2, "duel.runInLength": 200, "duel.memoryRadius": 50, "duel.memorySites": 3, "duel.blockSeconds": 10, "duel.searchRadius": 60, "duel.searchSeconds": 4, "proto.learningEnabled": 0, "proto.learn.standoffEnabled": 0, "perception.forwardLength": 720, "proto.driver.cautionZone": 180, "run.appearances.road": 1000, "run.quota.road": 1000000, "perception.sideNoticeSeconds": 0.6, "props.planter.height": 14, "body.duckHeight": 6, "movement.duckSpeedFactor": 0.35, "perception.duckNoticeFactor": 1.5, "perception.sensorHeight": 14, "perception.lidarHeight": 26, "perception.streetCameraHeight": 60, "perception.streetCameraRange": 180, "proto.health.standard": 500, "perception.streetCameraFov": 60}; // Edit 108 (P10.8): registry edit100-2026-10-30; P6SIM, P7SIM, Prototype 9 flags, P10 defaults, then 10.8
+window.DUMMIES_SIM = {"proto.droneConeSeconds": 5, "traffic.ringLaneChange": 150, "traffic.ringEntryGap": 2, "traffic.signalDistance": 140, "vehicles.scale": 0.9, "proto.turnModel": 2, "proto.input.fourButtons": 1, "proto.combo": 1, "proto.abilities": 3, "proto.jump.runToClear": 1, "proto.bounce.newton": 1, "proto.recoilScale": 0.7, "abilities.maxLevel": 3, "abilities.wearCut": 0.25, "battery.secondsPerCharge": 1, "scoring.comboVariety": 0.5, "scoring.comboAirPause": 1, "scoring.coneLink": 1, "scoring.comboMax": 5, "input.dropHoldSeconds": 0.3, "vehicles.sedan.length": 50.4, "vehicles.sedan.width": 25.2, "vehicles.sedan.height": 19.8, "vehicles.van.height": 30.6, "vehicles.van.length": 61.2, "vehicles.van.width": 28.8, "vehicles.hatchback.length": 41.4, "vehicles.hatchback.width": 23.4, "vehicles.hatchback.height": 20.7, "vehicles.police.length": 52.2, "vehicles.police.width": 25.2, "vehicles.police.height": 20.7, "vehicles.bus.length": 86.4, "vehicles.bus.width": 30.6, "vehicles.bus.height": 43.2, "proto.bounce.maxThrow": 40, "world.deckDropGaps": 1, "world.deckFlightsMin": 1, "props.cone.minVisible": 0.9, "battery.dashJumpCost": 0, "abilities.hands.tapDrop": 1, "proto.batteryModel": 1, "world.dummyMonument": 1, "world.storyArt": 1, "world.monumentShroud": 1, "arcade.grades": 1, "ui.introScreen": 1, "ui.levelCard": 1, "world.droneDropIn": 1, "ui.storySplash": 1, "arcade.grade.healthStep": 0.25, "arcade.grade.densityStep": 0.2, "arcade.grade.max": 5, "highscore.tableSize": 10, "ui.intro.loopSeconds": 6.5, "ui.splash.cycleSeconds": 3.6, "proto.driver.coneSteepPass": 1, "proto.art.beamStraight": 1, "proto.art.brakeGlowStopped": 1, "proto.art.spentGrey": 1, "ui.cueKey.simple": 1, "ui.layerEdgeFix": 1, "proto.art.noticeFlashHz": 4, "proto.stopCue": 0, "audio.enabled": 1, "story.coneBaitSeconds": 6, "story.floorHold": 1, "ui.hud.bodyCeil": 1, "ui.spentTick": 1, "proto.contactGraceSeconds": 0.3, "proto.driver.dodgeFollowsCone": 1, "ui.lampsOnCar": 1, "ui.pause.quiet": 1, "ui.conesXray": 1, "arcade.modes": 1, "arcade.trial.writeOffs": 10, "arcade.endless.gradeWriteOffs": 3, "ui.exploreArrows": 1, "ui.coreOnChest": 1, "economy.price.ability.level1": 2, "economy.price.ability.level2": 4, "economy.price.ability.level3": 6, "economy.price.ability.level4": 8, "duel.enabled": 1, "duel.carsOnRoad": 1, "duel.redReturnSeconds": 2, "duel.startRung": 6, "duel.topRung": 7, "duel.standstillSpeed": 5, "duel.dashArrives": 3, "duel.jumpArrives": 3, "duel.conesArrives": 3, "duel.duckArrives": 3, "duel.planters": 1, "duel.lessonClipSeconds": 3, "duel.lessonHoldSeconds": 0.8, "duel.lessonFitSeconds": 2, "duel.runInLength": 200, "duel.memoryRadius": 50, "duel.memorySites": 3, "duel.blockSeconds": 10, "duel.searchRadius": 60, "duel.searchSeconds": 4, "proto.learningEnabled": 0, "proto.learn.standoffEnabled": 0, "perception.forwardLength": 720, "proto.driver.cautionZone": 180, "run.appearances.road": 1000, "run.quota.road": 1000000, "perception.sideNoticeSeconds": 0.6, "props.planter.height": 14, "body.duckHeight": 6, "movement.duckSpeedFactor": 0.35, "perception.duckNoticeFactor": 1.5, "perception.sensorHeight": 14, "perception.lidarHeight": 26, "perception.streetCameraHeight": 60, "perception.streetCameraRange": 180, "proto.health.standard": 500, "perception.streetCameraFov": 60, "perception.streetCameraPanArc": 60, "perception.streetCameraPanSeconds": 3, "perception.streetCameraPanHold": 1}; // Edit 108 (P10.8): registry edit100-2026-10-30; P6SIM, P7SIM, Prototype 9 flags, P10 defaults, then 10.8
 window.DUMMIES_P10_STAGE = {"id": "10.8", "title": "THE SEARCH", "edit": 108};
 </script>
 <script>
@@ -4617,12 +4628,14 @@ window.DUMMIES_P10_STAGE = {"id": "10.8", "title": "THE SEARCH", "edit": 108};
     const b = s.body, cars = s.onRoad().filter((c) => c.red), seen = cars.filter((c) => c.hidden && (c.noticed || (c.hz && c.hz.inPath))), R = s.P['perception.streetCameraRange'] || 0;
     const F = s.P['perception.streetCameraFov'] || 360, cone = F < 360; // row 723: a cone of perception.streetCameraFov along its aim
     if (R > 0) { ctx.strokeStyle = C.camDim; ctx.lineWidth = 1; ctx.setLineDash([2, 6]);
-      for (const [x, y, aim] of L.cameras) { ctx.beginPath();
+      const A = s.P['perception.streetCameraPanArc'] || 0; // row 724: the cone pans; a faint arc marks its whole sweep
+      for (const cam of L.cameras) { const [x, y, base] = cam, aim = cone && base != null && s.cameraAim ? s.cameraAim(cam) : base; ctx.beginPath();
         if (cone && aim != null) { const a0 = (aim - F / 2) * Math.PI / 180, a1 = (aim + F / 2) * Math.PI / 180; ctx.moveTo(x, y); ctx.arc(x, y, R, a0, a1); ctx.closePath(); ctx.fillStyle = C.camCone; ctx.fill(); }
         else ctx.arc(x, y, R, 0, TAU);
-        ctx.stroke(); }
+        ctx.stroke();
+        if (cone && A > 0 && base != null) { ctx.save(); ctx.strokeStyle = C.camDim; ctx.globalAlpha = 0.5; ctx.setLineDash([1, 5]); ctx.beginPath(); ctx.arc(x, y, R + 4, (base - A / 2 - F / 2) * Math.PI / 180, (base + A / 2 + F / 2) * Math.PI / 180); ctx.stroke(); ctx.restore(); } }
       ctx.setLineDash([]); } // what each camera watches
-    for (const [x, y, aim] of L.cameras) { rect(x - 1.5, y - 14, 3, 14, C.joint); rect(x - 5, y - 19, 10, 6, C.joint); ctx.fillStyle = seen.length ? C.cam : C.camDim;
+    for (const cam of L.cameras) { const [x, y] = cam, aim = cone && cam[2] != null && s.cameraAim ? s.cameraAim(cam) : cam[2]; rect(x - 1.5, y - 14, 3, 14, C.joint); rect(x - 5, y - 19, 10, 6, C.joint); ctx.fillStyle = seen.length ? C.cam : C.camDim;
       const ax = cone && aim != null ? Math.cos(aim * Math.PI / 180) * 4 : 3, ay = cone && aim != null ? Math.sin(aim * Math.PI / 180) * 2 : 0; // the lens looks along its aim
       ctx.beginPath(); ctx.arc(x + ax, y - 16 + ay, 2, 0, TAU); ctx.fill(); }
     if (!seen.length || !b || !b.alive) return;

@@ -4,11 +4,13 @@
 
 **Amended 5 November (row 723):** each street camera sees a cone of `perception.streetCameraFov` (60°), not all round (§10.8.4).
 
+**Amended 6 November (row 724):** each cone pans back and forth, as in Metal Gear Solid (§10.8.4).
+
 - **Build:** `prototypes/p10/dummies_p10_8.html` (`python3 prototypes/p10/build.py`).
 - **Playtest pages:** `index.html`, one per test. 10.1–10.7 are frozen; 10.7 at md5 `54328d01…`.
-- **Tests:** `node prototypes/p10/test_p10.js --page` 57/57. Prototype 9 rebuild md5 `be163e7d014344e062965986b3da5786`. 8.4 md5 `9f5549201d88891f9f0b22c461602909`. Sound freeze: 211 items, 0 changed.
-- **Probes:** `node qa/testroad.js --stage 10.8 --out qa/baseline/p10_8.json`; report `qa/baseline/p10_8.md`, 16/16 checks. 10.7 reruns identical to its baseline, new fields aside.
-- **Decision log:** rows 717–723. Open D119, D120, D121, D122, D123.
+- **Tests:** `node prototypes/p10/test_p10.js --page` 58/58. Prototype 9 rebuild md5 `be163e7d014344e062965986b3da5786`. 8.4 md5 `9f5549201d88891f9f0b22c461602909`. Sound freeze: 211 items, 0 changed.
+- **Probes:** `node qa/testroad.js --stage 10.8 --out qa/baseline/p10_8.json`; report `qa/baseline/p10_8.md`, 17/17 checks. 10.7 reruns identical to its baseline, new fields aside.
+- **Decision log:** rows 717–724. D123 resolved. Open D119, D120, D121, D122, D124.
 
 ## Request
 
@@ -26,7 +28,9 @@
 | `duel.searchRadius` 60: about one spot's spacing | The nine hiding spots sit about 60 apart (row 708) | Proposed (row 718; D122) |
 | `duel.searchSeconds` 4: from the last time it had the dummy | Short: a search, not a stalemate. The block lift ends a found dummy's wait (row 715) | Proposed (row 718; D122) |
 | Narrower cameras: a cone along the cover each was put up for | Lawrence, 5 November: "with the cameras it's super difficult since they have this 360 view. they need a narrower field of view" | Decided (row 723) |
-| 60°; aims along the barrier and the building's south face | D118: each camera watches the cover near its post | Proposed (row 723; D123) |
+| 60°; aims along the barrier and the building's south face | D118: each camera watches the cover near its post | Proposed (row 723) |
+| The cones pan back and forth | Lawrence, 6 November: "panning back and forth like mgs" | Decided (row 724; D123 resolved) |
+| A 60° sweep: rest 1 s, cross in 3 s; the barrier's ends as mirror images | MGS: a slow pan, a rest at each end; a window when both look away | Proposed (row 724; D124) |
 
 ## 10.8 The search
 
@@ -71,10 +75,17 @@
   - The barrier's west end: 30°, along the barrier's back.
   - The barrier's east end: 150°, along it from the other end.
   - The building's corner: 20°, along the building's south face.
+- **Each cone pans (row 724),** as Metal Gear Solid's cameras do:
+  - It sweeps `perception.streetCameraPanArc` (60°), centred on its aim. Camera 1 looks from 0° to 60°.
+  - It rests `perception.streetCameraPanHold` (1 s) at each end.
+  - It crosses in `perception.streetCameraPanSeconds` (3 s), at a steady rate. One cycle: 8 s.
+  - The barrier's two ends sweep as mirror images. Both look along the barrier at once, and away at once.
+  - The building's corner runs a quarter cycle behind.
 - **Outside every cone, cover hides the dummy** as from the car's own sensors.
-- **Now unwatched:** the north planter row, the plinth, the building's west face, both planter rows south-east.
-- **Drawn:** a faint cone per camera, replacing the range circle. The lens points along its aim.
-- **Frozen 10.5–10.7 keep 360°.**
+- **The barrier's back is watched part of each cycle.** Cross while both cameras look south.
+- **Never watched:** the north planter row, the plinth, the building's west face, both planter rows south-east.
+- **Drawn:** a faint cone per camera, at its aim now, replacing the range circle. A faint dotted arc marks its whole sweep. The lens points along its aim.
+- **Frozen 10.5–10.7 keep 360°, fixed.**
 
 ### 10.8.5 The opening
 
@@ -93,6 +104,7 @@
   - `springSeen`: each spring records the last sighting. `account` sets `lostSight` and `seenAt`. `learnFrom`: the search cause.
 - `game_p10.js`: the ghost, ring, arc and line; the beacon and tag; FOUND; the clip's ghost; the fitting's diagram; the title line "It looks where it last saw you."
 - Row 723: each camera carries an aim; `inCameraCone` in `seeingCamera`; the cones drawn.
+- Row 724: each camera carries a phase; `cameraAim` pans it on sim time; the cone drawn at its aim now, with its sweep's arc.
 - `build.py`: 10.8's stage; 10.7's page frozen.
 - `qa/testroad.js`: bots `peek` (stand in view until noticed; duck; spring) and `peekmove` (the same; crawl beyond the radius along the row first). Fields: searches, found, ended, hits after a lost sighting.
 
@@ -103,36 +115,38 @@
 | Way in | Hits a minute | Damage a hit | Verdict |
 |---|---|---|---|
 | Seen, then ducked, the same spot (`peek`) | 0 | — | Closed: 30 searches, 30 found |
-| Seen, then crawled beyond the ring (`peekmove`) | 1.96 | 166 | Open: the crawl |
+| Seen, then crawled beyond the ring (`peekmove`) | 2.02 | 150 | Open: the crawl |
 | Moving between spots it does not remember (`roam`) | 2.59 | 226 | Open, narrowed: 6.97 at rung 6. Walks in view leave ghosts |
 | The sprint from past the field (`lurk`) | 0.60 | 53 | Open (D115) |
 | The flank from open pavement | 0.60 | 53 | Open (D115) |
 | The planter ambush, the same spot | 0.27 | 84 | Closed after one hit a run (rung 6) |
-| Behind the barrier at its gap; the cone bait | 0.07; 0.13 | 71; 53 | Rare: the cameras' blind sides (row 723) |
+| Behind the barrier at its gap (`gap`) | 0.47 | 66 | Open: the pan's window (row 724) |
+| The cone bait | 0 | — | Closed |
 | Every other bot | 0 | — | Closed |
 
-- **A new behaviour:** 779 searches; 120 found the dummy near the ghost; 773 ended. None at rung 6.
-- **No hit from a remembered spot:** 0 of 92.
-- **The block lift:** 1,079 lifts. No wait for the dummy past 20 s.
+- **A new behaviour:** 707 searches; 236 found the dummy near the ghost; 699 ended. None at rung 6.
+- **No hit from a remembered spot:** 0 of 97.
+- **The block lift:** 1,064 lifts. No wait for the dummy past 20 s.
 
 **The cones (row 723; trained, hits a minute):**
 
-| Way in | 360° | 60° |
-|---|---|---|
-| The crawl (`peekmove`) | 1.89 | 1.96 |
-| Moving between spots (`roam`) | 2.52 | 2.59 |
-| The flank from open pavement | 0.40 | 0.60 |
-| Behind the barrier at its gap (`gap`) | 0 | 0.07 |
-| The cone bait | 0 | 0.13 |
-| Searches | 564 | 779 |
+| Way in | 360° | 60°, fixed | 60°, panning |
+|---|---|---|---|
+| The crawl (`peekmove`) | 1.89 | 1.96 | 2.02 |
+| Moving between spots (`roam`) | 2.52 | 2.59 | 2.59 |
+| The flank from open pavement | 0.40 | 0.60 | 0.60 |
+| Behind the barrier at its gap (`gap`) | 0 | 0.07 | 0.47 |
+| The cone bait | 0 | 0.13 | 0 |
+| Searches | 564 | 779 | 707 |
 
 - **The bots barely move.** Their spots sat outside the cameras' range already. A human hiding by the plinth, the north planters or the building's west face gains most.
+- **The pan opens the barrier's gap.** Seven hits in 15 minutes, against one fixed. The bot does not time the sweep; a player who does gains more.
 
 **The lesson** (mode `lesson`):
 
 - **Lessons:** in 9 of 9 runs with a hit from cover after a sighting, at 3–54 s.
 - **Lessons:** 0 of 10 runs with other hits only.
-- **Escalation (10 minutes):** seen-then-hidden decays to 0 after two hits. The crawl holds at 1–4 a minute (decay 0.50). Roaming holds at 3 (0.70).
+- **Escalation (10 minutes):** seen-then-hidden decays to 0 after two hits. The crawl lands in 9 of 10 minutes (decay 0.38). Roaming holds at 3 (0.70).
 
 **Pace:**
 
@@ -140,18 +154,18 @@
 |---|---|---|
 | Moving between spots, rung 6 (10.7) | 18 | At most 80 (Edit 18 §10.2) |
 | Moving between spots, rung 7 | 55 | |
-| The crawl, rung 7 | 99 (111 at 360°) | |
+| The crawl, rung 7 | 111 (99 fixed 60°; 111 at 360°) | |
 
 ## Registry
 
-- **Added (3):** `duel.searchRadius`, `duel.searchSeconds`; `perception.streetCameraFov` (row 723; default 360).
-- **Set by stage:** `duel.startRung` 6, `duel.topRung` 7, `duel.searchRadius` 60, `duel.searchSeconds` 4, `perception.streetCameraFov` 60. 10.7's values otherwise.
-- **666 entries.** `registryVersion` unchanged (row 665).
+- **Added (6):** `duel.searchRadius`, `duel.searchSeconds`; `perception.streetCameraFov` (row 723; default 360); `perception.streetCameraPanArc` (default 0), `perception.streetCameraPanSeconds`, `perception.streetCameraPanHold` (row 724).
+- **Set by stage:** `duel.startRung` 6, `duel.topRung` 7, `duel.searchRadius` 60, `duel.searchSeconds` 4, `perception.streetCameraFov` 60, `perception.streetCameraPanArc` 60, `perception.streetCameraPanSeconds` 3, `perception.streetCameraPanHold` 1. 10.7's values otherwise.
+- **669 entries.** `registryVersion` unchanged (row 665).
 
 ## Open
 
-- **Human pass (H6):** does the player read the ghost, and crawl away? Do the cones read as blind sides?
-- **D123:** the cones' width and aims. 60° fixed; or panning, as MGS's cameras sweep.
+- **Human pass (H6):** does the player read the ghost, and crawl away? Do the cones read? Does the player time the sweep?
+- **D124:** the pan's values: 60° in 3 s, 1 s rests, the barrier's ends mirrored.
 - **D121:** the order from here. The road upgrade at 10.9, swerve cost at 10.10.
 - **D122:** the search's values. 60 and 4 leave the crawl open along a row longer than 60.
 - **D119:** eased. The roaming expert writes off a body every 55 s, within the target.

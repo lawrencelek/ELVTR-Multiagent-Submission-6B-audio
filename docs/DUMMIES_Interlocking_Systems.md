@@ -64,7 +64,7 @@ Read across: what the row's factor sets for the column's.
 | 1 | Forward camera | `perception.forwardLength` 720; envelope; hard stop at `traffic.hardBraking` 79 | The front | The flank | Battery 1 |
 | 2 | Side sensors | `proto.driver.cautionZone` 180; `perception.sideNoticeSeconds` 0.6 | The open flank | Height, cover | Legs 1 |
 | 3 | Roof lidar | `perception.lidarHeight` 26 (rungs 1–2: `perception.sensorHeight` 14) | The plinth, the jump | Cover | — |
-| 4 | Street cameras | `perception.streetCameraRange` 180; `perception.streetCameraHeight` 60; `perception.streetCameraFov` 60 from 10.8 (row 723) | Watched cover, within each cone | A cone's swerve; cover outside the cones | Hands 1 |
+| 4 | Street cameras | `perception.streetCameraRange` 180; `perception.streetCameraHeight` 60; `perception.streetCameraFov` 60 from 10.8 (row 723), panning `perception.streetCameraPanArc` 60 (row 724) | Watched cover, within each cone | A cone's swerve; cover outside the cones; the pan's window | Hands 1 |
 | 5 | Road items | Stops at a cone; waits `proto.droneConeSeconds` 5 for FARSIGHT | The cone bait | Low cover | DUCK |
 | 6 | Crash memory | `duel.memoryRadius` 50; `duel.memorySites` 3 | A repeated spot from cover, while the cover stays | Any other spot; a spot with new cover (row 712); hits from the open (row 713) | — |
 | 7 | Search (row 717) | `duel.searchRadius` 60; `duel.searchSeconds` 4 | Seen, then hidden: a ghost where it lost you; stops short; finds you near it | Crawl beyond the ring; hide before it sees you | — |
@@ -138,7 +138,7 @@ Read across: what the row's factor sets for the column's.
 | The plinth | A raised edge (`world.jumpableHeight` 20) | 2 open, 3 closed |
 | The corner building | Tall cover; hides each road from the other | 2 closed by the field |
 | The barrier and its gap | Cover by road A | 3 open, 4 closed |
-| Three camera posts | Watch the cover within `perception.streetCameraRange` 180, in a cone of `perception.streetCameraFov` 60 along it (row 723) | 4 up |
+| Three camera posts | Watch the cover within `perception.streetCameraRange` 180, in a cone of `perception.streetCameraFov` 60 along it (row 723), panning across `perception.streetCameraPanArc` 60 (row 724) | 4 up |
 | Three cone homes | Where the cones start and drones return them | 4–5 |
 | Three planter rows (`duel.planters` 1) | Low cover; planters of `world.gardenPlanter` 40 | 5–6 |
 | Screen edges | The run-in; the spawn-speed rule | All |
@@ -148,6 +148,7 @@ Read across: what the row's factor sets for the column's.
 - **L1. Cover must run up the road the car comes from.** The field sees 720 ahead; a single planter hid a ducked dummy only from a car abreast (row 696).
 - **L2. A camera watches only the cover near its post** (D118). Place posts per piece of cover, not per junction.
 - **L2a. A camera looks one way** (row 723). Aim each along its cover. What lies outside every cone is the level's blind side: place it on purpose.
+- **L2b. A panning camera sets a rhythm** (row 724). Phase paired cameras so their windows coincide, or so one always watches. The level chooses.
 - **L3. Hiding spots need spacing.** At least `duel.memorySites` + 1 per road, about 60 apart (row 708).
 - **L4. Cover within reach of a lane.** Spots must sit within 177 of the lane they ambush.
 - **L5. The run-in sets the pace.** It was half of every pass at 771 (row 702).
@@ -248,6 +249,7 @@ Read across: what the row's factor sets for the column's.
 | F21 | A ghost off the road can stop the car in the junction box (L10) | 2, 3, 4 | 719 |
 | F22 | All-round cameras made play "super difficult" (Lawrence). 60° cones leave blind sides; the bots barely move, a human gains most | 2, 4 | 723 |
 | F23 | A camera's cone edge makes it lose the dummy often: searches rise 564 to 779; the cone bait sets 647 ghosts | 2 | 723 |
+| F24 | The pan opens the barrier's gap: 0.07 to 0.47 a minute, by a bot that does not time it | 1, 2, 4 | 724 |
 
 ## 7 Open questions
 
@@ -283,7 +285,7 @@ One row per object type. Edit this table first; the sections above follow it.
 | L4 | Building | Landscape, tall | — | Yes, from every car eye; a camera sees past it within 180 of its post | D, R | Yes, as cover | Never moves | Built |
 | L5 | Barrier and gap | Street furniture, tall | — | Yes; a camera sees past it within 180 of its post | D (walk and dash); the gap lets D through | Yes, as cover | Never moves | Built |
 | L6 | Planter row (`props.planter.height` 14) | Street furniture, low | — | A ducked dummy only; higher eyes see in sooner | D's walk; a dash vaults it | Yes, as cover | Never moves | Built |
-| L7 | Camera post | Street furniture | Watching (a cone of `perception.streetCameraFov` along its aim; row 723); linked to R | No | No | No: it sees live, keeps nothing | — | Built |
+| L7 | Camera post | Street furniture | Watching (a cone of `perception.streetCameraFov`, panning across `perception.streetCameraPanArc`; rows 723–724); linked to R | No | No | No: it sees live, keeps nothing | — | Built |
 | L8 | Sculpture (`world.sculptureScaleLarge` 2) | Street furniture | — | Not yet | — | — | — | Proposed moveable |
 | M1 | Cone (`props.cone.radius` 7.2) | Moveable | Free; held; in flight; fetched | No | R: rung 4 swerves, rung 5 stops; D punts it | No | FARSIGHT fetches it from a lane after `proto.droneConeSeconds` 5, to its home | Built |
 | M2 | Planter, pushed | Moveable | Still; moving | A ducked dummy | D | Yes; memory follows it (row 712) | Moved by D | Proposed (Arms) |
@@ -364,7 +366,7 @@ One row per object type. Edit this table first; the sections above follow it.
 | Habits buy counters, capped, decaying | MGS V Revenge, Alien: Isolation | Rung 6, three spots (D120) | Decay by level change (Q6); show the counters on the map, as MGS V does | Adopted: the spots on a map. Lands with the multi-screen levels |
 | Moving cover is suspicious | The cardboard box; AC's haycarts | Parked cars arrive "seen coming" (row 712) | Cover that moves in a car's sight draws its notice; still cover hides | Adopted. Lands with moveable cover: pushed planters, parked cars |
 | Traces raise the alert | MGS V bodies; Hitman bodies, missing items | Outlines: only crashes from cover are remembered | White cars slow past fresh outlines (group, later) | Adopted, for later: a group behaviour after 10.8 |
-| Security cameras with a visible cone | MGS (panning cameras), Splinter Cell, Dishonored's watchtowers | A fixed 60° cone per post (row 723) | Panning cones: a timed crossing (D123) | Built fixed; panning open |
+| Security cameras with a visible cone | MGS (panning cameras), Splinter Cell, Dishonored's watchtowers | A 60° cone per post, panning 60° (rows 723–724) | Panning cones: a timed crossing | **Built 10.8 (row 724)**; values D124 |
 | Shared, stale information | Hitman services; MGS V radio | Street cameras feed the car live | Fleet memory (Q2); a camera blocked by moved cover sees nothing | Open (Q2) |
 | Crowds are cover | AC, Hitman | White cars as moving cover (row 711) | Queues as cover; their flashing lights as the alarm (row 711) | Decided (row 711) |
 | Failure is cheap | Mark of the Ninja's frequent checkpoints | A new body by drone; 2 s between passes | Keep | Keep; the block lift (row 715) |
@@ -397,3 +399,4 @@ One row per object type. Edit this table first; the sections above follow it.
 | 4 November 2026 | §9.2: six proposals adopted, with where each lands | 716 |
 | 5 November 2026 | 10.8 built: rung 7, the search (§2.1); its states and resets (§8); L9–L10; F17–F21; Q11; §9.2's first two built | 717–722 |
 | 5 November 2026 | The street cameras' cones (row 723): rung 4's row; L2a; L7; F22–F23; the research row | 723 |
+| 6 November 2026 | The cameras pan (row 724): rung 4's row; L2b; L7; F24; the research row | 724 |

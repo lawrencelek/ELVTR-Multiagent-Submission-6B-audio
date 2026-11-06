@@ -1004,7 +1004,10 @@
     "duel.blockSeconds": 10,
     "duel.searchRadius": 60,
     "duel.searchSeconds": 4,
-    "perception.streetCameraFov": 60
+    "perception.streetCameraFov": 60,
+    "perception.streetCameraPanArc": 60,
+    "perception.streetCameraPanSeconds": 3,
+    "perception.streetCameraPanHold": 1
    },
    "flags": {
     "proto.droneConeSeconds": 5,
@@ -1126,7 +1129,10 @@
     "perception.streetCameraHeight": 60,
     "perception.streetCameraRange": 180,
     "proto.health.standard": 500,
-    "perception.streetCameraFov": 60
+    "perception.streetCameraFov": 60,
+    "perception.streetCameraPanArc": 60,
+    "perception.streetCameraPanSeconds": 3,
+    "perception.streetCameraPanHold": 1
    }
   }
  }

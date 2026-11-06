@@ -14133,6 +14133,72 @@
    "purpose": "Rung 4 and up: a street camera sees only within this angle, centred on its aim along the cover it was put up for. 360: all round (10.5–10.7). 10.8 sets 60"
   },
   {
+   "id": "perception.streetCameraPanArc",
+   "group": "Vehicles and traffic",
+   "owner": "Design",
+   "label": "Street camera pan arc",
+   "description": "Rung 4 and up: the arc a street camera's aim sweeps across, centred on its aim, as Metal Gear Solid's cameras pan. 0: fixed (10.5–10.7). 10.8 sets 60",
+   "unit": "degrees",
+   "type": "number",
+   "default": 0,
+   "status": "proposed",
+   "source": "GDD Edit 108 amendment (Prototype 10.8): DECISIONS row 724",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-run",
+   "validation": {
+    "min": 0,
+    "max": 180
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "Rung 4 and up: the arc a street camera's aim sweeps across, centred on its aim, as Metal Gear Solid's cameras pan. 0: fixed (10.5–10.7). 10.8 sets 60"
+  },
+  {
+   "id": "perception.streetCameraPanSeconds",
+   "group": "Vehicles and traffic",
+   "owner": "Design",
+   "label": "Street camera pan time",
+   "description": "Seconds a panning street camera takes to sweep from one end of perception.streetCameraPanArc to the other, at a steady rate. 10.8 sets 3",
+   "unit": "seconds",
+   "type": "number",
+   "default": 3,
+   "status": "proposed",
+   "source": "GDD Edit 108 amendment (Prototype 10.8): DECISIONS row 724",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-run",
+   "validation": {
+    "min": 0.5,
+    "max": 20
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "Seconds a panning street camera takes to sweep from one end of perception.streetCameraPanArc to the other, at a steady rate. 10.8 sets 3"
+  },
+  {
+   "id": "perception.streetCameraPanHold",
+   "group": "Vehicles and traffic",
+   "owner": "Design",
+   "label": "Street camera pan hold",
+   "description": "Seconds a panning street camera rests at each end of its sweep. 10.8 sets 1",
+   "unit": "seconds",
+   "type": "number",
+   "default": 1,
+   "status": "proposed",
+   "source": "GDD Edit 108 amendment (Prototype 10.8): DECISIONS row 724",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-run",
+   "validation": {
+    "min": 0,
+    "max": 10
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "Seconds a panning street camera rests at each end of its sweep. 10.8 sets 1"
+  },
+  {
    "id": "duel.lessonClipSeconds",
    "group": "Prototype P10",
    "owner": "Design",
