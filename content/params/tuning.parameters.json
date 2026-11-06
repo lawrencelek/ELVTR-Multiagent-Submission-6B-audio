@@ -14995,7 +14995,7 @@
    "group": "Prototype P10",
    "owner": "Design",
    "label": "Give way: lookahead",
-   "description": "Two-way roads: a road B car holds at its line while a road A car is in the junction box or within this distance of it along its lane. 10.9 sets 420",
+   "description": "Two-way roads: a car decides at the junction from this far before the box, before it is too close to stop gently (row 735; row 734: road B held while road A was this near). 10.9 sets 400",
    "unit": "px",
    "type": "number",
    "default": 0,
@@ -15010,7 +15010,161 @@
    },
    "integrationStatus": "prototype-p10",
    "boundaryStatus": "proposed-adapter-contract-not-implemented",
-   "purpose": "Two-way roads: a road B car holds at its line while a road A car is in the junction box or within this distance of it along its lane. 10.9 sets 420"
+   "purpose": "Two-way roads: a car decides at the junction from this far before the box, before it is too close to stop gently (row 735; row 734: road B held while road A was this near). 10.9 sets 400"
+  },
+  {
+   "id": "perception.coneRadius",
+   "group": "Vehicles and traffic",
+   "owner": "Vehicles / Traffic",
+   "label": "Field: radius",
+   "description": "Rung 2 up, coned: the proportional field (row 735). The forward cone reaches this far from the car's middle; the side cones perception.sideConeRatio of it. 0: the row 731/733 field from the nose. 10.9 sets 320 (half the screen's height)",
+   "unit": "px",
+   "type": "number",
+   "default": 0,
+   "status": "proposed",
+   "source": "GDD Edit 109 amendment (Prototype 10.9): DECISIONS row 735",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-tick",
+   "validation": {
+    "min": 0,
+    "max": 720
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "Rung 2 up, coned: the proportional field (row 735). The forward cone reaches this far from the car's middle; the side cones perception.sideConeRatio of it. 0: the row 731/733 field from the nose. 10.9 sets 320 (half the screen's height)"
+  },
+  {
+   "id": "perception.sideConeRatio",
+   "group": "Vehicles and traffic",
+   "owner": "Vehicles / Traffic",
+   "label": "Field: side reach",
+   "description": "Proportional field: each side cone reaches this fraction of perception.coneRadius. 10.9 sets 0.8",
+   "unit": "fraction",
+   "type": "number",
+   "default": 0.8,
+   "status": "proposed",
+   "source": "GDD Edit 109 amendment (Prototype 10.9): DECISIONS row 735",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-tick",
+   "validation": {
+    "min": 0.1,
+    "max": 1
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "Proportional field: each side cone reaches this fraction of perception.coneRadius. 10.9 sets 0.8"
+  },
+  {
+   "id": "perception.forwardGrades",
+   "group": "Vehicles and traffic",
+   "owner": "Vehicles / Traffic",
+   "label": "Field: forward grades",
+   "description": "Proportional field: equal rings split the forward cone into this many grades, outermost AWARE, then SLOWING, then CRAWLING. 10.9 sets 3",
+   "unit": "count",
+   "type": "number",
+   "default": 3,
+   "status": "proposed",
+   "source": "GDD Edit 109 amendment (Prototype 10.9): DECISIONS row 735",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-tick",
+   "validation": {
+    "min": 1,
+    "max": 3
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "Proportional field: equal rings split the forward cone into this many grades, outermost AWARE, then SLOWING, then CRAWLING. 10.9 sets 3"
+  },
+  {
+   "id": "perception.sideGrades",
+   "group": "Vehicles and traffic",
+   "owner": "Vehicles / Traffic",
+   "label": "Field: side grades",
+   "description": "Proportional field: equal rings split each side cone into this many grades, outermost AWARE, then SLOWING. 10.9 sets 2",
+   "unit": "count",
+   "type": "number",
+   "default": 2,
+   "status": "proposed",
+   "source": "GDD Edit 109 amendment (Prototype 10.9): DECISIONS row 735",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-tick",
+   "validation": {
+    "min": 1,
+    "max": 3
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "Proportional field: equal rings split each side cone into this many grades, outermost AWARE, then SLOWING. 10.9 sets 2"
+  },
+  {
+   "id": "perception.coneGrowthPerMemory",
+   "group": "Vehicles and traffic",
+   "owner": "Vehicles / Traffic",
+   "label": "Field: growth per memory",
+   "description": "Proportional field: the radius grows by this fraction for each crash spot the car remembers (duel.memorySites), up to perception.coneGrowthMax: the field is part of what it learns. 10.9 sets 0.04",
+   "unit": "fraction",
+   "type": "number",
+   "default": 0,
+   "status": "proposed",
+   "source": "GDD Edit 109 amendment (Prototype 10.9): DECISIONS row 735",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-tick",
+   "validation": {
+    "min": 0,
+    "max": 0.5
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "Proportional field: the radius grows by this fraction for each crash spot the car remembers (duel.memorySites), up to perception.coneGrowthMax: the field is part of what it learns. 10.9 sets 0.04"
+  },
+  {
+   "id": "perception.coneGrowthMax",
+   "group": "Vehicles and traffic",
+   "owner": "Vehicles / Traffic",
+   "label": "Field: growth cap",
+   "description": "Proportional field: the most the radius grows, as a fraction. 10.9 sets 0.2 (320 to 384: 60% of the screen)",
+   "unit": "fraction",
+   "type": "number",
+   "default": 0,
+   "status": "proposed",
+   "source": "GDD Edit 109 amendment (Prototype 10.9): DECISIONS row 735",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-tick",
+   "validation": {
+    "min": 0,
+    "max": 1
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "Proportional field: the most the radius grows, as a fraction. 10.9 sets 0.2 (320 to 384: 60% of the screen)"
+  },
+  {
+   "id": "traffic.junctionGap",
+   "group": "Vehicles and traffic",
+   "owner": "Vehicles / Traffic",
+   "label": "Give way: gap",
+   "description": "Two-way roads: a road B car gives way while a road A car would reach the junction box within this many seconds; any car waits while a crossing car is in the box. 10.9 sets 2.2",
+   "unit": "seconds",
+   "type": "number",
+   "default": 0,
+   "status": "proposed",
+   "source": "GDD Edit 109 amendment (Prototype 10.9): DECISIONS row 735",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-tick",
+   "validation": {
+    "min": 0,
+    "max": 10
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "Two-way roads: a road B car gives way while a road A car would reach the junction box within this many seconds; any car waits while a crossing car is in the box. 10.9 sets 2.2"
   }
  ],
  "tables": {

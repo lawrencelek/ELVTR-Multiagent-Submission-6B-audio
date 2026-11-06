@@ -4,9 +4,11 @@
 
 - **Build:** `prototypes/p10/dummies_p10_9.html` (`python3 prototypes/p10/build.py`).
 - **Playtest pages:** `index.html`. 10.1–10.8 frozen; 10.8 at md5 `e019098d…`.
-- **Tests:** `node prototypes/p10/test_p10.js --page` 65/65. Sound freeze: 211 items, 0 changed.
-- **Probes:** `node qa/testroad.js --stage 10.9 --out qa/baseline/p10_9.json`; report `qa/baseline/p10_9.md`, 15/16 checks. 10.8 reruns identical.
-- **Decision log:** row 734. Open D130.
+- **Tests:** `node prototypes/p10/test_p10.js --page` 66/66. Sound freeze: 211 items, 0 changed.
+- **Probes:** `node qa/testroad.js --stage 10.9 --out qa/baseline/p10_9.json`; report `qa/baseline/p10_9.md`, 12/16 checks (row 735). 10.8 reruns identical.
+- **Decision log:** rows 734–735. Open D130.
+
+**Amended 6 November (row 735):** the junction decides by time (§10.9.2); the red car's proportional field (§10.9.4).
 
 ## Request
 
@@ -29,8 +31,11 @@
 
 ### 10.9.2 The junction
 
-- **Road B gives way to road A.** A road B car holds at its line while a road A car is in the box or within `traffic.junctionLookahead` 420 of it.
-- **Road A drives on.**
+- **Row 735, by time.** No give-way line to crawl to. A car decides within `traffic.junctionLookahead` 400 of the box.
+- **Road B gives way** while a road A car would reach the box within `traffic.junctionGap` 2.2 s, or stands at its edge.
+- **Any car waits** for a crossing car in the box, or one too close to stop for it.
+- **Giving way sticks:** a car that has begun to give way stops. One too close to stop gently goes on.
+- **Measured:** 10 minutes, no overlapping cars; no car stands over 4 s. Row 734 (hold while road A within 420) stood road B cars 4–7 s at the line.
 
 ### 10.9.3 White sedans (`duel.whiteInterval` 3.5)
 
@@ -41,7 +46,27 @@
 - **Queued behind the waiting red car,** they flash their lights (`proto.art.noticeFlashHz`; row 711).
 - **The block lift** (row 715): FARSIGHT lifts the dummy for a white car it keeps waiting too. A car stopped by traffic does not count.
 
-## Measured (`qa/baseline/p10_9.md`, rung 7, 5 minutes × 3)
+### 10.9.4 The red car's field (row 735)
+
+- **From the car's middle.** All three cones share the apex; edge to edge.
+- **One radius:** `perception.coneRadius` 320, half the screen's height.
+
+| Cone | Angle | Reach | Grades (equal rings) |
+|---|---|---|---|
+| Forward | ±`perception.forwardConeAngle` 15° | 320 | `perception.forwardGrades` 3: AWARE, SLOWING, CRAWLING |
+| Each side | 15°–110° (`perception.sideConeAxis` 62.5 ± `perception.sideConeAngle` 47.5) | `perception.sideConeRatio` 0.8: 256 | `perception.sideGrades` 2: AWARE, SLOWING |
+
+- **It learns:** the radius grows `perception.coneGrowthPerMemory` 4% per crash spot remembered, to `perception.coneGrowthMax` 20% (384, 60% of the screen).
+- **Unchanged:** the beam (the lane ahead), stage speeds, the notice meter, the three-second forget.
+- **10.8 keeps** its row 733 field (`perception.coneRadius` 0).
+
+**Row 735, measured** (rung 7, 5 minutes × 3):
+
+- **More open:** 12 ways in. flankOpen 4.59 a minute, kerb 2.74, the lure 2.31, roaming 1.9, the crawl 1.61.
+- **Seen-then-hidden reopens:** peek 12 hits in 15 minutes. The smaller field notices later.
+- **Fails:** 4 red-car stalls; 12 waits over 20 s; 2 hits from a remembered spot (D130).
+
+## Measured, row 734 (`qa/baseline/p10_9.md` before row 735, rung 7, 5 minutes × 3)
 
 - **White traffic:** 16.2 cars a minute. White hits on the dummy: 0.4 a minute, damage only.
 - **No stalls.** Waits over 20 s for the dummy: 7 (D130).
@@ -75,7 +100,8 @@
 
 - **Added (3):** `duel.twoWay` (default 0), `duel.whiteInterval` (default 0), `traffic.junctionLookahead` (default 0).
 - **Set by stage:** `duel.startRung` 7, `duel.topRung` 7, `duel.twoWay` 1, `duel.whiteInterval` 3.5, `traffic.junctionLookahead` 420. 10.8's values otherwise.
-- **691 entries.** `registryVersion` unchanged.
+- **Added (row 735):** `perception.coneRadius` (default 0: the row 733 field), `perception.sideConeRatio`, `perception.forwardGrades`, `perception.sideGrades`, `perception.coneGrowthPerMemory`, `perception.coneGrowthMax`, `traffic.junctionGap`. `traffic.junctionLookahead` now the decision distance (400).
+- **698 entries.** `registryVersion` unchanged.
 
 ## Open
 

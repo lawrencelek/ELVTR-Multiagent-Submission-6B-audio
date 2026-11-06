@@ -492,7 +492,7 @@ check('10.9 (row 734): two two-way roads, traffic on the left; white sedans that
   const s = sim(F9, {}, ALL); Object.assign(s.body, { x: 700, y: 600 }); const W = s.P['world.width'], H = s.P['world.height'], lanesW = new Set(), lanesR = new Set(); let maxRed = 0, overlaps = 0, yields = 0;
   const dir = s.level.lanes.map((l) => [Math.sign(l.pts[l.pts.length - 1][0] - l.pts[0][0]), Math.sign(l.pts[l.pts.length - 1][1] - l.pts[0][1]), l.pts[0][0] === l.pts[l.pts.length - 1][0] ? l.pts[0][0] : l.pts[0][1]]);
   for (let i = 0; i < 120 * 60; i++) { service(s); s.step({}); const on = s.onRoad(), vis = on.filter((c) => c.x > -30 && c.x < W + 30 && c.y > -30 && c.y < H + 30); maxRed = Math.max(maxRed, on.filter((c) => c.red).length);
-    for (const c of on) { (c.white ? lanesW : lanesR).add(c.lane); if (c.yielding) yields++; }
+    for (const c of on) { (c.white ? lanesW : lanesR).add(c.lane); if (c.jYield) yields++; }
     for (let a = 0; a < vis.length; a++) for (let b = a + 1; b < vis.length; b++) if (Math.hypot(vis[a].x - vis[b].x, vis[a].y - vis[b].y) < 0.9 * vis[a].L) overlaps++; }
   const lessons = s.events.filter((e) => e.type === 'lesson-due').length;
   const h = sim(F9, {}, ALL); Object.assign(h.body, { x: 650, y: 400 }); let wHit = null, p0 = 0, st0 = 0, hp0 = 0;
@@ -502,6 +502,18 @@ check('10.9 (row 734): two two-way roads, traffic on the left; white sedans that
   const ok = s.level.lanes.length === 4 && dir[0][0] === -1 && dir[1][0] === 1 && dir[2][1] === -1 && dir[3][1] === 1 && dir[0][2] === 348 && dir[1][2] === 292 && dir[2][2] === 372 && dir[3][2] === 428 &&
     lanesW.size === 4 && [...lanesR].every((l) => l === 1 || l === 3) && maxRed === 1 && overlaps === 0 && yields > 0 && lessons === 0 && !!wHit && wHit.points === 0 && h.run.points === p0 && h.stealth.points === st0 && h.body.health < hp0 && !seen0 && hid;
   return { ok, detail: `lanes: A west at y ${dir[0][2]}, A east ${dir[1][2]}, B north at x ${dir[2][2]}, B south ${dir[3][2]}; white lanes ${[...lanesW].sort().join(',')}, red lanes ${[...lanesR].sort().join(',')}; most red cars on the road ${maxRed}; overlapping car pairs ${overlaps}; give-way holds ${(yields / 60).toFixed(0)} car-seconds; lessons ${lessons}; a dash into a white car: ${wHit ? Math.round(wHit.lost) + ' damage, ' + wHit.points + ' points, run score ' + p0 + ' to ' + h.run.points : 'none'}; a white car between the red car and the dummy hides it: ${hid} (without: ${seen0})` };
+});
+
+check('10.9 (row 735): the proportional field, from the car middle: the forward cone reaches perception.coneRadius in perception.forwardGrades equal rings (AWARE, SLOWING, CRAWLING); the side cones perception.sideConeRatio of it, in perception.sideGrades (AWARE, SLOWING); the radius grows with each crash spot remembered, to perception.coneGrowthMax; at the junction no car waits long', () => {
+  const g = sim(F9, {}, ALL); let c = null; for (let i = 0; i < 30 * 60 && !c; i++) { g.step({}); c = g.onRoad().find((q) => q.red && q.path.road === 'A' && q.x > 60 && q.x < 300); }
+  const D = Math.PI / 180, R = g.coneReach(), br = g.P['body.radius'], A = F9['perception.forwardConeAngle'], at = (deg, r) => [c.x + Math.cos(c.h + deg * D) * r, c.y + Math.sin(c.h + deg * D) * r], cone = (pt) => { const k = g.coneOf(c, pt[0], pt[1]); return k ? k.cone : 'none'; };
+  const geo = { fwd: cone(at(A - 1, 0.95 * R.f)), fwdOut: cone(at(A - 1, R.f + br + 6)), side: cone(at(60, 0.9 * R.s)), sideOut: cone(at(60, R.s + br + 6)), other: cone(at(-60, 0.5 * R.s)) };
+  const gs = (k, f) => g.gradeStage(k, f * (k === 'side' ? R.s : R.f), k === 'side' ? R.s : R.f), grades = [gs('forward', 0.2), gs('forward', 0.5), gs('forward', 0.9), gs('side', 0.3), gs('side', 0.8)];
+  const keep = g.memory, grow = (n) => { g.memory = () => Array.from({ length: n }, (_, i) => i); const f = g.coneReach().f; g.memory = keep; return f; }, f0 = grow(0), f3 = grow(3), f20 = grow(20);
+  const j = sim(F9, {}, ALL); Object.assign(j.body, { x: 760, y: 620 }); const stop = new Map(); let longest = 0; for (let i = 0; i < 180 * 60; i++) { j.step({}); for (const q of j.onRoad()) { if (q.v < 1) stop.set(q.id, (stop.get(q.id) || 0) + 1 / 60); else stop.delete(q.id); longest = Math.max(longest, stop.get(q.id) || 0); } }
+  const r = F9['perception.coneRadius'], gm = F9['perception.coneGrowthPerMemory'], cap = F9['perception.coneGrowthMax'];
+  const ok = geo.fwd === 'forward' && geo.fwdOut === 'none' && geo.side === 'side' && geo.sideOut === 'none' && geo.other === 'side' && grades.join() === '3,2,1,2,1' && Math.abs(R.s - r * F9['perception.sideConeRatio']) < 1e-6 && Math.abs(f0 - r) < 1e-6 && Math.abs(f3 - r * (1 + 3 * gm)) < 1e-6 && Math.abs(f20 - r * (1 + cap)) < 1e-6 && longest < 4;
+  return { ok, detail: `forward reach ${R.f} (${Math.round(R.f / g.P['world.height'] * 100)}% of the screen height), sides ${R.s.toFixed(0)}, from the car middle: ${geo.fwd} inside, ${geo.fwdOut} past it; sides ${geo.side} / ${geo.other}, ${geo.sideOut} past; stages by equal grades, forward at 0.2, 0.5, 0.9 of its reach ${grades.slice(0, 3).join(', ')}, side at 0.3, 0.8 ${grades.slice(3).join(', ')}; radius with 0, 3, 20 crash spots remembered: ${f0}, ${f3.toFixed(1)}, ${f20.toFixed(1)}; the longest any car stood in 3 minutes of traffic: ${longest.toFixed(1)} s` };
 });
 
 // ---------- registry and frozen builds

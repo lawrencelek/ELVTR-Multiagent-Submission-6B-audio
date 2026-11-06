@@ -113,7 +113,10 @@ T109 = dict(T108, **{
     'duel.startRung': 7, 'duel.topRung': 7,  # the red car fully trained; no lesson: the road changes, not the car (row 734)
     'duel.twoWay': 1,  # two two-way roads, traffic on the left; road B gives way to road A (row 734)
     'duel.whiteInterval': 3.5,  # a white sedan that never learns enters about every 3.5 s, on any lane (row 734)
-    'traffic.junctionLookahead': 420,  # road B waits while a road A car is within 420 of the box (row 734)
+    'traffic.junctionLookahead': 400, 'traffic.junctionGap': 2.2,  # a car decides from 400 out (before it must commit); road B gives way to a road A car under 2.2 s from the box; anyone waits for a car in it (row 735)
+    'perception.coneRadius': 320, 'perception.sideConeRatio': 0.8, 'perception.forwardGrades': 3, 'perception.sideGrades': 2,  # the proportional field from the car's middle: forward 320 in three equal rings, sides 256 in two (row 735)
+    'perception.forwardConeAngle': 15, 'perception.sideConeAxis': 62.5, 'perception.sideConeAngle': 47.5,  # forward ±15°; sides 15°–110° (row 735)
+    'perception.coneGrowthPerMemory': 0.04, 'perception.coneGrowthMax': 0.2,  # each crash spot it remembers widens the field 4%, to 384 (row 735)
 })
 STAGES = {
     '10.1': {'title': 'THE TEST ROAD', 'page': 'dummies_p10.html', 'frozen': '82ab5e55d243ee500d6dfcaa60af74e6', 'edit': 101, 'values': T101},

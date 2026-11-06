@@ -1249,9 +1249,9 @@
     "perception.sideCloseSpeed": 0.35,
     "perception.sideAwareNoticeRate": 0.5,
     "perception.sideWaryNoticeRate": 1,
-    "perception.forwardConeAngle": 30,
-    "perception.sideConeAxis": 75,
-    "perception.sideConeAngle": 45,
+    "perception.forwardConeAngle": 15,
+    "perception.sideConeAxis": 62.5,
+    "perception.sideConeAngle": 47.5,
     "perception.sideConeRange": 240,
     "perception.trackSeconds": 3,
     "perception.forwardConeSensitivity": 1,
@@ -1259,7 +1259,14 @@
     "ui.lungeGuide": 1,
     "duel.twoWay": 1,
     "duel.whiteInterval": 3.5,
-    "traffic.junctionLookahead": 420
+    "traffic.junctionLookahead": 400,
+    "traffic.junctionGap": 2.2,
+    "perception.coneRadius": 320,
+    "perception.sideConeRatio": 0.8,
+    "perception.forwardGrades": 3,
+    "perception.sideGrades": 2,
+    "perception.coneGrowthPerMemory": 0.04,
+    "perception.coneGrowthMax": 0.2
    },
    "flags": {
     "proto.droneConeSeconds": 5,
@@ -1367,7 +1374,7 @@
     "duel.searchSeconds": 4,
     "duel.twoWay": 1,
     "duel.whiteInterval": 3.5,
-    "traffic.junctionLookahead": 420,
+    "traffic.junctionLookahead": 400,
     "proto.learningEnabled": 0,
     "proto.learn.standoffEnabled": 0,
     "perception.forwardLength": 720,
@@ -1399,14 +1406,21 @@
     "perception.sideCloseSpeed": 0.35,
     "perception.sideAwareNoticeRate": 0.5,
     "perception.sideWaryNoticeRate": 1,
-    "perception.forwardConeAngle": 30,
-    "perception.sideConeAxis": 75,
-    "perception.sideConeAngle": 45,
+    "perception.forwardConeAngle": 15,
+    "perception.sideConeAxis": 62.5,
+    "perception.sideConeAngle": 47.5,
     "perception.sideConeRange": 240,
     "perception.trackSeconds": 3,
     "perception.forwardConeSensitivity": 1,
     "perception.sideConeSensitivity": 0.5,
-    "ui.lungeGuide": 1
+    "ui.lungeGuide": 1,
+    "traffic.junctionGap": 2.2,
+    "perception.coneRadius": 320,
+    "perception.sideConeRatio": 0.8,
+    "perception.forwardGrades": 3,
+    "perception.sideGrades": 2,
+    "perception.coneGrowthPerMemory": 0.04,
+    "perception.coneGrowthMax": 0.2
    }
   }
  }
