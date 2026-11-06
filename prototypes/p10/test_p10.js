@@ -449,6 +449,21 @@ check('10.8 (row 726): the stop line: a car braking for the dummy, a remembered 
   return { ok: all.length >= 2 && within === all.length, detail: `stops ${all.length} (standing in the lane ${stand.length}; seen, then hidden ${peek.length}); within 10: ${within}; worst ${all.length ? Math.max(...all).toFixed(1) : '—'}` };
 });
 
+check('10.8 (row 730): the side field in stages, by distance from the nose: AWARE far out caps it at perception.sideAwareSpeed of cruise and notices at perception.sideAwareNoticeRate; WARY (perception.sideWaryRange) at perception.sideWarySpeed; CLOSE (perception.sideCloseRange) at perception.sideCloseSpeed; noticed, it stops short beyond the dash. 10.7: one speed, noticed in perception.sideNoticeSeconds', () => {
+  const run = (F, x, y, popAt) => { const s = sim(F, { 'duel.startRung': 7 }, ALL); Object.assign(s.body, popAt ? { x: 760, y: 600 } : { x, y }); let car = null, popped = false; const seen = {}, tIn = {}, vIn = {}; let t4 = null, stopGap = null;
+    for (let i = 0; i < 14 * 60; i++) { const c0 = s.onRoad().find((q) => q.red && q.path.road === 'A'); if (popAt && c0 && c0.x >= popAt && !popped) { popped = true; Object.assign(s.body, { x, y }); } s.step({}); const c = s.onRoad().find((q) => q.red && q.path.road === 'A'); if (!c) continue; if (car && car !== c.id) break; car = c.id;
+      const st = s.sideStaged() ? s.sideStage(c) : c.noticed ? 4 : c.hz && !c.hz.inPath ? 1 : 0; if (st >= 1 && st <= 3) { seen[st] = c.v; if (tIn[st] == null) { tIn[st] = s.t; vIn[st] = c.v; } } if (st === 4 && t4 == null) t4 = { t: s.t, from: Math.max(...Object.keys(tIn).map(Number)) }; if (t4 && s.sideDist(c) != null) stopGap = Math.min(stopGap == null ? 1e9 : stopGap, s.sideDist(c)); }
+    return { seen, tIn, vIn, t4, stopGap }; };
+  const cr = F8['vehicles.sedan.cruiseSpeed'] || 138, N = F8['perception.sideNoticeSeconds'], reach = sim(F8, {}, ALL).reach(), y = 292 + 12.6 + 40;
+  const a = run(F8, 560, y), w = run(F8, 560, y, 220), c = run(F8, 560, y, 430), o = run(F7, 560, y);
+  const into = (q, st) => q.t4 && q.t4.from === st ? q.t4.t - q.tIn[st] : null, ok =
+    a.seen[1] != null && Math.abs(a.seen[1] - cr * F8['perception.sideAwareSpeed']) < 2 && Math.abs(into(a, 1) - N / F8['perception.sideAwareNoticeRate']) < 0.05 && a.stopGap > reach &&
+    w.seen[2] != null && w.seen[2] < w.vIn[2] - 5 && Math.abs(into(w, 2) - N / F8['perception.sideWaryNoticeRate']) < 0.05 &&
+    Math.abs(into(c, 3) - N) < 0.05 && o.t4 && Math.abs(o.t4.t - o.tIn[1] - N) < 0.05;
+  const f = (v) => v != null ? v.toFixed(2) : '—';
+  return { ok, detail: `standing: AWARE at ${a.seen[1] != null ? a.seen[1].toFixed(0) : '—'} (cap ${(cr * F8['perception.sideAwareSpeed']).toFixed(0)}), noticed ${f(into(a, 1))} s in, came no closer than ${a.stopGap != null ? a.stopGap.toFixed(0) : '—'} to its nose (reach ${reach.toFixed(0)}); stepping out WARY: ${w.vIn[2] != null ? w.vIn[2].toFixed(0) : '—'} down to ${w.seen[2] != null ? w.seen[2].toFixed(0) : '—'} (braking for ${(cr * F8['perception.sideWarySpeed']).toFixed(0)}), noticed ${f(into(w, 2))} s in; stepping out CLOSE: noticed ${f(into(c, 3))} s in; 10.7: noticed ${o.t4 ? (o.t4.t - o.tIn[1]).toFixed(2) : '—'} s in its field` };
+});
+
 // ---------- registry and frozen builds
 check('Prototype 10 values are registered (registry first)', () => {
   const reg = new Set(JSON.parse(fs.readFileSync(path.join(ROOT, 'content/params/tuning.parameters.json'), 'utf8')).entries.map((e) => e.id));

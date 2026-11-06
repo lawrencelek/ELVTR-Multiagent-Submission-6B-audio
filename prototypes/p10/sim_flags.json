@@ -1011,7 +1011,14 @@
     "scoring.stealthUnseen": 3,
     "scoring.stealthLost": 2,
     "scoring.stealthSeen": 1,
-    "ui.tip.holdSeconds": 7
+    "ui.tip.holdSeconds": 7,
+    "perception.sideCloseRange": 180,
+    "perception.sideWaryRange": 360,
+    "perception.sideAwareSpeed": 0.85,
+    "perception.sideWarySpeed": 0.6,
+    "perception.sideCloseSpeed": 0.35,
+    "perception.sideAwareNoticeRate": 0.5,
+    "perception.sideWaryNoticeRate": 1
    },
    "flags": {
     "proto.droneConeSeconds": 5,
@@ -1140,7 +1147,14 @@
     "scoring.stealthUnseen": 3,
     "scoring.stealthLost": 2,
     "scoring.stealthSeen": 1,
-    "ui.tip.holdSeconds": 7
+    "ui.tip.holdSeconds": 7,
+    "perception.sideCloseRange": 180,
+    "perception.sideWaryRange": 360,
+    "perception.sideAwareSpeed": 0.85,
+    "perception.sideWarySpeed": 0.6,
+    "perception.sideCloseSpeed": 0.35,
+    "perception.sideAwareNoticeRate": 0.5,
+    "perception.sideWaryNoticeRate": 1
    }
   }
  }

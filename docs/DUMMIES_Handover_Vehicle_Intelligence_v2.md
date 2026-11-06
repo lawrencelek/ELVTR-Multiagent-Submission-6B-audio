@@ -1129,10 +1129,11 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
 
 - **Build:** `prototypes/p10/dummies_p10_8.html`. 10.7's page is frozen.
 - **The one change:** rung 7, taught by one lesson. The car starts at rung 6; the dummy starts with all four parts. No new part.
-- **Checks:** `node prototypes/p10/test_p10.js --page` 61/61. Probes `qa/baseline/p10_8.md` 24/24. 10.7 reruns identical. Prototype 9 and the frozen md5s hold; sound freeze holds.
+- **Checks:** `node prototypes/p10/test_p10.js --page` 62/62. Probes `qa/baseline/p10_8.md` 24/24. 10.7 reruns identical. Prototype 9 and the frozen md5s hold; sound freeze holds.
 - **Amended (row 723):** the street cameras see a 60° cone along their cover, not all round (§25.5).
 - **Amended (row 724):** the cones pan back and forth, as in Metal Gear Solid (§25.5).
 - **Amended (rows 725–727):** the stealth grade, the lure and its stop line, the floor of open ways (§25.6).
+- **Amended (row 730):** the side field in stages: AWARE, SLOWING, CRAWLING, STOPPING, by distance from the nose (§25.7).
 
 ### 25.1 What changed
 
@@ -1198,12 +1199,26 @@ Each test changes one thing. From 10.2, that change is one new behaviour for the
 
 - **Roaming still beats the lure for a bot:** 6.8–7.05 a minute against 4.1–4.8 at rung 6; 2.59 against 2.17 at rung 7. The lure buys control: the car stops where the dummy chose.
 
-### 25.7 Open
+### 25.7 The side field in stages (row 730)
+
+> "the car should SLOW DOWN, in inverse proportion to how close the character is … becomes aware (IT SHOULD INDICATE this), then slows down a bit, then a lot" (Lawrence, 6 November)
+
+| Stage | Distance from the nose | Speed (of cruise) | Noticed after | Shown |
+|---|---|---|---|---|
+| AWARE | Beyond 360 | 0.85 | 1.2 s | "?" · one pip |
+| SLOWING | Within 360 | 0.6 | 0.6 s | "?" · two pips |
+| CRAWLING | Within 180 | 0.35 | 0.6 s | "?" · three pips |
+| STOPPING | Noticed | Stops short | — | "!" red |
+
+- **Closures hold;** roaming rises to 3.15 a minute, the crawl falls to 1.69.
+
+### 25.8 Open
 
 - **Human pass (H6):** does the player read the ghost, and crawl away?
 - **D121:** the order from here: the road upgrade at 10.9, or the area alert first.
 - **D122:** the search's values. The crawl's room is a level rule: rows longer than the ring.
 - **D124:** the pan's values: 60° in 3 s, 1 s rests, mirrored.
 - **D125, D126 resolved (rows 728–729).** After the playtest: does the stop line stay free, or become a part?
+- **D127:** the side stages' values.
 - **Next:** 10.9, the road upgrade (D121): two-way, white sedans that never learn.
 

@@ -226,7 +226,41 @@
         const q = X.pathAt(c.path, hz.s);
         if (-(b.vx * q.tx + b.vy * q.ty) > 1) { c.man = null; c.state = 'cruise'; }
       }
-      return super.carAI(dt);
+      // Row 730: staged, each red car's caution speed (proto.driver.cautionSpeed) is its stage's: cornerSpeed sets it, just before
+      // the base's caution block reads it for the same car, which then brakes to reach it by the dummy (comfort to hard)
+      const P = this.P, keepC = P['proto.driver.cautionSpeed'], staged = this.testRoad && this.sideStaged();
+      this.stageCaution = staged ? keepC : null;
+      try { super.carAI(dt); } finally { P['proto.driver.cautionSpeed'] = keepC; this.stageCaution = null; }
+      if (staged) for (const c of this.cars) { if (!c.red || c.ghost) continue; const st = this.sideStage(c); if (st > (c.awarePrev || 0)) this.emit('aware', { car: c.id, stage: st, x: +this.body.x.toFixed(1), y: +this.body.y.toFixed(1) }); c.awarePrev = st; }
+    }
+    // Row 730: the field in stages, by the dummy's distance from the car's nose (beside it: its gap from the flank). AWARE in
+    // the field beyond perception.sideWaryRange; WARY within it; CLOSE within perception.sideCloseRange (about the dash's reach).
+    // Each caps the car's speed at a share of its cruise (perception.sideAwareSpeed, perception.sideWarySpeed,
+    // perception.sideCloseSpeed), after perception.reactionDelay. The notice meter fills at a share of its speed:
+    // perception.sideAwareNoticeRate, perception.sideWaryNoticeRate; CLOSE at full. Noticed (stage 4), it stops short, as
+    // before. 0 for perception.sideCloseRange: off, the whole field alike (10.3–10.7).
+    sideStaged() { return (this.P['perception.sideCloseRange'] || 0) > 0 && this.rung >= 2; }
+    sideDist(c) { const hz = c.hz; return hz && !hz.inPath ? Math.hypot(Math.max(0, hz.lx), Math.max(0, Math.abs(hz.ly) - c.W / 2)) : null; }
+    sideStage(c) {
+      if (!this.sideStaged() || !c.red || !c.hz || c.hz.inPath || !this.body.alive) return 0;
+      if (c.noticed) return 4;
+      const d = this.sideDist(c), P = this.P;
+      return d <= P['perception.sideCloseRange'] ? 3 : d <= P['perception.sideWaryRange'] ? 2 : 1;
+    }
+    noticeRate(c) {
+      if (!this.sideStaged()) return 1;
+      const st = this.sideStage(c), P = this.P, k = st === 1 ? P['perception.sideAwareNoticeRate'] : st === 2 ? P['perception.sideWaryNoticeRate'] : 1;
+      return k == null ? 1 : k;
+    }
+    cornerSpeed(c) {
+      const v = super.cornerSpeed(c);
+      if (this.stageCaution != null) this.P['proto.driver.cautionSpeed'] = this.stageSpeed(c); // row 730: this car's caution speed, read next
+      return v;
+    }
+    stageSpeed(c) { // a red car's caution speed by stage; any other car keeps proto.driver.cautionSpeed
+      if (!c.red) return this.stageCaution;
+      const st = this.sideStage(c), P = this.P, k = st === 1 ? P['perception.sideAwareSpeed'] : st === 2 ? P['perception.sideWarySpeed'] : st >= 3 ? P['perception.sideCloseSpeed'] : null;
+      return k == null ? this.stageCaution : (c.cruise || P['vehicles.sedan.cruiseSpeed']) * k;
     }
     // The field's width: rung 2 and up. Below, the car has no field (10.1, 10.2: proto.driver.cautionZone 0 by rung).
     fieldFor() { return this.rung >= 2 ? this.P['proto.driver.cautionZone'] : 0; }
@@ -234,7 +268,7 @@
     watchField(c, dt) {
       const P = this.P, b = this.body, hz = c.hz;
       const side = !!(hz && !hz.inPath && b.alive), wasHolding = c.cause === 'side' && !!c.man;
-      c.fieldT = side ? (c.fieldT || 0) + dt : 0;
+      c.fieldT = side ? (c.fieldT || 0) + dt * this.noticeRate(c) : 0; // row 730: staged, the meter fills slower the farther the dummy is
       c.noticed = side && c.fieldT >= (this.expected() ? 0 : P['perception.sideNoticeSeconds'] * (b.duck ? P['perception.duckNoticeFactor'] || 1 : 1)) - 1e-9; // a ducked dummy is noticed slower (row 696); one at a remembered spot, at once (rung 6)
       if (this.rung < 5 && c.dodge && c.dodge.kind === 'cone' && c.cause === 'cone') { c.sideHonk = false; c.sideHoldT = 0; return false; } // its swerve round a cone holds until it has passed it (rungs 2–4)
       if (!c.noticed) { c.sideHonk = false; c.sideHoldT = 0; if (wasHolding && c.v < 1 && !(hz && hz.inPath)) { c.man = null; c.state = 'cruise'; } return false; } // a dummy that steps from its field into its path keeps it stopped (row 688)

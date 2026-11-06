@@ -55,6 +55,7 @@ Read across: what the row's factor sets for the column's.
 - **Crawling is the answer to the search.** At `movement.duckSpeedFactor` 0.35 a ducked crawl beyond `duel.searchRadius` 60 takes about 2 s (row 720).
 - **The player's own escalation: the stealth grade** (rows 725, 728). Each strike scores its damage × its grade: UNSEEN × `scoring.stealthUnseen` 3, LOST × `scoring.stealthLost` 2, SEEN × `scoring.stealthSeen` 1. It rises with skill whatever the car's rung; power and stealth both pay.
 - **Lure: a verb made from the car's learning** (row 726). Stand where it expects you; it stops short. Strike from elsewhere. The page draws its stop line.
+- **The car's field reads in stages** (row 730). AWARE, SLOWING, CRAWLING, STOPPING, by distance from its nose: the player reads how near is too near.
 
 ## 2 Car behaviour and abilities
 
@@ -66,6 +67,7 @@ Read across: what the row's factor sets for the column's.
 | 1 | Forward camera | `perception.forwardLength` 720; envelope; hard stop at `traffic.hardBraking` 79 | The front | The flank | Battery 1 |
 | 2 | Side sensors | `proto.driver.cautionZone` 180; `perception.sideNoticeSeconds` 0.6 | The open flank | Height, cover | Legs 1 |
 | 3 | Roof lidar | `perception.lidarHeight` 26 (rungs 1–2: `perception.sensorHeight` 14) | The plinth, the jump | Cover | — |
+| 2+ | The field in stages (row 730) | `perception.sideCloseRange` 180, `perception.sideWaryRange` 360; speeds 0.85, 0.6, 0.35 | — | — | — |
 | 4 | Street cameras | `perception.streetCameraRange` 180; `perception.streetCameraHeight` 60; `perception.streetCameraFov` 60 from 10.8 (row 723), panning `perception.streetCameraPanArc` 60 (row 724) | Watched cover, within each cone | A cone's swerve; cover outside the cones; the pan's window | Hands 1 |
 | 5 | Road items | Stops at a cone; waits `proto.droneConeSeconds` 5 for FARSIGHT | The cone bait | Low cover | DUCK |
 | 6 | Crash memory | `duel.memoryRadius` 50; `duel.memorySites` 3 | A repeated spot from cover, while the cover stays | Any other spot; a spot with new cover (row 712); hits from the open (row 713) | — |
@@ -261,6 +263,8 @@ Read across: what the row's factor sets for the column's.
 | F27 | Roaming beats the lure for a bot: 6.8–7.05 a minute against 4.1–4.8 at rung 6; 2.59 against 2.17 at rung 7. The lure buys control, not rate | 1, 2 | 726 |
 | F28 | 10.5 and 10.6 sat on the floor of two open ways in | 1, 2, 4 | 727 |
 | F29 | Damage × grade reorders the ways in: roaming 635 a hit, the lure 529, the crawl 370; the UNSEEN sprint only 158 (53 damage) | 1, 2 | 728 |
+| F30 | A field that notices late lets cover springs back in: AWARE never noticing reopened aim, jump, dashjump. Noticing speed matters more than slowing | 2 | 730 |
+| F31 | The staged field favours roaming (2.59 to 3.15) and cuts the crawl (2.02 to 1.69): the car comes nearer before it stops | 1, 2 | 730 |
 
 ## 7 Open questions
 
@@ -416,3 +420,4 @@ One row per object type. Edit this table first; the sections above follow it.
 | 6 November 2026 | The cameras pan (row 724): rung 4's row; L2b; L7; F24; the research row | 724 |
 | 6 November 2026 | The stealth grade, the lure, the floor of open ways (rows 725–727): §1.1; L11–L12; F25–F28; two research rows; Wong added to sources | 725–727 |
 | 6 November 2026 | Damage × the grade (row 728); the lure's field notes once per save file (row 729): §1.1; F29; the research rows | 728–729 |
+| 6 November 2026 | The side field in stages (row 730): §1.1; rung 2's row; F30–F31 | 730 |

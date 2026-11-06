@@ -10,11 +10,13 @@
 
 **Amended 6 November (rows 728–729):** a strike scores its damage × its grade; the lure's field notes show once per save file, as a panel (§10.8.6–§10.8.7).
 
+**Amended 6 November (row 730):** the side field in stages: the nearer the dummy, the slower the car, and it shows its stage (§10.8.9).
+
 - **Build:** `prototypes/p10/dummies_p10_8.html` (`python3 prototypes/p10/build.py`).
 - **Playtest pages:** `index.html`, one per test. 10.1–10.7 are frozen; 10.7 at md5 `54328d01…`.
-- **Tests:** `node prototypes/p10/test_p10.js --page` 61/61. Prototype 9 rebuild md5 `be163e7d014344e062965986b3da5786`. 8.4 md5 `9f5549201d88891f9f0b22c461602909`. Sound freeze: 211 items, 0 changed.
+- **Tests:** `node prototypes/p10/test_p10.js --page` 62/62. Prototype 9 rebuild md5 `be163e7d014344e062965986b3da5786`. 8.4 md5 `9f5549201d88891f9f0b22c461602909`. Sound freeze: 211 items, 0 changed.
 - **Probes:** `node qa/testroad.js --stage 10.8 --out qa/baseline/p10_8.json`; report `qa/baseline/p10_8.md`, 24/24 checks. 10.7 reruns identical to its baseline, new fields aside.
-- **Decision log:** rows 717–729. D123, D125, D126 resolved. Open D119, D120, D121, D122, D124.
+- **Decision log:** rows 717–730. D123, D125, D126 resolved. Open D119, D120, D121, D122, D124, D127.
 
 ## Request
 
@@ -41,6 +43,9 @@
 | The lure: the car's learning as the player's tool | Lawrence, 6 November: "Make the car's learning a lure the player can use" | Decided (row 726) |
 | A stop line drawn for every stop at rung 6 up | "Draw the car's coming stop line on the road"; "keep the stop line always on while we playtest" | Decided (row 729) |
 | The prompt: once per save file, as a panel | Lawrence, 6 November: "only happen once per save file (test this), ideally it should be shown with UI" | Decided (row 729) |
+| The side field slows the car in stages, the nearer the dummy the slower, and shows its stage | Lawrence, 6 November: "the car should SLOW DOWN, in inverse proportion to how close the character is … becomes aware (IT SHOULD INDICATE this), then slows down a bit, then a lot … 3-4 stages" | Decided (row 730) |
+| "Close" is the distance from the car's nose; four stages: AWARE, SLOWING, CRAWLING, STOPPING | A standing dummy grows closer as the car comes: the stages run in order | Proposed (row 730; D127) |
+| Ranges 360 and 180 (about the dash's reach); speeds 0.85, 0.6, 0.35 of cruise; AWARE notices at half speed | The probes: slower noticing let the cover springs back in | Proposed (row 730; D127) |
 | An open way lands at least 0.3 a minute at the top rung; each new part opens a way that uses it | Lawrence, 6 November: "at least two bots still land at every rung, and the count rises as parts arrive" | Proposed (row 727) |
 
 ## 10.8 The search
@@ -146,6 +151,23 @@
 - **A new part opens a way that uses it.**
 - **The probe report checks both,** and lists every stage's count from its baseline.
 
+### 10.8.9 The side field in stages (row 730)
+
+- **The nearer the dummy, the slower the car.** By its distance from the car's nose (beside the car: its gap from the flank):
+
+| Stage | Where the dummy is | Speed cap (of cruise) | Notice meter | Shown |
+|---|---|---|---|---|
+| 1 AWARE | In the field, beyond `perception.sideWaryRange` (360) | `perception.sideAwareSpeed` 0.85 | At `perception.sideAwareNoticeRate` 0.5: noticed in 1.2 s | "?", one pip; "AWARE" |
+| 2 SLOWING | Within 360 | `perception.sideWarySpeed` 0.6 | At `perception.sideWaryNoticeRate` 1: 0.6 s | "?", two pips; "SLOWING" |
+| 3 CRAWLING | Within `perception.sideCloseRange` (180), about the dash's reach | `perception.sideCloseSpeed` 0.35 | Full: `perception.sideNoticeSeconds` 0.6 s | "?", three pips; "CRAWLING" |
+| 4 STOPPING | Noticed | Stops short, as before | — | "!", red; "STOPPING", then "WAITING" |
+
+- **Each cap is the car's caution speed** (`proto.driver.cautionSpeed`'s place). It brakes to reach it by the dummy, between `traffic.comfortBraking` and `traffic.hardBraking`, after `perception.reactionDelay`.
+- **A standing dummy:** AWARE, then STOPPING. The car notices it about 580 out and stops 228 short (reach 164).
+- **A dummy stepping out nearer:** SLOWING or CRAWLING first, then STOPPING.
+- **Drawn:** dashed rings at 180 and 360 from the nose, inside the field; the dummy's band lit in its stage's colour. Over the car: the glyph and pips, above its tag.
+- **Earlier stages:** `perception.sideCloseRange` 0, one caution speed, one notice time.
+
 ## Build
 
 - `testroad.js`:
@@ -161,6 +183,7 @@
 - Row 726: `stopPoint` (the nose's rest on its path). `game_p10.js`: `drawStopLines`.
 - Row 728: `gradeMultiplier`; the strike's points are its damage × it.
 - Row 729: `game_p10.js`: the save file (`dummies.p10.save`: `readSave`, `writeSave`, `newSave`), `showTip`, `drawTip`; N on the pause screen.
+- Row 730: `sideStaged`, `sideDist`, `sideStage`, `noticeRate`, `stageSpeed`; `cornerSpeed` sets each red car's caution speed; `watchField` fills the meter by stage. `game_p10.js`: the rings and lit band in `drawZones`; `drawAwareness`; the tag.
 - `build.py`: 10.8's stage; 10.7's page frozen.
 - `qa/testroad.js`: bots `peek` (stand in view until noticed; duck; spring) and `peekmove` (the same; crawl beyond the radius along the row first). Fields: searches, found, ended, hits after a lost sighting.
 - Rows 725–727: bot `lure`; fields grades, stealth points, lures taken, lured cars struck, stop-line misses. `qa/testroad_report.py`: the grade, lure and possibility-space sections and their checks.
@@ -241,6 +264,20 @@
 
 - **Every stage held the floor of two.** 10.5 and 10.6 sat on it.
 
+**The side field in stages (row 730; trained, hits a minute, before → after):**
+
+| Way in | Before | After |
+|---|---|---|
+| Moving between spots (`roam`) | 2.59 | 3.15 |
+| The lure | 2.17 | 2.17 |
+| The crawl (`peekmove`) | 2.02 | 1.69 (174 a hit) |
+| Behind the barrier at its gap | 0.47 | 0.33 |
+| The sprint; the open flank; the planter | 0.60; 0.60; 0.27 | 0.60; 0.60; 0.27 |
+| Every cover spring (aim, jump, dashjump) | 0 | 0 |
+| The scripted walk (`wander`) | 0 | 0.13 (44 a hit) |
+
+- **First tries reopened the cover springs.** AWARE never noticing, or WARY noticing in 1.2 s, let the car come too near: aim, jump and dashjump landed 3–7 times in 15 minutes. AWARE at half speed and WARY at full closed them again.
+
 **The lesson** (mode `lesson`):
 
 - **Lessons:** in 9 of 9 runs with a hit from cover after a sighting, at 3–54 s.
@@ -258,14 +295,15 @@
 
 ## Registry
 
-- **Added (10):** `duel.searchRadius`, `duel.searchSeconds`; `perception.streetCameraFov` (row 723; default 360); `perception.streetCameraPanArc` (default 0), `perception.streetCameraPanSeconds`, `perception.streetCameraPanHold` (row 724); `scoring.stealthUnseen`, `scoring.stealthLost`, `scoring.stealthSeen` (row 725; multipliers from row 728; default 0); `ui.tip.holdSeconds` (row 729).
-- **Set by stage:** `duel.startRung` 6, `duel.topRung` 7, `duel.searchRadius` 60, `duel.searchSeconds` 4, `perception.streetCameraFov` 60, `perception.streetCameraPanArc` 60, `perception.streetCameraPanSeconds` 3, `perception.streetCameraPanHold` 1, `scoring.stealthUnseen` 3, `scoring.stealthLost` 2, `scoring.stealthSeen` 1, `ui.tip.holdSeconds` 7. 10.7's values otherwise.
-- **673 entries.** `registryVersion` unchanged (row 665).
+- **Added (17):** `duel.searchRadius`, `duel.searchSeconds`; `perception.streetCameraFov` (row 723; default 360); `perception.streetCameraPanArc` (default 0), `perception.streetCameraPanSeconds`, `perception.streetCameraPanHold` (row 724); `scoring.stealthUnseen`, `scoring.stealthLost`, `scoring.stealthSeen` (row 725; multipliers from row 728; default 0); `ui.tip.holdSeconds` (row 729); `perception.sideCloseRange`, `perception.sideWaryRange`, `perception.sideAwareSpeed`, `perception.sideWarySpeed`, `perception.sideCloseSpeed`, `perception.sideAwareNoticeRate`, `perception.sideWaryNoticeRate` (row 730; defaults off).
+- **Set by stage:** `duel.startRung` 6, `duel.topRung` 7, `duel.searchRadius` 60, `duel.searchSeconds` 4, `perception.streetCameraFov` 60, `perception.streetCameraPanArc` 60, `perception.streetCameraPanSeconds` 3, `perception.streetCameraPanHold` 1, `scoring.stealthUnseen` 3, `scoring.stealthLost` 2, `scoring.stealthSeen` 1, `ui.tip.holdSeconds` 7, `perception.sideCloseRange` 180, `perception.sideWaryRange` 360, `perception.sideAwareSpeed` 0.85, `perception.sideWarySpeed` 0.6, `perception.sideCloseSpeed` 0.35, `perception.sideAwareNoticeRate` 0.5, `perception.sideWaryNoticeRate` 1. 10.7's values otherwise.
+- **680 entries.** `registryVersion` unchanged (row 665).
 
 ## Open
 
 - **Human pass (H6):** does the player read the ghost, and crawl away? Do the cones read? Does the player time the sweep? Does the grade pull play toward UNSEEN? Does the player use the lure?
 - **After the playtest:** does the stop line stay free, or become a part the dummy earns (row 729)?
+- **D127:** the side stages' values: ranges, speeds, notice rates. Does the player read AWARE before the car stops?
 - **D124:** the pan's values: 60° in 3 s, 1 s rests, the barrier's ends mirrored.
 - **D121:** the order from here. The road upgrade at 10.9, swerve cost at 10.10.
 - **D122:** the search's values. 60 and 4 leave the crawl open along a row longer than 60.

@@ -101,6 +101,9 @@ T108 = dict(T107, **{
     'perception.streetCameraPanArc': 60, 'perception.streetCameraPanSeconds': 3, 'perception.streetCameraPanHold': 1,  # each cone pans, MGS-style: rest 1 s, sweep 3 s, rest, back (row 724)
     'scoring.stealthUnseen': 3, 'scoring.stealthLost': 2, 'scoring.stealthSeen': 1,  # each strike's stealth grade multiplies its damage: never noticed ×3, noticed and lost ×2, seen ×1 (rows 725, 728)
     'ui.tip.holdSeconds': 7,  # the lure's field notes, once per save file (row 729)
+    'perception.sideCloseRange': 180, 'perception.sideWaryRange': 360,  # the side field in stages, by distance from the nose: CLOSE (about the dash's reach), WARY, then AWARE to the field's end (row 730)
+    'perception.sideAwareSpeed': 0.85, 'perception.sideWarySpeed': 0.6, 'perception.sideCloseSpeed': 0.35,  # it slows a bit, more, a lot (row 730)
+    'perception.sideAwareNoticeRate': 0.5, 'perception.sideWaryNoticeRate': 1,  # AWARE notices in 1.2 s; WARY and CLOSE in 0.6 s; noticed, it stops short (row 730)
 })
 STAGES = {
     '10.1': {'title': 'THE TEST ROAD', 'page': 'dummies_p10.html', 'frozen': '82ab5e55d243ee500d6dfcaa60af74e6', 'edit': 101, 'values': T101},

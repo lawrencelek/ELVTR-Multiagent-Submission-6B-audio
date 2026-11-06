@@ -284,7 +284,27 @@
     const half = c.W / 2 + br + s.fieldFor(), near = !!c.noticed; // the field acts from rung 2 (D103: draw what acts)
     rect(-c.L - br, -half, c.fwdLen + c.L + 2 * br, 2 * half, near ? C.fieldHot : C.field);
     rect(0, -(c.W / 2 + br), c.fwdLen, c.W + 2 * br, (c.hz && c.hz.inPath) || (c.det && c.det.fwd) ? C.beamHot : C.beam);
+    if (c.red && s.sideStaged && s.sideStaged()) { // row 730: the field's bands, rings from the nose: CLOSE, WARY, AWARE beyond; the dummy's band lit
+      const P2 = s.P, rC = P2['perception.sideCloseRange'], rW = P2['perception.sideWaryRange'], x0 = -c.L - br, len = c.fwdLen + c.L + 2 * br;
+      ctx.save(); ctx.beginPath(); ctx.rect(x0, -half, len, 2 * half); ctx.clip();
+      ctx.strokeStyle = 'rgba(255,255,255,0.25)'; ctx.lineWidth = 1; ctx.setLineDash([4, 6]);
+      for (const r of [rC, rW]) { ctx.beginPath(); ctx.arc(0, 0, r, 0, TAU); ctx.stroke(); }
+      ctx.setLineDash([]);
+      const st = s.sideStage(c), d = s.sideDist(c), band = d == null ? 0 : d <= rC ? 3 : d <= rW ? 2 : 1; // the band the dummy stands in; lit in its stage's colour
+      if (st >= 1 && band) { ctx.globalAlpha = 0.14; ctx.fillStyle = AWARE_C[st]; ctx.beginPath();
+        if (band === 3) ctx.arc(0, 0, rC, 0, TAU); else if (band === 2) { ctx.arc(0, 0, rW, 0, TAU); ctx.moveTo(rC, 0); ctx.arc(0, 0, rC, 0, TAU, true); } else { ctx.rect(x0, -half, len, 2 * half); ctx.moveTo(rW, 0); ctx.arc(0, 0, rW, 0, TAU, true); }
+        ctx.fill('evenodd'); ctx.globalAlpha = 1; }
+      ctx.restore();
+    }
     ctx.restore();
+  }
+  // Row 730: the car's awareness, in stages: AWARE, SLOWING, CRAWLING, then noticed (it stops short)
+  const AWARE = ['', 'AWARE', 'SLOWING', 'CRAWLING', 'STOPPING'], AWARE_C = ['', '#cfd8dc', '#ffc14d', '#ff7a3d', '#ff3b3b'];
+  function drawAwareness(c, x, y) {
+    const st = s.sideStage ? s.sideStage(c) : 0; if (!st) return;
+    const col = AWARE_C[st];
+    for (let i = 0; i < 3; i++) rect(x - 13 + i * 9, y, 7, 4, i < Math.min(st, 3) ? col : 'rgba(255,255,255,0.18)'); // three pips: one a stage
+    ctx.font = '700 15px B612, system-ui, sans-serif'; text(st === 4 ? '!' : '?', x, y - 4, st >= 3 ? 17 : 13 + st, col, 'center'); // MGS: ? while it suspects, ! when it has you
   }
   function carShape(c, rung) { // in the car's frame: body, stripe, glass, the roof dome (D89); from rung 1 the camera pod
     rect(-c.L / 2, -c.W / 2, c.L, c.W, c.red ? C.red : '#e8edf2');
@@ -318,9 +338,11 @@
     if (on) { rect(c.L / 2 - 3, -c.W / 2 + 2, 3, 5, '#fffbe0'); rect(c.L / 2 - 3, c.W / 2 - 7, 3, 5, '#fffbe0'); }
     if (braking || c.v < 2) { rect(-c.L / 2, -c.W / 2 + 2, 3, 5, '#ff2020'); rect(-c.L / 2, c.W / 2 - 7, 3, 5, '#ff2020'); }
     ctx.restore();
-    const tag = c.model + ' · R' + (c.rung || 0) + ((c.rung || 0) >= 6 && c.red ? ' · MEMORY ' + (c.mem || 0) : '') + (c.lkp ? ' · ' + (c.lkp.found ? 'FOUND' : 'SEARCHING') : c.state !== 'cruise' ? ' · ' + c.state.toUpperCase() : '');
+    const ast = c.red && s.sideStage ? s.sideStage(c) : 0; // row 730: the field's stage names the state while it slows
+    const tag = c.model + ' · R' + (c.rung || 0) + ((c.rung || 0) >= 6 && c.red ? ' · MEMORY ' + (c.mem || 0) : '') + (c.lkp ? ' · ' + (c.lkp.found ? 'FOUND' : 'SEARCHING') : ast >= 1 && c.v >= 1 ? ' · ' + AWARE[ast] : c.state !== 'cruise' ? ' · ' + c.state.toUpperCase() : '');
     text(tag, c.x, c.y - 26, 10, C.text, 'center'); const tw = ctx.measureText(tag).width; // the notice meter sits past the tag's end
     if (c.checks && c.checks.length) text('CHECKING ' + c.checks.map((m) => '#' + m.n).join(' '), c.x, c.y - 38, 10, C.mem, 'center'); // rung 6: the spots it is watching
+    if (ast) drawAwareness(c, Math.max(24, Math.min(FW - 24, c.x)), c.y - (c.checks && c.checks.length ? 54 : 42)); // row 730: above the tag, kept on screen
     const nT = s.P['perception.sideNoticeSeconds']; // rung 2's notice: a meter fills while the dummy is in its field, unnoticed
     if (c.fieldT > 0 && nT > 0) { const u = Math.min(1, c.fieldT / nT); ctx.strokeStyle = u >= 1 ? C.dummy : C.text; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(c.x + Math.max(30, tw / 2 + 12), c.y - 30, 6, -Math.PI / 2, -Math.PI / 2 + TAU * u); ctx.stroke(); }
     if (c.honking || c.sideHonk) { rect(c.x - 24, c.y - 52, 48, 16, C.text); text('HONK', c.x, c.y - 40, 11, C.joint, 'center'); }
