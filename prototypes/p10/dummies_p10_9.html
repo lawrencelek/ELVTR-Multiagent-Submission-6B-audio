@@ -4911,13 +4911,13 @@ window.DUMMIES_P10_STAGE = {"id": "10.9", "title": "THE TWO-WAY ROAD", "edit": 1
   function drawPropCones(c, near) {
     const P = s.P, br = P['body.radius'], D = Math.PI / 180, A = P['perception.forwardConeAngle'] * D, e = s.sideEdges(), e0 = e[0] * D, e1 = e[1] * D, Rp = s.coneReach(), O = -c.L / 2, Fa = s.cornerApex(c) - c.L / 2, BIG = 4000;
     const Gf = Math.round(P['perception.forwardGrades'] || 3), Gs = Math.round(P['perception.sideGrades'] || 2), x = Rp.f / Gf, Fs = P['perception.forwardConeSensitivity'], Ss = P['perception.sideConeSensitivity'], lk = (s.coneLook ? s.coneLook(c) : 0) * D;
-    const cones = [{ k: 'forward', a: Fa, a0: lk - A, a1: lk + A, R: Rp.f + br, G: Gf, sens: Fs }, { k: 'side', a: O, a0: e0, a1: e1, R: Rp.s + br, G: Gs, sens: Ss }, { k: 'side', a: O, a0: -e1, a1: -e0, R: Rp.s + br, G: Gs, sens: Ss }];
+    const cones = [{ k: 'forward', a: Fa, a0: lk - A, a1: lk + A, R: Gf * x, G: Gf, sens: Fs }, { k: 'side', a: O, a0: e0, a1: e1, R: Gs * x, G: Gs, sens: Ss }, { k: 'side', a: O, a0: -e1, a1: -e0, R: Gs * x, G: Gs, sens: Ss }]; // row 739: every arc exactly at kx about the middle; sensing reaches body.radius past it (the dummy's edge on the line)
     const ray = (q) => { ctx.beginPath(); ctx.moveTo(q.a, 0); ctx.arc(q.a, 0, BIG, q.a0, q.a1); ctx.closePath(); }, circ = (r) => { ctx.beginPath(); ctx.arc(O, 0, r, 0, TAU); };
     const notForward = () => { ctx.beginPath(); ctx.rect(-BIG, -BIG, 2 * BIG, 2 * BIG); ctx.moveTo(Fa, 0); ctx.arc(Fa, 0, BIG, cones[0].a0, cones[0].a1); ctx.closePath(); ctx.clip('evenodd'); }; // a side cone never draws under the forward one
-    const clipTo = (q) => { ray(q); ctx.clip(); circ(q.R); ctx.clip(); if (q.k === 'side') notForward(); };
+    const clipTo = (q) => { ray(q); ctx.clip(); circ(q.R + 1); ctx.clip(); if (q.k === 'side') notForward(); }; // +1: the stroke on the outer ring shows whole
     for (const q of cones) { const k = q.sens == null ? 1 : q.sens, line = `rgba(255,255,255,${(0.1 + 0.3 * k).toFixed(3)})`;
       ctx.save(); clipTo(q); ctx.fillStyle = near ? `rgba(255,212,0,${(0.05 + 0.13 * k).toFixed(3)})` : `rgba(127,168,188,${(0.02 + 0.18 * k).toFixed(3)})`; ctx.fillRect(-BIG, -BIG, 2 * BIG, 2 * BIG); // brighter = more sensitive
-      ctx.strokeStyle = line; ctx.lineWidth = 1; ctx.setLineDash([4, 6]); for (let i = 1; i < q.G; i++) { circ(x * i); ctx.stroke(); } circ(q.R - 0.5); ctx.stroke(); ctx.restore(); // rings at x, 2x; the outer arc
+      ctx.strokeStyle = line; ctx.lineWidth = 1; ctx.setLineDash([4, 6]); for (let i = 1; i <= q.G; i++) { circ(x * i); ctx.stroke(); } ctx.restore(); // rings at x, 2x, 3x: the outer arc is the last ring
       ctx.save(); circ(q.R); ctx.clip(); if (q.k === 'side') notForward(); ctx.strokeStyle = line; ctx.lineWidth = 1; ctx.setLineDash([4, 6]); ctx.beginPath(); for (const an of [q.a0, q.a1]) { ctx.moveTo(q.a, 0); ctx.lineTo(q.a + Math.cos(an) * BIG, Math.sin(an) * BIG); } ctx.stroke(); ctx.setLineDash([]); ctx.restore(); } // the straight edges, to the outer arc
     rect(0, -(c.W / 2 + br), c.fwdLen, c.W + 2 * br, (c.hz && c.hz.inPath) || (c.det && c.det.fwd) ? C.beamHot : C.beam); // the beam: the lane ahead
     const st = c.red && s.sideStage ? s.sideStage(c) : 0, hz = c.hz;

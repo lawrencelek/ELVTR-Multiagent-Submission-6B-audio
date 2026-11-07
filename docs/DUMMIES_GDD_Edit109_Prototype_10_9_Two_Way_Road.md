@@ -6,7 +6,7 @@
 - **Playtest pages:** `index.html`. 10.1–10.8 frozen; 10.8 at md5 `e019098d…`.
 - **Tests:** `node prototypes/p10/test_p10.js --page` 66/66. Sound freeze: 211 items, 0 changed.
 - **Probes:** `node qa/testroad.js --stage 10.9 --out qa/baseline/p10_9.json`; report `qa/baseline/p10_9.md`, 12/16 checks (row 735). 10.8 reruns identical.
-- **Decision log:** rows 734–738. Open D130.
+- **Decision log:** rows 734–739. Open D130.
 
 **Amended 6 November (row 735):** the junction decides by time (§10.9.2); the red car's proportional field (§10.9.4).
 
@@ -56,6 +56,7 @@
 
 - **Forward cone, row 736:** its edges run through the front corners, meeting behind the car.
 - **One set of rings, row 738:** every ring is a circle about the car's middle. The side cones' 2x arc is the forward cone's second ring.
+- **Arcs exactly at kx, row 739:** x 113, 2x 227, 3x 340. Sensing reaches `body.radius` 13 past each arc: the dummy's edge on the line.
 - **Side cones:** from the car's middle, 10°–110° (`perception.sideConeAxis` 60 ± `perception.sideConeAngle` 50). They meet the forward cone's edge.
 - **One step, row 737:** x = `perception.coneRadius` / `perception.forwardGrades` = 340 / 3 = 113, from the car's middle.
   - Forward rings at x, 2x, 3x (53% of the screen's height).
