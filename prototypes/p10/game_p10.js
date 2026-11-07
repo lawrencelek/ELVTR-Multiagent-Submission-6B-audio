@@ -30,7 +30,7 @@
   const PARTS = { battery1: 'BATTERY 1 · DASH', legs1: 'LEGS 1 · JUMP', hands1: 'HANDS 1 · CONES', duck1: 'DUCK · HOLD C' }, LOAD = { battery1: 'B1', legs1: 'L1', hands1: 'H1', duck1: 'D1' }, ZONES = { front: 'FRONT', frontDiagonal: 'FRONT CORNER', side: 'SIDE', rearDiagonal: 'REAR CORNER', rear: 'REAR' };
   const CLIP = F['duel.lessonClipSeconds'], HOLD = F['duel.lessonHoldSeconds'], FIT = F['duel.lessonFitSeconds']; // the clip, its last frame held, the fitting
   const cv = document.getElementById('game'), ctx = cv.getContext('2d');
-  let s, paused = false, started = false, showZones = true, log = [], session = {}, prevV = new Map(), flash = [];
+  let s, paused = false, started = false, showZones = true, log = [], session = {}, prevV = new Map(), flash = [], incidentStamp = null;
   // Row 729: the test road's save file: one record in this browser for every Prototype 10 page, holding the field notes
   // already shown. Without storage it lasts the visit. N on the pause screen starts a new save file.
   const SAVE_KEY = 'dummies.p10.save'; let memSave = null, tip = null, saveNote = 0;
@@ -44,7 +44,7 @@
 
   function newSim() {
     s = new T.TestRoadSim(Object.assign({}, F)); log = []; session = { start: Date.now(), build: 'P' + ST.id };
-    prevV.clear(); flash = []; ring = []; clip = null; lessonT = null; lastCrash = null; tip = null;
+    prevV.clear(); flash = []; incidentStamp = null; ring = []; clip = null; lessonT = null; lastCrash = null; tip = null;
   }
   newSim();
 
@@ -103,6 +103,7 @@
       if (e.type === 'gift') flash.push({ x: s.body.x, y: s.body.y, t: 1.6, n: PARTS[e.node] || e.node });
       if (e.type === 'crash') { lastCrash = e; if (graded() && e.grade) flash.push({ x: s.body.x, y: s.body.y + 62, t: 1.1, n: GRADE[e.grade] + ' ×' + (e.mult || 0) + ' +' + (e.points || 0), c: GRADE_C[e.grade]() }); } // row 725: below the dummy, clear of the damage and the car's tag
       if (e.type === 'search-found') flash.push({ x: e.x, y: e.y, t: 0.9, n: 'FOUND' });
+      if (e.type === 'incident') { incidentStamp = { x: e.x, y: e.y, t: 2.2, pts: e.points, model: e.model }; } // row 740
       if (e.type === 'expect-stop' && !tip && !tipSeen('lure.memory')) showTip('lure.memory', e.car); // row 726: the lure; row 729: once a save file
       if (e.type === 'search' && !tip && !tipSeen('lure.ghost')) showTip('lure.ghost', e.car);
       if (e.type === 'lesson-due') clip = { frames: ring.slice(), hitT: e.t, model: e.model, zone: e.zone, to: e.to, info: T.RUNGS[e.to], origin: e.origin, prev: lastCrash && lastCrash.habit ? lastCrash.prev : null, seenAt: e.seenAt };
@@ -402,7 +403,7 @@
     if (on) { rect(c.L / 2 - 3, -c.W / 2 + 2, 3, 5, '#fffbe0'); rect(c.L / 2 - 3, c.W / 2 - 7, 3, 5, '#fffbe0'); }
     if (braking || c.v < 2) { rect(-c.L / 2, -c.W / 2 + 2, 3, 5, '#ff2020'); rect(-c.L / 2, c.W / 2 - 7, 3, 5, '#ff2020'); }
     ctx.restore();
-    if (c.white) return; // row 734: white traffic carries no tag: it never learns
+    if (c.white) { if (c.incidentAt != null && s.t - c.incidentAt < 2.5) { rect(c.x - 24, c.y + 22, 48, 16, C.text); text('HONK', c.x, c.y + 34, 11, C.joint, 'center'); } return; } // row 734: white traffic carries no tag: it never learns; row 740: after an Incident, it honks
     const ast = c.red && s.sideStage ? s.sideStage(c) : 0; // row 730: the field's stage names the state while it slows
     const tag = c.model + ' · R' + (c.rung || 0) + ((c.rung || 0) >= 6 && c.red ? ' · MEMORY ' + (c.mem || 0) : '') + (c.lkp ? ' · ' + (c.lkp.found ? 'FOUND' : 'SEARCHING') : ast >= 1 && c.v >= 1 ? ' · ' + AWARE[ast] : c.state !== 'cruise' ? ' · ' + c.state.toUpperCase() : '');
     text(tag, c.x, c.y - 26, 10, C.text, 'center'); const tw = ctx.measureText(tag).width; // the notice meter sits past the tag's end
@@ -456,6 +457,7 @@
     const bx = 340; // the body bar sits left of the key hints, which grow with each part
     text('BODY', bx - 40, FH + 22, 11, C.dim); rect(bx, FH + 12, 120, 12, '#2c3447'); rect(bx, FH + 12, 120 * hp, 12, C.dummy);
     text('WRITE-OFFS ' + s.run.writeOffs, bx, FH + 42, 11, C.text);
+    if ((s.P['scoring.incidentPoints'] || 0) > 0) text('INCIDENTS ' + (s.run.incidents || 0), bx + 300, FH + 42, 11, '#ff3b3b'); // row 740
     if (graded() && s.stealth) { const st = s.stealth, l = st.last; text('STEALTH ' + st.points, bx + 96, FH + 42, 11, C.text); // row 725; row 728: damage × the grade
       if (l) text(GRADE[l.grade] + ' ×' + l.mult + ' +' + l.points, bx + 196, FH + 42, 11, GRADE_C[l.grade]()); }
     text(s.dashFitted() ? 'SPACE DASH' + (s.has('jump') ? ' · K JUMP' : '') + (s.has('carry') ? ' · E CONE' : '') + (s.has('duck1') ? ' · C DUCK' : '') : 'ON FOOT', 786, FH + 22, 11, C.dim, 'right');
@@ -548,13 +550,17 @@
     for (const dr of s.drones) { const cn = s.cones.find((q) => q.id === dr.cone); if (cn && cn.state === 'drone') drawCone(dr.x, dr.y + 12); drawDrone(dr.x, dr.y, false); } // FARSIGHT fetches a cone left in a lane (proto.droneConeSeconds)
     const d = s.delivery; if (d) drawDrone(d.x, d.y, d.state !== 'outbound' && (LOAD[d.node] || 'B1'));
     const lf = s.lift; if (lf) { const held = s.body && s.body.lifted; drawDrone(lf.x, lf.y - (held ? 30 : 0), false); if (held) { ctx.strokeStyle = C.joint; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(lf.x, lf.y - 24); ctx.lineTo(lf.x, lf.y - 16); ctx.stroke(); } } // FARSIGHT's block lift
+    if (incidentStamp) { const k = incidentStamp; k.t -= 1 / 60; if (k.t <= 0) incidentStamp = null; else { // row 740: the Incident, stamped where the two cars met
+      const a = Math.min(1, k.t / 0.4), sc = 1 + Math.max(0, k.t - 1.9) * 2, x = Math.max(110, Math.min(FW - 110, k.x)), y = k.y - 120 > 40 ? k.y - 120 : k.y + 120;
+      ctx.save(); ctx.globalAlpha = a; ctx.translate(x, y); ctx.rotate(-0.08); ctx.scale(sc, sc); ctx.strokeStyle = '#ff3b3b'; ctx.lineWidth = 3; ctx.strokeRect(-92, -24, 184, 48); ctx.lineWidth = 1; ctx.strokeRect(-87, -19, 174, 38);
+      text('INCIDENT', 0, -1, 18, '#ff3b3b', 'center'); text('DUMMY CORP. REPORT · +' + k.pts, 0, 14, 9, '#ff3b3b', 'center'); ctx.restore(); } }
     for (let i = flash.length - 1; i >= 0; i--) { const f = flash[i]; f.t -= 1 / 60; if (f.t <= 0) { flash.splice(i, 1); continue; } const big = typeof f.n !== 'number'; text(big ? f.n : '−' + f.n, f.x, f.y - 24 - (1 - f.t) * 20, big ? 16 : 13, f.c || (f.n === 'WRITE-OFF' ? C.red : C.dummy), 'center'); }
     drawTip();
     drawHud();
     if (!started || paused) {
       rect(0, 0, FW, FH, 'rgba(10,12,18,0.72)');
       text(paused ? 'PAUSED' : 'PROTOTYPE ' + ST.id + ' · ' + ST.title, FW / 2, 250, 24, C.text, 'center');
-      text(s.P['duel.twoWay'] ? 'Two two-way roads cross at the Monument. White cars never learn. One red car does.' : 'Two one-way roads cross at the Monument. One red car drives through.' + ((s.P['duel.topRung'] || 0) >= 7 ? ' It looks where it last saw you.' : s.rung >= 5 && (s.P['duel.topRung'] || 0) >= 6 ? ' Every crash leaves its mark.' : ''), FW / 2, 292, 14, C.dim, 'center');
+      text(s.P['scoring.incidentPoints'] ? 'White cars tailgate the red car. Make it stop hard.' : s.P['duel.twoWay'] ? 'Two two-way roads cross at the Monument. White cars never learn. One red car does.' : 'Two one-way roads cross at the Monument. One red car drives through.' + ((s.P['duel.topRung'] || 0) >= 7 ? ' It looks where it last saw you.' : s.rung >= 5 && (s.P['duel.topRung'] || 0) >= 6 ? ' Every crash leaves its mark.' : ''), FW / 2, 292, 14, C.dim, 'center');
       text('Arrows or WASD move · Space dash · K jump, E cone, C duck, once fitted · Z zones · P pause · R restart · L save log', FW / 2, 330, 13, C.dim, 'center');
       text(paused ? 'P to resume' : 'Press any key', FW / 2, 380, 16, C.dummy, 'center');
       if (paused) { if (saveNote > 0) saveNote -= 1 / 60; text(saveNote > 0 ? 'NEW SAVE FILE · THE FIELD NOTES WILL SHOW AGAIN' : 'N new save file (field notes show again)', FW / 2, 412, 12, saveNote > 0 ? C.dummy : C.dim, 'center'); } // row 729

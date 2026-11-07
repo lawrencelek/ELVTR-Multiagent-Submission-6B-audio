@@ -517,6 +517,20 @@ check('10.9 (rows 735–737): the proportional field: one step x (perception.con
   return { ok, detail: `step x ${(R.f / 3).toFixed(1)}: forward rings at x, 2x, 3x (${R.f}, ${Math.round(R.f / g.P['world.height'] * 100)}% of the screen height), sides at x, 2x (${R.s.toFixed(0)}), from the car middle; the side cones end at ${F9['perception.sideConeAxis'] + F9['perception.sideConeAngle']}° (a whole wedge, no crop): inside ${geo.sideEnd}, past ${geo.behind}; its edges through the front corners: just inside a corner ${geo.corner}, just outside ${geo.past}, just past its edge 150 ahead ${geo.edgeOut}; its centre ${(-g.cornerApex(c) - c.L / 2).toFixed(0)} behind the rear bumper; ${geo.fwd} inside, ${geo.fwdOut} past its reach; sides ${R.s.toFixed(0)} from the car middle: sides ${geo.side} / ${geo.other}, ${geo.sideOut} past; stages by equal grades, forward at 0.2, 0.5, 0.9 of its reach ${grades.slice(0, 3).join(', ')}, side at 0.3, 0.8 ${grades.slice(3).join(', ')}; radius with 0, 3, 20 crash spots remembered: ${f0}, ${f3.toFixed(1)}, ${f20.toFixed(1)}; the longest any car stood in 3 minutes of traffic: ${longest.toFixed(1)} s` };
 });
 
+// ---------- 10.10
+const F10 = SF.stages['10.10'] && SF.stages['10.10'].flags;
+check('10.10 (row 740): the Incident. White sedans close in (traffic.whiteSpeedRatio), tailgate (traffic.whiteTimeGap); caught out behind a red car stopping for the dummy, they brake no harder than traffic.whiteBraking; a dummy stepping late into the red car path makes it stop hard; the white car behind runs into it: an Incident, worth scoring.incidentPoints; the two stand traffic.incidentSeconds, at the bumper, then drive on; 10.9 has none', () => {
+  const go = (F) => { const s = sim(F, {}, ALL); Object.assign(s.body, { x: 760, y: 620 }); const done = new Set(); let inc = null, p0 = 0, stand = null, overlapAfter = 0, wDecel = 0, tries = 0;
+    for (let i = 0; i < 300 * 60 && !(inc && s.t > inc.t + 4); i++) { const vs = new Map(s.cars.filter((c) => c.white && s.caughtOut(c)).map((c) => [c.id, c.v])), e0 = s.events.length; s.step({}); /* caught out: the red car ahead stopping for the dummy */ const hitNow = new Set(s.events.slice(e0).filter((q) => q.type === 'impact' || q.type === 'incident').flatMap((q) => [q.car, q.by])); for (const c of s.cars) if (c.white && vs.has(c.id) && c.v > 0 && !hitNow.has(c.id)) wDecel = Math.max(wDecel, (vs.get(c.id) - c.v) * 60); // its own braking: contact (a hit, the bumper) aside
+      if (!inc) for (const r of s.onRoad()) { if (!r.red || done.has(r.id) || r.path.road !== 'A' || r.path.dir < 0 || r.v < 100) continue; const w = s.onRoad().find((o) => o.white && o.path === r.path && o.s < r.s && (r.s - r.L / 2) - (o.s + o.L / 2) < o.v); if (w && r.x > 40 && r.x < 350) { done.add(r.id); tries++; p0 = s.run.points; Object.assign(s.body, { x: r.x + r.L / 2 + 110, y: r.y, vx: 0, vy: 0 }); } }
+      const e = s.events.slice(-8).find((q) => q.type === 'incident'); if (e && !inc) { inc = e; stand = { l: s.cars.find((c) => c.id === e.car), f: s.cars.find((c) => c.id === e.by) }; }
+      if (inc && s.t < inc.t + (F['traffic.incidentSeconds'] || 0) - 0.1) { const { l, f } = stand; if ((l.s - l.L / 2) - (f.s + f.L / 2) < -1) overlapAfter++; if (l.v > 1 || f.v > 1) stand.moved = true; } }
+    return { s, inc, p0, stand, overlapAfter, wDecel, tries }; };
+  const a = go(F10), b = go(F9), pts = F10['scoring.incidentPoints'];
+  const ok = !!a.inc && a.inc.points === pts && a.s.run.points >= a.p0 + pts && a.s.run.incidents >= 1 && a.overlapAfter === 0 && !a.stand.moved && a.wDecel <= F10['traffic.whiteBraking'] + 1 && !b.inc && !b.s.run.incidents;
+  return { ok, detail: `10.10: ${a.tries} late steps into a red car with a white car on its tail; Incident ${a.inc ? 'at ' + a.inc.t.toFixed(1) + ' s, ' + a.inc.by + ' into ' + a.inc.car + ', +' + a.inc.points : 'none'}; score ${Math.round(a.p0)} to ${Math.round(a.s.run.points)}; overlapping after: ${a.overlapAfter} ticks; both stood ${F10['traffic.incidentSeconds']} s: ${a.stand ? !a.stand.moved : '—'}; hardest braking of a caught-out white car ${a.wDecel.toFixed(0)} (cap ${F10['traffic.whiteBraking']}); 10.9, the same steps: ${b.tries} tries, Incidents ${b.s.run.incidents || 0}` };
+});
+
 // ---------- registry and frozen builds
 check('Prototype 10 values are registered (registry first)', () => {
   const reg = new Set(JSON.parse(fs.readFileSync(path.join(ROOT, 'content/params/tuning.parameters.json'), 'utf8')).entries.map((e) => e.id));
@@ -545,7 +559,7 @@ if (process.argv.includes('--page')) {
     const srv = http.createServer((q, r) => { const p = path.join(ROOT, decodeURIComponent(q.url.split('?')[0])); if (!fs.existsSync(p) || fs.statSync(p).isDirectory()) { r.writeHead(404); return r.end(); } r.writeHead(200); fs.createReadStream(p).pipe(r); });
     srv.listen(0, async () => {
       const { chromium } = require('playwright'); const br = await chromium.launch();
-      for (const page of ['dummies_p10.html', 'dummies_p10_2.html', 'dummies_p10_3.html', 'dummies_p10_4.html', 'dummies_p10_5.html', 'dummies_p10_6.html', 'dummies_p10_7.html', 'dummies_p10_8.html', 'dummies_p10_9.html']) {
+      for (const page of ['dummies_p10.html', 'dummies_p10_2.html', 'dummies_p10_3.html', 'dummies_p10_4.html', 'dummies_p10_5.html', 'dummies_p10_6.html', 'dummies_p10_7.html', 'dummies_p10_8.html', 'dummies_p10_9.html', 'dummies_p10_10.html']) {
         const pg = await br.newPage(); const errs = [];
         pg.on('pageerror', (e) => errs.push(e.message));
         await pg.goto(`http://127.0.0.1:${srv.address().port}/prototypes/p10/${page}`); await pg.waitForTimeout(600);

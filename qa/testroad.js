@@ -42,6 +42,7 @@ const POLICIES = {
   peek: { home: { x: 617, y: 421 }, from: 10.8 },     // stands in view at a free spot behind a row for the car's road; once the car has noticed it, ducks and springs as it passes
   peekmove: { home: { x: 617, y: 421 }, from: 10.8 }, // the same, but once ducked it crawls to a free spot beyond duel.searchRadius of where it was seen, then springs
   roam: { home: { x: 501, y: 421 }, from: 10.7 },     // the planter ambush from a spot the car does not remember: it reads the red rings (rung 6) and moves to the nearest free spot behind a row for the car's road
+  brakecheck: { home: { x: 560, y: 250 }, from: '10.10' }, // row 740: waits at road A's north kerb, east of the junction; steps into the lane in front of a red car with a white car on its tail
   lure: { home: { x: 501, y: 421 }, from: 10.8 },     // row 726: the lure. Stands at a remembered spot (rung 6: the car expects it there) or in view at a free one (rung 7: a ghost), until the car stops for it; then crawls to a free spot downstream, beyond duel.searchRadius, and strikes as the car passes
 };
 // 10.7: the spots behind the planter rows, by the road whose cars they ambush. The corner (501, 421) serves both roads.
@@ -140,6 +141,15 @@ function run(policy, offset, secs, mode) {
       const ang = Math.atan2(best.ty - b().y, best.tx - b().x), off = Math.abs(wrap(ang - b().facing));
       if (b().mode === 'lunge') return { bPress: s.has('jump') && b().lunge && b().lunge.t > 0.04 };
       return { mx: Math.cos(ang) * 0.35, my: Math.sin(ang) * 0.35, aPress: can() && off < 12 * DEG && best.d < 200 };
+    },
+    brakecheck: () => { // row 740: make it stop hard; the white car behind does the rest
+      if (!b().alive) return {};
+      const c = live().find((q) => q.path.road === 'A' && q.path.dir > 0 && q.x + q.L / 2 < b().x && !done.has(q.id));
+      if (!c) return goTo(home.x, home.y);
+      const tail = s.onRoad().find((o) => o.white && o.path === c.path && o.s < c.s && (c.s - c.L / 2) - (o.s + o.L / 2) < Math.max(20, o.v) * 1.2), gap = b().x - (c.x + c.L / 2);
+      if (c.v < 1 || s.events.slice(-30).some((e) => e.type === 'incident' && e.car === c.id)) { done.add(c.id); return goTo(home.x, home.y); }
+      if (tail && gap < 150 && gap > c.L && Math.abs(b().y - home.y) < 8 && can()) return { mx: 0, my: 1, aPress: true }; // into its lane, late
+      return Math.abs(b().y - home.y) < 8 ? {} : goTo(home.x, home.y);
     },
     kerb: () => {
       if (!b().alive) return {};
@@ -365,12 +375,12 @@ function run(policy, offset, secs, mode) {
     }
   }
   while (wins.length < Math.ceil(secs / 60)) wins.push(0);
-  const ev = s.events.slice(e0), imp = ev.filter((e) => e.type === 'impact' && e.lost > 0 && !e.white), whiteHits = ev.filter((e) => e.type === 'impact' && e.lost > 0 && e.white).length, whites = ev.filter((e) => e.type === 'admit' && e.white).length, mins = (s.t - t0) / 60, n = (t) => ev.filter((e) => e.type === t);
+  const ev = s.events.slice(e0), incidents = ev.filter((e) => e.type === 'incident').length, imp = ev.filter((e) => e.type === 'impact' && e.lost > 0 && !e.white), whiteHits = ev.filter((e) => e.type === 'impact' && e.lost > 0 && e.white).length, whites = ev.filter((e) => e.type === 'admit' && e.white).length, mins = (s.t - t0) / 60, n = (t) => ev.filter((e) => e.type === t);
   const tally = (k) => imp.reduce((a, e) => (a[e[k]] = (a[e[k]] || 0) + 1, a), {});
   const lessonAt = n('lesson-due')[0], learned = n('learned')[0], firstBrake = n('first-brake')[0], firstSide = n('first-side')[0], firstCover = n('first-cover')[0], firstItem = n('first-item')[0], gift = n('gift')[0];
   const after = learned ? imp.filter((e) => e.t > learned.t) : null;
   const commits = n('commit').reduce((a, e) => (a[e.cause] = (a[e.cause] || 0) + 1, a), {});
-  return { policy, mode, offset, simSeconds: +(s.t - t0).toFixed(1), rungEnd: s.rung, whiteHits, whites,
+  return { policy, mode, offset, simSeconds: +(s.t - t0).toFixed(1), rungEnd: s.rung, whiteHits, whites, incidents,
     hits: imp.length, hitsPerMin: +(imp.length / mins).toFixed(2), writeOffs: n('writeoff').length,
     firstHit: imp.length ? +(imp[0].t - t0).toFixed(1) : null, points: Math.round(points), lost: Math.round(imp.reduce((a, e) => a + e.lost, 0)),
     zones: tally('zone'), carStates: tally('carState'), kinds: tally('kind'), dashes: n('lunge').length,
@@ -399,7 +409,8 @@ const out = { build: 'prototypes/p10/' + ST.page, stage: o.stage, level: 'juncti
 const modes = FLAGS['duel.topRung'] > (FLAGS['duel.startRung'] || 0) ? ['lesson', 'trained'] : ['lesson'];
 const want = (p) => !o.only || o.only.includes(p);
 if (o.set) out.set = o.set;
-for (const mode of modes) for (const p of Object.keys(POLICIES).filter((q) => (!POLICIES[q].from || +o.stage >= POLICIES[q].from) && want(q))) for (const off of o.offsets) {
+const vge = (a, b) => { const x = String(a).split('.').map(Number), y = String(b).split('.').map(Number); return x[0] !== y[0] ? x[0] > y[0] : (x[1] || 0) >= (y[1] || 0); }; // stage order by number: 10.10 comes after 10.9
+for (const mode of modes) for (const p of Object.keys(POLICIES).filter((q) => (!POLICIES[q].from || vge(o.stage, POLICIES[q].from)) && want(q))) for (const off of o.offsets) {
   const r = run(p, off, o.secs, mode); out.runs.push(r);
   console.log(`${mode.padEnd(7)} ${p.padEnd(10)} +${String(off).padEnd(3)} hits ${r.hits} (${r.hitsPerMin}/min) wo ${r.writeOffs} lesson ${r.lesson ? r.lesson.hitAt : '-'} after ${r.afterLesson ? r.afterLesson.hits : '-'} part ${r.parts.map((q) => q.node + '@' + q.t).join(',')} stills ${r.standstillTouches} tries ${r.tries} stalls ${r.cars.stalls20s}/${r.cars.blocked20s} gap ${r.cars.minStopGap}`);
 }

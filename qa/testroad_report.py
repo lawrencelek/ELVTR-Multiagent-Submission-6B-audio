@@ -36,10 +36,12 @@ HOME_COVER = "aim, flank, jump and dashjump wait at (300, 410), behind the barri
 MODE_DESC = {'lesson': "from the build's start (10.2: rung 0, on foot; 10.3: rung 1, Battery 1 fitted; 10.5: rung 3, Battery 1 and Legs 1 fitted); the lesson and the part as the build delivers them",
              'trained': "at the top rung from the start, every part its rungs bring fitted: the rung's own table"}
 STAGE = str(d.get('stage', '10.1'))
+def ge(v):  # stage order by number: 10.10 comes after 10.9
+    return tuple(int(x) for x in STAGE.split('.')) >= tuple(int(x) for x in v.split('.'))
 RARE, TIMED = [], []
 CONED = ((d.get('p10') or {}).get('perception.forwardConeAngle') or 0) > 0  # row 731: the field as three cones; the duller sides leave rare side strikes
 SIDE_RARE = 0.21  # hits a minute: a rare side strike, well under an open way in (OPEN_RATE)
-if STAGE >= '10.8':  # rung 7: seen-then-hidden closes; hiding before it sees you, or crawling away from the ghost, stays
+if ge('10.8'):  # rung 7: seen-then-hidden closes; hiding before it sees you, or crawling away from the ghost, stays
     CLOSED, OPEN_FOOT, OPEN_DASH = ['stand', 'standSouth', 'standOff', 'charge', 'kerb', 'walkin', 'corner', 'plinth', 'standplanter', 'peek'], ['lurk', 'flankOpen'], ['peekmove', 'roam'] + (['lure'] if 'lure' in POL else [])
     RARE = ['conebait']  # row 723: the cameras' cones (perception.streetCameraFov) leave blind sides; rare, not closed
     TIMED = ['gap'] if (d.get('p10') or {}).get('perception.streetCameraPanArc') else []  # row 724: the pan opens a window
@@ -47,25 +49,25 @@ if STAGE >= '10.8':  # rung 7: seen-then-hidden closes; hiding before it sees yo
     COVER = ['aim', 'flank', 'jump', 'dashjump'] + ([] if TIMED else ['gap'])
     ESC_CLOSED, ESC_OPEN = ['peek'], ['peekmove'] + (['lure'] if 'lure' in POL else [])
     HOME_COVER += "; conebait starts at the gap (188, 414); planter and standplanter use one spot behind the planter row south of road A, east (590, 418); roam, peek and peekmove use nine spots behind the three rows; lurk waits at (660, 576)"
-elif STAGE >= '10.7':  # rung 6: the same spot closes; any other spot stays, and the sprint from beyond the field (lurk; flankOpen, once the lift ends its stalemate: row 715)
+elif ge('10.7'):  # rung 6: the same spot closes; any other spot stays, and the sprint from beyond the field (lurk; flankOpen, once the lift ends its stalemate: row 715)
     CLOSED, OPEN_FOOT, OPEN_DASH = ['stand', 'standSouth', 'standOff', 'charge', 'kerb', 'walkin', 'corner', 'gap', 'plinth', 'conebait', 'standplanter'], ['lurk', 'flankOpen'], ['roam']
     COVER = ['gap', 'aim', 'flank', 'jump', 'dashjump']
     ESC_CLOSED, ESC_OPEN = ['planter'], ['roam']
     HOME_COVER += "; conebait starts at the gap (188, 414); planter and standplanter use one spot behind the planter row south of road A, east (590, 418); roam uses nine spots behind the three rows; lurk waits at (660, 576)"
-elif STAGE >= '10.6':  # rung 5: the cone bait closes; DUCK behind a planter and the sprint from beyond the field stay
+elif ge('10.6'):  # rung 5: the cone bait closes; DUCK behind a planter and the sprint from beyond the field stay
     CLOSED, OPEN_FOOT, OPEN_DASH = ['stand', 'standSouth', 'standOff', 'charge', 'kerb', 'flankOpen', 'walkin', 'corner', 'gap', 'plinth', 'conebait', 'standplanter'], ['lurk'], ['planter']
     COVER = ['gap', 'aim', 'flank', 'jump', 'dashjump']
     ESC_CLOSED, ESC_OPEN = ['conebait'], ['planter']
     HOME_COVER += "; conebait and planter start at the gap (188, 414); planter and standplanter use the spot behind the planter row south of road A, east (590, 418); lurk waits at (660, 576)"
-elif STAGE >= '10.5':  # rung 4: cover closes; the cone's swerve and the sprint from beyond the field stay
+elif ge('10.5'):  # rung 4: cover closes; the cone's swerve and the sprint from beyond the field stay
     CLOSED, OPEN_FOOT, OPEN_DASH = ['stand', 'standSouth', 'standOff', 'charge', 'kerb', 'flankOpen', 'walkin', 'corner', 'gap', 'plinth', 'aim'], ['lurk'], ['conebait']
     COVER = ['gap', 'aim', 'flank', 'jump', 'dashjump']  # every bot that waits behind the barrier
     ESC_CLOSED, ESC_OPEN = ['gap', 'jump'], ['conebait']  # lurk decays by the dummy's own leg damage (its dash shortens), not the car: noted under the escalation table
     HOME_COVER += "; conebait starts at the gap (188, 414); lurk waits at (660, 576), past every field's edge"
-elif STAGE >= '10.4':  # rung 3: the plinth and the jump close; cover stays
+elif ge('10.4'):  # rung 3: the plinth and the jump close; cover stays
     CLOSED, OPEN_FOOT, OPEN_DASH = ['stand', 'standSouth', 'standOff', 'charge', 'kerb', 'flankOpen', 'walkin', 'corner'], ['gap'], []  # the plinth and the jump: by decay, below
     ESC_CLOSED, ESC_OPEN = ['plinth', 'dashjump'], ['gap', 'jump']  # the jump bot waits behind the barrier: cover
-elif STAGE >= '10.3':  # rung 2: the open flank closes; cover and the raised edge stay
+elif ge('10.3'):  # rung 2: the open flank closes; cover and the raised edge stay
     CLOSED, OPEN_FOOT, OPEN_DASH = ['stand', 'standSouth', 'standOff', 'charge', 'kerb', 'flankOpen', 'walkin'], ['gap'], ['plinth']
     ESC_CLOSED, ESC_OPEN = ['kerb', 'flankOpen', 'walkin'], ['gap']
 else:
@@ -87,12 +89,12 @@ w('')
 w(f"- **Build:** `{d['build']}`, level `{d['level']}`, stage {d.get('stage', '10.1')}. Headless: `node qa/testroad.js --stage {d.get('stage', '10.1')} --out {os.path.relpath(src, ROOT)}`.")
 w(f"- **Runs:** {len(POL)} bots × {len(MODES)} mode(s) × offsets {d['offsets']} s × {d['secs']} sim-seconds; escalation {d['esc']} s.")
 for mo in MODES: w(f'- **Mode `{mo}`:** {MODE_DESC.get(mo, "")}.')
-if STAGE >= '10.3': w(f'- **Cover:** {HOME_COVER}.')
-if STAGE >= '10.8': w('- **Parts:** Battery 1, Legs 1, Hands 1 and DUCK fitted from the start. No new part. The car starts at rung 6, crash memory; from rung 7 it searches where it last saw the dummy.')
-elif STAGE >= '10.7': w('- **Parts:** Battery 1, Legs 1, Hands 1 and DUCK fitted from the start. No new part. Every crash leaves an outline; from rung 6 the car remembers the latest `duel.memorySites` spots.')
-elif STAGE >= '10.6': w('- **Parts:** Battery 1, Legs 1 and Hands 1 fitted from the start; DUCK by drone at the first stop at a cone. Three low planter rows by the road.')
-elif STAGE >= '10.5': w('- **Parts:** Battery 1 and Legs 1 fitted from the start; Hands 1, the cones, by drone at the first stop for a dummy behind cover.')
-elif STAGE >= '10.4': w('- **No new part:** Battery 1 and Legs 1 are fitted from the start.')
+if ge('10.3'): w(f'- **Cover:** {HOME_COVER}.')
+if ge('10.8'): w('- **Parts:** Battery 1, Legs 1, Hands 1 and DUCK fitted from the start. No new part. The car starts at rung 6, crash memory; from rung 7 it searches where it last saw the dummy.')
+elif ge('10.7'): w('- **Parts:** Battery 1, Legs 1, Hands 1 and DUCK fitted from the start. No new part. Every crash leaves an outline; from rung 6 the car remembers the latest `duel.memorySites` spots.')
+elif ge('10.6'): w('- **Parts:** Battery 1, Legs 1 and Hands 1 fitted from the start; DUCK by drone at the first stop at a cone. Three low planter rows by the road.')
+elif ge('10.5'): w('- **Parts:** Battery 1 and Legs 1 fitted from the start; Hands 1, the cones, by drone at the first stop for a dummy behind cover.')
+elif ge('10.4'): w('- **No new part:** Battery 1 and Legs 1 are fitted from the start.')
 w('- **The build\'s values:** ' + ', '.join(f'`{k}` {v}' for k, v in d['p10'].items()) + '.')
 w('')
 n = 1
@@ -115,13 +117,13 @@ for mo in MODES:
 if 'lesson' in MODES and any(r.get('lesson') is not None or r.get('dashAt') is not None for r in runs):
     w(f'## {n} The lesson (mode `lesson`)'); n += 1
     w('')
-    w('| Bot | Offset | Lesson: hit at (s) | Zone | Rung at end | First brake (s) | First side stop (s) | ' + ('First stop behind cover (s) | ' if STAGE >= '10.5' else '') + 'Part fitted (s) | Hits a minute after the lesson | Damage after |')
-    w('|---|---|---|---|---|---|---|---|---|---|' + ('---|' if STAGE >= '10.5' else ''))
+    w('| Bot | Offset | Lesson: hit at (s) | Zone | Rung at end | First brake (s) | First side stop (s) | ' + ('First stop behind cover (s) | ' if ge('10.5') else '') + 'Part fitted (s) | Hits a minute after the lesson | Damage after |')
+    w('|---|---|---|---|---|---|---|---|---|---|' + ('---|' if ge('10.5') else ''))
     for r in runs:
         if r['mode'] != 'lesson': continue
         L, A = r.get('lesson'), r.get('afterLesson')
         parts = ', '.join(f"{q['node']} {q['t']}" for q in r.get('parts', [])) or (str(r['dashAt']) if r.get('dashAt') is not None else '—')
-        w(f"| {r['policy']} | +{r['offset']} | {L['hitAt'] if L else '—'} | {L['zone'] if L else '—'} | {r.get('rungEnd', '—')} | {r.get('firstBrakeAt') if r.get('firstBrakeAt') is not None else '—'} | {r.get('firstSideAt') if r.get('firstSideAt') is not None else '—'} | {(str(r['firstCoverAt']) if r.get('firstCoverAt') is not None else '—') + ' | ' if STAGE >= '10.5' else ''}{parts} | {f(A['hitsPerMin']) if A else '—'} | {A['lost'] if A else '—'} |")
+        w(f"| {r['policy']} | +{r['offset']} | {L['hitAt'] if L else '—'} | {L['zone'] if L else '—'} | {r.get('rungEnd', '—')} | {r.get('firstBrakeAt') if r.get('firstBrakeAt') is not None else '—'} | {r.get('firstSideAt') if r.get('firstSideAt') is not None else '—'} | {(str(r['firstCoverAt']) if r.get('firstCoverAt') is not None else '—') + ' | ' if ge('10.5') else ''}{parts} | {f(A['hitsPerMin']) if A else '—'} | {A['lost'] if A else '—'} |")
     w('')
 w(f'## {n} Behaviours (commits by cause; honks)'); n += 1
 w('')
@@ -144,8 +146,8 @@ w('|---|---|---|---|')
 for r in d['escalation']:
     w(f"| {r['policy']} | {' '.join(str(x) for x in r['windows'])} | {f(r.get('decay'))} | {r['learnEvents']} |")
 w('')
-if STAGE >= '10.5' and 'lurk' in esc_pol and 'lurk' not in ESC_OPEN: w("- **lurk decays by the dummy's own damage, not the car.** Each hit lands on a leg; the dash shortens with leg damage (164 to 116 after four hits), below what the sprint from past the field needs. " + ("A sprint from the open leaves no spot: the car stays at rung 5 (row 713).\n" if STAGE >= '10.7' else "The car stays at rung 3 throughout.\n"))
-if STAGE >= '10.7':  # row 703 (D117): the shorter run-in and the lighter body
+if ge('10.5') and 'lurk' in esc_pol and 'lurk' not in ESC_OPEN: w("- **lurk decays by the dummy's own damage, not the car.** Each hit lands on a leg; the dash shortens with leg damage (164 to 116 after four hits), below what the sprint from past the field needs. " + ("A sprint from the open leaves no spot: the car stays at rung 5 (row 713).\n" if ge('10.7') else "The car stays at rung 3 throughout.\n"))
+if ge('10.7'):  # row 703 (D117): the shorter run-in and the lighter body
     w(f'## {n} Pace (row 703; D117)'); n += 1
     w('')
     pace = json.load(open(sys.argv[4])) if len(sys.argv) > 4 else None
@@ -181,7 +183,7 @@ for k in range(1, 20):
     elif os.path.exists(fp) and (STAGE.split('.')[-1].isdigit() and k < int(STAGE.split('.')[-1])): dd = json.load(open(fp))
     else: continue
     mo, ow = open_ways(dd); space.append((f'10.{k}', (dd.get('p10') or {}).get('duel.topRung', 0), mo, ow, new_parts(dd)))
-if STAGE >= '10.8':
+if ge('10.8'):
     imp_all = [r for r in runs if r.get('grades') is not None]
     if imp_all:
         w(f'## {n} Stealth grades (row 725)'); n += 1
@@ -338,7 +340,7 @@ RUNG_ONLY = ('Rung 7 closes:', 'Rung 7 keeps cover closed', 'It stops beyond das
 w('| Check | Result | Evidence |')
 w('|---|---|---|')
 checks = [c for c in checks if c[0] != '—']
-if STAGE >= '10.8':
+if ge('10.8'):
     gr = lambda p, k2: sum((r.get('grades') or {}).get(k2, 0) for r in runs if r['policy'] == p)
     hits_of = lambda p: sum(r['hits'] for r in runs if r['policy'] == p)
     if any(r.get('grades') is not None for r in runs):
@@ -350,6 +352,10 @@ if STAGE >= '10.8':
         checks += [('The lure lands: cars stop for it, and at least half the lured cars are struck (row 726)', st > 0 and lh >= st / 2, f"trained: {st} lures taken, {lh} lured cars struck"),
                    ('The stop line says where the car stops: within 10 in 90% of stops (row 726)', ns > 0 and n10 >= 0.9 * ns, f"{n10} of {ns}")]
     mo_, ow_ = open_ways(d); nps_ = new_parts(d); uses_ = sorted({q for k2 in nps_ for q in PART_OF[k2][1] if q in ow_})
+    if ((d.get('p10') or {}).get('scoring.incidentPoints') or 0) > 0:  # row 740: the Incident
+        bc = [r for r in runs if r['policy'] == 'brakecheck']; ni = sum(r.get('incidents', 0) for r in bc); mb = sum(r['simSeconds'] for r in bc) / 60 or 1
+        other = sum(r.get('incidents', 0) for r in runs if r['policy'] != 'brakecheck')
+        checks += [('The Incident lands: a late step in front of a tailgated red car (brakecheck) makes the white car run into it (row 740)', ni > 0, f"brakecheck {ni} Incidents in {round(mb)} minutes ({round(ni / mb, 2)} a minute); the other bots {other}")]
     if (d.get('p10') or {}).get('duel.twoWay'):  # row 734: the two-way road and its white traffic
         wsum, wh, mn = sum(r.get('whites', 0) for r in runs), sum(r.get('whiteHits', 0) for r in runs), sum(r['simSeconds'] for r in runs) / 60
         checks += [('White traffic runs both ways, and never scores (row 734)', wsum > 0, f"{round(wsum / mn, 1)} white cars a minute; white hits on the dummy {wh} ({round(wh / mn, 2)} a minute), damage only")]

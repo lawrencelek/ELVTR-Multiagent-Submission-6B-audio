@@ -193,7 +193,7 @@
     // proto.swerveOuter to the other: a district road's hard shoulder. Here both bounds are the road's kerbs.
     choose(c, tg, opts) {
       if (!this.testRoad || !c.path.edges) return super.choose(c, tg, opts);
-      if (c.white) { const P = this.P, margin = 12 + (tg.r || P['body.radius']), dist = Math.max(1, (tg.lx || 0) - margin), a = c.v * c.v / (2 * dist) > P['traffic.comfortBraking'] ? P['traffic.hardBraking'] : P['traffic.comfortBraking']; return { type: 'brake', v0: c.v, a, vTarget: 0, sStop: tg.s - c.L / 2 - margin }; } // row 734: it brakes, never swerves
+      if (c.white) { const P = this.P, margin = 12 + (tg.r || P['body.radius']), dist = Math.max(1, (tg.lx || 0) - margin), a = Math.min(c.v * c.v / (2 * dist) > P['traffic.comfortBraking'] ? P['traffic.hardBraking'] : P['traffic.comfortBraking'], (P['traffic.whiteBraking'] || 0) > 0 ? P['traffic.whiteBraking'] : Infinity); return { type: 'brake', v0: c.v, a, vTarget: 0, sStop: tg.s - c.L / 2 - margin }; } // row 734: it brakes, never swerves; row 740: no harder than traffic.whiteBraking
       if (tg.kind === 'cone' && this.rung >= 5) { // rung 5 never swerves round a cone: it stops short and waits (the base driver's stop)
         const P = this.P, margin = 12 + tg.r, dist = Math.max(1, tg.lx - margin);
         const a = c.v * c.v / (2 * dist) > P['traffic.comfortBraking'] ? P['traffic.hardBraking'] : P['traffic.comfortBraking'];
@@ -283,7 +283,16 @@
       return { x0: b.x, y0: b.y, x1, y1, dir, R, hit, ready };
     }
     coneSensitivity(c) { const P = this.P, hz = c.hz; return !hz || !hz.cone ? 1 : hz.cone === 'side' ? P['perception.sideConeSensitivity'] : P['perception.forwardConeSensitivity']; }
-    manSpeed(c, man, tau, sAt) {
+    moveCars(h, ts) { // row 740: however its speed was set this substep, a white car slows no faster than traffic.whiteBraking
+      const wb = this.P['traffic.whiteBraking'] || 0, pre = wb > 0 && this.testRoad ? this.cars.filter((c) => c.white && !c.gone && this.caughtOut(c)).map((c) => [c, c.v]) : null;
+      super.moveCars(h, ts);
+      if (pre) for (const [c, v] of pre) if (c.v > 0 && c.v < v - wb * h && !(c.shakenUntil != null && this.t < c.shakenUntil)) { const nv = v - wb * h; c.s += (nv - c.v) * h; c.v = nv; this.pose(c); }
+    }
+    manSpeed(c, man, tau, sAt) { // row 740: a white car's plan brakes no harder than traffic.whiteBraking
+      const v = this.manSpeed0(c, man, tau, sAt), wb = this.P['traffic.whiteBraking'] || 0;
+      return c.white && wb > 0 && man && man.v0 != null && this.caughtOut(c) ? Math.max(v, man.v0 - wb * Math.max(0, tau)) : v;
+    }
+    manSpeed0(c, man, tau, sAt) {
       if (!man || !man.env) return super.manSpeed(c, man, tau, sAt);
       const s = sAt != null ? sAt : c.s, gap = man.sBody - (s + c.L / 2), v0 = Math.max(0, man.v0);
       return Math.min(v0, Math.max(this.envSpeed(gap), v0 - this.P['traffic.hardBraking'] * Math.max(0, tau)));
@@ -306,9 +315,12 @@
       }
       // Row 730: staged, each red car's caution speed (proto.driver.cautionSpeed) is its stage's: cornerSpeed sets it, just before
       // the base's caution block reads it for the same car, which then brakes to reach it by the dummy (comfort to hard)
-      const P = this.P, keepC = P['proto.driver.cautionSpeed'], staged = this.testRoad && this.sideStaged();
-      this.stageCaution = staged ? keepC : null;
-      try { super.carAI(dt); } finally { P['proto.driver.cautionSpeed'] = keepC; this.stageCaution = null; }
+      const P = this.P, keepC = P['proto.driver.cautionSpeed'], staged = this.testRoad && this.sideStaged(), keepTG = P['traffic.timeGap'], wb = P['traffic.whiteBraking'] || 0;
+      this.stageCaution = staged ? keepC : null; this.carKeepTG = keepTG; // row 740: cornerSpeed sets each car's time gap, read next by the base's following
+      if (wb > 0) for (const c of this.cars) if (c.white) { c.vPrev = c.v; c.caught = this.caughtOut(c); }
+      try { super.carAI(dt); } finally { P['proto.driver.cautionSpeed'] = keepC; P['traffic.timeGap'] = keepTG; this.stageCaution = null; this.carKeepTG = null; }
+      if (wb > 0) for (const c of this.cars) if (c.white && c.caught && c.vPrev != null && c.v < c.vPrev - wb * dt) c.v = c.vPrev - wb * dt; // row 740: caught out, a white car brakes no harder than traffic.whiteBraking
+      if ((P['scoring.incidentPoints'] || 0) > 0) this.incidents();
       if (staged) for (const c of this.cars) { if (!c.red || c.ghost) continue; const st = this.sideStage(c); if (st > (c.awarePrev || 0)) this.emit('aware', { car: c.id, stage: st, x: +this.body.x.toFixed(1), y: +this.body.y.toFixed(1) }); c.awarePrev = st; }
     }
     // Row 730: the field in stages, by the dummy's distance from the car's nose (beside it: its gap from the flank). AWARE in
@@ -333,8 +345,29 @@
     }
     cornerSpeed(c) {
       let v = super.cornerSpeed(c); const jc = this.junctionCap(c); if (jc != null) v = Math.min(v, jc); // row 735
+      if (this.carKeepTG != null && (this.P['traffic.whiteTimeGap'] || 0) > 0) this.P['traffic.timeGap'] = c.white ? this.P['traffic.whiteTimeGap'] : this.carKeepTG; // row 740: a white car tailgates
+      if (c.shakenUntil != null && this.t < c.shakenUntil) v = 0; // row 740: after an Incident, both cars stand
       if (this.stageCaution != null) this.P['proto.driver.cautionSpeed'] = this.stageSpeed(c); // row 730: this car's caution speed, read next
       return v;
+    }
+    // Row 740: the Incident. White cars tailgate (traffic.whiteTimeGap). When the red car ahead stops for the dummy, the white
+    // car behind is caught out: it brakes no harder than traffic.whiteBraking and runs into its back: an Incident, worth
+    // scoring.incidentPoints. Any other stop, it brakes as it can. The two stand
+    // traffic.incidentSeconds, then drive on. Any car that runs into the one ahead in its lane is stopped at its bumper.
+    caughtOut(w) { // row 740: the red car just ahead of it in its lane is stopping for the dummy: the tailgater is caught out
+      return this.cars.some((r) => r.red && !r.gone && r.path === w.path && r.s > w.s && r.s - w.s < 4 * r.L + 60 && (r.cause === 'body' || r.noticed || (r.hz && r.hz.inPath)));
+    }
+    incidents() {
+      const P = this.P;
+      for (const f of this.cars) { if (f.gone || f.ghost) continue;
+        for (const l of this.cars) { if (l === f || l.gone || l.ghost || l.path !== f.path || l.s <= f.s) continue;
+          const gap = (l.s - l.L / 2) - (f.s + f.L / 2); if (gap >= 0) continue;
+          f.s = l.s - (l.L + f.L) / 2 - 0.5; f.v = 0; this.pose(f); // stopped at its bumper
+          if (!(l.red && f.white) || !this.caughtOut(f)) continue; // only a stop the dummy caused
+          l.incidentWith = l.incidentWith || new Set(); if (l.incidentWith.has(f.id)) continue; l.incidentWith.add(f.id);
+          const pts = Math.round(P['scoring.incidentPoints']); this.run.points += pts; this.run.incidents = (this.run.incidents || 0) + 1;
+          l.shakenUntil = f.shakenUntil = this.t + (P['traffic.incidentSeconds'] || 0); f.incidentAt = l.incidentAt = this.t;
+          const x = (l.x + f.x) / 2, y = (l.y + f.y) / 2; this.emit('incident', { car: l.id, by: f.id, model: l.model, x: +x.toFixed(1), y: +y.toFixed(1), points: pts, v: +f.vPrev?.toFixed(1) || 0 }); } }
     }
     // Row 735: the two-way junction. Road B gives way to road A: within traffic.junctionLookahead of the box, a road B car stops
     // short of it while a road A car would reach the box within traffic.junctionGap seconds. Any car stops short of the box
@@ -421,7 +454,7 @@
       const li = Math.floor(((k * 0.6180339887 + 0.17) % 1) * L.length), path = L[li], gap = 3 * P['vehicles.sedan.length'] + 40;
       if (this.cars.some((o) => o.path === path && !o.gone && o.s < gap)) { this.whiteAt = this.t + 0.5; return; }
       const c = this.newCar('white' + (++this.carSeq), 'sedan', li, path, 0, 0);
-      c.white = true; c.red = false; c.rung = 0; c.slot = 1e6 + k; c.v = Math.min(c.v, this.cornerSpeed(c)); this.pose(c); this.cars.push(c);
+      c.white = true; c.red = false; c.rung = 0; c.slot = 1e6 + k; if ((P['traffic.whiteSpeedRatio'] || 0) > 0) c.cruise = (c.cruise || P['vehicles.sedan.cruiseSpeed']) * P['traffic.whiteSpeedRatio']; c.v = Math.min(c.cruise || c.v, this.cornerSpeed(c)); this.pose(c); this.cars.push(c); // row 740: impatient, it closes on the car ahead
       this.emit('admit', { car: c.id, cls: c.cls, model: c.model, lane: li, white: true });
       this.whiteSeq = k + 1; this.whiteAt = this.t + iv * (0.6 + 0.8 * ((k * 0.7548776662 + 0.29) % 1));
     }

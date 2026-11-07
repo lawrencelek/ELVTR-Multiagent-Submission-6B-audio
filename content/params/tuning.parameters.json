@@ -15165,6 +15165,116 @@
    "integrationStatus": "prototype-p10",
    "boundaryStatus": "proposed-adapter-contract-not-implemented",
    "purpose": "Two-way roads: a road B car gives way while a road A car would reach the junction box within this many seconds; any car waits while a crossing car is in the box. 10.9 sets 2.2"
+  },
+  {
+   "id": "traffic.whiteTimeGap",
+   "group": "Vehicles and traffic",
+   "owner": "Vehicles / Traffic",
+   "label": "White traffic: time gap",
+   "description": "White sedans follow the car ahead at this time gap instead of traffic.timeGap: they tailgate. 0: traffic.timeGap. 10.10 sets 0.5",
+   "unit": "seconds",
+   "type": "number",
+   "default": 0,
+   "status": "proposed",
+   "source": "GDD Edit 110 (Prototype 10.10): DECISIONS row 740",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-tick",
+   "validation": {
+    "min": 0,
+    "max": 5
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "White sedans follow the car ahead at this time gap instead of traffic.timeGap: they tailgate. 0: traffic.timeGap. 10.10 sets 0.5"
+  },
+  {
+   "id": "traffic.whiteBraking",
+   "group": "Vehicles and traffic",
+   "owner": "Vehicles / Traffic",
+   "label": "White traffic: braking",
+   "description": "White sedans brake no harder than this (traffic.hardBraking is the red car's). 0: no limit. 10.10 sets 45",
+   "unit": "px/s²",
+   "type": "number",
+   "default": 0,
+   "status": "proposed",
+   "source": "GDD Edit 110 (Prototype 10.10): DECISIONS row 740",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-tick",
+   "validation": {
+    "min": 0,
+    "max": 400
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "White sedans brake no harder than this (traffic.hardBraking is the red car's). 0: no limit. 10.10 sets 45"
+  },
+  {
+   "id": "scoring.incidentPoints",
+   "group": "Vehicles and traffic",
+   "owner": "Vehicles / Traffic",
+   "label": "Incident points",
+   "description": "A white sedan runs into the back of the red car (it stopped hard; the white car could not): an Incident, worth this. 0: off. 10.10 sets 250",
+   "unit": "points",
+   "type": "number",
+   "default": 0,
+   "status": "proposed",
+   "source": "GDD Edit 110 (Prototype 10.10): DECISIONS row 740",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-tick",
+   "validation": {
+    "min": 0,
+    "max": 5000
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "A white sedan runs into the back of the red car (it stopped hard; the white car could not): an Incident, worth this. 0: off. 10.10 sets 250"
+  },
+  {
+   "id": "traffic.incidentSeconds",
+   "group": "Vehicles and traffic",
+   "owner": "Vehicles / Traffic",
+   "label": "Incident: standstill",
+   "description": "After an Incident the two cars stand this long, then drive on. 10.10 sets 2",
+   "unit": "seconds",
+   "type": "number",
+   "default": 0,
+   "status": "proposed",
+   "source": "GDD Edit 110 (Prototype 10.10): DECISIONS row 740",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-tick",
+   "validation": {
+    "min": 0,
+    "max": 10
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "After an Incident the two cars stand this long, then drive on. 10.10 sets 2"
+  },
+  {
+   "id": "traffic.whiteSpeedRatio",
+   "group": "Vehicles and traffic",
+   "owner": "Vehicles / Traffic",
+   "label": "White traffic: speed",
+   "description": "White sedans cruise at this multiple of their cruise speed: they close on the red car and sit at traffic.whiteTimeGap behind it. 0: their cruise speed. 10.10 sets 1.12",
+   "unit": "ratio",
+   "type": "number",
+   "default": 0,
+   "status": "proposed",
+   "source": "GDD Edit 110 (Prototype 10.10): DECISIONS row 740",
+   "editable": true,
+   "protectedReason": null,
+   "applyAt": "next-tick",
+   "validation": {
+    "min": 0,
+    "max": 2
+   },
+   "integrationStatus": "prototype-p10",
+   "boundaryStatus": "proposed-adapter-contract-not-implemented",
+   "purpose": "White sedans cruise at this multiple of their cruise speed: they close on the red car and sit at traffic.whiteTimeGap behind it. 0: their cruise speed. 10.10 sets 1.12"
   }
  ],
  "tables": {

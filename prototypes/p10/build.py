@@ -118,6 +118,10 @@ T109 = dict(T108, **{
     'perception.forwardConeAngle': 10, 'perception.sideConeAxis': 52.5, 'perception.sideConeAngle': 42.5,  # forward ±10°, its edges through the front corners (row 736); sides 10°–95° from the middle, a whole wedge: no crop behind the car (row 737)
     'perception.coneGrowthPerMemory': 0.04, 'perception.coneGrowthMax': 0.2,  # each crash spot it remembers widens the field 4%, to 384 (row 735)
 })
+T1010 = dict(T109, **{
+    'traffic.whiteTimeGap': 0.5, 'traffic.whiteBraking': 45, 'traffic.whiteSpeedRatio': 1.12,  # white sedans close in, tailgate and brake softly (row 740)
+    'scoring.incidentPoints': 250, 'traffic.incidentSeconds': 2,  # make the red car stop hard: the white car behind runs into it (row 740)
+})
 STAGES = {
     '10.1': {'title': 'THE TEST ROAD', 'page': 'dummies_p10.html', 'frozen': '82ab5e55d243ee500d6dfcaa60af74e6', 'edit': 101, 'values': T101},
     '10.2': {'title': 'THE FIRST LESSON', 'page': 'dummies_p10_2.html', 'frozen': '9dd14c5877128390fbad2595e86edce7', 'edit': 102, 'values': T102},
@@ -127,9 +131,10 @@ STAGES = {
     '10.6': {'title': 'DUCK', 'page': 'dummies_p10_6.html', 'frozen': '7acd08d2cc239e1743f2b85786ce411e', 'edit': 106, 'values': T106},
     '10.7': {'title': 'CRASH MEMORY', 'page': 'dummies_p10_7.html', 'frozen': '54328d019a708d70615b3bc57b0b7366', 'edit': 107, 'values': T107},
     '10.8': {'title': 'THE SEARCH', 'page': 'dummies_p10_8.html', 'frozen': 'e019098dac43a6b1c12d4685f0f23a9c', 'edit': 108, 'values': T108},
-    '10.9': {'title': 'THE TWO-WAY ROAD', 'page': 'dummies_p10_9.html', 'frozen': None, 'edit': 109, 'values': T109},
+    '10.9': {'title': 'THE TWO-WAY ROAD', 'page': 'dummies_p10_9.html', 'frozen': '213f9020690cd2c65fe57ebd08188d3b', 'edit': 109, 'values': T109},
+    '10.10': {'title': 'THE INCIDENT', 'page': 'dummies_p10_10.html', 'frozen': None, 'edit': 110, 'values': T1010},
 }
-CURRENT = '10.9'
+CURRENT = '10.10'
 
 out = {'registry': reg['registryVersion'], 'current': CURRENT, 'stages': {}}
 for sid, st in STAGES.items():
