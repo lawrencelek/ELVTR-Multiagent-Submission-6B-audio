@@ -6,11 +6,13 @@
 - **Playtest pages:** `index.html`. 10.1–10.8 frozen; 10.8 at md5 `e019098d…`.
 - **Tests:** `node prototypes/p10/test_p10.js --page` 66/66. Sound freeze: 211 items, 0 changed.
 - **Probes:** `node qa/testroad.js --stage 10.9 --out qa/baseline/p10_9.json`; report `qa/baseline/p10_9.md`, 12/16 checks (row 735). 10.8 reruns identical.
-- **Decision log:** rows 734–736. Open D130.
+- **Decision log:** rows 734–737. Open D130.
 
 **Amended 6 November (row 735):** the junction decides by time (§10.9.2); the red car's proportional field (§10.9.4).
 
 **Amended 6 November (row 736):** the forward cone's edges run through the front corners (§10.9.4).
+
+**Amended 7 November (row 737):** the field in steps of x; whole side wedges (§10.9.4).
 
 ## Request
 
@@ -52,16 +54,21 @@
 
 - **Forward cone, row 736:** its edges run through the front corners. Its centre lies behind the car, where they meet. Rings are equal steps ahead of the nose.
 - **Side cones:** from the car's middle, 10°–110° (`perception.sideConeAxis` 60 ± `perception.sideConeAngle` 50). They meet the forward cone's edge.
-- **One radius:** `perception.coneRadius` 320, half the screen's height.
+- **One step, row 737:** x = `perception.coneRadius` / `perception.forwardGrades` = 340 / 3 = 113, from the car's middle.
+  - Forward rings at x, 2x, 3x (53% of the screen's height).
+  - Side rings at x, 2x (`perception.sideConeRatio` 2/3).
+- **Side cones end in a whole wedge** at 95°: an arc and a radial edge, no crop behind the car.
 
 | Cone | Angle | Reach | Grades (equal rings) |
 |---|---|---|---|
-| Forward | ±`perception.forwardConeAngle` 10°, through the front corners | 320 ahead of the nose | `perception.forwardGrades` 3: AWARE, SLOWING, CRAWLING |
-| Each side | 10°–110°, from the middle | `perception.sideConeRatio` 0.8: 256 | `perception.sideGrades` 2: AWARE, SLOWING |
+| Forward | ±`perception.forwardConeAngle` 10°, through the front corners | 3x: 340 from the middle | `perception.forwardGrades` 3: AWARE, SLOWING, CRAWLING |
+| Each side | 10°–95° (`perception.sideConeAxis` 52.5 ± `perception.sideConeAngle` 42.5), from the middle | 2x: 227 | `perception.sideGrades` 2: AWARE, SLOWING |
 
 - **It learns:** the radius grows `perception.coneGrowthPerMemory` 4% per crash spot remembered, to `perception.coneGrowthMax` 20% (384, 60% of the screen).
 - **Unchanged:** the beam (the lane ahead), stage speeds, the notice meter, the three-second forget.
 - **10.8 keeps** its row 733 field (`perception.coneRadius` 0).
+
+**Row 737, measured** (rung 7, 5 minutes × 3): 12 ways in (flankOpen 4.86, roaming 2.32, the lure 2.23, kerb 2.09 a minute); peek 7 hits in 15 minutes; 1 stall, 9 long waits. Report 13/16.
 
 **Row 736, measured** (rung 7, 5 minutes × 3): 13 ways in (flankOpen 4.59, kerb 2.9, the lure 2.03 a minute); peek 9 hits in 15 minutes; 4 stalls, 9 long waits, 3 remembered-spot hits. Report 12/16.
 
