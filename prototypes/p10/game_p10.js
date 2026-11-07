@@ -307,7 +307,27 @@
   // Row 731: the field as three cones, in the nose's frame. The forward cone from the nose, brighter (more sensitive); the side
   // cones from the car's centre, fainter. Rings at perception.sideCloseRange and perception.sideWaryRange inside each; the
   // dummy's cone and band lit in its stage's colour.
-  function drawCones(c, near) { // row 733: edge to edge; a side cone never draws under the forward one. Row 735: proportional, from the car's middle, equal rings
+  // Row 738: the proportional field. Every ring is a circle about the car's middle, at x, 2x, 3x (x = perception.coneRadius /
+  // perception.forwardGrades): the side cones' outer arc (2x) is the forward cone's second ring. The forward cone's straight
+  // edges run through the front corners (row 736); the side cones' from the middle, to 95° (row 737).
+  function drawPropCones(c, near) {
+    const P = s.P, br = P['body.radius'], D = Math.PI / 180, A = P['perception.forwardConeAngle'] * D, e = s.sideEdges(), e0 = e[0] * D, e1 = e[1] * D, Rp = s.coneReach(), O = -c.L / 2, Fa = s.cornerApex(c) - c.L / 2, BIG = 4000;
+    const Gf = Math.round(P['perception.forwardGrades'] || 3), Gs = Math.round(P['perception.sideGrades'] || 2), x = Rp.f / Gf, Fs = P['perception.forwardConeSensitivity'], Ss = P['perception.sideConeSensitivity'], lk = (s.coneLook ? s.coneLook(c) : 0) * D;
+    const cones = [{ k: 'forward', a: Fa, a0: lk - A, a1: lk + A, R: Rp.f + br, G: Gf, sens: Fs }, { k: 'side', a: O, a0: e0, a1: e1, R: Rp.s + br, G: Gs, sens: Ss }, { k: 'side', a: O, a0: -e1, a1: -e0, R: Rp.s + br, G: Gs, sens: Ss }];
+    const ray = (q) => { ctx.beginPath(); ctx.moveTo(q.a, 0); ctx.arc(q.a, 0, BIG, q.a0, q.a1); ctx.closePath(); }, circ = (r) => { ctx.beginPath(); ctx.arc(O, 0, r, 0, TAU); };
+    const notForward = () => { ctx.beginPath(); ctx.rect(-BIG, -BIG, 2 * BIG, 2 * BIG); ctx.moveTo(Fa, 0); ctx.arc(Fa, 0, BIG, cones[0].a0, cones[0].a1); ctx.closePath(); ctx.clip('evenodd'); }; // a side cone never draws under the forward one
+    const clipTo = (q) => { ray(q); ctx.clip(); circ(q.R); ctx.clip(); if (q.k === 'side') notForward(); };
+    for (const q of cones) { const k = q.sens == null ? 1 : q.sens, line = `rgba(255,255,255,${(0.1 + 0.3 * k).toFixed(3)})`;
+      ctx.save(); clipTo(q); ctx.fillStyle = near ? `rgba(255,212,0,${(0.05 + 0.13 * k).toFixed(3)})` : `rgba(127,168,188,${(0.02 + 0.18 * k).toFixed(3)})`; ctx.fillRect(-BIG, -BIG, 2 * BIG, 2 * BIG); // brighter = more sensitive
+      ctx.strokeStyle = line; ctx.lineWidth = 1; ctx.setLineDash([4, 6]); for (let i = 1; i < q.G; i++) { circ(x * i); ctx.stroke(); } circ(q.R - 0.5); ctx.stroke(); ctx.restore(); // rings at x, 2x; the outer arc
+      ctx.save(); circ(q.R); ctx.clip(); if (q.k === 'side') notForward(); ctx.strokeStyle = line; ctx.lineWidth = 1; ctx.setLineDash([4, 6]); ctx.beginPath(); for (const an of [q.a0, q.a1]) { ctx.moveTo(q.a, 0); ctx.lineTo(q.a + Math.cos(an) * BIG, Math.sin(an) * BIG); } ctx.stroke(); ctx.setLineDash([]); ctx.restore(); } // the straight edges, to the outer arc
+    rect(0, -(c.W / 2 + br), c.fwdLen, c.W + 2 * br, (c.hz && c.hz.inPath) || (c.det && c.det.fwd) ? C.beamHot : C.beam); // the beam: the lane ahead
+    const st = c.red && s.sideStage ? s.sideStage(c) : 0, hz = c.hz;
+    if (st >= 1 && hz && (hz.cone === 'forward' || hz.cone === 'side')) { const b = s.body, ly = -Math.sin(c.h) * (b.x - c.x) + Math.cos(c.h) * (b.y - c.y), q = hz.cone === 'forward' ? cones[0] : ly >= 0 ? cones[1] : cones[2], i = Math.min(q.G, Math.max(1, Math.ceil(hz.dist / x - 1e-9)));
+      ctx.save(); clipTo(q); ctx.globalAlpha = 0.18; ctx.fillStyle = AWARE_C[st]; ctx.beginPath(); ctx.arc(O, 0, i === q.G ? q.R : x * i, 0, TAU); if (i > 1) { ctx.moveTo(O + x * (i - 1), 0); ctx.arc(O, 0, x * (i - 1), 0, TAU, true); } ctx.fill('evenodd'); ctx.restore(); } // the dummy's grade, lit
+  }
+  function drawCones(c, near) {
+    if (s.propField && s.propField()) return drawPropCones(c, near); // row 738 // row 733: edge to edge; a side cone never draws under the forward one. Row 735: proportional, from the car's middle, equal rings
     const P = s.P, br = P['body.radius'], D = Math.PI / 180, A = P['perception.forwardConeAngle'] * D, e = s.sideEdges(), e0 = e[0] * D, e1 = e[1] * D, prop = !!(s.propField && s.propField()), Rp = prop ? s.coneReach() : null, O = prop ? -c.L / 2 : 0;
     const Fo = prop ? s.cornerApex(c) - c.L / 2 : 0, Fx = prop ? -s.cornerApex(c) : 0; // row 736: the forward cone's centre, behind the nose where lines through the front corners meet; row 737: its rings step x from the car's middle
     const Rf = (prop ? Rp.f + Fx : c.fwdLen) + br, Rs = (prop ? Rp.s : P['perception.sideConeRange']) + br, rC = P['perception.sideCloseRange'], rW = P['perception.sideWaryRange'], Fs = P['perception.forwardConeSensitivity'], Ss = P['perception.sideConeSensitivity'];

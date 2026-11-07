@@ -1580,8 +1580,8 @@
    "lureGhost": 0,
    "lureHits": 0,
    "lureLost": 0,
-   "stopErrs": 2,
-   "stopErrMedian": 59.4,
+   "stopErrs": 1,
+   "stopErrMedian": 2.2,
    "stopErrWithin10": 1,
    "lostSightHits": 0,
    "searches": 2,
@@ -1606,7 +1606,7 @@
    "dashAt": null,
    "parts": [],
    "behaviours": {
-    "body": 77,
+    "body": 76,
     "side": 72
    },
    "learnEvents": 0,
@@ -4444,8 +4444,8 @@
    "offset": 13,
    "simSeconds": 299.9,
    "rungEnd": 7,
-   "whiteHits": 7,
-   "whites": 85,
+   "whiteHits": 6,
+   "whites": 84,
    "hits": 1,
    "hitsPerMin": 0.2,
    "writeOffs": 0,
@@ -4461,7 +4461,7 @@
    "kinds": {
     "struck": 1
    },
-   "dashes": 20,
+   "dashes": 22,
    "above": 0,
    "heightHid": 0,
    "sights": [],
@@ -4488,9 +4488,9 @@
    "stopErrMedian": 9.3,
    "stopErrWithin10": 1,
    "lostSightHits": 0,
-   "searches": 23,
-   "searchFound": 9,
-   "searchEnd": 23,
+   "searches": 21,
+   "searchFound": 7,
+   "searchEnd": 21,
    "spawnSlow": 0,
    "lifts": 8,
    "liftDrops": 6,
@@ -4498,8 +4498,8 @@
    "expectStops": 8,
    "expectHidden": 7,
    "coneSwerves": 0,
-   "coneStops": 160,
-   "standstillTouches": 17,
+   "coneStops": 171,
+   "standstillTouches": 21,
    "tries": null,
    "lesson": null,
    "afterLesson": null,
@@ -4510,10 +4510,10 @@
    "dashAt": null,
    "parts": [],
    "behaviours": {
-    "side": 120,
-    "cone": 160,
-    "body": 49,
-    "search": 289
+    "side": 126,
+    "cone": 171,
+    "body": 67,
+    "search": 461
    },
    "learnEvents": 0,
    "cars": {
@@ -4522,7 +4522,7 @@
     "stalls20s": 0,
     "blocked20s": 0,
     "honks": 3,
-    "minStopGap": 3,
+    "minStopGap": 6,
     "minSideGap": 26,
     "reach": 177
    },
@@ -5646,7 +5646,7 @@
    "hitsPerMin": 0.8,
    "writeOffs": 1,
    "firstHit": 19.9,
-   "points": 3018,
+   "points": 3019,
    "lost": 513,
    "zones": {
     "frontDiagonal": 3,
@@ -5713,7 +5713,7 @@
    "parts": [],
    "behaviours": {
     "side": 137,
-    "search": 593,
+    "search": 592,
     "body": 28
    },
    "learnEvents": 0,
@@ -6641,7 +6641,7 @@
    "hitsPerMin": 0.5,
    "writeOffs": 1,
    "firstHit": 19.9,
-   "points": 3023,
+   "points": 3024,
    "lost": 518,
    "zones": {
     "frontDiagonal": 4,
@@ -6708,7 +6708,7 @@
    "parts": [],
    "behaviours": {
     "side": 347,
-    "search": 636,
+    "search": 635,
     "body": 49
    },
    "learnEvents": 0,

@@ -242,7 +242,7 @@
       const P = this.P, ca = Math.cos(c.h), sa = Math.sin(c.h), br = P['body.radius'], prop = this.propField(), ox = prop ? 0 : c.L / 2, dx = px - (c.x + ca * ox), dy = py - (c.y + sa * ox), fx = dx * ca + dy * sa, fy = -dx * sa + dy * ca; // row 735: proportional, from the car's middle
       const d = Math.hypot(fx, fy), a = Math.atan2(fy, fx) * 180 / Math.PI, A = P['perception.forwardConeAngle'], look = this.coneLook(c), R = prop ? this.coneReach() : null;
       if (prop) { const k = this.cornerApex(c), gx = fx - k, ga = Math.atan2(fy, gx) * 180 / Math.PI, gd = Math.hypot(gx, fy), off = -k; // row 736: the forward cone's edges run through the front corners; its centre lies behind, where they meet. Row 737: its rings at x, 2x, 3x from the car's middle
-        if (Math.abs(ga - look) <= A && gd <= off + R.f + br) return { cone: 'forward', d: Math.max(0, gd - off), R: R.f }; }
+        if (Math.abs(ga - look) <= A && d <= R.f + br) return { cone: 'forward', d, R: R.f }; } // row 738: its reach and rings about the car's middle, like the side cones: one set of circles
       else if (Math.abs(a - look) <= A && d <= c.fwdLen + br) return { cone: 'forward', d, R: null };
       const e = this.sideEdges(), aa = Math.abs(a); if (aa > e[0] && aa <= e[1] && d <= (prop ? R.s : P['perception.sideConeRange']) + br) return { cone: 'side', d, R: prop ? R.s : null };
       return null;
